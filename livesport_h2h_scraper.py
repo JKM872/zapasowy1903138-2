@@ -61,6 +61,14 @@ except ImportError:
     FOREBET_AVAILABLE = False
     print("⚠️ forebet_scraper not available - predictions will be skipped")
 
+# Gemini AI integration
+try:
+    from gemini_analyzer import analyze_match as gemini_analyze_match
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("⚠️ gemini_analyzer not available - AI predictions will be skipped")
+
 
 # ----------------------
 # Helper / scraper code
@@ -276,13 +284,16 @@ def parse_h2h_from_soup(soup: BeautifulSoup, home_team: str) -> List[Dict]:
     return results
 
 
-def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = False, use_forebet: bool = False, sport: str = 'football') -> Dict:
+def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = False, use_forebet: bool = False, use_gemini: bool = False, sport: str = 'football') -> Dict:
     """Odwiedza stronę meczu, otwiera H2H i zwraca informację we właściwym formacie.
     
     Args:
         url: URL meczu
         driver: Selenium WebDriver
         away_team_focus: Jeśli True, liczy zwycięstwa GOŚCI w H2H zamiast gospodarzy
+        use_forebet: Jeśli True, pobiera predykcje z Forebet
+        use_gemini: Jeśli True, używa Gemini AI do analizy
+        sport: Sport (football, volleyball, etc.)
     """
     out = {
         'match_url': url,
@@ -308,6 +319,11 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         'forebet_over_under': None,  # 'Over 2.5' / 'Under 2.5'
         'forebet_btts': None,  # 'Yes' / 'No'
         'forebet_avg_goals': None,  # float
+        # GEMINI AI PREDICTIONS
+        'gemini_prediction': None,  # Krótka predykcja AI (1-2 zdania)
+        'gemini_confidence': None,  # 0-100% pewności
+        'gemini_reasoning': None,  # Szczegółowe uzasadnienie
+        'gemini_recommendation': None,  # HIGH/MEDIUM/LOW/SKIP
     }
 
     # KLUCZOWE: Najpierw otwórz stronę główną meczu
@@ -599,6 +615,59 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
                 
         except Exception as e:
             print(f"      ⚠️ Błąd Forebet: {e}")
+    
+    # ============================================
+    # GEMINI AI ANALYSIS (Faza 3)
+    # ============================================
+    if use_gemini and GEMINI_AVAILABLE and out.get('qualifies'):
+        try:
+            print("      🤖 Gemini AI analysis...")
+            
+            # Przygotuj dane dla AI
+            h2h_data = {
+                'home_wins': out.get('home_wins_in_h2h_last5', 0),
+                'away_wins': out.get('away_wins_in_h2h_last5', 0),
+                'total': out.get('h2h_count', 5)
+            }
+            
+            # Forma jako string (np. "7/10")
+            home_form_str = format_form_as_score(out.get('home_form', []))
+            away_form_str = format_form_as_score(out.get('away_form', []))
+            
+            # Forebet prediction string
+            forebet_str = None
+            if out.get('forebet_prediction') and out.get('forebet_probability'):
+                forebet_str = f"{out['forebet_prediction']} ({out['forebet_probability']:.1f}%)"
+                if out.get('forebet_exact_score'):
+                    forebet_str += f" - {out['forebet_exact_score']}"
+            
+            # Wywołaj Gemini AI
+            gemini_result = gemini_analyze_match(
+                home_team=out.get('home_team', 'Unknown'),
+                away_team=out.get('away_team', 'Unknown'),
+                sport=sport,
+                h2h_data=h2h_data,
+                home_form=home_form_str,
+                away_form=away_form_str,
+                forebet_prediction=forebet_str,
+                home_odds=out.get('home_odds'),
+                away_odds=out.get('away_odds'),
+                additional_info=f"Last H2H: {out.get('last_h2h_date', 'N/A')}"
+            )
+            
+            # Zapisz wyniki
+            if not gemini_result.get('error'):
+                out['gemini_prediction'] = gemini_result.get('prediction')
+                out['gemini_confidence'] = gemini_result.get('confidence')
+                out['gemini_reasoning'] = gemini_result.get('reasoning')
+                out['gemini_recommendation'] = gemini_result.get('recommendation')
+                
+                print(f"      ✅ AI: {gemini_result.get('prediction', '')[:60]}... ({gemini_result.get('confidence', 0)}%)")
+            else:
+                print(f"      ⚠️ Gemini AI: {gemini_result.get('error', 'Unknown error')}")
+                
+        except Exception as e:
+            print(f"      ⚠️ Błąd Gemini AI: {e}")
 
     return out
 
@@ -615,6 +684,35 @@ def format_form(form_list: List[str]) -> str:
     """
     emoji_map = {'W': '✅', 'L': '❌', 'D': '🟡'}
     return ' '.join([f"{r}{emoji_map.get(r, '')}" for r in form_list])
+
+
+def format_form_as_score(form_list: List[str]) -> str:
+    """
+    Konwertuje formę na score (np. 7/10 dla Gemini AI)
+    
+    Args:
+        form_list: ['W', 'L', 'D', 'W', 'W']
+    
+    Returns:
+        '7/10' (3 wins * 3 + 1 draw * 1 = 10, scale to /10)
+    """
+    if not form_list:
+        return 'N/A'
+    
+    wins = form_list.count('W')
+    draws = form_list.count('D')
+    total = len(form_list)
+    
+    # Scoring: Win=3pts, Draw=1pt, Loss=0pt
+    points = wins * 3 + draws * 1
+    max_points = total * 3
+    
+    # Scale to /10
+    if max_points > 0:
+        score = round((points / max_points) * 10, 1)
+        return f"{score}/10"
+    
+    return 'N/A'
 
 
 def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict:
@@ -1864,6 +1962,8 @@ Przykłady użycia:
                        help='Szukaj meczów gdzie GOŚCIE mają >=60%% zwycięstw w H2H (zamiast gospodarzy)')
     parser.add_argument('--use-forebet', action='store_true',
                        help='Pobieraj predykcje z Forebet.com (wymaga widocznej przeglądarki)')
+    parser.add_argument('--use-gemini', action='store_true',
+                       help='Użyj Gemini AI do analizy meczów (wymaga API key w gemini_config.py)')
     args = parser.parse_args()
 
     # Walidacja
@@ -1973,7 +2073,8 @@ Przykłady użycia:
                 # Sporty drużynowe (football, basketball, etc.)
                 current_sport = detect_sport_from_url(url)
                 info = process_match(url, driver, away_team_focus=args.away_team_focus, 
-                                   use_forebet=args.use_forebet, sport=current_sport)
+                                   use_forebet=args.use_forebet, use_gemini=args.use_gemini,
+                                   sport=current_sport)
                 rows.append(info)
                 
                 if info['qualifies']:
