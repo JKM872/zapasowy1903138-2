@@ -195,9 +195,15 @@ def search_forebet_prediction(
     own_driver = False
     html_content = None
     
-    # 🔥 ULTRA POWER: W CI/CD najpierw spróbuj Cloudflare Bypass
-    if IS_CI_CD and CLOUDFLARE_BYPASS_AVAILABLE:
-        print(f"      🔥 CI/CD: Używam Ultra Power Cloudflare Bypass!")
+    # 🚫 W CI/CD (GitHub Actions) Forebet jest ZABLOKOWANY przez Cloudflare
+    # GitHub Actions IP są na czarnej liście - nie ma sensu próbować
+    if IS_CI_CD:
+        print(f"      ⚠️ Forebet: Pominięty w CI/CD (Cloudflare blokuje GitHub Actions IP)")
+        return result
+    
+    # 🔥 ULTRA POWER: Lokalnie spróbuj Cloudflare Bypass
+    if CLOUDFLARE_BYPASS_AVAILABLE:
+        print(f"      🔥 Używam Ultra Power Cloudflare Bypass!")
         
         sport_urls = {
             'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
