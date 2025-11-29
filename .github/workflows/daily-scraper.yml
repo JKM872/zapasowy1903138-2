@@ -90,6 +90,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     
+    # 🔥 FlareSolverr Docker Service - omija Cloudflare!
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          TZ: Europe/Warsaw
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -124,6 +134,18 @@ jobs:
           pip install curl-cffi cloudscraper httpx[http2] || true
           playwright install firefox --with-deps || true
       
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr to be ready..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/ > /dev/null 2>&1; then
+              echo "✅ FlareSolverr is ready!"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+      
       - name: Run Football Scraper
         env:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
@@ -131,6 +153,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
             --date ${{ needs.determine-sport.outputs.date }} \
@@ -162,6 +185,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          TZ: Europe/Warsaw
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -196,6 +228,17 @@ jobs:
           pip install curl-cffi cloudscraper httpx[http2] || true
           playwright install firefox --with-deps || true
       
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/ > /dev/null 2>&1; then
+              echo "✅ FlareSolverr is ready!"
+              break
+            fi
+            sleep 2
+          done
+      
       - name: Run Basketball Scraper
         env:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
@@ -203,6 +246,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
             --date ${{ needs.determine-sport.outputs.date }} \
@@ -234,6 +278,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          TZ: Europe/Warsaw
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -268,6 +321,17 @@ jobs:
           pip install curl-cffi cloudscraper httpx[http2] || true
           playwright install firefox --with-deps || true
       
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/ > /dev/null 2>&1; then
+              echo "✅ FlareSolverr is ready!"
+              break
+            fi
+            sleep 2
+          done
+      
       - name: Run Tennis Scraper
         env:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
@@ -275,6 +339,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
             --date ${{ needs.determine-sport.outputs.date }} \
@@ -306,6 +371,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          TZ: Europe/Warsaw
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -340,6 +414,17 @@ jobs:
           pip install curl-cffi cloudscraper httpx[http2] || true
           playwright install firefox --with-deps || true
       
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/ > /dev/null 2>&1; then
+              echo "✅ FlareSolverr is ready!"
+              break
+            fi
+            sleep 2
+          done
+      
       - name: Run Hockey Scraper
         env:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
@@ -347,6 +432,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
             --date ${{ needs.determine-sport.outputs.date }} \
@@ -378,77 +464,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-      
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-      
-      - name: Install ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-      
-      - name: Install Xvfb
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
-      
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install xvfbwrapper
-          # 🔥 Cloudflare Bypass packages
-          pip install curl-cffi cloudscraper httpx[http2] || true
-          playwright install firefox --with-deps || true
-      
-      - name: Run Volleyball Scraper
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
         env:
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python scrape_and_notify.py \
-            --date ${{ needs.determine-sport.outputs.date }} \
-            --sports volleyball \
-            --to "$EMAIL_TO" \
-            --from "$EMAIL_FROM" \
-            --password "$EMAIL_PASSWORD" \
-            --provider "$EMAIL_PROVIDER" \
-            --headless \
-            --use-forebet \
-            --use-sofascore \
-            --use-odds
-      
-      - name: Upload results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: volleyball-results-${{ needs.determine-sport.outputs.date }}
-          path: |
-            results/*.json
-            results/*.csv
-            results/*.html
-          if-no-files-found: ignore
-          retention-days: 30
-
-  scrape-handball:
-    needs: determine-sport
-    if: needs.determine-sport.outputs.sport == 'handball' || needs.determine-sport.outputs.sport == 'all'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
+          LOG_LEVEL: info
+          TZ: Europe/Warsaw
     
     steps:
       - name: Checkout code
@@ -484,6 +507,110 @@ jobs:
           pip install curl-cffi cloudscraper httpx[http2] || true
           playwright install firefox --with-deps || true
       
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/ > /dev/null 2>&1; then
+              echo "✅ FlareSolverr is ready!"
+              break
+            fi
+            sleep 2
+          done
+      
+      - name: Run Volleyball Scraper
+        env:
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FLARESOLVERR_URL: http://localhost:8191/v1
+        run: |
+          python scrape_and_notify.py \
+            --date ${{ needs.determine-sport.outputs.date }} \
+            --sports volleyball \
+            --to "$EMAIL_TO" \
+            --from "$EMAIL_FROM" \
+            --password "$EMAIL_PASSWORD" \
+            --provider "$EMAIL_PROVIDER" \
+            --headless \
+            --use-forebet \
+            --use-sofascore \
+            --use-odds
+      
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: volleyball-results-${{ needs.determine-sport.outputs.date }}
+          path: |
+            results/*.json
+            results/*.csv
+            results/*.html
+          if-no-files-found: ignore
+          retention-days: 30
+
+  scrape-handball:
+    needs: determine-sport
+    if: needs.determine-sport.outputs.sport == 'handball' || needs.determine-sport.outputs.sport == 'all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          TZ: Europe/Warsaw
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+      
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+      
+      - name: Install Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
+      
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/ > /dev/null 2>&1; then
+              echo "✅ FlareSolverr is ready!"
+              break
+            fi
+            sleep 2
+          done
+      
       - name: Run Handball Scraper
         env:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
@@ -491,6 +618,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
             --date ${{ needs.determine-sport.outputs.date }} \

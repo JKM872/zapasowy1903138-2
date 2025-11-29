@@ -195,13 +195,7 @@ def search_forebet_prediction(
     own_driver = False
     html_content = None
     
-    # 🚫 W CI/CD (GitHub Actions) Forebet jest ZABLOKOWANY przez Cloudflare
-    # GitHub Actions IP są na czarnej liście - nie ma sensu próbować
-    if IS_CI_CD:
-        print(f"      ⚠️ Forebet: Pominięty w CI/CD (Cloudflare blokuje GitHub Actions IP)")
-        return result
-    
-    # 🔥 ULTRA POWER: Lokalnie spróbuj Cloudflare Bypass
+    # 🔥 ULTRA POWER: Używaj Cloudflare Bypass (włącznie z FlareSolverr w CI/CD!)
     if CLOUDFLARE_BYPASS_AVAILABLE:
         print(f"      🔥 Używam Ultra Power Cloudflare Bypass!")
         

@@ -4,12 +4,13 @@
 Agresywne techniki omijania Cloudflare dla GitHub Actions.
 
 Metody:
-1. DrissionPage (najnowsza biblioteka anti-detection)
-2. Playwright z stealth
-3. curl_cffi (TLS fingerprint jak przeglądarka)
-4. Requests z Cloudflare scraper
-5. Selenium undetected + random delays
-6. Puppeteer-like behavior simulation
+1. FlareSolverr (Docker service - najlepsza dla CI/CD!)
+2. DrissionPage (najnowsza biblioteka anti-detection)
+3. Playwright z stealth
+4. curl_cffi (TLS fingerprint jak przeglądarka)
+5. Requests z Cloudflare scraper
+6. Selenium undetected + random delays
+7. httpx z HTTP/2
 """
 
 import os
@@ -17,10 +18,14 @@ import time
 import random
 import json
 import subprocess
+import requests
 from typing import Optional, Dict, Any
 
 # Detekcja CI/CD (GitHub Actions)
 IS_CI = os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true'
+
+# FlareSolverr URL (Docker service)
+FLARESOLVERR_URL = os.environ.get('FLARESOLVERR_URL', 'http://localhost:8191/v1')
 
 # Xvfb helper dla CI/CD
 _xvfb_process = None
@@ -57,6 +62,9 @@ def stop_xvfb():
 
 # Sprawdź dostępne metody
 METHODS_AVAILABLE = {}
+
+# Metoda 0: FlareSolverr (zawsze dostępna jeśli serwer działa)
+METHODS_AVAILABLE['flaresolverr'] = True  # Sprawdzamy dostępność przy wywołaniu
 
 # Metoda 1: DrissionPage
 try:
@@ -242,18 +250,32 @@ class CloudflareBypass:
         Próbuje kolejnych metod aż jedna zadziała.
         """
         
-        # Uruchom Xvfb jeśli w CI/CD
+        # Uruchom Xvfb jeśli w CI/CD (dla metod przeglądarkowych)
         if IS_CI:
             start_xvfb()
         
-        methods = [
-            ('curl_cffi', self._try_curl_cffi),
-            ('cloudscraper', self._try_cloudscraper),
-            ('drissionpage', self._try_drissionpage),
-            ('playwright', self._try_playwright),
-            ('undetected', self._try_undetected_chrome),
-            ('httpx', self._try_httpx),
-        ]
+        # W CI/CD - FlareSolverr jako PIERWSZA metoda (najlepsza!)
+        # Lokalnie - standardowe metody
+        if IS_CI:
+            methods = [
+                ('flaresolverr', self._try_flaresolverr),  # 🔥 NAJLEPSZA dla CI/CD
+                ('curl_cffi', self._try_curl_cffi),
+                ('cloudscraper', self._try_cloudscraper),
+                ('drissionpage', self._try_drissionpage),
+                ('playwright', self._try_playwright),
+                ('undetected', self._try_undetected_chrome),
+                ('httpx', self._try_httpx),
+            ]
+        else:
+            methods = [
+                ('undetected', self._try_undetected_chrome),  # Lokalnie najlepsza
+                ('flaresolverr', self._try_flaresolverr),
+                ('curl_cffi', self._try_curl_cffi),
+                ('cloudscraper', self._try_cloudscraper),
+                ('drissionpage', self._try_drissionpage),
+                ('playwright', self._try_playwright),
+                ('httpx', self._try_httpx),
+            ]
         
         try:
             for method_name, method_func in methods:
@@ -294,6 +316,62 @@ class CloudflareBypass:
             # Zatrzymaj Xvfb jeśli uruchomiony
             if IS_CI:
                 stop_xvfb()
+    
+    def _try_flaresolverr(self, url: str, timeout: int) -> Optional[str]:
+        """
+        🔥 FlareSolverr - Docker service do omijania Cloudflare
+        Najlepsza metoda dla CI/CD! Działa przez HTTP API.
+        """
+        try:
+            self.log(f"🐳 Łączę z FlareSolverr: {FLARESOLVERR_URL}")
+            
+            payload = {
+                "cmd": "request.get",
+                "url": url,
+                "maxTimeout": timeout * 1000  # ms
+            }
+            
+            response = requests.post(
+                FLARESOLVERR_URL,
+                headers={"Content-Type": "application/json"},
+                json=payload,
+                timeout=timeout + 30  # Dodatkowy czas na rozwiązanie challenge
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("status") == "ok":
+                    solution = data.get("solution", {})
+                    html = solution.get("response", "")
+                    
+                    if html:
+                        self.log(f"🐳 FlareSolverr SUCCESS! ({len(html)} znaków)")
+                        
+                        # Zapisz cookies do przyszłego użycia
+                        cookies = solution.get("cookies", [])
+                        user_agent = solution.get("userAgent", "")
+                        
+                        if cookies:
+                            self.log(f"🍪 Otrzymano {len(cookies)} cookies")
+                        
+                        return html
+                    else:
+                        self.log("⚠️ FlareSolverr: pusta odpowiedź")
+                else:
+                    error_msg = data.get("message", "Unknown error")
+                    self.log(f"⚠️ FlareSolverr error: {error_msg}")
+            else:
+                self.log(f"⚠️ FlareSolverr HTTP {response.status_code}")
+                
+        except requests.exceptions.ConnectionError:
+            self.log("⚠️ FlareSolverr: serwer niedostępny (nie działa Docker?)")
+        except requests.exceptions.Timeout:
+            self.log("⚠️ FlareSolverr: timeout")
+        except Exception as e:
+            self.log(f"⚠️ FlareSolverr error: {str(e)[:50]}")
+        
+        return None
     
     def _try_curl_cffi(self, url: str, timeout: int) -> Optional[str]:
         """curl_cffi - emuluje TLS fingerprint przeglądarki"""
