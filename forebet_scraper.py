@@ -7,12 +7,16 @@ Pobiera predykcje meczów z Forebet.com:
 - Over/Under - przewidywana liczba goli
 - BTTS (Both Teams To Score) - czy obie drużyny strzelą
 
+🔥 ULTRA POWER CLOUDFLARE BYPASS 🔥
+Używa wielu metod aby ominąć Cloudflare w CI/CD
+
 Autor: AI Assistant
 Data: 2025-11-17
 """
 
 import time
 import random
+import os
 from typing import Dict, Optional, Tuple
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -22,6 +26,16 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 import undetected_chromedriver as uc
+
+# 🔥 Import Cloudflare Bypass
+try:
+    from cloudflare_bypass import fetch_forebet_with_bypass, CloudflareBypass, print_available_methods
+    CLOUDFLARE_BYPASS_AVAILABLE = True
+    print("🔥 Cloudflare Bypass module loaded!")
+except ImportError:
+    CLOUDFLARE_BYPASS_AVAILABLE = False
+    print("⚠️ cloudflare_bypass not available, using standard methods")
+
 try:
     from selenium_stealth import stealth
     STEALTH_AVAILABLE = True
@@ -35,6 +49,11 @@ try:
 except ImportError:
     CLOUDSCRAPER_AVAILABLE = False
     print("⚠️ cloudscraper not available, skipping...")
+
+# Sprawdź czy jesteśmy w CI/CD
+IS_CI_CD = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
+if IS_CI_CD:
+    print("🔥 CI/CD environment detected - using Ultra Power Cloudflare Bypass!")
 
 # Cache dla wyników (żeby nie scrape'ować dwa razy tego samego)
 _forebet_cache = {}
@@ -174,11 +193,49 @@ def search_forebet_prediction(
     }
     
     own_driver = False
+    html_content = None
+    
+    # 🔥 ULTRA POWER: W CI/CD najpierw spróbuj Cloudflare Bypass
+    if IS_CI_CD and CLOUDFLARE_BYPASS_AVAILABLE:
+        print(f"      🔥 CI/CD: Używam Ultra Power Cloudflare Bypass!")
+        
+        sport_urls = {
+            'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+            'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+            'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
+            'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
+            'handball': 'https://www.forebet.com/en/handball/predictions-today',
+            'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+            'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+            'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+        }
+        
+        url = sport_urls.get(sport.lower(), sport_urls['football'])
+        print(f"      🌐 Forebet ({sport}): {url}")
+        
+        try:
+            html_content = fetch_forebet_with_bypass(url, debug=True)
+            
+            if html_content:
+                print(f"      🔥 Cloudflare Bypass SUCCESS! ({len(html_content)} znaków)")
+                soup = BeautifulSoup(html_content, 'html.parser')
+                
+                # Przejdź do parsowania meczów (poniżej)
+            else:
+                print(f"      ⚠️ Cloudflare Bypass nie zadziałał, próbuję standardową metodę...")
+                html_content = None
+        except Exception as e:
+            print(f"      ⚠️ Cloudflare Bypass error: {e}")
+            html_content = None
     
     try:
-        # Utwórz driver jeśli nie podano - UNDETECTED CHROMEDRIVER
-        if driver is None:
-            print(f"      🚀 Tworzenie undetected ChromeDriver...")
+        # Jeśli mamy już HTML z bypass, parsuj go
+        if html_content:
+            soup = BeautifulSoup(html_content, 'html.parser')
+        else:
+            # Utwórz driver jeśli nie podano - UNDETECTED CHROMEDRIVER
+            if driver is None:
+                print(f"      🚀 Tworzenie undetected ChromeDriver...")
             
             # METODA 1: undetected-chromedriver (najlepsza do Cloudflare)
             options = uc.ChromeOptions()

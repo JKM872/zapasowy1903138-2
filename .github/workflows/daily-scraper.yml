@@ -120,6 +120,9 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
       
       - name: Run Football Scraper
         env:
@@ -189,6 +192,9 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
       
       - name: Run Basketball Scraper
         env:
@@ -258,6 +264,9 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
       
       - name: Run Tennis Scraper
         env:
@@ -327,6 +336,9 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
       
       - name: Run Hockey Scraper
         env:
@@ -396,6 +408,9 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
       
       - name: Run Volleyball Scraper
         env:
@@ -465,6 +480,9 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install xvfbwrapper
+          # 🔥 Cloudflare Bypass packages
+          pip install curl-cffi cloudscraper httpx[http2] || true
+          playwright install firefox --with-deps || true
       
       - name: Run Handball Scraper
         env:

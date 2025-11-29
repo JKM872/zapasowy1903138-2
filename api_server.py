@@ -27,6 +27,7 @@ Endpointy:
 
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 import pandas as pd
 import os
 from datetime import datetime, timedelta
@@ -40,6 +41,7 @@ from livesport_h2h_scraper import start_driver, get_match_links_from_day, proces
 
 app = Flask(__name__)
 CORS(app)  # Pozwala na requesty z innych domen (ważne dla web/mobile app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Globalne zmienne do śledzenia statusu scrapingu
 scraping_status = {
@@ -280,11 +282,15 @@ def run_scraping_task(date: str, sports: List[str], max_matches: Optional[int] =
         scraping_status['progress'] = 0
         scraping_status['qualifying_count'] = 0
         
+        socketio.emit('scraping_status', scraping_status)
+
         # Start driver
         driver = start_driver(headless=True)
         
         # Zbierz linki
         scraping_status['current_match'] = 'Zbieranie linków...'
+        socketio.emit('scraping_status', scraping_status)
+        
         all_urls = []
         for sport in sports:
             urls = get_match_links_from_day(driver, date, sports=[sport])
@@ -297,6 +303,8 @@ def run_scraping_task(date: str, sports: List[str], max_matches: Optional[int] =
             all_urls = all_urls[:max_matches]
             scraping_status['total'] = max_matches
         
+        socketio.emit('scraping_status', scraping_status)
+
         # Scrapuj mecze
         rows = []
         RESTART_INTERVAL = 200
@@ -304,6 +312,7 @@ def run_scraping_task(date: str, sports: List[str], max_matches: Optional[int] =
         for i, url in enumerate(all_urls, 1):
             scraping_status['progress'] = i
             scraping_status['current_match'] = url[:80]
+            socketio.emit('scraping_status', scraping_status)
             
             try:
                 # Wykryj sport z URL (tennis ma '/tenis/' w URLu)
@@ -346,6 +355,7 @@ def run_scraping_task(date: str, sports: List[str], max_matches: Optional[int] =
         scraping_status['output_file'] = output_file
         scraping_status['is_running'] = False
         scraping_status['current_match'] = 'Zakończono!'
+        socketio.emit('scraping_status', scraping_status)
         
         driver.quit()
         
@@ -353,6 +363,7 @@ def run_scraping_task(date: str, sports: List[str], max_matches: Optional[int] =
         scraping_status['is_running'] = False
         scraping_status['error'] = str(e)
         scraping_status['current_match'] = 'Błąd!'
+        socketio.emit('scraping_status', scraping_status)
 
 
 @app.route('/api/scrape', methods=['POST'])
@@ -408,12 +419,7 @@ def start_scraping():
         }), 400
     
     # Uruchom w osobnym wątku
-    thread = threading.Thread(
-        target=run_scraping_task,
-        args=(date, sports, max_matches)
-    )
-    thread.daemon = True
-    thread.start()
+    socketio.start_background_task(run_scraping_task, date, sports, max_matches)
     
     return jsonify({
         'message': 'Scraping rozpoczęty',
@@ -744,10 +750,12 @@ if __name__ == '__main__':
     os.makedirs('outputs', exist_ok=True)
     
     # Uruchom server
-    app.run(
+    socketio.run(
+        app,
         host='0.0.0.0',  # Dostępne z innych urządzeń w sieci
         port=5000,
-        debug=True
+        debug=True,
+        allow_unsafe_werkzeug=True
     )
 
 
