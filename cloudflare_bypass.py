@@ -145,6 +145,33 @@ def human_delay(min_sec: float = 0.5, max_sec: float = 2.0):
     time.sleep(random.uniform(min_sec, max_sec))
 
 
+# 🍪 CONSENT BUTTON SELECTORS (różne wersje)
+CONSENT_SELECTORS = [
+    # FundingChoices (Google) - Forebet używa tego
+    'button.fc-cta-consent',
+    'button.fc-button.fc-cta-consent',
+    '.fc-cta-consent',
+    # GDPR consent
+    'button[data-cookiefirst-action="accept"]',
+    '#onetrust-accept-btn-handler',
+    '.onetrust-accept-btn-handler',
+    '#accept-cookies',
+    '.accept-cookies',
+    '#cookie-accept',
+    '.cookie-accept',
+    'button[id*="accept"]',
+    'button[class*="accept"]',
+    # Generic
+    'button:contains("Accept")',
+    'button:contains("Agree")',
+    'button:contains("Zgadzam")',
+    'button:contains("Akceptuj")',
+    'a.agree-button',
+    '.agree-button',
+    '#agree-button',
+]
+
+
 class CloudflareBypass:
     """Ultra-power Cloudflare bypass"""
     
@@ -157,6 +184,57 @@ class CloudflareBypass:
     def log(self, msg: str):
         if self.debug:
             print(f"      🔥 CF-Bypass: {msg}")
+    
+    def _click_consent_selenium(self, driver):
+        """Kliknij przycisk consent/cookie jeśli istnieje (Selenium/UC)"""
+        from selenium.webdriver.common.by import By
+        
+        consent_clicked = False
+        
+        # Priorytetowe selektory dla Forebet (FundingChoices)
+        priority_selectors = [
+            (By.CSS_SELECTOR, 'button.fc-cta-consent'),
+            (By.CSS_SELECTOR, '.fc-cta-consent'),
+            (By.CSS_SELECTOR, 'button.fc-button.fc-cta-consent'),
+        ]
+        
+        # Najpierw spróbuj priorytetowych
+        for by, selector in priority_selectors:
+            try:
+                buttons = driver.find_elements(by, selector)
+                for btn in buttons:
+                    if btn.is_displayed() and btn.is_enabled():
+                        self.log(f"🍪 Klikam consent: {selector}")
+                        btn.click()
+                        human_delay(1, 2)
+                        consent_clicked = True
+                        break
+                if consent_clicked:
+                    break
+            except Exception:
+                pass
+        
+        if consent_clicked:
+            return True
+        
+        # Fallback - szukaj po tekście
+        try:
+            buttons = driver.find_elements(By.TAG_NAME, 'button')
+            for btn in buttons:
+                try:
+                    text = btn.text.lower()
+                    if any(word in text for word in ['zgadzam', 'accept', 'agree', 'akceptuj', 'consent']):
+                        if btn.is_displayed() and btn.is_enabled():
+                            self.log(f"🍪 Klikam consent (text match): {btn.text[:30]}")
+                            btn.click()
+                            human_delay(1, 2)
+                            return True
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        
+        return False
     
     def get_page(self, url: str, timeout: int = 30) -> Optional[str]:
         """
@@ -295,6 +373,11 @@ class CloudflareBypass:
                     
                 human_delay(1, 2)
             
+            # 🍪 KLIKNIJ CONSENT/COOKIE BUTTON (DrissionPage)
+            self._click_consent_drissionpage(page)
+            
+            human_delay(1, 2)
+            
             # Symulacja scrollowania
             for _ in range(3):
                 page.scroll.down(random.randint(200, 400))
@@ -304,6 +387,43 @@ class CloudflareBypass:
             return html
         finally:
             page.quit()
+    
+    def _click_consent_drissionpage(self, page):
+        """Kliknij przycisk consent/cookie (DrissionPage)"""
+        selectors = [
+            'button.fc-cta-consent',
+            '.fc-cta-consent',
+            'button.fc-button.fc-cta-consent',
+        ]
+        
+        for selector in selectors:
+            try:
+                btn = page.ele(selector, timeout=2)
+                if btn:
+                    self.log(f"🍪 Klikam consent (DrissionPage): {selector}")
+                    btn.click()
+                    human_delay(1, 2)
+                    return True
+            except Exception:
+                pass
+        
+        # Fallback - szukaj po tekście
+        try:
+            buttons = page.eles('tag:button')
+            for btn in buttons:
+                try:
+                    text = btn.text.lower() if btn.text else ''
+                    if any(word in text for word in ['zgadzam', 'accept', 'agree', 'akceptuj']):
+                        self.log(f"🍪 Klikam consent (text): {btn.text[:30]}")
+                        btn.click()
+                        human_delay(1, 2)
+                        return True
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        
+        return False
     
     def _try_playwright(self, url: str, timeout: int) -> Optional[str]:
         """Playwright z stealth mode"""
@@ -345,6 +465,11 @@ class CloudflareBypass:
                         
                     human_delay(1, 2)
                 
+                # 🍪 KLIKNIJ CONSENT/COOKIE BUTTON (Playwright)
+                self._click_consent_playwright(page)
+                
+                human_delay(1, 2)
+                
                 # Symulacja ludzkiego zachowania
                 page.mouse.move(random.randint(100, 500), random.randint(100, 500))
                 human_delay(0.2, 0.5)
@@ -359,9 +484,48 @@ class CloudflareBypass:
             finally:
                 browser.close()
     
+    def _click_consent_playwright(self, page):
+        """Kliknij przycisk consent/cookie (Playwright)"""
+        selectors = [
+            'button.fc-cta-consent',
+            '.fc-cta-consent',
+            'button.fc-button.fc-cta-consent',
+        ]
+        
+        for selector in selectors:
+            try:
+                btn = page.locator(selector).first
+                if btn.is_visible():
+                    self.log(f"🍪 Klikam consent (Playwright): {selector}")
+                    btn.click()
+                    human_delay(1, 2)
+                    return True
+            except Exception:
+                pass
+        
+        # Fallback - szukaj po tekście
+        try:
+            for text in ['Zgadzam się', 'Accept', 'Agree', 'Akceptuję']:
+                try:
+                    btn = page.get_by_role('button', name=text)
+                    if btn.is_visible():
+                        self.log(f"🍪 Klikam consent (text): {text}")
+                        btn.click()
+                        human_delay(1, 2)
+                        return True
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        
+        return False
+    
     def _try_undetected_chrome(self, url: str, timeout: int) -> Optional[str]:
         """undetected_chromedriver z agresywnymi ustawieniami"""
         import undetected_chromedriver as uc
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
         
         options = uc.ChromeOptions()
         # NIE używaj headless - Cloudflare to wykrywa!
@@ -398,6 +562,11 @@ class CloudflareBypass:
                     break
                     
                 human_delay(1, 2)
+            
+            # 🍪 KLIKNIJ CONSENT/COOKIE BUTTON jeśli istnieje
+            self._click_consent_selenium(driver)
+            
+            human_delay(1, 2)
             
             # Symulacja scrollowania
             for _ in range(5):
