@@ -448,12 +448,73 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
         # Kursy bukmacherskie (jeśli dostępne)
         odds_html = ''
         home_odds = match.get('home_odds')
+        draw_odds = match.get('draw_odds')
         away_odds = match.get('away_odds')
+        odds_source = match.get('odds_source', 'flashscore')
+        
         if home_odds and away_odds:
+            # Znajdź najniższy kurs (faworyt)
+            odds_list = [home_odds, draw_odds, away_odds] if draw_odds else [home_odds, away_odds]
+            min_odds = min(o for o in odds_list if o is not None)
+            
+            # Formatuj kursy z podświetleniem faworyta
+            home_style = 'background-color: #4CAF50; color: white;' if home_odds == min_odds else 'background-color: #FFD700;'
+            draw_style = 'background-color: #4CAF50; color: white;' if draw_odds and draw_odds == min_odds else 'background-color: #FFD700;'
+            away_style = 'background-color: #4CAF50; color: white;' if away_odds == min_odds else 'background-color: #FFD700;'
+            
+            draw_html = f' | <span style="padding: 2px 6px; border-radius: 3px; font-weight: bold; {draw_style}">X {draw_odds:.2f}</span>' if draw_odds else ''
+            
             odds_html = f'''
-                <div class="match-details" style="background-color: #FFF9E6; padding: 8px; border-radius: 5px; margin-top: 8px;">
-                    🎲 <strong>Kursy:</strong> {home} <span style="background-color: #FFD700; padding: 2px 6px; border-radius: 3px; font-weight: bold;">{home_odds:.2f}</span> | {away} <span style="background-color: #FFD700; padding: 2px 6px; border-radius: 3px; font-weight: bold;">{away_odds:.2f}</span>
-                    <br><em style="font-size: 11px; color: #666;">⚠️ Kursy są wyłącznie informacją dodatkową, nie wpływają na scoring</em>
+                <div class="match-details" style="background-color: #FFF9E6; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #FFD700;">
+                    <div style="font-weight: bold; margin-bottom: 6px; color: #B8860B;">
+                        💰 Kursy Bukmacherskie <span style="font-size: 11px; color: #666; font-weight: normal;">({odds_source})</span>
+                    </div>
+                    <div>
+                        🏠 <span style="padding: 2px 6px; border-radius: 3px; font-weight: bold; {home_style}">{home} {home_odds:.2f}</span>
+                        {draw_html}
+                         | ✈️ <span style="padding: 2px 6px; border-radius: 3px; font-weight: bold; {away_style}">{away} {away_odds:.2f}</span>
+                    </div>
+                    <div style="margin-top: 6px; font-size: 11px; color: #666;">
+                        ⚡ Faworyt: <strong style="color: #4CAF50;">{'Remis' if draw_odds and draw_odds == min_odds else (home if home_odds == min_odds else away)}</strong> (kurs {min_odds:.2f})
+                    </div>
+                </div>
+            '''
+        
+        # SofaScore Fan Vote (jeśli dostępne)
+        sofascore_html = ''
+        sofascore_home = match.get('sofascore_home_win_prob')
+        sofascore_draw = match.get('sofascore_draw_prob')
+        sofascore_away = match.get('sofascore_away_win_prob')
+        sofascore_votes = match.get('sofascore_total_votes', 0)
+        sofascore_btts_yes = match.get('sofascore_btts_yes')
+        sofascore_btts_no = match.get('sofascore_btts_no')
+        
+        if sofascore_home is not None:
+            # Format liczby głosów
+            if sofascore_votes >= 1000000:
+                votes_str = f"{sofascore_votes/1000000:.1f}M"
+            elif sofascore_votes >= 1000:
+                votes_str = f"{sofascore_votes/1000:.1f}k"
+            else:
+                votes_str = str(sofascore_votes)
+            
+            # Koloruj dominującą opcję
+            max_pct = max(sofascore_home, sofascore_draw or 0, sofascore_away)
+            home_style = 'background-color: #4CAF50; color: white; font-weight: bold;' if sofascore_home == max_pct else ''
+            draw_style = 'background-color: #FFC107; color: black; font-weight: bold;' if sofascore_draw and sofascore_draw == max_pct else ''
+            away_style = 'background-color: #F44336; color: white; font-weight: bold;' if sofascore_away == max_pct else ''
+            
+            sofascore_html = f'''
+                <div style="background-color: #E3F2FD; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #2196F3;">
+                    <div style="font-weight: bold; margin-bottom: 8px; color: #1976D2;">
+                        🗳️ SofaScore Fan Vote <span style="font-size: 11px; color: #666; font-weight: normal;">({votes_str} głosów)</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="padding: 4px 12px; border-radius: 15px; {home_style}">🏠 {sofascore_home}%</span>
+                        {f'<span style="padding: 4px 12px; border-radius: 15px; {draw_style}">🤝 {sofascore_draw}%</span>' if sofascore_draw else ''}
+                        <span style="padding: 4px 12px; border-radius: 15px; {away_style}">✈️ {sofascore_away}%</span>
+                    </div>
+                    {f'<div style="margin-top: 6px; font-size: 12px; color: #555;">🎯 BTTS: Yes {sofascore_btts_yes}% | No {sofascore_btts_no}%</div>' if sofascore_btts_yes else ''}
                 </div>
             '''
         
@@ -474,6 +535,7 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
                 </div>
                 {gemini_html}
                 {odds_html}
+                {sofascore_html}
                 <div class="match-details">
                     🔗 <a href="{match_url}">Zobacz mecz na Livesport</a>
                 </div>

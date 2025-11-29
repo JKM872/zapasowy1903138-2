@@ -1,5 +1,12 @@
 """
 SKRYPT AUTOMATYCZNY: Scrapuje mecze i wysyła powiadomienie email
+
+FLOW:
+1. Forebet - predykcje (filtrowanie meczów z przewagą)
+2. SofaScore - głosy fanów
+3. Livesport - H2H + forma
+4. FlashScore - kursy bukmacherskie
+5. Email/AI - powiadomienie
 """
 
 import argparse
@@ -12,6 +19,14 @@ from email_notifier import send_email_notification
 from app_integrator import AppIntegrator, create_integrator_from_config
 import pandas as pd
 import time
+
+# Import FlashScore odds scraper
+try:
+    from flashscore_odds_scraper import FlashScoreOddsScraper
+    FLASHSCORE_AVAILABLE = True
+except ImportError:
+    FLASHSCORE_AVAILABLE = False
+    print("⚠️ flashscore_odds_scraper.py not found - odds will not be fetched")
 
 
 def scrape_and_send_email(
@@ -29,10 +44,19 @@ def scrape_and_send_email(
     only_form_advantage: bool = False,
     skip_no_odds: bool = False,
     away_team_focus: bool = False,
-    use_forebet: bool = False
+    use_forebet: bool = False,
+    use_sofascore: bool = False,
+    use_odds: bool = False
 ):
     """
     Scrapuje mecze i automatycznie wysyła email z wynikami
+    
+    NOWY FLOW (jeśli włączone):
+    1. Forebet → predykcje i filtrowanie
+    2. SofaScore → głosy fanów  
+    3. Livesport → H2H + forma
+    4. FlashScore → kursy bukmacherskie
+    5. Email → powiadomienie
     
     Args:
         date: Data w formacie YYYY-MM-DD
@@ -47,6 +71,7 @@ def scrape_and_send_email(
         only_form_advantage: Wysyłaj tylko mecze z przewagą formy gospodarzy (🔥)
         skip_no_odds: Pomijaj mecze bez kursów bukmacherskich (💰)
         away_team_focus: Szukaj meczów gdzie GOŚCIE mają ≥60% H2H (zamiast gospodarzy) (🏃)
+        use_odds: Pobieraj kursy z FlashScore (💰)
     """
     
     print("="*70)
@@ -62,6 +87,8 @@ def scrape_and_send_email(
         print(f"🔥 TRYB: Tylko mecze z PRZEWAGĄ FORMY {'gości' if away_team_focus else 'gospodarzy'}")
     if skip_no_odds:
         print(f"💰 TRYB: Pomijam mecze BEZ KURSÓW bukmacherskich")
+    if use_odds:
+        print(f"💰 TRYB: Pobieranie kursów z FlashScore")
     if max_matches:
         print(f"⚠️  TRYB TESTOWY: Limit {max_matches} meczów")
     print("="*70)
@@ -245,6 +272,56 @@ def scrape_and_send_email(
                 json.dump(qualifying_rows, f, ensure_ascii=False, indent=2)
             print(f"✅ Przewidywania zapisane do: {predictions_file}")
         
+        # KROK 2.5: Pobierz kursy z FlashScore (tylko dla kwalifikujących się meczów)
+        if use_odds and FLASHSCORE_AVAILABLE and qualifying_count > 0:
+            print(f"\n💰 KROK 2.5/4: Pobieranie kursów z FlashScore...")
+            print("="*70)
+            
+            odds_scraper = FlashScoreOddsScraper(headless=False)
+            odds_fetched = 0
+            
+            for row in rows:
+                if row.get('qualifies', False):
+                    try:
+                        home_team = row.get('home_team', '')
+                        away_team = row.get('away_team', '')
+                        current_sport = detect_sport_from_url(row.get('url', ''))
+                        
+                        odds_result = odds_scraper.get_odds(
+                            home_team=home_team,
+                            away_team=away_team,
+                            sport=current_sport
+                        )
+                        
+                        if odds_result.get('odds_found'):
+                            row['home_odds'] = odds_result.get('home_odds')
+                            row['draw_odds'] = odds_result.get('draw_odds')
+                            row['away_odds'] = odds_result.get('away_odds')
+                            row['odds_source'] = odds_result.get('odds_source')
+                            odds_fetched += 1
+                            print(f"   ✅ {home_team} vs {away_team}: {row['home_odds']}/{row['draw_odds']}/{row['away_odds']}")
+                        else:
+                            row['home_odds'] = None
+                            row['draw_odds'] = None
+                            row['away_odds'] = None
+                            row['odds_source'] = None
+                            print(f"   ⚠️ {home_team} vs {away_team}: Kursy nie znalezione")
+                        
+                    except Exception as e:
+                        print(f"   ❌ Błąd pobierania kursów: {e}")
+                        row['home_odds'] = None
+                        row['draw_odds'] = None
+                        row['away_odds'] = None
+            
+            print(f"\n   📊 Pobrano kursy dla {odds_fetched}/{qualifying_count} meczów")
+            
+            # Zapisz ponownie CSV z kursami
+            df = pd.DataFrame(rows)
+            if 'h2h_last5' in df.columns:
+                df['h2h_last5'] = df['h2h_last5'].apply(lambda x: str(x) if x else '')
+            df.to_csv(outfn, index=False, encoding='utf-8-sig')
+            print(f"   ✅ CSV zaktualizowany o kursy: {outfn}")
+        
         # Podsumowanie scrapingu
         print("\n📊 PODSUMOWANIE SCRAPINGU:")
         print(f"   Przetworzono: {len(rows)} meczów")
@@ -409,6 +486,10 @@ WAŻNE dla Gmail:
                        help='🏃 Szukaj meczów gdzie GOŚCIE mają >=60%% H2H (zamiast gospodarzy)')
     parser.add_argument('--use-forebet', action='store_true',
                        help='🎯 Pobieraj predykcje z Forebet.com (wymaga widocznej przeglądarki)')
+    parser.add_argument('--use-sofascore', action='store_true',
+                       help='🗳️ Pobieraj Fan Vote z SofaScore.com (wymaga widocznej przeglądarki)')
+    parser.add_argument('--use-odds', action='store_true',
+                       help='💰 Pobieraj kursy z FlashScore.com')
     parser.add_argument('--app-url', default=None,
                        help='URL aplikacji UI do wysyłania danych (np. http://localhost:3000)')
     parser.add_argument('--app-api-key', default=None,
@@ -431,7 +512,9 @@ WAŻNE dla Gmail:
         only_form_advantage=args.only_form_advantage,
         skip_no_odds=args.skip_no_odds,
         away_team_focus=args.away_team_focus,
-        use_forebet=args.use_forebet
+        use_forebet=args.use_forebet,
+        use_sofascore=args.use_sofascore,
+        use_odds=args.use_odds
     )
     
     print("\n✨ ZAKOŃCZONO!")
