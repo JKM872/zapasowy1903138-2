@@ -16,7 +16,44 @@ import os
 import time
 import random
 import json
+import subprocess
 from typing import Optional, Dict, Any
+
+# Detekcja CI/CD (GitHub Actions)
+IS_CI = os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true'
+
+# Xvfb helper dla CI/CD
+_xvfb_process = None
+
+def start_xvfb():
+    """Uruchom Xvfb virtual display dla CI/CD"""
+    global _xvfb_process
+    if IS_CI and _xvfb_process is None:
+        try:
+            # Sprawdź czy Xvfb jest dostępny
+            subprocess.run(['which', 'Xvfb'], check=True, capture_output=True)
+            
+            # Uruchom Xvfb na display :99
+            _xvfb_process = subprocess.Popen(
+                ['Xvfb', ':99', '-screen', '0', '1920x1080x24'],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            os.environ['DISPLAY'] = ':99'
+            time.sleep(1)  # Daj czas na start
+            print("      🖥️ Xvfb virtual display started for bypass")
+            return True
+        except Exception as e:
+            print(f"      ⚠️ Xvfb nie dostępny: {e}")
+            return False
+    return True
+
+def stop_xvfb():
+    """Zatrzymaj Xvfb"""
+    global _xvfb_process
+    if _xvfb_process:
+        _xvfb_process.terminate()
+        _xvfb_process = None
 
 # Sprawdź dostępne metody
 METHODS_AVAILABLE = {}
@@ -127,6 +164,10 @@ class CloudflareBypass:
         Próbuje kolejnych metod aż jedna zadziała.
         """
         
+        # Uruchom Xvfb jeśli w CI/CD
+        if IS_CI:
+            start_xvfb()
+        
         methods = [
             ('curl_cffi', self._try_curl_cffi),
             ('cloudscraper', self._try_cloudscraper),
@@ -136,30 +177,45 @@ class CloudflareBypass:
             ('httpx', self._try_httpx),
         ]
         
-        for method_name, method_func in methods:
-            if not METHODS_AVAILABLE.get(method_name, False):
-                self.log(f"{method_name}: niedostępny, pomijam")
-                continue
-            
-            self.log(f"Próbuję metodę: {method_name}")
-            
-            try:
-                html = method_func(url, timeout)
-                if html and len(html) > 1000:
-                    # Sprawdź czy to nie Cloudflare challenge
-                    if 'checking your browser' not in html.lower() and 'cloudflare' not in html.lower()[:500]:
-                        self.method_used = method_name
-                        self.log(f"✅ SUKCES z metodą: {method_name}")
-                        return html
+        try:
+            for method_name, method_func in methods:
+                if not METHODS_AVAILABLE.get(method_name, False):
+                    self.log(f"{method_name}: niedostępny, pomijam")
+                    continue
+                
+                self.log(f"Próbuję metodę: {method_name}")
+                
+                try:
+                    html = method_func(url, timeout)
+                    if html and len(html) > 1000:
+                        # Sprawdź czy to nie Cloudflare challenge
+                        html_lower = html.lower()
+                        is_challenge = (
+                            'checking your browser' in html_lower or 
+                            'verifying you are human' in html_lower or
+                            'just a moment' in html_lower or
+                            'cloudflare' in html[:1000].lower() or
+                            'loading-verifying' in html or
+                            'lds-ring' in html
+                        )
+                        
+                        if not is_challenge:
+                            self.method_used = method_name
+                            self.log(f"✅ SUKCES z metodą: {method_name}")
+                            return html
+                        else:
+                            self.log(f"⚠️ {method_name}: Cloudflare challenge wykryty, strona nie przeszła")
                     else:
-                        self.log(f"⚠️ {method_name}: Cloudflare challenge wykryty")
-                else:
-                    self.log(f"⚠️ {method_name}: za krótka odpowiedź ({len(html) if html else 0} znaków)")
-            except Exception as e:
-                self.log(f"❌ {method_name}: {str(e)[:50]}")
-        
-        self.log("❌ Wszystkie metody zawiodły!")
-        return None
+                        self.log(f"⚠️ {method_name}: za krótka odpowiedź ({len(html) if html else 0} znaków)")
+                except Exception as e:
+                    self.log(f"❌ {method_name}: {str(e)[:50]}")
+            
+            self.log("❌ Wszystkie metody zawiodły!")
+            return None
+        finally:
+            # Zatrzymaj Xvfb jeśli uruchomiony
+            if IS_CI:
+                stop_xvfb()
     
     def _try_curl_cffi(self, url: str, timeout: int) -> Optional[str]:
         """curl_cffi - emuluje TLS fingerprint przeglądarki"""
@@ -202,17 +258,42 @@ class CloudflareBypass:
         from DrissionPage import ChromiumPage, ChromiumOptions
         
         co = ChromiumOptions()
-        co.set_argument('--headless=new')
+        # NIE używaj headless - Cloudflare to wykrywa!
         co.set_argument('--disable-gpu')
         co.set_argument('--no-sandbox')
         co.set_argument('--disable-dev-shm-usage')
+        co.set_argument('--disable-blink-features=AutomationControlled')
         co.set_argument(f'--user-agent={get_random_user_agent()}')
+        co.set_argument('--window-size=1920,1080')
+        
+        # Wyłącz WebDriver detection
+        co.set_pref('credentials_enable_service', False)
+        co.set_pref('profile.password_manager_enabled', False)
         
         page = ChromiumPage(co)
         
         try:
             page.get(url, timeout=timeout)
-            human_delay(3, 5)
+            
+            # 🔥 KLUCZOWE: Czekaj na rozwiązanie Cloudflare challenge
+            max_wait = 30  # max 30 sekund na challenge
+            start_time = time.time()
+            
+            while time.time() - start_time < max_wait:
+                html = page.html
+                
+                # Sprawdź czy wciąż jesteśmy na stronie weryfikacji
+                if 'Verifying you are human' in html or 'checking your browser' in html.lower() or 'Just a moment' in html:
+                    self.log("⏳ Cloudflare challenge w toku, czekam...")
+                    human_delay(2, 3)
+                    continue
+                
+                # Sprawdź czy strona ma prawdziwe treści (mecze, typy bukmacherskie itp)
+                if 'rcnt' in html or 'contentmiddle' in html or 'schema' in html or len(html) > 50000:
+                    self.log("✅ Strona załadowana pomyślnie!")
+                    break
+                    
+                human_delay(1, 2)
             
             # Symulacja scrollowania
             for _ in range(3):
@@ -229,8 +310,8 @@ class CloudflareBypass:
         from playwright.sync_api import sync_playwright
         
         with sync_playwright() as p:
-            # Użyj Firefox (mniej wykrywalny)
-            browser = p.firefox.launch(headless=True)
+            # Użyj Firefox (mniej wykrywalny) - NIE headless!
+            browser = p.firefox.launch(headless=False)
             
             context = browser.new_context(
                 user_agent=get_random_user_agent(),
@@ -246,7 +327,23 @@ class CloudflareBypass:
             
             try:
                 page.goto(url, timeout=timeout * 1000, wait_until='domcontentloaded')
-                human_delay(3, 5)
+                
+                # 🔥 Czekaj na rozwiązanie Cloudflare challenge
+                max_wait = 30
+                start_time = time.time()
+                
+                while time.time() - start_time < max_wait:
+                    html = page.content()
+                    
+                    if 'Verifying you are human' in html or 'checking your browser' in html.lower() or 'Just a moment' in html:
+                        self.log("⏳ Playwright: Cloudflare challenge w toku...")
+                        human_delay(2, 3)
+                        continue
+                    
+                    if 'rcnt' in html or 'contentmiddle' in html or len(html) > 50000:
+                        break
+                        
+                    human_delay(1, 2)
                 
                 # Symulacja ludzkiego zachowania
                 page.mouse.move(random.randint(100, 500), random.randint(100, 500))
@@ -267,7 +364,7 @@ class CloudflareBypass:
         import undetected_chromedriver as uc
         
         options = uc.ChromeOptions()
-        options.add_argument('--headless=new')
+        # NIE używaj headless - Cloudflare to wykrywa!
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -283,12 +380,24 @@ class CloudflareBypass:
         
         try:
             driver.get(url)
-            human_delay(4, 7)
             
-            # Sprawdź Cloudflare
-            if 'checking' in driver.title.lower():
-                self.log("Wykryto Cloudflare check, czekam...")
-                human_delay(8, 12)
+            # 🔥 Czekaj na rozwiązanie Cloudflare challenge
+            max_wait = 30
+            start_time = time.time()
+            
+            while time.time() - start_time < max_wait:
+                html = driver.page_source
+                
+                if 'Verifying you are human' in html or 'checking your browser' in html.lower() or 'Just a moment' in html:
+                    self.log("⏳ Undetected Chrome: Cloudflare challenge w toku...")
+                    human_delay(2, 3)
+                    continue
+                
+                if 'rcnt' in html or 'contentmiddle' in html or len(html) > 50000:
+                    self.log("✅ Cloudflare challenge rozwiązany!")
+                    break
+                    
+                human_delay(1, 2)
             
             # Symulacja scrollowania
             for _ in range(5):
