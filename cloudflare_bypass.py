@@ -65,6 +65,7 @@ METHODS_AVAILABLE = {}
 
 # Metoda 0: FlareSolverr (zawsze dostępna jeśli serwer działa)
 METHODS_AVAILABLE['flaresolverr'] = True  # Sprawdzamy dostępność przy wywołaniu
+METHODS_AVAILABLE['flaresolverr_session'] = True  # Wersja z sesją
 
 # Metoda 1: DrissionPage
 try:
@@ -259,6 +260,7 @@ class CloudflareBypass:
         if IS_CI:
             methods = [
                 ('flaresolverr', self._try_flaresolverr),  # 🔥 NAJLEPSZA dla CI/CD
+                ('flaresolverr_session', self._try_flaresolverr_with_session),  # 🔥 Wersja z sesją (retry)
                 ('curl_cffi', self._try_curl_cffi),
                 ('cloudscraper', self._try_cloudscraper),
                 ('drissionpage', self._try_drissionpage),
@@ -325,17 +327,21 @@ class CloudflareBypass:
         try:
             self.log(f"🐳 Łączę z FlareSolverr: {FLARESOLVERR_URL}")
             
+            # 🔥 Forebet wymaga dłuższego czasu - 120 sekund!
+            # Challenge może trwać długo
+            flare_timeout = max(timeout * 1000, 120000)  # min 120 sekund
+            
             payload = {
                 "cmd": "request.get",
                 "url": url,
-                "maxTimeout": timeout * 1000  # ms
+                "maxTimeout": flare_timeout
             }
             
             response = requests.post(
                 FLARESOLVERR_URL,
                 headers={"Content-Type": "application/json"},
                 json=payload,
-                timeout=timeout + 30  # Dodatkowy czas na rozwiązanie challenge
+                timeout=180  # 3 minuty na całość
             )
             
             if response.status_code == 200:
@@ -346,6 +352,30 @@ class CloudflareBypass:
                     html = solution.get("response", "")
                     
                     if html:
+                        # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona, nie challenge!
+                        html_lower = html.lower()
+                        is_cloudflare_page = (
+                            'checking your browser' in html_lower or
+                            'verifying you are human' in html_lower or
+                            'just a moment' in html_lower or
+                            'loading-verifying' in html or
+                            'lds-ring' in html or
+                            'ray-id' in html and 'rcnt' not in html  # ray-id bez treści forebet
+                        )
+                        
+                        # Sprawdź czy to strona Forebet (powinna mieć klasy meczów)
+                        is_forebet_page = (
+                            'rcnt' in html or  # główny kontener meczów
+                            'forepr' in html or  # prognozy
+                            'lscrsp' in html or  # wyniki
+                            'tr_0' in html or 'tr_1' in html  # wiersze meczów
+                        )
+                        
+                        if is_cloudflare_page and not is_forebet_page:
+                            self.log(f"⚠️ FlareSolverr: Otrzymano stronę Cloudflare challenge, nie Forebet!")
+                            self.log(f"   HTML zawiera: loading-verifying={('loading-verifying' in html)}, lds-ring={('lds-ring' in html)}")
+                            return None  # Zwróć None żeby próbować inne metody
+                        
                         self.log(f"🐳 FlareSolverr SUCCESS! ({len(html)} znaków)")
                         
                         # Zapisz cookies do przyszłego użycia
@@ -354,6 +384,12 @@ class CloudflareBypass:
                         
                         if cookies:
                             self.log(f"🍪 Otrzymano {len(cookies)} cookies")
+                        
+                        # Dodatkowa weryfikacja - czy to na pewno Forebet?
+                        if is_forebet_page:
+                            self.log(f"✅ Potwierdzona strona Forebet (znaleziono elementy meczów)")
+                        else:
+                            self.log(f"⚠️ Strona nie wygląda jak Forebet, ale zwracam HTML do analizy")
                         
                         return html
                     else:
@@ -372,6 +408,102 @@ class CloudflareBypass:
             self.log(f"⚠️ FlareSolverr error: {str(e)[:50]}")
         
         return None
+    
+    def _try_flaresolverr_with_session(self, url: str, timeout: int) -> Optional[str]:
+        """
+        🔥 FlareSolverr z sesją - tworzy sesję, rozwiązuje challenge, potem pobiera stronę
+        Czasami challenge wymaga wielu prób.
+        """
+        import uuid
+        session_id = f"forebet_{uuid.uuid4().hex[:8]}"
+        
+        try:
+            self.log(f"🐳 FlareSolverr SESSION: Tworzę sesję {session_id}")
+            
+            # 1. Utwórz sesję
+            create_payload = {
+                "cmd": "sessions.create",
+                "session": session_id
+            }
+            
+            response = requests.post(
+                FLARESOLVERR_URL,
+                headers={"Content-Type": "application/json"},
+                json=create_payload,
+                timeout=30
+            )
+            
+            if response.status_code != 200:
+                self.log(f"⚠️ Nie można utworzyć sesji")
+                return None
+            
+            # 2. Pobierz stronę z sesją (max 3 próby)
+            for attempt in range(3):
+                self.log(f"🐳 Próba {attempt + 1}/3 z sesją...")
+                
+                get_payload = {
+                    "cmd": "request.get",
+                    "url": url,
+                    "session": session_id,
+                    "maxTimeout": 120000  # 2 minuty
+                }
+                
+                response = requests.post(
+                    FLARESOLVERR_URL,
+                    headers={"Content-Type": "application/json"},
+                    json=get_payload,
+                    timeout=180
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    if data.get("status") == "ok":
+                        solution = data.get("solution", {})
+                        html = solution.get("response", "")
+                        
+                        if html:
+                            # Sprawdź czy to Forebet
+                            is_forebet = 'rcnt' in html or 'forepr' in html or 'tr_0' in html
+                            is_challenge = 'loading-verifying' in html or 'lds-ring' in html
+                            
+                            if is_forebet and not is_challenge:
+                                self.log(f"✅ FlareSolverr SESSION SUCCESS! ({len(html)} znaków)")
+                                # Usuń sesję
+                                self._cleanup_flaresolverr_session(session_id)
+                                return html
+                            elif is_challenge:
+                                self.log(f"⚠️ Próba {attempt + 1}: Nadal challenge, czekam...")
+                                time.sleep(5)  # Czekaj przed kolejną próbą
+                            else:
+                                # Może to inna strona - zwróć do analizy
+                                self._cleanup_flaresolverr_session(session_id)
+                                return html
+            
+            # Usuń sesję po nieudanych próbach
+            self._cleanup_flaresolverr_session(session_id)
+            
+        except Exception as e:
+            self.log(f"⚠️ FlareSolverr SESSION error: {str(e)[:50]}")
+            self._cleanup_flaresolverr_session(session_id)
+        
+        return None
+    
+    def _cleanup_flaresolverr_session(self, session_id: str):
+        """Usuń sesję FlareSolverr"""
+        try:
+            destroy_payload = {
+                "cmd": "sessions.destroy",
+                "session": session_id
+            }
+            requests.post(
+                FLARESOLVERR_URL,
+                headers={"Content-Type": "application/json"},
+                json=destroy_payload,
+                timeout=10
+            )
+        except:
+            pass
     
     def _try_curl_cffi(self, url: str, timeout: int) -> Optional[str]:
         """curl_cffi - emuluje TLS fingerprint przeglądarki"""
