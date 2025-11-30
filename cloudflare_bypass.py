@@ -3,14 +3,19 @@
 ==========================================
 Agresywne techniki omijania Cloudflare dla GitHub Actions.
 
-Metody:
-1. FlareSolverr (Docker service - najlepsza dla CI/CD!)
-2. DrissionPage (najnowsza biblioteka anti-detection)
-3. Playwright z stealth
-4. curl_cffi (TLS fingerprint jak przeglądarka)
-5. Requests z Cloudflare scraper
-6. Selenium undetected + random delays
-7. httpx z HTTP/2
+Metody (w kolejności próbowania):
+1. Puppeteer Stealth (Node.js) - najskuteczniejsza!
+2. FlareSolverr (Docker service)
+3. FlareSolverr z sesją (retry)
+4. curl_cffi (TLS fingerprint)
+5. cloudscraper
+6. Zenrows API (free tier)
+7. ScraperAPI (free tier) 
+8. DrissionPage
+9. Playwright stealth
+10. Selenium undetected
+11. httpx HTTP/2
+12. Archive.org cache (fallback)
 """
 
 import os
@@ -26,6 +31,11 @@ IS_CI = os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 't
 
 # FlareSolverr URL (Docker service)
 FLARESOLVERR_URL = os.environ.get('FLARESOLVERR_URL', 'http://localhost:8191/v1')
+
+# API Keys (można ustawić jako secrets w GitHub Actions)
+ZENROWS_API_KEY = os.environ.get('ZENROWS_API_KEY', '')
+SCRAPERAPI_KEY = os.environ.get('SCRAPERAPI_KEY', '')
+SCRAPINGBEE_KEY = os.environ.get('SCRAPINGBEE_KEY', '')
 
 # Xvfb helper dla CI/CD
 _xvfb_process = None
@@ -63,9 +73,20 @@ def stop_xvfb():
 # Sprawdź dostępne metody
 METHODS_AVAILABLE = {}
 
-# Metoda 0: FlareSolverr (zawsze dostępna jeśli serwer działa)
-METHODS_AVAILABLE['flaresolverr'] = True  # Sprawdzamy dostępność przy wywołaniu
-METHODS_AVAILABLE['flaresolverr_session'] = True  # Wersja z sesją
+# Metoda 0: Puppeteer Stealth (Node.js) - najskuteczniejsza!
+METHODS_AVAILABLE['puppeteer'] = True  # Wymaga Node.js i npm
+
+# Metoda 1: FlareSolverr (zawsze dostępna jeśli serwer działa)
+METHODS_AVAILABLE['flaresolverr'] = True
+METHODS_AVAILABLE['flaresolverr_session'] = True
+
+# Metoda 2: API services (jeśli skonfigurowane)
+METHODS_AVAILABLE['zenrows'] = bool(ZENROWS_API_KEY)
+METHODS_AVAILABLE['scraperapi'] = bool(SCRAPERAPI_KEY)
+METHODS_AVAILABLE['scrapingbee'] = bool(SCRAPINGBEE_KEY)
+
+# Metoda 3: Archive.org (zawsze dostępna jako fallback)
+METHODS_AVAILABLE['archive'] = True
 
 # Metoda 1: DrissionPage
 try:
@@ -255,22 +276,27 @@ class CloudflareBypass:
         if IS_CI:
             start_xvfb()
         
-        # W CI/CD - FlareSolverr jako PIERWSZA metoda (najlepsza!)
-        # Lokalnie - standardowe metody
+        # W CI/CD - Puppeteer jako PIERWSZA, potem FlareSolverr, potem API
         if IS_CI:
             methods = [
-                ('flaresolverr', self._try_flaresolverr),  # 🔥 NAJLEPSZA dla CI/CD
-                ('flaresolverr_session', self._try_flaresolverr_with_session),  # 🔥 Wersja z sesją (retry)
+                ('puppeteer', self._try_puppeteer),  # 🔥 NAJSKUTECZNIEJSZA!
+                ('flaresolverr', self._try_flaresolverr),
+                ('flaresolverr_session', self._try_flaresolverr_with_session),
+                ('zenrows', self._try_zenrows),  # API services
+                ('scraperapi', self._try_scraperapi),
+                ('scrapingbee', self._try_scrapingbee),
                 ('curl_cffi', self._try_curl_cffi),
                 ('cloudscraper', self._try_cloudscraper),
                 ('drissionpage', self._try_drissionpage),
                 ('playwright', self._try_playwright),
                 ('undetected', self._try_undetected_chrome),
                 ('httpx', self._try_httpx),
+                ('archive', self._try_archive),  # Fallback
             ]
         else:
             methods = [
                 ('undetected', self._try_undetected_chrome),  # Lokalnie najlepsza
+                ('puppeteer', self._try_puppeteer),
                 ('flaresolverr', self._try_flaresolverr),
                 ('curl_cffi', self._try_curl_cffi),
                 ('cloudscraper', self._try_cloudscraper),
@@ -841,6 +867,244 @@ class CloudflareBypass:
             if response.status_code == 200:
                 return response.text
         return None
+    
+    def _try_puppeteer(self, url: str, timeout: int) -> Optional[str]:
+        """
+        🔥 Puppeteer Extra z Stealth Plugin (Node.js)
+        Najskuteczniejsza metoda dla Cloudflare!
+        """
+        # Sprawdź sport z URL
+        sport = 'football'
+        if '/basketball/' in url:
+            sport = 'basketball'
+        elif '/tennis/' in url:
+            sport = 'tennis'
+        elif '/volleyball/' in url:
+            sport = 'volleyball'
+        elif '/handball/' in url:
+            sport = 'handball'
+        elif '/hockey/' in url:
+            sport = 'hockey'
+        
+        output_file = f'forebet_{sport}_puppeteer.html'
+        
+        try:
+            self.log(f"🚀 Puppeteer Stealth: Uruchamiam...")
+            
+            # Sprawdź czy Node.js jest dostępny
+            result = subprocess.run(['node', '--version'], capture_output=True, text=True, timeout=10)
+            if result.returncode != 0:
+                self.log("⚠️ Node.js nie jest dostępny")
+                return None
+            
+            # Sprawdź czy plik forebet_puppeteer.js istnieje
+            if not os.path.exists('forebet_puppeteer.js'):
+                self.log("⚠️ Brak pliku forebet_puppeteer.js")
+                return None
+            
+            # Sprawdź czy dependencies są zainstalowane
+            if not os.path.exists('node_modules/puppeteer-extra'):
+                self.log("📦 Instaluję puppeteer-extra...")
+                subprocess.run(['npm', 'install'], capture_output=True, timeout=180)
+            
+            # Uruchom Puppeteer scraper
+            result = subprocess.run(
+                ['node', 'forebet_puppeteer.js', sport, output_file],
+                capture_output=True,
+                text=True,
+                timeout=300  # 5 minut timeout
+            )
+            
+            # Sprawdź output
+            if 'SUKCES' in result.stdout or 'SUCCESS' in result.stdout:
+                if os.path.exists(output_file):
+                    with open(output_file, 'r', encoding='utf-8') as f:
+                        html = f.read()
+                    
+                    # Weryfikacja
+                    if self._is_forebet_content(html) and not self._is_cloudflare_challenge(html):
+                        self.log(f"✅ Puppeteer SUCCESS! ({len(html)} znaków)")
+                        return html
+            
+            self.log(f"⚠️ Puppeteer nie zadziałał")
+            return None
+            
+        except subprocess.TimeoutExpired:
+            self.log("⚠️ Puppeteer: Timeout")
+            return None
+        except FileNotFoundError:
+            self.log("⚠️ Puppeteer: Node.js nie znaleziony")
+            return None
+        except Exception as e:
+            self.log(f"⚠️ Puppeteer error: {str(e)[:50]}")
+            return None
+    
+    def _try_zenrows(self, url: str, timeout: int) -> Optional[str]:
+        """
+        ZenRows API - darmowy tier 1000 requestów/miesiąc
+        https://www.zenrows.com/
+        """
+        if not ZENROWS_API_KEY:
+            return None
+        
+        try:
+            self.log(f"🌐 ZenRows API...")
+            
+            api_url = "https://api.zenrows.com/v1/"
+            params = {
+                'apikey': ZENROWS_API_KEY,
+                'url': url,
+                'js_render': 'true',
+                'antibot': 'true',
+                'premium_proxy': 'true'
+            }
+            
+            response = requests.get(api_url, params=params, timeout=timeout + 30)
+            
+            if response.status_code == 200:
+                html = response.text
+                if self._is_forebet_content(html) and not self._is_cloudflare_challenge(html):
+                    self.log(f"✅ ZenRows SUCCESS! ({len(html)} znaków)")
+                    return html
+            
+            self.log(f"⚠️ ZenRows HTTP {response.status_code}")
+            return None
+            
+        except Exception as e:
+            self.log(f"⚠️ ZenRows error: {str(e)[:50]}")
+            return None
+    
+    def _try_scraperapi(self, url: str, timeout: int) -> Optional[str]:
+        """
+        ScraperAPI - darmowy tier 5000 requestów/miesiąc
+        https://www.scraperapi.com/
+        """
+        if not SCRAPERAPI_KEY:
+            return None
+        
+        try:
+            self.log(f"🌐 ScraperAPI...")
+            
+            api_url = f"http://api.scraperapi.com?api_key={SCRAPERAPI_KEY}&url={url}&render=true&country_code=us"
+            
+            response = requests.get(api_url, timeout=timeout + 60)
+            
+            if response.status_code == 200:
+                html = response.text
+                if self._is_forebet_content(html) and not self._is_cloudflare_challenge(html):
+                    self.log(f"✅ ScraperAPI SUCCESS! ({len(html)} znaków)")
+                    return html
+            
+            self.log(f"⚠️ ScraperAPI HTTP {response.status_code}")
+            return None
+            
+        except Exception as e:
+            self.log(f"⚠️ ScraperAPI error: {str(e)[:50]}")
+            return None
+    
+    def _try_scrapingbee(self, url: str, timeout: int) -> Optional[str]:
+        """
+        ScrapingBee API - darmowy tier 1000 requestów/miesiąc
+        https://www.scrapingbee.com/
+        """
+        if not SCRAPINGBEE_KEY:
+            return None
+        
+        try:
+            self.log(f"🌐 ScrapingBee API...")
+            
+            api_url = "https://app.scrapingbee.com/api/v1/"
+            params = {
+                'api_key': SCRAPINGBEE_KEY,
+                'url': url,
+                'render_js': 'true',
+                'premium_proxy': 'true',
+                'stealth_proxy': 'true'
+            }
+            
+            response = requests.get(api_url, params=params, timeout=timeout + 60)
+            
+            if response.status_code == 200:
+                html = response.text
+                if self._is_forebet_content(html) and not self._is_cloudflare_challenge(html):
+                    self.log(f"✅ ScrapingBee SUCCESS! ({len(html)} znaków)")
+                    return html
+            
+            self.log(f"⚠️ ScrapingBee HTTP {response.status_code}")
+            return None
+            
+        except Exception as e:
+            self.log(f"⚠️ ScrapingBee error: {str(e)[:50]}")
+            return None
+    
+    def _try_archive(self, url: str, timeout: int) -> Optional[str]:
+        """
+        Archive.org Wayback Machine - jako fallback
+        Zwraca najnowszą zarchiwizowaną wersję strony
+        """
+        try:
+            self.log(f"📦 Archive.org (fallback)...")
+            
+            # Sprawdź czy jest dostępna wersja
+            check_url = f"https://archive.org/wayback/available?url={url}"
+            response = requests.get(check_url, timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
+                snapshots = data.get('archived_snapshots', {})
+                closest = snapshots.get('closest', {})
+                
+                if closest.get('available'):
+                    archive_url = closest.get('url')
+                    timestamp = closest.get('timestamp', '')
+                    
+                    self.log(f"📦 Znaleziono snapshot z {timestamp[:8]}")
+                    
+                    # Pobierz zarchiwizowaną stronę
+                    archive_response = requests.get(archive_url, timeout=timeout)
+                    
+                    if archive_response.status_code == 200:
+                        html = archive_response.text
+                        
+                        # Archive.org może nie mieć aktualnych danych, ale przynajmniej coś zwróci
+                        if len(html) > 5000:
+                            self.log(f"📦 Archive.org: ({len(html)} znaków) - UWAGA: może być nieaktualne!")
+                            return html
+            
+            self.log("⚠️ Archive.org: brak dostępnej wersji")
+            return None
+            
+        except Exception as e:
+            self.log(f"⚠️ Archive.org error: {str(e)[:50]}")
+            return None
+    
+    def _is_cloudflare_challenge(self, html: str) -> bool:
+        """Sprawdź czy HTML to strona Cloudflare challenge"""
+        if not html:
+            return True
+        
+        html_lower = html.lower()
+        return (
+            'loading-verifying' in html or
+            'lds-ring' in html or
+            'checking your browser' in html_lower or
+            'verifying you are human' in html_lower or
+            'just a moment' in html_lower
+        )
+    
+    def _is_forebet_content(self, html: str) -> bool:
+        """Sprawdź czy HTML zawiera prawdziwe dane Forebet"""
+        if not html:
+            return False
+        
+        return (
+            'class="rcnt"' in html or
+            'class="forepr"' in html or
+            'class="fprc"' in html or
+            'class="tr_0"' in html or
+            'class="tr_1"' in html or
+            'class="schema' in html
+        )
     
     def close(self):
         """Zamknij zasoby"""
