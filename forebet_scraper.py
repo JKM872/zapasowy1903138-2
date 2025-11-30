@@ -452,11 +452,10 @@ def search_forebet_prediction(
             
             own_driver = True
             
-            # 🔥 WAŻNE: Używamy /by-league bo pokazuje WSZYSTKIE mecze na jednej stronie!
-            # Normalny URL pokazuje tylko ~50 i wymaga "Load More"
+            # 🔥 WAŻNE: Używamy URL z datą meczu!
             sport_urls = {
-                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2/by-league',
-                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2/by-league',
+                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
+                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
                 'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
                 'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
                 'handball': 'https://www.forebet.com/en/handball/predictions-today',
@@ -467,8 +466,20 @@ def search_forebet_prediction(
                 'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
             }
             
-            url = sport_urls.get(sport.lower(), sport_urls['football'])
-            print(f"      🌐 Forebet ({sport}): Ładuję {url} [FULL LIST /by-league]")
+            base_url = sport_urls.get(sport.lower(), sport_urls['football'])
+            
+            # Dodaj datę do URL - Forebet filtruje mecze po dacie!
+            from datetime import datetime
+            today = datetime.now().strftime('%Y-%m-%d')
+            
+            if match_date and match_date != today:
+                url = f"{base_url}?date={match_date}"
+                print(f"      📅 Forebet dla daty: {match_date}")
+            else:
+                url = base_url
+                print(f"      📅 Forebet dla dzisiaj")
+            
+            print(f"      🌐 Forebet ({sport}): Ładuję {url}")
             
             driver.get(url)
             
@@ -576,18 +587,24 @@ def search_forebet_prediction(
         print(f"      🔍 Znaleziono {len(match_rows)} meczów na Forebet")
         
         # DEBUG: Wypisz strukturę pierwszego wiersza
-        if match_rows:
-            first_row = match_rows[0]
-            row_classes = first_row.get('class', []) if first_row else []
-            all_spans = first_row.find_all('span') if first_row else []
-            all_divs = first_row.find_all('div') if first_row else []
-            print(f"      📋 Struktura pierwszego wiersza: klasy={row_classes}")
-            print(f"      📋 Spany w wierszu: {len(all_spans)}, Divy: {len(all_divs)}")
-            # Wypisz pierwsze 3 spany
-            for i, span in enumerate(all_spans[:5]):
-                span_class = span.get('class', [])
-                span_text = span.get_text(strip=True)[:30]
-                print(f"      📋 Span {i}: class={span_class}, text='{span_text}'")
+        try:
+            if match_rows:
+                first_row = match_rows[0]
+                print(f"      📋 DEBUG: first_row type={type(first_row)}, truthy={bool(first_row)}")
+                if first_row:
+                    row_classes = first_row.get('class', []) if hasattr(first_row, 'get') else []
+                    all_spans = first_row.find_all('span') if hasattr(first_row, 'find_all') else []
+                    all_divs = first_row.find_all('div') if hasattr(first_row, 'find_all') else []
+                    print(f"      📋 Struktura pierwszego wiersza: klasy={row_classes}")
+                    print(f"      📋 Spany w wierszu: {len(all_spans)}, Divy: {len(all_divs)}")
+                    # Wypisz pierwsze 5 spanów z klasami homeTeam/awayTeam
+                    for i, span in enumerate(all_spans[:10]):
+                        span_class = span.get('class', [])
+                        if 'homeTeam' in span_class or 'awayTeam' in span_class or 'tnm' in span_class:
+                            span_text = span.get_text(strip=True)[:50]
+                            print(f"      📋 Span {i}: class={span_class}, text='{span_text}'")
+        except Exception as debug_err:
+            print(f"      ⚠️ DEBUG error przy analizie first_row: {debug_err}")
         
         # DEBUG: Wypisz pierwsze 5 meczów z Forebet żeby zobaczyć format
         debug_matches = []
@@ -608,79 +625,81 @@ def search_forebet_prediction(
         for row in match_rows:
             try:
                 # Wyciągnij nazwy drużyn - WIELE WARIANTÓW
-                home_elem = None
-                away_elem = None
+                home_name = None
+                away_name = None
                 
-                # Wariant 1: span.homeTeam / span.awayTeam
-                home_elem = row.find('span', class_='homeTeam')
-                away_elem = row.find('span', class_='awayTeam')
+                # Wariant 1: span.homeTeam > span[itemprop="name"] (AKTUALNA STRUKTURA FOREBET 2025)
+                home_span = row.find('span', class_='homeTeam')
+                away_span = row.find('span', class_='awayTeam')
+                if home_span and away_span:
+                    # Szukaj zagnieżdżonego span z itemprop="name"
+                    home_inner = home_span.find('span', itemprop='name')
+                    away_inner = away_span.find('span', itemprop='name')
+                    if home_inner and away_inner:
+                        home_name = home_inner.get_text(strip=True)
+                        away_name = away_inner.get_text(strip=True)
+                    else:
+                        # Fallback: weź cały tekst ze span.homeTeam/awayTeam
+                        home_name = home_span.get_text(strip=True)
+                        away_name = away_span.get_text(strip=True)
                 
-                # Wariant 2: td.lscr_td > spans
-                if not home_elem or not away_elem:
-                    teams_td = row.find('td', class_='lscr_td')
-                    if teams_td:
-                        spans = teams_td.find_all('span')
-                        if len(spans) >= 2:
-                            home_elem = spans[0]
-                            away_elem = spans[1]
+                # Wariant 2: meta itemprop="name" w schema.org (BACKUP)
+                if not home_name or not away_name:
+                    meta_name = row.find('meta', itemprop='name')
+                    if meta_name and meta_name.get('content'):
+                        content = meta_name['content']
+                        if ' vs ' in content:
+                            parts = content.split(' vs ')
+                            home_name = parts[0].strip()
+                            away_name = parts[1].strip()
                 
-                # Wariant 3: div.homeTeam / div.awayTeam
-                if not home_elem or not away_elem:
-                    home_elem = row.find('div', class_='homeTeam')
-                    away_elem = row.find('div', class_='awayTeam')
-                
-                # Wariant 4: Szukaj <a> z href zawierającym '/predictions/'
-                if not home_elem or not away_elem:
+                # Wariant 3: Szukaj <a> z href zawierającym mecz (np. /bayelsa-united-katsina-united)
+                if not home_name or not away_name:
                     links = row.find_all('a', href=True)
                     for link in links:
-                        if '/predictions/' in link['href']:
-                            # Link wygląda jak: /predictions/home-vs-away
-                            teams_in_url = link['href'].split('/')[-1]
-                            if '-vs-' in teams_in_url:
-                                parts = teams_in_url.split('-vs-')
-                                # Symuluj elementy
-                                class FakeElement:
-                                    def __init__(self, text):
-                                        self.text = text
-                                    def get_text(self, strip=False):
-                                        return self.text.strip() if strip else self.text
-                                
-                                home_elem = FakeElement(parts[0].replace('-', ' ').title())
-                                away_elem = FakeElement(parts[1].replace('-', ' ').title())
-                                break
+                        href = link.get('href', '')
+                        # Szukaj linków z meczami typu /football/matches/team1-team2-123456
+                        if '/matches/' in href or '/predictions/' in href:
+                            # Wyciągnij ostatni segment URL
+                            url_part = href.split('/')[-1]
+                            # Usuń ID meczu (liczby na końcu po myślniku)
+                            import re
+                            url_part = re.sub(r'-\d+$', '', url_part)
+                            # Szukaj wzorca team1-team2
+                            if '-' in url_part:
+                                # Spróbuj znaleźć podział na dwie drużyny
+                                # Szukaj kombinacji słów oddzielonych myślnikami
+                                words = url_part.split('-')
+                                # Spróbuj różnych podziałów
+                                for i in range(1, len(words)):
+                                    potential_home = ' '.join(words[:i]).title()
+                                    potential_away = ' '.join(words[i:]).title()
+                                    if len(potential_home) > 2 and len(potential_away) > 2:
+                                        home_name = potential_home
+                                        away_name = potential_away
+                                        break
+                                if home_name and away_name:
+                                    break
                 
-                # Wariant 5: Szukaj klasy 'tnm' (team name) - nowa struktura Forebet
-                if not home_elem or not away_elem:
-                    tnm_elems = row.find_all(class_='tnm')
-                    if len(tnm_elems) >= 2:
-                        home_elem = tnm_elems[0]
-                        away_elem = tnm_elems[1]
+                # Wariant 4: div.tnms - kontener na drużyny
+                if not home_name or not away_name:
+                    tnms_div = row.find('div', class_='tnms')
+                    if tnms_div:
+                        home_span = tnms_div.find('span', class_='homeTeam')
+                        away_span = tnms_div.find('span', class_='awayTeam')
+                        if home_span and away_span:
+                            home_name = home_span.get_text(strip=True)
+                            away_name = away_span.get_text(strip=True)
                 
-                # Wariant 6: Szukaj klasy 'ht' i 'at' (home team / away team)
-                if not home_elem or not away_elem:
-                    home_elem = row.find(class_='ht')
-                    away_elem = row.find(class_='at')
-                
-                # Wariant 7: Szukaj dowolnych elementów z tekstem w strukturze div.contentmiddle lub tr
-                if not home_elem or not away_elem:
-                    all_links = row.find_all('a')
-                    team_links = [l for l in all_links if l.get_text(strip=True) and len(l.get_text(strip=True)) > 2]
-                    if len(team_links) >= 2:
-                        home_elem = team_links[0]
-                        away_elem = team_links[1]
-                
-                if not home_elem or not away_elem:
-                    # DEBUG: Sprawdź co jest w wierszu - BARDZIEJ SZCZEGÓŁOWO
+                if not home_name or not away_name:
+                    # DEBUG: Sprawdź co jest w wierszu
                     if len(debug_matches) < 3:
                         row_text = row.get_text(strip=True)[:100] if row else "None"
                         debug_matches.append(f"[EMPTY] {row_text}")
-                        # Wypisz pełny HTML wiersza do debugowania
-                        if row:
-                            print(f"      🔬 DEBUG ROW HTML: {str(row)[:300]}")
                     continue
                 
-                forebet_home = home_elem.get_text(strip=True)
-                forebet_away = away_elem.get_text(strip=True)
+                forebet_home = home_name
+                forebet_away = away_name
                 
                 # DEBUG: Zbierz WSZYSTKIE mecze do logowania (nie tylko 5)
                 if len(debug_matches) < 10:
