@@ -397,7 +397,7 @@ class CloudflareBypass:
                                 has_just_moment
                             )
                             
-                            # Forebet content indicators
+                            # Forebet content indicators - MUSZĄ BYĆ OBECNE!
                             has_rcnt = 'class="rcnt"' in html
                             has_forepr = 'class="forepr"' in html or 'class="fprc"' in html
                             has_match_rows = 'class="tr_0"' in html or 'class="tr_1"' in html
@@ -405,9 +405,11 @@ class CloudflareBypass:
                             
                             is_forebet_page = has_rcnt or has_forepr or has_match_rows or has_schema
                             
-                            # 🔥 Jeśli Cloudflare challenge - kontynuuj do następnej próby
+                            # 🔥 NOWA LOGIKA: Wymaga POZYTYWNEJ WERYFIKACJI Forebet!
+                            # Jeśli mamy Cloudflare indicators LUB brak Forebet indicators - FAIL!
+                            
                             if is_cloudflare_challenge:
-                                self.log(f"⚠️ Próba {attempt}: Cloudflare challenge (loading-verifying={has_loading_verifying})")
+                                self.log(f"⚠️ Próba {attempt}: Cloudflare challenge (loading-verifying={has_loading_verifying}, lds-ring={has_lds_ring})")
                                 if attempt < len(timeouts):
                                     self.log(f"   Próbuję ponownie z dłuższym timeout...")
                                     time.sleep(5)  # Krótka pauza
@@ -416,17 +418,25 @@ class CloudflareBypass:
                                     self.log(f"❌ Wszystkie próby wyczerpane - Cloudflare nie został ominięty")
                                     return None
                             
-                            # Sukces!
+                            # 🔥 KRYTYCZNE: Wymaga elementów Forebet!
+                            if not is_forebet_page:
+                                self.log(f"⚠️ Próba {attempt}: Brak elementów Forebet (rcnt={has_rcnt}, tr_0/1={has_match_rows})")
+                                if attempt < len(timeouts):
+                                    self.log(f"   Próbuję ponownie z dłuższym timeout...")
+                                    time.sleep(5)
+                                    continue
+                                else:
+                                    self.log(f"❌ Wszystkie próby wyczerpane - brak elementów Forebet")
+                                    return None
+                            
+                            # ✅ SUKCES: Ma elementy Forebet i NIE ma Cloudflare challenge!
                             self.log(f"🐳 FlareSolverr SUCCESS! ({len(html)} znaków)")
                             
                             cookies = solution.get("cookies", [])
                             if cookies:
                                 self.log(f"🍪 Otrzymano {len(cookies)} cookies")
                             
-                            if is_forebet_page:
-                                self.log(f"✅ Potwierdzona strona Forebet")
-                            else:
-                                self.log(f"⚠️ Brak elementów Forebet, ale zwracam HTML")
+                            self.log(f"✅ Potwierdzona strona Forebet (rcnt={has_rcnt}, tr_0/1={has_match_rows})")
                             
                             return html
                         else:

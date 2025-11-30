@@ -340,10 +340,20 @@ def search_forebet_prediction(
             html_content = None
     
     try:
-        # Jeśli mamy już HTML z bypass, parsuj go
+        # Jeśli mamy już HTML z bypass, parsuj go i POMIŃ całą logikę Selenium!
         if html_content:
+            print(f"      ✅ Używam HTML z Cloudflare Bypass ({len(html_content)} znaków)")
             soup = BeautifulSoup(html_content, 'html.parser')
+            # Zapisz debug HTML z bypass
+            with open('forebet_debug.html', 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            print(f"      💾 Debug: Zapisano HTML do forebet_debug.html")
         else:
+            # ========================================
+            # FALLBACK: Selenium (gdy Bypass nie zadziałał)
+            # ========================================
+            print(f"      🔄 Fallback: Używam Selenium (bypass nie zadziałał)")
+            
             # Utwórz driver jeśli nie podano - UNDETECTED CHROMEDRIVER
             if driver is None:
                 print(f"      🚀 Tworzenie undetected ChromeDriver...")
@@ -403,66 +413,66 @@ def search_forebet_prediction(
                 print(f"      ⚠️ Selenium Stealth not available")
             
             own_driver = True
-        
-        # Forebet URL - różne sporty (poprawne URLe z menu)
-        sport_urls = {
-            'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-            'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-            'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
-            'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
-            'handball': 'https://www.forebet.com/en/handball/predictions-today',
-            'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
-            'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
-            'rugby': 'https://www.forebet.com/en/rugby/predictions-today',
-            'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
-            'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
-        }
-        
-        url = sport_urls.get(sport.lower(), sport_urls['football'])
-        print(f"      🌐 Forebet ({sport}): Ładuję {url}")
-        
-        driver.get(url)
-        
-        # STRATEGIA ANTY-CLOUDFLARE: Symulacja ludzkiego zachowania
-        print(f"      ⏳ Czekam na Cloudflare check...")
-        time.sleep(random.uniform(3, 5))  # Random delay 3-5s
-        
-        # Sprawdź czy Cloudflare challenge
-        page_title = driver.title.lower()
-        if 'cloudflare' in page_title or 'checking' in page_title:
-            print(f"      ⚠️ Wykryto Cloudflare challenge - czekam dłużej...")
-            time.sleep(8)  # Dodatkowe 8s na challenge
-        
-        # Symulacja ludzkiego przewijania (kilka razy)
-        print(f"      🖱️ Symulacja scrollowania...")
-        for _ in range(3):
-            scroll_amount = random.randint(200, 500)
-            driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
-            time.sleep(random.uniform(0.3, 0.8))
-        
-        # Przewiń na środek strony
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight/2);")
-        time.sleep(1)
-        
-        # Sprawdź czy są mecze (czekaj max 10s)
-        print(f"      ⏳ Czekam na załadowanie meczów...")
-        start_wait = time.time()
-        while time.time() - start_wait < 10:
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-            if soup.find_all('div', class_='tr') or soup.find_all('tr') or soup.find('table'):
-                print(f"      ✅ Mecze załadowane!")
-                break
+            
+            # Forebet URL - różne sporty (poprawne URLe z menu)
+            sport_urls = {
+                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+                'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
+                'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
+                'handball': 'https://www.forebet.com/en/handball/predictions-today',
+                'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+                'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+                'rugby': 'https://www.forebet.com/en/rugby/predictions-today',
+                'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+                'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
+            }
+            
+            url = sport_urls.get(sport.lower(), sport_urls['football'])
+            print(f"      🌐 Forebet ({sport}): Ładuję {url}")
+            
+            driver.get(url)
+            
+            # STRATEGIA ANTY-CLOUDFLARE: Symulacja ludzkiego zachowania
+            print(f"      ⏳ Czekam na Cloudflare check...")
+            time.sleep(random.uniform(3, 5))  # Random delay 3-5s
+            
+            # Sprawdź czy Cloudflare challenge
+            page_title = driver.title.lower()
+            if 'cloudflare' in page_title or 'checking' in page_title:
+                print(f"      ⚠️ Wykryto Cloudflare challenge - czekam dłużej...")
+                time.sleep(8)  # Dodatkowe 8s na challenge
+            
+            # Symulacja ludzkiego przewijania (kilka razy)
+            print(f"      🖱️ Symulacja scrollowania...")
+            for _ in range(3):
+                scroll_amount = random.randint(200, 500)
+                driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
+                time.sleep(random.uniform(0.3, 0.8))
+            
+            # Przewiń na środek strony
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight/2);")
             time.sleep(1)
-        else:
-            print(f"      ⚠️ Timeout czekania na mecze")
-        
-        # Pobierz finalny HTML
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        
-        # DEBUG: Zapisz HTML do pliku
-        with open('forebet_debug.html', 'w', encoding='utf-8') as f:
-            f.write(driver.page_source)
-        print(f"      💾 Debug: Zapisano HTML do forebet_debug.html")
+            
+            # Sprawdź czy są mecze (czekaj max 10s)
+            print(f"      ⏳ Czekam na załadowanie meczów...")
+            start_wait = time.time()
+            while time.time() - start_wait < 10:
+                soup = BeautifulSoup(driver.page_source, 'html.parser')
+                if soup.find_all('div', class_='tr') or soup.find_all('tr') or soup.find('table'):
+                    print(f"      ✅ Mecze załadowane!")
+                    break
+                time.sleep(1)
+            else:
+                print(f"      ⚠️ Timeout czekania na mecze")
+            
+            # Pobierz finalny HTML
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            
+            # DEBUG: Zapisz HTML do pliku
+            with open('forebet_debug.html', 'w', encoding='utf-8') as f:
+                f.write(driver.page_source)
+            print(f"      💾 Debug: Zapisano HTML do forebet_debug.html")
         
         # Sprawdź czy to nie jest strona błędu Cloudflare
         body_text = soup.get_text().lower()
