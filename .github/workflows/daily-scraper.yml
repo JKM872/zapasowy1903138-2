@@ -196,7 +196,7 @@ jobs:
     needs: determine-sport
     if: needs.determine-sport.outputs.sport == 'basketball' || needs.determine-sport.outputs.sport == 'all'
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # 3 godziny
+    timeout-minutes: 360  # 6 godzin
     
     services:
       flaresolverr:
@@ -301,7 +301,7 @@ jobs:
     needs: determine-sport
     if: needs.determine-sport.outputs.sport == 'tennis' || needs.determine-sport.outputs.sport == 'all'
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # 3 godziny
+    timeout-minutes: 360  # 6 godzin
     
     services:
       flaresolverr:
@@ -406,7 +406,7 @@ jobs:
     needs: determine-sport
     if: needs.determine-sport.outputs.sport == 'hockey' || needs.determine-sport.outputs.sport == 'all'
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # 3 godziny
+    timeout-minutes: 360  # 6 godzin
     
     services:
       flaresolverr:
@@ -511,7 +511,7 @@ jobs:
     needs: determine-sport
     if: needs.determine-sport.outputs.sport == 'volleyball' || needs.determine-sport.outputs.sport == 'all'
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # 3 godziny
+    timeout-minutes: 360  # 6 godzin
     
     services:
       flaresolverr:
@@ -616,7 +616,7 @@ jobs:
     needs: determine-sport
     if: needs.determine-sport.outputs.sport == 'handball' || needs.determine-sport.outputs.sport == 'all'
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # 3 godziny
+    timeout-minutes: 360  # 6 godzin
     
     services:
       flaresolverr:
