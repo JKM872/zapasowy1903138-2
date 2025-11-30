@@ -276,21 +276,17 @@ class CloudflareBypass:
         if IS_CI:
             start_xvfb()
         
-        # W CI/CD - Puppeteer jako PIERWSZA, potem FlareSolverr, potem API
+        # 🔥 W CI/CD - FlareSolverr PIERWSZA (Puppeteer nie działa na GitHub Actions!)
         if IS_CI:
             methods = [
-                ('puppeteer', self._try_puppeteer),  # 🔥 NAJSKUTECZNIEJSZA!
-                ('flaresolverr', self._try_flaresolverr),
+                ('flaresolverr', self._try_flaresolverr),  # 🔥 DZIAŁA W CI/CD!
                 ('flaresolverr_session', self._try_flaresolverr_with_session),
                 ('zenrows', self._try_zenrows),  # API services
                 ('scraperapi', self._try_scraperapi),
                 ('scrapingbee', self._try_scrapingbee),
+                # Puppeteer pominięty - nie działa na GitHub Actions
                 ('curl_cffi', self._try_curl_cffi),
                 ('cloudscraper', self._try_cloudscraper),
-                ('drissionpage', self._try_drissionpage),
-                ('playwright', self._try_playwright),
-                ('undetected', self._try_undetected_chrome),
-                ('httpx', self._try_httpx),
                 ('archive', self._try_archive),  # Fallback
             ]
         else:

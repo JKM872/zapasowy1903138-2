@@ -62,6 +62,12 @@ if IS_CI_CD:
 # Cache dla wyników (żeby nie scrape'ować dwa razy tego samego)
 _forebet_cache = {}
 
+# 🔥 CACHE HTML PER SPORT - żeby nie pobierać tej samej strony 100 razy!
+# Klucz: sport (basketball, volleyball, etc.)
+# Wartość: (html_content, soup, timestamp)
+_forebet_html_cache = {}
+_FOREBET_HTML_CACHE_TTL = 600  # 10 minut - wystarczy na jedno uruchomienie
+
 # 🔥 PUPPETEER STEALTH - najlepsza metoda dla CI/CD
 def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
     """
@@ -261,90 +267,105 @@ def search_forebet_prediction(
     
     own_driver = False
     html_content = None
+    soup = None
     
-    # 🔥 CI/CD: Najpierw spróbuj Puppeteer Stealth (Node.js) - NAJSKUTECZNIEJSZE!
-    if IS_CI_CD:
-        print(f"      🚀 CI/CD: Próbuję Puppeteer Stealth (najlepsza metoda)...")
-        html_content = fetch_forebet_with_puppeteer(sport)
+    # 🔥 CACHE HTML PER SPORT - najważniejsza optymalizacja!
+    sport_lower = sport.lower()
+    sport_cache_key = sport_lower
+    
+    if sport_cache_key in _forebet_html_cache:
+        cached_html, cached_soup, cache_time = _forebet_html_cache[sport_cache_key]
+        cache_age = time.time() - cache_time
         
-        if html_content:
-            # Weryfikacja czy to prawdziwa strona Forebet
-            is_cloudflare = 'loading-verifying' in html_content or 'lds-ring' in html_content
-            is_forebet = 'class="rcnt"' in html_content or 'class="tr_0"' in html_content
-            
-            if is_forebet and not is_cloudflare:
-                print(f"      ✅ Puppeteer Stealth SUCCESS! ({len(html_content)} znaków)")
-            else:
-                print(f"      ⚠️ Puppeteer zwrócił stronę challenge, nie Forebet...")
-                html_content = None
+        if cache_age < _FOREBET_HTML_CACHE_TTL:
+            print(f"      📋 HTML CACHE HIT! ({sport}, {len(cached_html)} znaków, {cache_age:.0f}s stary)")
+            html_content = cached_html
+            soup = cached_soup
         else:
-            print(f"      ⚠️ Puppeteer nie zadziałał, próbuję innych metod...")
-            html_content = None
+            print(f"      ⏰ HTML cache expired ({cache_age:.0f}s > {_FOREBET_HTML_CACHE_TTL}s)")
+            del _forebet_html_cache[sport_cache_key]
     
-    # 🔥 ULTRA POWER: Używaj Cloudflare Bypass (włącznie z FlareSolverr w CI/CD!)
-    if html_content is None and CLOUDFLARE_BYPASS_AVAILABLE:
-        print(f"      🔥 Używam Ultra Power Cloudflare Bypass!")
+    # 🔥 Pobierz HTML tylko jeśli nie ma w cache
+    if html_content is None:
+        # W CI/CD - od razu FlareSolverr (Puppeteer nie działa)
+        if IS_CI_CD and CLOUDFLARE_BYPASS_AVAILABLE:
+            print(f"      🔥 CI/CD: Używam FlareSolverr (skip Puppeteer - nie działa)")
+            
+            sport_urls = {
+                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+                'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
+                'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
+                'handball': 'https://www.forebet.com/en/handball/predictions-today',
+                'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+                'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+                'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+            }
+            
+            url = sport_urls.get(sport_lower, sport_urls['football'])
+            print(f"      🌐 Forebet ({sport}): {url}")
+            
+            try:
+                html_content = fetch_forebet_with_bypass(url, debug=True)
+                
+                if html_content:
+                    # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona Forebet!
+                    is_cloudflare = (
+                        'loading-verifying' in html_content or
+                        'lds-ring' in html_content or
+                        'checking your browser' in html_content.lower() or
+                        'verifying you are human' in html_content.lower()
+                    )
+                    
+                    is_forebet = (
+                        'class="rcnt"' in html_content or
+                        'class="forepr"' in html_content or
+                        'class="tr_0"' in html_content or
+                        'class="tr_1"' in html_content
+                    )
+                    
+                    if is_cloudflare and not is_forebet:
+                        print(f"      ⚠️ Cloudflare Bypass zwrócił stronę challenge!")
+                        html_content = None
+                    elif is_forebet:
+                        print(f"      🔥 Cloudflare Bypass SUCCESS! ({len(html_content)} znaków)")
+                        print(f"      ✅ Potwierdzona strona Forebet!")
+                        soup = BeautifulSoup(html_content, 'html.parser')
+                        # 🔥 Zapisz do cache!
+                        _forebet_html_cache[sport_cache_key] = (html_content, soup, time.time())
+                        print(f"      💾 HTML zapisany do cache dla {sport}")
+                    else:
+                        print(f"      ⚠️ Bypass zwrócił nieznany HTML")
+                        html_content = None
+                else:
+                    print(f"      ⚠️ Cloudflare Bypass nie zadziałał")
+            except Exception as e:
+                print(f"      ⚠️ Cloudflare Bypass error: {e}")
+                html_content = None
         
-        sport_urls = {
-            'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-            'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-            'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
-            'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
-            'handball': 'https://www.forebet.com/en/handball/predictions-today',
-            'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
-            'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
-            'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
-        }
-        
-        url = sport_urls.get(sport.lower(), sport_urls['football'])
-        print(f"      🌐 Forebet ({sport}): {url}")
-        
-        try:
-            html_content = fetch_forebet_with_bypass(url, debug=True)
+        # Lokalnie - Puppeteer + fallback
+        elif not IS_CI_CD:
+            print(f"      🚀 Lokalnie: Próbuję Puppeteer Stealth...")
+            html_content = fetch_forebet_with_puppeteer(sport)
             
             if html_content:
-                # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona Forebet!
-                is_cloudflare = (
-                    'loading-verifying' in html_content or
-                    'lds-ring' in html_content or
-                    'checking your browser' in html_content.lower() or
-                    'verifying you are human' in html_content.lower()
-                )
+                is_cloudflare = 'loading-verifying' in html_content or 'lds-ring' in html_content
+                is_forebet = 'class="rcnt"' in html_content or 'class="tr_0"' in html_content
                 
-                is_forebet = (
-                    'class="rcnt"' in html_content or
-                    'class="forepr"' in html_content or
-                    'class="tr_0"' in html_content or
-                    'class="tr_1"' in html_content
-                )
-                
-                if is_cloudflare and not is_forebet:
-                    print(f"      ⚠️ Cloudflare Bypass zwrócił stronę challenge, nie Forebet!")
-                    print(f"      ⚠️ Ignoruję i próbuję innej metody...")
-                    html_content = None
-                elif is_forebet:
-                    print(f"      🔥 Cloudflare Bypass SUCCESS! ({len(html_content)} znaków)")
-                    print(f"      ✅ Potwierdzona strona Forebet!")
+                if is_forebet and not is_cloudflare:
+                    print(f"      ✅ Puppeteer SUCCESS! ({len(html_content)} znaków)")
                     soup = BeautifulSoup(html_content, 'html.parser')
+                    _forebet_html_cache[sport_cache_key] = (html_content, soup, time.time())
                 else:
-                    print(f"      ⚠️ Bypass zwrócił nieznany HTML ({len(html_content)} znaków)")
-                    # Zapisz do debug
-                    with open('forebet_bypass_debug.html', 'w', encoding='utf-8') as f:
-                        f.write(html_content)
                     html_content = None
-            else:
-                print(f"      ⚠️ Cloudflare Bypass nie zadziałał, próbuję standardową metodę...")
-                html_content = None
-        except Exception as e:
-            print(f"      ⚠️ Cloudflare Bypass error: {e}")
-            html_content = None
     
     try:
-        # Jeśli mamy już HTML z bypass, parsuj go i POMIŃ całą logikę Selenium!
+        # Jeśli mamy już HTML, parsuj go i POMIŃ całą logikę Selenium!
         if html_content:
-            print(f"      ✅ Używam HTML z Cloudflare Bypass ({len(html_content)} znaków)")
-            soup = BeautifulSoup(html_content, 'html.parser')
-            # Zapisz debug HTML z bypass
+            if soup is None:
+                soup = BeautifulSoup(html_content, 'html.parser')
+            print(f"      ✅ Używam HTML ({len(html_content)} znaków)")
+            # Zapisz debug HTML
             with open('forebet_debug.html', 'w', encoding='utf-8') as f:
                 f.write(html_content)
             print(f"      💾 Debug: Zapisano HTML do forebet_debug.html")
