@@ -560,6 +560,20 @@ def search_forebet_prediction(
         
         print(f"      🔍 Znaleziono {len(match_rows)} meczów na Forebet")
         
+        # DEBUG: Wypisz strukturę pierwszego wiersza
+        if match_rows:
+            first_row = match_rows[0]
+            row_classes = first_row.get('class', []) if first_row else []
+            all_spans = first_row.find_all('span') if first_row else []
+            all_divs = first_row.find_all('div') if first_row else []
+            print(f"      📋 Struktura pierwszego wiersza: klasy={row_classes}")
+            print(f"      📋 Spany w wierszu: {len(all_spans)}, Divy: {len(all_divs)}")
+            # Wypisz pierwsze 3 spany
+            for i, span in enumerate(all_spans[:5]):
+                span_class = span.get('class', [])
+                span_text = span.get_text(strip=True)[:30]
+                print(f"      📋 Span {i}: class={span_class}, text='{span_text}'")
+        
         # DEBUG: Wypisz pierwsze 5 meczów z Forebet żeby zobaczyć format
         debug_matches = []
         
@@ -609,6 +623,10 @@ def search_forebet_prediction(
                                 break
                 
                 if not home_elem or not away_elem:
+                    # DEBUG: Sprawdź co jest w wierszu
+                    if len(debug_matches) < 3:
+                        row_text = row.get_text(strip=True)[:100] if row else "None"
+                        debug_matches.append(f"[EMPTY] {row_text}")
                     continue
                 
                 forebet_home = home_elem.get_text(strip=True)
@@ -621,6 +639,10 @@ def search_forebet_prediction(
                 # Sprawdź similarity
                 home_score = similarity_score(home_team, forebet_home)
                 away_score = similarity_score(away_team, forebet_away)
+                
+                # DEBUG: Loguj wysokie (ale niewystarczające) similarity scores
+                if home_score >= 0.4 or away_score >= 0.4:
+                    print(f"      🔍 Potencjalny match: {forebet_home} vs {forebet_away} | Home={home_score:.2f} Away={away_score:.2f}")
                 
                 if home_score >= min_similarity and away_score >= min_similarity:
                     print(f"      ✅ Znaleziono mecz na Forebet: {forebet_home} vs {forebet_away}")
