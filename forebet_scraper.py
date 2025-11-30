@@ -291,9 +291,11 @@ def search_forebet_prediction(
         if IS_CI_CD and CLOUDFLARE_BYPASS_AVAILABLE:
             print(f"      🔥 CI/CD: Używam FlareSolverr (skip Puppeteer - nie działa)")
             
+            # 🔥 WAŻNE: Używamy /by-league bo pokazuje WSZYSTKIE mecze na jednej stronie!
+            # Normalny URL pokazuje tylko ~50 i wymaga "Load More"
             sport_urls = {
-                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2/by-league',
+                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2/by-league',
                 'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
                 'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
                 'handball': 'https://www.forebet.com/en/handball/predictions-today',
@@ -303,7 +305,7 @@ def search_forebet_prediction(
             }
             
             url = sport_urls.get(sport_lower, sport_urls['football'])
-            print(f"      🌐 Forebet ({sport}): {url}")
+            print(f"      🌐 Forebet ({sport}): {url} [FULL LIST /by-league]")
             
             try:
                 html_content = fetch_forebet_with_bypass(url, debug=True)
@@ -435,10 +437,11 @@ def search_forebet_prediction(
             
             own_driver = True
             
-            # Forebet URL - różne sporty (poprawne URLe z menu)
+            # 🔥 WAŻNE: Używamy /by-league bo pokazuje WSZYSTKIE mecze na jednej stronie!
+            # Normalny URL pokazuje tylko ~50 i wymaga "Load More"
             sport_urls = {
-                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+                'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2/by-league',
+                'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2/by-league',
                 'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
                 'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
                 'handball': 'https://www.forebet.com/en/handball/predictions-today',
@@ -450,7 +453,7 @@ def search_forebet_prediction(
             }
             
             url = sport_urls.get(sport.lower(), sport_urls['football'])
-            print(f"      🌐 Forebet ({sport}): Ładuję {url}")
+            print(f"      🌐 Forebet ({sport}): Ładuję {url} [FULL LIST /by-league]")
             
             driver.get(url)
             
