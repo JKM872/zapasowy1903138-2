@@ -323,105 +323,103 @@ class CloudflareBypass:
         """
         🔥 FlareSolverr - Docker service do omijania Cloudflare
         Najlepsza metoda dla CI/CD! Działa przez HTTP API.
+        Próbuje 3 razy z rosnącym timeoutem.
         """
-        try:
-            self.log(f"🐳 Łączę z FlareSolverr: {FLARESOLVERR_URL}")
-            
-            # 🔥 Forebet wymaga dłuższego czasu - 120 sekund!
-            # Challenge może trwać długo
-            flare_timeout = max(timeout * 1000, 120000)  # min 120 sekund
-            
-            payload = {
-                "cmd": "request.get",
-                "url": url,
-                "maxTimeout": flare_timeout
-            }
-            
-            response = requests.post(
-                FLARESOLVERR_URL,
-                headers={"Content-Type": "application/json"},
-                json=payload,
-                timeout=180  # 3 minuty na całość
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
+        # 🔥 Forebet wymaga DUŻO czasu - próbujemy 3 razy
+        timeouts = [120000, 180000, 300000]  # 2, 3, 5 minut
+        
+        for attempt, flare_timeout in enumerate(timeouts, 1):
+            try:
+                self.log(f"🐳 FlareSolverr (próba {attempt}/3, timeout: {flare_timeout//1000}s)")
                 
-                if data.get("status") == "ok":
-                    solution = data.get("solution", {})
-                    html = solution.get("response", "")
+                payload = {
+                    "cmd": "request.get",
+                    "url": url,
+                    "maxTimeout": flare_timeout
+                }
+                
+                response = requests.post(
+                    FLARESOLVERR_URL,
+                    headers={"Content-Type": "application/json"},
+                    json=payload,
+                    timeout=flare_timeout // 1000 + 60  # timeout + 60 sekund buffer
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
                     
-                    if html:
-                        # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona, nie challenge!
-                        html_lower = html.lower()
+                    if data.get("status") == "ok":
+                        solution = data.get("solution", {})
+                        html = solution.get("response", "")
                         
-                        # Cloudflare challenge indicators - jeśli są, to FAIL
-                        has_loading_verifying = 'loading-verifying' in html
-                        has_lds_ring = 'lds-ring' in html
-                        has_checking_browser = 'checking your browser' in html_lower
-                        has_verifying_human = 'verifying you are human' in html_lower
-                        has_just_moment = 'just a moment' in html_lower
-                        
-                        is_cloudflare_challenge = (
-                            has_loading_verifying or 
-                            has_lds_ring or 
-                            has_checking_browser or 
-                            has_verifying_human or
-                            has_just_moment
-                        )
-                        
-                        # Forebet content indicators - muszą być PRAWDZIWE elementy strony
-                        # Sprawdzamy czy są w <body>, nie w skryptach
-                        has_rcnt = '<div class="rcnt"' in html or 'class="rcnt"' in html
-                        has_forepr = 'class="forepr"' in html or 'class="fprc"' in html
-                        has_match_rows = 'class="tr_0"' in html or 'class="tr_1"' in html
-                        has_schema = 'class="schema' in html
-                        
-                        is_forebet_page = has_rcnt or has_forepr or has_match_rows or has_schema
-                        
-                        # 🔥 KLUCZOWE: Jeśli są elementy Cloudflare challenge - to FAIL!
-                        if is_cloudflare_challenge:
-                            self.log(f"⚠️ FlareSolverr: Strona zawiera Cloudflare challenge!")
-                            self.log(f"   loading-verifying={has_loading_verifying}, lds-ring={has_lds_ring}")
-                            self.log(f"   checking_browser={has_checking_browser}, verifying_human={has_verifying_human}")
-                            return None  # Zwróć None żeby próbować inne metody
-                        
-                        # Jeśli nie ma Cloudflare ale też nie ma Forebet - ostrzeżenie
-                        if not is_forebet_page:
-                            self.log(f"⚠️ FlareSolverr: Brak elementów Forebet w HTML!")
-                            self.log(f"   rcnt={has_rcnt}, forepr={has_forepr}, match_rows={has_match_rows}")
-                            # Mimo to zwróć do dalszej analizy
-                        
-                        self.log(f"🐳 FlareSolverr SUCCESS! ({len(html)} znaków)")
-                        
-                        # Zapisz cookies do przyszłego użycia
-                        cookies = solution.get("cookies", [])
-                        user_agent = solution.get("userAgent", "")
-                        
-                        if cookies:
-                            self.log(f"🍪 Otrzymano {len(cookies)} cookies")
-                        
-                        # Dodatkowa weryfikacja - czy to na pewno Forebet?
-                        if is_forebet_page:
-                            self.log(f"✅ Potwierdzona strona Forebet (znaleziono elementy meczów)")
+                        if html:
+                            # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona, nie challenge!
+                            html_lower = html.lower()
+                            
+                            # Cloudflare challenge indicators - jeśli są, to FAIL
+                            has_loading_verifying = 'loading-verifying' in html
+                            has_lds_ring = 'lds-ring' in html
+                            has_checking_browser = 'checking your browser' in html_lower
+                            has_verifying_human = 'verifying you are human' in html_lower
+                            has_just_moment = 'just a moment' in html_lower
+                            
+                            is_cloudflare_challenge = (
+                                has_loading_verifying or 
+                                has_lds_ring or 
+                                has_checking_browser or 
+                                has_verifying_human or
+                                has_just_moment
+                            )
+                            
+                            # Forebet content indicators
+                            has_rcnt = 'class="rcnt"' in html
+                            has_forepr = 'class="forepr"' in html or 'class="fprc"' in html
+                            has_match_rows = 'class="tr_0"' in html or 'class="tr_1"' in html
+                            has_schema = 'class="schema' in html
+                            
+                            is_forebet_page = has_rcnt or has_forepr or has_match_rows or has_schema
+                            
+                            # 🔥 Jeśli Cloudflare challenge - kontynuuj do następnej próby
+                            if is_cloudflare_challenge:
+                                self.log(f"⚠️ Próba {attempt}: Cloudflare challenge (loading-verifying={has_loading_verifying})")
+                                if attempt < len(timeouts):
+                                    self.log(f"   Próbuję ponownie z dłuższym timeout...")
+                                    time.sleep(5)  # Krótka pauza
+                                    continue
+                                else:
+                                    self.log(f"❌ Wszystkie próby wyczerpane - Cloudflare nie został ominięty")
+                                    return None
+                            
+                            # Sukces!
+                            self.log(f"🐳 FlareSolverr SUCCESS! ({len(html)} znaków)")
+                            
+                            cookies = solution.get("cookies", [])
+                            if cookies:
+                                self.log(f"🍪 Otrzymano {len(cookies)} cookies")
+                            
+                            if is_forebet_page:
+                                self.log(f"✅ Potwierdzona strona Forebet")
+                            else:
+                                self.log(f"⚠️ Brak elementów Forebet, ale zwracam HTML")
+                            
+                            return html
                         else:
-                            self.log(f"⚠️ Strona nie wygląda jak Forebet, ale zwracam HTML do analizy")
-                        
-                        return html
+                            self.log("⚠️ FlareSolverr: pusta odpowiedź")
                     else:
-                        self.log("⚠️ FlareSolverr: pusta odpowiedź")
+                        error_msg = data.get("message", "Unknown error")
+                        self.log(f"⚠️ FlareSolverr error: {error_msg}")
                 else:
-                    error_msg = data.get("message", "Unknown error")
-                    self.log(f"⚠️ FlareSolverr error: {error_msg}")
-            else:
-                self.log(f"⚠️ FlareSolverr HTTP {response.status_code}")
-                
-        except requests.exceptions.ConnectionError:
-            self.log("⚠️ FlareSolverr: serwer niedostępny (nie działa Docker?)")
-        except requests.exceptions.Timeout:
-            self.log("⚠️ FlareSolverr: timeout")
-        except Exception as e:
-            self.log(f"⚠️ FlareSolverr error: {str(e)[:50]}")
+                    self.log(f"⚠️ FlareSolverr HTTP {response.status_code}")
+                    
+            except requests.exceptions.ConnectionError:
+                self.log("⚠️ FlareSolverr: serwer niedostępny")
+                return None  # Nie ma sensu próbować dalej
+            except requests.exceptions.Timeout:
+                self.log(f"⚠️ FlareSolverr: timeout próby {attempt}")
+                continue  # Spróbuj z dłuższym timeout
+            except Exception as e:
+                self.log(f"⚠️ FlareSolverr error: {str(e)[:50]}")
+                continue
         
         return None
     
