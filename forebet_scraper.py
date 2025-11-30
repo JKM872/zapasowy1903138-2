@@ -66,7 +66,7 @@ _forebet_cache = {}
 # Klucz: sport (basketball, volleyball, etc.)
 # Wartość: (html_content, soup, timestamp)
 _forebet_html_cache = {}
-_FOREBET_HTML_CACHE_TTL = 600  # 10 minut - wystarczy na jedno uruchomienie
+_FOREBET_HTML_CACHE_TTL = 3600  # 1 godzina - mecze dzienne się nie zmieniają
 
 # 🔥 PUPPETEER STEALTH - najlepsza metoda dla CI/CD
 def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
@@ -135,7 +135,7 @@ def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
 def normalize_team_name(name: str) -> str:
     """
     Normalizuje nazwę drużyny do porównania.
-    Usuwa znaki specjalne, lowercase, trim.
+    Usuwa prefixy, sufixy, rozwiązuje skróty, lowercase, trim.
     """
     if not name:
         return ""
@@ -143,25 +143,51 @@ def normalize_team_name(name: str) -> str:
     # Lowercase i trim
     normalized = name.lower().strip()
     
-    # Usuń typowe sufiksy/prefixy
+    # 🔥 Usuń prefixy (NOWE!)
+    prefixes_to_remove = ['fc ', 'afc ', 'cf ', 'club ', 'sporting ', 'real ', 
+                          'sc ', 'sv ', 'vfb ', 'tsv ', 'fk ', 'nk ', 'sk ',
+                          'ac ', 'as ', 'ss ', 'us ', 'cd ', 'ud ', 'rcd ']
+    for prefix in prefixes_to_remove:
+        if normalized.startswith(prefix):
+            normalized = normalized[len(prefix):]
+    
+    # Usuń sufixy
     suffixes_to_remove = [' fc', ' afc', ' cf', ' united', ' city', ' town', 
                           ' wanderers', ' rovers', ' athletic', ' sports',
-                          ' k', ' w', ' kobiety', ' kobiet']
-    
+                          ' k', ' w', ' kobiety', ' kobiet', ' sc', ' sv',
+                          ' fk', ' nk', ' sk', ' kv', ' bk']
     for suffix in suffixes_to_remove:
         if normalized.endswith(suffix):
             normalized = normalized[:-len(suffix)].strip()
     
-    # Usuń znaki specjalne (zostaw tylko litery i spacje)
+    # 🔥 Rozwiń popularne skróty (NOWE!)
+    abbreviations = {
+        'st.': 'sint', 'st ': 'sint ', 'st-': 'sint-',
+        'man ': 'manchester ', 'man.': 'manchester',
+        'utd': 'united', 'utd.': 'united',
+        'ath ': 'athletic ', 'ath.': 'athletic',
+        'int ': 'inter ', 'int.': 'inter',
+        'dynamo': 'dinamo',  # Wariant transliteracji
+        'cska': 'cska',  # Zostaw bez zmian
+        'spartak': 'spartak',
+    }
+    for abbr, full in abbreviations.items():
+        normalized = normalized.replace(abbr, full)
+    
+    # Usuń znaki specjalne (zostaw tylko litery, cyfry i spacje)
     normalized = ''.join(c for c in normalized if c.isalnum() or c.isspace())
     
-    return normalized
+    # Usuń podwójne spacje
+    while '  ' in normalized:
+        normalized = normalized.replace('  ', ' ')
+    
+    return normalized.strip()
 
 
 def similarity_score(name1: str, name2: str) -> float:
     """
     Oblicza similarity score między dwoma nazwami drużyn (0.0 - 1.0).
-    Używa SequenceMatcher z difflib.
+    Używa SequenceMatcher z difflib + token-based Jaccard jako fallback.
     """
     norm1 = normalize_team_name(name1)
     norm2 = normalize_team_name(name2)
@@ -169,7 +195,27 @@ def similarity_score(name1: str, name2: str) -> float:
     if not norm1 or not norm2:
         return 0.0
     
-    return SequenceMatcher(None, norm1, norm2).ratio()
+    # Metoda 1: SequenceMatcher (character-based)
+    seq_score = SequenceMatcher(None, norm1, norm2).ratio()
+    
+    # Metoda 2: Token-based Jaccard similarity (word-based)
+    tokens1 = set(norm1.split())
+    tokens2 = set(norm2.split())
+    if tokens1 and tokens2:
+        intersection = len(tokens1 & tokens2)
+        union = len(tokens1 | tokens2)
+        jaccard = intersection / union if union > 0 else 0.0
+    else:
+        jaccard = 0.0
+    
+    # Metoda 3: Sprawdź czy jedna nazwa zawiera drugą (dla krótkich nazw)
+    containment = 0.0
+    if len(norm1) >= 3 and len(norm2) >= 3:
+        if norm1 in norm2 or norm2 in norm1:
+            containment = 0.85  # Wysoki score dla zawierania
+    
+    # Zwróć najwyższy wynik z trzech metod
+    return max(seq_score, jaccard, containment)
 
 
 def find_best_match(target_team: str, available_teams: list) -> Tuple[Optional[str], float]:
@@ -199,7 +245,7 @@ def search_forebet_prediction(
     away_team: str,
     match_date: str,
     driver: webdriver.Chrome = None,
-    min_similarity: float = 0.7,
+    min_similarity: float = 0.5,  # 🔥 Zmniejszone z 0.7 dla lepszego matchingu
     timeout: int = 10,
     headless: bool = False,
     sport: str = 'football',
@@ -711,10 +757,24 @@ def search_forebet_prediction(
                 away_score = similarity_score(away_team, forebet_away)
                 
                 # DEBUG: Loguj wysokie (ale niewystarczające) similarity scores
-                if home_score >= 0.4 or away_score >= 0.4:
+                if home_score >= 0.35 or away_score >= 0.35:
                     print(f"      🔍 Potencjalny match: {forebet_home} vs {forebet_away} | Home={home_score:.2f} Away={away_score:.2f}")
                 
-                if home_score >= min_similarity and away_score >= min_similarity:
+                # 🔥 NOWA LOGIKA: Elastyczne dopasowanie
+                # Stare: if home_score >= 0.7 and away_score >= 0.7
+                # Nowe: średnia >= 0.55 ORAZ minimum >= 0.4 (lub jedna drużyna >= 0.8)
+                combined_score = (home_score + away_score) / 2
+                min_score = min(home_score, away_score)
+                max_score = max(home_score, away_score)
+                
+                # Warunek 1: Obie drużyny >= min_similarity (oryginalne zachowanie)
+                condition1 = home_score >= min_similarity and away_score >= min_similarity
+                # Warunek 2: Średnia >= 0.55 i minimum >= 0.4 (elastyczne)
+                condition2 = combined_score >= 0.55 and min_score >= 0.4
+                # Warunek 3: Jedna drużyna bardzo pewna (>=0.85) i druga akceptowalna (>=0.35)
+                condition3 = max_score >= 0.85 and min_score >= 0.35
+                
+                if condition1 or condition2 or condition3:
                     print(f"      ✅ Znaleziono mecz na Forebet: {forebet_home} vs {forebet_away}")
                     print(f"         Similarity: Home={home_score:.2f}, Away={away_score:.2f}")
                     
