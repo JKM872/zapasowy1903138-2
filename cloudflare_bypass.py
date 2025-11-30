@@ -354,27 +354,43 @@ class CloudflareBypass:
                     if html:
                         # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona, nie challenge!
                         html_lower = html.lower()
-                        is_cloudflare_page = (
-                            'checking your browser' in html_lower or
-                            'verifying you are human' in html_lower or
-                            'just a moment' in html_lower or
-                            'loading-verifying' in html or
-                            'lds-ring' in html or
-                            'ray-id' in html and 'rcnt' not in html  # ray-id bez treści forebet
+                        
+                        # Cloudflare challenge indicators - jeśli są, to FAIL
+                        has_loading_verifying = 'loading-verifying' in html
+                        has_lds_ring = 'lds-ring' in html
+                        has_checking_browser = 'checking your browser' in html_lower
+                        has_verifying_human = 'verifying you are human' in html_lower
+                        has_just_moment = 'just a moment' in html_lower
+                        
+                        is_cloudflare_challenge = (
+                            has_loading_verifying or 
+                            has_lds_ring or 
+                            has_checking_browser or 
+                            has_verifying_human or
+                            has_just_moment
                         )
                         
-                        # Sprawdź czy to strona Forebet (powinna mieć klasy meczów)
-                        is_forebet_page = (
-                            'rcnt' in html or  # główny kontener meczów
-                            'forepr' in html or  # prognozy
-                            'lscrsp' in html or  # wyniki
-                            'tr_0' in html or 'tr_1' in html  # wiersze meczów
-                        )
+                        # Forebet content indicators - muszą być PRAWDZIWE elementy strony
+                        # Sprawdzamy czy są w <body>, nie w skryptach
+                        has_rcnt = '<div class="rcnt"' in html or 'class="rcnt"' in html
+                        has_forepr = 'class="forepr"' in html or 'class="fprc"' in html
+                        has_match_rows = 'class="tr_0"' in html or 'class="tr_1"' in html
+                        has_schema = 'class="schema' in html
                         
-                        if is_cloudflare_page and not is_forebet_page:
-                            self.log(f"⚠️ FlareSolverr: Otrzymano stronę Cloudflare challenge, nie Forebet!")
-                            self.log(f"   HTML zawiera: loading-verifying={('loading-verifying' in html)}, lds-ring={('lds-ring' in html)}")
+                        is_forebet_page = has_rcnt or has_forepr or has_match_rows or has_schema
+                        
+                        # 🔥 KLUCZOWE: Jeśli są elementy Cloudflare challenge - to FAIL!
+                        if is_cloudflare_challenge:
+                            self.log(f"⚠️ FlareSolverr: Strona zawiera Cloudflare challenge!")
+                            self.log(f"   loading-verifying={has_loading_verifying}, lds-ring={has_lds_ring}")
+                            self.log(f"   checking_browser={has_checking_browser}, verifying_human={has_verifying_human}")
                             return None  # Zwróć None żeby próbować inne metody
+                        
+                        # Jeśli nie ma Cloudflare ale też nie ma Forebet - ostrzeżenie
+                        if not is_forebet_page:
+                            self.log(f"⚠️ FlareSolverr: Brak elementów Forebet w HTML!")
+                            self.log(f"   rcnt={has_rcnt}, forepr={has_forepr}, match_rows={has_match_rows}")
+                            # Mimo to zwróć do dalszej analizy
                         
                         self.log(f"🐳 FlareSolverr SUCCESS! ({len(html)} znaków)")
                         
@@ -463,22 +479,33 @@ class CloudflareBypass:
                         html = solution.get("response", "")
                         
                         if html:
-                            # Sprawdź czy to Forebet
-                            is_forebet = 'rcnt' in html or 'forepr' in html or 'tr_0' in html
-                            is_challenge = 'loading-verifying' in html or 'lds-ring' in html
+                            # 🔥 Sprawdź czy to Cloudflare challenge (FAIL indicators)
+                            is_challenge = (
+                                'loading-verifying' in html or 
+                                'lds-ring' in html or
+                                'checking your browser' in html.lower() or
+                                'verifying you are human' in html.lower()
+                            )
                             
-                            if is_forebet and not is_challenge:
-                                self.log(f"✅ FlareSolverr SESSION SUCCESS! ({len(html)} znaków)")
-                                # Usuń sesję
-                                self._cleanup_flaresolverr_session(session_id)
-                                return html
-                            elif is_challenge:
-                                self.log(f"⚠️ Próba {attempt + 1}: Nadal challenge, czekam...")
+                            # Sprawdź czy to Forebet (musi być class= nie sam tekst)
+                            is_forebet = (
+                                'class="rcnt"' in html or 
+                                'class="forepr"' in html or 
+                                'class="tr_0"' in html or
+                                'class="tr_1"' in html or
+                                'class="schema' in html
+                            )
+                            
+                            if is_challenge:
+                                self.log(f"⚠️ Próba {attempt + 1}: Nadal Cloudflare challenge, czekam...")
                                 time.sleep(5)  # Czekaj przed kolejną próbą
-                            else:
-                                # Może to inna strona - zwróć do analizy
+                            elif is_forebet:
+                                self.log(f"✅ FlareSolverr SESSION SUCCESS! ({len(html)} znaków)")
                                 self._cleanup_flaresolverr_session(session_id)
                                 return html
+                            else:
+                                self.log(f"⚠️ Próba {attempt + 1}: Brak elementów Forebet, czekam...")
+                                time.sleep(5)
             
             # Usuń sesję po nieudanych próbach
             self._cleanup_flaresolverr_session(session_id)
