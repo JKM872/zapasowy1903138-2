@@ -153,13 +153,16 @@ def find_match_on_main_page(
         url = f'https://www.sofascore.com/{sport_slug}'
         print(f"   🔍 SofaScore: Szukam meczu na stronie głównej...")
         
+        # Ustaw krótki timeout dla szybszego działania
+        driver.set_page_load_timeout(15)
+        
         # Użyj page_load_strategy do szybszego ładowania
         try:
             driver.get(url)
         except TimeoutException:
             pass  # Kontynuuj nawet przy timeout (strona częściowo załadowana)
         
-        time.sleep(5)
+        time.sleep(3)
         
         home_norm = normalize_team_name(home_team)
         away_norm = normalize_team_name(away_team)
@@ -254,8 +257,12 @@ def search_and_get_votes(
         
         # Załaduj stronę meczu
         print(f"   📊 SofaScore: Pobieram dane Fan Vote...")
-        driver.get(match_url)
-        time.sleep(8)
+        try:
+            driver.set_page_load_timeout(15)
+            driver.get(match_url)
+        except TimeoutException:
+            pass  # Kontynuuj nawet przy timeout
+        time.sleep(4)
         
         # Scroll żeby załadować całą stronę
         for _ in range(4):
@@ -444,8 +451,8 @@ def scrape_sofascore_full(
         chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
         chrome_options.page_load_strategy = 'eager'  # Nie czekaj na pełne załadowanie
         driver = webdriver.Chrome(options=chrome_options)
-        driver.set_page_load_timeout(30)
-        driver.set_script_timeout(15)
+        driver.set_page_load_timeout(15)
+        driver.set_script_timeout(10)
     
     try:
         result = search_and_get_votes(driver, home_team, away_team, sport, date_str)
