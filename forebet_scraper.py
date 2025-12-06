@@ -392,62 +392,76 @@ def search_forebet_prediction(
             
             print(f"      🌐 Forebet ({sport}): {url}")
             
-            try:
-                html_content = fetch_forebet_with_bypass(url, debug=True)
-                
-                if html_content:
-                    # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona Forebet!
-                    is_cloudflare = (
-                        'loading-verifying' in html_content or
-                        'lds-ring' in html_content or
-                        'checking your browser' in html_content.lower() or
-                        'verifying you are human' in html_content.lower()
-                    )
+            # 🔥 WERYFIKACJA SPORTU - keywords
+            sport_check_keywords = {
+                'basketball': ['basketball', 'nba', 'euroleague', 'fiba'],
+                'volleyball': ['volleyball', 'volley'],
+                'handball': ['handball'],
+                'hockey': ['hockey', 'nhl', 'khl'],
+                'tennis': ['tennis', 'atp', 'wta'],
+                'football': ['football', 'soccer', 'liga', 'premier league', 'serie a'],
+                'soccer': ['football', 'soccer', 'liga', 'premier league', 'serie a'],
+            }
+            keywords = sport_check_keywords.get(sport_lower, ['predictions'])
+            
+            # 🔥 RETRY LOOP - 2 próby z różnymi sesjami FlareSolverr
+            max_retries = 2
+            for retry_attempt in range(max_retries):
+                try:
+                    # 🔥 Przy kolejnej próbie - dodaj timestamp do URL żeby ominąć cache
+                    fetch_url = url
+                    if retry_attempt > 0:
+                        cache_buster = int(time.time())
+                        fetch_url = f"{url}{'&' if '?' in url else '?'}_cb={cache_buster}"
+                        print(f"      🔄 Retry {retry_attempt + 1}/{max_retries} z cache buster: {fetch_url}")
                     
-                    is_forebet = (
-                        'class="rcnt"' in html_content or
-                        'class="forepr"' in html_content or
-                        'class="tr_0"' in html_content or
-                        'class="tr_1"' in html_content
-                    )
+                    html_content = fetch_forebet_with_bypass(fetch_url, debug=True, sport=sport_lower)
                     
-                    # 🔥 WERYFIKACJA SPORTU: Sprawdź czy HTML zawiera żądany sport!
-                    # FlareSolverr może zwracać cached stronę z innego sportu
-                    sport_check_keywords = {
-                        'basketball': ['basketball', 'nba', 'euroleague', 'fiba'],
-                        'volleyball': ['volleyball', 'volley'],
-                        'handball': ['handball'],
-                        'hockey': ['hockey', 'nhl', 'khl'],
-                        'tennis': ['tennis', 'atp', 'wta'],
-                        'football': ['football', 'soccer', 'liga', 'premier league', 'serie a'],
-                        'soccer': ['football', 'soccer', 'liga', 'premier league', 'serie a'],
-                    }
-                    keywords = sport_check_keywords.get(sport_lower, ['predictions'])
-                    html_lower = html_content.lower()
-                    sport_matches = any(kw in html_lower for kw in keywords)
-                    
-                    if is_cloudflare and not is_forebet:
-                        print(f"      ⚠️ Cloudflare Bypass zwrócił stronę challenge!")
-                        html_content = None
-                    elif is_forebet and sport_matches:
-                        print(f"      🔥 Cloudflare Bypass SUCCESS! ({len(html_content)} znaków)")
-                        print(f"      ✅ Potwierdzona strona Forebet dla {sport}!")
-                        soup = BeautifulSoup(html_content, 'html.parser')
-                        # 🔥 Zapisz do cache!
-                        _forebet_html_cache[sport_cache_key] = (html_content, soup, time.time())
-                        print(f"      💾 HTML zapisany do cache dla {sport}")
-                    elif is_forebet and not sport_matches:
-                        print(f"      ⚠️ Forebet HTML nie zawiera sportu {sport}! (FlareSolverr cache?)")
-                        print(f"      🔄 Próbuję ponownie bez cache...")
-                        # NIE cachuj - może być stale HTML z innego sportu
-                        html_content = None
+                    if html_content:
+                        # 🔥 WERYFIKACJA: Sprawdź czy to prawdziwa strona Forebet!
+                        is_cloudflare = (
+                            'loading-verifying' in html_content or
+                            'lds-ring' in html_content or
+                            'checking your browser' in html_content.lower() or
+                            'verifying you are human' in html_content.lower()
+                        )
+                        
+                        is_forebet = (
+                            'class="rcnt"' in html_content or
+                            'class="forepr"' in html_content or
+                            'class="tr_0"' in html_content or
+                            'class="tr_1"' in html_content
+                        )
+                        
+                        html_lower = html_content.lower()
+                        sport_matches = any(kw in html_lower for kw in keywords)
+                        
+                        if is_cloudflare and not is_forebet:
+                            print(f"      ⚠️ Cloudflare Bypass zwrócił stronę challenge!")
+                            html_content = None
+                        elif is_forebet and sport_matches:
+                            print(f"      🔥 Cloudflare Bypass SUCCESS! ({len(html_content)} znaków)")
+                            print(f"      ✅ Potwierdzona strona Forebet dla {sport}!")
+                            soup = BeautifulSoup(html_content, 'html.parser')
+                            # 🔥 Zapisz do cache!
+                            _forebet_html_cache[sport_cache_key] = (html_content, soup, time.time())
+                            print(f"      💾 HTML zapisany do cache dla {sport}")
+                            break  # SUKCES - wyjdź z retry loop
+                        elif is_forebet and not sport_matches:
+                            print(f"      ⚠️ Forebet HTML nie zawiera sportu {sport}! (FlareSolverr cache?)")
+                            if retry_attempt < max_retries - 1:
+                                print(f"      🔄 Czekam 3s i próbuję ponownie z nową sesją...")
+                                time.sleep(3)  # Czekaj przed retry
+                            html_content = None  # NIE cachuj
+                        else:
+                            print(f"      ⚠️ Bypass zwrócił nieznany HTML")
+                            html_content = None
                     else:
-                        html_content = None
-                else:
-                    print(f"      ⚠️ Cloudflare Bypass nie zadziałał")
-            except Exception as e:
-                print(f"      ⚠️ Cloudflare Bypass error: {e}")
-                html_content = None
+                        print(f"      ⚠️ Cloudflare Bypass nie zadziałał")
+                        
+                except Exception as e:
+                    print(f"      ⚠️ Cloudflare Bypass error: {e}")
+                    html_content = None
         
         # Lokalnie - Puppeteer + fallback
         elif not IS_CI_CD:

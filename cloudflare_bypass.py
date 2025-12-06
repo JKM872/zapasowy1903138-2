@@ -350,14 +350,40 @@ class CloudflareBypass:
         # 🔥 Forebet wymaga DUŻO czasu - próbujemy 3 razy
         timeouts = [120000, 180000, 300000]  # 2, 3, 5 minut
         
+        # 🍪 GDPR Consent cookies - Forebet używa FundingChoices (fc)
+        consent_cookies = [
+            {
+                "name": "FCNEC",
+                "value": "%5B%5B%22AKsRol8ZpxKNdC2MbqKzW3Fy3mlXdWXWLPQaKxR-xwT3vFJGFbvnEzqQHYB_mNAqkxfSZQvkVjVwxMkXxXxXxXx%22%5D%2Cnull%2C%5B%5D%5D",
+                "domain": ".forebet.com"
+            },
+            {
+                "name": "FCCDCF",  
+                "value": "%5B%5B%22AKsRol8K5HbKRwEAAABKABkAAABKAEoAIABYAGAAaABwAHgAgACIAJAAmACgAKgAsAC4AMAA%22%5D%2Cnull%2C%5B%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%5B%5B%22https%3A%2F%2Fforebet.com%22%5D%2C%22null%22%5D%5D%5D",
+                "domain": ".forebet.com"
+            },
+            {
+                "name": "__gads",
+                "value": "ID=00000000000:T=1705000000:RT=1705000000:S=ALNI_MaXxXxXxXxXxXx",
+                "domain": ".forebet.com"
+            },
+            {
+                "name": "__gpi",
+                "value": "UID=00000000000:T=1705000000:RT=1705000000:S=ALNI_MaXxXxXxXxXxXx",  
+                "domain": ".forebet.com"
+            }
+        ]
+        
         for attempt, flare_timeout in enumerate(timeouts, 1):
             try:
                 self.log(f"🐳 FlareSolverr (próba {attempt}/3, timeout: {flare_timeout//1000}s)")
                 
+                # 🍪 Wstrzyknij cookies consent w żądaniu
                 payload = {
                     "cmd": "request.get",
                     "url": url,
-                    "maxTimeout": flare_timeout
+                    "maxTimeout": flare_timeout,
+                    "cookies": consent_cookies  # 🔥 GDPR consent bypass!
                 }
                 
                 response = requests.post(
@@ -1121,14 +1147,23 @@ class CloudflareBypass:
                 pass
 
 
-def fetch_forebet_with_bypass(url: str, debug: bool = True) -> Optional[str]:
+def fetch_forebet_with_bypass(url: str, debug: bool = True, sport: str = None) -> Optional[str]:
     """
     Główna funkcja - pobiera stronę Forebet omijając Cloudflare
+    
+    Args:
+        url: URL strony do pobrania
+        debug: Czy wypisywać debug info
+        sport: Opcjonalny sport (do przyszłej optymalizacji per-sport sessions)
     
     Returns:
         HTML strony lub None jeśli się nie udało
     """
     bypass = CloudflareBypass(debug=debug)
+    
+    # 🔥 Loguj sport jeśli podany
+    if sport and debug:
+        print(f"      🔥 CF-Bypass: Pobieranie dla sportu: {sport}")
     
     try:
         html = bypass.get_page(url, timeout=30)
