@@ -62,7 +62,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 # Forebet integration
 try:
-    from forebet_scraper import search_forebet_prediction, format_forebet_result
+    from forebet_scraper import search_forebet_prediction, format_forebet_result, prefetch_forebet_html
     FOREBET_AVAILABLE = True
 except ImportError:
     FOREBET_AVAILABLE = False

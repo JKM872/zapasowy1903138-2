@@ -68,6 +68,133 @@ _forebet_cache = {}
 _forebet_html_cache = {}
 _FOREBET_HTML_CACHE_TTL = 3600  # 1 godzina - mecze dzienne się nie zmieniają
 
+
+def prefetch_forebet_html(sport: str, match_date: str = None) -> bool:
+    """
+    🔥 PRE-FETCH: Pobiera HTML dla sportu i zapisuje do cache.
+    Wywołaj RAZ na początku przed przetwarzaniem meczów!
+    
+    Args:
+        sport: Sport do pobrania (basketball, volleyball, football, etc.)
+        match_date: Data meczu (YYYY-MM-DD), domyślnie dzisiaj
+    
+    Returns:
+        True jeśli sukces, False jeśli nie udało się pobrać
+    """
+    from datetime import datetime
+    
+    sport_lower = sport.lower()
+    if match_date is None:
+        match_date = datetime.now().strftime('%Y-%m-%d')
+    
+    sport_cache_key = f"{sport_lower}_{match_date}"
+    
+    # Sprawdź czy już w cache
+    if sport_cache_key in _forebet_html_cache:
+        cached_html, _, cache_time = _forebet_html_cache[sport_cache_key]
+        cache_age = time.time() - cache_time
+        if cache_age < _FOREBET_HTML_CACHE_TTL:
+            print(f"   📋 Forebet {sport}: Już w cache ({len(cached_html)} znaków, {cache_age:.0f}s)")
+            return True
+    
+    print(f"   🔥 Forebet {sport}: Prefetch HTML...")
+    
+    sport_urls = {
+        'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
+        'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
+        'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
+        'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
+        'handball': 'https://www.forebet.com/en/handball/predictions-today',
+        'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+        'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+        'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+    }
+    
+    base_url = sport_urls.get(sport_lower, sport_urls['football'])
+    today = datetime.now().strftime('%Y-%m-%d')
+    
+    if match_date and match_date != today:
+        url = f"{base_url}?date={match_date}"
+    else:
+        url = base_url
+    
+    # Keywords do weryfikacji sportu
+    sport_check_keywords = {
+        'basketball': ['basketball', 'nba', 'euroleague', 'fiba'],
+        'volleyball': ['volleyball', 'volley'],
+        'handball': ['handball'],
+        'hockey': ['hockey', 'nhl', 'khl'],
+        'tennis': ['tennis', 'atp', 'wta'],
+        'football': ['football', 'soccer', 'liga', 'premier league', 'serie a'],
+        'soccer': ['football', 'soccer', 'liga', 'premier league', 'serie a'],
+    }
+    keywords = sport_check_keywords.get(sport_lower, ['predictions'])
+    
+    # Retry loop
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            fetch_url = url
+            if attempt > 0:
+                cache_buster = int(time.time())
+                fetch_url = f"{url}{'&' if '?' in url else '?'}_cb={cache_buster}"
+                print(f"   🔄 Retry {attempt + 1}/{max_retries}...")
+                time.sleep(3)
+            
+            if CLOUDFLARE_BYPASS_AVAILABLE:
+                html_content = fetch_forebet_with_bypass(fetch_url, debug=False, sport=sport_lower)
+            else:
+                print(f"   ⚠️ Cloudflare Bypass niedostępny")
+                return False
+            
+            if html_content:
+                is_forebet = (
+                    'class="rcnt"' in html_content or
+                    'class="tr_0"' in html_content
+                )
+                html_lower = html_content.lower()
+                sport_matches = any(kw in html_lower for kw in keywords)
+                
+                if is_forebet and sport_matches:
+                    soup = BeautifulSoup(html_content, 'html.parser')
+                    _forebet_html_cache[sport_cache_key] = (html_content, soup, time.time())
+                    print(f"   ✅ Forebet {sport}: Prefetch SUCCESS! ({len(html_content)} znaków)")
+                    return True
+                elif is_forebet and not sport_matches:
+                    print(f"   ⚠️ Forebet {sport}: HTML nie pasuje do sportu, retry...")
+                    continue
+        except Exception as e:
+            print(f"   ⚠️ Prefetch error: {e}")
+    
+    print(f"   ❌ Forebet {sport}: Prefetch FAILED po {max_retries} próbach")
+    return False
+
+
+def prefetch_all_sports(sports: list, match_date: str = None) -> dict:
+    """
+    🔥 PRE-FETCH ALL: Pobiera HTML dla wszystkich sportów na początku.
+    
+    Args:
+        sports: Lista sportów ['basketball', 'volleyball', 'football']
+        match_date: Data meczu
+    
+    Returns:
+        Dict {sport: success} np. {'basketball': True, 'volleyball': False}
+    """
+    print(f"\n{'='*60}")
+    print(f"🔥 FOREBET PREFETCH - Ładuję HTML dla {len(sports)} sportów")
+    print(f"{'='*60}")
+    
+    results = {}
+    for sport in sports:
+        results[sport] = prefetch_forebet_html(sport, match_date)
+    
+    success_count = sum(results.values())
+    print(f"\n✅ Prefetch zakończony: {success_count}/{len(sports)} sportów")
+    print(f"{'='*60}\n")
+    
+    return results
+
 # 🔥 PUPPETEER STEALTH - najlepsza metoda dla CI/CD
 def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
     """
