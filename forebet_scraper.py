@@ -409,13 +409,14 @@ def find_forebet_match_with_gemini(home_team: str, away_team: str, available_mat
         
         api_key = os.environ.get('GEMINI_API_KEY')
         if not api_key:
+            print(f"      ⚠️ Gemini: Brak GEMINI_API_KEY w środowisku")
             return None
             
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-1.5-flash')
         
-        # Ograniczenie listy meczów do 50 dla efektywności
-        matches_text = '\n'.join(available_matches[:50])
+        # Ograniczenie listy meczów do 100 dla lepszego coverage
+        matches_text = '\n'.join(available_matches[:100])
         
         prompt = f"""Find the best matching match for teams "{home_team}" vs "{away_team}" from this list:
 
@@ -424,8 +425,10 @@ def find_forebet_match_with_gemini(home_team: str, away_team: str, available_mat
 The match may have:
 - Different name format (e.g., "Bjerringbro/Silkeborg" = "Bjerringbro" or "BSV")
 - Different language (e.g., "Niemcy K" = "Germany W" or "Germany Women")
+- City vs Club name (e.g., "Jerusalem" = "Hapoel Jerusalem")
 - Abbreviations (e.g., "FC" instead of "Football Club")
 - Minor spelling differences
+- Partial name matches (e.g., "Hamburg" = "Hamburg Towers")
 
 Return ONLY the matching line from the list, exactly as written.
 If no match found, return "NONE".
@@ -434,15 +437,23 @@ Do not add any explanation or additional text."""
         response = model.generate_content(prompt)
         answer = response.text.strip()
         
-        if answer and answer != 'NONE' and 'vs' in answer:
-            # Parsuj odpowiedź
-            parts = answer.split(' vs ')
-            if len(parts) == 2:
+        print(f"      🤖 Gemini odpowiedź: '{answer[:60]}...' " if len(answer) > 60 else f"      🤖 Gemini odpowiedź: '{answer}'")
+        
+        if answer and answer.upper() != 'NONE' and 'vs' in answer.lower():
+            # Parsuj odpowiedź - obsłuż różne formaty "vs"
+            parts = None
+            for separator in [' vs ', ' VS ', ' Vs ', ' - ']:
+                if separator in answer:
+                    parts = answer.split(separator)
+                    break
+            
+            if parts and len(parts) == 2:
                 match_home = parts[0].strip()
                 match_away = parts[1].strip()
-                print(f"      🤖 Gemini: Znaleziono mecz: {match_home} vs {match_away}")
+                print(f"      ✅ Gemini: Znaleziono mecz: {match_home} vs {match_away}")
                 return (match_home, match_away)
         
+        print(f"      ⚠️ Gemini: Nie znaleziono dopasowania (odpowiedź: {answer[:50]})")
         return None
         
     except Exception as e:
@@ -1011,8 +1022,8 @@ def search_forebet_prediction(
                 forebet_home = home_name
                 forebet_away = away_name
                 
-                # DEBUG: Zbierz WSZYSTKIE mecze do logowania (nie tylko 5)
-                if len(debug_matches) < 10:
+                # DEBUG: Zbierz WSZYSTKIE mecze do Gemini (limit 100)
+                if len(debug_matches) < 100:
                     debug_matches.append(f"{forebet_home} vs {forebet_away}")
                     print(f"      🏟️ Forebet mecz znaleziony: {forebet_home} vs {forebet_away}")
                 
