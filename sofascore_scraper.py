@@ -517,6 +517,33 @@ def search_and_get_votes(
         except Exception:
             pass
         
+        # 🔥 NEW: Kliknij w tab "Fan Vote" / "Who will win" / "Vote" jeśli istnieje
+        try:
+            vote_tab_selectors = [
+                "//button[contains(text(), 'Vote')]",
+                "//button[contains(text(), 'vote')]",
+                "//div[contains(text(), 'Who will win')]",
+                "//span[contains(text(), 'Who will win')]",
+                "[data-testid='vote-tab']",
+                "[class*='vote']",
+                "//a[contains(@href, 'vote')]",
+            ]
+            for selector in vote_tab_selectors:
+                try:
+                    if selector.startswith('//'):
+                        tab = driver.find_element(By.XPATH, selector)
+                    else:
+                        tab = driver.find_element(By.CSS_SELECTOR, selector)
+                    if tab and tab.is_displayed():
+                        tab.click()
+                        print(f"   🔘 SofaScore: Kliknięto tab Vote")
+                        time.sleep(1.5)  # Poczekaj na załadowanie
+                        break
+                except:
+                    continue
+        except Exception:
+            pass  # Kontynuuj bez klikania
+        
         # Pobierz HTML
         try:
             page_source = driver.page_source
@@ -606,6 +633,17 @@ def search_and_get_votes(
                 result['sofascore_total_votes'] = int(votes)
             except:
                 pass
+        
+        
+        # 🔥 WALIDACJA: Odrzuć fałszywe wyniki (100%/100% z 0 głosami = brak danych)
+        if (result['sofascore_home_win_prob'] == 100 and 
+            result['sofascore_away_win_prob'] == 100 and 
+            result['sofascore_total_votes'] == 0):
+            print(f"   ⚠️ SofaScore: Fałszywe głosy (100%/100% z 0 głosów) - resetuję")
+            result['sofascore_home_win_prob'] = None
+            result['sofascore_draw_prob'] = None
+            result['sofascore_away_win_prob'] = None
+            result['sofascore_found'] = False
         
         if result['sofascore_home_win_prob'] is not None:
             draw_str = f"🤝{result['sofascore_draw_prob']}% | " if result['sofascore_draw_prob'] else ""
