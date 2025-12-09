@@ -1435,17 +1435,20 @@ def extract_team_form(soup: BeautifulSoup, driver: webdriver.Chrome, side: str, 
 
 def fetch_odds_from_livesport(driver: webdriver.Chrome, match_url: str, sport: str = 'football') -> Dict[str, Optional[float]]:
     """
-    🔥 Pobiera kursy z Livesport przechodząc na stronę kursów meczu.
+    🔥 Pobiera kursy z Livesport używając GraphQL API (nie Selenium!).
+    
+    Używa bezpośredniego dostępu do API kursów Livesport.
     
     PRIORYTET BUKMACHERÓW:
     1. Pinnacle (najlepsze kursy)
     2. bet365
-    3. Betway
-    4. Unibet
-    5. Pierwszy dostępny
+    3. Unibet
+    4. Nordic Bet
+    5. Bwin
+    6. Betway
     
     Args:
-        driver: Selenium WebDriver
+        driver: Selenium WebDriver (nieużywany, zachowany dla kompatybilności)
         match_url: URL strony meczu (np. /pilka-nozna/mecz/xxxx/szczegoly/)
         sport: Typ sportu
         
@@ -1460,139 +1463,63 @@ def fetch_odds_from_livesport(driver: webdriver.Chrome, match_url: str, sport: s
         'odds_found': False
     }
     
-    # Sprawdź czy sport ma remis
-    has_draw = sport.lower() not in ['tennis', 'volleyball', 'basketball']
-    
-    # Priorytetowe bukmacherzy
-    PRIORITY_BOOKMAKERS = ['pinnacle', 'bet365', 'betway', 'unibet', '1xbet', 'betsson', 'bwin', 'nordicbet']
-    
     try:
-        # Zbuduj URL do strony kursów
-        # Livesport format: /pilka-nozna/mecz/xxxxx/szczegoly/ -> /pilka-nozna/mecz/xxxxx/kursy/
-        odds_url = match_url
-        for suffix in ['/szczegoly/', '/h2h/', '/statystyki/', '/zestawienia-tabel/']:
-            if suffix in odds_url.lower():
-                odds_url = odds_url.lower().replace(suffix, '/kursy/')
-                break
-        else:
-            # Jeśli nie ma znanego suffixu, dodaj /kursy/ na koniec
-            odds_url = match_url.rstrip('/') + '/kursy/'
+        # Import API client
+        from livesport_odds_api import LivesportOddsAPI, get_livesport_odds
         
-        # Dla polskiej wersji
-        if '/szczegoly' not in match_url and '/kursy' not in match_url:
-            odds_url = match_url.replace('/szczegoly', '/kursy').replace('/h2h', '/kursy')
+        # Użyj API do pobrania kursów
+        api_result = get_livesport_odds(match_url, sport)
         
-        print(f"   💰 Livesport: Pobieram kursy z {odds_url[:60]}...")
-        
-        try:
-            driver.get(odds_url)
-            time.sleep(2.5)
-        except Exception as e:
-            print(f"   ⚠️ Livesport odds navigation error: {e}")
-            return result
-        
-        # Parsuj stronę
-        page_source = driver.page_source
-        soup = BeautifulSoup(page_source, 'html.parser')
-        
-        # 🔍 METODA 1: Szukaj tabel z kursami bukmacherów
-        # Livesport struktura: wiersze z nazwą bukmachera i kursami
-        
-        bookmaker_odds = {}  # {'pinnacle': [1.85, 3.40, 2.10], ...}
-        
-        # Szukaj wierszy z kursami
-        odds_rows = soup.select('[class*="odds"], [class*="bookmaker"], [class*="oddsRow"], tr')
-        
-        for row in odds_rows:
-            row_text = row.get_text(' ', strip=True).lower()
-            
-            # Sprawdź każdego priorytetowego bukmachera
-            for bookie in PRIORITY_BOOKMAKERS:
-                if bookie in row_text:
-                    # Znajdź wszystkie kursy w tym wierszu
-                    odds_pattern = re.findall(r'(\d+[.,]\d{2})', row_text)
-                    valid_odds = []
-                    
-                    for odd_str in odds_pattern:
-                        try:
-                            odd_val = float(odd_str.replace(',', '.'))
-                            if 1.01 <= odd_val <= 50.0:
-                                valid_odds.append(odd_val)
-                        except:
-                            pass
-                    
-                    # Zapisz jeśli mamy wystarczająco kursów
-                    min_odds = 2 if not has_draw else 3
-                    if len(valid_odds) >= 2:
-                        bookmaker_odds[bookie] = valid_odds[:3]
-        
-        # 🔍 METODA 2: Szukaj elementów z data-testid lub klasami kursów
-        odds_cells = soup.select('[data-testid*="odd"], [class*="oddValue"], .oddsCell, .odd')
-        cell_values = []
-        
-        for cell in odds_cells:
-            text = cell.get_text(strip=True)
-            try:
-                val = float(text.replace(',', '.'))
-                if 1.01 <= val <= 50.0:
-                    cell_values.append(val)
-            except:
-                pass
-        
-        # Jeśli mamy kursy z komórek i nie znaleźliśmy bukmacherów
-        if cell_values and not bookmaker_odds:
-            bookmaker_odds['unknown'] = cell_values[:3]
-        
-        # 🔍 METODA 3: Regex na całej stronie
-        if not bookmaker_odds:
-            all_odds = re.findall(r'>(\d+[.,]\d{2})<', page_source)
-            valid_all = []
-            for o in all_odds:
-                try:
-                    v = float(o.replace(',', '.'))
-                    if 1.01 <= v <= 50.0:
-                        valid_all.append(v)
-                except:
-                    pass
-            
-            if len(valid_all) >= 2:
-                bookmaker_odds['page_scan'] = valid_all[:3]
-        
-        # Wybierz najlepszego bukmachera (według priorytetu)
-        selected_bookie = None
-        selected_odds = None
-        
-        for bookie in PRIORITY_BOOKMAKERS:
-            if bookie in bookmaker_odds:
-                selected_bookie = bookie
-                selected_odds = bookmaker_odds[bookie]
-                break
-        
-        # Jeśli nie znaleziono priorytetowego, użyj pierwszego dostępnego
-        if not selected_bookie and bookmaker_odds:
-            selected_bookie = list(bookmaker_odds.keys())[0]
-            selected_odds = bookmaker_odds[selected_bookie]
-        
-        if selected_odds:
-            result['home_odds'] = selected_odds[0]
-            
-            if has_draw and len(selected_odds) >= 3:
-                result['draw_odds'] = selected_odds[1]
-                result['away_odds'] = selected_odds[2]
-            elif len(selected_odds) >= 2:
-                result['away_odds'] = selected_odds[1]
-            
-            result['bookmaker'] = selected_bookie.title()
+        if api_result and api_result.get('odds_found'):
+            result['home_odds'] = api_result.get('home_odds')
+            result['draw_odds'] = api_result.get('draw_odds')
+            result['away_odds'] = api_result.get('away_odds')
+            result['bookmaker'] = api_result.get('bookmaker')
             result['odds_found'] = True
-            
-            print(f"   ✅ Livesport: {selected_bookie.title()} - {result['home_odds']}/{result.get('draw_odds', '-')}/{result['away_odds']}")
         else:
-            print(f"   ⚠️ Livesport: Brak kursów na stronie")
-    
+            # Fallback: Spróbuj wydobyć Event ID z URL ręcznie i próbuj ponownie
+            import re
+            
+            # Wydobądź event ID z URL
+            event_id = None
+            
+            # Metoda 1: Parametr ?mid= lub &mid=
+            match = re.search(r'[?&]mid=([a-zA-Z0-9]+)', match_url)
+            if match:
+                event_id = match.group(1)
+            
+            # Metoda 2: ID z URL path (ostatni segment alfanumeryczny)
+            if not event_id:
+                parts = match_url.rstrip('/').split('/')
+                for part in reversed(parts):
+                    if re.match(r'^[a-zA-Z0-9]{6,10}$', part):
+                        if part.lower() not in ['szczegoly', 'h2h', 'statystyki', 'kursy', 'mecz', 'match']:
+                            event_id = part
+                            break
+            
+            if event_id:
+                print(f"   💰 Livesport API: Retry z Event ID: {event_id}")
+                api = LivesportOddsAPI()
+                api_result = api.get_odds_from_multiple_bookmakers(event_id, sport)
+                
+                if api_result and api_result.get('success'):
+                    result['home_odds'] = api_result.get('home_odds')
+                    result['draw_odds'] = api_result.get('draw_odds')
+                    result['away_odds'] = api_result.get('away_odds')
+                    result['bookmaker'] = api_result.get('bookmaker')
+                    result['odds_found'] = True
+                    print(f"   ✅ Livesport API (retry): {result['bookmaker']} - {result['home_odds']}/{result.get('draw_odds', '-')}/{result['away_odds']}")
+            
+            if not result['odds_found']:
+                print(f"   ⚠️ Livesport API: Brak kursów na stronie")
+                
+    except ImportError:
+        print(f"   ⚠️ Livesport API: Moduł livesport_odds_api niedostępny")
     except Exception as e:
         print(f"   ⚠️ Livesport odds error: {e}")
     
     return result
+
 
 def extract_betting_odds(soup: BeautifulSoup) -> Dict[str, Optional[float]]:
     """
