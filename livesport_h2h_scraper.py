@@ -1809,6 +1809,16 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
     # TENIS: Nawigacja dwuetapowa - najpierw strona meczu, potem find H2H link
     # Tennis URLs mają parametry ?mid=... które łamią proste dodawanie ścieżki
     try:
+        # 🔥 WALIDACJA URL: Zapobiegaj "invalid argument" błędom
+        if not url or not isinstance(url, str):
+            print(f"   ⚠️ Tennis: Brak URL (None/empty)")
+            return out
+        
+        url = url.strip()
+        if not url.startswith('http'):
+            print(f"   ⚠️ Tennis: Nieprawidłowy URL: {url[:50]}...")
+            return out
+        
         # KROK 1: Przejdź do strony meczu
         driver.get(url)
         time.sleep(2.5)
