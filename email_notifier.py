@@ -318,11 +318,32 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
         # ========== KOMPAKTOWA KARTA MECZU Z IKONAMI ==========
         # Zbierz wszystkie dane w jednym miejscu
         
-        # FORMA
-        home_form_overall = match.get('home_form_overall', match.get('home_form', []))
-        home_form_home = match.get('home_form_home', [])
-        away_form_overall = match.get('away_form_overall', match.get('away_form', []))
-        away_form_away = match.get('away_form_away', [])
+        # 🔥 Helper: Parse form list from CSV string (CSV saves lists as strings)
+        def parse_form_list(val):
+            if not val:
+                return []
+            if isinstance(val, list):
+                return val
+            if isinstance(val, str):
+                # CSV format: "['W', 'L', 'D']" → ['W', 'L', 'D']
+                val = val.strip()
+                if val.startswith('[') and val.endswith(']'):
+                    # Remove brackets and quotes, split by comma
+                    inner = val[1:-1]
+                    if not inner:
+                        return []
+                    # Parse: 'W', 'L', 'D' → ['W', 'L', 'D']
+                    items = [s.strip().strip("'\"") for s in inner.split(',')]
+                    return [i for i in items if i in ('W', 'L', 'D')]
+                # Simple format: "WLDWD" → ['W', 'L', 'D', 'W', 'D']
+                return [c for c in val if c in ('W', 'L', 'D')]
+            return []
+        
+        # FORMA - parse from CSV strings
+        home_form_overall = parse_form_list(match.get('home_form_overall', match.get('home_form', [])))
+        home_form_home = parse_form_list(match.get('home_form_home', []))
+        away_form_overall = parse_form_list(match.get('away_form_overall', match.get('away_form', [])))
+        away_form_away = parse_form_list(match.get('away_form_away', []))
         form_advantage = match.get('form_advantage', False)
         last_meeting_date = match.get('last_meeting_date', '')
         
