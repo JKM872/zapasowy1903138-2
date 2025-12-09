@@ -38,7 +38,7 @@ jobs:
       matrix:
         sport: [football, basketball, volleyball, handball, hockey, tennis]
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 6
     
     services:
       # FlareSolverr for Cloudflare bypass
@@ -101,19 +101,20 @@ jobs:
       # 8. Run the scraper for this sport
       - name: Run scraper - ${{ matrix.sport }}
         env:
-          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
-          EMAIL_SMTP_SERVER: ${{ secrets.EMAIL_SMTP_SERVER || 'smtp.gmail.com' }}
-          EMAIL_SMTP_PORT: ${{ secrets.EMAIL_SMTP_PORT || '587' }}
           FLARESOLVERR_URL: "http://localhost:8191/v1"
         run: |
           echo "🏃 Scraping ${{ matrix.sport }}..."
+          TODAY=$(date +%Y-%m-%d)
           python scrape_and_notify.py \
-            --sport ${{ matrix.sport }} \
-            --use-forebet-first \
+            --date $TODAY \
+            --sports ${{ matrix.sport }} \
+            --to "${{ secrets.EMAIL_RECIPIENT }}" \
+            --from-email "${{ secrets.EMAIL_SENDER }}" \
+            --password "${{ secrets.EMAIL_PASSWORD }}" \
+            --provider gmail \
+            --use-forebet \
+            --use-sofascore \
             --use-odds \
-            ${{ github.event.inputs.send_email == 'true' || github.event_name == 'schedule' && '--send-email' || '' }} \
             --headless
       
       # 9. Upload results as artifact
