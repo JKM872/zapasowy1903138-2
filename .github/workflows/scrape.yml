@@ -1,0 +1,132 @@
+name: Sports Scraper Pipeline
+
+on:
+  # Run daily at 2:00 AM UTC (3:00 CET / 4:00 CEST)
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: 'Sport to scrape (all = all sports)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - football
+          - basketball
+          - volleyball
+          - handball
+          - hockey
+          - tennis
+      send_email:
+        description: 'Send email notification'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        sport: ${{ github.event.inputs.sport == 'all' || github.event_name == 'schedule' 
+                   && fromJson('["football", "basketball", "volleyball", "handball", "hockey", "tennis"]') 
+                   || fromJson(format('["{0}"]', github.event.inputs.sport || 'football')) }}
+      fail-fast: false
+      max-parallel: 1
+    
+    services:
+      # FlareSolverr for Cloudflare bypass
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+    
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # 2. Setup Python
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      # 3. Setup Node.js (for Puppeteer)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      # 4. Install Chrome for Puppeteer and Selenium
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
+      
+      # 5. Install Python dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # 6. Install Node.js dependencies (Puppeteer)
+      - name: Install Node.js dependencies
+        run: npm ci || npm install
+      
+      # 7. Wait for FlareSolverr to be ready
+      - name: Wait for FlareSolverr
+        run: |
+          echo "Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q "ok"; then
+              echo "FlareSolverr is ready!"
+              break
+            fi
+            sleep 2
+          done
+      
+      # 8. Run the scraper for this sport
+      - name: Run scraper - ${{ matrix.sport }}
+        env:
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SMTP_SERVER: ${{ secrets.EMAIL_SMTP_SERVER || 'smtp.gmail.com' }}
+          EMAIL_SMTP_PORT: ${{ secrets.EMAIL_SMTP_PORT || '587' }}
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+        run: |
+          echo "🏃 Scraping ${{ matrix.sport }}..."
+          python scrape_and_notify.py \
+            --sport ${{ matrix.sport }} \
+            --use-forebet-first \
+            --use-odds \
+            ${{ github.event.inputs.send_email == 'true' || github.event_name == 'schedule' && '--send-email' || '' }} \
+            --headless
+      
+      # 9. Upload results as artifact
+      - name: Upload results - ${{ matrix.sport }}
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-${{ matrix.sport }}-${{ github.run_id }}
+          path: |
+            *.json
+            *.html
+            logs/
+          retention-days: 7
+

@@ -98,18 +98,6 @@ def scrape_and_send_email(
         print(f"⚠️  TRYB TESTOWY: Limit {max_matches} meczów")
     print("="*70)
     
-    # 🔥 FOREBET PRE-FETCH: Załaduj HTML dla wszystkich sportów NA POCZĄTKU
-    # To zapobiega wielokrotnym wywołaniom FlareSolverr dla 2000 meczów
-    if use_forebet:
-        try:
-            from forebet_scraper import prefetch_forebet_html
-            print(f"\n🔥 FOREBET PREFETCH: Ładuję HTML dla {len(sports)} sportów...")
-            for sport in sports:
-                prefetch_forebet_html(sport, date)
-            print("✅ Forebet cache załadowany!\n")
-        except Exception as e:
-            print(f"⚠️ Forebet prefetch error: {e}\n")
-    
     driver = start_driver(headless=headless)
     
     try:
@@ -187,8 +175,7 @@ def scrape_and_send_email(
                         current_sport = detect_sport_from_url(url)
                         info = process_match(url, driver, away_team_focus=away_team_focus,
                                            use_forebet=use_forebet, use_gemini=use_gemini, 
-                                           use_sofascore=use_sofascore, use_flashscore=use_odds,
-                                           sport=current_sport)
+                                           use_sofascore=use_sofascore, sport=current_sport)
                         rows.append(info)
                         
                         if info['qualifies']:

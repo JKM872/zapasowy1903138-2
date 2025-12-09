@@ -109,7 +109,7 @@ class FlashScoreOddsScraper:
     def _find_match_on_page(self, home_team: str, away_team: str, sport: str = 'football') -> Optional[str]:
         """
         Szuka meczu na stronie głównej FlashScore i zwraca URL z kursami.
-        Używa regex na HTML (szybsze niż Selenium elements).
+        Używa element ID z FlashScore (format: g_1_XXXXXXXX).
         """
         sport_slug = self.SPORT_SLUGS.get(sport, 'football')
         
@@ -127,29 +127,84 @@ class FlashScoreOddsScraper:
             home_norm = normalize_team_name(home_team)
             away_norm = normalize_team_name(away_team)
             
+            # Pobierz tekst strony i HTML
             page_source = self.driver.page_source
             
-            # Szukaj linków do meczów w HTML
-            match_pattern = r'href="(/match/[^"]+)"'
-            matches = list(set(re.findall(match_pattern, page_source)))
+            # FlashScore używa div z id="g_1_XXXXXXXXX" dla każdego meczu
+            # Szukamy elementów z danymi meczów
             
-            for match_href in matches:
-                href_lower = match_href.lower()
-                
-                # Sprawdź czy główne słowa z nazw są w URL
-                home_parts = [p for p in home_norm.split() if len(p) > 3]
-                away_parts = [p for p in away_norm.split() if len(p) > 3]
-                
-                home_found = any(part in href_lower for part in home_parts)
-                away_found = any(part in href_lower for part in away_parts)
-                
-                if home_found and away_found:
-                    full_url = f'https://www.flashscore.com{match_href}'
-                    print(f"   ✅ FlashScore: Znaleziono mecz!")
-                    return full_url
+            # Metoda 1: Szukaj elementów div z klasą event czy sportName
+            match_elements = self.driver.find_elements(By.CSS_SELECTOR, 
+                '[class*="event__match"], [class*="sportName"], .event__participant')
             
-            # NIE zwracaj losowego meczu - to powodowało identyczne kursy dla wszystkich!
-            # Zamiast tego zwróć None i pozwól fallbackowi na LiveScore
+            for elem in match_elements:
+                try:
+                    elem_text = elem.text.lower()
+                    parent = elem.find_element(By.XPATH, './ancestor::div[contains(@id,"g_")]')
+                    match_id = parent.get_attribute('id')
+                    
+                    if match_id:
+                        # Sprawdź czy nazwy drużyn są w tekście
+                        home_parts = [p for p in home_norm.split() if len(p) > 3]
+                        away_parts = [p for p in away_norm.split() if len(p) > 3]
+                        
+                        home_found = any(part in elem_text for part in home_parts)
+                        away_found = any(part in elem_text for part in away_parts)
+                        
+                        if home_found or away_found:
+                            # Kliknij w element żeby otworzyć stronę meczu
+                            elem.click()
+                            time.sleep(2)
+                            match_url = self.driver.current_url
+                            if '/match/' in match_url:
+                                print(f"   ✅ FlashScore: Znaleziono mecz!")
+                                return match_url
+                except:
+                    continue
+            
+            # Metoda 2: Szukaj bezpośrednio po tekście na stronie
+            try:
+                # Znajdź wszystkie divy z dwoma uczestnikami
+                event_rows = self.driver.find_elements(By.CSS_SELECTOR, 
+                    '[class*="event__participant--home"], [class*="homeParticipant"]')
+                
+                for row in event_rows:
+                    try:
+                        home_text = row.text.lower()
+                        
+                        # Znajdź away team w sąsiednim elemencie
+                        parent = row.find_element(By.XPATH, './ancestor::div[contains(@class, "event")]')
+                        away_elem = parent.find_element(By.CSS_SELECTOR, 
+                            '[class*="event__participant--away"], [class*="awayParticipant"]')
+                        away_text = away_elem.text.lower()
+                        
+                        home_parts = [p for p in home_norm.split() if len(p) > 2]
+                        away_parts = [p for p in away_norm.split() if len(p) > 2]
+                        
+                        home_match = any(part in home_text for part in home_parts)
+                        away_match = any(part in away_text for part in away_parts)
+                        
+                        if home_match and away_match:
+                            parent.click()
+                            time.sleep(2)
+                            match_url = self.driver.current_url
+                            if '/match/' in match_url:
+                                print(f"   ✅ FlashScore: Znaleziono mecz!")
+                                return match_url
+                    except:
+                        continue
+            except:
+                pass
+            
+            # Metoda 3: Fallback - szukaj po regex w HTML
+            match_pattern = r'id="g_1_([^"]+)"[^>]*>.*?(' + '|'.join([re.escape(p) for p in home_norm.split() if len(p) > 2]) + ').*?</div>'
+            matches = re.findall(match_pattern, page_source, re.IGNORECASE | re.DOTALL)
+            
+            for match_id, _ in matches[:5]:
+                match_url = f'https://www.flashscore.com/match/{match_id}/'
+                print(f"   ✅ FlashScore: Znaleziono mecz (ID: {match_id})!")
+                return match_url
+            
             print(f"   ⚠️ FlashScore: Nie znaleziono meczu {home_team} vs {away_team}")
             return None
             

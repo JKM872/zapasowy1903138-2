@@ -118,19 +118,6 @@ def normalize_team_name(name: str) -> str:
     if not name:
         return ""
     name = name.lower().strip()
-    
-    # 🔥 POLSKIE/EUROPEJSKIE ZNAKI → ASCII
-    char_map = {
-        'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n',
-        'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
-        'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'ss',
-        'é': 'e', 'è': 'e', 'ê': 'e', 'á': 'a', 'à': 'a',
-        'í': 'i', 'ú': 'u', 'ñ': 'n', 'ç': 'c',
-        'š': 's', 'č': 'c', 'ž': 'z', 'ř': 'r',
-    }
-    for char, replacement in char_map.items():
-        name = name.replace(char, replacement)
-    
     name = re.sub(r'\s+(u21|u19|u18|b|ii|iii|iv)\s*$', '', name, flags=re.IGNORECASE)
     name = re.sub(r'[^a-z0-9\s]', '', name)
     name = re.sub(r'\s+', ' ', name).strip()
@@ -390,57 +377,7 @@ def find_match_on_main_page(
                 print(f"   ✅ SofaScore: Znaleziono mecz!")
                 return full_url
         
-        # Metoda 2: ULEPSZONE - szukaj tekstu drużyn na stronie (nie tylko w URL)
-        try:
-            # Użyj BeautifulSoup do parsowania HTML
-            from bs4 import BeautifulSoup
-            soup = BeautifulSoup(page_source, 'html.parser')
-            
-            # Szukaj linków do meczów
-            all_links = soup.find_all('a', href=True)
-            best_match = None
-            best_score = 0.0
-            
-            for link in all_links:
-                href = link.get('href', '')
-                if '#id:' not in href or f'/{sport_slug}/' not in href:
-                    continue
-                
-                # Pobierz tekst linku (nazwy drużyn)
-                link_text = link.get_text(strip=True)
-                
-                # Oblicz similarity score dla tekstu
-                home_score = similarity_score(home_team, link_text)
-                away_score = similarity_score(away_team, link_text)
-                
-                # Sprawdź też czy główne słowa są w tekście
-                home_parts = [p for p in home_norm.split() if len(p) > 2]
-                away_parts = [p for p in away_norm.split() if len(p) > 2]
-                link_text_lower = link_text.lower()
-                
-                home_in_text = any(part in link_text_lower for part in home_parts)
-                away_in_text = any(part in link_text_lower for part in away_parts)
-                
-                # Daj bonus za znalezienie słów
-                combined_score = (home_score + away_score) / 2
-                if home_in_text and away_in_text:
-                    combined_score += 0.3
-                elif home_in_text or away_in_text:
-                    combined_score += 0.15
-                
-                if combined_score > best_score and combined_score >= 0.4:
-                    best_score = combined_score
-                    best_match = href
-            
-            if best_match:
-                full_url = f'https://www.sofascore.com{best_match}' if best_match.startswith('/') else best_match
-                print(f"   ✅ SofaScore: Znaleziono mecz (text match, score={best_score:.2f})!")
-                return full_url
-                
-        except Exception as e:
-            print(f"   ⚠️ SofaScore: Text search failed: {e}")
-        
-        # Metoda 3: Fallback - użyj Selenium elements (stara metoda)
+        # Metoda 2: Fallback - użyj Selenium elements jeśli regex nie zadziałał
         try:
             links = driver.find_elements(By.TAG_NAME, 'a')
             
@@ -450,16 +387,13 @@ def find_match_on_main_page(
                     if not href or '#id:' not in href or f'/{sport_slug}/' not in href:
                         continue
                     
-                    # Pobierz tekst elementu (nazwy drużyn)
-                    link_text = link.text.lower() if link.text else ""
                     href_lower = href.lower()
                     
-                    home_parts = [p for p in home_norm.split() if len(p) > 2]
-                    away_parts = [p for p in away_norm.split() if len(p) > 2]
+                    home_parts = [p for p in home_norm.split() if len(p) > 3]
+                    away_parts = [p for p in away_norm.split() if len(p) > 3]
                     
-                    # Sprawdź tekst lub href
-                    home_found = any(part in href_lower or part in link_text for part in home_parts) if home_parts else False
-                    away_found = any(part in href_lower or part in link_text for part in away_parts) if away_parts else False
+                    home_found = any(part in href_lower for part in home_parts)
+                    away_found = any(part in href_lower for part in away_parts)
                     
                     if home_found and away_found:
                         print(f"   ✅ SofaScore: Znaleziono mecz (fallback)!")
@@ -473,7 +407,6 @@ def find_match_on_main_page(
         except Exception as e:
             print(f"   ⚠️ SofaScore: Fallback search failed: {e}")
         
-        print(f"   ⚠️ SofaScore: Nie znaleziono meczu {home_team} vs {away_team}")
         return None
         
     except Exception as e:
@@ -864,26 +797,14 @@ def scrape_sofascore_full(
         # Uruchom scraping z własnym timeoutem przez threading
         scrape_result = [result]  # Użyj listy żeby móc modyfikować w wątku
         scrape_exception = [None]
-        driver_killed = [False]  # Flag to suppress errors after driver.quit()
         
         def do_scrape():
             try:
-                if driver_killed[0]:
-                    return  # Driver was killed by timeout, stop immediately
                 scrape_result[0] = search_and_get_votes(
                     sofascore_driver, home_team, away_team, sport, date_str
                 )
-            except (ConnectionRefusedError, ConnectionResetError) as e:
-                # Suppress connection errors - driver was probably killed by timeout
-                if not driver_killed[0]:
-                    scrape_exception[0] = e
             except Exception as e:
-                # Suppress all exceptions if driver was killed
-                if not driver_killed[0]:
-                    error_msg = str(e).lower()
-                    # Suppress typical driver-killed errors
-                    if 'connection refused' not in error_msg and 'max retries' not in error_msg:
-                        scrape_exception[0] = e
+                scrape_exception[0] = e
         
         scrape_thread = threading.Thread(target=do_scrape)
         scrape_thread.start()
@@ -891,8 +812,7 @@ def scrape_sofascore_full(
         
         if scrape_thread.is_alive():
             print(f"   ⚠️ SofaScore: Timeout po {SOFASCORE_GLOBAL_TIMEOUT}s - przerywam")
-            # Mark driver as killed BEFORE quitting to suppress errors in thread
-            driver_killed[0] = True
+            # Wątek się nie skończył - driver.quit() przerwać operację
             try:
                 sofascore_driver.quit()
             except:

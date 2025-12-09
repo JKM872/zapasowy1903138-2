@@ -3,43 +3,11 @@ Moduł do wysyłania powiadomień email o kwalifikujących się meczach
 """
 
 import smtplib
-import math
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from typing import List, Dict, Any
+from typing import List, Dict
 import pandas as pd
 from datetime import datetime
-
-
-def is_nan_or_none(val: Any) -> bool:
-    """Check if value is None or NaN (float)."""
-    if val is None:
-        return True
-    if isinstance(val, float) and math.isnan(val):
-        return True
-    if isinstance(val, str) and val.lower() == 'nan':
-        return True
-    return False
-
-
-def safe_value(val: Any, default: Any = '') -> Any:
-    """
-    Convert NaN/None to default value.
-    Used to prevent 'nan' text from appearing in email.
-    """
-    if is_nan_or_none(val):
-        return default
-    return val
-
-
-def safe_float(val: Any, default: float = 0.0) -> float:
-    """Convert value to float, returning default if NaN/None."""
-    if is_nan_or_none(val):
-        return default
-    try:
-        return float(val)
-    except (ValueError, TypeError):
-        return default
 
 # Konfiguracja SMTP
 SMTP_CONFIG = {
@@ -336,329 +304,171 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
         home = match.get('home_team', 'N/A')
         away = match.get('away_team', 'N/A')
         
-        # Uwzględnij tryb away_team_focus
         focus_team = match.get('focus_team', 'home')
-        if focus_team == 'away':
-            wins = match.get('away_wins_in_h2h_last5', 0)
-            focused_team_name = away
-        else:
-            wins = match.get('home_wins_in_h2h_last5', 0)
-            focused_team_name = home
-        
         match_time = match.get('match_time', 'Brak danych')
         match_url = match.get('match_url', '#')
         
-        # Wyciągnij godzinę dla lepszego wyświetlania
         import re
-        time_display = match_time
         time_badge = ''
         if match_time and match_time != 'Brak danych':
             time_match = re.search(r'(\d{1,2}:\d{2})', match_time)
             if time_match:
-                time_only = time_match.group(1)
-                time_badge = f'<span class="time-badge">🕐 {time_only}</span>'
-                time_display = match_time
+                time_badge = time_match.group(1)
         
-        # Sprawdź czy to tenis z advanced scoring (tylko tennis ma pole 'favorite')
-        is_tennis = 'favorite' in match
-        h2h_info = ''
-        form_info = ''
+        # ========== KOMPAKTOWA KARTA MECZU Z IKONAMI ==========
+        # Zbierz wszystkie dane w jednym miejscu
         
-        if is_tennis:  # Tennis z advanced scoring
-            advanced_score = match.get('advanced_score', 0)
-            
-            # Wyświetl scoring dla tenisa
-            favorite = match.get('favorite', 'unknown')
-            if favorite == 'player_a':
-                fav_name = home
-            elif favorite == 'player_b':
-                fav_name = away
-            else:
-                fav_name = "Równi"
-            
-            h2h_info = f'<span class="h2h-record">🎾 Score: {advanced_score:.1f}/100 | Faworytem: {fav_name}</span>'
-        else:  # Sporty drużynowe (football, basketball, etc.)
-            # H2H z win rate
-            h2h_count = match.get('h2h_count', 0)
-            win_rate = match.get('win_rate', 0.0)
-            form_advantage = match.get('form_advantage', False)
-            
-            # Emoji dla przewagi formy
-            advantage_emoji = ' 🔥' if form_advantage else ''
-            
-            if h2h_count > 0:
-                # Data ostatniego meczu H2H
-                last_h2h_date = match.get('last_h2h_date', '')
-                date_suffix = f' | Ost. mecz: {last_h2h_date}' if last_h2h_date else ''
-                
-                # Dynamiczny komunikat w zależności od focus_team
-                if focus_team == 'away':
-                    h2h_info = f'<span class="h2h-record">📊 H2H: {away} (goście) wygrał {wins}/{h2h_count} ({win_rate*100:.0f}%){advantage_emoji}{date_suffix}</span>'
-                else:
-                    h2h_info = f'<span class="h2h-record">📊 H2H: {home} wygrał {wins}/{h2h_count} ({win_rate*100:.0f}%){advantage_emoji}{date_suffix}</span>'
-            else:
-                h2h_info = f'<span class="h2h-record">📊 H2H: Brak danych</span>'
-            
-            # ZAAWANSOWANA FORMA DRUŻYN (3 źródła)
-            home_form_overall = match.get('home_form_overall', match.get('home_form', []))
-            home_form_home = match.get('home_form_home', [])
-            away_form_overall = match.get('away_form_overall', match.get('away_form', []))
-            away_form_away = match.get('away_form_away', [])
-            
-            if home_form_overall or away_form_overall:
-                # Funkcja pomocnicza do formatowania formy z emoji
-                def format_form_with_emoji(form_list):
-                    emoji_map = {'W': '✅', 'L': '❌', 'D': '🟡'}
-                    return ' '.join([emoji_map.get(r, r) for r in form_list]) if form_list else 'N/A'
-                
-                # Formatuj formę
-                home_overall_str = format_form_with_emoji(home_form_overall)
-                home_home_str = format_form_with_emoji(home_form_home)
-                away_overall_str = format_form_with_emoji(away_form_overall)
-                away_away_str = format_form_with_emoji(away_form_away)
-                
-                # Oblicz przewagę
-                home_wins = home_form_overall.count('W') if home_form_overall else 0
-                away_wins = away_form_overall.count('W') if away_form_overall else 0
-                
-                form_info = f'''
-                    <div style="margin-top: 10px; font-size: 13px; background-color: #F5F9FF; padding: 10px; border-radius: 5px;">
-                        <strong>📊 Analiza Formy (ostatnie 5 meczów):</strong>
-                        <div style="margin-top: 6px;">
-                            <div style="margin-bottom: 4px;">
-                                🏠 <strong>{home}:</strong>
-                            </div>
-                            <div style="margin-left: 20px; font-size: 12px;">
-                                • Ogółem: <span style="background-color: #E8F5E9; padding: 2px 6px; border-radius: 3px;">{home_overall_str}</span>
-                                {f'<br>• U siebie: <span style="background-color: #E8F5E9; padding: 2px 6px; border-radius: 3px;">{home_home_str}</span>' if home_form_home else ''}
-                            </div>
-                        </div>
-                        <div style="margin-top: 8px;">
-                            <div style="margin-bottom: 4px;">
-                                ✈️ <strong>{away}:</strong>
-                            </div>
-                            <div style="margin-left: 20px; font-size: 12px;">
-                                • Ogółem: <span style="background-color: #FFEBEE; padding: 2px 6px; border-radius: 3px;">{away_overall_str}</span>
-                                {f'<br>• Na wyjeździe: <span style="background-color: #FFEBEE; padding: 2px 6px; border-radius: 3px;">{away_away_str}</span>' if away_form_away else ''}
-                            </div>
-                        </div>
-                        {f'<div style="margin-top: 8px; padding: 6px; background-color: #FFF3CD; border-radius: 3px; font-weight: bold;">🔥 {focused_team_name} ma przewagę w formie!</div>' if form_advantage else ''}
-                    </div>
-                '''
+        # FORMA
+        home_form_overall = match.get('home_form_overall', match.get('home_form', []))
+        home_form_home = match.get('home_form_home', [])
+        away_form_overall = match.get('away_form_overall', match.get('away_form', []))
+        away_form_away = match.get('away_form_away', [])
+        form_advantage = match.get('form_advantage', False)
+        last_meeting_date = match.get('last_meeting_date', '')
         
-        # Gemini AI Predictions (jeśli dostępne)
-        gemini_html = ''
-        gemini_recommendation = match.get('gemini_recommendation')
-        gemini_confidence = match.get('gemini_confidence')
-        gemini_reasoning = match.get('gemini_reasoning')
+        def form_to_icons(form_list):
+            icons = {'W': '🟢', 'L': '🔴', 'D': '🟡'}
+            return ''.join([icons.get(r, '⚪') for r in form_list[:5]]) if form_list else '—'
         
-        # FIXED: Check for NaN values, not just None/empty
-        has_gemini = (not is_nan_or_none(gemini_recommendation) and 
-                      not is_nan_or_none(gemini_confidence))
+        # H2H
+        h2h_count = match.get('h2h_count', 0)
+        win_rate = match.get('win_rate', 0.0)
+        if focus_team == 'away':
+            wins = match.get('away_wins_in_h2h_last5', 0)
+        else:
+            wins = match.get('home_wins_in_h2h_last5', 0)
         
-        if has_gemini:
-            gemini_confidence = safe_float(gemini_confidence, 0)
-            # Kolory dla rekomendacji
-            rec_colors = {
-                'HIGH': '#22c55e',    # Zielony
-                'MEDIUM': '#eab308',  # Żółty
-                'LOW': '#f97316',     # Pomarańczowy
-                'SKIP': '#ef4444'     # Czerwony
-            }
-            rec_color = rec_colors.get(gemini_recommendation, '#999')
-            
-            # Kolor confidence
-            if gemini_confidence >= 85:
-                conf_color = '#22c55e'  # Zielony
-            elif gemini_confidence >= 70:
-                conf_color = '#eab308'  # Żółty
-            else:
-                conf_color = '#ef4444'  # Czerwony
-            
-            # Skróć reasoning jeśli jest zbyt długi (bezpieczna obsługa NaN/float)
-            if gemini_reasoning is None or (isinstance(gemini_reasoning, float) and str(gemini_reasoning) == 'nan'):
-                reasoning_display = ''
-            else:
-                reasoning_str = str(gemini_reasoning)
-                reasoning_display = reasoning_str[:200] + '...' if len(reasoning_str) > 200 else reasoning_str
-            
-            gemini_html = f'''
-                <div style="background-color: #F0F4FF; padding: 12px; border-radius: 8px; margin-top: 12px; border-left: 4px solid {rec_color};">
-                    <div style="font-weight: bold; margin-bottom: 8px;">
-                        🤖 <span style="color: #667eea;">Gemini AI Analysis</span>
-                    </div>
-                    <div style="margin-bottom: 6px;">
-                        <span style="font-size: 12px; color: #666;">Recommendation:</span>
-                        <span style="background-color: {rec_color}; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 11px; margin-left: 6px;">{gemini_recommendation}</span>
-                        <span style="margin-left: 12px; font-size: 12px; color: #666;">Confidence:</span>
-                        <span style="background-color: {conf_color}; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 11px; margin-left: 6px;">{gemini_confidence:.0f}%</span>
-                    </div>
-                    {f'<div style="font-size: 12px; color: #555; font-style: italic; margin-top: 8px; padding: 6px; background-color: white; border-radius: 4px;">💡 {reasoning_display}</div>' if reasoning_display else ''}
-                </div>
-            '''
+        # SofaScore
+        ss_home = match.get('sofascore_home_win_prob') or match.get('sofascore_home')
+        ss_draw = match.get('sofascore_draw_prob') or match.get('sofascore_draw')
+        ss_away = match.get('sofascore_away_win_prob') or match.get('sofascore_away')
+        ss_votes = match.get('sofascore_total_votes') or match.get('sofascore_votes', 0)
         
-        # Kursy bukmacherskie (jeśli dostępne)
-        odds_html = ''
+        # Odds
         home_odds = match.get('home_odds')
         draw_odds = match.get('draw_odds')
         away_odds = match.get('away_odds')
-        odds_source = safe_value(match.get('odds_source'), 'flashscore')
         
-        # FIXED: Check for NaN values, not just None/empty
-        has_odds = (not is_nan_or_none(home_odds) and not is_nan_or_none(away_odds))
+        # Forebet
+        fb_pred = match.get('forebet_prediction')
+        fb_prob = match.get('forebet_probability')
+        fb_exact = match.get('forebet_exact_score')
         
-        if has_odds:
-            home_odds = safe_float(home_odds, 0)
-            away_odds = safe_float(away_odds, 0)
-            draw_odds = safe_float(draw_odds, 0) if not is_nan_or_none(draw_odds) else None
-            # Znajdź najniższy kurs (faworyt)
-            odds_list = [home_odds, draw_odds, away_odds] if draw_odds else [home_odds, away_odds]
-            min_odds = min(o for o in odds_list if o is not None)
-            
-            # Formatuj kursy z podświetleniem faworyta
-            home_style = 'background-color: #4CAF50; color: white;' if home_odds == min_odds else 'background-color: #FFD700;'
-            draw_style = 'background-color: #4CAF50; color: white;' if draw_odds and draw_odds == min_odds else 'background-color: #FFD700;'
-            away_style = 'background-color: #4CAF50; color: white;' if away_odds == min_odds else 'background-color: #FFD700;'
-            
-            draw_html = f' | <span style="padding: 2px 6px; border-radius: 3px; font-weight: bold; {draw_style}">X {draw_odds:.2f}</span>' if draw_odds else ''
-            
-            odds_html = f'''
-                <div class="match-details" style="background-color: #FFF9E6; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #FFD700;">
-                    <div style="font-weight: bold; margin-bottom: 6px; color: #B8860B;">
-                        💰 Kursy Bukmacherskie <span style="font-size: 11px; color: #666; font-weight: normal;">({odds_source})</span>
-                    </div>
-                    <div>
-                        🏠 <span style="padding: 2px 6px; border-radius: 3px; font-weight: bold; {home_style}">{home} {home_odds:.2f}</span>
-                        {draw_html}
-                         | ✈️ <span style="padding: 2px 6px; border-radius: 3px; font-weight: bold; {away_style}">{away} {away_odds:.2f}</span>
-                    </div>
-                    <div style="margin-top: 6px; font-size: 11px; color: #666;">
-                        ⚡ Faworyt: <strong style="color: #4CAF50;">{'Remis' if draw_odds and draw_odds == min_odds else (home if home_odds == min_odds else away)}</strong> (kurs {min_odds:.2f})
-                    </div>
-                </div>
-            '''
-        
-        # SofaScore Fan Vote (jeśli dostępne)
-        sofascore_html = ''
-        sofascore_home = match.get('sofascore_home_win_prob')
-        sofascore_draw = match.get('sofascore_draw_prob')
-        sofascore_away = match.get('sofascore_away_win_prob')
-        sofascore_votes = match.get('sofascore_total_votes', 0)
-        sofascore_btts_yes = match.get('sofascore_btts_yes')
-        sofascore_btts_no = match.get('sofascore_btts_no')
-        
-        # FIXED: Check for NaN values, not just None
-        has_sofascore = (not is_nan_or_none(sofascore_home) and 
-                         not is_nan_or_none(sofascore_away))
-        
-        if has_sofascore:
-            # Convert to safe values
-            sofascore_home = safe_float(sofascore_home, 0)
-            sofascore_away = safe_float(sofascore_away, 0)
-            sofascore_draw = safe_float(sofascore_draw, 0) if not is_nan_or_none(sofascore_draw) else None
-            sofascore_votes = safe_float(sofascore_votes, 0)
-            
-            # Format liczby głosów
-            if sofascore_votes >= 1000000:
-                votes_str = f"{sofascore_votes/1000000:.1f}M"
-            elif sofascore_votes >= 1000:
-                votes_str = f"{sofascore_votes/1000:.1f}k"
-            else:
-                votes_str = str(int(sofascore_votes))
-            
-            # Koloruj dominującą opcję
-            max_pct = max(sofascore_home, sofascore_draw or 0, sofascore_away)
-            home_style = 'background-color: #4CAF50; color: white; font-weight: bold;' if sofascore_home == max_pct else ''
-            draw_style = 'background-color: #FFC107; color: black; font-weight: bold;' if sofascore_draw and sofascore_draw == max_pct else ''
-            away_style = 'background-color: #F44336; color: white; font-weight: bold;' if sofascore_away == max_pct else ''
-            
-            sofascore_html = f'''
-                <div style="background-color: #E3F2FD; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #2196F3;">
-                    <div style="font-weight: bold; margin-bottom: 8px; color: #1976D2;">
-                        🗳️ SofaScore Fan Vote <span style="font-size: 11px; color: #666; font-weight: normal;">({votes_str} głosów)</span>
-                    </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <span style="padding: 4px 12px; border-radius: 15px; {home_style}">🏠 {sofascore_home:.0f}%</span>
-                        {f'<span style="padding: 4px 12px; border-radius: 15px; {draw_style}">🤝 {sofascore_draw:.0f}%</span>' if sofascore_draw else ''}
-                        <span style="padding: 4px 12px; border-radius: 15px; {away_style}">✈️ {sofascore_away:.0f}%</span>
-                    </div>
-                    {f'<div style="margin-top: 6px; font-size: 12px; color: #555;">🎯 BTTS: Yes {sofascore_btts_yes}% | No {sofascore_btts_no}%</div>' if not is_nan_or_none(sofascore_btts_yes) else ''}
-                </div>
-            '''
-        
-        # Forebet Predictions (jeśli dostępne)
-        forebet_html = ''
-        forebet_prediction = match.get('forebet_prediction')
-        forebet_probability = match.get('forebet_probability')
-        forebet_exact_score = match.get('forebet_exact_score')
-        forebet_over_under = match.get('forebet_over_under')
-        forebet_btts = match.get('forebet_btts')
-        
-        # Sprawdź czy forebet_probability nie jest NaN
-        has_forebet = False
-        if forebet_probability is not None:
-            if isinstance(forebet_probability, float):
-                import math
-                if not math.isnan(forebet_probability):
-                    has_forebet = True
-            else:
-                has_forebet = True
-        
-        if has_forebet:
-            # Kolor dla prawdopodobieństwa
-            if forebet_probability >= 70:
-                prob_color = '#22c55e'  # Zielony
-            elif forebet_probability >= 50:
-                prob_color = '#eab308'  # Żółty
-            else:
-                prob_color = '#ef4444'  # Czerwony
-            
-            # Formatuj predykcję
-            pred_display = forebet_prediction if forebet_prediction else 'N/A'
-            exact_score_html = f'<span style="margin-left: 10px; font-size: 12px; color: #666;">📊 Wynik: <strong>{forebet_exact_score}</strong></span>' if forebet_exact_score else ''
-            over_under_html = f'<span style="margin-left: 10px; font-size: 12px; color: #666;">⚽ {forebet_over_under}</span>' if forebet_over_under else ''
-            btts_html = f'<span style="margin-left: 10px; font-size: 12px; color: #666;">🎯 BTTS: {forebet_btts}</span>' if forebet_btts else ''
-            
-            forebet_html = f'''
-                <div style="background-color: #FFF8E1; padding: 12px; border-radius: 8px; margin-top: 12px; border-left: 4px solid #FF9800;">
-                    <div style="font-weight: bold; margin-bottom: 8px;">
-                        🎯 <span style="color: #E65100;">Forebet Prediction</span>
-                    </div>
-                    <div style="margin-bottom: 6px;">
-                        <span style="font-size: 12px; color: #666;">Predykcja:</span>
-                        <span style="background-color: #FF9800; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 14px; margin-left: 6px;">{pred_display}</span>
-                        <span style="margin-left: 12px; font-size: 12px; color: #666;">Prawdopodobieństwo:</span>
-                        <span style="background-color: {prob_color}; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 14px; margin-left: 6px;">{forebet_probability:.0f}%</span>
-                    </div>
-                    <div style="margin-top: 6px;">
-                        {exact_score_html}
-                        {over_under_html}
-                        {btts_html}
-                    </div>
-                </div>
-            '''
+        # Kolory podświetlenia
+        advantage_icon = '🔥' if form_advantage else ''
         
         html += f"""
-            <div class="match">
-                <div style="margin-bottom: 10px;">
-                    {time_badge}
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
+                <!-- HEADER -->
+                <div style="padding: 15px 20px; background: rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: white; font-size: 12px;">
+                        <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 {time_badge.replace('<span class="time-badge">', '').replace('</span>', '') if time_badge else 'TBD'}</span>
+                    </div>
+                    <div style="color: white; font-size: 11px; opacity: 0.8;">
+                        #{i}
+                    </div>
                 </div>
-                <div class="match-title">
-                    #{i}. {home} vs {away}
+                
+                <!-- DRUŻYNY -->
+                <div style="background: white; padding: 20px; text-align: center;">
+                    <div style="font-size: 22px; font-weight: bold; color: #333;">
+                        🏠 {home} <span style="color: #999; font-size: 16px;">vs</span> {away} ✈️
+                    </div>
+                    {f'<div style="margin-top: 5px;"><span style="background: #FFD700; color: #333; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">🔥 Przewaga gospodarzy!</span></div>' if form_advantage else ''}
                 </div>
-                <div class="match-details">
-                    📅 Data: <strong>{time_display}</strong>
+                
+                <!-- DANE MECZU - GRID -->
+                <div style="background: #f8f9fa; padding: 15px 20px;">
+                    
+                    <!-- FORMA DRUŻYN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {home} (ogólna)</div>
+                            <div style="font-size: 16px;">{form_to_icons(home_form_overall)}</div>
+                            {f'<div style="font-size: 10px; color: #888; margin-top: 3px;">🏠 U siebie: {form_to_icons(home_form_home)}</div>' if home_form_home else ''}
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {away} (ogólna)</div>
+                            <div style="font-size: 16px;">{form_to_icons(away_form_overall)}</div>
+                            {f'<div style="font-size: 10px; color: #888; margin-top: 3px;">✈️ Na wyjeździe: {form_to_icons(away_form_away)}</div>' if away_form_away else ''}
+                        </div>
+                    </div>
+                    
+                    <!-- H2H + OSTATNI MECZ -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666;">🔄 H2H</div>
+                            <div style="font-size: 18px; font-weight: bold; color: {'#4CAF50' if win_rate >= 0.6 else '#FF9800'};">
+                                {f'{wins}/{h2h_count}' if h2h_count > 0 else '—'}
+                            </div>
+                            <div style="font-size: 12px; color: #888;">{f'{win_rate*100:.0f}%' if h2h_count > 0 else ''}</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #333;">
+                                {last_meeting_date if last_meeting_date else '—'}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOFASCORE FAN VOTES -->
+                    {f'''
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">🗳️ SofaScore Fan Vote {f'({ss_votes} głosów)' if ss_votes else ''}</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 18px; font-weight: bold; color: {'#4CAF50' if ss_home and ss_home >= max(ss_home or 0, ss_draw or 0, ss_away or 0) else '#333'};">{ss_home}%</div>
+                                <div style="font-size: 10px; color: #888;">🏠</div>
+                            </div>
+                            {f'<div style="text-align: center;"><div style="font-size: 18px; font-weight: bold; color: {chr(39)}#FFC107{chr(39) if ss_draw and ss_draw >= max(ss_home or 0, ss_draw or 0, ss_away or 0) else chr(39)}#333{chr(39)};">{ss_draw}%</div><div style="font-size: 10px; color: #888;">🤝</div></div>' if ss_draw else ''}
+                            <div style="text-align: center;">
+                                <div style="font-size: 18px; font-weight: bold; color: {'#F44336' if ss_away and ss_away >= max(ss_home or 0, ss_draw or 0, ss_away or 0) else '#333'};">{ss_away}%</div>
+                                <div style="font-size: 10px; color: #888;">✈️</div>
+                            </div>
+                        </div>
+                    </div>
+                    ''' if ss_home else ''}
+                    
+                    <!-- KURSY -->
+                    {f'''
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center; padding: 5px 15px; background: {'#4CAF50' if home_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#f5f5f5'}; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: {'white' if home_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#333'};">{home_odds:.2f}</div>
+                                <div style="font-size: 10px; color: {'white' if home_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#888'};">1</div>
+                            </div>
+                            {f'<div style="text-align: center; padding: 5px 15px; background: {chr(39)}#4CAF50{chr(39) if draw_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else chr(39)}#f5f5f5{chr(39)}; border-radius: 8px;"><div style="font-size: 16px; font-weight: bold; color: {chr(39)}white{chr(39) if draw_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else chr(39)}#333{chr(39)};">{draw_odds:.2f}</div><div style="font-size: 10px;">X</div></div>' if draw_odds else ''}
+                            <div style="text-align: center; padding: 5px 15px; background: {'#4CAF50' if away_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#f5f5f5'}; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: {'white' if away_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#333'};">{away_odds:.2f}</div>
+                                <div style="font-size: 10px; color: {'white' if away_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#888'};">2</div>
+                            </div>
+                        </div>
+                    </div>
+                    ''' if home_odds and away_odds else ''}
+                    
+                    <!-- FOREBET PREDICTION -->
+                    {f'''
+                    <div style="padding: 10px; background: linear-gradient(135deg, #FF9800, #FF5722); border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 11px; color: rgba(255,255,255,0.8);">🎯 Forebet</div>
+                                <div style="font-size: 20px; font-weight: bold; color: white;">{fb_pred}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 11px; color: rgba(255,255,255,0.8);">Prawdopodobieństwo</div>
+                                <div style="font-size: 24px; font-weight: bold; color: white;">{fb_prob:.0f}%</div>
+                            </div>
+                            {f'<div style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px;"><div style="font-size: 10px; color: rgba(255,255,255,0.8);">Wynik</div><div style="font-size: 14px; font-weight: bold; color: white;">{fb_exact}</div></div>' if fb_exact else ''}
+                        </div>
+                    </div>
+                    ''' if fb_pred and fb_prob and str(fb_prob) != 'nan' else ''}
+                    
                 </div>
-                <div class="stats">
-                    {h2h_info}
-                    {form_info}
-                </div>
-                {forebet_html}
-                {gemini_html}
-                {odds_html}
-                {sofascore_html}
-                <div class="match-details">
-                    🔗 <a href="{match_url}">Zobacz mecz na Livesport</a>
+                
+                <!-- FOOTER -->
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                    <a href="{match_url}" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
                 </div>
             </div>
         """

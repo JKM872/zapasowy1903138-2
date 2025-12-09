@@ -19,12 +19,24 @@ Metody (w kolejności próbowania):
 """
 
 import os
+import sys
 import time
 import random
 import json
 import subprocess
 import requests
 from typing import Optional, Dict, Any
+
+# Patch for undetected_chromedriver WinError 6 on Windows
+# This must be done BEFORE importing undetected_chromedriver
+if sys.platform == 'win32':
+    _original_excepthook = sys.excepthook
+    def _patched_excepthook(exc_type, exc_val, exc_tb):
+        if exc_type is OSError and 'WinError 6' in str(exc_val):
+            pass  # Suppress WinError 6 "Invalid handle"
+        else:
+            _original_excepthook(exc_type, exc_val, exc_tb)
+    sys.excepthook = _patched_excepthook
 
 # Detekcja CI/CD (GitHub Actions)
 IS_CI = os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true'
@@ -120,6 +132,26 @@ except ImportError:
 try:
     import undetected_chromedriver as uc
     METHODS_AVAILABLE['undetected'] = True
+    
+    # Patch quit() and __del__() to suppress WinError 6 on Windows
+    if sys.platform == 'win32':
+        _original_quit = uc.Chrome.quit
+        def _patched_quit(self):
+            try:
+                _original_quit(self)
+            except OSError:
+                pass  # Suppress WinError 6
+            except Exception:
+                pass
+        uc.Chrome.quit = _patched_quit
+        
+        def _patched_del(self):
+            try:
+                self.quit()
+            except Exception:
+                pass
+        uc.Chrome.__del__ = _patched_del
+        
 except ImportError:
     METHODS_AVAILABLE['undetected'] = False
 
@@ -420,12 +452,14 @@ class CloudflareBypass:
                             )
                             
                             # Forebet content indicators - MUSZĄ BYĆ OBECNE!
-                            has_rcnt = 'class="rcnt"' in html
-                            has_forepr = 'class="forepr"' in html or 'class="fprc"' in html
-                            has_match_rows = 'class="tr_0"' in html or 'class="tr_1"' in html
-                            has_schema = 'class="schema' in html
+                            # Use flexible matching - HTML can have class="rcnt" or class='rcnt' or class=rcnt
+                            has_rcnt = 'class="rcnt"' in html or "class='rcnt'" in html or 'class=rcnt' in html
+                            has_forepr = 'forepr' in html or 'fprc' in html
+                            has_match_rows = 'tr_0' in html or 'tr_1' in html
+                            has_schema = 'schema' in html
+                            has_homeTeam = 'homeTeam' in html  # Most reliable indicator
                             
-                            is_forebet_page = has_rcnt or has_forepr or has_match_rows or has_schema
+                            is_forebet_page = has_rcnt or has_forepr or has_match_rows or has_schema or has_homeTeam
                             
                             # 🔥 NOWA LOGIKA: Wymaga POZYTYWNEJ WERYFIKACJI Forebet!
                             # Jeśli mamy Cloudflare indicators LUB brak Forebet indicators - FAIL!
@@ -883,7 +917,13 @@ class CloudflareBypass:
             
             return driver.page_source
         finally:
-            driver.quit()
+            try:
+                driver.quit()
+            except OSError:
+                # WinError 6 "Invalid handle" is common with undetected_chromedriver on Windows
+                pass
+            except Exception:
+                pass
     
     def _try_httpx(self, url: str, timeout: int) -> Optional[str]:
         """httpx z HTTP/2 support"""

@@ -18,10 +18,24 @@ import os
 import sys
 import time
 import re
+import atexit
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
+
+# Patch for undetected_chromedriver WinError 6 on Windows
+# This must be done BEFORE importing undetected_chromedriver
+if sys.platform == 'win32':
+    import warnings
+    # Suppress OSError in threading cleanup
+    _original_excepthook = sys.excepthook
+    def _patched_excepthook(exc_type, exc_val, exc_tb):
+        if exc_type is OSError and 'WinError 6' in str(exc_val):
+            pass  # Suppress WinError 6 "Invalid handle"
+        else:
+            _original_excepthook(exc_type, exc_val, exc_tb)
+    sys.excepthook = _patched_excepthook
 
 # Selenium imports
 try:
@@ -44,7 +58,7 @@ except ImportError:
 
 # Existing scrapers
 try:
-    from sofascore_scraper import scrape_sofascore_full
+    from sofascore_scraper import search_and_get_sofascore_votes
     SOFASCORE_AVAILABLE = True
 except ImportError:
     SOFASCORE_AVAILABLE = False
@@ -148,7 +162,15 @@ def get_all_forebet_matches(
             print(f"   ⚠️ FlareSolverr error: {e}")
     
     # Metoda 2: Selenium z Load More (dla lokalnie i gdy FlareSolverr nie zadziałał)
-    if not html_content or 'class="rcnt"' not in html_content:
+    # Use flexible matching - check for any Forebet indicator
+    html_has_forebet_content = html_content and (
+        'rcnt' in html_content or 
+        'homeTeam' in html_content or 
+        'forepr' in html_content or
+        'tr_0' in html_content
+    )
+    
+    if not html_has_forebet_content:
         if SELENIUM_AVAILABLE:
             print("   🌐 Używam Selenium z Load More...")
             try:
@@ -299,7 +321,8 @@ def _parse_single_match(row, sport: str) -> Optional[Dict]:
     probability = None
     
     # Szukaj predykcji w różnych formatach
-    pred_spans = row.find_all('span', class_=re.compile(r'(fprc|foremark|pred)'))
+    # Basketball używa 'forepr', football używa 'fprc'
+    pred_spans = row.find_all('span', class_=re.compile(r'(fprc|forepr|foremark|pred)'))
     for span in pred_spans:
         text = span.get_text(strip=True)
         if text in ['1', 'X', '2', '1X', 'X2', '12']:
@@ -310,7 +333,8 @@ def _parse_single_match(row, sport: str) -> Optional[Dict]:
             break
     
     # Szukaj prawdopodobieństwa
-    prob_spans = row.find_all('span', class_=re.compile(r'(prob|fpr)'))
+    # Basketball używa 'fpr', football używa 'fprc'
+    prob_spans = row.find_all('span', class_=re.compile(r'(prob|fpr|fprc)'))
     for span in prob_spans:
         text = span.get_text(strip=True).replace('%', '')
         try:
@@ -358,10 +382,18 @@ def search_h2h_on_livesport(
     home_team: str,
     away_team: str,
     sport: str,
-    driver: webdriver.Chrome = None
+    driver: webdriver.Chrome = None,
+    date: str = None
 ) -> Optional[Dict]:
     """
     Szuka meczu na Livesport po nazwach drużyn i pobiera H2H.
+    
+    Args:
+        home_team: Nazwa drużyny gospodarzy
+        away_team: Nazwa drużyny gości
+        sport: Sport (basketball, football, etc.)
+        driver: Selenium WebDriver (opcjonalny)
+        date: Data meczu YYYY-MM-DD (opcjonalny, domyślnie dziś)
     
     Returns:
         Dict z H2H danymi lub None jeśli nie znaleziono
@@ -369,19 +401,126 @@ def search_h2h_on_livesport(
     # Import livesport scraper
     try:
         from livesport_h2h_scraper import (
-            search_match_by_teams_livesport,
-            process_match_page,
+            start_driver,
+            get_match_links_from_day,
+            process_match,
+            extract_advanced_team_form,
+            parse_h2h_from_soup,
+            format_form,
         )
-    except ImportError:
-        print("   ⚠️ livesport_h2h_scraper not available")
+    except ImportError as e:
+        print(f"   ⚠️ livesport_h2h_scraper not available: {e}")
         return None
     
     print(f"   🔍 Szukam H2H: {home_team} vs {away_team}...")
     
-    # TODO: Implementacja wyszukiwania po nazwach drużyn
-    # Na razie zwracamy None - trzeba dodać funkcję search_match_by_teams_livesport
+    if date is None:
+        date = datetime.now().strftime('%Y-%m-%d')
     
-    return None
+    own_driver = False
+    try:
+        # Utwórz driver jeśli nie podano
+        if driver is None:
+            driver = start_driver(headless=True)
+            own_driver = True
+        
+        # Pobierz listę meczów z danego dnia
+        urls = get_match_links_from_day(driver, date, sports=[sport], leagues=None)
+        
+        if not urls:
+            print(f"   ⚠️ Nie znaleziono meczów {sport} na Livesport dla {date}")
+            return None
+        
+        # Szukaj meczu po nazwach drużyn
+        home_norm = normalize_team_name(home_team)
+        away_norm = normalize_team_name(away_team)
+        
+        best_match_url = None
+        best_score = 0.0
+        
+        for url in urls[:50]:  # Ogranicz do pierwszych 50 meczów dla wydajności
+            # URL zawiera nazwy drużyn, np. /mecz/team1-team2/
+            url_lower = url.lower()
+            
+            # Sprawdź czy główne słowa z nazw są w URL
+            home_words = [w for w in home_norm.split() if len(w) > 3]
+            away_words = [w for w in away_norm.split() if len(w) > 3]
+            
+            home_in_url = sum(1 for w in home_words if w in url_lower)
+            away_in_url = sum(1 for w in away_words if w in url_lower)
+            
+            # Score: ile słów pasuje
+            score = home_in_url + away_in_url
+            
+            if score > best_score and home_in_url > 0 and away_in_url > 0:
+                best_score = score
+                best_match_url = url
+        
+        if not best_match_url:
+            print(f"   ⚠️ Nie znaleziono meczu {home_team} vs {away_team} na Livesport")
+            return None
+        
+        print(f"   ✅ Znaleziono mecz na Livesport!")
+        
+        # Pobierz dane H2H dla znalezionego meczu
+        match_data = process_match(best_match_url, driver, away_team_focus=False, sport=sport)
+        
+        # Pobierz zaawansowane dane formy
+        advanced_form = {}
+        try:
+            advanced_form = extract_advanced_team_form(best_match_url, driver)
+        except Exception as e:
+            print(f"   ⚠️ Nie udało się pobrać zaawansowanej formy: {e}")
+        
+        # Pobierz H2H historię (mecze bezpośrednie)
+        h2h_matches = []
+        last_meeting_date = None
+        if match_data:
+            h2h_matches = match_data.get('h2h_matches', [])
+            if h2h_matches and len(h2h_matches) > 0:
+                last_meeting_date = h2h_matches[0].get('date')
+        
+        if match_data:
+            h2h_percent = match_data.get('win_rate', 0) * 100
+            h2h_count = match_data.get('h2h_count', 0)
+            
+            result = {
+                # H2H stats
+                'h2h_wins': match_data.get('home_wins_in_h2h_last5', 0),
+                'h2h_total': h2h_count or 5,
+                'h2h_percent': h2h_percent,
+                'focus_team': home_team,
+                
+                # Basic form (from process_match)
+                'home_form': match_data.get('home_form', []),
+                'away_form': match_data.get('away_form', []),
+                
+                # Advanced form (home at home, away on road)
+                'home_form_overall': advanced_form.get('home_form_overall', match_data.get('home_form', [])),
+                'home_form_home': advanced_form.get('home_form_home', []),
+                'away_form_overall': advanced_form.get('away_form_overall', match_data.get('away_form', [])),
+                'away_form_away': advanced_form.get('away_form_away', []),
+                'form_advantage': advanced_form.get('form_advantage', False),
+                
+                # H2H matches with dates
+                'h2h_matches': h2h_matches[:5],  # Last 5 meetings
+                'last_meeting_date': last_meeting_date,
+            }
+            
+            return result
+        else:
+            return None
+    
+    except Exception as e:
+        print(f"   ❌ Livesport search error: {e}")
+        return None
+    
+    finally:
+        if own_driver and driver:
+            try:
+                driver.quit()
+            except:
+                pass
 
 
 # ============================================================================
@@ -429,7 +568,7 @@ def scrape_forebet_first(
     
     print(f"\n📋 Forebet: {len(forebet_matches)} meczów do sprawdzenia")
     
-    # KROK 2: Dla każdego meczu szukaj H2H na Livesport
+    # KROK 2: Dla każdego meczu pobierz SofaScore i szukaj H2H
     qualified_matches = []
     
     for i, match in enumerate(forebet_matches, 1):
@@ -438,8 +577,25 @@ def scrape_forebet_first(
         print(f"\n[{i}/{len(forebet_matches)}] {home} vs {away}")
         print(f"   🎯 Forebet: {match.get('prediction', '?')} ({match.get('probability', '?')}%)")
         
-        # Szukaj H2H
-        h2h_data = search_h2h_on_livesport(home, away, sport)
+        # SofaScore Fan Votes - pobierz dla KAŻDEGO meczu
+        if use_sofascore and SOFASCORE_AVAILABLE:
+            try:
+                sofascore = search_and_get_sofascore_votes(
+                    home_team=home,
+                    away_team=away,
+                    sport=sport
+                )
+                if sofascore and sofascore.get('home_win_pct'):
+                    match['sofascore_home'] = sofascore.get('home_win_pct')
+                    match['sofascore_draw'] = sofascore.get('draw_pct')
+                    match['sofascore_away'] = sofascore.get('away_win_pct')
+                    match['sofascore_votes'] = sofascore.get('total_votes')
+                    # Output already printed by search_and_get_sofascore_votes
+            except Exception as e:
+                print(f"   ⚠️ SofaScore error: {e}")
+        
+        # Szukaj H2H i pobierz formę
+        h2h_data = search_h2h_on_livesport(home, away, sport, date=date)
         
         if h2h_data:
             h2h_percent = h2h_data.get('h2h_percent', 0)
@@ -448,21 +604,34 @@ def scrape_forebet_first(
             match['h2h_percent'] = h2h_percent
             match['focus_team'] = h2h_data.get('focus_team')
             
+            # Forma ogólna
+            match['home_form'] = h2h_data.get('home_form_overall', [])
+            match['away_form'] = h2h_data.get('away_form_overall', [])
+            
+            # Forma u siebie / na wyjeździe
+            match['home_form_home'] = h2h_data.get('home_form_home', [])
+            match['away_form_away'] = h2h_data.get('away_form_away', [])
+            match['form_advantage'] = h2h_data.get('form_advantage', False)
+            
+            # H2H historia
+            match['h2h_matches'] = h2h_data.get('h2h_matches', [])
+            match['last_meeting_date'] = h2h_data.get('last_meeting_date')
+            
+            # Wyświetl formę
+            home_form_str = ''.join(match['home_form'][:5]) if match['home_form'] else '?'
+            away_form_str = ''.join(match['away_form'][:5]) if match['away_form'] else '?'
+            home_home_str = ''.join(match['home_form_home'][:5]) if match['home_form_home'] else '?'
+            away_away_str = ''.join(match['away_form_away'][:5]) if match['away_form_away'] else '?'
+            
+            print(f"   📊 Forma ogólna: {home} [{home_form_str}] vs {away} [{away_form_str}]")
+            print(f"   🏠 {home} u siebie: [{home_home_str}] | ✈️ {away} na wyjeździe: [{away_away_str}]")
+            
+            # Wyświetl H2H historię jeśli jest
+            if match['h2h_matches']:
+                print(f"   🔄 H2H: ostatnie spotkanie: {match['last_meeting_date'] or '?'}")
+            
             if h2h_percent >= min_h2h_percent:
                 print(f"   ✅ H2H: {h2h_percent}% - KWALIFIKUJE!")
-                
-                # SofaScore
-                if use_sofascore and SOFASCORE_AVAILABLE:
-                    try:
-                        sofascore = scrape_sofascore_full(
-                            home_team=home,
-                            away_team=away,
-                            sport=sport,
-                            date_str=date
-                        )
-                        match.update(sofascore)
-                    except Exception as e:
-                        print(f"   ⚠️ SofaScore error: {e}")
                 
                 # Odds
                 if use_odds and FLASHSCORE_AVAILABLE:
@@ -478,6 +647,10 @@ def scrape_forebet_first(
                 print(f"   ❌ H2H: {h2h_percent}% - nie kwalifikuje (< {min_h2h_percent}%)")
         else:
             print(f"   ⚠️ Livesport: Nie znaleziono meczu")
+            # Dodaj mecz do wyników nawet bez H2H (jeśli ma dane SofaScore/Forebet)
+            if match.get('sofascore_home') or match.get('prediction'):
+                match['h2h_percent'] = None  # Brak H2H
+                # Nie kwalifikujemy bez H2H, ale dane są dostępne
     
     print(f"\n{'='*70}")
     print(f"✅ WYNIK: {len(qualified_matches)}/{len(forebet_matches)} meczów zakwalifikowanych")
