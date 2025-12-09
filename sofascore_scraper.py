@@ -667,30 +667,63 @@ def search_and_get_votes(
         except Exception:
             pass
         
-        # 🔥 NEW: Kliknij w tab "Fan Vote" / "Who will win" / "Vote" jeśli istnieje
+        # 🔥 IMPORTANT: Kliknij w tab "Fans" / "Fan Vote" / "Vote" żeby załadować głosy
+        # SofaScore wymaga kliknięcia w ten tab aby pokazać procenty!
+        vote_clicked = False
         try:
             vote_tab_selectors = [
+                # SofaScore Desktop - Fans tab
+                "//button[contains(text(), 'Fans')]",
+                "//a[contains(text(), 'Fans')]",
+                "//div[contains(text(), 'Fans')]",
+                "[data-testid='fans-tab']",
+                
+                # Vote / Who will win
                 "//button[contains(text(), 'Vote')]",
                 "//button[contains(text(), 'vote')]",
                 "//div[contains(text(), 'Who will win')]",
                 "//span[contains(text(), 'Who will win')]",
+                "//p[contains(text(), 'Who will win')]",
+                
+                # Głosowanie (polski?)
+                "//button[contains(text(), 'Głosuj')]",
+                "//div[contains(text(), 'Kto wygra')]",
+                
+                # CSS selectors
+                "[class*='VoteFan']",
+                "[class*='fanVote']",
+                "[class*='FanVote']",
+                "[class*='vote-section']",
                 "[data-testid='vote-tab']",
                 "[class*='vote']",
-                "//a[contains(@href, 'vote')]",
+                
+                # Ostatnia deska ratunku - szukaj 1 X 2 buttonów
+                "//button[text()='1']",
             ]
+            
             for selector in vote_tab_selectors:
                 try:
                     if selector.startswith('//'):
                         tab = driver.find_element(By.XPATH, selector)
                     else:
                         tab = driver.find_element(By.CSS_SELECTOR, selector)
+                    
                     if tab and tab.is_displayed():
-                        tab.click()
-                        print(f"   🔘 SofaScore: Kliknięto tab Vote")
-                        time.sleep(1.5)  # Poczekaj na załadowanie
+                        try:
+                            tab.click()
+                        except:
+                            # Fallback: JavaScript click
+                            driver.execute_script("arguments[0].click();", tab)
+                        
+                        print(f"   🔘 SofaScore: Kliknięto tab Fan Vote")
+                        time.sleep(2)  # Dłuższe oczekiwanie na załadowanie głosów
+                        vote_clicked = True
                         break
                 except:
                     continue
+            
+            if not vote_clicked:
+                print(f"   ⚠️ SofaScore: Nie znaleziono taba Fan Vote - próbuję dalej")
         except Exception:
             pass  # Kontynuuj bez klikania
         
