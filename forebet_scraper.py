@@ -391,6 +391,65 @@ def find_best_match(target_team: str, available_teams: list) -> Tuple[Optional[s
     return best_match, best_score
 
 
+def find_forebet_match_with_gemini(home_team: str, away_team: str, available_matches: list) -> Optional[tuple]:
+    """
+    🤖 Używa Gemini AI do znalezienia meczu na Forebet gdy similarity matching zawodzi.
+    
+    Args:
+        home_team: Szukana drużyna gospodarzy
+        away_team: Szukana drużyna gości
+        available_matches: Lista dostępnych meczów jako stringi 'Home vs Away'
+        
+    Returns:
+        (matching_home, matching_away) lub None jeśli nie znaleziono
+    """
+    try:
+        import google.generativeai as genai
+        import os
+        
+        api_key = os.environ.get('GEMINI_API_KEY')
+        if not api_key:
+            return None
+            
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Ograniczenie listy meczów do 50 dla efektywności
+        matches_text = '\n'.join(available_matches[:50])
+        
+        prompt = f"""Find the best matching match for teams "{home_team}" vs "{away_team}" from this list:
+
+{matches_text}
+
+The match may have:
+- Different name format (e.g., "Bjerringbro/Silkeborg" = "Bjerringbro" or "BSV")
+- Different language (e.g., "Niemcy K" = "Germany W" or "Germany Women")
+- Abbreviations (e.g., "FC" instead of "Football Club")
+- Minor spelling differences
+
+Return ONLY the matching line from the list, exactly as written.
+If no match found, return "NONE".
+Do not add any explanation or additional text."""
+
+        response = model.generate_content(prompt)
+        answer = response.text.strip()
+        
+        if answer and answer != 'NONE' and 'vs' in answer:
+            # Parsuj odpowiedź
+            parts = answer.split(' vs ')
+            if len(parts) == 2:
+                match_home = parts[0].strip()
+                match_away = parts[1].strip()
+                print(f"      🤖 Gemini: Znaleziono mecz: {match_home} vs {match_away}")
+                return (match_home, match_away)
+        
+        return None
+        
+    except Exception as e:
+        print(f"      ⚠️ Gemini Forebet matching error: {e}")
+        return None
+
+
 def search_forebet_prediction(
     home_team: str,
     away_team: str,
@@ -1057,11 +1116,73 @@ def search_forebet_prediction(
                 continue
         
         if not result['success']:
-            # DEBUG: Wypisz pierwsze mecze znalezione na stronie
-            if debug_matches:
-                print(f"      📋 Próbki meczów na Forebet: {debug_matches[:5]}")
-                print(f"      🔎 Szukany mecz: {home_team} vs {away_team}")
-            result['error'] = f'Nie znaleziono meczu {home_team} vs {away_team} na Forebet (similarity < {min_similarity})'
+            # 🤖 GEMINI FALLBACK: Spróbuj znaleźć mecz za pomocą AI
+            if debug_matches and len(debug_matches) > 0:
+                print(f"      🤖 Forebet: Próbuję Gemini AI matching ({len(debug_matches)} meczów)...")
+                gemini_match = find_forebet_match_with_gemini(home_team, away_team, debug_matches)
+                
+                if gemini_match:
+                    gemini_home, gemini_away = gemini_match
+                    
+                    # Znajdź wiersz z dopasowanym meczem i wyciągnij predykcję
+                    for row in rows:
+                        try:
+                            # Wyciągnij nazwy drużyn z wiersza (używając tych samych metod co wcześniej)
+                            row_home, row_away = None, None
+                            
+                            home_span = row.find('span', class_='homeTeam')
+                            away_span = row.find('span', class_='awayTeam')
+                            if home_span and away_span:
+                                row_home = home_span.get_text(strip=True)
+                                row_away = away_span.get_text(strip=True)
+                            
+                            # Sprawdź czy to nasz mecz
+                            if row_home and row_away:
+                                if (row_home.lower() == gemini_home.lower() and 
+                                    row_away.lower() == gemini_away.lower()):
+                                    print(f"      ✅ Gemini: Znaleziono predykcję dla {row_home} vs {row_away}")
+                                    result['found'] = True
+                                    result['home_team_forebet'] = row_home
+                                    result['away_team_forebet'] = row_away
+                                    
+                                    # Wyciągnij predykcję (taki sam kod jak wcześniej)
+                                    fprc_div = row.find('div', class_='fprc')
+                                    if fprc_div:
+                                        spans = fprc_div.find_all('span')
+                                        if len(spans) >= 3:
+                                            try:
+                                                home_prob = int(spans[0].get_text(strip=True))
+                                                draw_prob = int(spans[1].get_text(strip=True))
+                                                away_prob = int(spans[2].get_text(strip=True))
+                                                
+                                                max_prob = max(home_prob, draw_prob, away_prob)
+                                                result['probability'] = float(max_prob)
+                                                
+                                                if max_prob == home_prob:
+                                                    result['prediction'] = '1'
+                                                elif max_prob == draw_prob:
+                                                    result['prediction'] = 'X'
+                                                else:
+                                                    result['prediction'] = '2'
+                                            except (ValueError, IndexError):
+                                                pass
+                                    
+                                    # Exact score
+                                    ex_sc_elem = row.find('div', class_='ex_sc')
+                                    if ex_sc_elem:
+                                        result['exact_score'] = ex_sc_elem.get_text(strip=True)
+                                    
+                                    result['success'] = True
+                                    break
+                        except Exception as e:
+                            continue
+            
+            # Jeśli nadal nie znaleziono - ustaw error
+            if not result['success']:
+                if debug_matches:
+                    print(f"      📋 Próbki meczów na Forebet: {debug_matches[:5]}")
+                    print(f"      🔎 Szukany mecz: {home_team} vs {away_team}")
+                result['error'] = f'Nie znaleziono meczu {home_team} vs {away_team} na Forebet (similarity < {min_similarity})'
     
     except TimeoutException:
         result['error'] = 'Timeout podczas ładowania Forebet.com'

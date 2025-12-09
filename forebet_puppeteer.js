@@ -53,7 +53,7 @@ async function randomDelay(min = 1000, max = 3000) {
 
 async function clickConsent(page) {
     console.log('🍪 Szukam przycisku consent...');
-    
+
     for (const selector of CONSENT_SELECTORS) {
         try {
             const button = await page.$(selector);
@@ -70,7 +70,7 @@ async function clickConsent(page) {
             // Kontynuuj do następnego selektora
         }
     }
-    
+
     // Fallback - szukaj po tekście
     try {
         const buttons = await page.$$('button');
@@ -86,14 +86,14 @@ async function clickConsent(page) {
     } catch (e) {
         // Ignore
     }
-    
+
     console.log('🍪 Nie znaleziono przycisku consent');
     return false;
 }
 
 async function waitForContent(page) {
     console.log('⏳ Czekam na załadowanie treści...');
-    
+
     // Czekaj na różne możliwe selektory meczów
     const selectors = [
         'div.rcnt',
@@ -103,7 +103,7 @@ async function waitForContent(page) {
         '.contentmiddle',
         'table.schema'
     ];
-    
+
     for (const selector of selectors) {
         try {
             await page.waitForSelector(selector, { timeout: 10000 });
@@ -113,24 +113,24 @@ async function waitForContent(page) {
             // Kontynuuj do następnego
         }
     }
-    
+
     return false;
 }
 
 async function simulateHumanBehavior(page) {
     console.log('🖱️ Symulacja zachowania człowieka...');
-    
+
     // Scroll
     await page.evaluate(() => {
         window.scrollBy(0, 300);
     });
     await randomDelay(500, 1500);
-    
+
     await page.evaluate(() => {
         window.scrollBy(0, 500);
     });
     await randomDelay(500, 1500);
-    
+
     // Scroll back up
     await page.evaluate(() => {
         window.scrollTo(0, 0);
@@ -138,12 +138,152 @@ async function simulateHumanBehavior(page) {
     await randomDelay(1000, 2000);
 }
 
+// 🔥 NEW: Click "Load More" / "Show More" button to get all matches
+async function clickLoadMore(page, maxClicks = 10) {
+    console.log('📄 Szukam przycisku "Pokaż więcej"...');
+
+    const loadMoreSelectors = [
+        // Forebet specific
+        '.showmore',
+        '#showmore',
+        'a.showmore',
+        'button.showmore',
+        '.show-more',
+        '#show-more',
+        // Generic patterns
+        'a:has-text("Show more")',
+        'a:has-text("Load more")',
+        'a:has-text("Pokaż więcej")',
+        'a:has-text("Więcej")',
+        'button:has-text("Show more")',
+        'button:has-text("Load more")',
+        // Class patterns
+        '[class*="loadmore"]',
+        '[class*="showmore"]',
+        '[class*="load-more"]',
+        '[class*="show-more"]',
+        // ID patterns
+        '[id*="loadmore"]',
+        '[id*="showmore"]'
+    ];
+
+    let clickCount = 0;
+    let foundButton = true;
+
+    while (foundButton && clickCount < maxClicks) {
+        foundButton = false;
+
+        // First, scroll to bottom to trigger lazy loading
+        await page.evaluate(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+        await delay(1500);
+
+        // Try each selector
+        for (const selector of loadMoreSelectors) {
+            try {
+                const elements = await page.$$(selector);
+                for (const element of elements) {
+                    try {
+                        const isVisible = await element.isIntersectingViewport().catch(() => false);
+                        const isClickable = await page.evaluate(el => {
+                            const rect = el.getBoundingClientRect();
+                            return rect.width > 0 && rect.height > 0 &&
+                                window.getComputedStyle(el).display !== 'none' &&
+                                window.getComputedStyle(el).visibility !== 'hidden';
+                        }, element).catch(() => false);
+
+                        if (isClickable) {
+                            // Scroll element into view
+                            await page.evaluate(el => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), element);
+                            await delay(500);
+
+                            console.log(`   📄 Klikam "Load More" (${selector}) - próba ${clickCount + 1}/${maxClicks}`);
+                            await element.click();
+                            clickCount++;
+                            foundButton = true;
+
+                            // Wait for content to load
+                            await delay(2000);
+                            break;
+                        }
+                    } catch (e) {
+                        // Element not clickable
+                    }
+                }
+                if (foundButton) break;
+            } catch (e) {
+                // Selector not found
+            }
+        }
+
+        // Also try clicking by text
+        if (!foundButton) {
+            try {
+                const links = await page.$$('a, button');
+                for (const link of links) {
+                    const text = await page.evaluate(el => el.textContent, link).catch(() => '');
+                    if (text && /show\s*more|load\s*more|pokaż\s*więcej|więcej\s*meczów/i.test(text)) {
+                        const isClickable = await page.evaluate(el => {
+                            const rect = el.getBoundingClientRect();
+                            return rect.width > 0 && rect.height > 0;
+                        }, link).catch(() => false);
+
+                        if (isClickable) {
+                            console.log(`   📄 Klikam link z tekstem: "${text.trim().substring(0, 30)}"`);
+                            await link.click();
+                            clickCount++;
+                            foundButton = true;
+                            await delay(2000);
+                            break;
+                        }
+                    }
+                }
+            } catch (e) {
+                // Ignore
+            }
+        }
+
+        // If still no button found, try scrolling more to trigger infinite scroll
+        if (!foundButton) {
+            const prevHeight = await page.evaluate(() => document.body.scrollHeight);
+
+            // Scroll multiple times
+            for (let i = 0; i < 3; i++) {
+                await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await delay(1000);
+            }
+
+            const newHeight = await page.evaluate(() => document.body.scrollHeight);
+
+            // If page grew, continue scrolling
+            if (newHeight > prevHeight) {
+                console.log(`   📄 Infinite scroll: strona powiększona (${prevHeight} -> ${newHeight})`);
+                foundButton = true; // Continue loop
+                clickCount++;
+            }
+        }
+    }
+
+    if (clickCount > 0) {
+        console.log(`✅ Załadowano więcej treści (${clickCount} interakcji)`);
+    } else {
+        console.log('📄 Brak przycisku "Pokaż więcej" lub wszystkie mecze załadowane');
+    }
+
+    // Scroll back to top
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await delay(500);
+
+    return clickCount;
+}
+
 async function scrapeForebet(sport, outputFile) {
     const url = SPORT_URLS[sport.toLowerCase()] || SPORT_URLS['football'];
     console.log(`🌐 Forebet ${sport}: ${url}`);
-    
+
     let browser;
-    
+
     try {
         // Opcje przeglądarki
         const launchOptions = {
@@ -162,69 +302,73 @@ async function scrapeForebet(sport, outputFile) {
                 '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
             ]
         };
-        
+
         console.log('🚀 Uruchamiam przeglądarkę...');
         browser = await puppeteer.launch(launchOptions);
-        
+
         const page = await browser.newPage();
-        
+
         // Ustaw viewport
         await page.setViewport({ width: 1920, height: 1080 });
-        
+
         // Ustaw extra headers
         await page.setExtraHTTPHeaders({
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'
         });
-        
+
         console.log('🌐 Ładuję stronę...');
-        await page.goto(url, { 
+        await page.goto(url, {
             waitUntil: 'networkidle2',
-            timeout: 60000 
+            timeout: 60000
         });
-        
+
         // Czekaj na potencjalny challenge
         console.log('⏳ Czekam na Cloudflare...');
         await delay(5000);
-        
+
         // Symuluj człowieka
         await simulateHumanBehavior(page);
-        
+
         // Kliknij consent
         await clickConsent(page);
-        
+
         // Czekaj na content
         const hasContent = await waitForContent(page);
-        
+
         if (!hasContent) {
             console.log('⚠️ Nie znaleziono treści, czekam jeszcze...');
             await delay(10000);
             await simulateHumanBehavior(page);
         }
-        
+
+        // 🔥 NEW: Click "Load More" to get all matches
+        const loadMoreClicks = await clickLoadMore(page, 10);
+        console.log(`📊 Załadowano strony: ${loadMoreClicks + 1}`);
+
         // Pobierz HTML
         const html = await page.content();
-        
+
         // Sprawdź czy to prawdziwa strona
-        const isChallenge = html.includes('loading-verifying') || 
-                           html.includes('lds-ring') ||
-                           html.includes('Checking your browser');
-        
-        const isForebet = html.includes('rcnt') || 
-                         html.includes('forepr') ||
-                         html.includes('tr_0');
-        
+        const isChallenge = html.includes('loading-verifying') ||
+            html.includes('lds-ring') ||
+            html.includes('Checking your browser');
+
+        const isForebet = html.includes('rcnt') ||
+            html.includes('forepr') ||
+            html.includes('tr_0');
+
         if (isChallenge && !isForebet) {
             console.log('❌ Cloudflare challenge nie został rozwiązany!');
-            
+
             // Jeszcze jedna próba - czekaj dłużej
             console.log('⏳ Ostatnia próba - czekam 30 sekund...');
             await delay(30000);
             await simulateHumanBehavior(page);
             await clickConsent(page);
-            
+
             const html2 = await page.content();
-            
+
             if (html2.includes('rcnt') || html2.includes('tr_0')) {
                 console.log('✅ Sukces po dodatkowym czekaniu!');
                 fs.writeFileSync(outputFile, html2);
@@ -243,7 +387,7 @@ async function scrapeForebet(sport, outputFile) {
             console.log('⚠️ Nieznana strona - zapisuję do analizy');
             fs.writeFileSync(outputFile, html);
         }
-        
+
     } catch (error) {
         console.error(`❌ Błąd: ${error.message}`);
         process.exit(1);
