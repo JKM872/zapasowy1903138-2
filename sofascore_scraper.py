@@ -716,7 +716,16 @@ def search_and_get_votes(
                             driver.execute_script("arguments[0].click();", tab)
                         
                         print(f"   🔘 SofaScore: Kliknięto tab Fan Vote")
-                        time.sleep(1.5)  # Optimized from 2s
+                        # 🔥 WIĘCEJ CZASU: SofaScore potrzebuje AJAX load na dane głosów
+                        time.sleep(3)  # Zwiększone z 1.5s
+                        
+                        # 🔥 SCROLL do vote area żeby trigger lazy load
+                        try:
+                            driver.execute_script("window.scrollBy(0, 300);")
+                            time.sleep(0.5)
+                        except:
+                            pass
+                        
                         vote_clicked = True
                         break
                 except:
