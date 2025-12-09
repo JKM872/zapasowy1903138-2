@@ -141,32 +141,64 @@ class FlashScoreOddsScraper:
             # FlashScore używa div z id="g_1_XXXXXXXXX" dla każdego meczu
             # Szukamy elementów z danymi meczów
             
-            # Metoda 1: Szukaj elementów div z klasą event czy sportName
-            match_elements = self.driver.find_elements(By.CSS_SELECTOR, 
-                '[class*="event__match"], [class*="sportName"], .event__participant')
+            # 🔥 UPDATED: FlashScore changed their class names - use newer patterns
+            # Modern FlashScore uses classes like: event__match, sportName, etc.
+            match_selectors = [
+                # New patterns (2024+)
+                '.event__match',
+                '.event__participant',
+                '[class*="participant__participantName"]',
+                # Row-based
+                '[class*="event__"]',
+                '.sportName',
+                # ID-based
+                '[id^="g_1_"]',
+                '[id^="g_2_"]',
+            ]
             
-            for elem in match_elements:
+            for selector in match_selectors:
                 try:
-                    elem_text = elem.text.lower()
-                    parent = elem.find_element(By.XPATH, './ancestor::div[contains(@id,"g_")]')
-                    match_id = parent.get_attribute('id')
+                    match_elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
                     
-                    if match_id:
-                        # Sprawdź czy nazwy drużyn są w tekście
-                        home_parts = [p for p in home_norm.split() if len(p) > 3]
-                        away_parts = [p for p in away_norm.split() if len(p) > 3]
-                        
-                        home_found = any(part in elem_text for part in home_parts)
-                        away_found = any(part in elem_text for part in away_parts)
-                        
-                        if home_found or away_found:
-                            # Kliknij w element żeby otworzyć stronę meczu
-                            elem.click()
-                            time.sleep(2)
-                            match_url = self.driver.current_url
-                            if '/match/' in match_url:
-                                print(f"   ✅ FlashScore: Znaleziono mecz!")
-                                return match_url
+                    for elem in match_elements:
+                        try:
+                            elem_text = elem.text.lower()
+                            if not elem_text or len(elem_text) < 3:
+                                continue
+                                
+                            # Find parent with match ID
+                            parent = None
+                            match_id = None
+                            
+                            try:
+                                parent = elem.find_element(By.XPATH, './ancestor::div[starts-with(@id,"g_")]')
+                                if parent:
+                                    match_id = parent.get_attribute('id')
+                            except:
+                                pass
+                            
+                            # Check team name match
+                            home_parts = [p for p in home_norm.split() if len(p) > 2]
+                            away_parts = [p for p in away_norm.split() if len(p) > 2]
+                            
+                            home_found = any(part in elem_text for part in home_parts) if home_parts else False
+                            away_found = any(part in elem_text for part in away_parts) if away_parts else False
+                            
+                            if home_found or away_found:
+                                # Try clicking to open match page
+                                try:
+                                    clickable = parent if parent else elem
+                                    self.driver.execute_script("arguments[0].click();", clickable)
+                                    time.sleep(2)
+                                    match_url = self.driver.current_url
+                                    if '/match/' in match_url:
+                                        match_id_from_url = match_url.split('/')[-2] if match_url.endswith('/') else match_url.split('/')[-1].split('#')[0]
+                                        print(f"   ✅ FlashScore: Znaleziono mecz (ID: {match_id_from_url})!")
+                                        return match_url
+                                except:
+                                    pass
+                        except:
+                            continue
                 except:
                     continue
             
