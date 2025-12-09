@@ -479,7 +479,7 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
                 </tr>
                 ''' if ss_home and ss_away else ''}
                 
-                <!-- KURSY (tylko gdy dane są dostępne) -->
+                <!-- KURSY (pokazuj gdy jest jakiekolwiek dane) -->
                 {f'''
                 <tr>
                     <td colspan="2" style="background: white; padding: 12px;">
@@ -487,25 +487,25 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
                         <table width="100%">
                             <tr>
                                 <td align="center" style="padding: 5px;">
-                                    <div style="background: {'#4CAF50' if home_odds and home_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#f5f5f5'}; padding: 8px 12px; border-radius: 6px;">
-                                        <div style="font-size: 16px; font-weight: bold; color: {'white' if home_odds and home_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#333'};">{home_odds:.2f}</div>
-                                        <div style="font-size: 10px; color: {'white' if home_odds and home_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#888'};">1</div>
+                                    <div style="background: {'#4CAF50' if home_odds and away_odds and home_odds < away_odds else '#f5f5f5'}; padding: 8px 12px; border-radius: 6px;">
+                                        <div style="font-size: 16px; font-weight: bold; color: {'white' if home_odds and away_odds and home_odds < away_odds else '#333'};">{f"{home_odds:.2f}" if home_odds else "N/A"}</div>
+                                        <div style="font-size: 10px; color: {'white' if home_odds and away_odds and home_odds < away_odds else '#888'};">1</div>
                                     </div>
                                 </td>
                                 {f'<td align="center" style="padding: 5px;"><div style="background: #f5f5f5; padding: 8px 12px; border-radius: 6px;"><div style="font-size: 16px; font-weight: bold; color: #333;">' + f'{draw_odds:.2f}' + '</div><div style="font-size: 10px; color: #888;">X</div></div></td>' if draw_odds else ''}
                                 <td align="center" style="padding: 5px;">
-                                    <div style="background: {'#4CAF50' if away_odds and away_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#f5f5f5'}; padding: 8px 12px; border-radius: 6px;">
-                                        <div style="font-size: 16px; font-weight: bold; color: {'white' if away_odds and away_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#333'};">{away_odds:.2f}</div>
-                                        <div style="font-size: 10px; color: {'white' if away_odds and away_odds == min([o for o in [home_odds, draw_odds, away_odds] if o]) else '#888'};">2</div>
+                                    <div style="background: {'#4CAF50' if home_odds and away_odds and away_odds < home_odds else '#f5f5f5'}; padding: 8px 12px; border-radius: 6px;">
+                                        <div style="font-size: 16px; font-weight: bold; color: {'white' if home_odds and away_odds and away_odds < home_odds else '#333'};">{f"{away_odds:.2f}" if away_odds else "N/A"}</div>
+                                        <div style="font-size: 10px; color: {'white' if home_odds and away_odds and away_odds < home_odds else '#888'};">2</div>
                                     </div>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                ''' if home_odds and away_odds else ''}
+                ''' if home_odds or away_odds or draw_odds else ''}
                 
-                <!-- FOREBET (tylko gdy dane są dostępne) -->
+                <!-- FOREBET (pokazuj gdy jest jakiekolwiek dane) -->
                 {f'''
                 <tr>
                     <td colspan="2" style="background: linear-gradient(135deg, #FF9800, #FF5722); padding: 12px;">
@@ -513,18 +513,18 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
                             <tr>
                                 <td style="color: white;">
                                     <div style="font-size: 10px; opacity: 0.8;">🎯 Forebet</div>
-                                    <div style="font-size: 18px; font-weight: bold;">{fb_pred}</div>
+                                    <div style="font-size: 18px; font-weight: bold;">{fb_pred if fb_pred else 'N/A'}</div>
                                 </td>
                                 <td align="right" style="color: white;">
                                     <div style="font-size: 10px; opacity: 0.8;">Prawdopodobieństwo</div>
-                                    <div style="font-size: 22px; font-weight: bold;">{fb_prob_clean:.0f}%</div>
+                                    <div style="font-size: 22px; font-weight: bold;">{f"{fb_prob_clean:.0f}%" if fb_prob_clean else 'N/A'}</div>
                                 </td>
                                 {f'<td align="right" style="color: white;"><div style="background: rgba(255,255,255,0.2); padding: 6px 10px; border-radius: 6px;"><div style="font-size: 10px; opacity: 0.8;">Wynik</div><div style="font-size: 14px; font-weight: bold;">' + str(fb_exact) + '</div></div></td>' if fb_exact else ''}
                             </tr>
                         </table>
                     </td>
                 </tr>
-                ''' if fb_pred and fb_prob_clean else ''}
+                ''' if fb_pred or fb_prob_clean or fb_exact else ''}
                 
                 <!-- FOOTER -->
                 <tr>
