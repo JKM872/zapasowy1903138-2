@@ -406,6 +406,7 @@ def find_forebet_match_with_gemini(home_team: str, away_team: str, available_mat
     try:
         import google.generativeai as genai
         import os
+        import time as time_module
         
         api_key = os.environ.get('GEMINI_API_KEY')
         if not api_key:
@@ -413,10 +414,10 @@ def find_forebet_match_with_gemini(home_team: str, away_team: str, available_mat
             return None
             
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.0-flash')
         
-        # Ograniczenie listy meczów do 100 dla lepszego coverage
-        matches_text = '\n'.join(available_matches[:100])
+        # Ograniczenie listy meczów do 50 dla mniejszego zużycia tokenów
+        matches_text = '\n'.join(available_matches[:50])
         
         prompt = f"""Find the best matching match for teams "{home_team}" vs "{away_team}" from this list:
 
@@ -434,8 +435,20 @@ Return ONLY the matching line from the list, exactly as written.
 If no match found, return "NONE".
 Do not add any explanation or additional text."""
 
-        response = model.generate_content(prompt)
-        answer = response.text.strip()
+        # Retry logic for rate limiting
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                response = model.generate_content(prompt)
+                answer = response.text.strip()
+                break
+            except Exception as e:
+                if '429' in str(e) and attempt < max_retries - 1:
+                    wait_time = 30 * (attempt + 1)
+                    print(f"      ⏳ Gemini rate limit - czekam {wait_time}s...")
+                    time_module.sleep(wait_time)
+                    continue
+                raise
         
         print(f"      🤖 Gemini odpowiedź: '{answer[:60]}...' " if len(answer) > 60 else f"      🤖 Gemini odpowiedź: '{answer}'")
         

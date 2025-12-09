@@ -177,28 +177,42 @@ def find_best_match_with_gemini(home_team: str, away_team: str, url_list: list, 
             return None
         
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel("models/gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-2.0-flash")
         
-        # Przygotuj listę URL-i z numerami
-        url_options = "\n".join([f"{i+1}. {url}" for i, url in enumerate(url_list)])
+        # Ograniczenie do 15 URL-i dla oszczędności tokenów
+        url_subset = url_list[:15]
+        url_options = "\n".join([f"{i+1}. {url}" for i, url in enumerate(url_subset)])
         
         prompt = f"""Znajdź który URL pasuje do meczu: {home_team} vs {away_team} (sport: {sport})
 
 URLs:
 {url_options}
 
-Odpowiedz TYLKO numerem (1-{len(url_list)}) najlepiej pasującego URL, lub 0 jeśli żaden nie pasuje.
+Odpowiedz TYLKO numerem (1-{len(url_subset)}) najlepiej pasującego URL, lub 0 jeśli żaden nie pasuje.
 Bierz pod uwagę różne warianty nazw drużyn (skróty, pełne nazwy, nazwy miast).
 Twoja odpowiedź musi zawierać TYLKO jedną liczbę."""
 
-        response = model.generate_content(prompt)
+        # Retry logic for rate limiting
+        import time as time_module
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                response = model.generate_content(prompt)
+                break
+            except Exception as e:
+                if '429' in str(e) and attempt < max_retries - 1:
+                    wait_time = 30 * (attempt + 1)
+                    print(f"   ⏳ Gemini rate limit - czekam {wait_time}s...")
+                    time_module.sleep(wait_time)
+                    continue
+                raise
         
         # Parsuj odpowiedź
         try:
             match_idx = int(response.text.strip()) - 1
-            if 0 <= match_idx < len(url_list):
+            if 0 <= match_idx < len(url_subset):
                 print(f"   🤖 Gemini: Znalazłem dopasowanie!")
-                return url_list[match_idx]
+                return url_subset[match_idx]
         except (ValueError, IndexError):
             pass
         
