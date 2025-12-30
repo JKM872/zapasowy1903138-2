@@ -5,6 +5,11 @@ Pobiera dane z SofaScore.com:
 - "Who will win?" probabilities (community voting)
 - "Will both teams score?" (BTTS) 
 
+NOWE W v3.2:
+- RETRY LOGIC z exponential backoff (3 próby)
+- Lepsze obsługa błędów sieciowych
+- Automatyczne ponawianie przy timeout
+
 NOWE W v3.1:
 - ZAWSZE dedykowany driver (nie używa zewnętrznego z 120s timeout)
 - Globalny timeout 20s dla całej operacji
@@ -113,6 +118,61 @@ def _set_cached_result(home_team: str, away_team: str, sport: str, result: Dict)
     _cache_expiry[key] = datetime.now() + timedelta(minutes=CACHE_DURATION_MINUTES)
 
 
+# ============================================================================
+# RETRY LOGIC
+# ============================================================================
+
+MAX_RETRIES = 3
+RETRY_BACKOFF = [1, 2, 4]  # Exponential backoff: 1s, 2s, 4s
+
+
+def _retry_request(request_func, *args, **kwargs):
+    """
+    Wrapper do wielokrotnych prób wykonania requestu z exponential backoff.
+    
+    Args:
+        request_func: Funkcja wykonująca request (np. requests.get)
+        *args: Argumenty przekazywane do funkcji
+        **kwargs: Keyword arguments przekazywane do funkcji
+        
+    Returns:
+        Response jeśli sukces, None jeśli wszystkie próby zawiodą
+    """
+    last_exception = None
+    
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = request_func(*args, **kwargs)
+            if response.status_code == 200:
+                return response
+            elif response.status_code in [429, 503]:  # Rate limited lub service unavailable
+                wait_time = RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1]
+                print(f"      ⏳ SofaScore API: Status {response.status_code}, czekam {wait_time}s...")
+                time.sleep(wait_time)
+                continue
+            else:
+                return response  # Inne błędy - zwróć natychmiast
+        except requests.exceptions.Timeout as e:
+            last_exception = e
+            if attempt < MAX_RETRIES - 1:
+                wait_time = RETRY_BACKOFF[attempt]
+                print(f"      ⏳ SofaScore API: Timeout, próba {attempt + 2}/{MAX_RETRIES} za {wait_time}s...")
+                time.sleep(wait_time)
+        except requests.exceptions.ConnectionError as e:
+            last_exception = e
+            if attempt < MAX_RETRIES - 1:
+                wait_time = RETRY_BACKOFF[attempt]
+                print(f"      ⏳ SofaScore API: Błąd połączenia, próba {attempt + 2}/{MAX_RETRIES} za {wait_time}s...")
+                time.sleep(wait_time)
+        except Exception as e:
+            last_exception = e
+            break  # Inne błędy - przerwij natychmiast
+    
+    if last_exception:
+        print(f"      ❌ SofaScore API: Wszystkie próby zawiodły - {type(last_exception).__name__}")
+    return None
+
+
 def normalize_team_name(name: str) -> str:
     """Normalizuje nazwę drużyny do porównania"""
     if not name:
@@ -174,13 +234,15 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
     """
     Pobiera głosy Fan Vote przez SofaScore API.
     Szybsze i bardziej niezawodne niż HTML scraping.
+    
+    v3.2: Dodano retry logic z exponential backoff.
     """
     if not REQUESTS_AVAILABLE:
         return None
     try:
         url = f"https://api.sofascore.com/api/v1/event/{event_id}/votes"
-        response = requests.get(url, headers=API_HEADERS, timeout=5)
-        if response.status_code == 200:
+        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=5)
+        if response and response.status_code == 200:
             data = response.json()
             vote = data.get('vote', {})
             return {
@@ -198,8 +260,13 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
         return None
 
 
+
 def search_event_via_api(home_team: str, away_team: str, sport: str = 'football', date_str: str = None) -> Optional[int]:
-    """Szuka event ID przez SofaScore API."""
+    """
+    Szuka event ID przez SofaScore API.
+    
+    v3.2: Dodano retry logic z exponential backoff.
+    """
     if not REQUESTS_AVAILABLE:
         return None
     try:
@@ -209,8 +276,8 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
             search_date = datetime.now().strftime('%Y-%m-%d')
         sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
         url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{search_date}"
-        response = requests.get(url, headers=API_HEADERS, timeout=5)
-        if response.status_code != 200:
+        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=5)
+        if not response or response.status_code != 200:
             return None
         data = response.json()
         events = data.get('events', [])
@@ -228,6 +295,7 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
         return None
     except Exception:
         return None
+
 
 
 def extract_event_id_from_url(url: str) -> Optional[int]:

@@ -1,0 +1,15 @@
+{
+    "buildCommand": "cd frontend && npm run build",
+    "outputDirectory": "frontend/dist",
+    "framework": "vite",
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/api/$1"
+        }
+    ],
+    "env": {
+        "VITE_SUPABASE_URL": "@supabase_url",
+        "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key"
+    }
+}

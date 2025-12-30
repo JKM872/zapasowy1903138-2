@@ -328,6 +328,85 @@ def scrape_and_send_email(
             df.to_csv(outfn, index=False, encoding='utf-8-sig')
             print(f"   ✅ CSV zaktualizowany o kursy: {outfn}")
         
+        # 📊 EKSPORT JSON DLA FRONTEND API
+        print(f"\n📊 Eksport danych JSON dla frontendu...")
+        os.makedirs('results', exist_ok=True)
+        sport_suffix = '_'.join(sports) if len(sports) <= 2 else 'multi'
+        json_filename = f'results/matches_{date}_{sport_suffix}.json'
+        
+        # Przygotuj dane w formacie frontendu
+        frontend_matches = []
+        for row in rows:
+            match_data = {
+                'id': hash(f"{row.get('home_team', '')}_{row.get('away_team', '')}_{row.get('time', '')}"),
+                'homeTeam': row.get('home_team', ''),
+                'awayTeam': row.get('away_team', ''),
+                'time': row.get('time', ''),
+                'date': date,
+                'league': row.get('league', row.get('tournament', '')),
+                'country': row.get('country', ''),
+                'sport': sport_suffix if len(sports) == 1 else row.get('sport', 'football'),
+                'matchUrl': row.get('url', ''),
+                'qualifies': row.get('qualifies', False),
+                # H2H
+                'h2h': {
+                    'home': row.get('home_wins_in_h2h_last5', 0),
+                    'draw': row.get('draws_in_h2h_last5', 0),
+                    'away': row.get('away_wins_in_h2h_last5', 0),
+                    'total': row.get('h2h_count', 5),
+                    'winRate': int(row.get('win_rate', 0) * 100) if row.get('win_rate') else 0
+                },
+                # Form
+                'homeForm': row.get('home_form', []),
+                'awayForm': row.get('away_form', []),
+                'homeFormHome': row.get('home_form_home', []),
+                'awayFormAway': row.get('away_form_away', []),
+                'formAdvantage': row.get('form_advantage', False),
+                # Odds
+                'odds': {
+                    'home': row.get('home_odds'),
+                    'draw': row.get('draw_odds'),
+                    'away': row.get('away_odds'),
+                    'bookmaker': row.get('odds_source', row.get('odds_bookmaker', 'Unknown'))
+                } if row.get('home_odds') or row.get('away_odds') else None,
+                # Forebet
+                'forebet': {
+                    'prediction': row.get('forebet_prediction'),
+                    'probability': row.get('forebet_probability'),
+                    'exactScore': row.get('forebet_score'),
+                    'overUnder': row.get('forebet_over_under'),
+                    'btts': row.get('forebet_btts')
+                } if row.get('forebet_prediction') else None,
+                # SofaScore
+                'sofascore': {
+                    'home': row.get('sofascore_home_win_prob'),
+                    'draw': row.get('sofascore_draw_prob'),
+                    'away': row.get('sofascore_away_win_prob'),
+                    'votes': row.get('sofascore_total_votes', 0)
+                } if row.get('sofascore_home_win_prob') else None,
+                # Focus
+                'focusTeam': 'away' if away_team_focus else 'home'
+            }
+            frontend_matches.append(match_data)
+        
+        # Zapisz JSON
+        json_output = {
+            'date': date,
+            'sport': sport_suffix,
+            'generatedAt': datetime.now().isoformat(),
+            'stats': {
+                'total': len(frontend_matches),
+                'qualifying': qualifying_count,
+                'formAdvantage': sum(1 for m in frontend_matches if m.get('formAdvantage'))
+            },
+            'matches': frontend_matches
+        }
+        
+        with open(json_filename, 'w', encoding='utf-8') as f:
+            json.dump(json_output, f, ensure_ascii=False, indent=2)
+        
+        print(f"   ✅ JSON zapisany: {json_filename}")
+        
         # Podsumowanie scrapingu
         print("\n📊 PODSUMOWANIE SCRAPINGU:")
         print(f"   Przetworzono: {len(rows)} meczów")

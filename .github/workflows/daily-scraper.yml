@@ -740,3 +740,39 @@ jobs:
           echo "| 🏒 Hockey | ${{ needs.scrape-hockey.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🏐 Volleyball | ${{ needs.scrape-volleyball.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🤾 Handball | ${{ needs.scrape-handball.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # 🎯 Weryfikacja wczorajszych predykcji
+  verify-predictions:
+    needs: [summary]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests supabase
+      
+      - name: Verify Yesterday's Predictions
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python auto_result_updater.py --date yesterday --mode check
+      
+      - name: Generate Accuracy Report
+        run: |
+          echo "## 📊 Prediction Accuracy Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Yesterday's predictions have been verified." >> $GITHUB_STEP_SUMMARY
+          echo "Check Supabase dashboard for detailed stats." >> $GITHUB_STEP_SUMMARY
+

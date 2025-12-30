@@ -407,9 +407,52 @@ def find_best_match(target_team: str, available_teams: list) -> Tuple[Optional[s
     return best_match, best_score
 
 
+def _call_groq_api(prompt: str) -> Optional[str]:
+    """
+    🚀 Groq API - ultra-szybki fallback dla Gemini.
+    Używa llama-3.3-70b-versatile.
+    """
+    import os
+    import requests
+    
+    api_key = os.environ.get('GROQ_API_KEY')
+    if not api_key:
+        print(f"      ⚠️ Groq: Brak GROQ_API_KEY w środowisku")
+        return None
+    
+    try:
+        response = requests.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            headers={
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'model': 'llama-3.3-70b-versatile',  # Najlepszy model Groq dla matchingu
+                'messages': [{'role': 'user', 'content': prompt}],
+                'temperature': 0.1,
+                'max_tokens': 200
+            },
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            answer = data['choices'][0]['message']['content'].strip()
+            print(f"      🚀 Groq odpowiedź: '{answer[:60]}...' " if len(answer) > 60 else f"      🚀 Groq odpowiedź: '{answer}'")
+            return answer
+        else:
+            print(f"      ⚠️ Groq API error: {response.status_code} - {response.text[:100]}")
+            return None
+            
+    except Exception as e:
+        print(f"      ⚠️ Groq API error: {e}")
+        return None
+
+
 def find_forebet_match_with_gemini(home_team: str, away_team: str, available_matches: list) -> Optional[tuple]:
     """
-    🤖 Używa Gemini AI do znalezienia meczu na Forebet gdy similarity matching zawodzi.
+    🤖 Używa Gemini AI (+ Groq fallback) do znalezienia meczu na Forebet gdy similarity matching zawodzi.
     
     Args:
         home_team: Szukana drużyna gospodarzy
@@ -419,23 +462,13 @@ def find_forebet_match_with_gemini(home_team: str, away_team: str, available_mat
     Returns:
         (matching_home, matching_away) lub None jeśli nie znaleziono
     """
-    try:
-        import google.generativeai as genai
-        import os
-        import time as time_module
-        
-        api_key = os.environ.get('GEMINI_API_KEY')
-        if not api_key:
-            print(f"      ⚠️ Gemini: Brak GEMINI_API_KEY w środowisku")
-            return None
-            
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        
-        # Ograniczenie listy meczów do 50 dla mniejszego zużycia tokenów
-        matches_text = '\n'.join(available_matches[:50])
-        
-        prompt = f"""Find the best matching match for teams "{home_team}" vs "{away_team}" from this list:
+    import os
+    import time as time_module
+    
+    # Ograniczenie listy meczów do 50 dla mniejszego zużycia tokenów
+    matches_text = '\n'.join(available_matches[:50])
+    
+    prompt = f"""Find the best matching match for teams "{home_team}" vs "{away_team}" from this list:
 
 {matches_text}
 
@@ -451,43 +484,72 @@ Return ONLY the matching line from the list, exactly as written.
 If no match found, return "NONE".
 Do not add any explanation or additional text."""
 
-        # Retry logic for rate limiting
-        max_retries = 2
-        for attempt in range(max_retries):
-            try:
-                response = model.generate_content(prompt)
-                answer = response.text.strip()
-                break
-            except Exception as e:
-                if '429' in str(e) and attempt < max_retries - 1:
-                    wait_time = 30 * (attempt + 1)
-                    print(f"      ⏳ Gemini rate limit - czekam {wait_time}s...")
-                    time_module.sleep(wait_time)
-                    continue
-                raise
-        
-        print(f"      🤖 Gemini odpowiedź: '{answer[:60]}...' " if len(answer) > 60 else f"      🤖 Gemini odpowiedź: '{answer}'")
-        
-        if answer and answer.upper() != 'NONE' and 'vs' in answer.lower():
-            # Parsuj odpowiedź - obsłuż różne formaty "vs"
-            parts = None
-            for separator in [' vs ', ' VS ', ' Vs ', ' - ']:
-                if separator in answer:
-                    parts = answer.split(separator)
-                    break
+    answer = None
+    use_groq_fallback = False
+    
+    # 🔥 METODA 1: Gemini (główna)
+    gemini_key = os.environ.get('GEMINI_API_KEY')
+    if gemini_key:
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')  # Najnowszy model Gemini
             
-            if parts and len(parts) == 2:
-                match_home = parts[0].strip()
-                match_away = parts[1].strip()
-                print(f"      ✅ Gemini: Znaleziono mecz: {match_home} vs {match_away}")
-                return (match_home, match_away)
+            # Retry logic for rate limiting
+            max_retries = 2
+            for attempt in range(max_retries):
+                try:
+                    response = model.generate_content(prompt)
+                    answer = response.text.strip()
+                    print(f"      🤖 Gemini odpowiedź: '{answer[:60]}...' " if len(answer) > 60 else f"      🤖 Gemini odpowiedź: '{answer}'")
+                    break
+                except Exception as e:
+                    error_str = str(e)
+                    if '429' in error_str:
+                        if attempt < max_retries - 1:
+                            wait_time = 30 * (attempt + 1)
+                            print(f"      ⏳ Gemini rate limit - czekam {wait_time}s...")
+                            time_module.sleep(wait_time)
+                            continue
+                        else:
+                            print(f"      ⚠️ Gemini rate limit - przełączam na Groq...")
+                            use_groq_fallback = True
+                            break
+                    raise
+                    
+        except Exception as e:
+            print(f"      ⚠️ Gemini error: {e} - próbuję Groq...")
+            use_groq_fallback = True
+    else:
+        print(f"      ⚠️ Brak GEMINI_API_KEY - próbuję Groq...")
+        use_groq_fallback = True
+    
+    # 🚀 METODA 2: Groq (fallback)
+    if use_groq_fallback or not answer:
+        groq_answer = _call_groq_api(prompt)
+        if groq_answer:
+            answer = groq_answer
+    
+    # Parsuj odpowiedź
+    if answer and answer.upper() != 'NONE' and 'vs' in answer.lower():
+        parts = None
+        for separator in [' vs ', ' VS ', ' Vs ', ' - ']:
+            if separator in answer:
+                parts = answer.split(separator)
+                break
         
-        print(f"      ⚠️ Gemini: Nie znaleziono dopasowania (odpowiedź: {answer[:50]})")
-        return None
-        
-    except Exception as e:
-        print(f"      ⚠️ Gemini Forebet matching error: {e}")
-        return None
+        if parts and len(parts) == 2:
+            match_home = parts[0].strip()
+            match_away = parts[1].strip()
+            print(f"      ✅ AI Match: Znaleziono mecz: {match_home} vs {match_away}")
+            return (match_home, match_away)
+    
+    if answer:
+        print(f"      ⚠️ AI: Nie znaleziono dopasowania (odpowiedź: {answer[:50]})")
+    else:
+        print(f"      ⚠️ AI: Brak odpowiedzi od Gemini i Groq")
+    
+    return None
 
 
 def search_forebet_prediction(

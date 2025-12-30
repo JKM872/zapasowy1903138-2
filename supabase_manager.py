@@ -7,7 +7,7 @@ Zarządza połączeniem z Supabase i zapisuje:
 - Accuracy tracking dla każdego źródła
 - ROI calculations
 
-Database: https://atdyvzpjlfexqqjxokgq.supabase.co
+Database: Configured via environment variables
 """
 
 from supabase import create_client, Client
@@ -15,9 +15,9 @@ from typing import Dict, List, Optional
 from datetime import datetime
 import os
 
-# Supabase credentials
-SUPABASE_URL = "https://atdyvzpjlfexqqjxokgq.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0ZHl2enBqbGZleHFxanhva2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzOTY1NjEsImV4cCI6MjA3ODk3MjU2MX0.VIJbmVEkeYvPPhmcMxTSc3-6W5DzLSZ-yro7C3EOcBU"
+# Supabase credentials from environment (with fallback)
+SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://lczcittvuaocimqkhaho.supabase.co')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', os.environ.get('SUPABASE_ANON_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjemNpdHR2dWFvY2ltcWtoYWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTA3MDksImV4cCI6MjA4MTY2NjcwOX0.6CWKNB6nqqYgDUuSTEeNF61g2NvorXw4s5gf8hqy7Rc'))
 
 
 class SupabaseManager:

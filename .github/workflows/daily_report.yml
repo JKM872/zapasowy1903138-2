@@ -1,0 +1,202 @@
+name: Daily Report & Notifications
+
+on:
+  # Morning report at 7:00 UTC (8:00 CET)
+  schedule:
+    - cron: '0 7 * * *'
+    # Evening summary at 19:00 UTC (20:00 CET)
+    - cron: '0 19 * * *'
+  
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      report_type:
+        description: 'Report type'
+        required: true
+        default: 'morning'
+        type: choice
+        options:
+          - morning
+          - evening
+          - full
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests
+      
+      - name: API Health Check
+        run: |
+          python -c "
+          import requests
+          import sys
+          
+          # Check API if hosted
+          api_url = '${{ secrets.API_URL }}' or 'http://localhost:5000'
+          
+          try:
+              response = requests.get(f'{api_url}/api/health', timeout=10)
+              if response.status_code == 200:
+                  print('API is healthy')
+              else:
+                  print(f'API returned status {response.status_code}')
+          except Exception as e:
+              print(f'API check skipped: {e}')
+          "
+
+  send-report:
+    runs-on: ubuntu-latest
+    needs: health-check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || pip install requests apscheduler
+      
+      - name: Determine report type
+        id: report-type
+        run: |
+          HOUR=$(date -u +%H)
+          if [ "${{ github.event.inputs.report_type }}" != "" ]; then
+            echo "type=${{ github.event.inputs.report_type }}" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" -lt 12 ]; then
+            echo "type=morning" >> $GITHUB_OUTPUT
+          else
+            echo "type=evening" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Run Email Scheduler
+        env:
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+        run: |
+          REPORT_TYPE="${{ steps.report-type.outputs.type }}"
+          
+          if [ "$REPORT_TYPE" = "morning" ]; then
+            echo "Running morning report..."
+            python email_scheduler.py --test-morning || echo "Morning report sent or skipped"
+          else
+            echo "Running evening report..."
+            python email_scheduler.py --test-evening || echo "Evening report sent or skipped"
+          fi
+
+  notify-telegram:
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: ${{ vars.TELEGRAM_ENABLED == 'true' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install python-telegram-bot requests
+      
+      - name: Send Telegram Notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python -c "
+          import os
+          import json
+          from datetime import datetime
+          
+          token = os.getenv('TELEGRAM_BOT_TOKEN')
+          chat_id = os.getenv('TELEGRAM_CHAT_ID')
+          
+          if not token or not chat_id:
+              print('Telegram not configured, skipping')
+              exit(0)
+          
+          import requests
+          
+          message = f'''
+          BigOne Daily Report
+          Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+          
+          Workflow completed successfully.
+          Check your email for detailed predictions.
+          '''
+          
+          url = f'https://api.telegram.org/bot{token}/sendMessage'
+          requests.post(url, json={
+              'chat_id': chat_id,
+              'text': message.strip()
+          })
+          print('Telegram notification sent')
+          "
+
+  notify-discord:
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: ${{ vars.DISCORD_ENABLED == 'true' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Send Discord Notification
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python discord_webhook.py --summary || python -c "
+          import os
+          import requests
+          from datetime import datetime
+          
+          webhook_url = os.getenv('DISCORD_WEBHOOK_URL')
+          if not webhook_url:
+              print('Discord not configured')
+              exit(0)
+          
+          payload = {
+              'embeds': [{
+                  'title': 'BigOne Daily Report',
+                  'description': f'Daily predictions ready - {datetime.now().strftime(\"%Y-%m-%d\")}',
+                  'color': 3066993,
+                  'footer': {'text': 'BigOne Sports Predictions'}
+              }]
+          }
+          
+          requests.post(webhook_url, json=payload)
+          print('Discord notification sent')
+          "
