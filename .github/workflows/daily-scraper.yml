@@ -166,6 +166,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
@@ -271,6 +272,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
@@ -376,6 +378,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
@@ -481,6 +484,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
@@ -586,6 +590,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
@@ -691,6 +696,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'gmail' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FLARESOLVERR_URL: http://localhost:8191/v1
         run: |
           python scrape_and_notify.py \
