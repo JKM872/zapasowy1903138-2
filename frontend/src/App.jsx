@@ -134,7 +134,7 @@ function useFavorites() {
 
 // Value Bet Calculator
 function calculateValueBet(match) {
-  if (!match.odds?.home || !match.forebet?.probability) return null
+  if (!isValidNumber(match.odds?.home) || !isValidNumber(match.forebet?.probability)) return null
 
   const impliedProb = 1 / match.odds.home
   const forebetProb = match.forebet.probability / 100
@@ -149,6 +149,11 @@ function calculateValueBet(match) {
     }
   }
   return null
+}
+
+// Helper: sprawdza czy wartość jest poprawną liczbą (nie null, nie undefined, nie NaN)
+function isValidNumber(val) {
+  return val != null && !Number.isNaN(val) && typeof val === 'number'
 }
 
 // API Functions
@@ -445,11 +450,12 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
   const [expanded, setExpanded] = useState(false)
   const hasDraw = match.sport === 'football'
 
-  // Memoized calculations
+  // Memoized calculations - filtruje NaN i null wartości
   const allOdds = useMemo(() => {
-    return hasDraw
-      ? [match.odds?.home, match.odds?.draw, match.odds?.away].filter(Boolean)
-      : [match.odds?.home, match.odds?.away].filter(Boolean)
+    const odds = hasDraw
+      ? [match.odds?.home, match.odds?.draw, match.odds?.away]
+      : [match.odds?.home, match.odds?.away]
+    return odds.filter(isValidNumber)
   }, [match.odds, hasDraw])
 
   const minOdd = allOdds.length > 0 ? Math.min(...allOdds) : null
@@ -532,16 +538,16 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
 
         {/* Odds */}
         <div className="match-odds">
-          {match.odds?.home && (
+          {isValidNumber(match.odds?.home) && (
             <OddBox label="1" value={match.odds.home} isBest={match.odds.home === minOdd} />
           )}
-          {hasDraw && match.odds?.draw && (
+          {hasDraw && isValidNumber(match.odds?.draw) && (
             <OddBox label="X" value={match.odds.draw} isBest={match.odds.draw === minOdd} />
           )}
-          {match.odds?.away && (
+          {isValidNumber(match.odds?.away) && (
             <OddBox label="2" value={match.odds.away} isBest={match.odds.away === minOdd} />
           )}
-          {!match.odds?.home && !match.odds?.away && (
+          {!isValidNumber(match.odds?.home) && !isValidNumber(match.odds?.away) && (
             <span className="no-odds">No odds</span>
           )}
         </div>
@@ -628,24 +634,29 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
           )}
 
           {/* SofaScore */}
-          {match.sofascore?.home && (
+          {isValidNumber(match.sofascore?.home) && (
             <div className="detail-section">
               <div className="detail-header">
                 <Users size={14} />
                 <span>Fan Vote</span>
+                {isValidNumber(match.sofascore?.votes) && match.sofascore.votes > 0 && (
+                  <span className="vote-count">({match.sofascore.votes.toLocaleString()} głosów)</span>
+                )}
               </div>
               <div className="vote-bar">
                 <div className="vote-segment home" style={{ width: `${match.sofascore.home}%` }}>
                   {match.sofascore.home}%
                 </div>
-                {match.sofascore.draw > 0 && (
+                {isValidNumber(match.sofascore?.draw) && match.sofascore.draw > 0 && (
                   <div className="vote-segment draw" style={{ width: `${match.sofascore.draw}%` }}>
                     {match.sofascore.draw}%
                   </div>
                 )}
-                <div className="vote-segment away" style={{ width: `${match.sofascore.away}%` }}>
-                  {match.sofascore.away}%
-                </div>
+                {isValidNumber(match.sofascore?.away) && (
+                  <div className="vote-segment away" style={{ width: `${match.sofascore.away}%` }}>
+                    {match.sofascore.away}%
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -667,11 +678,11 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
                   e.stopPropagation()
                   onPlaceBet?.(match, '1', match.odds?.home)
                 }}
-                disabled={!match.odds?.home}
+                disabled={!isValidNumber(match.odds?.home)}
                 title={`Postaw na ${match.homeTeam}`}
               >
                 <span className="bet-label">1</span>
-                <span className="bet-odds">{match.odds?.home?.toFixed(2) || '—'}</span>
+                <span className="bet-odds">{isValidNumber(match.odds?.home) ? match.odds.home.toFixed(2) : '—'}</span>
               </button>
               {hasDraw && (
                 <button
@@ -680,11 +691,11 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
                     e.stopPropagation()
                     onPlaceBet?.(match, 'X', match.odds?.draw)
                   }}
-                  disabled={!match.odds?.draw}
+                  disabled={!isValidNumber(match.odds?.draw)}
                   title="Postaw na remis"
                 >
                   <span className="bet-label">X</span>
-                  <span className="bet-odds">{match.odds?.draw?.toFixed(2) || '—'}</span>
+                  <span className="bet-odds">{isValidNumber(match.odds?.draw) ? match.odds.draw.toFixed(2) : '—'}</span>
                 </button>
               )}
               <button
@@ -693,11 +704,11 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
                   e.stopPropagation()
                   onPlaceBet?.(match, '2', match.odds?.away)
                 }}
-                disabled={!match.odds?.away}
+                disabled={!isValidNumber(match.odds?.away)}
                 title={`Postaw na ${match.awayTeam}`}
               >
                 <span className="bet-label">2</span>
-                <span className="bet-odds">{match.odds?.away?.toFixed(2) || '—'}</span>
+                <span className="bet-odds">{isValidNumber(match.odds?.away) ? match.odds.away.toFixed(2) : '—'}</span>
               </button>
             </div>
           </div>
@@ -742,9 +753,9 @@ function ComparePanel({ selectedMatches, onRemove, onClear }) {
               </div>
               <div className="compare-row">
                 <span>Odds</span>
-                <span className="value">{match.odds?.home?.toFixed(2) || '—'} / {match.odds?.away?.toFixed(2) || '—'}</span>
+                <span className="value">{isValidNumber(match.odds?.home) ? match.odds.home.toFixed(2) : '—'} / {isValidNumber(match.odds?.away) ? match.odds.away.toFixed(2) : '—'}</span>
               </div>
-              {match.forebet?.prediction && (
+              {match.forebet?.prediction && isValidNumber(match.forebet?.probability) && (
                 <div className="compare-row">
                   <span>Forebet</span>
                   <span className="value">{match.forebet.prediction} ({match.forebet.probability}%)</span>
@@ -996,7 +1007,7 @@ function App() {
   const filteredMatches = matches.filter(m => {
     if (filters.qualifying && !m.qualifies) return false
     if (filters.formAdvantage && !m.formAdvantage) return false
-    if (filters.withOdds && !m.odds?.home) return false
+    if (filters.withOdds && !isValidNumber(m.odds?.home)) return false
     if (searchQuery) {
       const q = searchQuery.toLowerCase()
       return m.homeTeam?.toLowerCase().includes(q) ||
@@ -1010,7 +1021,9 @@ function App() {
         return (b.h2h?.winRate || 0) - (a.h2h?.winRate || 0)
       case 'odds':
         // Sortuj od największego kursu do najmniejszego (najlepsze kursy pierwsze)
-        return (b.odds?.home || 0) - (a.odds?.home || 0)
+        const aOdds = isValidNumber(a.odds?.home) ? a.odds.home : 0
+        const bOdds = isValidNumber(b.odds?.home) ? b.odds.home : 0
+        return bOdds - aOdds
       case 'time':
       default:
         return (a.time || '').localeCompare(b.time || '')

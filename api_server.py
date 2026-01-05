@@ -17,9 +17,22 @@ Server: http://localhost:5000
 import os
 import json
 import glob
+import math
 from datetime import datetime, timedelta
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
+
+def safe_value(val, default=None):
+    """
+    Zamienia NaN na None, zwraca default dla brakujących wartości.
+    Zapobiega wyświetlaniu 'nan' w interfejsie użytkownika.
+    """
+    if val is None:
+        return default
+    if isinstance(val, float) and math.isnan(val):
+        return default
+    return val
 
 # Import Supabase manager for user bets
 try:
@@ -118,28 +131,28 @@ def normalize_match(match):
         'homeFormHome': match.get('home_form_home') or match.get('homeFormHome', []),
         'awayFormAway': match.get('away_form_away') or match.get('awayFormAway', []),
         'formAdvantage': match.get('form_advantage') or match.get('formAdvantage', False),
-        # Odds
+        # Odds - używamy safe_value() aby filtrować NaN
         'odds': {
-            'home': match.get('home_odds') or match.get('odds', {}).get('home'),
-            'draw': match.get('draw_odds') or match.get('odds', {}).get('draw'),
-            'away': match.get('away_odds') or match.get('odds', {}).get('away'),
+            'home': safe_value(match.get('home_odds')) or safe_value(match.get('odds', {}).get('home')),
+            'draw': safe_value(match.get('draw_odds')) or safe_value(match.get('odds', {}).get('draw')),
+            'away': safe_value(match.get('away_odds')) or safe_value(match.get('odds', {}).get('away')),
             'bookmaker': match.get('odds_bookmaker') or match.get('odds', {}).get('bookmaker', 'Unknown'),
         },
-        # Forebet
+        # Forebet - używamy safe_value() dla probability
         'forebet': {
             'prediction': match.get('forebet_prediction') or match.get('forebet', {}).get('prediction'),
-            'probability': match.get('forebet_probability') or match.get('forebet', {}).get('probability'),
+            'probability': safe_value(match.get('forebet_probability')) or safe_value(match.get('forebet', {}).get('probability')),
             'exactScore': match.get('forebet_score') or match.get('forebet', {}).get('exactScore'),
             'overUnder': match.get('forebet_over_under') or match.get('forebet', {}).get('overUnder'),
             'btts': match.get('forebet_btts') or match.get('forebet', {}).get('btts'),
         } if match.get('forebet_prediction') or match.get('forebet') else None,
-        # SofaScore
+        # SofaScore - używamy safe_value() aby filtrować NaN
         'sofascore': {
-            'home': match.get('sofascore_home_win_prob') or match.get('sofascore', {}).get('home'),
-            'draw': match.get('sofascore_draw_prob') or match.get('sofascore', {}).get('draw'),
-            'away': match.get('sofascore_away_win_prob') or match.get('sofascore', {}).get('away'),
-            'votes': match.get('sofascore_total_votes') or match.get('sofascore', {}).get('votes', 0),
-        } if match.get('sofascore_home_win_prob') or match.get('sofascore') else None,
+            'home': safe_value(match.get('sofascore_home_win_prob')) or safe_value(match.get('sofascore', {}).get('home')),
+            'draw': safe_value(match.get('sofascore_draw_prob')) or safe_value(match.get('sofascore', {}).get('draw')),
+            'away': safe_value(match.get('sofascore_away_win_prob')) or safe_value(match.get('sofascore', {}).get('away')),
+            'votes': safe_value(match.get('sofascore_total_votes'), 0) or safe_value(match.get('sofascore', {}).get('votes'), 0),
+        } if safe_value(match.get('sofascore_home_win_prob')) or match.get('sofascore') else None,
         # Focus team
         'focusTeam': match.get('focus_team') or match.get('focusTeam', 'home'),
     }
