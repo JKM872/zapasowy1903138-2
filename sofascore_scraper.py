@@ -66,7 +66,8 @@ except ImportError:
     SELENIUM_AVAILABLE = False
     
 # Globalny timeout dla całej operacji SofaScore (sekundy)
-SOFASCORE_GLOBAL_TIMEOUT = 20
+# Zwiększono z 20s na 35s dla stabilności w GitHub Actions
+SOFASCORE_GLOBAL_TIMEOUT = 35
 
 # Sporty BEZ REMISÓW (tylko Home/Away win)
 SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'basketball', 'handball', 'hockey', 'ice-hockey']

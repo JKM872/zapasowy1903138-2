@@ -721,7 +721,8 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             return out
         soup = BeautifulSoup(page_source, 'html.parser')
         # spróbuj wyciągnąć nazwy drużyn z nagłówka
-        title = soup.title.string if soup.title else ''
+        # FIX: soup.title.string może zwrócić None nawet gdy soup.title istnieje
+        title = (soup.title.string or '') if soup.title else ''
         if title:
             # tytuł często ma formę "Home - Away" lub "Home vs Away"
             m = re.split(r"\s[-–—|]\s|\svs\s|\sv\s", title)
@@ -731,7 +732,7 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     except (WebDriverException, AttributeError) as e:
         logger.debug(f"process_match: Błąd pobierania tytułu strony dla {url}: {e}")
     except Exception as e:
-        logger.warning(f"process_match: Nieoczekiwany błąd przy parsowaniu tytułu: {type(e).__name__}")
+        logger.warning(f"process_match: Nieoczekiwany błąd przy parsowaniu tytułu: {type(e).__name__}: {e}")
 
     # NIE MUSIMY KLIKAĆ H2H - już jesteśmy na stronie /h2h/ogolem/
 

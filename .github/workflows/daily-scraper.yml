@@ -48,6 +48,10 @@ on:
 
 env:
   PYTHON_VERSION: '3.11'
+  # Chrome/Selenium stability settings for CI/CD
+  SELENIUM_TIMEOUT: '180'
+  CHROME_HEADLESS: 'new'
+  PYTHONUNBUFFERED: '1'
 
 jobs:
   determine-sport:
@@ -124,6 +128,9 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Chrome stability settings for CI/CD
+          echo "CHROME_NO_SANDBOX=1" >> $GITHUB_ENV
+          echo "DBUS_SESSION_BUS_ADDRESS=/dev/null" >> $GITHUB_ENV
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -232,6 +239,9 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Chrome stability settings for CI/CD
+          echo "CHROME_NO_SANDBOX=1" >> $GITHUB_ENV
+          echo "DBUS_SESSION_BUS_ADDRESS=/dev/null" >> $GITHUB_ENV
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -338,6 +348,9 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Chrome stability settings for CI/CD
+          echo "CHROME_NO_SANDBOX=1" >> $GITHUB_ENV
+          echo "DBUS_SESSION_BUS_ADDRESS=/dev/null" >> $GITHUB_ENV
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -444,6 +457,9 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Chrome stability settings for CI/CD
+          echo "CHROME_NO_SANDBOX=1" >> $GITHUB_ENV
+          echo "DBUS_SESSION_BUS_ADDRESS=/dev/null" >> $GITHUB_ENV
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -550,6 +566,9 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Chrome stability settings for CI/CD
+          echo "CHROME_NO_SANDBOX=1" >> $GITHUB_ENV
+          echo "DBUS_SESSION_BUS_ADDRESS=/dev/null" >> $GITHUB_ENV
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -656,6 +675,9 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Chrome stability settings for CI/CD
+          echo "CHROME_NO_SANDBOX=1" >> $GITHUB_ENV
+          echo "DBUS_SESSION_BUS_ADDRESS=/dev/null" >> $GITHUB_ENV
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
