@@ -1,0 +1,808 @@
+
+    <html>
+    <head>
+        <style>
+            
+    .odds-sections-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 25px 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .odds-sections-header {
+        color: #ffd700;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 25px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        letter-spacing: 1px;
+    }
+    .odds-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .odds-section-title {
+        color: #00d4ff;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(0,212,255,0.3);
+    }
+    .odds-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #fff;
+    }
+    .odds-table-header th {
+        background: rgba(0,212,255,0.2);
+        color: #00d4ff;
+        padding: 10px 8px;
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .odds-table tr:nth-child(even) {
+        background: rgba(255,255,255,0.03);
+    }
+    .odds-table tr:hover {
+        background: rgba(0,212,255,0.1);
+    }
+    .odds-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .odds-table .rank {
+        color: #ffd700;
+        font-weight: bold;
+        width: 30px;
+        text-align: center;
+    }
+    .odds-table .teams {
+        color: #fff;
+        font-weight: 500;
+    }
+    .odds-table .time {
+        color: #aaa;
+        font-size: 13px;
+        width: 60px;
+    }
+    .odds-table .odds-value {
+        color: #00ff88;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: right;
+        width: 70px;
+    }
+
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+            }
+            .header {
+                background-color: #4CAF50;
+                color: white;
+                padding: 20px;
+                text-align: center;
+            }
+            .content {
+                padding: 20px;
+            }
+            .match {
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 15px;
+                margin: 10px 0;
+                background-color: #f9f9f9;
+            }
+            .match-title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #2196F3;
+            }
+            .match-details {
+                margin: 5px 0;
+                color: #666;
+            }
+            .match-time {
+                font-size: 20px;
+                color: #FF5722;
+                font-weight: bold;
+            }
+            .stats {
+                background-color: #fff3cd;
+                padding: 10px;
+                border-radius: 3px;
+                margin-top: 10px;
+            }
+            .footer {
+                text-align: center;
+                padding: 20px;
+                color: #888;
+                font-size: 12px;
+            }
+            .h2h-record {
+                color: #4CAF50;
+                font-weight: bold;
+            }
+            .time-badge {
+                display: inline-block;
+                background-color: #FF5722;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 3px;
+                margin-right: 10px;
+            }
+            .top-picks-section {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 10px;
+                padding: 25px;
+                margin: 20px 0;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            }
+            .top-picks-header {
+                color: #fff;
+                font-size: 26px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+            .top-pick-card {
+                background: white;
+                border-radius: 8px;
+                padding: 20px;
+                margin: 15px 0;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-left: 6px solid #ffd700;
+            }
+            .top-pick-team {
+                font-size: 20px;
+                font-weight: bold;
+                color: #2196F3;
+                margin-bottom: 10px;
+            }
+            .top-pick-stats {
+                display: flex;
+                justify-content: space-around;
+                margin: 15px 0;
+                flex-wrap: wrap;
+            }
+            .top-pick-stat {
+                text-align: center;
+                padding: 10px;
+                min-width: 100px;
+            }
+            .top-pick-stat-value {
+                font-size: 24px;
+                font-weight: bold;
+                color: #4CAF50;
+            }
+            .top-pick-stat-label {
+                font-size: 12px;
+                color: #666;
+                text-transform: uppercase;
+            }
+            .top-pick-reasoning {
+                background: #f8f9fa;
+                border-left: 4px solid #667eea;
+                padding: 12px;
+                margin: 10px 0;
+                font-style: italic;
+                color: #333;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🏆 Kwalifikujące się mecze - 2026-01-06</h1>
+            <p>🎾 Tennis: Advanced scoring (≥50/100) | ⚽ Drużynowe: Gospodarze wygrali ≥60% H2H</p>
+            <p style="font-size: 14px; margin-top: 10px;">🤖 <strong>Gemini AI Analysis</strong> | ⏰ Posortowane chronologicznie</p>
+        </div>
+        
+        <div class="content">
+    
+    <div class="odds-sections-container">
+        <div class="odds-sections-header">
+            💰 KURSY POSORTOWANE (od najwyższych) 💰
+        </div>
+    
+        <div class="odds-section">
+            <div class="odds-section-title">🏠 Kursy na GOSPODARZY (1)</div>
+            <table class="odds-table">
+                <tr class="odds-table-header">
+                    <th>#</th>
+                    <th>Mecz</th>
+                    <th>Godz.</th>
+                    <th>Kurs</th>
+                </tr>
+        
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="teams">Real Madrid vs Barcelona</td>
+                    <td class="time">20:00</td>
+                    <td class="odds-value">2.50</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="teams">Juventus vs Inter</td>
+                    <td class="time">18:00</td>
+                    <td class="odds-value">2.20</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="teams">Liverpool vs Man City</td>
+                    <td class="time">17:30</td>
+                    <td class="odds-value">1.90</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="teams">Bayern vs Dortmund</td>
+                    <td class="time">18:30</td>
+                    <td class="odds-value">1.50</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="teams">PSG vs Lyon</td>
+                    <td class="time">21:00</td>
+                    <td class="odds-value">1.40</td>
+                </tr>
+            
+            </table>
+        </div>
+        
+        <div class="odds-section">
+            <div class="odds-section-title">🤝 Kursy na REMIS (X)</div>
+            <table class="odds-table">
+                <tr class="odds-table-header">
+                    <th>#</th>
+                    <th>Mecz</th>
+                    <th>Godz.</th>
+                    <th>Kurs</th>
+                </tr>
+        
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="teams">PSG vs Lyon</td>
+                    <td class="time">21:00</td>
+                    <td class="odds-value">4.80</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="teams">Bayern vs Dortmund</td>
+                    <td class="time">18:30</td>
+                    <td class="odds-value">4.50</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="teams">Liverpool vs Man City</td>
+                    <td class="time">17:30</td>
+                    <td class="odds-value">3.60</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="teams">Juventus vs Inter</td>
+                    <td class="time">18:00</td>
+                    <td class="odds-value">3.30</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="teams">Real Madrid vs Barcelona</td>
+                    <td class="time">20:00</td>
+                    <td class="odds-value">3.20</td>
+                </tr>
+            
+            </table>
+        </div>
+        
+        <div class="odds-section">
+            <div class="odds-section-title">✈️ Kursy na GOŚCI (2)</div>
+            <table class="odds-table">
+                <tr class="odds-table-header">
+                    <th>#</th>
+                    <th>Mecz</th>
+                    <th>Godz.</th>
+                    <th>Kurs</th>
+                </tr>
+        
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="teams">PSG vs Lyon</td>
+                    <td class="time">21:00</td>
+                    <td class="odds-value">6.50</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="teams">Bayern vs Dortmund</td>
+                    <td class="time">18:30</td>
+                    <td class="odds-value">5.00</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="teams">Liverpool vs Man City</td>
+                    <td class="time">17:30</td>
+                    <td class="odds-value">3.80</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="teams">Juventus vs Inter</td>
+                    <td class="time">18:00</td>
+                    <td class="odds-value">3.10</td>
+                </tr>
+            
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="teams">Real Madrid vs Barcelona</td>
+                    <td class="time">20:00</td>
+                    <td class="odds-value">2.80</td>
+                </tr>
+            
+            </table>
+        </div>
+        
+    </div>
+    
+            <p style="margin-top: 30px;">Znaleziono <strong>5</strong> kwalifikujących się meczów:</p>
+    
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
+                <!-- HEADER -->
+                <div style="padding: 15px 20px; background: rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: white; font-size: 12px;">
+                        <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 17:30</span>
+                    </div>
+                    <div style="color: white; font-size: 11px; opacity: 0.8;">
+                        #1
+                    </div>
+                </div>
+                
+                <!-- DRUŻYNY -->
+                <div style="background: white; padding: 20px; text-align: center;">
+                    <div style="font-size: 22px; font-weight: bold; color: #333;">
+                        🏠 Liverpool <span style="color: #999; font-size: 16px;">vs</span> Man City ✈️
+                    </div>
+                    
+                </div>
+                
+                <!-- DANE MECZU - GRID -->
+                <div style="background: #f8f9fa; padding: 15px 20px;">
+                    
+                    <!-- FORMA DRUŻYN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Liverpool (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Man City (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- H2H + OSTATNI MECZ -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666;">🔄 H2H</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #FF9800;">
+                                —
+                            </div>
+                            <div style="font-size: 12px; color: #888;"></div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #333;">
+                                —
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOFASCORE FAN VOTES -->
+                    
+                    
+                    <!-- KURSY -->
+                    
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center; padding: 5px 15px; background: #4CAF50; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: white;">1.90</div>
+                                <div style="font-size: 10px; color: white;">1</div>
+                            </div>
+                            <div style="text-align: center; padding: 5px 15px; background: '#4CAF50'#f5f5f5'; border-radius: 8px;"><div style="font-size: 16px; font-weight: bold; color: 'white'#333';">3.60</div><div style="font-size: 10px;">X</div></div>
+                            <div style="text-align: center; padding: 5px 15px; background: #f5f5f5; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #333;">3.80</div>
+                                <div style="font-size: 10px; color: #888;">2</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- FOREBET PREDICTION -->
+                    
+                    
+                </div>
+                
+                <!-- FOOTER -->
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                    <a href="#" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
+                </div>
+            </div>
+        
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
+                <!-- HEADER -->
+                <div style="padding: 15px 20px; background: rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: white; font-size: 12px;">
+                        <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 18:00</span>
+                    </div>
+                    <div style="color: white; font-size: 11px; opacity: 0.8;">
+                        #2
+                    </div>
+                </div>
+                
+                <!-- DRUŻYNY -->
+                <div style="background: white; padding: 20px; text-align: center;">
+                    <div style="font-size: 22px; font-weight: bold; color: #333;">
+                        🏠 Juventus <span style="color: #999; font-size: 16px;">vs</span> Inter ✈️
+                    </div>
+                    
+                </div>
+                
+                <!-- DANE MECZU - GRID -->
+                <div style="background: #f8f9fa; padding: 15px 20px;">
+                    
+                    <!-- FORMA DRUŻYN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Juventus (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Inter (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- H2H + OSTATNI MECZ -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666;">🔄 H2H</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #FF9800;">
+                                —
+                            </div>
+                            <div style="font-size: 12px; color: #888;"></div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #333;">
+                                —
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOFASCORE FAN VOTES -->
+                    
+                    
+                    <!-- KURSY -->
+                    
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center; padding: 5px 15px; background: #4CAF50; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: white;">2.20</div>
+                                <div style="font-size: 10px; color: white;">1</div>
+                            </div>
+                            <div style="text-align: center; padding: 5px 15px; background: '#4CAF50'#f5f5f5'; border-radius: 8px;"><div style="font-size: 16px; font-weight: bold; color: 'white'#333';">3.30</div><div style="font-size: 10px;">X</div></div>
+                            <div style="text-align: center; padding: 5px 15px; background: #f5f5f5; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #333;">3.10</div>
+                                <div style="font-size: 10px; color: #888;">2</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- FOREBET PREDICTION -->
+                    
+                    
+                </div>
+                
+                <!-- FOOTER -->
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                    <a href="#" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
+                </div>
+            </div>
+        
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
+                <!-- HEADER -->
+                <div style="padding: 15px 20px; background: rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: white; font-size: 12px;">
+                        <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 18:30</span>
+                    </div>
+                    <div style="color: white; font-size: 11px; opacity: 0.8;">
+                        #3
+                    </div>
+                </div>
+                
+                <!-- DRUŻYNY -->
+                <div style="background: white; padding: 20px; text-align: center;">
+                    <div style="font-size: 22px; font-weight: bold; color: #333;">
+                        🏠 Bayern <span style="color: #999; font-size: 16px;">vs</span> Dortmund ✈️
+                    </div>
+                    
+                </div>
+                
+                <!-- DANE MECZU - GRID -->
+                <div style="background: #f8f9fa; padding: 15px 20px;">
+                    
+                    <!-- FORMA DRUŻYN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Bayern (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Dortmund (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- H2H + OSTATNI MECZ -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666;">🔄 H2H</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #FF9800;">
+                                —
+                            </div>
+                            <div style="font-size: 12px; color: #888;"></div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #333;">
+                                —
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOFASCORE FAN VOTES -->
+                    
+                    
+                    <!-- KURSY -->
+                    
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center; padding: 5px 15px; background: #4CAF50; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: white;">1.50</div>
+                                <div style="font-size: 10px; color: white;">1</div>
+                            </div>
+                            <div style="text-align: center; padding: 5px 15px; background: '#4CAF50'#f5f5f5'; border-radius: 8px;"><div style="font-size: 16px; font-weight: bold; color: 'white'#333';">4.50</div><div style="font-size: 10px;">X</div></div>
+                            <div style="text-align: center; padding: 5px 15px; background: #f5f5f5; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #333;">5.00</div>
+                                <div style="font-size: 10px; color: #888;">2</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- FOREBET PREDICTION -->
+                    
+                    
+                </div>
+                
+                <!-- FOOTER -->
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                    <a href="#" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
+                </div>
+            </div>
+        
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
+                <!-- HEADER -->
+                <div style="padding: 15px 20px; background: rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: white; font-size: 12px;">
+                        <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 20:00</span>
+                    </div>
+                    <div style="color: white; font-size: 11px; opacity: 0.8;">
+                        #4
+                    </div>
+                </div>
+                
+                <!-- DRUŻYNY -->
+                <div style="background: white; padding: 20px; text-align: center;">
+                    <div style="font-size: 22px; font-weight: bold; color: #333;">
+                        🏠 Real Madrid <span style="color: #999; font-size: 16px;">vs</span> Barcelona ✈️
+                    </div>
+                    
+                </div>
+                
+                <!-- DANE MECZU - GRID -->
+                <div style="background: #f8f9fa; padding: 15px 20px;">
+                    
+                    <!-- FORMA DRUŻYN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Real Madrid (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Barcelona (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- H2H + OSTATNI MECZ -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666;">🔄 H2H</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #FF9800;">
+                                —
+                            </div>
+                            <div style="font-size: 12px; color: #888;"></div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #333;">
+                                —
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOFASCORE FAN VOTES -->
+                    
+                    
+                    <!-- KURSY -->
+                    
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center; padding: 5px 15px; background: #4CAF50; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: white;">2.50</div>
+                                <div style="font-size: 10px; color: white;">1</div>
+                            </div>
+                            <div style="text-align: center; padding: 5px 15px; background: '#4CAF50'#f5f5f5'; border-radius: 8px;"><div style="font-size: 16px; font-weight: bold; color: 'white'#333';">3.20</div><div style="font-size: 10px;">X</div></div>
+                            <div style="text-align: center; padding: 5px 15px; background: #f5f5f5; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #333;">2.80</div>
+                                <div style="font-size: 10px; color: #888;">2</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- FOREBET PREDICTION -->
+                    
+                    
+                </div>
+                
+                <!-- FOOTER -->
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                    <a href="#" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
+                </div>
+            </div>
+        
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
+                <!-- HEADER -->
+                <div style="padding: 15px 20px; background: rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: white; font-size: 12px;">
+                        <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 21:00</span>
+                    </div>
+                    <div style="color: white; font-size: 11px; opacity: 0.8;">
+                        #5
+                    </div>
+                </div>
+                
+                <!-- DRUŻYNY -->
+                <div style="background: white; padding: 20px; text-align: center;">
+                    <div style="font-size: 22px; font-weight: bold; color: #333;">
+                        🏠 PSG <span style="color: #999; font-size: 16px;">vs</span> Lyon ✈️
+                    </div>
+                    
+                </div>
+                
+                <!-- DANE MECZU - GRID -->
+                <div style="background: #f8f9fa; padding: 15px 20px;">
+                    
+                    <!-- FORMA DRUŻYN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 PSG (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 Lyon (ogólna)</div>
+                            <div style="font-size: 16px;">—</div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- H2H + OSTATNI MECZ -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
+                            <div style="font-size: 11px; color: #666;">🔄 H2H</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #FF9800;">
+                                —
+                            </div>
+                            <div style="font-size: 12px; color: #888;"></div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #333;">
+                                —
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOFASCORE FAN VOTES -->
+                    
+                    
+                    <!-- KURSY -->
+                    
+                    <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div style="text-align: center; padding: 5px 15px; background: #4CAF50; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: white;">1.40</div>
+                                <div style="font-size: 10px; color: white;">1</div>
+                            </div>
+                            <div style="text-align: center; padding: 5px 15px; background: '#4CAF50'#f5f5f5'; border-radius: 8px;"><div style="font-size: 16px; font-weight: bold; color: 'white'#333';">4.80</div><div style="font-size: 10px;">X</div></div>
+                            <div style="text-align: center; padding: 5px 15px; background: #f5f5f5; border-radius: 8px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #333;">6.50</div>
+                                <div style="font-size: 10px; color: #888;">2</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- FOREBET PREDICTION -->
+                    
+                    
+                </div>
+                
+                <!-- FOOTER -->
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                    <a href="#" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
+                </div>
+            </div>
+        
+        </div>
+        
+        <div class="footer">
+            <p>📧 Wygenerowano automatycznie przez Livesport H2H Scraper v6.1</p>
+            <p>🔔 <strong>Kryteria kwalifikacji:</strong></p>
+            <p>🎾 <strong>Tennis:</strong> Multi-factor scoring (H2H + ranking + forma + powierzchnia) ≥ 50/100</p>
+            <p>⚽ <strong>Sporty drużynowe:</strong></p>
+            <p style="margin-left: 20px;">
+                1️⃣ Gospodarze wygrali ≥60% H2H<br>
+                2️⃣ <strong>ZAAWANSOWANA ANALIZA FORMY (3 źródła):</strong><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• Forma ogólna (ostatnie 5 meczów)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• Forma gospodarzy U SIEBIE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• Forma gości NA WYJEŹDZIE<br>
+                3️⃣ Gospodarze w dobrej formie + Goście w słabej = 🔥 Przewaga!
+            </p>
+        </div>
+    </body>
+    </html>
+    
