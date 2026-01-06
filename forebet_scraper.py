@@ -13,6 +13,10 @@ Używa wielu metod aby ominąć Cloudflare w CI/CD:
 2. FlareSolverr (Docker)
 3. curl_cffi, cloudscraper, drissionpage, itd.
 
+🚀 OPTYMALIZACJA CI (v2):
+- Cache wyników na poziomie procesu (sport, home, away, date)
+- Drogie źródła tylko dla kwalifikujących się meczów
+
 Autor: AI Assistant
 Data: 2025-11-17
 """
@@ -22,6 +26,25 @@ import random
 import os
 import subprocess
 from typing import Dict, Optional, Tuple
+
+# ========================================================================
+# CACHE DLA FOREBET - unika wielokrotnego sprawdzania tych samych meczów
+# ========================================================================
+_forebet_cache: Dict[str, Dict] = {}
+
+def _get_forebet_cache_key(sport: str, home_team: str, away_team: str, match_date: str) -> str:
+    """Generuje klucz cache dla danego meczu."""
+    return f"{sport}|{home_team.lower().strip()}|{away_team.lower().strip()}|{match_date}"
+
+def _get_cached_forebet(sport: str, home_team: str, away_team: str, match_date: str) -> Optional[Dict]:
+    """Pobiera wynik z cache jeśli istnieje."""
+    key = _get_forebet_cache_key(sport, home_team, away_team, match_date)
+    return _forebet_cache.get(key)
+
+def _set_cached_forebet(sport: str, home_team: str, away_team: str, match_date: str, result: Dict):
+    """Zapisuje wynik do cache."""
+    key = _get_forebet_cache_key(sport, home_team, away_team, match_date)
+    _forebet_cache[key] = result
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -629,13 +652,13 @@ def search_forebet_prediction(
             print(f"      ⚠️ Xvfb failed: {e}, using headless mode")
             headless = True
     
-    # Sprawdź cache
-    cache_key = f"{home_team}_{away_team}_{match_date}"
-    if cache_key in _forebet_cache:
-        print(f"      📋 Forebet (cache): {_forebet_cache[cache_key]}")
+    # Sprawdź cache (z kluczem sport/home/away/date)
+    cached = _get_cached_forebet(sport, home_team, away_team, match_date)
+    if cached:
+        print(f"      📋 Forebet (cache hit): {cached.get('prediction', 'N/A')}")
         if xvfb_display:
             xvfb_display.stop()
-        return _forebet_cache[cache_key]
+        return cached
     
     result = {
         'success': False,
@@ -1361,8 +1384,8 @@ def search_forebet_prediction(
                 # Ignoruj błędy przy zamykaniu Xvfb
                 pass
     
-    # Zapisz do cache
-    _forebet_cache[cache_key] = result
+    # Zapisz do cache (nowy system z kluczem sport)
+    _set_cached_forebet(sport, home_team, away_team, match_date, result)
     
     return result
 

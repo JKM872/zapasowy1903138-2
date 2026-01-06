@@ -66,8 +66,10 @@ except ImportError:
     SELENIUM_AVAILABLE = False
     
 # Globalny timeout dla całej operacji SofaScore (sekundy)
-# Zwiększono z 20s na 35s dla stabilności w GitHub Actions
-SOFASCORE_GLOBAL_TIMEOUT = 35
+# W CI: 20s (szybsze fail-fast), lokalnie: 35s (więcej cierpliwości)
+import os as _os_timeout
+_IS_CI_TIMEOUT = _os_timeout.getenv('CI') == 'true' or _os_timeout.getenv('GITHUB_ACTIONS') == 'true'
+SOFASCORE_GLOBAL_TIMEOUT = 20 if _IS_CI_TIMEOUT else 35
 
 # Sporty BEZ REMISÓW (tylko Home/Away win)
 SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'basketball', 'handball', 'hockey', 'ice-hockey']
@@ -130,16 +132,22 @@ def _set_cached_result(home_team: str, away_team: str, sport: str, result: Dict)
 
 
 # ============================================================================
-# RETRY LOGIC
+# RETRY LOGIC - zoptymalizowane dla CI (mniej retry)
 # ============================================================================
 
-MAX_RETRIES = 3
-RETRY_BACKOFF = [1, 2, 4]  # Exponential backoff: 1s, 2s, 4s
+# Wykrywanie CI - w CI zmniejszamy retry aby nie tracić czasu
+import os
+IS_CI = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
+
+# W CI: tylko 1 próba (brak retry), lokalnie: 3 próby
+MAX_RETRIES = 1 if IS_CI else 3
+RETRY_BACKOFF = [1, 2, 4]  # Exponential backoff: 1s, 2s, 4s (używane tylko lokalnie)
 
 
 def _retry_request(request_func, *args, **kwargs):
     """
     Wrapper do wielokrotnych prób wykonania requestu z exponential backoff.
+    W CI: wykonuje tylko 1 próbę (brak retry po timeout).
     
     Args:
         request_func: Funkcja wykonująca request (np. requests.get)

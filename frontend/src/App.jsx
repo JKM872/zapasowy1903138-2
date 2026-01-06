@@ -653,9 +653,9 @@ const MatchCard = memo(function MatchCard({ match, compareMode, isSelected, onTo
                   </div>
                 )}
                 {isValidNumber(match.sofascore?.away) && (
-                  <div className="vote-segment away" style={{ width: `${match.sofascore.away}%` }}>
-                    {match.sofascore.away}%
-                  </div>
+                <div className="vote-segment away" style={{ width: `${match.sofascore.away}%` }}>
+                  {match.sofascore.away}%
+                </div>
                 )}
               </div>
             </div>

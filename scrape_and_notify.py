@@ -74,9 +74,25 @@ def scrape_and_send_email(
         away_team_focus: Szukaj meczów gdzie GOŚCIE mają ≥60% H2H (zamiast gospodarzy) (🏃)
         use_odds: Pobieraj kursy z FlashScore (💰)
     """
+    import time as time_module
+    import os
+    
+    # Wykrywanie CI
+    IS_CI = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
+    
+    # Statystyki dla CI
+    _ci_stats = {
+        'total_matches': 0,
+        'qualifying': 0,
+        'enriched': 0,  # mecze z danymi z Forebet/SofaScore/Gemini
+        'with_odds': 0,
+        'start_time': time_module.time(),
+    }
     
     print("="*70)
     print("🤖 AUTOMATYCZNY SCRAPING + POWIADOMIENIE EMAIL")
+    if IS_CI:
+        print("🔧 TRYB CI: Zoptymalizowane timeouty, mniej retry")
     print("="*70)
     print(f"📅 Data: {date}")
     print(f"⚽ Sporty: {', '.join(sports)}")
@@ -130,8 +146,8 @@ def scrape_and_send_email(
         for i, url in enumerate(urls, 1):
             print(f"\n[{i}/{len(urls)}] Przetwarzam...")
             
-            # RETRY LOGIC - 3 próby przy błędzie połączenia
-            max_retries = 3
+            # RETRY LOGIC - w CI tylko 1 próba, lokalnie 3 próby
+            max_retries = 1 if IS_CI else 3
             retry_count = 0
             success = False
             
@@ -255,9 +271,9 @@ def scrape_and_send_email(
                     print(f"   ⚠️  Błąd restartu: {e}")
                     driver = start_driver(headless=headless)
             
-            # Rate limiting
+            # Rate limiting - w CI szybsze, ale nadal bezpieczne
             elif i < len(urls):
-                time.sleep(1.5)
+                time.sleep(0.8 if IS_CI else 1.5)
         
         # Zapisz finalne wyniki (plik już istnieje jeśli były checkpointy)
         print("\n💾 Zapisywanie finalnych wyników...")
@@ -268,6 +284,31 @@ def scrape_and_send_email(
         
         df.to_csv(outfn, index=False, encoding='utf-8-sig')
         print(f"✅ Zapisano do: {outfn}")
+        
+        # ========================================================================
+        # CI STATS: Podsumowanie wydajności
+        # ========================================================================
+        _ci_stats['total_matches'] = len(rows)
+        _ci_stats['qualifying'] = qualifying_count
+        _ci_stats['enriched'] = sum(1 for r in rows if r.get('forebet_prediction') or r.get('sofascore_home_win_prob') or r.get('gemini_prediction'))
+        _ci_stats['with_odds'] = sum(1 for r in rows if r.get('home_odds'))
+        _ci_stats['elapsed'] = time_module.time() - _ci_stats['start_time']
+        
+        avg_per_match = _ci_stats['elapsed'] / len(rows) if len(rows) > 0 else 0
+        
+        print("\n" + "="*70)
+        print("📊 CI STATS: PODSUMOWANIE SCRAPINGU")
+        print("="*70)
+        print(f"   Total meczów:      {_ci_stats['total_matches']}")
+        print(f"   Kwalifikujące:     {_ci_stats['qualifying']} ({100*_ci_stats['qualifying']/_ci_stats['total_matches']:.1f}%)" if _ci_stats['total_matches'] > 0 else "   Kwalifikujące:     0")
+        print(f"   Wzbogacone:        {_ci_stats['enriched']} (Forebet/SofaScore/Gemini)")
+        print(f"   Z kursami:         {_ci_stats['with_odds']}")
+        print(f"   Czas:              {_ci_stats['elapsed']/60:.1f} min ({_ci_stats['elapsed']:.0f}s)")
+        print(f"   Śr. czas/mecz:     {avg_per_match:.2f}s")
+        if _ci_stats['total_matches'] >= 100:
+            est_3000 = avg_per_match * 3000 / 3600
+            print(f"   Est. dla 3000:     {est_3000:.1f}h")
+        print("="*70 + "\n")
         
         # Zapisz przewidywania do JSON (dla późniejszej weryfikacji)
         if qualifying_count > 0:

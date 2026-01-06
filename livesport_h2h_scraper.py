@@ -599,6 +599,20 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         use_gemini: Jeśli True, używa Gemini AI do analizy
         sport: Sport (football, volleyball, etc.)
     """
+    # ========================================================================
+    # PROFILOWANIE CZASU - rozpoczęcie pomiaru
+    # ========================================================================
+    import time as time_module
+    _t_start = time_module.time()
+    _timings = {
+        'h2h': 0.0,
+        'qualify': 0.0,
+        'forebet': 0.0,
+        'sofascore': 0.0,
+        'flashscore': 0.0,
+        'gemini': 0.0,
+    }
+    
     out = {
         'match_url': url,
         'home_team': None,
@@ -631,7 +645,10 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     }
 
     # 🔥🔥🔥🔥 QUADRUPLE FORCE: Ultra-aggressive retry logic with multiple strategies
-    max_retries = 5  # Increased from 3
+    # W CI: tylko 2 próby (szybkie fail-fast), lokalnie: 5 prób
+    import os as _os_ci
+    _is_ci = _os_ci.getenv('CI') == 'true' or _os_ci.getenv('GITHUB_ACTIONS') == 'true'
+    max_retries = 2 if _is_ci else 5
     last_error = None
     
     # Sprawdź stan drivera przed rozpoczęciem
@@ -872,6 +889,9 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     out['away_wins_in_h2h_last5'] = cnt_away
     out['h2h_count'] = len(h2h)
     
+    # ⏱️ TIMING: Koniec H2H
+    _timings['h2h'] = time_module.time() - _t_start
+    
     # NOWE KRYTERIUM: W zależności od trybu, sprawdzamy gospodarzy lub gości
     if away_team_focus:
         # Tryb GOŚCIE: Goście wygrali ≥60% meczów H2H
@@ -956,6 +976,9 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         # Nie kwalifikuje się podstawowo - nie sprawdzaj formy
         out['qualifies'] = False
     
+    # ⏱️ TIMING: Koniec kwalifikacji (Etap 1)
+    _timings['qualify'] = time_module.time() - _t_start - _timings['h2h']
+    
     # 🔥 Kursy bukmacherskie - ZAWSZE pobierz z Livesport API (priorytet: Pinnacle)
     # API daje prawdziwe kursy od bukmacherów, nie mock data
     if out.get('match_url'):
@@ -1006,6 +1029,7 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
 
     # FOREBET PREDICTIONS - TYLKO jeśli mecz KWALIFIKUJE SIĘ!
     # 🔥 OPTYMALIZACJA: Skip Forebet dla meczów które i tak nie przejdą
+    _t_forebet_start = time_module.time()
     if use_forebet and FOREBET_AVAILABLE and out.get('qualifies') and out.get('home_team') and out.get('away_team'):
         try:
             print(f"      🎯 Forebet: Pobieram predykcję...")
@@ -1054,10 +1078,12 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
                 
         except Exception as e:
             print(f"      ⚠️ Błąd Forebet: {e}")
+    _timings['forebet'] = time_module.time() - _t_forebet_start
     
     # ============================================
     # GEMINI AI ANALYSIS (Faza 3)
     # ============================================
+    _t_gemini_start = time_module.time()
     if use_gemini and out.get('qualifies'):
         try:
             print("      🤖 Gemini AI analysis...")
@@ -1110,11 +1136,13 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
                 
         except Exception as e:
             print(f"      ⚠️ Błąd Gemini AI: {e}")
+    _timings['gemini'] = time_module.time() - _t_gemini_start
     
     # ========================================================================
     # SOFASCORE INTEGRATION - "Who will win?" predictions
     # ========================================================================
-    if use_sofascore:
+    _t_sofascore_start = time_module.time()
+    if use_sofascore and out.get('qualifies'):
         try:
             print(f"   🎯 SofaScore: Pobieranie predykcji...")
             from sofascore_scraper import scrape_sofascore_full
@@ -1146,9 +1174,13 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             print(f"      ⚠️ SofaScore scraper nie zainstalowany")
         except Exception as e:
             print(f"      ⚠️ Błąd SofaScore: {e}")
+    _timings['sofascore'] = time_module.time() - _t_sofascore_start
     
-    # FLASHSCORE ODDS
-    if use_flashscore and FLASHSCORE_AVAILABLE and out.get('qualifies') and out.get('home_team') and out.get('away_team'):
+    # FLASHSCORE ODDS - tylko jeśli brak kursów z Livesport
+    _t_flash_start = time_module.time()
+    # 🔥 OPTYMALIZACJA: Skip FlashScore jeśli mamy już kursy z Livesport
+    has_livesport_odds = out.get('home_odds') and out.get('away_odds')
+    if use_flashscore and FLASHSCORE_AVAILABLE and out.get('qualifies') and out.get('home_team') and out.get('away_team') and not has_livesport_odds:
         try:
             print(f"   💰 FlashScore: Pobieranie kursów...")
             
@@ -1185,10 +1217,13 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             out['flashscore_found'] = False
     elif use_flashscore and not FLASHSCORE_AVAILABLE:
         print(f"      ⚠️ FlashScore: Scraper niedostępny")
+    _timings['flashscore'] = time_module.time() - _t_flash_start
 
     # ========================================================================
-    # PODSUMOWANIE INTEGRACJI DANYCH
+    # PODSUMOWANIE INTEGRACJI DANYCH + TIMING
     # ========================================================================
+    _t_total = time_module.time() - _t_start
+    
     if out.get('home_team') and out.get('away_team'):
         sources = []
         missing = []
@@ -1222,10 +1257,27 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         if out.get('gemini_prediction'):
             sources.append(f"Gemini({out.get('gemini_confidence')}%)")
         
-        # Log podsumowania
+        # Log podsumowania z czasem
         sources_str = ' | '.join(sources) if sources else 'BRAK'
         missing_str = ', '.join(missing) if missing else 'BRAK'
+        qual_str = "✅" if out.get('qualifies') else "❌"
+        
+        # Timing log
+        time_parts = []
+        if _timings['h2h'] > 0.1:
+            time_parts.append(f"h2h={_timings['h2h']:.1f}s")
+        if _timings['forebet'] > 0.1:
+            time_parts.append(f"fb={_timings['forebet']:.1f}s")
+        if _timings['sofascore'] > 0.1:
+            time_parts.append(f"ss={_timings['sofascore']:.1f}s")
+        if _timings['flashscore'] > 0.1:
+            time_parts.append(f"fs={_timings['flashscore']:.1f}s")
+        if _timings['gemini'] > 0.1:
+            time_parts.append(f"ai={_timings['gemini']:.1f}s")
+        time_str = ' '.join(time_parts) if time_parts else ''
+        
         print(f"   📊 Integracja: [{sources_str}] | Brak: [{missing_str}]")
+        print(f"   ⏱️ TIME: total={_t_total:.1f}s {time_str} qual={qual_str}")
 
     return out
 
