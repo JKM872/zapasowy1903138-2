@@ -47,7 +47,9 @@ def scrape_and_send_email(
     use_forebet: bool = False,
     use_sofascore: bool = False,
     use_odds: bool = False,
-    use_gemini: bool = False
+    use_gemini: bool = False,
+    include_sorted_odds: bool = True,
+    odds_limit: int = 15
 ):
     """
     Scrapuje mecze i automatycznie wysyła email z wynikami
@@ -482,7 +484,9 @@ def scrape_and_send_email(
                 subject=subject,
                 sort_by=sort_by,
                 only_form_advantage=only_form_advantage,
-                skip_no_odds=skip_no_odds
+                skip_no_odds=skip_no_odds,
+                include_sorted_odds=include_sorted_odds,
+                odds_limit=odds_limit
             )
             
             print("\n✅ SUKCES! Email wysłany.")
@@ -622,8 +626,17 @@ WAŻNE dla Gmail:
                        help='URL aplikacji UI do wysyłania danych (np. http://localhost:3000)')
     parser.add_argument('--app-api-key', default=None,
                        help='API key dla aplikacji UI (opcjonalne)')
+    parser.add_argument('--sorted-odds', action='store_true', default=True,
+                       help='💰📊 Dodaj sekcje z kursami posortowanymi od najwyższych (domyślnie włączone)')
+    parser.add_argument('--no-sorted-odds', action='store_true',
+                       help='💰📊 Wyłącz sekcje z posortowanymi kursami')
+    parser.add_argument('--odds-limit', type=int, default=15,
+                       help='Max liczba meczów w każdej sekcji kursów (domyślnie 15)')
     
     args = parser.parse_args()
+    
+    # Sorted odds - domyślnie włączone, chyba że --no-sorted-odds
+    include_sorted_odds = not args.no_sorted_odds
     
     scrape_and_send_email(
         date=args.date,
@@ -643,7 +656,9 @@ WAŻNE dla Gmail:
         use_forebet=args.use_forebet,
         use_sofascore=args.use_sofascore,
         use_odds=args.use_odds,
-        use_gemini=args.use_gemini
+        use_gemini=args.use_gemini,
+        include_sorted_odds=include_sorted_odds,
+        odds_limit=args.odds_limit
     )
     
     print("\n✨ ZAKOŃCZONO!")

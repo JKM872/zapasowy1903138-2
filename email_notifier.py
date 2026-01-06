@@ -1,13 +1,268 @@
 """
 Moduł do wysyłania powiadomień email o kwalifikujących się meczach
+
+NOWE: Sekcje pre-posortowanych kursów (home/draw/away) - od najwyższych do najniższych
 """
 
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from typing import List, Dict
+from typing import List, Dict, Optional
 import pandas as pd
 from datetime import datetime
+
+
+# ============================================================================
+# SORTED ODDS SECTIONS - Pre-posortowane kursy w emailu
+# ============================================================================
+
+def create_sorted_odds_sections(matches: List[Dict], limit: int = 15) -> str:
+    """
+    Tworzy HTML sekcje z meczami posortowanymi po kursach (od najwyższych).
+    
+    Args:
+        matches: Lista meczów z kursami
+        limit: Max liczba meczów w każdej sekcji (default 15)
+    
+    Returns:
+        HTML string z trzema sekcjami: Home Odds, Draw Odds, Away Odds
+    """
+    # Filtruj mecze z kursami
+    matches_with_odds = [m for m in matches if m.get('home_odds') or m.get('away_odds')]
+    
+    if not matches_with_odds:
+        return ""
+    
+    def safe_float(val, default=0.0):
+        """Bezpiecznie konwertuj na float."""
+        if val is None:
+            return default
+        try:
+            f = float(val)
+            if str(f) == 'nan':
+                return default
+            return f
+        except (ValueError, TypeError):
+            return default
+    
+    def get_time_str(match):
+        """Wyciąga godzinę meczu."""
+        import re
+        match_time = match.get('match_time', '')
+        if match_time:
+            time_match = re.search(r'(\d{1,2}:\d{2})', str(match_time))
+            if time_match:
+                return time_match.group(1)
+        return ''
+    
+    # Sortuj po home_odds (malejąco)
+    by_home = sorted(
+        [m for m in matches_with_odds if safe_float(m.get('home_odds')) > 0],
+        key=lambda x: safe_float(x.get('home_odds')),
+        reverse=True
+    )[:limit]
+    
+    # Sortuj po draw_odds (malejąco) - tylko dla sportów z remisami
+    by_draw = sorted(
+        [m for m in matches_with_odds if safe_float(m.get('draw_odds')) > 0],
+        key=lambda x: safe_float(x.get('draw_odds')),
+        reverse=True
+    )[:limit]
+    
+    # Sortuj po away_odds (malejąco)
+    by_away = sorted(
+        [m for m in matches_with_odds if safe_float(m.get('away_odds')) > 0],
+        key=lambda x: safe_float(x.get('away_odds')),
+        reverse=True
+    )[:limit]
+    
+    html = """
+    <div class="odds-sections-container">
+        <div class="odds-sections-header">
+            💰 KURSY POSORTOWANE (od najwyższych) 💰
+        </div>
+    """
+    
+    # Sekcja HOME ODDS
+    if by_home:
+        html += """
+        <div class="odds-section">
+            <div class="odds-section-title">🏠 Kursy na GOSPODARZY (1)</div>
+            <table class="odds-table">
+                <tr class="odds-table-header">
+                    <th>#</th>
+                    <th>Mecz</th>
+                    <th>Godz.</th>
+                    <th>Kurs</th>
+                </tr>
+        """
+        for i, m in enumerate(by_home, 1):
+            home = m.get('home_team', 'N/A')
+            away = m.get('away_team', 'N/A')
+            odds = safe_float(m.get('home_odds'))
+            time_str = get_time_str(m)
+            html += f"""
+                <tr>
+                    <td class="rank">{i}</td>
+                    <td class="teams">{home} vs {away}</td>
+                    <td class="time">{time_str}</td>
+                    <td class="odds-value">{odds:.2f}</td>
+                </tr>
+            """
+        html += """
+            </table>
+        </div>
+        """
+    
+    # Sekcja DRAW ODDS (tylko jeśli są remisy)
+    if by_draw:
+        html += """
+        <div class="odds-section">
+            <div class="odds-section-title">🤝 Kursy na REMIS (X)</div>
+            <table class="odds-table">
+                <tr class="odds-table-header">
+                    <th>#</th>
+                    <th>Mecz</th>
+                    <th>Godz.</th>
+                    <th>Kurs</th>
+                </tr>
+        """
+        for i, m in enumerate(by_draw, 1):
+            home = m.get('home_team', 'N/A')
+            away = m.get('away_team', 'N/A')
+            odds = safe_float(m.get('draw_odds'))
+            time_str = get_time_str(m)
+            html += f"""
+                <tr>
+                    <td class="rank">{i}</td>
+                    <td class="teams">{home} vs {away}</td>
+                    <td class="time">{time_str}</td>
+                    <td class="odds-value">{odds:.2f}</td>
+                </tr>
+            """
+        html += """
+            </table>
+        </div>
+        """
+    
+    # Sekcja AWAY ODDS
+    if by_away:
+        html += """
+        <div class="odds-section">
+            <div class="odds-section-title">✈️ Kursy na GOŚCI (2)</div>
+            <table class="odds-table">
+                <tr class="odds-table-header">
+                    <th>#</th>
+                    <th>Mecz</th>
+                    <th>Godz.</th>
+                    <th>Kurs</th>
+                </tr>
+        """
+        for i, m in enumerate(by_away, 1):
+            home = m.get('home_team', 'N/A')
+            away = m.get('away_team', 'N/A')
+            odds = safe_float(m.get('away_odds'))
+            time_str = get_time_str(m)
+            html += f"""
+                <tr>
+                    <td class="rank">{i}</td>
+                    <td class="teams">{home} vs {away}</td>
+                    <td class="time">{time_str}</td>
+                    <td class="odds-value">{odds:.2f}</td>
+                </tr>
+            """
+        html += """
+            </table>
+        </div>
+        """
+    
+    html += """
+    </div>
+    """
+    
+    return html
+
+
+# CSS dla sekcji kursów
+ODDS_SECTIONS_CSS = """
+    .odds-sections-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 25px 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .odds-sections-header {
+        color: #ffd700;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 25px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        letter-spacing: 1px;
+    }
+    .odds-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .odds-section-title {
+        color: #00d4ff;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(0,212,255,0.3);
+    }
+    .odds-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #fff;
+    }
+    .odds-table-header th {
+        background: rgba(0,212,255,0.2);
+        color: #00d4ff;
+        padding: 10px 8px;
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .odds-table tr:nth-child(even) {
+        background: rgba(255,255,255,0.03);
+    }
+    .odds-table tr:hover {
+        background: rgba(0,212,255,0.1);
+    }
+    .odds-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .odds-table .rank {
+        color: #ffd700;
+        font-weight: bold;
+        width: 30px;
+        text-align: center;
+    }
+    .odds-table .teams {
+        color: #fff;
+        font-weight: 500;
+    }
+    .odds-table .time {
+        color: #aaa;
+        font-size: 13px;
+        width: 60px;
+    }
+    .odds-table .odds-value {
+        color: #00ff88;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: right;
+        width: 70px;
+    }
+"""
 
 # Konfiguracja SMTP
 SMTP_CONFIG = {
@@ -28,7 +283,8 @@ SMTP_CONFIG = {
     }
 }
 
-def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> str:
+def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time', 
+                      include_sorted_odds: bool = False, odds_limit: int = 15) -> str:
     """
     Tworzy ładny HTML email z listą meczów
     
@@ -36,6 +292,8 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
         matches: Lista meczów
         date: Data
         sort_by: 'time' (godzina), 'wins' (liczba wygranych), 'team' (alfabetycznie)
+        include_sorted_odds: Czy dodać sekcje z kursami posortowanymi od najwyższych
+        odds_limit: Max liczba meczów w każdej sekcji kursów
     """
     
     # SORTOWANIE MECZÓW
@@ -72,10 +330,14 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
         # Sortuj alfabetycznie po nazwie gospodarzy
         sorted_matches = sorted(sorted_matches, key=lambda x: x.get('home_team', '').lower())
     
+    # Dodaj CSS dla sorted odds jeśli włączone
+    extra_css = ODDS_SECTIONS_CSS if include_sorted_odds else ''
+    
     html = f"""
     <html>
     <head>
         <style>
+            {extra_css}
             body {{
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
@@ -294,6 +556,14 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time') -> 
         """
     
     # ========================================================================
+    # SORTED ODDS SECTIONS (jeśli włączone) - zawsze przed REGULAR MATCHES
+    # ========================================================================
+    if include_sorted_odds:
+        odds_sections_html = create_sorted_odds_sections(sorted_matches, limit=odds_limit)
+        if odds_sections_html:
+            html += odds_sections_html
+    
+    # ========================================================================
     # REGULAR MATCHES SECTION
     # ========================================================================
     html += f"""
@@ -506,7 +776,9 @@ def send_email_notification(
     subject: str = None,
     sort_by: str = 'time',
     only_form_advantage: bool = False,
-    skip_no_odds: bool = False
+    skip_no_odds: bool = False,
+    include_sorted_odds: bool = True,
+    odds_limit: int = 15
 ):
     """
     Wysyła email z powiadomieniem o kwalifikujących się meczach
@@ -521,6 +793,8 @@ def send_email_notification(
         sort_by: Sortowanie: 'time' (godzina), 'wins' (wygrane), 'team' (alfabetycznie)
         only_form_advantage: Wysyłaj tylko mecze z przewagą formy gospodarzy (🔥)
         skip_no_odds: Pomijaj mecze bez kursów bukmacherskich
+        include_sorted_odds: Dodaj sekcje z kursami posortowanymi od najwyższych (domyślnie True)
+        odds_limit: Max liczba meczów w każdej sekcji kursów (domyślnie 15)
     """
     
     # Wczytaj dane
@@ -609,7 +883,12 @@ def send_email_notification(
     msg['To'] = to_email
     
     # Dodaj treść HTML
-    html_content = create_html_email(matches, date, sort_by=sort_by)
+    html_content = create_html_email(
+        matches, date, 
+        sort_by=sort_by,
+        include_sorted_odds=include_sorted_odds,
+        odds_limit=odds_limit
+    )
     html_part = MIMEText(html_content, 'html')
     msg.attach(html_part)
     
