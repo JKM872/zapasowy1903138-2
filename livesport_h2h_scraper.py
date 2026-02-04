@@ -599,14 +599,6 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         use_gemini: Jeśli True, używa Gemini AI do analizy
         sport: Sport (football, volleyball, etc.)
     """
-    # #region agent log
-    try:
-        import json as _json_debug
-        import time as _time_debug
-        with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-            _f.write(_json_debug.dumps({"hypothesisId": "ENTRY", "location": "livesport_h2h_scraper.py:591", "message": "process_match called", "data": {"url": url[:80] if url else "None", "sport": sport}, "timestamp": int(_time_debug.time() * 1000)}) + '\n')
-    except: pass
-    # #endregion
     # ========================================================================
     # PROFILOWANIE CZASU - rozpoczęcie pomiaru
     # ========================================================================
@@ -990,13 +982,6 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         # Nie kwalifikuje się podstawowo - ale nadal pobierz formę dla wyświetlenia
         out['qualifies'] = False
         # Pobierz podstawową formę (dla meczów niekwalifikujących się)
-        # #region agent log
-        try:
-            import json as _json_debug
-            with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                _f.write(_json_debug.dumps({"hypothesisId": "A", "location": "livesport_h2h_scraper.py:987", "message": "Non-qualifying match form extraction", "data": {"soup_defined": 'soup' in dir(), "home_team": out.get('home_team'), "away_team": out.get('away_team')}, "timestamp": int(time.time() * 1000)}) + '\n')
-        except: pass
-        # #endregion
         try:
             home_form = extract_team_form(soup, driver, 'home', out.get('home_team'))
             away_form = extract_team_form(soup, driver, 'away', out.get('away_team'))
@@ -1005,13 +990,6 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             out['home_form_overall'] = home_form
             out['away_form_overall'] = away_form
         except (AttributeError, TypeError, WebDriverException, NameError) as e:
-            # #region agent log
-            try:
-                import json as _json_debug
-                with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                    _f.write(_json_debug.dumps({"hypothesisId": "A", "location": "livesport_h2h_scraper.py:995", "message": "Form extraction error", "data": {"error_type": type(e).__name__, "error": str(e)[:100]}, "timestamp": int(time.time() * 1000)}) + '\n')
-            except: pass
-            # #endregion
             logger.debug(f"Błąd przy pobieraniu formy dla niekwalifikujących: {e}")
     
     # ⏱️ TIMING: Koniec kwalifikacji (Etap 1)
@@ -1868,26 +1846,8 @@ def fetch_odds_from_livesport(driver: webdriver.Chrome, match_url: str, sport: s
         # Import API client
         from livesport_odds_api import LivesportOddsAPI, get_livesport_odds
         
-        # #region agent log
-        _odds_start_time = time.time()
-        try:
-            import json as _json_debug
-            with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                _f.write(_json_debug.dumps({"hypothesisId": "D", "location": "livesport_h2h_scraper.py:1866", "message": "Odds API call start", "data": {"match_url": match_url[:80], "sport": sport}, "timestamp": int(time.time() * 1000)}) + '\n')
-        except: pass
-        # #endregion
-        
         # Użyj API do pobrania kursów
         api_result = get_livesport_odds(match_url, sport)
-        
-        # #region agent log
-        _odds_duration = time.time() - _odds_start_time
-        try:
-            import json as _json_debug
-            with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                _f.write(_json_debug.dumps({"hypothesisId": "D", "location": "livesport_h2h_scraper.py:1870", "message": "Odds API call complete", "data": {"duration_sec": round(_odds_duration, 2), "odds_found": api_result.get('odds_found') if api_result else False}, "timestamp": int(time.time() * 1000)}) + '\n')
-        except: pass
-        # #endregion
         
         if api_result and api_result.get('odds_found'):
             # 🔧 Upewnij się że kursy to float lub None (nie string 'nan')

@@ -158,13 +158,6 @@ def scrape_and_send_email(
         print("🔧 TRYB CI: Zoptymalizowane timeouty, mniej retry")
     print("="*70)
     
-    # #region agent log
-    try:
-        import json as _json_debug
-        with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-            _f.write(_json_debug.dumps({"hypothesisId": "BASELINE", "location": "scrape_and_notify.py:155", "message": "Scraping session started", "data": {"date": date, "sports": sports, "is_ci": IS_CI, "max_matches": max_matches, "use_forebet": use_forebet, "use_odds": use_odds}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-    except: pass
-    # #endregion
     print(f"📅 Data: {date}")
     print(f"⚽ Sporty: {', '.join(sports)}")
     print(f"📧 Email do: {to_email}")
@@ -197,14 +190,6 @@ def scrape_and_send_email(
             urls = urls[:max_matches]
             print(f"⚠️  Ograniczono do {max_matches} meczów (tryb testowy)")
         
-        # #region agent log
-        try:
-            import json as _json_debug
-            with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                _f.write(_json_debug.dumps({"hypothesisId": "URLS", "location": "scrape_and_notify.py:195", "message": "URLs gathered", "data": {"url_count": len(urls), "first_urls": [u[:60] for u in urls[:3]] if urls else []}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-        except: pass
-        # #endregion
-        
         # ========================================================================
         # DWUFAZOWY PROCES OPTYMALIZACJI CZASOWEJ
         # FAZA 1: Szybkie sprawdzenie kwalifikacji (bez Forebet/SofaScore)
@@ -235,13 +220,6 @@ def scrape_and_send_email(
         print("="*70)
         
         for i, url in enumerate(urls, 1):
-            # #region agent log
-            try:
-                import json as _json_debug
-                with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                    _f.write(_json_debug.dumps({"hypothesisId": "LOOP", "location": "scrape_and_notify.py:228", "message": "Processing match in loop", "data": {"index": i, "total": len(urls), "url": url[:80] if url else "None"}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-            except: pass
-            # #endregion
             # Oblicz ETA
             if i > 1:
                 elapsed = time_module.time() - phase1_start
@@ -338,13 +316,6 @@ def scrape_and_send_email(
                     
                 except (ConnectionResetError, ConnectionError, Exception) as e:
                     retry_count += 1
-                    # #region agent log
-                    try:
-                        import json as _json_debug
-                        with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                            _f.write(_json_debug.dumps({"hypothesisId": "C", "location": "scrape_and_notify.py:316", "message": "Connection error during match processing", "data": {"error_type": type(e).__name__, "error": str(e)[:100], "retry_count": retry_count, "match_index": i}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-                    except: pass
-                    # #endregion
                     if retry_count < max_retries:
                         print(f"   ⚠️  Błąd połączenia (próba {retry_count}/{max_retries}): {str(e)[:100]}")
                         print(f"   🔄 Restartowanie przeglądarki i ponowienie próby...")
@@ -375,33 +346,12 @@ def scrape_and_send_email(
             # AUTO-RESTART przeglądarki
             if i % RESTART_INTERVAL == 0 and i < len(urls):
                 print(f"\n🔄 AUTO-RESTART po {i} meczach...")
-                # #region agent log
-                try:
-                    import json as _json_debug
-                    with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                        _f.write(_json_debug.dumps({"hypothesisId": "B", "location": "scrape_and_notify.py:345", "message": "Driver auto-restart triggered", "data": {"match_index": i, "restart_interval": RESTART_INTERVAL}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-                except: pass
-                # #endregion
                 try:
                     driver.quit()
                     time.sleep(1.5 if IS_CI else 2)
                     driver = start_driver(headless=headless)
-                    # #region agent log
-                    try:
-                        import json as _json_debug
-                        with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                            _f.write(_json_debug.dumps({"hypothesisId": "B", "location": "scrape_and_notify.py:352", "message": "Driver restart SUCCESS", "data": {"match_index": i}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-                    except: pass
-                    # #endregion
                     print(f"   ✅ OK! Kontynuuję...")
                 except Exception as e:
-                    # #region agent log
-                    try:
-                        import json as _json_debug
-                        with open(r'c:\Users\hp\Bdudcsidinsv\debug.log', 'a', encoding='utf-8') as _f:
-                            _f.write(_json_debug.dumps({"hypothesisId": "B", "location": "scrape_and_notify.py:360", "message": "Driver restart FAILED", "data": {"match_index": i, "error": str(e)[:100]}, "timestamp": int(time_module.time() * 1000)}) + '\n')
-                    except: pass
-                    # #endregion
                     print(f"   ⚠️  Błąd restartu: {e}")
                     driver = start_driver(headless=headless)
             
