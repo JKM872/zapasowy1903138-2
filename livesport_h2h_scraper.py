@@ -2594,6 +2594,46 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         
         print(f"   📊 Fallback score: {fallback_score:.1f} -> abs={out['advanced_score']:.1f} (qualifies: {out['qualifies']})")
 
+    # ===================================================================
+    # MAPOWANIE PÓL DLA KOMPATYBILNOŚCI Z EMAIL_NOTIFIER
+    # Tennis używa form_a/form_b, ale email_notifier oczekuje home_form/away_form
+    # ===================================================================
+    
+    # Mapowanie formy
+    out['home_form'] = out.get('form_a', [])
+    out['away_form'] = out.get('form_b', [])
+    out['home_form_overall'] = out.get('form_a', [])
+    out['away_form_overall'] = out.get('form_b', [])
+    out['home_form_home'] = []  # Tenis nie ma rozróżnienia na u siebie/na wyjeździe
+    out['away_form_away'] = []
+    
+    # Mapowanie H2H - email używa tych pól
+    out['h2h_count'] = len(out.get('h2h_last5', []))
+    
+    # win_rate dla email (kalkulacja)
+    total_h2h = out.get('home_wins_in_h2h_last5', 0) + out.get('away_wins_in_h2h', 0)
+    if total_h2h > 0:
+        # Dla tenisa: win_rate = faworyt / total
+        favorite = out.get('favorite', 'unknown')
+        if favorite == 'player_a':
+            out['win_rate'] = out['home_wins_in_h2h_last5'] / total_h2h
+        elif favorite == 'player_b':
+            out['win_rate'] = out['away_wins_in_h2h'] / total_h2h
+        else:
+            out['win_rate'] = 0.5
+    else:
+        out['win_rate'] = 0.0
+    
+    # Dodatkowe pola dla email
+    out['form_advantage'] = False  # Tenis nie używa tego samego systemu
+    out['sport'] = 'tennis'  # Oznacz sport
+    out['focus_team'] = 'home' if out.get('favorite') == 'player_a' else 'away'
+    
+    # Ranking info dla wyświetlania w mailu
+    out['ranking_info'] = None
+    if out.get('ranking_a') and out.get('ranking_b'):
+        out['ranking_info'] = f"ATP/WTA: #{out['ranking_a']} vs #{out['ranking_b']}"
+
     return out
 
 

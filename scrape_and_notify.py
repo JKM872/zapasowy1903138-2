@@ -366,6 +366,31 @@ def scrape_and_send_email(
         print(f"   Przetworzone: {len(rows)} meczów")
         print(f"   Kwalifikujące się: {qualifying_count} ({100*qualifying_count/len(rows):.1f}%)" if len(rows) > 0 else "")
         print(f"   Średni czas/mecz: {phase1_duration/len(rows):.2f}s" if len(rows) > 0 else "")
+        
+        # 🎾 TENNIS-SPECIFIC LOGGING: Pokaż statystyki dla tenisa
+        if 'tennis' in sports:
+            tennis_matches = [r for r in rows if r.get('sport') == 'tennis' or '/tenis/' in str(r.get('match_url', '')).lower()]
+            tennis_qualifying = [r for r in tennis_matches if r.get('qualifies')]
+            tennis_with_ranking = [r for r in tennis_qualifying if r.get('ranking_a') and r.get('ranking_b')]
+            tennis_with_form = [r for r in tennis_qualifying if r.get('form_a') or r.get('home_form')]
+            tennis_with_odds = [r for r in tennis_qualifying if r.get('home_odds') or r.get('away_odds')]
+            
+            print(f"\n   🎾 TENNIS SUMMARY:")
+            print(f"      Total tennis matches: {len(tennis_matches)}")
+            print(f"      Qualifying: {len(tennis_qualifying)}")
+            print(f"      With ranking: {len(tennis_with_ranking)}")
+            print(f"      With form: {len(tennis_with_form)}")
+            print(f"      With odds: {len(tennis_with_odds)}")
+            
+            # Debug: Pokaż przykładowe dane (w CI)
+            if IS_CI and tennis_qualifying and len(tennis_qualifying) > 0:
+                sample = tennis_qualifying[0]
+                print(f"      Sample match: {sample.get('home_team')} vs {sample.get('away_team')}")
+                print(f"         Advanced score: {sample.get('advanced_score', 'N/A')}")
+                print(f"         Ranking A: {sample.get('ranking_a', 'N/A')}, B: {sample.get('ranking_b', 'N/A')}")
+                print(f"         Form A: {sample.get('form_a', sample.get('home_form', 'N/A'))}")
+                print(f"         H2H: {sample.get('home_wins_in_h2h_last5', 0)}-{sample.get('away_wins_in_h2h', 0)}")
+        
         print("="*70)
         
         # ========================================================================

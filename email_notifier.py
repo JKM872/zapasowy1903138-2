@@ -892,6 +892,18 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
         # Kolory podświetlenia
         advantage_icon = '🔥' if form_advantage else ''
         
+        # TENNIS-SPECIFIC: Wykryj czy to tenis (po polu sport lub URL)
+        is_tennis = (match.get('sport') == 'tennis' or 
+                     '/tenis/' in str(match.get('match_url', '')).lower() or
+                     '/tennis/' in str(match.get('match_url', '')).lower())
+        
+        # Tennis: Pobierz ranking i advanced score
+        ranking_a = match.get('ranking_a')
+        ranking_b = match.get('ranking_b')
+        advanced_score = safe_float(match.get('advanced_score', 0))
+        favorite = match.get('favorite', 'unknown')
+        ranking_info = match.get('ranking_info', '')
+        
         html += f"""
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
                 <!-- HEADER -->
@@ -907,9 +919,11 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
                 <!-- DRUŻYNY -->
                 <div style="background: white; padding: 20px; text-align: center;">
                     <div style="font-size: 22px; font-weight: bold; color: #333;">
-                        🏠 {home} <span style="color: #999; font-size: 16px;">vs</span> {away} ✈️
+                        {'🎾' if is_tennis else '🏠'} {home} <span style="color: #999; font-size: 16px;">vs</span> {away} {'🎾' if is_tennis else '✈️'}
                     </div>
-                    {f'<div style="margin-top: 5px;"><span style="background: #FFD700; color: #333; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">🔥 Przewaga gospodarzy!</span></div>' if form_advantage else ''}
+                    {f'<div style="margin-top: 5px;"><span style="background: #FFD700; color: #333; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">🔥 Przewaga gospodarzy!</span></div>' if form_advantage and not is_tennis else ''}
+                    {f'<div style="margin-top: 8px;"><span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Advanced Score: {advanced_score:.0f}/100</span></div>' if is_tennis and advanced_score > 0 else ''}
+                    {f'<div style="margin-top: 5px; font-size: 12px; color: #666;">{ranking_info}</div>' if is_tennis and ranking_info else ''}
                 </div>
                 
                 <!-- DANE MECZU - GRID -->
@@ -929,6 +943,20 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
                         </div>
                     </div>
                     
+                    <!-- TENNIS: RANKING SECTION -->
+                    {f'''
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%); border-radius: 8px;">
+                        <div style="flex: 1; text-align: center; border-right: 1px solid rgba(255,255,255,0.3);">
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.8);">🏆 Ranking {home}</div>
+                            <div style="font-size: 22px; font-weight: bold; color: white;">#{ranking_a if ranking_a else "?"}</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.8);">🏆 Ranking {away}</div>
+                            <div style="font-size: 22px; font-weight: bold; color: white;">#{ranking_b if ranking_b else "?"}</div>
+                        </div>
+                    </div>
+                    ''' if is_tennis and (ranking_a or ranking_b) else ''}
+                    
                     <!-- H2H + OSTATNI MECZ -->
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
                         <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
@@ -939,9 +967,9 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
                             <div style="font-size: 12px; color: #888;">{f'{win_rate*100:.0f}%' if h2h_count > 0 else ''}</div>
                         </div>
                         <div style="flex: 1; text-align: center;">
-                            <div style="font-size: 11px; color: #666;">📅 Ostatni mecz</div>
+                            <div style="font-size: 11px; color: #666;">{'🎾 Faworytem' if is_tennis else '📅 Ostatni mecz'}</div>
                             <div style="font-size: 14px; font-weight: bold; color: #333;">
-                                {last_meeting_date if last_meeting_date else '—'}
+                                {(home if favorite == 'player_a' else (away if favorite == 'player_b' else 'Równi')) if is_tennis else (last_meeting_date if last_meeting_date else '—')}
                             </div>
                         </div>
                     </div>
