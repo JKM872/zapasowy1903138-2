@@ -25,6 +25,7 @@ import time
 import random
 import os
 import subprocess
+import re
 from typing import Dict, Optional, Tuple
 
 # ========================================================================
@@ -1504,6 +1505,7 @@ def search_forebet_prediction(
                     print(f"         Similarity: Home={home_score:.2f}, Away={away_score:.2f}")
                     
                     # Wyciągnij predykcję - POPRAWIONA STRUKTURA
+                    extraction_success = False
                     
                     # 1. Prawdopodobieństwa (div.fprc > spans)
                     fprc_div = row.find('div', class_='fprc')
@@ -1525,8 +1527,13 @@ def search_forebet_prediction(
                                     result['prediction'] = 'X'  # Draw
                                 else:
                                     result['prediction'] = '2'  # Away win
-                            except (ValueError, IndexError):
-                                pass
+                                
+                                extraction_success = True
+                                print(f"         📊 Probability: {home_prob}%-{draw_prob}%-{away_prob}% → {result['prediction']}")
+                            except (ValueError, IndexError) as e:
+                                print(f"         ⚠️ Błąd parsowania prawdopodobieństw: {e}")
+                    else:
+                        print(f"         ⚠️ Brak div.fprc - szukam alternatyw...")
                     
                     # 2. Predykcja tekstowa (div.predict > span.forepr)
                     forepr_elem = row.find('span', class_='forepr')
@@ -1534,6 +1541,8 @@ def search_forebet_prediction(
                         pred_text = forepr_elem.get_text(strip=True)
                         if pred_text in ['1', 'X', '2']:
                             result['prediction'] = pred_text
+                            extraction_success = True
+                            print(f"         📊 Prediction (forepr): {pred_text}")
                     
                     # 3. Dokładny wynik (div.ex_sc)
                     ex_sc_elem = row.find('div', class_='ex_sc')
@@ -1569,7 +1578,60 @@ def search_forebet_prediction(
                             except ValueError:
                                 pass
                     
+                    # 🔥 ALTERNATYWNA EKSTRAKCJA: Jeśli fprc nie znaleziono, szukaj w innych miejscach
+                    if not result.get('prediction'):
+                        # Alternatywa 1: span.ex_sc może zawierać predykcję dla niektórych sportów
+                        ex_spans = row.find_all('span', class_=['ex_sc', 'ex1', 'ex2', 'ex3'])
+                        for ex_span in ex_spans:
+                            text = ex_span.get_text(strip=True)
+                            if text in ['1', 'X', '2', '1X', 'X2', '12']:
+                                result['prediction'] = text
+                                extraction_success = True
+                                print(f"         📊 Prediction (ex_span): {text}")
+                                break
+                        
+                        # Alternatywa 2: Szukaj w całym wierszu
+                        if not result.get('prediction'):
+                            all_text = row.get_text()
+                            # Szukaj wzorca prawdopodobieństw (np. 45% 30% 25%)
+                            import re
+                            probs = re.findall(r'(\d{1,2})%', all_text)
+                            if len(probs) >= 2:
+                                try:
+                                    # Dla sportów bez remisu (handball, volleyball, basketball)
+                                    if sport_lower in ['handball', 'volleyball', 'basketball', 'tennis']:
+                                        p1, p2 = int(probs[0]), int(probs[1])
+                                        result['probability'] = float(max(p1, p2))
+                                        result['prediction'] = '1' if p1 > p2 else '2'
+                                        extraction_success = True
+                                        print(f"         📊 Probability (regex 2-way): {p1}%-{p2}% → {result['prediction']}")
+                                    elif len(probs) >= 3:
+                                        p1, px, p2 = int(probs[0]), int(probs[1]), int(probs[2])
+                                        max_prob = max(p1, px, p2)
+                                        result['probability'] = float(max_prob)
+                                        if max_prob == p1:
+                                            result['prediction'] = '1'
+                                        elif max_prob == px:
+                                            result['prediction'] = 'X'
+                                        else:
+                                            result['prediction'] = '2'
+                                        extraction_success = True
+                                        print(f"         📊 Probability (regex 3-way): {p1}%-{px}%-{p2}% → {result['prediction']}")
+                                except (ValueError, IndexError):
+                                    pass
+                    
+                    # 🔥 FIX: Ustaw oba klucze dla kompatybilności z scrape_and_notify.py
                     result['success'] = True
+                    result['found'] = True  # Wymagane przez scrape_and_notify.py
+                    result['home_team_forebet'] = forebet_home
+                    result['away_team_forebet'] = forebet_away
+                    
+                    # Log status ekstrakcji
+                    if extraction_success:
+                        print(f"         ✅ Ekstrakcja danych zakończona sukcesem")
+                    else:
+                        print(f"         ⚠️ Mecz znaleziony, ale nie udało się wyciągnąć predykcji")
+                    
                     break
                     
             except Exception as e:
@@ -1597,7 +1659,7 @@ def search_forebet_prediction(
                     gemini_home, gemini_away = gemini_match
                     
                     # Znajdź wiersz z dopasowanym meczem i wyciągnij predykcję
-                    for row in rows:
+                    for row in match_rows:  # 🔥 FIX: użyj match_rows zamiast rows
                         try:
                             # Wyciągnij nazwy drużyn z wiersza (używając tych samych metod co wcześniej)
                             row_home, row_away = None, None

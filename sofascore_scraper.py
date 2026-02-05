@@ -283,15 +283,28 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
     Szybsze i bardziej niezawodne niż HTML scraping.
     
     v3.2: Dodano retry logic z exponential backoff.
+    v3.4: Ulepszone logowanie dla CI/CD
     """
     if not REQUESTS_AVAILABLE:
+        logger.warning("SofaScore API: requests module not available")
         return None
     try:
         url = f"https://api.sofascore.com/api/v1/event/{event_id}/votes"
-        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=5)
-        if response and response.status_code == 200:
+        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=10)
+        
+        if response is None:
+            print(f"   ⚠️ SofaScore API: Brak odpowiedzi (event_id={event_id})")
+            return None
+            
+        if response.status_code == 200:
             data = response.json()
             vote = data.get('vote', {})
+            
+            # Sprawdź czy są dane głosowania
+            if not vote or vote.get('vote1') is None:
+                print(f"   ⚠️ SofaScore API: Brak danych głosowania (event_id={event_id})")
+                return None
+            
             return {
                 'sofascore_home_win_prob': vote.get('vote1'),
                 'sofascore_draw_prob': vote.get('voteX'),
@@ -302,8 +315,18 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
                     vote.get('vote2Count', 0)
                 ]),
             }
-        return None
-    except Exception:
+        elif response.status_code == 403:
+            print(f"   ⚠️ SofaScore API: Zablokowane (403) - możliwe blokady geograficzne/rate limit")
+            return None
+        elif response.status_code == 404:
+            print(f"   ⚠️ SofaScore API: Nie znaleziono meczu (404, event_id={event_id})")
+            return None
+        else:
+            print(f"   ⚠️ SofaScore API: HTTP {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"   ⚠️ SofaScore API error: {type(e).__name__}: {str(e)[:50]}")
+        logger.debug(f"SofaScore API error details: {e}")
         return None
 
 
@@ -393,8 +416,10 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
     Szuka event ID przez SofaScore API.
     
     v3.2: Dodano retry logic z exponential backoff.
+    v3.4: Ulepszone logowanie dla CI/CD
     """
     if not REQUESTS_AVAILABLE:
+        logger.warning("SofaScore search API: requests module not available")
         return None
     try:
         if date_str:
@@ -403,8 +428,17 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
             search_date = datetime.now().strftime('%Y-%m-%d')
         sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
         url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{search_date}"
-        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=5)
-        if not response or response.status_code != 200:
+        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=10)
+        
+        if not response:
+            print(f"   ⚠️ SofaScore search API: Brak odpowiedzi ({sport}/{search_date})")
+            return None
+            
+        if response.status_code == 403:
+            print(f"   ⚠️ SofaScore search API: Zablokowane (403)")
+            return None
+        elif response.status_code != 200:
+            print(f"   ⚠️ SofaScore search API: HTTP {response.status_code}")
             return None
         data = response.json()
         events = data.get('events', [])
@@ -866,6 +900,55 @@ def format_votes_for_display(result: Dict) -> str:
         return f"🗳️ Fan Vote ({votes_str}): 🏠{home}% | 🤝{draw}% | ✈️{away}%"
     else:
         return f"🗳️ Fan Vote ({votes_str}): 🏠{home}% | ✈️{away}%"
+
+
+def get_sofascore_prediction(
+    home_team: str,
+    away_team: str,
+    sport: str = 'football',
+    date_str: str = None
+) -> Dict:
+    """
+    🔥 WRAPPER: Interfejs kompatybilny z scrape_and_notify.py
+    
+    Konwertuje wynik z scrape_sofascore_full() na format oczekiwany przez
+    scrape_and_notify.py (klucze bez prefiksu 'sofascore_').
+    
+    Args:
+        home_team: Nazwa gospodarzy
+        away_team: Nazwa gości
+        sport: Sport
+        date_str: Data meczu (YYYY-MM-DD)
+    
+    Returns:
+        Dict z kluczami: found, home_win_prob, draw_prob, away_win_prob, total_votes
+    """
+    # Pobierz pełne dane z SofaScore
+    full_result = scrape_sofascore_full(
+        home_team=home_team,
+        away_team=away_team,
+        sport=sport,
+        date_str=date_str,
+        use_cache=True
+    )
+    
+    # Konwertuj na format oczekiwany przez scrape_and_notify.py
+    return {
+        'found': full_result.get('sofascore_found', False),
+        'home_win_prob': full_result.get('sofascore_home_win_prob'),
+        'draw_prob': full_result.get('sofascore_draw_prob'),
+        'away_win_prob': full_result.get('sofascore_away_win_prob'),
+        'total_votes': full_result.get('sofascore_total_votes', 0),
+        'btts_yes': full_result.get('sofascore_btts_yes'),
+        'btts_no': full_result.get('sofascore_btts_no'),
+        'url': full_result.get('sofascore_url'),
+        # Również zachowaj oryginalne klucze dla backward compatibility
+        'sofascore_found': full_result.get('sofascore_found', False),
+        'sofascore_home_win_prob': full_result.get('sofascore_home_win_prob'),
+        'sofascore_draw_prob': full_result.get('sofascore_draw_prob'),
+        'sofascore_away_win_prob': full_result.get('sofascore_away_win_prob'),
+        'sofascore_total_votes': full_result.get('sofascore_total_votes', 0),
+    }
 
 
 def format_sofascore_for_email(result: Dict) -> str:

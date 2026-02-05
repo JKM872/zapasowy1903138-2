@@ -221,6 +221,20 @@ jobs:
             outputs/*.csv
           if-no-files-found: ignore
           retention-days: 30
+      
+      # 🔍 Upload debug files for troubleshooting
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: football-debug-${{ needs.determine-sport.outputs.date }}
+          path: |
+            forebet_debug.html
+            forebet_debug_rows.html
+            forebet_*.html
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
 
   scrape-basketball:
     needs: determine-sport
@@ -344,6 +358,19 @@ jobs:
             outputs/*.csv
           if-no-files-found: ignore
           retention-days: 30
+      
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: basketball-debug-${{ needs.determine-sport.outputs.date }}
+          path: |
+            forebet_debug.html
+            forebet_debug_rows.html
+            forebet_*.html
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
 
   scrape-tennis:
     needs: determine-sport
@@ -467,6 +494,19 @@ jobs:
             outputs/*.csv
           if-no-files-found: ignore
           retention-days: 30
+      
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tennis-debug-${{ needs.determine-sport.outputs.date }}
+          path: |
+            forebet_debug.html
+            forebet_debug_rows.html
+            forebet_*.html
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
 
   scrape-hockey:
     needs: determine-sport
@@ -590,6 +630,19 @@ jobs:
             outputs/*.csv
           if-no-files-found: ignore
           retention-days: 30
+      
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hockey-debug-${{ needs.determine-sport.outputs.date }}
+          path: |
+            forebet_debug.html
+            forebet_debug_rows.html
+            forebet_*.html
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
 
   scrape-volleyball:
     needs: determine-sport
@@ -713,6 +766,19 @@ jobs:
             outputs/*.csv
           if-no-files-found: ignore
           retention-days: 30
+      
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: volleyball-debug-${{ needs.determine-sport.outputs.date }}
+          path: |
+            forebet_debug.html
+            forebet_debug_rows.html
+            forebet_*.html
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
 
   scrape-handball:
     needs: determine-sport
@@ -836,6 +902,20 @@ jobs:
             outputs/*.csv
           if-no-files-found: ignore
           retention-days: 30
+      
+      # 🔍 Upload debug files for troubleshooting
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: handball-debug-${{ needs.determine-sport.outputs.date }}
+          path: |
+            forebet_debug.html
+            forebet_debug_rows.html
+            forebet_*.html
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
 
   summary:
     needs: [scrape-football, scrape-basketball, scrape-tennis, scrape-hockey, scrape-volleyball, scrape-handball]
