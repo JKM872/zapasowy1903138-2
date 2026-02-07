@@ -1515,10 +1515,8 @@ def search_forebet_prediction(
                     # Wyciągnij predykcję - POPRAWIONA STRUKTURA
                     extraction_success = False
                     
-                    # 🔥 Wrap extraction in separate try/except to prevent losing the match
-                    try:
-                        # 1. Prawdopodobieństwa (div.fprc > spans)
-                        fprc_div = row.find('div', class_='fprc')
+                    # 1. Prawdopodobieństwa (div.fprc > spans)
+                    fprc_div = row.find('div', class_='fprc')
                     if fprc_div:
                         spans = fprc_div.find_all('span')
                         if len(spans) >= 3:
@@ -1630,17 +1628,11 @@ def search_forebet_prediction(
                                 except (ValueError, IndexError):
                                     pass
                     
-                        # Log status ekstrakcji
-                        if extraction_success:
-                            print(f"         ✅ Ekstrakcja danych zakończona sukcesem")
-                        else:
-                            print(f"         ⚠️ Mecz znaleziony, ale nie udało się wyciągnąć predykcji")
-                    
-                    except Exception as extraction_error:
-                        # 🔥 FIX: Loguj błędy ekstrakcji ale NIE resetuj found/success
-                        print(f"         ⚠️ Błąd ekstrakcji danych: {type(extraction_error).__name__}: {extraction_error}")
-                        print(f"         ℹ️ Mecz został znaleziony ale bez szczegółowych danych")
-                        # result['success'] i result['found'] pozostają True!
+                    # Log status ekstrakcji
+                    if extraction_success:
+                        print(f"         ✅ Ekstrakcja danych zakończona sukcesem")
+                    else:
+                        print(f"         ⚠️ Mecz znaleziony, ale nie udało się wyciągnąć predykcji")
                     
                     # Zawsze break po znalezieniu meczu (nawet jeśli ekstrakcja zawiodła)
                     break
