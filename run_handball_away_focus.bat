@@ -18,7 +18,7 @@ echo Sport: Piłka ręczna (Handball)
 echo Fokus: DRUŻYNY GOŚCI
 echo.
 
-python livesport_h2h_scraper.py --mode auto --date %DATE% --sports handball --away-team-focus --headless
+python livesport_h2h_scraper.py --mode auto --date %DATE% --sports handball --away-team-focus --headless --use-forebet --use-sofascore
 
 echo.
 echo Wyniki: outputs\livesport_h2h_%DATE%_handball_AWAY_FOCUS.csv

@@ -24,7 +24,7 @@ echo Uruchamiam scraper dla wszystkich sportów...
 echo.
 
 REM Uruchom scraper
-python livesport_h2h_scraper.py --mode auto --date %DATE% --sports football basketball volleyball handball rugby hockey --headless
+python livesport_h2h_scraper.py --mode auto --date %DATE% --sports football basketball volleyball handball rugby hockey --headless --use-forebet --use-sofascore
 
 echo.
 echo ============================================================

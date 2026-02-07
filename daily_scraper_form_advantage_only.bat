@@ -66,6 +66,7 @@ python scrape_and_notify.py ^
     --headless ^
     --only-form-advantage ^
     --use-forebet ^
+    --use-sofascore ^
     --use-odds ^
     --use-gemini
 

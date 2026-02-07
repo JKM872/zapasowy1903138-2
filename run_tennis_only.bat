@@ -35,7 +35,9 @@ python scrape_and_notify.py ^
   --from-email jakub.majka.zg@gmail.com ^
   --password "vurb tcai zaaq itjx" ^
   --headless ^
-  --sort time
+  --sort time ^
+  --use-forebet ^
+  --use-sofascore
 
 echo.
 echo ============================================================

@@ -13,8 +13,8 @@ echo.
 echo Start: %date% %time%
 echo.
 
-REM Przejdź do katalogu projektu
-cd /d C:\Users\jakub\Downloads\Flashscore2
+REM Przejdź do katalogu projektu (automatycznie z lokalizacji .bat)
+cd /d "%~dp0"
 
 REM Ustaw kodowanie UTF-8
 chcp 65001 >nul
@@ -36,7 +36,10 @@ python scrape_and_notify.py ^
   --from-email jakub.majka.zg@gmail.com ^
   --password "vurb tcai zaaq itjx" ^
   --headless ^
-  --sort time
+  --sort time ^
+  --use-forebet ^
+  --use-sofascore ^
+  --use-odds
 
 echo.
 echo ========================================

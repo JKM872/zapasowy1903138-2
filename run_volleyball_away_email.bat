@@ -19,7 +19,7 @@ echo Fokus: DRUŻYNY GOŚCI + PRZEWAGA FORMY
 echo Email: jakub.majka.zg@gmail.com
 echo.
 
-python scrape_and_notify.py --date %DATE% --sports volleyball --to jakub.majka.zg@gmail.com --from-email jakub.majka.zg@gmail.com --password "vurb tcai zaaq itjx" --away-team-focus --only-form-advantage --headless
+python scrape_and_notify.py --date %DATE% --sports volleyball --to jakub.majka.zg@gmail.com --from-email jakub.majka.zg@gmail.com --password "vurb tcai zaaq itjx" --away-team-focus --only-form-advantage --headless --use-forebet --use-sofascore --use-odds
 
 echo.
 echo ============================================================

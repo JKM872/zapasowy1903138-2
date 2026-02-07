@@ -506,7 +506,7 @@ def scrape_and_send_email(
                             sport=current_sport
                         )
                         
-                        if forebet_result.get('found'):
+                        if forebet_result.get('success') or forebet_result.get('found'):
                             row['forebet_prediction'] = forebet_result.get('prediction')
                             row['forebet_probability'] = forebet_result.get('probability')
                             row['forebet_exact_score'] = forebet_result.get('exact_score')
@@ -515,7 +515,7 @@ def scrape_and_send_email(
                             row['forebet_avg_goals'] = forebet_result.get('avg_goals')
                             print(f"   ✅ Forebet: {row['forebet_prediction']} ({row['forebet_probability']}%)")
                         else:
-                            print(f"   ⚠️ Forebet: nie znaleziono")
+                            print(f"   ⚠️ Forebet: nie znaleziono ({forebet_result.get('error', 'brak')})")
                     except Exception as e:
                         print(f"   ❌ Forebet błąd: {str(e)[:50]}")
                 

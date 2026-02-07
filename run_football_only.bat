@@ -20,7 +20,7 @@ echo Uruchamiam scraper dla pilki noznej...
 echo.
 
 REM Uruchom scraper
-python livesport_h2h_scraper.py --mode auto --date %DATE% --sports football --headless
+python livesport_h2h_scraper.py --mode auto --date %DATE% --sports football --headless --use-forebet --use-sofascore
 
 echo.
 echo ============================================================

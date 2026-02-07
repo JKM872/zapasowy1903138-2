@@ -15,8 +15,8 @@ echo.
 echo Start: %date% %time%
 echo.
 
-REM Przejdź do katalogu projektu
-cd /d C:\Users\jakub\Downloads\Flashscore2
+REM Przejdź do katalogu projektu (automatycznie z lokalizacji .bat)
+cd /d "%~dp0"
 
 REM Ustaw kodowanie UTF-8
 chcp 65001 >nul
@@ -38,7 +38,8 @@ python livesport_h2h_scraper.py ^
   --away-team-focus ^
   --headless ^
   --use-gemini ^
-  --use-forebet
+  --use-forebet ^
+  --use-sofascore
 
 echo.
 echo ========================================

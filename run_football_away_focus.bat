@@ -28,7 +28,7 @@ echo Uruchamiam scraper...
 echo.
 
 REM Uruchom scraper z flagą --away-team-focus
-python livesport_h2h_scraper.py --mode auto --date %DATE% --sports football --away-team-focus --headless
+python livesport_h2h_scraper.py --mode auto --date %DATE% --sports football --away-team-focus --headless --use-forebet --use-sofascore
 
 echo.
 echo ============================================================

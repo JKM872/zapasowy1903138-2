@@ -18,7 +18,7 @@ echo Sport: Siatkówka (Volleyball)
 echo Fokus: DRUŻYNY GOŚCI
 echo.
 
-python livesport_h2h_scraper.py --mode auto --date %DATE% --sports volleyball --away-team-focus --headless
+python livesport_h2h_scraper.py --mode auto --date %DATE% --sports volleyball --away-team-focus --headless --use-forebet --use-sofascore
 
 echo.
 echo Wyniki: outputs\livesport_h2h_%DATE%_volleyball_AWAY_FOCUS.csv

@@ -72,6 +72,7 @@ python scrape_and_notify.py ^
     --only-form-advantage ^
     --skip-no-odds ^
     --use-forebet ^
+    --use-sofascore ^
     --use-odds ^
     --use-gemini
 

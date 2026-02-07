@@ -24,7 +24,7 @@ echo "Uruchamiam scraper dla wszystkich sportów..."
 echo ""
 
 # Uruchom scraper
-python3 livesport_h2h_scraper.py --mode auto --date $DATE --sports football basketball volleyball handball rugby hockey --headless
+python3 livesport_h2h_scraper.py --mode auto --date $DATE --sports football basketball volleyball handball rugby hockey --headless --use-forebet --use-sofascore
 
 echo ""
 echo "============================================================"

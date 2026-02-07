@@ -1252,12 +1252,16 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         # Forebet
         if out.get('forebet_prediction'):
             sources.append(f"Forebet({out.get('forebet_prediction')})")
+        elif not use_forebet:
+            missing.append("Forebet(FAZA 2)")
         else:
             missing.append("Forebet")
         
         # SofaScore
         if out.get('sofascore_home_win_prob'):
             sources.append(f"SofaScore({out.get('sofascore_home_win_prob')}%)")
+        elif not use_sofascore:
+            missing.append("SofaScore(FAZA 2)")
         else:
             missing.append("SofaScore")
         
