@@ -619,7 +619,10 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         'away_team': None,
         'match_time': None,
         'h2h_last5': [],
-        'last_h2h_date': None,  # NOWE: Data ostatniego meczu H2H
+        'last_h2h_date': None,  # Data ostatniego meczu H2H
+        'last_h2h_score': None,  # Wynik ostatniego meczu H2H
+        'last_h2h_home': None,  # Gospodarz ostatniego H2H
+        'last_h2h_away': None,  # Gość ostatniego H2H
         'home_wins_in_h2h_last5': 0,
         'away_wins_in_h2h_last5': 0,  # NOWE: dla trybu away_team_focus
         'h2h_count': 0,
@@ -821,9 +824,12 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     h2h = parse_h2h_from_soup(soup, out['home_team'] or '')
     out['h2h_last5'] = h2h
     
-    # Wyciągnij datę ostatniego meczu H2H (pierwszy element)
+    # Wyciągnij datę i wynik ostatniego meczu H2H (pierwszy element)
     if h2h and len(h2h) > 0:
         out['last_h2h_date'] = h2h[0].get('date', None)
+        out['last_h2h_score'] = h2h[0].get('score', None)
+        out['last_h2h_home'] = h2h[0].get('home', None)
+        out['last_h2h_away'] = h2h[0].get('away', None)
 
     # count home AND away wins in H2H list
     # WAŻNE: W zależności od trybu (away_team_focus), liczymy zwycięstwa gospodarzy lub gości
@@ -2688,10 +2694,33 @@ def get_match_links_from_day(driver: webdriver.Chrome, date: str, sports: List[s
             else:
                 time.sleep(2.0)  # Standardowy czas
             
-            # Scroll w dół aby załadować więcej meczów (kilka razy dla pewności)
-            for _ in range(3):
+            # Scroll w dół aby załadować więcej meczów
+            # Więcej scrolli = więcej meczów (szczególnie football z 1000+ meczami)
+            IS_CI = os.environ.get('GITHUB_ACTIONS') == 'true' or os.environ.get('CI') == 'true'
+            scroll_count = 25 if sport == 'football' else (15 if sport in ['basketball', 'tennis'] else 8)
+            if IS_CI:
+                scroll_count = max(scroll_count, 30)  # W CI scrolluj więcej
+            
+            prev_height = 0
+            no_change_count = 0
+            for scroll_i in range(scroll_count):
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(0.5)
+                time.sleep(1.0 if sport == 'football' else 0.7)
+                
+                # Sprawdź czy strona się jeszcze ładuje
+                new_height = driver.execute_script("return document.body.scrollHeight")
+                if new_height == prev_height:
+                    no_change_count += 1
+                    if no_change_count >= 3:
+                        print(f"   ℹ️ Koniec scrollowania po {scroll_i+1} scrollach (brak nowych meczów)")
+                        break
+                else:
+                    no_change_count = 0
+                prev_height = new_height
+                
+                # Log postępu co 10 scrolli
+                if (scroll_i + 1) % 10 == 0:
+                    print(f"   📜 Scroll {scroll_i+1}/{scroll_count}...")
             
             # Scroll do góry aby zobaczyć wszystkie mecze
             driver.execute_script("window.scrollTo(0, 0);")

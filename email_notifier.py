@@ -843,7 +843,10 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
         away_form_overall = parse_form_list(match.get('away_form_overall', match.get('away_form', [])))
         away_form_away = parse_form_list(match.get('away_form_away', []))
         form_advantage = bool(match.get('form_advantage', False))
-        last_meeting_date = safe_value(match.get('last_meeting_date', ''), '—')
+        last_meeting_date = safe_value(match.get('last_meeting_date', match.get('last_h2h_date', '')), '—')
+        last_h2h_score = safe_value(match.get('last_h2h_score', ''), '')
+        last_h2h_home = safe_value(match.get('last_h2h_home', ''), '')
+        last_h2h_away = safe_value(match.get('last_h2h_away', ''), '')
         
         def form_to_icons(form_list):
             """Konwertuje listę wyników na ikony emoji."""
@@ -860,16 +863,26 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
         else:
             wins = int(safe_float(match.get('home_wins_in_h2h_last5', 0)))
         
-        # SofaScore - bezpieczne pobieranie z obsługą NaN
-        ss_home_raw = match.get('sofascore_home_win_prob') or match.get('sofascore_home')
-        ss_draw_raw = match.get('sofascore_draw_prob') or match.get('sofascore_draw')
-        ss_away_raw = match.get('sofascore_away_win_prob') or match.get('sofascore_away')
-        ss_votes_raw = match.get('sofascore_total_votes') or match.get('sofascore_votes', 0)
+        # SofaScore - bezpieczne pobieranie z obsługą NaN i wartości 0
+        ss_home_raw = match.get('sofascore_home_win_prob')
+        if is_nan_or_none(ss_home_raw):
+            ss_home_raw = match.get('sofascore_home')
+        ss_draw_raw = match.get('sofascore_draw_prob')
+        if is_nan_or_none(ss_draw_raw):
+            ss_draw_raw = match.get('sofascore_draw')
+        ss_away_raw = match.get('sofascore_away_win_prob')
+        if is_nan_or_none(ss_away_raw):
+            ss_away_raw = match.get('sofascore_away')
+        ss_votes_raw = match.get('sofascore_total_votes')
+        if is_nan_or_none(ss_votes_raw):
+            ss_votes_raw = match.get('sofascore_votes', 0)
         
         ss_home = safe_float(ss_home_raw) if not is_nan_or_none(ss_home_raw) else None
         ss_draw = safe_float(ss_draw_raw) if not is_nan_or_none(ss_draw_raw) else None
         ss_away = safe_float(ss_away_raw) if not is_nan_or_none(ss_away_raw) else None
         ss_votes = int(safe_float(ss_votes_raw))
+        # Flaga: pokaż SofaScore nawet gdy wartości = 0 (ale nie gdy None)
+        has_sofascore = ss_home is not None or ss_away is not None
         
         # Odds - bezpieczne pobieranie z obsługą NaN
         home_odds_raw = match.get('home_odds')
@@ -969,8 +982,9 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
                         <div style="flex: 1; text-align: center;">
                             <div style="font-size: 11px; color: #666;">{'🎾 Faworytem' if is_tennis else '📅 Ostatni mecz'}</div>
                             <div style="font-size: 14px; font-weight: bold; color: #333;">
-                                {(home if favorite == 'player_a' else (away if favorite == 'player_b' else 'Równi')) if is_tennis else (last_meeting_date if last_meeting_date else '—')}
+                                {(home if favorite == 'player_a' else (away if favorite == 'player_b' else 'Równi')) if is_tennis else (f'{last_meeting_date} — {last_h2h_score}' if last_h2h_score else (last_meeting_date if last_meeting_date else '—'))}
                             </div>
+                            {f'<div style="font-size: 10px; color: #888; margin-top: 2px;">{last_h2h_home} vs {last_h2h_away}</div>' if last_h2h_score and last_h2h_home and not is_tennis else ''}
                         </div>
                     </div>
                     
@@ -990,7 +1004,7 @@ def create_html_email(matches: List[Dict], date: str, sort_by: str = 'time',
                             </div>
                         </div>
                     </div>
-                    ''' if ss_home else ''}
+                    ''' if has_sofascore else ''}
                     
                     <!-- KURSY -->
                     {_render_odds_section(home_odds, draw_odds, away_odds) if has_odds else ''}
