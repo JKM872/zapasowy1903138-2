@@ -26,8 +26,8 @@ GEMINI_API_KEY = "your-api-key-here"
 
 # Model selection
 # Options:
-- "gemini-pro" (RECOMMENDED - fast, free, good quality)
-- "gemini-1.5-pro" (if available in your region)
+#   "gemini-pro" (RECOMMENDED - fast, free, good quality)
+#   "gemini-1.5-pro" (if available in your region)
 GEMINI_MODEL = "gemini-pro"
 
 # Rate limiting (seconds between requests)
