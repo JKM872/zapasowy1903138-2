@@ -276,8 +276,8 @@ class LivesportOddsAPI:
             Dict z najlepszymi kursami i źródłem
         """
         if bookmakers is None:
-            # Domyślna kolejność priorytetowa
-            bookmakers = ['pinnacle', 'bet365', 'unibet', 'nordic_bet', 'bwin', 'betway']
+            # OPTYMALIZACJA: Tylko 2 bukmacherów (zamiast 6) — osczędza ~40s/mecz
+            bookmakers = ['pinnacle', 'bet365']
         
         best_result = {
             'home_odds': None,

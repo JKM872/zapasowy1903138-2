@@ -1001,10 +1001,13 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     # ⏱️ TIMING: Koniec kwalifikacji (Etap 1)
     _timings['qualify'] = time_module.time() - _t_start - _timings['h2h']
     
-    # 🔥 Kursy bukmacherskie - ZAWSZE pobierz z Livesport API (priorytet: Pinnacle)
-    # API daje prawdziwe kursy od bukmacherów, nie mock data
-    if out.get('match_url'):
-        print(f"   💰 Livesport API: Pobieranie kursów od Pinnacle...")
+    # 🔥 Kursy bukmacherskie - TYLKO dla kwalifikujących się meczów w sportach z kursami
+    # OPTYMALIZACJA: Pominięcie kursów oszczędza ~100s/mecz (12 API calls × timeout)
+    _SPORTS_WITH_ODDS = {'football', 'soccer', 'basketball', 'tennis', 'hockey', 'ice-hockey'}
+    _skip_odds = sport.lower() not in _SPORTS_WITH_ODDS or not out.get('qualifies')
+    
+    if out.get('match_url') and not _skip_odds:
+        print(f"   💰 Livesport API: Pobieranie kursów...")
         livesport_odds = fetch_odds_from_livesport(driver, out['match_url'], sport)
         if livesport_odds.get('odds_found'):
             out['home_odds'] = livesport_odds.get('home_odds')
@@ -1013,41 +1016,15 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             out['odds_bookmaker'] = livesport_odds.get('bookmaker')
             print(f"      ✅ Kursy: {out['home_odds']}/{out.get('draw_odds', '-')}/{out['away_odds']} ({out['odds_bookmaker']})")
         else:
-            # 🔥 FALLBACK: FlashScore gdy Livesport API nie działa
-            if FLASHSCORE_AVAILABLE and out.get('home_team') and out.get('away_team'):
-                print(f"      🔄 Livesport API nie zadziałało, próbuję FlashScore...")
-                try:
-                    flashscore_scraper = FlashScoreOddsScraper(headless=True)
-                    fallback_result = flashscore_scraper.get_odds(
-                        home_team=out['home_team'],
-                        away_team=out['away_team'],
-                        sport=sport,
-                        driver=driver
-                    )
-                    if fallback_result.get('odds_found'):
-                        out['home_odds'] = fallback_result.get('home_odds')
-                        out['draw_odds'] = fallback_result.get('draw_odds')
-                        out['away_odds'] = fallback_result.get('away_odds')
-                        out['odds_bookmaker'] = fallback_result.get('bookmaker', 'FlashScore')
-                        print(f"      ✅ FlashScore kursy: {out['home_odds']}/{out.get('draw_odds', '-')}/{out['away_odds']} ({out['odds_bookmaker']})")
-                    else:
-                        print(f"      ⚠️ FlashScore też nie znalazł kursów")
-                        out['home_odds'] = None
-                        out['draw_odds'] = None
-                        out['away_odds'] = None
-                        out['odds_bookmaker'] = None
-                except Exception as e:
-                    print(f"      ⚠️ FlashScore fallback error: {e}")
-                    out['home_odds'] = None
-                    out['draw_odds'] = None
-                    out['away_odds'] = None
-                    out['odds_bookmaker'] = None
-            else:
-                print(f"      ⚠️ Brak kursów - FlashScore niedostępny")
-                out['home_odds'] = None
-                out['draw_odds'] = None
-                out['away_odds'] = None
-                out['odds_bookmaker'] = None
+            out['home_odds'] = None
+            out['draw_odds'] = None
+            out['away_odds'] = None
+            out['odds_bookmaker'] = None
+    elif _skip_odds:
+        out['home_odds'] = None
+        out['draw_odds'] = None
+        out['away_odds'] = None
+        out['odds_bookmaker'] = None
 
     # FOREBET PREDICTIONS - TYLKO jeśli mecz KWALIFIKUJE SIĘ!
     # 🔥 OPTYMALIZACJA: Skip Forebet dla meczów które i tak nie przejdą
@@ -1197,11 +1174,10 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             print(f"      ⚠️ Błąd SofaScore: {e}")
     _timings['sofascore'] = time_module.time() - _t_sofascore_start
     
-    # FLASHSCORE ODDS - tylko jeśli brak kursów z Livesport
+    # FLASHSCORE ODDS - tylko jeśli brak kursów z Livesport AND kwalifikuje się AND sport z kursami
     _t_flash_start = time_module.time()
-    # 🔥 OPTYMALIZACJA: Skip FlashScore jeśli mamy już kursy z Livesport
     has_livesport_odds = out.get('home_odds') and out.get('away_odds')
-    if use_flashscore and FLASHSCORE_AVAILABLE and out.get('qualifies') and out.get('home_team') and out.get('away_team') and not has_livesport_odds:
+    if use_flashscore and FLASHSCORE_AVAILABLE and out.get('qualifies') and out.get('home_team') and out.get('away_team') and not has_livesport_odds and not _skip_odds:
         try:
             print(f"   💰 FlashScore: Pobieranie kursów...")
             
