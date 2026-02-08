@@ -87,13 +87,67 @@ SOFASCORE_SPORT_SLUGS = {
     'tennis': 'tennis',
 }
 
-# Headers dla requests API
+# Headers dla requests API - v3.5: Ulepszone headers jak w przeglądarce
 API_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'application/json',
-    'Accept-Language': 'en-US,en;q=0.9',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept': '*/*',
+    'Accept-Language': 'en-US,en;q=0.9,pl;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Origin': 'https://www.sofascore.com',
     'Referer': 'https://www.sofascore.com/',
+    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-site',
+    'Cache-Control': 'no-cache',
 }
+
+# ============================================================================
+# API SESSION SINGLETON (v3.5)
+# ============================================================================
+
+_api_session: Optional['requests.Session'] = None
+_session_initialized: bool = False
+
+def _get_api_session() -> 'requests.Session':
+    """
+    Zwraca singleton session z cookies od SofaScore.
+    Session jest inicjalizowany tylko raz (warmup cookies from main page).
+    """
+    global _api_session, _session_initialized
+    
+    if _api_session is not None and _session_initialized:
+        return _api_session
+    
+    if not REQUESTS_AVAILABLE:
+        return None
+    
+    _api_session = requests.Session()
+    _api_session.headers.update(API_HEADERS)
+    
+    # Warmup: pobierz cookies ze strony głównej
+    try:
+        warmup_headers = {
+            'User-Agent': API_HEADERS['User-Agent'],
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Upgrade-Insecure-Requests': '1',
+        }
+        r = _api_session.get('https://www.sofascore.com/', headers=warmup_headers, timeout=8)
+        cookies_count = len(_api_session.cookies.get_dict())
+        if cookies_count > 0:
+            logger.debug(f"SofaScore session: {cookies_count} cookies received")
+        _session_initialized = True
+    except Exception as e:
+        logger.debug(f"SofaScore session warmup failed: {e}")
+        _session_initialized = True  # Kontynuuj mimo błędu
+    
+    return _api_session
 
 # ============================================================================
 # CACHE SYSTEM
@@ -144,9 +198,61 @@ MAX_RETRIES = 1 if IS_CI else 3
 RETRY_BACKOFF = [0.5, 1, 2] if IS_CI else [1, 2, 4]  # Szybsze w CI
 
 
+def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
+    """
+    Wykonuje request z użyciem sesji (cookies) i exponential backoff.
+    v3.5: Używa singleton session z cookies.
+    
+    Args:
+        url: URL do pobrania
+        timeout: Timeout w sekundach
+        **kwargs: Dodatkowe argumenty dla requests
+        
+    Returns:
+        Response jeśli sukces, None jeśli wszystkie próby zawiodą
+    """
+    session = _get_api_session()
+    if session is None:
+        return None
+    
+    last_exception = None
+    
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = session.get(url, timeout=timeout, **kwargs)
+            if response.status_code == 200:
+                return response
+            elif response.status_code in [429, 503]:  # Rate limited lub service unavailable
+                wait_time = RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1]
+                logger.debug(f"SofaScore API: Status {response.status_code}, czekam {wait_time}s...")
+                time.sleep(wait_time)
+                continue
+            else:
+                return response  # Inne błędy - zwróć natychmiast
+        except requests.exceptions.Timeout as e:
+            last_exception = e
+            if attempt < MAX_RETRIES - 1:
+                wait_time = RETRY_BACKOFF[attempt]
+                logger.debug(f"SofaScore API: Timeout, próba {attempt + 2}/{MAX_RETRIES} za {wait_time}s...")
+                time.sleep(wait_time)
+        except requests.exceptions.ConnectionError as e:
+            last_exception = e
+            if attempt < MAX_RETRIES - 1:
+                wait_time = RETRY_BACKOFF[attempt]
+                logger.debug(f"SofaScore API: Błąd połączenia, próba {attempt + 2}/{MAX_RETRIES}...")
+                time.sleep(wait_time)
+        except Exception as e:
+            last_exception = e
+            break  # Inne błędy - przerwij natychmiast
+    
+    if last_exception:
+        logger.debug(f"SofaScore API: Wszystkie próby zawiodły - {type(last_exception).__name__}")
+    return None
+
+
 def _retry_request(request_func, *args, **kwargs):
     """
-    Wrapper do wielokrotnych prób wykonania requestu z exponential backoff.
+    [LEGACY] Wrapper do wielokrotnych prób wykonania requestu z exponential backoff.
     W CI: wykonuje tylko 1 próbę (brak retry po timeout).
     
     Args:
@@ -284,13 +390,14 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
     
     v3.2: Dodano retry logic z exponential backoff.
     v3.4: Ulepszone logowanie dla CI/CD
+    v3.5: Używa session z cookies
     """
     if not REQUESTS_AVAILABLE:
         logger.warning("SofaScore API: requests module not available")
         return None
     try:
         url = f"https://api.sofascore.com/api/v1/event/{event_id}/votes"
-        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=10)
+        response = _retry_request_with_session(url, timeout=10)
         
         if response is None:
             print(f"   ⚠️ SofaScore API: Brak odpowiedzi (event_id={event_id})")
@@ -411,72 +518,102 @@ def get_odds_via_api(event_id: int) -> Optional[Dict]:
 
 
 
+def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, search_date: str) -> Optional[int]:
+    """
+    Wewnętrzna funkcja: szuka event ID dla konkretnej daty.
+    v3.5: Wydzielono z search_event_via_api dla date window search.
+    """
+    url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{search_date}"
+    response = _retry_request_with_session(url, timeout=10)
+    
+    if not response:
+        return None
+        
+    if response.status_code != 200:
+        return None
+    
+    try:
+        data = response.json()
+    except Exception:
+        return None
+    
+    events = data.get('events', [])
+    home_norm = normalize_team_name(home_team)
+    away_norm = normalize_team_name(away_team)
+    
+    for event in events:
+        event_home = event.get('homeTeam', {}).get('name', '')
+        event_away = event.get('awayTeam', {}).get('name', '')
+        event_home_norm = normalize_team_name(event_home)
+        event_away_norm = normalize_team_name(event_away)
+        
+        # Poluzowane warunki dopasowania (z 0.6 na 0.45)
+        home_sim = similarity_score(home_team, event_home)
+        away_sim = similarity_score(away_team, event_away)
+        
+        # Warunek 1: Similarity score >= 0.45
+        home_match_sim = home_sim > 0.45
+        away_match_sim = away_sim > 0.45
+        
+        # Warunek 2: Część nazwy drużyny zawarta w nazwie z SofaScore (dla krótkich słów >= 3 znaki)
+        home_match_partial = any(p in event_home_norm for p in home_norm.split() if len(p) > 2)
+        away_match_partial = any(p in event_away_norm for p in away_norm.split() if len(p) > 2)
+        
+        # Warunek 3: Nazwa z SofaScore zawiera część szukanej nazwy
+        home_match_reverse = any(p in home_norm for p in event_home_norm.split() if len(p) > 2)
+        away_match_reverse = any(p in away_norm for p in event_away_norm.split() if len(p) > 2)
+        
+        home_match = home_match_sim or home_match_partial or home_match_reverse
+        away_match = away_match_sim or away_match_partial or away_match_reverse
+        
+        # Dodatkowy warunek: suma similarity >= 1.0 (nawet jeśli jedna drużyna słabsza)
+        combined_match = (home_sim + away_sim) >= 1.0
+        
+        if (home_match and away_match) or combined_match:
+            return event.get('id')
+    
+    return None
+
+
 def search_event_via_api(home_team: str, away_team: str, sport: str = 'football', date_str: str = None) -> Optional[int]:
     """
     Szuka event ID przez SofaScore API.
     
     v3.2: Dodano retry logic z exponential backoff.
     v3.4: Ulepszone logowanie dla CI/CD
+    v3.5: Date window search (today, yesterday, tomorrow) + session cookies
     """
     if not REQUESTS_AVAILABLE:
         logger.warning("SofaScore search API: requests module not available")
         return None
-    try:
-        if date_str:
-            search_date = date_str
-        else:
-            search_date = datetime.now().strftime('%Y-%m-%d')
-        sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
-        url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{search_date}"
-        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=10)
-        
-        if not response:
-            print(f"   ⚠️ SofaScore search API: Brak odpowiedzi ({sport}/{search_date})")
-            return None
-            
-        if response.status_code == 403:
-            print(f"   ⚠️ SofaScore search API: Zablokowane (403)")
-            return None
-        elif response.status_code != 200:
-            print(f"   ⚠️ SofaScore search API: HTTP {response.status_code}")
-            return None
-        data = response.json()
-        events = data.get('events', [])
-        home_norm = normalize_team_name(home_team)
-        away_norm = normalize_team_name(away_team)
-        for event in events:
-            event_home = event.get('homeTeam', {}).get('name', '')
-            event_away = event.get('awayTeam', {}).get('name', '')
-            event_home_norm = normalize_team_name(event_home)
-            event_away_norm = normalize_team_name(event_away)
-            
-            # Poluzowane warunki dopasowania (z 0.6 na 0.45)
-            home_sim = similarity_score(home_team, event_home)
-            away_sim = similarity_score(away_team, event_away)
-            
-            # Warunek 1: Similarity score >= 0.45
-            home_match_sim = home_sim > 0.45
-            away_match_sim = away_sim > 0.45
-            
-            # Warunek 2: Część nazwy drużyny zawarta w nazwie z SofaScore (dla krótkich słów >= 3 znaki)
-            home_match_partial = any(p in event_home_norm for p in home_norm.split() if len(p) > 2)
-            away_match_partial = any(p in event_away_norm for p in away_norm.split() if len(p) > 2)
-            
-            # Warunek 3: Nazwa z SofaScore zawiera część szukanej nazwy
-            home_match_reverse = any(p in home_norm for p in event_home_norm.split() if len(p) > 2)
-            away_match_reverse = any(p in away_norm for p in event_away_norm.split() if len(p) > 2)
-            
-            home_match = home_match_sim or home_match_partial or home_match_reverse
-            away_match = away_match_sim or away_match_partial or away_match_reverse
-            
-            # Dodatkowy warunek: suma similarity >= 1.0 (nawet jeśli jedna drużyna słabsza)
-            combined_match = (home_sim + away_sim) >= 1.0
-            
-            if (home_match and away_match) or combined_match:
-                return event.get('id')
-        return None
-    except Exception:
-        return None
+    
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+    
+    # Date window: dzisiaj, wczoraj, jutro (dla timezone mismatches)
+    today = datetime.now()
+    if date_str:
+        try:
+            base_date = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            base_date = today
+    else:
+        base_date = today
+    
+    dates_to_try = [
+        base_date.strftime('%Y-%m-%d'),                          # Dziś / podana data
+        (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),    # Wczoraj
+        (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),    # Jutro
+    ]
+    
+    for search_date in dates_to_try:
+        event_id = _search_event_for_date(home_team, away_team, sport_slug, search_date)
+        if event_id:
+            logger.debug(f"SofaScore: Znaleziono mecz na dacie {search_date}")
+            return event_id
+    
+    # Jeśli nie znaleziono w żadnej dacie, wypisz log tylko raz
+    print(f"   ⚠️ SofaScore search API: Brak odpowiedzi ({sport}/{dates_to_try[0]})")
+    return None
 
 
 
