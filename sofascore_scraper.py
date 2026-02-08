@@ -449,7 +449,7 @@ def get_odds_via_api(event_id: int) -> Optional[Dict]:
         return None
     try:
         url = f"https://api.sofascore.com/api/v1/event/{event_id}/odds/1/all"
-        response = _retry_request(requests.get, url, headers=API_HEADERS, timeout=5)
+        response = _retry_request_with_session(url, timeout=5)
         if response and response.status_code == 200:
             data = response.json()
             markets = data.get('markets', [])
