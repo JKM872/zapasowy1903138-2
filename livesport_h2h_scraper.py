@@ -1003,8 +1003,12 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     
     # 🔥 Kursy bukmacherskie - TYLKO dla kwalifikujących się meczów w sportach z kursami
     # OPTYMALIZACJA: Pominięcie kursów oszczędza ~100s/mecz (12 API calls × timeout)
-    _SPORTS_WITH_ODDS = {'football', 'soccer', 'basketball', 'tennis', 'hockey', 'ice-hockey'}
+    _SPORTS_WITH_ODDS = {'football', 'soccer', 'basketball', 'tennis', 'hockey', 'ice-hockey', 'handball', 'volleyball'}
     _skip_odds = sport.lower() not in _SPORTS_WITH_ODDS or not out.get('qualifies')
+    
+    if _skip_odds:
+        _reason = 'nie kwalifikuje się' if not out.get('qualifies') else f'sport {sport} bez kursów'
+        logger.debug(f"⏭️ Pomijanie kursów: {_reason}")
     
     if out.get('match_url') and not _skip_odds:
         print(f"   💰 Livesport API: Pobieranie kursów...")
