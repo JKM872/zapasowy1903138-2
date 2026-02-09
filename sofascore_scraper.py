@@ -34,7 +34,7 @@ import hashlib
 import threading
 import logging
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional
 from difflib import SequenceMatcher
 
@@ -66,10 +66,10 @@ except ImportError:
     SELENIUM_AVAILABLE = False
     
 # Globalny timeout dla całej operacji SofaScore (sekundy)
-# W CI: 20s (szybsze fail-fast), lokalnie: 35s (więcej cierpliwości)
+# W CI: 30s (wystarczająco na 3 daty × retry), lokalnie: 35s
 import os as _os_timeout
 _IS_CI_TIMEOUT = _os_timeout.getenv('CI') == 'true' or _os_timeout.getenv('GITHUB_ACTIONS') == 'true'
-SOFASCORE_GLOBAL_TIMEOUT = 20 if _IS_CI_TIMEOUT else 35
+SOFASCORE_GLOBAL_TIMEOUT = 30 if _IS_CI_TIMEOUT else 35
 
 # Sporty BEZ REMISÓW (tylko Home/Away win)
 SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'basketball', 'handball', 'hockey', 'ice-hockey']
@@ -111,10 +111,17 @@ API_HEADERS = {
 _api_session: Optional['requests.Session'] = None
 _session_initialized: bool = False
 
+# Circuit breaker dla Selenium fallback w CI
+_selenium_failures: int = 0
+_selenium_max_failures: int = 3  # Po 3 failures, skip Selenium w CI
+_selenium_last_reset: float = 0.0
+_SELENIUM_RESET_INTERVAL: int = 300  # Reset co 5 minut
+
 def _get_api_session() -> 'requests.Session':
     """
     Zwraca singleton session z cookies od SofaScore.
     Session jest inicjalizowany tylko raz (warmup cookies from main page).
+    v3.6: Retry warmup + cookie verification
     """
     global _api_session, _session_initialized
     
@@ -127,26 +134,42 @@ def _get_api_session() -> 'requests.Session':
     _api_session = requests.Session()
     _api_session.headers.update(API_HEADERS)
     
-    # Warmup: pobierz cookies ze strony głównej
-    try:
-        warmup_headers = {
-            'User-Agent': API_HEADERS['User-Agent'],
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'none',
-            'Upgrade-Insecure-Requests': '1',
-        }
-        r = _api_session.get('https://www.sofascore.com/', headers=warmup_headers, timeout=8)
-        cookies_count = len(_api_session.cookies.get_dict())
-        if cookies_count > 0:
-            logger.debug(f"SofaScore session: {cookies_count} cookies received")
-        _session_initialized = True
-    except Exception as e:
-        logger.debug(f"SofaScore session warmup failed: {e}")
-        _session_initialized = True  # Kontynuuj mimo błędu
+    # Warmup: pobierz cookies ze strony głównej (z retry)
+    warmup_headers = {
+        'User-Agent': API_HEADERS['User-Agent'],
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Upgrade-Insecure-Requests': '1',
+    }
     
+    max_warmup_attempts = 2
+    for attempt in range(max_warmup_attempts):
+        try:
+            r = _api_session.get('https://www.sofascore.com/', headers=warmup_headers, timeout=8)
+            cookies_count = len(_api_session.cookies.get_dict())
+            if cookies_count > 0:
+                print(f"   🍪 SofaScore session: {cookies_count} cookies OK")
+                logger.debug(f"SofaScore session: {cookies_count} cookies received")
+                break
+            else:
+                if attempt < max_warmup_attempts - 1:
+                    logger.debug(f"SofaScore warmup: 0 cookies, retry {attempt + 2}/{max_warmup_attempts}...")
+                    time.sleep(1)
+                else:
+                    print(f"   ⚠️ SofaScore session: 0 cookies po {max_warmup_attempts} próbach (kontynuuję)")
+                    logger.debug("SofaScore warmup: 0 cookies po retry - API może zwracać 403")
+        except Exception as e:
+            if attempt < max_warmup_attempts - 1:
+                logger.debug(f"SofaScore session warmup failed (attempt {attempt + 1}): {e}")
+                time.sleep(1)
+            else:
+                print(f"   ⚠️ SofaScore session warmup failed: {type(e).__name__}")
+                logger.debug(f"SofaScore session warmup failed after {max_warmup_attempts} attempts: {e}")
+    
+    _session_initialized = True
     return _api_session
 
 # ============================================================================
@@ -193,8 +216,8 @@ def _set_cached_result(home_team: str, away_team: str, sport: str, result: Dict)
 import os
 IS_CI = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
 
-# W CI: tylko 1 próba (brak retry), lokalnie: 3 próby
-MAX_RETRIES = 1 if IS_CI else 3
+# W CI: 2 próby (1 retry), lokalnie: 3 próby
+MAX_RETRIES = 2 if IS_CI else 3
 RETRY_BACKOFF = [0.5, 1, 2] if IS_CI else [1, 2, 4]  # Szybsze w CI
 
 
@@ -221,12 +244,26 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
         try:
             response = session.get(url, timeout=timeout, **kwargs)
             if response.status_code == 200:
-                return response
+                # Walidacja odpowiedzi - sprawdź czy jest content
+                if response.content and len(response.content) > 2:
+                    return response
+                else:
+                    logger.debug(f"SofaScore API: Pusta odpowiedź (200 ale {len(response.content or b'')}B)")
+                    if attempt < MAX_RETRIES - 1:
+                        time.sleep(RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1])
+                    continue
             elif response.status_code in [429, 503]:  # Rate limited lub service unavailable
                 wait_time = RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1]
                 logger.debug(f"SofaScore API: Status {response.status_code}, czekam {wait_time}s...")
+                if IS_CI:
+                    print(f"   ⚠️ SofaScore API: {response.status_code} - retry za {wait_time}s")
                 time.sleep(wait_time)
                 continue
+            elif response.status_code == 403:
+                logger.debug(f"SofaScore API: 403 Forbidden - prawdopodobnie brak cookies lub rate limit")
+                if IS_CI:
+                    print(f"   ⚠️ SofaScore API: 403 Forbidden")
+                return response  # Zwróć 403 - caller zdecyduje
             else:
                 return response  # Inne błędy - zwróć natychmiast
         except requests.exceptions.Timeout as e:
@@ -235,14 +272,21 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 wait_time = RETRY_BACKOFF[attempt]
                 logger.debug(f"SofaScore API: Timeout, próba {attempt + 2}/{MAX_RETRIES} za {wait_time}s...")
                 time.sleep(wait_time)
+            else:
+                if IS_CI:
+                    print(f"   ⚠️ SofaScore API: Timeout po {MAX_RETRIES} próbach")
         except requests.exceptions.ConnectionError as e:
             last_exception = e
             if attempt < MAX_RETRIES - 1:
                 wait_time = RETRY_BACKOFF[attempt]
                 logger.debug(f"SofaScore API: Błąd połączenia, próba {attempt + 2}/{MAX_RETRIES}...")
                 time.sleep(wait_time)
+            else:
+                if IS_CI:
+                    print(f"   ⚠️ SofaScore API: ConnectionError po {MAX_RETRIES} próbach")
         except Exception as e:
             last_exception = e
+            logger.debug(f"SofaScore API: Nieoczekiwany błąd: {type(e).__name__}: {str(e)[:100]}")
             break  # Inne błędy - przerwij natychmiast
     
     if last_exception:
@@ -541,38 +585,53 @@ def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, sear
     home_norm = normalize_team_name(home_team)
     away_norm = normalize_team_name(away_team)
     
+    # Minimum length check - zbyt krótkie nazwy mogą dawać false positives
+    MIN_NAME_LENGTH = 3
+    if len(home_norm) < MIN_NAME_LENGTH or len(away_norm) < MIN_NAME_LENGTH:
+        logger.debug(f"SofaScore: Nazwa drużyny za krótka ({home_norm!r}/{away_norm!r}), skip matching")
+        return None
+    
+    best_match_id = None
+    best_combined_sim = 0.0
+    
     for event in events:
         event_home = event.get('homeTeam', {}).get('name', '')
         event_away = event.get('awayTeam', {}).get('name', '')
         event_home_norm = normalize_team_name(event_home)
         event_away_norm = normalize_team_name(event_away)
         
-        # Poluzowane warunki dopasowania (z 0.6 na 0.45)
+        # Similarity score z podwyższonym threshold (0.50 zamiast 0.45)
         home_sim = similarity_score(home_team, event_home)
         away_sim = similarity_score(away_team, event_away)
         
-        # Warunek 1: Similarity score >= 0.45
-        home_match_sim = home_sim > 0.45
-        away_match_sim = away_sim > 0.45
+        # Warunek 1: Similarity score >= 0.50
+        home_match_sim = home_sim > 0.50
+        away_match_sim = away_sim > 0.50
         
-        # Warunek 2: Część nazwy drużyny zawarta w nazwie z SofaScore (dla krótkich słów >= 3 znaki)
-        home_match_partial = any(p in event_home_norm for p in home_norm.split() if len(p) > 2)
-        away_match_partial = any(p in event_away_norm for p in away_norm.split() if len(p) > 2)
+        # Warunek 2: Część nazwy drużyny zawarta w nazwie z SofaScore (dla słów >= 4 znaki)
+        home_match_partial = any(p in event_home_norm for p in home_norm.split() if len(p) >= 4)
+        away_match_partial = any(p in event_away_norm for p in away_norm.split() if len(p) >= 4)
         
         # Warunek 3: Nazwa z SofaScore zawiera część szukanej nazwy
-        home_match_reverse = any(p in home_norm for p in event_home_norm.split() if len(p) > 2)
-        away_match_reverse = any(p in away_norm for p in event_away_norm.split() if len(p) > 2)
+        home_match_reverse = any(p in home_norm for p in event_home_norm.split() if len(p) >= 4)
+        away_match_reverse = any(p in away_norm for p in event_away_norm.split() if len(p) >= 4)
         
         home_match = home_match_sim or home_match_partial or home_match_reverse
         away_match = away_match_sim or away_match_partial or away_match_reverse
         
         # Dodatkowy warunek: suma similarity >= 1.0 (nawet jeśli jedna drużyna słabsza)
-        combined_match = (home_sim + away_sim) >= 1.0
+        combined_sim = home_sim + away_sim
+        combined_match = combined_sim >= 1.0
         
         if (home_match and away_match) or combined_match:
-            return event.get('id')
+            # Wybierz najlepsze dopasowanie (najwyższa suma similarity)
+            if combined_sim > best_combined_sim:
+                best_combined_sim = combined_sim
+                best_match_id = event.get('id')
+                logger.debug(f"SofaScore match candidate: {event_home} vs {event_away} "
+                           f"(sim: {home_sim:.2f}/{away_sim:.2f}, combined: {combined_sim:.2f})")
     
-    return None
+    return best_match_id
 
 
 def search_event_via_api(home_team: str, away_team: str, sport: str = 'football', date_str: str = None) -> Optional[int]:
@@ -590,7 +649,8 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
     sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
     
     # Date window: dzisiaj, wczoraj, jutro (dla timezone mismatches)
-    today = datetime.now()
+    # Używamy UTC jawnie - GitHub Actions działa w UTC
+    today = datetime.now(timezone.utc).replace(tzinfo=None)
     if date_str:
         try:
             base_date = datetime.strptime(date_str, '%Y-%m-%d')
@@ -1213,6 +1273,18 @@ def scrape_sofascore_full(
         print("   ❌ SofaScore: Selenium niedostępne, API nie znalazło meczu")
         return result
     
+    # Circuit breaker: skip Selenium w CI po zbyt wielu failures
+    global _selenium_failures, _selenium_last_reset
+    if IS_CI and _selenium_failures >= _selenium_max_failures:
+        # Reset co 5 minut
+        if time.time() - _selenium_last_reset > _SELENIUM_RESET_INTERVAL:
+            _selenium_failures = 0
+            _selenium_last_reset = time.time()
+            logger.debug("SofaScore Selenium circuit breaker: reset")
+        else:
+            print(f"   ⚠️ SofaScore: Selenium wyłączony (circuit breaker: {_selenium_failures} failures)")
+            return result
+    
     # Ignorujemy przekazany driver - zawsze tworzymy własny z optymalnym timeout
     print(f"   🌐 SofaScore: Tworzę dedykowany driver (timeout {SOFASCORE_GLOBAL_TIMEOUT}s)...")
     
@@ -1254,6 +1326,8 @@ def scrape_sofascore_full(
         if scrape_thread.is_alive():
             print(f"   ⚠️ SofaScore: Timeout po {SOFASCORE_GLOBAL_TIMEOUT}s - przerywam")
             logger.warning(f"SofaScore: Globalny timeout {SOFASCORE_GLOBAL_TIMEOUT}s przekroczony")
+            if IS_CI:
+                _selenium_failures += 1
             # Wątek się nie skończył - driver.quit() przerwać operację
             try:
                 sofascore_driver.quit()
@@ -1265,6 +1339,8 @@ def scrape_sofascore_full(
         if scrape_exception[0]:
             logger.warning(f"SofaScore scrape exception: {scrape_exception[0]}")
             print(f"   ⚠️ SofaScore: Błąd: {scrape_exception[0]}")
+            if IS_CI:
+                _selenium_failures += 1
             return result
         
         result = scrape_result[0]
@@ -1275,6 +1351,8 @@ def scrape_sofascore_full(
     except Exception as e:
         logger.error(f"SofaScore scraping error: {type(e).__name__}: {e}")
         print(f"   ❌ SofaScore scraping error: {e}")
+        if IS_CI:
+            _selenium_failures += 1
         return result
         
     finally:
