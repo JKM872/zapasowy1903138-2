@@ -168,6 +168,8 @@ def prefetch_forebet_html(sport: str, match_date: str = None) -> bool:
         'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
         'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
         'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+        'rugby': 'https://www.forebet.com/en/rugby/predictions-today',
+        'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
     }
     
     base_url = sport_urls.get(sport_lower, sport_urls['football'])
@@ -1004,6 +1006,8 @@ def search_forebet_prediction(
                 'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
                 'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
                 'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+                'rugby': 'https://www.forebet.com/en/rugby/predictions-today',
+                'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
             }
             
             base_url = sport_urls.get(sport_lower, sport_urls['football'])
@@ -1237,7 +1241,7 @@ def search_forebet_prediction(
             # Scrolluj całą stronę od góry do dołu, czekając na lazy loading
             last_height = driver.execute_script("return document.body.scrollHeight")
             scroll_attempts = 0
-            max_scroll_attempts = 15  # Max 15 prób scrollowania
+            max_scroll_attempts = 25  # Max 25 prób scrollowania (więcej meczy na duże dni)
             
             while scroll_attempts < max_scroll_attempts:
                 # Przewiń na dół strony
@@ -1473,9 +1477,8 @@ def search_forebet_prediction(
                 if home_score >= 0.35 or away_score >= 0.35:
                     print(f"      🔍 Potencjalny match: {forebet_home} vs {forebet_away} | Home={home_score:.2f} Away={away_score:.2f}")
                 
-                # 🔥 POPRAWIONA LOGIKA: Surowsze dopasowanie (wrzesień 2024)
-                # Poprzednio zbyt niskie thresholdy powodowały fałszywe dopasowania
-                # np. "Monaco U19" pasowało do "Tottenham U19" przez wspólne "U19"
+                # � POPRAWIONE WARUNKI - elastyczne dopasowanie (v3 - luty 2026)
+                # Uproszczone i bardziej niezawodne niż 7 warunków
                 combined_score = (home_score + away_score) / 2
                 min_score = min(home_score, away_score)
                 max_score = max(home_score, away_score)
@@ -1484,23 +1487,17 @@ def search_forebet_prediction(
                 if combined_score > best_similarity:
                     best_similarity = combined_score
                 
-                # 🔄 POPRAWIONE WARUNKI - jeszcze bardziej elastyczne dopasowanie (v2 - luty 2026)
-                # Warunek 1: Obie drużyny >= 0.40 (poluzowane z 0.45)
-                condition1 = home_score >= 0.40 and away_score >= 0.40
-                # Warunek 2: Średnia >= 0.45 i minimum >= 0.30 (poluzowane)
-                condition2 = combined_score >= 0.45 and min_score >= 0.30
-                # Warunek 3: Jedna drużyna bardzo pewna (>=0.75) i druga >= 0.25
-                condition3 = max_score >= 0.75 and min_score >= 0.25
-                # Warunek 4: Obie drużyny mają > 0.35 (poluzowane)
-                condition4 = home_score > 0.35 and away_score > 0.35
-                # Warunek 5: Kombinowana suma >= 0.80 (poluzowane z 0.9)
-                condition5 = (home_score + away_score) >= 0.80
-                # Warunek 6: NOWY - jedna drużyna ma dokładne dopasowanie (>=0.90)
-                condition6 = max_score >= 0.90
-                # Warunek 7: NOWY - obie drużyny mają przyzwoite dopasowanie (>=0.30) i średnia >= 0.40
-                condition7 = min_score >= 0.30 and combined_score >= 0.40
+                # === WARUNKI MATCHOWANIA (v3 - uproszczone) ===
+                # W1: Obie drużyny przyzwoite (>= 0.35)
+                cond_both = home_score >= 0.35 and away_score >= 0.35
+                # W2: Suma wyników >= 0.85 (pozwala 0.50 + 0.35)
+                cond_sum = (home_score + away_score) >= 0.85
+                # W3: Jedna drużyna bardzo pewna (>= 0.75), druga min 0.20
+                cond_one_strong = max_score >= 0.75 and min_score >= 0.20
+                # W4: Jedna drużyna dokładne dopasowanie (>= 0.90)
+                cond_exact = max_score >= 0.90
                 
-                if condition1 or condition2 or condition3 or condition4 or condition5 or condition6 or condition7:
+                if cond_both or cond_sum or cond_one_strong or cond_exact:
                     print(f"      ✅ Znaleziono mecz na Forebet: {forebet_home} vs {forebet_away}")
                     print(f"         Similarity: Home={home_score:.2f}, Away={away_score:.2f}")
                     
@@ -1573,28 +1570,59 @@ def search_forebet_prediction(
                         avg_text = avg_sc_elem.get_text(strip=True)
                         try:
                             result['avg_goals'] = float(avg_text)
-                            # Określ Over/Under 2.5
-                            if result['avg_goals'] > 2.5:
-                                result['over_under'] = 'Over 2.5'
-                            else:
-                                result['over_under'] = 'Under 2.5'
+                            # Over/Under - różne thresholdy per sport
+                            if sport_lower in ['football', 'soccer']:
+                                # Football: Over/Under 2.5 goli
+                                if result['avg_goals'] > 2.5:
+                                    result['over_under'] = 'Over 2.5'
+                                else:
+                                    result['over_under'] = 'Under 2.5'
+                            elif sport_lower in ['hockey', 'ice-hockey']:
+                                # Hockey: Over/Under 5.5 goli
+                                if result['avg_goals'] > 5.5:
+                                    result['over_under'] = 'Over 5.5'
+                                else:
+                                    result['over_under'] = 'Under 5.5'
+                            elif sport_lower in ['basketball']:
+                                # Basketball: Over/Under - wartość z Forebet (punkty, nie gole)
+                                pass  # avg_goals jest saved, ale Over/Under threshold zależy od ligi
+                            elif sport_lower in ['handball']:
+                                # Handball: Over/Under - wartość z Forebet 
+                                pass  # avg_goals saved
+                            # Inne sporty: zachowaj avg_goals bez Over/Under
                         except ValueError:
                             pass
                     
                     # 5. BTTS - sprawdź czy oba zespoły strzelą
-                    # Jeśli dokładny wynik to np. "1-3", oba strzelą
-                    if result.get('exact_score'):
-                        score_parts = result['exact_score'].split('-')
-                        if len(score_parts) == 2:
-                            try:
-                                home_goals = int(score_parts[0].strip())
-                                away_goals = int(score_parts[1].strip())
-                                if home_goals > 0 and away_goals > 0:
-                                    result['btts'] = 'Yes'
-                                else:
-                                    result['btts'] = 'No'
-                            except ValueError:
-                                pass
+                    # TYLKO dla football i hockey - nie ma sensu dla basketball/handball/volleyball
+                    # (tam wyniki są np. 78-95 / 29-32 - oba zawsze "strzelają")
+                    if sport_lower in ['football', 'soccer']:
+                        if result.get('exact_score'):
+                            score_parts = result['exact_score'].split('-')
+                            if len(score_parts) == 2:
+                                try:
+                                    home_goals = int(score_parts[0].strip())
+                                    away_goals = int(score_parts[1].strip())
+                                    if home_goals > 0 and away_goals > 0:
+                                        result['btts'] = 'Yes'
+                                    else:
+                                        result['btts'] = 'No'
+                                except ValueError:
+                                    pass
+                    elif sport_lower in ['hockey', 'ice-hockey']:
+                        # Hockey też ma niskie wyniki - BTTS ma sens
+                        if result.get('exact_score'):
+                            score_parts = result['exact_score'].split('-')
+                            if len(score_parts) == 2:
+                                try:
+                                    home_goals = int(score_parts[0].strip())
+                                    away_goals = int(score_parts[1].strip())
+                                    if home_goals > 0 and away_goals > 0:
+                                        result['btts'] = 'Yes'
+                                    else:
+                                        result['btts'] = 'No'
+                                except ValueError:
+                                    pass
                     
                     # 🔥 ALTERNATYWNA EKSTRAKCJA: Jeśli fprc nie znaleziono, szukaj w innych miejscach
                     if not result.get('prediction'):

@@ -343,12 +343,12 @@ def _retry_request(request_func, *args, **kwargs):
 
 
 def normalize_team_name(name: str) -> str:
-    """Normalizuje nazwę drużyny do porównania - rozszerzona wersja"""
+    """Normalizuje nazwę drużyny do porównania - v3.7 mniej agresywna wersja"""
     if not name:
         return ""
     name = name.lower().strip()
     
-    # 🔥 POLSKIE/EUROPEJSKIE ZNAKI → ASCII
+    # POLSKIE/EUROPEJSKIE ZNAKI → ASCII
     char_map = {
         'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n',
         'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
@@ -357,22 +357,23 @@ def normalize_team_name(name: str) -> str:
         'í': 'i', 'ì': 'i', 'î': 'i', 'ú': 'u', 'ù': 'u', 'û': 'u',
         'ñ': 'n', 'ç': 'c', 'š': 's', 'č': 'c', 'ž': 'z', 'ř': 'r',
         'ď': 'd', 'ť': 't', 'ň': 'n', 'ő': 'o', 'ű': 'u',
+        'ý': 'y', 'ã': 'a', 'õ': 'o', 'ø': 'o', 'å': 'a', 'æ': 'ae',
+        'ð': 'd', 'þ': 'th', 'ğ': 'g', 'ı': 'i', 'ş': 's',
     }
     for char, replacement in char_map.items():
         name = name.replace(char, replacement)
     
-    # Usuń prefiksy klubów
-    prefixes = ['fc ', 'afc ', 'cf ', 'sc ', 'sv ', 'fk ', 'nk ', 'sk ', 'bk ',
-                'ac ', 'as ', 'ss ', 'us ', 'cd ', 'ud ', 'rcd ', 'ks ', 'mks ',
-                'hapoel ', 'maccabi ', 'beitar ', 'dinamo ', 'dynamo ', 'spartak ',
-                'cska ', 'lokomotiv ', 'rapid ', 'inter ', 'real ', 'sporting ']
-    for prefix in prefixes:
+    # Usuń TYLKO krótkie prefiksy (2-3 literowe skróty klubów)
+    # NIE usuwamy dłuższych jak 'hapoel', 'maccabi', 'dinamo' - mogą być częścią nazwy
+    short_prefixes = ['fc ', 'afc ', 'cf ', 'sc ', 'sv ', 'fk ', 'nk ', 'sk ', 'bk ',
+                      'ac ', 'as ', 'ss ', 'us ', 'cd ', 'ud ', 'rcd ', 'ks ', 'mks ']
+    for prefix in short_prefixes:
         if name.startswith(prefix):
             name = name[len(prefix):]
+            break  # Usuń tylko jeden prefix
     
-    # Usuń sufiksy
-    name = re.sub(r'\s+(u21|u19|u18|u17|u16|u23|b|ii|iii|iv|women|kobiety|ladies)\s*$', '', name, flags=re.IGNORECASE)
-    name = re.sub(r'\s+(fc|sc|fk|united|city|town)\s*$', '', name, flags=re.IGNORECASE)
+    # Usuń sufiksy wiekowe/kategorii (U21, U19, Women, etc.) - ale ZACHOWAJ inne
+    name = re.sub(r'\s+(u21|u19|u18|u17|u16|u23|women|kobiety|ladies|w)\s*$', '', name, flags=re.IGNORECASE)
     
     name = re.sub(r'[^a-z0-9\s]', '', name)
     name = re.sub(r'\s+', ' ', name).strip()
@@ -380,16 +381,66 @@ def normalize_team_name(name: str) -> str:
 
 
 def similarity_score(name1: str, name2: str) -> float:
-    """Oblicza similarity score między dwoma nazwami (0.0 - 1.0)."""
+    """
+    Oblicza similarity score między dwoma nazwami (0.0 - 1.0).
+    v3.7: Używa wielu metod i zwraca najwyższy wynik (jak forebet).
+    """
     norm1 = normalize_team_name(name1)
     norm2 = normalize_team_name(name2)
     if not norm1 or not norm2:
         return 0.0
-    return SequenceMatcher(None, norm1, norm2).ratio()
+    
+    # Metoda 1: SequenceMatcher (standard)
+    seq_score = SequenceMatcher(None, norm1, norm2).ratio()
+    
+    # Metoda 2: Containment check ("psg" in "paris saint germain")
+    containment = 0.0
+    if norm1 in norm2:
+        containment = max(0.85, len(norm1) / len(norm2))
+    elif norm2 in norm1:
+        containment = max(0.85, len(norm2) / len(norm1))
+    
+    # Metoda 3: Jaccard na tokenach (słowach)
+    tokens1 = set(norm1.split())
+    tokens2 = set(norm2.split())
+    if tokens1 and tokens2:
+        intersection = tokens1 & tokens2
+        union = tokens1 | tokens2
+        jaccard = len(intersection) / len(union) if union else 0.0
+    else:
+        jaccard = 0.0
+    
+    # Metoda 4: First/Main word match
+    first_word_score = 0.0
+    words1, words2 = norm1.split(), norm2.split()
+    if words1 and words2:
+        # Najdłuższe słowo z każdej nazwy (main word)
+        main1 = max(words1, key=len)
+        main2 = max(words2, key=len)
+        main_sim = SequenceMatcher(None, main1, main2).ratio()
+        if main_sim >= 0.80:
+            first_word_score = max(0.75, main_sim * 0.85)
+        # Pierwsze słowo match
+        if words1[0] == words2[0] and len(words1[0]) >= 3:
+            first_word_score = max(first_word_score, 0.70)
+    
+    # Metoda 5: Common prefix (>= 4 chars)
+    prefix_score = 0.0
+    common_prefix_len = 0
+    for c1, c2 in zip(norm1, norm2):
+        if c1 == c2:
+            common_prefix_len += 1
+        else:
+            break
+    if common_prefix_len >= 4:
+        max_len = max(len(norm1), len(norm2))
+        prefix_score = min(0.85, common_prefix_len / max_len + 0.3)
+    
+    return max(seq_score, containment, jaccard, first_word_score, prefix_score)
 
 
-def teams_match(team1: str, team2: str, threshold: float = 0.45) -> bool:
-    """Sprawdza czy dwie nazwy drużyn są podobne - poluzowany threshold z 0.6"""
+def teams_match(team1: str, team2: str, threshold: float = 0.35) -> bool:
+    """Sprawdza czy dwie nazwy drużyn są podobne"""
     return similarity_score(team1, team2) >= threshold
 
 
@@ -582,14 +633,11 @@ def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, sear
         return None
     
     events = data.get('events', [])
+    if not events:
+        return None
+    
     home_norm = normalize_team_name(home_team)
     away_norm = normalize_team_name(away_team)
-    
-    # Minimum length check - zbyt krótkie nazwy mogą dawać false positives
-    MIN_NAME_LENGTH = 3
-    if len(home_norm) < MIN_NAME_LENGTH or len(away_norm) < MIN_NAME_LENGTH:
-        logger.debug(f"SofaScore: Nazwa drużyny za krótka ({home_norm!r}/{away_norm!r}), skip matching")
-        return None
     
     best_match_id = None
     best_combined_sim = 0.0
@@ -597,39 +645,42 @@ def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, sear
     for event in events:
         event_home = event.get('homeTeam', {}).get('name', '')
         event_away = event.get('awayTeam', {}).get('name', '')
+        if not event_home or not event_away:
+            continue
+        
         event_home_norm = normalize_team_name(event_home)
         event_away_norm = normalize_team_name(event_away)
         
-        # Similarity score z podwyższonym threshold (0.50 zamiast 0.45)
+        # Multi-method similarity (v3.7: containment, jaccard, prefix, etc.)
         home_sim = similarity_score(home_team, event_home)
         away_sim = similarity_score(away_team, event_away)
-        
-        # Warunek 1: Similarity score >= 0.50
-        home_match_sim = home_sim > 0.50
-        away_match_sim = away_sim > 0.50
-        
-        # Warunek 2: Część nazwy drużyny zawarta w nazwie z SofaScore (dla słów >= 4 znaki)
-        home_match_partial = any(p in event_home_norm for p in home_norm.split() if len(p) >= 4)
-        away_match_partial = any(p in event_away_norm for p in away_norm.split() if len(p) >= 4)
-        
-        # Warunek 3: Nazwa z SofaScore zawiera część szukanej nazwy
-        home_match_reverse = any(p in home_norm for p in event_home_norm.split() if len(p) >= 4)
-        away_match_reverse = any(p in away_norm for p in event_away_norm.split() if len(p) >= 4)
-        
-        home_match = home_match_sim or home_match_partial or home_match_reverse
-        away_match = away_match_sim or away_match_partial or away_match_reverse
-        
-        # Dodatkowy warunek: suma similarity >= 1.0 (nawet jeśli jedna drużyna słabsza)
         combined_sim = home_sim + away_sim
-        combined_match = combined_sim >= 1.0
+        min_sim = min(home_sim, away_sim)
+        max_sim = max(home_sim, away_sim)
         
-        if (home_match and away_match) or combined_match:
-            # Wybierz najlepsze dopasowanie (najwyższa suma similarity)
-            if combined_sim > best_combined_sim:
-                best_combined_sim = combined_sim
-                best_match_id = event.get('id')
-                logger.debug(f"SofaScore match candidate: {event_home} vs {event_away} "
-                           f"(sim: {home_sim:.2f}/{away_sim:.2f}, combined: {combined_sim:.2f})")
+        # === WARUNKI MATCHOWANIA (v3.7 - wielopoziomowe) ===
+        # W1: Obie drużyny mają przyzwoity similarity (>= 0.35)
+        cond_both_decent = home_sim >= 0.35 and away_sim >= 0.35
+        # W2: Suma similarity >= 0.85 (pozwala na jedną słabszą)
+        cond_combined = combined_sim >= 0.85
+        # W3: Jedna drużyna pewna (>= 0.75), druga przyzwoita (>= 0.25)
+        cond_one_strong = max_sim >= 0.75 and min_sim >= 0.25
+        # W4: Partial word containment (obie drużyny mają wspólne słowa >= 3 znaki)
+        home_match_partial = any(p in event_home_norm for p in home_norm.split() if len(p) >= 3)
+        away_match_partial = any(p in event_away_norm for p in away_norm.split() if len(p) >= 3)
+        home_match_reverse = any(p in home_norm for p in event_home_norm.split() if len(p) >= 3)
+        away_match_reverse = any(p in away_norm for p in event_away_norm.split() if len(p) >= 3)
+        cond_partial = (home_match_partial or home_match_reverse) and (away_match_partial or away_match_reverse)
+        # W5: Jedna drużyna dokładne dopasowanie (>= 0.90)
+        cond_exact_one = max_sim >= 0.90 and min_sim >= 0.20
+        
+        is_match = cond_both_decent or cond_combined or cond_one_strong or cond_partial or cond_exact_one
+        
+        if is_match and combined_sim > best_combined_sim:
+            best_combined_sim = combined_sim
+            best_match_id = event.get('id')
+            logger.debug(f"SofaScore match: {event_home} vs {event_away} "
+                       f"(h:{home_sim:.2f} a:{away_sim:.2f} sum:{combined_sim:.2f})")
     
     return best_match_id
 
@@ -659,10 +710,15 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
     else:
         base_date = today
     
+    # Date window: ±3 dni (v3.7: rozszerzono z ±1 dla lepszego pokrycia)
     dates_to_try = [
-        base_date.strftime('%Y-%m-%d'),                          # Dziś / podana data
-        (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),    # Wczoraj
-        (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),    # Jutro
+        base_date.strftime('%Y-%m-%d'),                          # Podana data (priorytet)
+        (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),    # -1 dzień
+        (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),    # +1 dzień
+        (base_date - timedelta(days=2)).strftime('%Y-%m-%d'),    # -2 dni
+        (base_date + timedelta(days=2)).strftime('%Y-%m-%d'),    # +2 dni
+        (base_date - timedelta(days=3)).strftime('%Y-%m-%d'),    # -3 dni
+        (base_date + timedelta(days=3)).strftime('%Y-%m-%d'),    # +3 dni
     ]
     
     for search_date in dates_to_try:
