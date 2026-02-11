@@ -1,8 +1,9 @@
 {
-    "buildCommand": "cd sports-dashboard && npm run build",
-    "outputDirectory": "sports-dashboard/out",
-    "installCommand": "cd sports-dashboard && npm install",
+    "buildCommand": "npm run build",
+    "outputDirectory": "out",
+    "installCommand": "npm install --legacy-peer-deps",
     "framework": null,
+    "rootDirectory": "sports-dashboard",
     "rewrites": [
         {
             "source": "/api/:path*",
