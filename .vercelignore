@@ -1,0 +1,43 @@
+# Python backend (hosted on Heroku)
+*.py
+*.pyc
+__pycache__/
+venv/
+.venv/
+*.egg-info/
+requirements.txt
+runtime.txt
+Procfile
+app.json
+
+# Root node_modules (only for Puppeteer)
+/node_modules/
+/package.json
+/package-lock.json
+
+# Results & debug
+results/
+debug_html/
+*.html
+*.txt
+*.md
+
+# Bat files
+*.bat
+*.sh
+*.ps1
+
+# Config files
+.env*
+!sports-dashboard/.env.production
+gemini_config.py
+email_config.py
+groq_config.py
+
+# Documentation
+*.md
+!sports-dashboard/README.md
+
+# Git
+.git/
+.gitignore
