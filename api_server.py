@@ -637,11 +637,15 @@ if __name__ == '__main__':
     # Create results directory if it doesn't exist
     os.makedirs(RESULTS_DIR, exist_ok=True)
     
+    # Get port from environment variable (Heroku) or default to 5000
+    port = int(os.environ.get('PORT', 5000))
+    
     print("=" * 60)
     print("BigOne API Server")
     print("=" * 60)
     print(f"Results directory: {RESULTS_DIR}")
-    print(f"Starting server on http://localhost:5000")
+    print(f"Starting server on http://0.0.0.0:{port}")
     print("=" * 60)
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Use debug=False in production (when PORT is set by Heroku)
+    app.run(host='0.0.0.0', port=port, debug=('PORT' not in os.environ))
