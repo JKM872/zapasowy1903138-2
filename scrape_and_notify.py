@@ -106,7 +106,7 @@ def scrape_and_send_email(
     skip_no_odds: bool = False,
     away_team_focus: bool = False,
     use_forebet: bool = False,
-    use_sofascore: bool = False,
+    use_sofascore: bool = True,
     use_odds: bool = False,
     use_gemini: bool = False,
     include_sorted_odds: bool = True,
@@ -877,8 +877,10 @@ WAŻNE dla Gmail:
                        help='🏃 Szukaj meczów gdzie GOŚCIE mają >=60%% H2H (zamiast gospodarzy)')
     parser.add_argument('--use-forebet', action='store_true',
                        help='🎯 Pobieraj predykcje z Forebet.com (wymaga widocznej przeglądarki)')
-    parser.add_argument('--use-sofascore', action='store_true',
-                       help='🗳️ Pobieraj Fan Vote z SofaScore.com (wymaga widocznej przeglądarki)')
+    parser.add_argument('--use-sofascore', action='store_true', default=True,
+                       help='🗳️ Pobieraj Fan Vote z SofaScore.com (domyślnie włączone)')
+    parser.add_argument('--no-sofascore', action='store_true',
+                       help='🗳️ Wyłącz pobieranie Fan Vote z SofaScore.com')
     parser.add_argument('--use-odds', action='store_true',
                        help='💰 Pobieraj kursy z FlashScore.com')
     parser.add_argument('--use-gemini', action='store_true',
@@ -898,6 +900,8 @@ WAŻNE dla Gmail:
     
     # Sorted odds - domyślnie włączone, chyba że --no-sorted-odds
     include_sorted_odds = not args.no_sorted_odds
+    # SofaScore - domyślnie włączone, chyba że --no-sofascore
+    use_sofascore = args.use_sofascore and not args.no_sofascore
     
     scrape_and_send_email(
         date=args.date,
@@ -915,7 +919,7 @@ WAŻNE dla Gmail:
         skip_no_odds=args.skip_no_odds,
         away_team_focus=args.away_team_focus,
         use_forebet=args.use_forebet,
-        use_sofascore=args.use_sofascore,
+        use_sofascore=use_sofascore,
         use_odds=args.use_odds,
         use_gemini=args.use_gemini,
         include_sorted_odds=include_sorted_odds,

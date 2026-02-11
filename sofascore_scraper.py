@@ -41,11 +41,21 @@ from difflib import SequenceMatcher
 # Logging setup
 logger = logging.getLogger(__name__)
 
+# Preferuj curl_cffi (omija Cloudflare), fallback do requests
+CURL_CFFI_AVAILABLE = False
+try:
+    from curl_cffi import requests as curl_requests
+    CURL_CFFI_AVAILABLE = True
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    curl_requests = None
+
 try:
     import requests
     REQUESTS_AVAILABLE = True
 except ImportError:
-    REQUESTS_AVAILABLE = False
+    if not CURL_CFFI_AVAILABLE:
+        REQUESTS_AVAILABLE = False
 
 try:
     from selenium import webdriver
@@ -108,7 +118,7 @@ API_HEADERS = {
 # API SESSION SINGLETON (v3.5)
 # ============================================================================
 
-_api_session: Optional['requests.Session'] = None
+_api_session = None
 _session_initialized: bool = False
 
 # Circuit breaker dla Selenium fallback w CI
@@ -117,11 +127,11 @@ _selenium_max_failures: int = 3  # Po 3 failures, skip Selenium w CI
 _selenium_last_reset: float = 0.0
 _SELENIUM_RESET_INTERVAL: int = 300  # Reset co 5 minut
 
-def _get_api_session() -> 'requests.Session':
+def _get_api_session():
     """
-    Zwraca singleton session z cookies od SofaScore.
-    Session jest inicjalizowany tylko raz (warmup cookies from main page).
-    v3.6: Retry warmup + cookie verification
+    Zwraca singleton session.
+    v4.0: Preferuje curl_cffi (omija Cloudflare 403).
+    Fallback do requests.Session z warmup cookies.
     """
     global _api_session, _session_initialized
     
@@ -131,10 +141,18 @@ def _get_api_session() -> 'requests.Session':
     if not REQUESTS_AVAILABLE:
         return None
     
+    # Preferuj curl_cffi - omija Cloudflare bez potrzeby cookies
+    if CURL_CFFI_AVAILABLE:
+        # curl_cffi nie potrzebuje session warmup - impersonuje Chrome TLS
+        _api_session = 'curl_cffi'  # sentinel value
+        _session_initialized = True
+        print(f"   🚀 SofaScore: curl_cffi (Chrome TLS impersonation)")
+        return _api_session
+    
+    # Fallback: requests.Session z warmup cookies
     _api_session = requests.Session()
     _api_session.headers.update(API_HEADERS)
     
-    # Warmup: pobierz cookies ze strony głównej (z retry)
     warmup_headers = {
         'User-Agent': API_HEADERS['User-Agent'],
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -152,22 +170,17 @@ def _get_api_session() -> 'requests.Session':
             cookies_count = len(_api_session.cookies.get_dict())
             if cookies_count > 0:
                 print(f"   🍪 SofaScore session: {cookies_count} cookies OK")
-                logger.debug(f"SofaScore session: {cookies_count} cookies received")
                 break
             else:
                 if attempt < max_warmup_attempts - 1:
-                    logger.debug(f"SofaScore warmup: 0 cookies, retry {attempt + 2}/{max_warmup_attempts}...")
                     time.sleep(1)
                 else:
-                    print(f"   ⚠️ SofaScore session: 0 cookies po {max_warmup_attempts} próbach (kontynuuję)")
-                    logger.debug("SofaScore warmup: 0 cookies po retry - API może zwracać 403")
+                    print(f"   ⚠️ SofaScore session: 0 cookies (API może zwracać 403)")
         except Exception as e:
             if attempt < max_warmup_attempts - 1:
-                logger.debug(f"SofaScore session warmup failed (attempt {attempt + 1}): {e}")
                 time.sleep(1)
             else:
                 print(f"   ⚠️ SofaScore session warmup failed: {type(e).__name__}")
-                logger.debug(f"SofaScore session warmup failed after {max_warmup_attempts} attempts: {e}")
     
     _session_initialized = True
     return _api_session
@@ -223,13 +236,13 @@ RETRY_BACKOFF = [0.5, 1, 2] if IS_CI else [1, 2, 4]  # Szybsze w CI
 
 def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     """
-    Wykonuje request z użyciem sesji (cookies) i exponential backoff.
-    v3.5: Używa singleton session z cookies.
+    Wykonuje request z exponential backoff.
+    v4.0: Preferuje curl_cffi (omija Cloudflare), fallback do requests session.
     
     Args:
         url: URL do pobrania
         timeout: Timeout w sekundach
-        **kwargs: Dodatkowe argumenty dla requests
+        **kwargs: Dodatkowe argumenty
         
     Returns:
         Response jeśli sukces, None jeśli wszystkie próby zawiodą
@@ -238,11 +251,16 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     if session is None:
         return None
     
+    use_curl = CURL_CFFI_AVAILABLE and session == 'curl_cffi'
+    
     last_exception = None
     
     for attempt in range(MAX_RETRIES):
         try:
-            response = session.get(url, timeout=timeout, **kwargs)
+            if use_curl:
+                response = curl_requests.get(url, impersonate='chrome', timeout=timeout)
+            else:
+                response = session.get(url, timeout=timeout, **kwargs)
             if response.status_code == 200:
                 # Walidacja odpowiedzi - sprawdź czy jest content
                 if response.content and len(response.content) > 2:
@@ -266,28 +284,22 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 return response  # Zwróć 403 - caller zdecyduje
             else:
                 return response  # Inne błędy - zwróć natychmiast
-        except requests.exceptions.Timeout as e:
+        except (TimeoutError, OSError) as e:
             last_exception = e
             if attempt < MAX_RETRIES - 1:
                 wait_time = RETRY_BACKOFF[attempt]
-                logger.debug(f"SofaScore API: Timeout, próba {attempt + 2}/{MAX_RETRIES} za {wait_time}s...")
+                logger.debug(f"SofaScore API: Timeout/Connection error, próba {attempt + 2}/{MAX_RETRIES}...")
                 time.sleep(wait_time)
             else:
                 if IS_CI:
-                    print(f"   ⚠️ SofaScore API: Timeout po {MAX_RETRIES} próbach")
-        except requests.exceptions.ConnectionError as e:
-            last_exception = e
-            if attempt < MAX_RETRIES - 1:
-                wait_time = RETRY_BACKOFF[attempt]
-                logger.debug(f"SofaScore API: Błąd połączenia, próba {attempt + 2}/{MAX_RETRIES}...")
-                time.sleep(wait_time)
-            else:
-                if IS_CI:
-                    print(f"   ⚠️ SofaScore API: ConnectionError po {MAX_RETRIES} próbach")
+                    print(f"   ⚠️ SofaScore API: {type(e).__name__} po {MAX_RETRIES} próbach")
         except Exception as e:
             last_exception = e
             logger.debug(f"SofaScore API: Nieoczekiwany błąd: {type(e).__name__}: {str(e)[:100]}")
-            break  # Inne błędy - przerwij natychmiast
+            if attempt < MAX_RETRIES - 1:
+                time.sleep(RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1])
+            else:
+                break
     
     if last_exception:
         logger.debug(f"SofaScore API: Wszystkie próby zawiodły - {type(last_exception).__name__}")
@@ -507,16 +519,38 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
                 print(f"   ⚠️ SofaScore API: Brak danych głosowania (event_id={event_id})")
                 return None
             
-            return {
-                'sofascore_home_win_prob': vote.get('vote1'),
-                'sofascore_draw_prob': vote.get('voteX'),
-                'sofascore_away_win_prob': vote.get('vote2'),
-                'sofascore_total_votes': sum([
-                    vote.get('vote1Count', 0),
-                    vote.get('voteXCount', 0),
-                    vote.get('vote2Count', 0)
-                ]),
+            # API zwraca surowe liczby głosów - przelicz na procenty
+            vote1 = vote.get('vote1', 0) or 0
+            voteX = vote.get('voteX', 0) or 0
+            vote2 = vote.get('vote2', 0) or 0
+            total_votes = vote1 + voteX + vote2
+            
+            if total_votes == 0:
+                print(f"   ⚠️ SofaScore API: 0 głosów (event_id={event_id})")
+                return None
+            
+            home_pct = round(vote1 / total_votes * 100)
+            draw_pct = round(voteX / total_votes * 100) if voteX else None
+            away_pct = round(vote2 / total_votes * 100)
+            
+            # BTTS data
+            btts = data.get('bothTeamsToScoreVote', {})
+            btts_yes = btts.get('voteYes', 0) or 0
+            btts_no = btts.get('voteNo', 0) or 0
+            btts_total = btts_yes + btts_no
+            
+            result = {
+                'sofascore_home_win_prob': home_pct,
+                'sofascore_draw_prob': draw_pct,
+                'sofascore_away_win_prob': away_pct,
+                'sofascore_total_votes': total_votes,
             }
+            
+            if btts_total > 0:
+                result['sofascore_btts_yes'] = round(btts_yes / btts_total * 100)
+                result['sofascore_btts_no'] = round(btts_no / btts_total * 100)
+            
+            return result
         elif response.status_code == 403:
             print(f"   ⚠️ SofaScore API: Zablokowane (403) - możliwe blokady geograficzne/rate limit")
             return None

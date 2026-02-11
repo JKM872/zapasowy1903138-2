@@ -161,12 +161,26 @@ def normalize_match(match):
 @app.route('/api/matches', methods=['GET'])
 def get_matches():
     """Get matches for a specific date and sport."""
-    date_str = request.args.get('date', datetime.now().strftime('%Y-%m-%d'))
+    date_str = request.args.get('date')
     sport = request.args.get('sport', 'all')
     search = request.args.get('search', '').strip().lower()
     only_qualifying = request.args.get('qualifying', 'false').lower() == 'true'
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 100, type=int)
+    
+    # If no date specified, find the most recent date with data
+    if not date_str:
+        import re
+        date_pattern = re.compile(r'(\d{4}-\d{2}-\d{2})')
+        all_dates = set()
+        for f in glob.glob(os.path.join(RESULTS_DIR, '*.json')):
+            m = date_pattern.search(os.path.basename(f))
+            if m:
+                all_dates.add(m.group(1))
+        if all_dates:
+            date_str = sorted(all_dates, reverse=True)[0]
+        else:
+            date_str = datetime.now().strftime('%Y-%m-%d')
     
     # Find matching files
     files = find_result_files(date_str, sport if sport != 'all' else None)

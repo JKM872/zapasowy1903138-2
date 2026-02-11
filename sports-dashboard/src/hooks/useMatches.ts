@@ -9,10 +9,10 @@ import { useFilterStore } from '@/store/filterStore'
 
 export function useMatches() {
   const { sport, date, search } = useFilterStore()
-  const dateStr = date ? format(date, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
+  const dateStr = date ? format(date, 'yyyy-MM-dd') : undefined
 
   return useQuery({
-    queryKey: ['matches', sport, dateStr, search],
+    queryKey: ['matches', sport, dateStr ?? 'latest', search],
     queryFn: () => api.getMatches({ sport, date: dateStr, search }),
     staleTime: 60_000,          // 1 min
     refetchInterval: 300_000,   // 5 min background refresh
