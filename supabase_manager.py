@@ -128,6 +128,8 @@ class SupabaseManager:
             
         except Exception as e:
             print(f"[ERROR] Error saving to Supabase: {e}")
+            import traceback
+            traceback.print_exc()  # Print full stack trace for debugging
             return False
     
     

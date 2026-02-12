@@ -724,13 +724,17 @@ def scrape_and_send_email(
         if SUPABASE_AVAILABLE and _supabase_mgr:
             print(f"\n\u2601\ufe0f Zapisywanie {len(rows)} mecz\u00f3w do Supabase...")
             _sb_saved = 0
+            _sb_failed = 0
             for row in rows:
                 try:
                     _supabase_mgr.save_prediction(row)
                     _sb_saved += 1
                 except Exception as e:
-                    pass  # Silent fail per match
-            print(f"   \u2705 Supabase: {_sb_saved}/{len(rows)} mecz\u00f3w zapisanych")
+                    _sb_failed += 1
+                    home = row.get('home_team', '???')
+                    away = row.get('away_team', '???')
+                    print(f"   ⚠️ Błąd zapisu: {home} vs {away} - {e}")
+            print(f"   ✅ Supabase: {_sb_saved}/{len(rows)} zapisanych ({_sb_failed} błędów)")
                 # Podsumowanie scrapingu
         print("\n📊 PODSUMOWANIE SCRAPINGU:")
         print(f"   Przetworzono: {len(rows)} meczów")
