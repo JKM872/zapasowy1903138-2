@@ -1,19 +1,18 @@
-# pyright: reportMissingImports=false, reportOptionalMemberAccess=false
+# pyright: reportMissingImports=false, reportOptionalMemberAccess=false, reportPrivateUsage=false, reportUnknownArgumentType=false, reportUnknownVariableType=false
 """Tests for telegram_notifier — formatting and failure isolation."""
 
 import importlib
 import os
-import types
 import json
+from typing import Any
 from unittest.mock import patch, MagicMock
-import pytest
 
 
 # ---------------------------------------------------------------------------
 # Helper: reload module with custom env
 # ---------------------------------------------------------------------------
 
-def _load_module(**env_overrides):
+def _load_module(**env_overrides: str) -> Any:
     """Reload telegram_notifier with given env overrides."""
     defaults = {
         "TELEGRAM_BOT_TOKEN": "test-token",
