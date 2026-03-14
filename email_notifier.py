@@ -1383,7 +1383,7 @@ def send_email_notification(
 
     # Zapisz manifest meczów wysłanych mailem (źródło prawdy dla rozliczenia)
     if matches:
-        _save_mailed_manifest(matches, date)
+        _save_mailed_manifest(list(matches), date)
     
     if subject is None:
         subject_parts: List[str] = []

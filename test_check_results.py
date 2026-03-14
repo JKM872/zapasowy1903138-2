@@ -9,10 +9,7 @@ Covers:
  - Summary save/load roundtrip
 """
 import json
-import math
 import os
-import tempfile
-import pytest
 
 from check_results import (
     load_manifests,

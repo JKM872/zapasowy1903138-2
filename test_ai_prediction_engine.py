@@ -20,7 +20,6 @@ from ai_prediction_engine import (
     _form_trend,
     _form_score,
     _form_consistency,
-    _normalize_form,
     _extract_source_prediction,
     _compute_consensus,
     _build_factors,

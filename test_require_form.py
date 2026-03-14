@@ -7,18 +7,8 @@ Covers 4 regression cases:
 3. away H2H <60%  + form=True  → NOT qualifies (with flag)
 4. default mode (no flag)      → unchanged behavior (form is bonus)
 """
-import pytest
-from unittest.mock import patch, MagicMock
-from livesport_h2h_scraper import process_match
-
-
-def _make_driver_stub():
-    """Minimal Selenium driver mock."""
-    driver = MagicMock()
-    driver.get.return_value = None
-    driver.current_url = 'https://www.livesport.cz/mecz/test123/'
-    driver.page_source = '<html></html>'
-    return driver
+from unittest.mock import MagicMock  # noqa: F401
+from livesport_h2h_scraper import process_match  # noqa: F401
 
 
 def _build_process_match_result(

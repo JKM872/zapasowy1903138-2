@@ -2,7 +2,6 @@
 Tests for form data serialization roundtrip:
   CSV string → parse_form_list / _normalize_form → clean list of W/D/L
 """
-import pytest
 from email_notifier import parse_form_list
 from ai_prediction_engine import _normalize_form
 

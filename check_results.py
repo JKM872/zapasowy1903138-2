@@ -22,7 +22,7 @@ import time as time_module
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Union
 
 # Selenium — optional; results can also come from API
 try:
@@ -30,14 +30,18 @@ try:
     from selenium.webdriver.chrome.options import Options
     from selenium.webdriver.chrome.service import Service
     from bs4 import BeautifulSoup
-    SELENIUM_OK = True
+    _selenium_ok = True
 except ImportError:
-    SELENIUM_OK = False
+    webdriver = None  # type: ignore[assignment]
+    Options = None  # type: ignore[assignment,misc]
+    Service = None  # type: ignore[assignment,misc]
+    BeautifulSoup = None  # type: ignore[assignment,misc]
+    _selenium_ok = False
 
 # ---------------------------------------------------------------------------
 # SMTP config (reused from email_notifier)
 # ---------------------------------------------------------------------------
-SMTP_CONFIG = {
+SMTP_CONFIG: Dict[str, Dict[str, Union[str, int, bool]]] = {
     'gmail': {'server': 'smtp.gmail.com', 'port': 587, 'use_tls': True},
     'outlook': {'server': 'smtp-mail.outlook.com', 'port': 587, 'use_tls': True},
     'yahoo': {'server': 'smtp.mail.yahoo.com', 'port': 587, 'use_tls': True},
@@ -59,7 +63,7 @@ def load_manifests(date: str) -> List[Dict[str, Any]]:
         return []
 
     all_matches: List[Dict[str, Any]] = []
-    seen_urls: set = set()
+    seen_urls: set[str] = set()
 
     for fpath in files:
         try:
@@ -82,9 +86,9 @@ def load_manifests(date: str) -> List[Dict[str, Any]]:
 # 2. RESULT SCRAPING
 # ═══════════════════════════════════════════════════════════════════════════
 
-def _init_driver(headless: bool = True):
+def _init_driver(headless: bool = True) -> Any:
     """Initialize Selenium WebDriver."""
-    if not SELENIUM_OK:
+    if not _selenium_ok:
         raise RuntimeError("Selenium/BeautifulSoup not installed")
 
     opts = Options()
@@ -109,7 +113,7 @@ def _init_driver(headless: bool = True):
     return driver
 
 
-def scrape_match_result(driver, match_url: str) -> Dict[str, Any]:
+def scrape_match_result(driver: Any, match_url: str) -> Dict[str, Any]:
     """Scrape final score for a single match URL.
 
     Returns dict with keys: status, score_home, score_away, winner.
@@ -145,7 +149,7 @@ def scrape_match_result(driver, match_url: str) -> Dict[str, Any]:
         if score_home is None:
             for script in soup.find_all('script', type='application/ld+json'):
                 try:
-                    data = json.loads(script.string)
+                    data = json.loads(script.string or '')
                     if isinstance(data, dict) and 'homeTeam' in data:
                         score_home = int(data['homeTeam']['score'])
                         score_away = int(data['awayTeam']['score'])
@@ -328,7 +332,7 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
     lost = stats['lost']
     draw = stats['draw']
     pending = stats['pending']
-    errors = stats['errors']
+    _errors = stats['errors']
     accuracy = stats['accuracy']
     roi_pln = stats['roi_pln']
     roi_pct = stats['roi_pct']
@@ -471,14 +475,14 @@ def send_report_email(
 ) -> bool:
     """Send HTML report via SMTP. Returns True on success."""
     try:
-        smtp_cfg = SMTP_CONFIG[provider]
+        smtp_cfg: Dict[str, Union[str, int, bool]] = SMTP_CONFIG[provider]
         msg = MIMEMultipart('alternative')
         msg['Subject'] = subject
         msg['From'] = from_email
         msg['To'] = to_email
         msg.attach(MIMEText(html, 'html'))
 
-        with smtplib.SMTP(smtp_cfg['server'], smtp_cfg['port']) as server:
+        with smtplib.SMTP(str(smtp_cfg['server']), int(smtp_cfg['port'])) as server:
             if smtp_cfg['use_tls']:
                 server.starttls()
             server.login(from_email, password)
