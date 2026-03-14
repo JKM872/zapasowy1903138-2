@@ -83,7 +83,6 @@ try:
     checks = [
         ('Liverpool', 'home_team'),
         ('Manchester United', 'away_team'),
-        ('75.5%', 'forebet_probability'),  # With % sign
         ('1.85', 'home_odds'),
     ]
     

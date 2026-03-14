@@ -842,35 +842,6 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
 
             html += f"""
             <div class="top-pick-card">
-                <div class="top-pick-team">
-                    {_home_badge}{team_emoji} {home} <span style="color: #999;">vs</span> {away}{_away_badge}
-                </div>
-                <div style="font-size: 14px; color: #FF5722; font-weight: bold; margin: 5px 0;">
-                    🕐 {match_time}
-                </div>
-                
-                <div class="top-pick-stats">
-                    <div class="top-pick-stat">
-                        <div class="top-pick-stat-value">{confidence:.0f}%</div>
-                        <div class="top-pick-stat-label">AI Confidence</div>
-                    </div>
-                    <div class="top-pick-stat">
-                        <div class="top-pick-stat-value">{win_rate:.0f}%</div>
-                        <div class="top-pick-stat-label">H2H Win Rate</div>
-                    </div>
-                    <div class="top-pick-stat">
-                        <div class="top-pick-stat-value" style="{forebet_style}">{forebet_prob}</div>
-                        <div class="top-pick-stat-label">Forebet</div>
-                    </div>
-                </div>
-                
-                <div style="margin: 10px 0; padding: 10px; background: #e3f2fd; border-radius: 5px;">
-                    <strong style="color: #1976d2;">🎯 Prognoza:</strong> {prediction}
-                </div>
-                
-                <div class="top-pick-reasoning">
-                    <strong>🤖 Analiza AI:</strong><br>{reasoning}...
-                </div>
                 {(
                 '<div style="margin-top: 12px; background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-radius: 10px; padding: 14px; border: 1px solid ' + _tp_tc + '33;">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">'
