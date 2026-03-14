@@ -795,8 +795,8 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         for pick in top_picks:
             home = pick.get('home_team', 'N/A')
             away = pick.get('away_team', 'N/A')
-            confidence: float = pick.get('gemini_confidence') or 0
-            prediction = pick.get('gemini_prediction', 'N/A')
+            _confidence: float = pick.get('gemini_confidence') or 0
+            _prediction = pick.get('gemini_prediction', 'N/A')
             tp_ai = ensure_ai_prediction_dict(pick.get('ai_prediction'))
             # Pre-compute AI Pro color values (avoids {{dict}} syntax errors inside f-strings)
             _tp_tc = {'VERY HIGH': '#00e676', 'HIGH': '#69f0ae', 'MEDIUM': '#ffd740'}.get(tp_ai.get('confidenceTier', ''), '#555')
@@ -807,31 +807,31 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
             # Bezpieczne pobieranie reasoning (może być NaN/float z pandas)
             raw_reasoning = pick.get('gemini_reasoning', '')
             if raw_reasoning is None or (isinstance(raw_reasoning, float) and str(raw_reasoning) == 'nan'):
-                reasoning = ''
+                _reasoning = ''
             else:
-                reasoning = str(raw_reasoning)[:300]  # First 300 chars
+                _reasoning = str(raw_reasoning)[:300]  # First 300 chars
             
             # Calculate stats
             focus_team = pick.get('focus_team', 'home')
             if focus_team == 'away':
                 wins = pick.get('away_wins_in_h2h_last5', 0)
                 h2h_count = pick.get('h2h_count', pick.get('h2h_last5', 0))
-                team_emoji = '🚀'
+                _team_emoji = '🚀'
             else:
                 wins = pick.get('home_wins_in_h2h_last5', 0)
                 h2h_count = pick.get('h2h_count', pick.get('h2h_last5', 0))
-                team_emoji = '🏠'
+                _team_emoji = '🏠'
             
             win_rate = (wins / h2h_count * 100) if h2h_count > 0 else 0
             
             # Forebet data - obsługa braku danych
             raw_forebet_prob = pick.get('forebet_probability')
             if raw_forebet_prob is None or (isinstance(raw_forebet_prob, float) and str(raw_forebet_prob) == 'nan'):
-                forebet_prob = 'Brak'
-                forebet_style = 'color: #999; font-size: 12px;'
+                _forebet_prob = 'Brak'
+                _forebet_style = 'color: #999; font-size: 12px;'
             else:
-                forebet_prob = f"{raw_forebet_prob}%" if isinstance(raw_forebet_prob, (int, float)) else str(raw_forebet_prob)
-                forebet_style = ''
+                _forebet_prob = f"{raw_forebet_prob}%" if isinstance(raw_forebet_prob, (int, float)) else str(raw_forebet_prob)
+                _forebet_style = ''
             match_time = pick.get('match_time', 'Brak danych')
             
             # Logos for top picks
@@ -1383,7 +1383,7 @@ def send_email_notification(
 
     # Zapisz manifest meczów wysłanych mailem (źródło prawdy dla rozliczenia)
     if matches:
-        _save_mailed_manifest(list(matches), date)
+        _save_mailed_manifest(list(matches), date)  # type: ignore[arg-type]
     
     if subject is None:
         subject_parts: List[str] = []

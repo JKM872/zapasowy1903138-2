@@ -197,7 +197,7 @@ def _normalize_form(raw: Any) -> list[str]:
     if raw is None:
         return []
     if isinstance(raw, (list, tuple)):
-        return [str(x).strip().upper() for x in raw if x and str(x).strip().upper() in ('W', 'D', 'L')]
+        return [str(x).strip().upper() for x in cast(list[Any], raw) if x and str(x).strip().upper() in ('W', 'D', 'L')]
     if isinstance(raw, str):
         s = raw.strip()
         if not s or s.lower() in ('nan', 'none', 'n/a'):
@@ -208,7 +208,7 @@ def _normalize_form(raw: Any) -> list[str]:
                 import ast
                 parsed = ast.literal_eval(s)
                 if isinstance(parsed, list):
-                    return [str(x).strip().upper() for x in parsed if x and str(x).strip().upper() in ('W', 'D', 'L')]
+                    return [str(x).strip().upper() for x in cast(list[Any], parsed) if x and str(x).strip().upper() in ('W', 'D', 'L')]
             except (ValueError, SyntaxError):
                 pass
         # "W-L-D" or "W,L,D"

@@ -1,3 +1,4 @@
+# pyright: reportPrivateUsage=false
 """
 Tests for form data serialization roundtrip:
   CSV string → parse_form_list / _normalize_form → clean list of W/D/L

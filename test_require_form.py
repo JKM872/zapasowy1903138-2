@@ -1,3 +1,4 @@
+# pyright: reportUnusedImport=false, reportUnknownVariableType=false, reportUnknownParameterType=false, reportUnknownMemberType=false
 """
 Tests for require_form_advantage flag in process_match qualification logic.
 

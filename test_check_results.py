@@ -1,3 +1,4 @@
+# pyright: reportPrivateUsage=false, reportMissingParameterType=false, reportUnknownParameterType=false, reportUnknownVariableType=false, reportUnknownMemberType=false, reportUnknownArgumentType=false
 """
 Tests for check_results.py — result checker and accuracy report pipeline.
 

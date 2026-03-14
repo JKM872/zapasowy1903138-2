@@ -91,23 +91,23 @@ def _init_driver(headless: bool = True) -> Any:
     if not _selenium_ok:
         raise RuntimeError("Selenium/BeautifulSoup not installed")
 
-    opts = Options()
+    opts = Options()  # type: ignore[misc]
     if headless:
         opts.add_argument('--headless')
     opts.add_argument('--disable-gpu')
     opts.add_argument('--no-sandbox')
     opts.add_argument('--disable-dev-shm-usage')
     opts.add_argument('--disable-blink-features=AutomationControlled')
-    opts.add_experimental_option("excludeSwitches", ["enable-automation"])
-    opts.add_experimental_option('useAutomationExtension', False)
+    opts.add_experimental_option("excludeSwitches", ["enable-automation"])  # type: ignore[union-attr]
+    opts.add_experimental_option('useAutomationExtension', False)  # type: ignore[union-attr]
 
     # Try chromedriver from PATH first, fall back to webdriver-manager
     try:
-        driver = webdriver.Chrome(options=opts)
+        driver = webdriver.Chrome(options=opts)  # type: ignore[union-attr]
     except Exception:
         from webdriver_manager.chrome import ChromeDriverManager
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
+        driver = webdriver.Chrome(  # type: ignore[union-attr]
+            service=Service(ChromeDriverManager().install()),  # type: ignore[misc]
             options=opts,
         )
     return driver
@@ -122,7 +122,7 @@ def scrape_match_result(driver: Any, match_url: str) -> Dict[str, Any]:
         driver.get(match_url)
         time_module.sleep(2.0)
 
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        soup = BeautifulSoup(driver.page_source, 'html.parser')  # type: ignore[misc]
 
         # Check if match finished
         status_elem = soup.find('div', class_='detailScore__status')
@@ -151,8 +151,8 @@ def scrape_match_result(driver: Any, match_url: str) -> Dict[str, Any]:
                 try:
                     data = json.loads(script.string or '')
                     if isinstance(data, dict) and 'homeTeam' in data:
-                        score_home = int(data['homeTeam']['score'])
-                        score_away = int(data['awayTeam']['score'])
+                        score_home = int(data['homeTeam']['score'])  # type: ignore[arg-type]
+                        score_away = int(data['awayTeam']['score'])  # type: ignore[arg-type]
                         break
                 except (json.JSONDecodeError, KeyError, TypeError, ValueError):
                     continue

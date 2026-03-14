@@ -1,3 +1,4 @@
+# pyright: reportPrivateUsage=false
 """
 Tests for:
   1. Per-sport odds threshold filtering (OR — at least one odds >= sport threshold)
