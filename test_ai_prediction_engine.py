@@ -20,6 +20,7 @@ from ai_prediction_engine import (
     _form_trend,
     _form_score,
     _form_consistency,
+    _normalize_form,
     _extract_source_prediction,
     _compute_consensus,
     _build_factors,
@@ -392,6 +393,36 @@ class TestBuildFactors:
         h2h = next(f for f in factors if f['name'] == 'Head-to-Head')
         assert 'Liverpool' in h2h['description']
         assert h2h['quality'] == 1.0  # 5/5 h2h games
+
+    def test_csv_string_form_parsed(self, football_row: Dict[str, Any]) -> None:
+        """BUG #2 regression: CSV dash-separated form must be parsed, not iterated char-by-char."""
+        row = dict(football_row)
+        row['home_form'] = 'W-W-D-W-L'
+        row['away_form'] = 'L-D-L-W-L'
+        row['home_form_home'] = 'W-W-W-D'
+        row['away_form_away'] = 'L-L-D-L'
+        factors = _build_factors(row, 'football')
+        form = next(f for f in factors if f['name'] == 'Recent Form')
+        venue = next(f for f in factors if f['name'] == 'Venue Form')
+        # With list input, quality=1.0 because both sides have data
+        assert form['quality'] == 1.0
+        assert venue['quality'] == 1.0
+        # Form descriptions should contain team names and trend labels
+        assert 'Liverpool' in form['description']
+        assert 'Everton' in form['description']
+        # Venue description must have reasonable percentages (not 50% default)
+        assert 'Home at home:' in venue['description']
+        assert '50%' not in venue['description']  # 50% would mean it fell back to default
+
+    def test_csv_stringified_list_form(self, football_row: Dict[str, Any]) -> None:
+        """CSV stringified list format also works."""
+        row = dict(football_row)
+        row['home_form'] = "['W', 'W', 'D', 'W', 'L']"
+        row['away_form'] = "['L', 'D', 'L', 'W', 'L']"
+        factors = _build_factors(row, 'football')
+        form = next(f for f in factors if f['name'] == 'Recent Form')
+        assert form['quality'] == 1.0
+        assert 'Liverpool' in form['description']
 
 
 # =========================================================================

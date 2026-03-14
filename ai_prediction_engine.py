@@ -192,6 +192,37 @@ def _dq_label(dq: float) -> str:
     return "POOR"
 
 
+def _normalize_form(raw: Any) -> list[str]:
+    """Convert form data from any format (CSV string, list, etc.) to a clean list of W/D/L."""
+    if raw is None:
+        return []
+    if isinstance(raw, (list, tuple)):
+        return [str(x).strip().upper() for x in raw if x and str(x).strip().upper() in ('W', 'D', 'L')]
+    if isinstance(raw, str):
+        s = raw.strip()
+        if not s or s.lower() in ('nan', 'none', 'n/a'):
+            return []
+        # "['W', 'L', 'D']" — stringified list
+        if s.startswith('[') and s.endswith(']'):
+            try:
+                import ast
+                parsed = ast.literal_eval(s)
+                if isinstance(parsed, list):
+                    return [str(x).strip().upper() for x in parsed if x and str(x).strip().upper() in ('W', 'D', 'L')]
+            except (ValueError, SyntaxError):
+                pass
+        # "W-L-D" or "W,L,D"
+        for sep in ['-', ',', ' ', ';']:
+            if sep in s:
+                parts = [x.strip().upper() for x in s.split(sep) if x.strip()]
+                if parts and all(p in ('W', 'D', 'L') for p in parts):
+                    return parts
+        # "WLDWD" — single chars
+        if all(c.upper() in 'WLD' for c in s if c.strip()):
+            return [c.upper() for c in s if c.upper() in 'WLD']
+    return []
+
+
 def _form_trend(form_list: Any) -> Tuple[float, str]:
     """Compute form trend from W/D/L list. Returns (score -1..+1, label)."""
     if not form_list or not isinstance(form_list, (list, tuple)):
@@ -356,8 +387,8 @@ def _build_factors(m: Dict[str, Any], sport: str) -> List[Dict[str, Any]]:
     })
 
     # 2. Form
-    hf = m.get('home_form', m.get('livesport_home_form', []))
-    af = m.get('away_form', m.get('livesport_away_form', []))
+    hf = _normalize_form(m.get('home_form', m.get('livesport_home_form', [])))
+    af = _normalize_form(m.get('away_form', m.get('livesport_away_form', [])))
     hf_score = _form_score(hf)
     af_score = _form_score(af)
     _, hf_trend_label = _form_trend(hf)
@@ -392,8 +423,8 @@ def _build_factors(m: Dict[str, Any], sport: str) -> List[Dict[str, Any]]:
 
     # 3. Venue Form (not tennis)
     if sport != 'tennis':
-        hfh = m.get('home_form_home', [])
-        afa = m.get('away_form_away', [])
+        hfh = _normalize_form(m.get('home_form_home', []))
+        afa = _normalize_form(m.get('away_form_away', []))
         hfh_score = _form_score(hfh) if hfh else 0.5
         afa_score = _form_score(afa) if afa else 0.5
         venue_diff = hfh_score - afa_score
