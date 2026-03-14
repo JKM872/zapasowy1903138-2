@@ -115,6 +115,7 @@ def scrape_and_send_email(
     only_form_advantage: bool = False,
     skip_no_odds: bool = True,
     away_team_focus: bool = False,
+    require_form_advantage: bool = False,
     use_forebet: bool = False,
     use_sofascore: bool = True,
     use_odds: bool = False,
@@ -292,6 +293,7 @@ def scrape_and_send_email(
                         # Sporty drużynowe - FAZA 1: BEZ Forebet/SofaScore
                         current_sport = detect_sport_from_url(url)
                         info = process_match(url, driver, away_team_focus=away_team_focus,
+                                           require_form_advantage=require_form_advantage,
                                            use_forebet=False, use_gemini=False, 
                                            use_sofascore=False, sport=current_sport)
                         rows.append(info)
@@ -1046,6 +1048,8 @@ WAŻNE dla Gmail:
                        help='🔥 Wyślij tylko mecze z PRZEWAGĄ FORMY gospodarzy/gości (przyspiesza proces)')
     parser.add_argument('--away-team-focus', action='store_true',
                        help='🏃 Szukaj meczów gdzie GOŚCIE mają >=60%% H2H (zamiast gospodarzy)')
+    parser.add_argument('--require-form-advantage', action='store_true',
+                       help='🔒 Forma jako WYMAGANY warunek kwalifikacji (nie tylko bonus)')
     parser.add_argument('--use-forebet', action='store_true',
                        help='🎯 Pobieraj predykcje z Forebet.com (wymaga widocznej przeglądarki)')
     parser.add_argument('--use-sofascore', action='store_true', default=True,
@@ -1092,6 +1096,7 @@ WAŻNE dla Gmail:
         app_api_key=args.app_api_key,
         only_form_advantage=args.only_form_advantage,
         away_team_focus=args.away_team_focus,
+        require_form_advantage=args.require_form_advantage,
         use_forebet=args.use_forebet,
         use_sofascore=use_sofascore,
         use_odds=args.use_odds,

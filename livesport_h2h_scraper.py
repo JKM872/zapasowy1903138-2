@@ -634,7 +634,7 @@ def _teams_match(name_a, name_b):
     return overlap >= 0.8
 
 
-def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = False, use_forebet: bool = False, use_gemini: bool = False, use_sofascore: bool = False, use_flashscore: bool = False, sport: str = 'football') -> Dict:
+def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = False, require_form_advantage: bool = False, use_forebet: bool = False, use_gemini: bool = False, use_sofascore: bool = False, use_flashscore: bool = False, sport: str = 'football') -> Dict:
     """Odwiedza stronę meczu, otwiera H2H i zwraca informację we właściwym formacie.
     
     Args:
@@ -999,8 +999,12 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             out['away_form'] = advanced_form['away_form_overall']
             
             # FINALNE KRYTERIUM: H2H ≥60% (podstawowe)
-            # Forma jest BONUSEM (dodatkowa ikona 🔥), nie wymogiem
-            out['qualifies'] = basic_qualifies
+            # Jeśli require_form_advantage=True, forma jest WYMAGANA
+            # W przeciwnym razie forma jest BONUSEM (dodatkowa ikona 🔥)
+            if require_form_advantage:
+                out['qualifies'] = basic_qualifies and out['form_advantage']
+            else:
+                out['qualifies'] = basic_qualifies
             
             if out['form_advantage']:
                 if away_team_focus:

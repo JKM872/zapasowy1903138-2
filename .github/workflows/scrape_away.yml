@@ -1,0 +1,223 @@
+name: Sports Scraper Pipeline - AWAY FOCUS
+
+on:
+  # Run daily at 3:00 UTC (5:00 CEST summer / 4:00 CET winter)
+  schedule:
+    - cron: '0 3 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: 'Sport to scrape (all = all sports)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - football
+          - basketball
+          - volleyball
+          - handball
+          - hockey
+          - tennis
+      send_email:
+        description: 'Send email notification'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        sport: [football, basketball, volleyball, handball, hockey, tennis]
+      fail-fast: false
+      max-parallel: 6
+    
+    services:
+      # FlareSolverr for Cloudflare bypass
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+    
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # 2. Setup Python
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      # 3. Setup Node.js (for Puppeteer)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      # 4. Install Chrome for Puppeteer and Selenium
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          # Create symlink for compatibility
+          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
+          # Set environment variables
+          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser" >> $GITHUB_ENV
+      
+      # 5. Install Python dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # 🔥 Cloudflare Bypass packages (curl_cffi is PRIMARY bypass method)
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi cloudscraper httpx[http2]
+          python -c "from curl_cffi import requests; print('curl_cffi OK')"
+      
+      # 6. Install Node.js dependencies (Puppeteer)
+      - name: Install Node.js dependencies
+        run: npm ci || npm install
+      
+      # 7. Wait for FlareSolverr to be ready
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr to be ready..."
+          FLARESOLVERR_READY=false
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "✅ FlareSolverr health endpoint responding!"
+              TEST_RESPONSE=$(curl -s -X POST http://localhost:8191/v1 \
+                -H "Content-Type: application/json" \
+                -d '{"cmd":"request.get","url":"https://www.google.com","maxTimeout":10000}' \
+                --max-time 15 2>/dev/null || echo "TIMEOUT")
+              if echo "$TEST_RESPONSE" | grep -q '"status":"ok"'; then
+                echo "✅ FlareSolverr verified - working correctly!"
+                FLARESOLVERR_READY=true
+                break
+              fi
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+          if [ "$FLARESOLVERR_READY" != "true" ]; then
+            echo "⚠️ FlareSolverr may not be fully ready, continuing anyway..."
+          fi
+      
+      # 8. Run the scraper for this sport — AWAY TEAM FOCUS + REQUIRE FORM
+      - name: Run scraper (AWAY) - ${{ matrix.sport }}
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "🏃 Scraping ${{ matrix.sport }} (AWAY FOCUS)..."
+          TODAY=$(date +%Y-%m-%d)
+          python scrape_and_notify.py \
+            --date $TODAY \
+            --sports ${{ matrix.sport }} \
+            --to "${{ secrets.EMAIL_RECIPIENT }}" \
+            --from-email "${{ secrets.EMAIL_SENDER }}" \
+            --password "${{ secrets.EMAIL_PASSWORD }}" \
+            --provider gmail \
+            --use-forebet \
+            --use-sofascore \
+            --use-odds \
+            --use-gemini \
+            --headless \
+            --away-team-focus \
+            --require-form-advantage
+      
+      # 9. Upload results as artifact
+      - name: Upload results (AWAY) - ${{ matrix.sport }}
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-away-${{ matrix.sport }}-${{ github.run_id }}
+          path: |
+            results/*.json
+            *.html
+            outputs/*.csv
+            logs/
+          retention-days: 7
+
+  # ── Commit scraped results back to the repo ──
+  commit-results:
+    needs: scrape
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Collect JSON results
+        run: |
+          mkdir -p results
+          echo "📦 Collecting JSON results from artifacts..."
+          find artifacts -name '*.json' -path '*/results/*' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "results/$fname"
+          done
+          echo "📋 Results directory:"
+          ls -la results/ || echo "No results found"
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/*.json
+          if git diff --cached --quiet; then
+            echo "ℹ️ No new results to commit"
+          else
+            TODAY=$(date +%Y-%m-%d)
+            git commit -m "data: away-focus scraped results for $TODAY [skip ci]"
+            git push
+            echo "✅ Results committed and pushed"
+          fi
+
+      - name: Deploy to Heroku
+        if: success()
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          if [ -z "$HEROKU_API_KEY" ]; then
+            echo "⚠️ HEROKU_API_KEY not set — skipping Heroku deploy"
+            echo "Set HEROKU_API_KEY secret to enable auto-deploy"
+            exit 0
+          fi
+          # Trigger Heroku build from latest commit
+          curl -s -n -X POST https://api.heroku.com/apps/pickly-67e87ed00f70/builds \
+            -d '{"source_blob":{"url":"https://github.com/JKM872/zapasowy1903138-2/tarball/main"}}' \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/vnd.heroku+json; version=3" \
+            -H "Authorization: Bearer $HEROKU_API_KEY" \
+            && echo "✅ Heroku build triggered" \
+            || echo "⚠️ Heroku deploy failed (non-critical)"
