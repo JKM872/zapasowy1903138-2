@@ -1325,23 +1325,19 @@ def send_email_notification(
         else:
             print("   ⚠️ Brak kolumn z kursami w danych - pokazuję wszystkie mecze")
 
-    # OPCJA 3: Pomijaj mecze z kursem poniżej progu (np. 1.19)
-    if min_odds_threshold > 0:
-        print(f"📉 TRYB: Pomijam mecze z kursem < {min_odds_threshold}")
-        before_count = len(qualified)
-        if 'home_odds' in qualified.columns and 'away_odds' in qualified.columns:
-            def _odds_above_threshold(row: pd.Series) -> bool:  # type: ignore[type-arg]
-                ho = row.get('home_odds')
-                ao = row.get('away_odds')
-                if pd.isna(ho) or pd.isna(ao):
-                    return False  # brak kursów = nie przechodzi
-                try:
-                    return float(ho) >= min_odds_threshold and float(ao) >= min_odds_threshold
-                except (ValueError, TypeError):
-                    return False
-            qualified = qualified[qualified.apply(_odds_above_threshold, axis=1)]
-            skipped = before_count - len(qualified)
-            print(f"   Pominięto {skipped} meczów z kursem < {min_odds_threshold}")
+    # OPCJA 3: Filtr progów kursowych per sport (OR — wystarczy jeden kurs >= progu)
+    print("📉 TRYB: Progi kursowe per sport (OR)")
+    before_count = len(qualified)
+    if 'home_odds' in qualified.columns and 'away_odds' in qualified.columns:
+        sport_col = 'sport' if 'sport' in qualified.columns else None
+
+        def _sport_odds_ok(row: pd.Series) -> bool:  # type: ignore[type-arg]
+            sp = row[sport_col] if sport_col else 'football'
+            return _passes_sport_odds_threshold(sp, row.get('home_odds'), row.get('away_odds'))
+
+        qualified = qualified[qualified.apply(_sport_odds_ok, axis=1)]
+        skipped = before_count - len(qualified)
+        print(f"   Pominięto {skipped} meczów poniżej progu kursowego per sport")
 
     if len(qualified) == 0:
         messages: List[str] = []
@@ -1451,6 +1447,43 @@ SPORT_LABEL = {
     'volleyball': 'Siatkówka', 'tennis': 'Tenis', 'hockey': 'Hokej', 'rugby': 'Rugby',
 }
 
+# ---------------------------------------------------------------------------
+# Per-sport minimum odds thresholds
+# ---------------------------------------------------------------------------
+SPORT_MIN_ODDS: Dict[str, float] = {
+    'football': 1.50,
+    'basketball': 1.30,
+    'handball': 1.45,
+    'volleyball': 1.30,
+    'hockey': 1.50,
+    'tennis': 1.35,
+}
+SPORT_MIN_ODDS_FALLBACK: float = 1.35
+
+
+def _passes_sport_odds_threshold(sport: str, home_odds: Any, away_odds: Any) -> bool:
+    """Return True when at least ONE of home/away odds meets the sport's threshold.
+
+    Rules:
+      - threshold is looked up per sport; unknown sports use SPORT_MIN_ODDS_FALLBACK
+      - condition is OR: float(home_odds) >= threshold OR float(away_odds) >= threshold
+      - if both odds are missing / unparseable the match is rejected
+    """
+    threshold = SPORT_MIN_ODDS.get(sport, SPORT_MIN_ODDS_FALLBACK)
+    ho_ok = False
+    ao_ok = False
+    try:
+        if home_odds is not None and not (isinstance(home_odds, float) and math.isnan(home_odds)):
+            ho_ok = float(home_odds) >= threshold
+    except (ValueError, TypeError):
+        pass
+    try:
+        if away_odds is not None and not (isinstance(away_odds, float) and math.isnan(away_odds)):
+            ao_ok = float(away_odds) >= threshold
+    except (ValueError, TypeError):
+        pass
+    return ho_ok or ao_ok
+
 
 def send_split_emails_by_sport(
     csv_file: str,
@@ -1461,7 +1494,7 @@ def send_split_emails_by_sport(
     sort_by: str = 'time',
     include_sorted_odds: bool = True,
     odds_limit: int = 15,
-    min_odds_threshold: float = 1.19,
+    min_odds_threshold: float = 0.0,
 ):
     """
     Wysyła 2 osobne maile dla każdego sportu:
@@ -1470,11 +1503,11 @@ def send_split_emails_by_sport(
 
     Filtry:
       - brak kursów → pominięty
-      - jakikolwiek kurs < min_odds_threshold → pominięty
+      - per-sport progi kursowe (OR — wystarczy jeden kurs >= progu sportu)
     """
     print("=" * 70)
     print("📧 TRYB SPLIT: 2 maile na każdy sport")
-    print(f"   Próg kursów: {min_odds_threshold}")
+    print("   Progi kursowe per sport (OR)")
     print("=" * 70)
 
     # --- wczytaj i wyczyść ---
@@ -1500,18 +1533,17 @@ def send_split_emails_by_sport(
         qualified = qualified[(qualified['home_odds'].notna()) & (qualified['away_odds'].notna())]
         print(f"   Pominięto {before - len(qualified)} meczów bez kursów")
 
-    # --- filtr: próg kursów ---
-    if min_odds_threshold > 0 and 'home_odds' in qualified.columns:
+    # --- filtr: progi kursowe per sport (OR) ---
+    if 'home_odds' in qualified.columns:
         before = len(qualified)
+        sport_col = 'sport' if 'sport' in qualified.columns else None
 
         def _above(row: pd.Series) -> bool:  # type: ignore[type-arg]
-            try:
-                return float(row['home_odds']) >= min_odds_threshold and float(row['away_odds']) >= min_odds_threshold
-            except (ValueError, TypeError):
-                return False
+            sp = row[sport_col] if sport_col else 'football'
+            return _passes_sport_odds_threshold(sp, row.get('home_odds'), row.get('away_odds'))
 
         qualified = qualified[qualified.apply(_above, axis=1)]
-        print(f"   Pominięto {before - len(qualified)} meczów z kursem < {min_odds_threshold}")
+        print(f"   Pominięto {before - len(qualified)} meczów poniżej progu kursowego per sport")
 
     if len(qualified) == 0:
         print("   ⚠️ Brak meczów po filtrach — żaden email nie zostanie wysłany")

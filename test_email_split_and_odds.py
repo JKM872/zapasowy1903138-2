@@ -1,8 +1,9 @@
 """
 Tests for:
-  1. min_odds_threshold filtering (skip matches with odds < 1.19)
+  1. Per-sport odds threshold filtering (OR — at least one odds >= sport threshold)
   2. skip_no_odds filtering (skip matches without odds)
   3. send_split_emails_by_sport grouping logic (2 emails per sport)
+  4. _passes_sport_odds_threshold helper unit tests
 """
 
 import os
@@ -15,7 +16,7 @@ from unittest.mock import patch, MagicMock
 # ---------------------------------------------------------------------------
 
 SAMPLE_MATCHES: list[dict[str, Any]] = [
-    # football, form_advantage=True, good odds
+    # football, form_advantage=True, good odds (both >= 1.5)
     dict(sport='football', home_team='Barcelona', away_team='Real Madrid',
          qualifies=True, form_advantage=True,
          home_odds=1.75, away_odds=4.20, match_time='2026-03-08 20:00'),
@@ -23,15 +24,15 @@ SAMPLE_MATCHES: list[dict[str, Any]] = [
     dict(sport='football', home_team='Arsenal', away_team='Chelsea',
          qualifies=True, form_advantage=False,
          home_odds=2.10, away_odds=3.40, match_time='2026-03-08 18:00'),
-    # football, form_advantage=True, LOW odds (home < 1.19)
+    # football, form_advantage=True, BOTH odds below football threshold (1.5)
     dict(sport='football', home_team='Bayern', away_team='Augsburg',
          qualifies=True, form_advantage=True,
-         home_odds=1.10, away_odds=8.50, match_time='2026-03-08 15:30'),
+         home_odds=1.10, away_odds=1.20, match_time='2026-03-08 15:30'),
     # football, qualifies but NO odds
     dict(sport='football', home_team='Dortmund', away_team='Mainz',
          qualifies=True, form_advantage=False,
          home_odds=None, away_odds=None, match_time='2026-03-08 15:30'),
-    # basketball, form_advantage=True, good odds
+    # basketball, form_advantage=True, good odds (both >= 1.3)
     dict(sport='basketball', home_team='Lakers', away_team='Celtics',
          qualifies=True, form_advantage=True,
          home_odds=1.90, away_odds=1.95, match_time='2026-03-08 02:00'),
@@ -39,7 +40,7 @@ SAMPLE_MATCHES: list[dict[str, Any]] = [
     dict(sport='basketball', home_team='Warriors', away_team='Nets',
          qualifies=True, form_advantage=False,
          home_odds=1.55, away_odds=2.50, match_time='2026-03-08 01:00'),
-    # tennis, form_advantage=False, odds exactly 1.19 (edge case — should PASS)
+    # tennis, form_advantage=False, one odds below 1.35 but other above → OR passes
     dict(sport='tennis', home_team='Djokovic', away_team='Nadal',
          qualifies=True, form_advantage=False,
          home_odds=1.19, away_odds=5.00, match_time='2026-03-08 14:00'),
@@ -59,50 +60,121 @@ def _write_csv(tmp_path: Any, matches: list[dict[str, Any]] | None = None) -> st
 
 
 # ---------------------------------------------------------------------------
-# Tests: min_odds_threshold in send_email_notification
+# Tests: _passes_sport_odds_threshold helper
 # ---------------------------------------------------------------------------
 
-class TestMinOddsThreshold:
-    """send_email_notification should drop matches with any key odds < threshold."""
+class TestPassesSportOddsThreshold:
+    """Unit tests for the per-sport odds threshold helper."""
+
+    def test_football_both_above(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        assert _passes_sport_odds_threshold('football', 1.75, 4.20) is True
+
+    def test_football_both_below(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        assert _passes_sport_odds_threshold('football', 1.10, 1.20) is False
+
+    def test_football_or_one_above(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # home below, away above → OR passes
+        assert _passes_sport_odds_threshold('football', 1.10, 8.50) is True
+
+    def test_basketball_lower_threshold(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # 1.35 >= 1.30 basketball threshold
+        assert _passes_sport_odds_threshold('basketball', 1.35, 1.35) is True
+
+    def test_basketball_below(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        assert _passes_sport_odds_threshold('basketball', 1.20, 1.20) is False
+
+    def test_tennis_exactly_at_threshold(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # tennis threshold = 1.35, exactly at threshold = passes
+        assert _passes_sport_odds_threshold('tennis', 1.35, 1.35) is True
+
+    def test_handball_threshold(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # handball threshold = 1.45
+        assert _passes_sport_odds_threshold('handball', 1.45, 1.10) is True
+        assert _passes_sport_odds_threshold('handball', 1.10, 1.10) is False
+
+    def test_hockey_threshold(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # hockey threshold = 1.50
+        assert _passes_sport_odds_threshold('hockey', 1.50, 1.00) is True
+        assert _passes_sport_odds_threshold('hockey', 1.40, 1.40) is False
+
+    def test_volleyball_threshold(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # volleyball threshold = 1.30
+        assert _passes_sport_odds_threshold('volleyball', 1.30, 1.10) is True
+        assert _passes_sport_odds_threshold('volleyball', 1.20, 1.20) is False
+
+    def test_unknown_sport_uses_fallback(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # unknown sport → fallback 1.35
+        assert _passes_sport_odds_threshold('rugby', 1.40, 1.40) is True
+        assert _passes_sport_odds_threshold('rugby', 1.30, 1.30) is False
+
+    def test_both_none_rejected(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        assert _passes_sport_odds_threshold('football', None, None) is False
+
+    def test_one_none_other_above(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        # home=None, away=2.0 >= 1.5 → passes via OR
+        assert _passes_sport_odds_threshold('football', None, 2.0) is True
+
+    def test_nan_float_rejected(self) -> None:
+        from email_notifier import _passes_sport_odds_threshold
+        assert _passes_sport_odds_threshold('football', float('nan'), float('nan')) is False
+
+
+# ---------------------------------------------------------------------------
+# Tests: per-sport filtering in send_email_notification
+# ---------------------------------------------------------------------------
+
+class TestPerSportOddsClassic:
+    """send_email_notification filters by per-sport thresholds (OR condition)."""
 
     @patch('email_notifier.smtplib.SMTP')
-    def test_filters_low_odds(self, mock_smtp: Any, tmp_path: Any) -> None:
+    def test_filters_both_odds_below_sport_threshold(self, mock_smtp: Any, tmp_path: Any) -> None:
         from email_notifier import send_email_notification
         csv = _write_csv(tmp_path)
 
-        # Capture what gets rendered by intercepting create_html_email
         with patch('email_notifier.create_html_email', return_value='<html>ok</html>') as mock_html:
             send_email_notification(
                 csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-                password='x', skip_no_odds=True, min_odds_threshold=1.19,
+                password='x', skip_no_odds=True,
             )
-            # Bayern (1.10) and Dortmund (None) should be dropped
             matches_sent = mock_html.call_args[0][0]
             teams = {m['home_team'] for m in matches_sent}
-            assert 'Bayern' not in teams, "Bayern (odds 1.10) should be filtered"
+            assert 'Bayern' not in teams, "Bayern (1.10/1.20, football threshold 1.5) both below"
             assert 'Dortmund' not in teams, "Dortmund (no odds) should be filtered"
             assert 'Barcelona' in teams
-            assert 'Djokovic' in teams, "Djokovic (odds exactly 1.19) should pass"
+            assert 'Arsenal' in teams
+            assert 'Lakers' in teams
+            assert 'Warriors' in teams
 
     @patch('email_notifier.smtplib.SMTP')
-    def test_threshold_zero_means_no_filter(self, mock_smtp: Any, tmp_path: Any) -> None:
+    def test_or_condition_one_above_passes(self, mock_smtp: Any, tmp_path: Any) -> None:
         from email_notifier import send_email_notification
         csv = _write_csv(tmp_path)
 
         with patch('email_notifier.create_html_email', return_value='<html>ok</html>') as mock_html:
             send_email_notification(
                 csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-                password='x', skip_no_odds=False, min_odds_threshold=0.0,
+                password='x', skip_no_odds=True,
             )
             matches_sent = mock_html.call_args[0][0]
             teams = {m['home_team'] for m in matches_sent}
-            # With threshold 0 and skip_no_odds=False, all qualifying should pass
-            assert 'Bayern' in teams
-            assert 'Dortmund' in teams
+            # Djokovic: tennis 1.19/5.00, threshold=1.35, 5.00>=1.35 → passes via OR
+            assert 'Djokovic' in teams, "Djokovic should pass via OR (away 5.00 >= 1.35)"
 
     @patch('email_notifier.smtplib.SMTP')
     def test_no_matches_after_filter(self, mock_smtp: Any, tmp_path: Any) -> None:
-        """If all matches are below threshold, no email should be sent."""
+        """If all matches are below sport threshold, no email should be sent."""
         from email_notifier import send_email_notification
         low = [dict(sport='football', home_team='A', away_team='B',
                     qualifies=True, form_advantage=False,
@@ -111,10 +183,49 @@ class TestMinOddsThreshold:
 
         send_email_notification(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', skip_no_odds=True, min_odds_threshold=1.19,
+            password='x', skip_no_odds=True,
         )
-        # SMTP should never be used (no matches to send)
         mock_smtp.return_value.__enter__.return_value.send_message.assert_not_called()
+
+    @patch('email_notifier.smtplib.SMTP')
+    def test_basketball_passes_with_lower_threshold(self, mock_smtp: Any, tmp_path: Any) -> None:
+        """Basketball threshold 1.3 — odds 1.35 should pass (would fail football 1.5)."""
+        from email_notifier import send_email_notification
+        matches = [dict(sport='basketball', home_team='Team1', away_team='Team2',
+                        qualifies=True, form_advantage=False,
+                        home_odds=1.35, away_odds=1.35, match_time='2026-03-08 12:00')]
+        csv = _write_csv(tmp_path, matches)
+
+        with patch('email_notifier.create_html_email', return_value='<html>ok</html>') as mock_html:
+            send_email_notification(
+                csv_file=csv, to_email='a@b.com', from_email='a@b.com',
+                password='x', skip_no_odds=True,
+            )
+            teams = {m['home_team'] for m in mock_html.call_args[0][0]}
+            assert 'Team1' in teams
+
+    @patch('email_notifier.smtplib.SMTP')
+    def test_unknown_sport_uses_fallback(self, mock_smtp: Any, tmp_path: Any) -> None:
+        """Unknown sport 'rugby' should use fallback threshold 1.35."""
+        from email_notifier import send_email_notification
+        matches = [
+            dict(sport='rugby', home_team='PassTeam', away_team='X',
+                 qualifies=True, form_advantage=False,
+                 home_odds=1.40, away_odds=1.40, match_time='2026-03-08 12:00'),
+            dict(sport='rugby', home_team='FailTeam', away_team='Y',
+                 qualifies=True, form_advantage=False,
+                 home_odds=1.20, away_odds=1.20, match_time='2026-03-08 13:00'),
+        ]
+        csv = _write_csv(tmp_path, matches)
+
+        with patch('email_notifier.create_html_email', return_value='<html>ok</html>') as mock_html:
+            send_email_notification(
+                csv_file=csv, to_email='a@b.com', from_email='a@b.com',
+                password='x', skip_no_odds=True,
+            )
+            teams = {m['home_team'] for m in mock_html.call_args[0][0]}
+            assert 'PassTeam' in teams, "1.40 >= 1.35 fallback"
+            assert 'FailTeam' not in teams, "1.20 < 1.35 fallback"
 
 
 # ---------------------------------------------------------------------------
@@ -122,7 +233,7 @@ class TestMinOddsThreshold:
 # ---------------------------------------------------------------------------
 
 class TestSplitEmailsBySport:
-    """send_split_emails_by_sport should group by sport, then form_advantage."""
+    """send_split_emails_by_sport groups by sport with per-sport thresholds."""
 
     @patch('email_notifier.smtplib.SMTP')
     def test_sends_correct_number_of_emails(self, mock_smtp: Any, tmp_path: Any) -> None:
@@ -135,13 +246,13 @@ class TestSplitEmailsBySport:
 
         count = send_split_emails_by_sport(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', min_odds_threshold=1.19,
+            password='x',
         )
 
-        # Expected emails after filtering (Bayern dropped, Dortmund dropped):
+        # Expected after per-sport filter (Bayern 1.10/1.20 dropped, Dortmund no odds dropped):
         #   football: form_adv=[Barcelona] → 1 email, normal=[Arsenal] → 1 email = 2
         #   basketball: form_adv=[Lakers] → 1, normal=[Warriors] → 1 = 2
-        #   tennis: form_adv=[], normal=[Djokovic] → 1 = 1
+        #   tennis: form_adv=[], normal=[Djokovic (1.19/5.00, OR passes)] → 1 = 1
         # Total = 5
         assert count == 5
         assert mock_server.send_message.call_count == 5
@@ -157,7 +268,7 @@ class TestSplitEmailsBySport:
 
         send_split_emails_by_sport(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', min_odds_threshold=1.19,
+            password='x',
         )
 
         subjects: list[str] = []
@@ -189,7 +300,7 @@ class TestSplitEmailsBySport:
 
         count = send_split_emails_by_sport(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', min_odds_threshold=1.19,
+            password='x',
         )
         assert count == 1  # only normal group
 
@@ -203,17 +314,17 @@ class TestSplitEmailsBySport:
 
         count = send_split_emails_by_sport(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', min_odds_threshold=1.19,
+            password='x',
         )
         assert count == 0
 
     @patch('email_notifier.smtplib.SMTP')
-    def test_odds_exactly_threshold_passes(self, mock_smtp: Any, tmp_path: Any) -> None:
-        """Odds == 1.19 should pass the filter."""
+    def test_odds_exactly_at_sport_threshold_passes(self, mock_smtp: Any, tmp_path: Any) -> None:
+        """Odds exactly at sport threshold should pass."""
         from email_notifier import send_split_emails_by_sport
         edge = [dict(sport='tennis', home_team='Player1', away_team='Player2',
                      qualifies=True, form_advantage=False,
-                     home_odds=1.19, away_odds=1.19, match_time='2026-03-08 10:00')]
+                     home_odds=1.35, away_odds=1.35, match_time='2026-03-08 10:00')]
         csv = _write_csv(tmp_path, edge)
 
         mock_server = MagicMock()
@@ -222,7 +333,7 @@ class TestSplitEmailsBySport:
 
         count = send_split_emails_by_sport(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', min_odds_threshold=1.19,
+            password='x',
         )
         assert count == 1
 
@@ -237,6 +348,34 @@ class TestSplitEmailsBySport:
 
         count = send_split_emails_by_sport(
             csv_file=csv, to_email='a@b.com', from_email='a@b.com',
-            password='x', min_odds_threshold=1.19,
+            password='x',
         )
         assert count == 0
+
+    @patch('email_notifier.smtplib.SMTP')
+    def test_per_sport_different_thresholds(self, mock_smtp: Any, tmp_path: Any) -> None:
+        """Match that passes basketball threshold (1.3) but would fail football (1.5)."""
+        from email_notifier import send_split_emails_by_sport
+        matches = [
+            dict(sport='basketball', home_team='BballTeam', away_team='X',
+                 qualifies=True, form_advantage=False,
+                 home_odds=1.40, away_odds=1.40, match_time='2026-03-08 12:00'),
+            dict(sport='football', home_team='FootTeam', away_team='Y',
+                 qualifies=True, form_advantage=False,
+                 home_odds=1.40, away_odds=1.40, match_time='2026-03-08 13:00'),
+        ]
+        csv = _write_csv(tmp_path, matches)
+
+        mock_server = MagicMock()
+        mock_smtp.return_value.__enter__ = MagicMock(return_value=mock_server)
+        mock_smtp.return_value.__exit__ = MagicMock(return_value=False)
+
+        count = send_split_emails_by_sport(
+            csv_file=csv, to_email='a@b.com', from_email='a@b.com',
+            password='x',
+        )
+        # basketball 1.40 >= 1.30 → passes
+        # football 1.40 < 1.50 → filtered
+        assert count == 1
+        msg = mock_server.send_message.call_args[0][0]
+        assert 'Koszykówka' in str(msg['Subject'])

@@ -885,7 +885,6 @@ def scrape_and_send_email(
             
             if split_emails:
                 # --- TRYB SPLIT: 2 maile na każdy sport ---
-                threshold = min_odds_threshold if min_odds_threshold > 0 else 1.19
                 send_split_emails_by_sport(
                     csv_file=outfn,
                     to_email=to_email,
@@ -895,7 +894,6 @@ def scrape_and_send_email(
                     sort_by=sort_by,
                     include_sorted_odds=include_sorted_odds,
                     odds_limit=odds_limit,
-                    min_odds_threshold=threshold,
                 )
             else:
                 # --- TRYB KLASYCZNY: 1 email ---

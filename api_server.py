@@ -36,6 +36,37 @@ logger = logging.getLogger('api_server')
 # Auth middleware
 from auth_middleware import require_auth, optional_auth
 
+# ---------------------------------------------------------------------------
+# Per-sport minimum odds thresholds (same as email_notifier)
+# ---------------------------------------------------------------------------
+SPORT_MIN_ODDS = {
+    'football': 1.50,
+    'basketball': 1.30,
+    'handball': 1.45,
+    'volleyball': 1.30,
+    'hockey': 1.50,
+    'tennis': 1.35,
+}
+SPORT_MIN_ODDS_FALLBACK = 1.35
+
+
+def _passes_sport_odds_threshold(sport, home_odds, away_odds):
+    """Return True when at least ONE of home/away odds meets the sport's threshold."""
+    threshold = SPORT_MIN_ODDS.get(sport, SPORT_MIN_ODDS_FALLBACK)
+    ho_ok = False
+    ao_ok = False
+    try:
+        if home_odds is not None:
+            ho_ok = float(home_odds) >= threshold
+    except (ValueError, TypeError):
+        pass
+    try:
+        if away_odds is not None:
+            ao_ok = float(away_odds) >= threshold
+    except (ValueError, TypeError):
+        pass
+    return ho_ok or ao_ok
+
 
 def safe_value(val, default=None):
     """
@@ -472,6 +503,19 @@ def get_matches():
         if all_matches:
             source = 'files'
     
+    # ── Per-sport odds threshold filter (OR condition) ──────────────
+    if only_qualifying:
+        before = len(all_matches)
+        all_matches = [
+            m for m in all_matches
+            if _passes_sport_odds_threshold(
+                m.get('sport', 'football'),
+                (m.get('odds') or {}).get('home'),
+                (m.get('odds') or {}).get('away'),
+            )
+        ]
+        logger.debug('Per-sport odds filter: %d -> %d matches', before, len(all_matches))
+
     # Calculate stats
     qualifying_count = sum(1 for m in all_matches if m['qualifies'])
     form_adv_count = sum(1 for m in all_matches if m.get('formAdvantage'))
