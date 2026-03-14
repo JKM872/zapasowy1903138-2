@@ -18,6 +18,7 @@ import re
 from datetime import datetime
 from livesport_h2h_scraper import start_driver, get_match_links_from_day, process_match, process_match_tennis, detect_sport_from_url
 from email_notifier import send_email_notification, send_split_emails_by_sport
+from telegram_notifier import send_telegram_summary
 from app_integrator import AppIntegrator, create_integrator_from_config
 import pandas as pd
 import numpy as np
@@ -926,6 +927,12 @@ def scrape_and_send_email(
                 )
             
             print("\n✅ SUKCES! Email wysłany.")
+
+            # ── Telegram summary (po udanym mailu) ──
+            try:
+                send_telegram_summary(rows, qualifying_count, date)
+            except Exception as exc:
+                print(f"⚠️  Telegram: {exc}")
         else:
             # Komunikat o braku meczów
             msg_parts = []
