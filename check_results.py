@@ -1,0 +1,641 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+📊 CHECK RESULTS — Sprawdza wyniki meczów wysłanych mailem
+
+Czyta manifest mailed events (zapisany przez email_notifier w momencie wysyłki),
+sprawdza finalne wyniki każdego meczu i wysyła raport skuteczności.
+
+Użycie:
+  python check_results.py --date 2025-10-07 --headless
+  python check_results.py --date 2025-10-07 --send-email --to user@gmail.com ...
+  python check_results.py --yesterday --headless --send-email ...
+"""
+
+import json
+import argparse
+import glob
+import math
+import os
+import smtplib
+import time as time_module
+from datetime import datetime, timedelta
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from typing import Any, Dict, List, Optional
+
+# Selenium — optional; results can also come from API
+try:
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
+    from bs4 import BeautifulSoup
+    SELENIUM_OK = True
+except ImportError:
+    SELENIUM_OK = False
+
+# ---------------------------------------------------------------------------
+# SMTP config (reused from email_notifier)
+# ---------------------------------------------------------------------------
+SMTP_CONFIG = {
+    'gmail': {'server': 'smtp.gmail.com', 'port': 587, 'use_tls': True},
+    'outlook': {'server': 'smtp-mail.outlook.com', 'port': 587, 'use_tls': True},
+    'yahoo': {'server': 'smtp.mail.yahoo.com', 'port': 587, 'use_tls': True},
+}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 1. MANIFEST LOADING
+# ═══════════════════════════════════════════════════════════════════════════
+
+def load_manifests(date: str) -> List[Dict[str, Any]]:
+    """Load all mailed-event manifest files for a given date and merge."""
+    pattern = f'outputs/mailed_manifest_{date}*.json'
+    files = sorted(glob.glob(pattern))
+
+    if not files:
+        print(f"❌ Brak manifestów dla daty {date}")
+        print(f"   Szukano: {pattern}")
+        return []
+
+    all_matches: List[Dict[str, Any]] = []
+    seen_urls: set = set()
+
+    for fpath in files:
+        try:
+            with open(fpath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            for m in data:
+                url = m.get('match_url')
+                if url and url not in seen_urls:
+                    all_matches.append(m)
+                    seen_urls.add(url)
+            print(f"   📂 {fpath}: {len(data)} meczów")
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"   ⚠️ Błąd wczytywania {fpath}: {e}")
+
+    print(f"✅ Wczytano łącznie {len(all_matches)} unikalnych meczów z manifestów")
+    return all_matches
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 2. RESULT SCRAPING
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _init_driver(headless: bool = True):
+    """Initialize Selenium WebDriver."""
+    if not SELENIUM_OK:
+        raise RuntimeError("Selenium/BeautifulSoup not installed")
+
+    opts = Options()
+    if headless:
+        opts.add_argument('--headless')
+    opts.add_argument('--disable-gpu')
+    opts.add_argument('--no-sandbox')
+    opts.add_argument('--disable-dev-shm-usage')
+    opts.add_argument('--disable-blink-features=AutomationControlled')
+    opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+    opts.add_experimental_option('useAutomationExtension', False)
+
+    # Try chromedriver from PATH first, fall back to webdriver-manager
+    try:
+        driver = webdriver.Chrome(options=opts)
+    except Exception:
+        from webdriver_manager.chrome import ChromeDriverManager
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()),
+            options=opts,
+        )
+    return driver
+
+
+def scrape_match_result(driver, match_url: str) -> Dict[str, Any]:
+    """Scrape final score for a single match URL.
+
+    Returns dict with keys: status, score_home, score_away, winner.
+    """
+    try:
+        driver.get(match_url)
+        time_module.sleep(2.0)
+
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+        # Check if match finished
+        status_elem = soup.find('div', class_='detailScore__status')
+        if status_elem:
+            status_text = status_elem.get_text(strip=True).lower()
+            finished_keywords = ['zakończony', 'finished', 'ft', 'ao', 'po dogrywce',
+                                 'po karnych', 'walkower', 'ended']
+            if not any(kw in status_text for kw in finished_keywords):
+                return {'status': 'not_finished'}
+
+        score_home = None
+        score_away = None
+
+        # Method 1: detailScore__wrapper divs
+        score_divs = soup.find_all('div', class_='detailScore__wrapper')
+        if len(score_divs) >= 2:
+            try:
+                score_home = int(score_divs[0].get_text(strip=True))
+                score_away = int(score_divs[1].get_text(strip=True))
+            except (ValueError, TypeError):
+                pass
+
+        # Method 2: JSON-LD structured data
+        if score_home is None:
+            for script in soup.find_all('script', type='application/ld+json'):
+                try:
+                    data = json.loads(script.string)
+                    if isinstance(data, dict) and 'homeTeam' in data:
+                        score_home = int(data['homeTeam']['score'])
+                        score_away = int(data['awayTeam']['score'])
+                        break
+                except (json.JSONDecodeError, KeyError, TypeError, ValueError):
+                    continue
+
+        if score_home is None or score_away is None:
+            return {'status': 'no_score'}
+
+        if score_home > score_away:
+            winner = 'home'
+        elif score_away > score_home:
+            winner = 'away'
+        else:
+            winner = 'draw'
+
+        return {
+            'status': 'finished',
+            'score_home': score_home,
+            'score_away': score_away,
+            'winner': winner,
+        }
+
+    except Exception as e:
+        return {'status': 'error', 'error': str(e)}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 3. EVALUATION LOGIC
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _predicted_winner(match: Dict[str, Any]) -> str:
+    """Determine who our pipeline predicted to win.
+
+    For tennis: scoring_pick or favorite field.
+    For team sports: the focus team (home by default, away if away_team_focus).
+    """
+    sport = (match.get('sport') or 'football').lower()
+
+    # Tennis – check scoring_pick first, then favorite
+    if sport == 'tennis':
+        pick = match.get('scoring_pick', '')
+        if pick:
+            return 'home' if '1' in str(pick) or 'A' in str(pick).upper() else 'away'
+        fav = match.get('favorite', '')
+        if fav:
+            return 'home' if str(fav).upper() == 'A' else 'away'
+        return 'home'  # fallback
+
+    # Team sports: focus_team tells us who we bet on
+    focus = (match.get('focus_team') or '').lower()
+    if focus == 'away':
+        return 'away'
+    return 'home'
+
+
+def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    """Evaluate the outcomes for mailed matches.
+
+    Args:
+        matches: list of match dicts from manifest
+        results: dict mapping match_url → scrape result
+
+    Returns:
+        stats dict with totals, per-sport breakdown, and detailed results list.
+    """
+    stats: Dict[str, Any] = {
+        'total': len(matches),
+        'finished': 0,
+        'won': 0,
+        'lost': 0,
+        'draw': 0,
+        'pending': 0,
+        'errors': 0,
+        'details': [],
+        'by_sport': {},
+    }
+
+    for m in matches:
+        url = m.get('match_url', '')
+        res = results.get(url, {'status': 'error', 'error': 'no result fetched'})
+        sport = (m.get('sport') or 'football').lower()
+
+        # Ensure per-sport bucket
+        if sport not in stats['by_sport']:
+            stats['by_sport'][sport] = {'total': 0, 'won': 0, 'lost': 0, 'draw': 0, 'pending': 0, 'errors': 0}
+        sp = stats['by_sport'][sport]
+        sp['total'] += 1
+
+        predicted = _predicted_winner(m)
+
+        detail: Dict[str, Any] = {
+            'home_team': m.get('home_team', '?'),
+            'away_team': m.get('away_team', '?'),
+            'sport': sport,
+            'predicted': predicted,
+            'home_odds': m.get('home_odds'),
+            'away_odds': m.get('away_odds'),
+            'match_url': url,
+        }
+
+        if res['status'] == 'finished':
+            stats['finished'] += 1
+            winner = res['winner']
+            detail['score'] = f"{res['score_home']}-{res['score_away']}"
+            detail['actual'] = winner
+
+            if winner == 'draw':
+                stats['draw'] += 1
+                sp['draw'] += 1
+                detail['outcome'] = 'draw'
+            elif winner == predicted:
+                stats['won'] += 1
+                sp['won'] += 1
+                detail['outcome'] = 'won'
+            else:
+                stats['lost'] += 1
+                sp['lost'] += 1
+                detail['outcome'] = 'lost'
+
+        elif res['status'] in ('not_finished', 'no_score'):
+            stats['pending'] += 1
+            sp['pending'] += 1
+            detail['outcome'] = 'pending'
+            detail['score'] = '—'
+            detail['actual'] = '—'
+        else:
+            stats['errors'] += 1
+            sp['errors'] += 1
+            detail['outcome'] = 'error'
+            detail['score'] = '—'
+            detail['actual'] = '—'
+
+        stats['details'].append(detail)
+
+    # Global accuracy (exclude draws and pending/errors from denominator)
+    decided = stats['won'] + stats['lost']
+    stats['accuracy'] = (stats['won'] / decided * 100) if decided > 0 else 0.0
+
+    # ROI calculation (100 PLN flat stake)
+    roi_total = 0.0
+    roi_count = 0
+    stake = 100
+    for d in stats['details']:
+        if d['outcome'] in ('won', 'lost'):
+            odds_key = 'home_odds' if d['predicted'] == 'home' else 'away_odds'
+            odds = d.get(odds_key)
+            try:
+                odds_f = float(odds)
+                if math.isnan(odds_f):
+                    continue
+            except (TypeError, ValueError):
+                continue
+            if d['outcome'] == 'won':
+                roi_total += (odds_f * stake - stake)
+            else:
+                roi_total -= stake
+            roi_count += 1
+    stats['roi_pln'] = roi_total
+    stats['roi_pct'] = (roi_total / (roi_count * stake) * 100) if roi_count > 0 else 0.0
+
+    return stats
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 4. REPORT EMAIL
+# ═══════════════════════════════════════════════════════════════════════════
+
+SPORT_EMOJI = {
+    'football': '⚽', 'basketball': '🏀', 'handball': '🤾',
+    'volleyball': '🏐', 'tennis': '🎾', 'hockey': '🏒',
+}
+
+
+def generate_report_html(stats: Dict[str, Any], date: str) -> str:
+    """Generate a transparent accuracy report as HTML email."""
+    total = stats['total']
+    won = stats['won']
+    lost = stats['lost']
+    draw = stats['draw']
+    pending = stats['pending']
+    errors = stats['errors']
+    accuracy = stats['accuracy']
+    roi_pln = stats['roi_pln']
+    roi_pct = stats['roi_pct']
+
+    # Per-sport rows
+    sport_rows = ''
+    for sport in sorted(stats['by_sport'].keys()):
+        sp = stats['by_sport'][sport]
+        emoji = SPORT_EMOJI.get(sport, '🏆')
+        sp_decided = sp['won'] + sp['lost']
+        sp_acc = (sp['won'] / sp_decided * 100) if sp_decided > 0 else 0
+        sport_rows += f"""
+        <tr>
+            <td>{emoji} {sport.capitalize()}</td>
+            <td style="text-align:center">{sp['total']}</td>
+            <td style="text-align:center;color:#27ae60;font-weight:700">{sp['won']}</td>
+            <td style="text-align:center;color:#e74c3c;font-weight:700">{sp['lost']}</td>
+            <td style="text-align:center;color:#f39c12">{sp['draw']}</td>
+            <td style="text-align:center;color:#7f8c8d">{sp['pending']}</td>
+            <td style="text-align:center;font-weight:700">{sp_acc:.0f}%</td>
+        </tr>"""
+
+    # Match detail rows
+    detail_rows = ''
+    for d in stats['details']:
+        emoji = SPORT_EMOJI.get(d['sport'], '🏆')
+        if d['outcome'] == 'won':
+            color = '#27ae60'
+            icon = '✅'
+        elif d['outcome'] == 'lost':
+            color = '#e74c3c'
+            icon = '❌'
+        elif d['outcome'] == 'draw':
+            color = '#f39c12'
+            icon = '🟡'
+        elif d['outcome'] == 'pending':
+            color = '#95a5a6'
+            icon = '⏳'
+        else:
+            color = '#95a5a6'
+            icon = '⚠️'
+
+        pred_label = '1 (Home)' if d['predicted'] == 'home' else '2 (Away)'
+        detail_rows += f"""
+        <tr>
+            <td>{emoji}</td>
+            <td>{d['home_team']} vs {d['away_team']}</td>
+            <td style="text-align:center">{pred_label}</td>
+            <td style="text-align:center">{d['score']}</td>
+            <td style="text-align:center;color:{color};font-weight:700">{icon} {d['outcome'].upper()}</td>
+        </tr>"""
+
+    accuracy_color = '#27ae60' if accuracy >= 55 else '#e74c3c' if accuracy < 45 else '#f39c12'
+    roi_color = '#27ae60' if roi_pln > 0 else '#e74c3c'
+
+    html = f"""<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#0d1117">
+<div style="max-width:700px;margin:20px auto;background:#161b22;border-radius:12px;overflow:hidden;border:1px solid #30363d">
+
+  <!-- HEADER -->
+  <div style="background:linear-gradient(135deg,#1a73e8,#7c3aed);padding:24px;text-align:center">
+    <div style="font-size:28px;font-weight:800;color:#fff">📊 RAPORT SKUTECZNOŚCI</div>
+    <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:4px">{date} — tylko zdarzenia wysłane mailem</div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div style="display:flex;flex-wrap:wrap;gap:10px;padding:20px;justify-content:center">
+    <div style="flex:1;min-width:130px;background:#0d1117;border-radius:10px;padding:16px;text-align:center;border:1px solid #30363d">
+      <div style="font-size:11px;color:#8b949e;text-transform:uppercase">Trafność</div>
+      <div style="font-size:32px;font-weight:800;color:{accuracy_color}">{accuracy:.0f}%</div>
+      <div style="font-size:11px;color:#8b949e">{won}/{won + lost} meczów</div>
+    </div>
+    <div style="flex:1;min-width:130px;background:#0d1117;border-radius:10px;padding:16px;text-align:center;border:1px solid #30363d">
+      <div style="font-size:11px;color:#8b949e;text-transform:uppercase">ROI (100 PLN/mecz)</div>
+      <div style="font-size:32px;font-weight:800;color:{roi_color}">{roi_pct:+.1f}%</div>
+      <div style="font-size:11px;color:#8b949e">{roi_pln:+.0f} PLN</div>
+    </div>
+    <div style="flex:1;min-width:130px;background:#0d1117;border-radius:10px;padding:16px;text-align:center;border:1px solid #30363d">
+      <div style="font-size:11px;color:#8b949e;text-transform:uppercase">Łącznie</div>
+      <div style="font-size:32px;font-weight:800;color:#e6edf3">{total}</div>
+      <div style="font-size:11px;color:#8b949e">✅{won} ❌{lost} 🟡{draw} ⏳{pending}</div>
+    </div>
+  </div>
+
+  <!-- PER-SPORT TABLE -->
+  <div style="padding:0 20px 10px">
+    <div style="font-size:16px;font-weight:700;color:#e6edf3;margin-bottom:8px">📈 Per sport</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;color:#c9d1d9">
+      <tr style="background:#21262d">
+        <th style="padding:8px;text-align:left">Sport</th>
+        <th style="padding:8px;text-align:center">Total</th>
+        <th style="padding:8px;text-align:center">✅</th>
+        <th style="padding:8px;text-align:center">❌</th>
+        <th style="padding:8px;text-align:center">🟡</th>
+        <th style="padding:8px;text-align:center">⏳</th>
+        <th style="padding:8px;text-align:center">Acc</th>
+      </tr>
+      {sport_rows}
+    </table>
+  </div>
+
+  <!-- MATCH DETAILS TABLE -->
+  <div style="padding:0 20px 20px">
+    <div style="font-size:16px;font-weight:700;color:#e6edf3;margin-bottom:8px">📋 Pełna lista meczów</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;color:#c9d1d9">
+      <tr style="background:#21262d">
+        <th style="padding:6px"></th>
+        <th style="padding:6px;text-align:left">Mecz</th>
+        <th style="padding:6px;text-align:center">Typ</th>
+        <th style="padding:6px;text-align:center">Wynik</th>
+        <th style="padding:6px;text-align:center">Status</th>
+      </tr>
+      {detail_rows}
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#0d1117;padding:16px;text-align:center;border-top:1px solid #30363d">
+    <div style="font-size:11px;color:#484f58">
+      📧 Wygenerowano automatycznie przez Check Results Pipeline<br>
+      Raport obejmuje wyłącznie zdarzenia wysłane mailem po wszystkich filtrach
+    </div>
+  </div>
+
+</div>
+</body>
+</html>"""
+    return html
+
+
+def send_report_email(
+    html: str,
+    subject: str,
+    to_email: str,
+    from_email: str,
+    password: str,
+    provider: str = 'gmail',
+) -> bool:
+    """Send HTML report via SMTP. Returns True on success."""
+    try:
+        smtp_cfg = SMTP_CONFIG[provider]
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = from_email
+        msg['To'] = to_email
+        msg.attach(MIMEText(html, 'html'))
+
+        with smtplib.SMTP(smtp_cfg['server'], smtp_cfg['port']) as server:
+            if smtp_cfg['use_tls']:
+                server.starttls()
+            server.login(from_email, password)
+            server.send_message(msg)
+
+        print(f"✅ Raport wysłany do {to_email}")
+        return True
+    except Exception as e:
+        print(f"❌ Błąd wysyłania raportu: {e}")
+        return False
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 5. SUMMARY PERSISTENCE (idempotent)
+# ═══════════════════════════════════════════════════════════════════════════
+
+def save_summary(stats: Dict[str, Any], date: str) -> str:
+    """Save evaluation summary JSON for auditing. Returns file path."""
+    os.makedirs('outputs', exist_ok=True)
+    path = f'outputs/results_summary_{date}.json'
+
+    # Strip full details for the summary file (keep it concise)
+    summary = {k: v for k, v in stats.items() if k != 'details'}
+    summary['date'] = date
+    summary['generated_at'] = datetime.now().isoformat()
+    summary['match_count'] = len(stats.get('details', []))
+
+    # Compact detail list
+    summary['matches'] = [
+        {
+            'home': d['home_team'],
+            'away': d['away_team'],
+            'sport': d['sport'],
+            'predicted': d['predicted'],
+            'score': d.get('score', '—'),
+            'outcome': d['outcome'],
+        }
+        for d in stats.get('details', [])
+    ]
+
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
+
+    print(f"📁 Summary zapisany: {path}")
+    return path
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 6. CLI MAIN
+# ═══════════════════════════════════════════════════════════════════════════
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='📊 Sprawdź wyniki meczów wysłanych mailem i wygeneruj raport skuteczności'
+    )
+    parser.add_argument('--date', help='Data do sprawdzenia (YYYY-MM-DD)')
+    parser.add_argument('--yesterday', action='store_true', help='Sprawdź wczorajsze mecze')
+    parser.add_argument('--headless', action='store_true', help='Uruchom przeglądarkę w trybie headless')
+    parser.add_argument('--send-email', action='store_true', help='Wyślij raport mailem')
+    parser.add_argument('--to', help='Email odbiorcy raportu')
+    parser.add_argument('--from-email', help='Email nadawcy')
+    parser.add_argument('--password', help='Hasło email (lub App Password)')
+    parser.add_argument('--provider', default='gmail', choices=['gmail', 'outlook', 'yahoo'])
+
+    args = parser.parse_args()
+
+    # Determine date
+    if args.yesterday:
+        target_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    elif args.date:
+        target_date = args.date
+    else:
+        target_date = datetime.now().strftime('%Y-%m-%d')
+
+    print(f"\n{'='*70}")
+    print(f"📊 CHECK RESULTS — {target_date}")
+    print(f"{'='*70}\n")
+
+    # 1. Load manifests
+    matches = load_manifests(target_date)
+    if not matches:
+        print("⚠️ Brak danych do sprawdzenia — koniec.")
+        return
+
+    # 2. Scrape results
+    print(f"\n🔎 Sprawdzam wyniki {len(matches)} meczów...")
+    driver = _init_driver(headless=args.headless)
+    results: Dict[str, Dict[str, Any]] = {}
+
+    try:
+        for i, m in enumerate(matches, 1):
+            url = m.get('match_url', '')
+            home = m.get('home_team', '?')
+            away = m.get('away_team', '?')
+            print(f"  [{i}/{len(matches)}] {home} vs {away}")
+
+            if not url:
+                results[url] = {'status': 'error', 'error': 'no URL'}
+                continue
+
+            res = scrape_match_result(driver, url)
+            results[url] = res
+
+            status = res['status']
+            if status == 'finished':
+                print(f"    → {res['score_home']}-{res['score_away']}")
+            elif status == 'not_finished':
+                print(f"    → ⏳ mecz jeszcze trwa")
+            else:
+                print(f"    → ⚠️ {status}")
+
+            time_module.sleep(0.5)
+    finally:
+        driver.quit()
+
+    # 3. Evaluate
+    stats = evaluate(matches, results)
+
+    print(f"\n{'='*70}")
+    print(f"📊 PODSUMOWANIE — {target_date}")
+    print(f"{'='*70}")
+    print(f"  Łącznie wysłanych mailem: {stats['total']}")
+    print(f"  Zakończone:              {stats['finished']}")
+    print(f"  ✅ Wygrane:               {stats['won']}")
+    print(f"  ❌ Przegrane:             {stats['lost']}")
+    print(f"  🟡 Remisy:                {stats['draw']}")
+    print(f"  ⏳ Pending:               {stats['pending']}")
+    print(f"  Trafność:                {stats['accuracy']:.1f}%")
+    print(f"  ROI:                     {stats['roi_pct']:+.1f}% ({stats['roi_pln']:+.0f} PLN)")
+    print(f"{'='*70}\n")
+
+    # 4. Save summary
+    save_summary(stats, target_date)
+
+    # 5. Send email report
+    if args.send_email:
+        if not all([args.to, args.from_email, args.password]):
+            print("❌ --send-email wymaga --to, --from-email i --password")
+            return
+
+        html = generate_report_html(stats, target_date)
+        subject = (
+            f"📊 Raport skuteczności {target_date}: "
+            f"{stats['accuracy']:.0f}% trafność "
+            f"({stats['won']}W/{stats['lost']}L/{stats['draw']}D/{stats['pending']}P)"
+        )
+        send_report_email(
+            html=html,
+            subject=subject,
+            to_email=args.to,
+            from_email=args.from_email,
+            password=args.password,
+            provider=args.provider,
+        )
+
+    print("✨ ZAKOŃCZONO!")
+
+
+if __name__ == '__main__':
+    main()

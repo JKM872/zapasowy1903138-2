@@ -7,6 +7,7 @@ NOWE: Sekcje pre-posortowanych kursów (home/draw/away) - od najwyższych do naj
 import smtplib
 import math
 import json
+import os
 import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -1379,6 +1380,10 @@ def send_email_notification(
     for m in matches:
         m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
     date = datetime.now().strftime('%Y-%m-%d')
+
+    # Zapisz manifest meczów wysłanych mailem (źródło prawdy dla rozliczenia)
+    if matches:
+        _save_mailed_manifest(matches, date)
     
     if subject is None:
         subject_parts: List[str] = []
@@ -1450,6 +1455,69 @@ SPORT_LABEL = {
 # ---------------------------------------------------------------------------
 # Per-sport minimum odds thresholds
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Manifest: snapshot of matches that actually made it into the email
+# ---------------------------------------------------------------------------
+
+_MANIFEST_FIELDS = [
+    'match_url', 'match_date', 'match_time', 'sport', 'league',
+    'home_team', 'away_team', 'home_odds', 'draw_odds', 'away_odds',
+    'win_rate', 'h2h_count', 'home_wins_in_h2h_last5', 'away_wins_in_h2h_last5',
+    'form_advantage', 'forebet_prediction', 'forebet_probability',
+    'gemini_prediction', 'gemini_recommendation', 'gemini_confidence',
+    'scoring_pick', 'scoring_prob', 'scoring_ev', 'scoring_edge',
+    'qualifies', 'focus_team',
+]
+
+
+def _save_mailed_manifest(matches: List[Dict[str, Any]], date: str, tag: str = '') -> str:
+    """Save a JSON manifest of matches that were actually emailed.
+
+    Returns the path of the written file.
+    """
+    os.makedirs('outputs', exist_ok=True)
+    suffix = f'_{tag}' if tag else ''
+    path = f'outputs/mailed_manifest_{date}{suffix}.json'
+
+    # Keep only stable fields (drop huge HTML blobs etc.)
+    records: List[Dict[str, Any]] = []
+    for m in matches:
+        rec: Dict[str, Any] = {}
+        for field in _MANIFEST_FIELDS:
+            val = m.get(field)
+            # Convert pandas NaN / numpy NaN to None for clean JSON
+            if val is not None:
+                try:
+                    if isinstance(val, float) and math.isnan(val):
+                        val = None
+                except (TypeError, ValueError):
+                    pass
+            rec[field] = val
+        records.append(rec)
+
+    # Append-safe: if a manifest already exists for this date+tag, merge
+    existing: List[Dict[str, Any]] = []
+    if os.path.exists(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                existing = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            existing = []
+
+    # Deduplicate by match_url
+    seen_urls = {r.get('match_url') for r in existing if r.get('match_url')}
+    for rec in records:
+        if rec.get('match_url') not in seen_urls:
+            existing.append(rec)
+            seen_urls.add(rec.get('match_url'))
+
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(existing, f, ensure_ascii=False, indent=2)
+
+    print(f"📋 Manifest mailed events zapisany: {path} ({len(existing)} meczów)")
+    return path
+
+
 SPORT_MIN_ODDS: Dict[str, float] = {
     'football': 1.50,
     'basketball': 1.30,
@@ -1583,6 +1651,7 @@ def send_split_emails_by_sport(
                     matches_form: List[Dict[str, Any]] = group_form.to_dict('records')  # type: ignore[assignment]
                     for m in matches_form:
                         m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
+                    _save_mailed_manifest(matches_form, date, tag=f'{sport}_form')
                     subj = f"🔥 {emoji} {label}: {len(group_form)} meczów z PRZEWAGĄ FORMY — {date}"  # type: ignore[arg-type]
                     html = create_html_email(matches_form, date, sort_by=sort_by,  # type: ignore[arg-type]
                                              include_sorted_odds=include_sorted_odds,
@@ -1601,6 +1670,7 @@ def send_split_emails_by_sport(
                     matches_normal: List[Dict[str, Any]] = group_normal.to_dict('records')  # type: ignore[assignment]
                     for m in matches_normal:
                         m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
+                    _save_mailed_manifest(matches_normal, date, tag=f'{sport}_normal')
                     subj = f"📋 {emoji} {label}: {len(group_normal)} meczów zwykłych — {date}"  # type: ignore[arg-type]
                     html = create_html_email(matches_normal, date, sort_by=sort_by,  # type: ignore[arg-type]
                                              include_sorted_odds=include_sorted_odds,

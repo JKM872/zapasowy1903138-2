@@ -1,0 +1,99 @@
+name: Check Results & Accuracy Report
+
+on:
+  # Run daily at 22:00 UTC (late evening — most matches finished)
+  schedule:
+    - cron: '0 22 * * *'
+
+  # Allow manual trigger for any date
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to check (YYYY-MM-DD). Default: today'
+        required: false
+        type: string
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  check-results:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # 1. Checkout repository (includes committed manifests)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Python
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # 3. Install Chrome for Selenium
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
+          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
+
+      # 4. Install Python dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 5. Determine target date
+      - name: Set target date
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            echo "TARGET_DATE=${{ github.event.inputs.date }}" >> $GITHUB_ENV
+          else
+            echo "TARGET_DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+          fi
+          echo "📅 Checking results for: $TARGET_DATE"
+
+      # 6. Run the result checker
+      - name: Check results & generate report
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "📊 Checking results for $TARGET_DATE..."
+          python check_results.py \
+            --date $TARGET_DATE \
+            --headless \
+            --send-email \
+            --to "${{ secrets.EMAIL_RECIPIENT }}" \
+            --from-email "${{ secrets.EMAIL_SENDER }}" \
+            --password "${{ secrets.EMAIL_PASSWORD }}" \
+            --provider gmail
+
+      # 7. Commit result summary
+      - name: Commit result summary
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/results_summary_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ No new summaries to commit"
+          else
+            git commit -m "data: results summary for $TARGET_DATE [skip ci]"
+            git push
+            echo "✅ Summary committed and pushed"
+          fi
+
+      # 8. Upload summary as artifact
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-summary-${{ env.TARGET_DATE }}-${{ github.run_id }}
+          path: outputs/results_summary_*.json
+          retention-days: 30
