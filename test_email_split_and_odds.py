@@ -1,7 +1,7 @@
 # pyright: reportPrivateUsage=false
 """
 Tests for:
-  1. Per-sport odds threshold filtering (OR — at least one odds >= sport threshold)
+  1. Per-sport odds threshold filtering (AND — both odds must be >= sport threshold)
   2. skip_no_odds filtering (skip matches without odds)
   3. send_split_emails_by_sport grouping logic (2 emails per sport)
   4. _passes_sport_odds_threshold helper unit tests
@@ -41,7 +41,7 @@ SAMPLE_MATCHES: list[dict[str, Any]] = [
     dict(sport='basketball', home_team='Warriors', away_team='Nets',
          qualifies=True, form_advantage=False,
          home_odds=1.55, away_odds=2.50, match_time='2026-03-08 01:00'),
-    # tennis, form_advantage=False, one odds below 1.35 but other above → OR passes
+    # tennis, form_advantage=False, one odds below 1.35 — AND rejects (both must be >= 1.35)
     dict(sport='tennis', home_team='Djokovic', away_team='Nadal',
          qualifies=True, form_advantage=False,
          home_odds=1.19, away_odds=5.00, match_time='2026-03-08 14:00'),
@@ -75,10 +75,10 @@ class TestPassesSportOddsThreshold:
         from email_notifier import _passes_sport_odds_threshold
         assert _passes_sport_odds_threshold('football', 1.10, 1.20) is False
 
-    def test_football_or_one_above(self) -> None:
+    def test_football_and_one_below(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
-        # home below, away above → OR passes
-        assert _passes_sport_odds_threshold('football', 1.10, 8.50) is True
+        # home below, away above → AND rejects (both must be >= 1.50)
+        assert _passes_sport_odds_threshold('football', 1.10, 8.50) is False
 
     def test_basketball_lower_threshold(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
@@ -97,20 +97,23 @@ class TestPassesSportOddsThreshold:
     def test_handball_threshold(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
         # handball threshold = 1.45
-        assert _passes_sport_odds_threshold('handball', 1.45, 1.10) is True
+        assert _passes_sport_odds_threshold('handball', 1.45, 1.10) is False
         assert _passes_sport_odds_threshold('handball', 1.10, 1.10) is False
+        assert _passes_sport_odds_threshold('handball', 1.45, 1.45) is True
 
     def test_hockey_threshold(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
         # hockey threshold = 1.50
-        assert _passes_sport_odds_threshold('hockey', 1.50, 1.00) is True
+        assert _passes_sport_odds_threshold('hockey', 1.50, 1.00) is False
         assert _passes_sport_odds_threshold('hockey', 1.40, 1.40) is False
+        assert _passes_sport_odds_threshold('hockey', 1.50, 1.50) is True
 
     def test_volleyball_threshold(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
         # volleyball threshold = 1.30
-        assert _passes_sport_odds_threshold('volleyball', 1.30, 1.10) is True
+        assert _passes_sport_odds_threshold('volleyball', 1.30, 1.10) is False
         assert _passes_sport_odds_threshold('volleyball', 1.20, 1.20) is False
+        assert _passes_sport_odds_threshold('volleyball', 1.30, 1.30) is True
 
     def test_unknown_sport_uses_fallback(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
@@ -124,8 +127,8 @@ class TestPassesSportOddsThreshold:
 
     def test_one_none_other_above(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
-        # home=None, away=2.0 >= 1.5 → passes via OR
-        assert _passes_sport_odds_threshold('football', None, 2.0) is True
+        # home=None, away=2.0 >= 1.5 → AND rejects (None fails)
+        assert _passes_sport_odds_threshold('football', None, 2.0) is False
 
     def test_nan_float_rejected(self) -> None:
         from email_notifier import _passes_sport_odds_threshold
@@ -137,7 +140,7 @@ class TestPassesSportOddsThreshold:
 # ---------------------------------------------------------------------------
 
 class TestPerSportOddsClassic:
-    """send_email_notification filters by per-sport thresholds (OR condition)."""
+    """send_email_notification filters by per-sport thresholds (AND condition)."""
 
     @patch('email_notifier.smtplib.SMTP')
     def test_filters_both_odds_below_sport_threshold(self, mock_smtp: Any, tmp_path: Any) -> None:
@@ -159,7 +162,7 @@ class TestPerSportOddsClassic:
             assert 'Warriors' in teams
 
     @patch('email_notifier.smtplib.SMTP')
-    def test_or_condition_one_above_passes(self, mock_smtp: Any, tmp_path: Any) -> None:
+    def test_and_condition_rejects_one_below(self, mock_smtp: Any, tmp_path: Any) -> None:
         from email_notifier import send_email_notification
         csv = _write_csv(tmp_path)
 
@@ -170,8 +173,8 @@ class TestPerSportOddsClassic:
             )
             matches_sent = mock_html.call_args[0][0]
             teams = {m['home_team'] for m in matches_sent}
-            # Djokovic: tennis 1.19/5.00, threshold=1.35, 5.00>=1.35 → passes via OR
-            assert 'Djokovic' in teams, "Djokovic should pass via OR (away 5.00 >= 1.35)"
+            # Djokovic: tennis 1.19/5.00, threshold=1.35, 1.19<1.35 → rejected by AND
+            assert 'Djokovic' not in teams, "Djokovic should be rejected (home 1.19 < 1.35)"
 
     @patch('email_notifier.smtplib.SMTP')
     def test_no_matches_after_filter(self, mock_smtp: Any, tmp_path: Any) -> None:
@@ -250,13 +253,13 @@ class TestSplitEmailsBySport:
             password='x',
         )
 
-        # Expected after per-sport filter (Bayern 1.10/1.20 dropped, Dortmund no odds dropped):
+        # Expected after per-sport filter (Bayern 1.10/1.20 dropped, Dortmund no odds dropped,
+        #   Djokovic 1.19/5.00 dropped — AND requires both >= threshold):
         #   football: form_adv=[Barcelona] → 1 email, normal=[Arsenal] → 1 email = 2
         #   basketball: form_adv=[Lakers] → 1, normal=[Warriors] → 1 = 2
-        #   tennis: form_adv=[], normal=[Djokovic (1.19/5.00, OR passes)] → 1 = 1
-        # Total = 5
-        assert count == 5
-        assert mock_server.send_message.call_count == 5
+        # Total = 4
+        assert count == 4
+        assert mock_server.send_message.call_count == 4
 
     @patch('email_notifier.smtplib.SMTP')
     def test_subjects_contain_sport_and_type(self, mock_smtp: Any, tmp_path: Any) -> None:
@@ -280,9 +283,9 @@ class TestSplitEmailsBySport:
         # Check basketball form email exists
         bball_form = [s for s in subjects if 'Koszykówka' in s and 'PRZEWAGĄ FORMY' in s]
         assert len(bball_form) == 1
-        # Check tennis normal email exists
-        tennis_normal = [s for s in subjects if 'Tenis' in s and 'zwykłych' in s]
-        assert len(tennis_normal) == 1
+        # Djokovic tennis (1.19/5.00) should be filtered out by AND logic
+        tennis_normal = [s for s in subjects if 'Tenis' in s]
+        assert len(tennis_normal) == 0, "Tennis should be absent (Djokovic 1.19 < 1.35)"
 
     @patch('email_notifier.smtplib.SMTP')
     def test_empty_group_not_sent(self, mock_smtp: Any, tmp_path: Any) -> None:
