@@ -247,6 +247,7 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
             'away_team': m.get('away_team', '?'),
             'sport': sport,
             'predicted': predicted,
+            'focus_team': (m.get('focus_team') or 'home').lower(),
             'home_odds': m.get('home_odds'),
             'away_odds': m.get('away_odds'),
             'match_url': url,
@@ -517,6 +518,9 @@ def save_summary(stats: Dict[str, Any], date: str) -> str:
             'away': d['away_team'],
             'sport': d['sport'],
             'predicted': d['predicted'],
+            'focus_team': d.get('focus_team', 'home'),
+            'home_odds': d.get('home_odds'),
+            'away_odds': d.get('away_odds'),
             'score': d.get('score', '—'),
             'outcome': d['outcome'],
         }
