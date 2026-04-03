@@ -17,22 +17,15 @@ Usage:
 
 import json
 import os
-import sys
-import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 try:
     import requests
     _requests_ok = True
 except ImportError:
+    requests = None  # type: ignore[assignment]
     _requests_ok = False
-
-try:
-    from prediction_data_contract import PlayerAvailability, AvailabilityReport
-except ImportError:
-    PlayerAvailability = None  # type: ignore[assignment,misc]
-    AvailabilityReport = None  # type: ignore[assignment,misc]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -64,7 +57,7 @@ def _cache_key(source: str, identifier: str) -> str:
     return f'{source}:{identifier}'
 
 
-def _is_cache_valid(entry: Dict) -> bool:
+def _is_cache_valid(entry: Dict[str, Any]) -> bool:
     cached_at = entry.get('cached_at', '')
     if not cached_at:
         return False
@@ -96,7 +89,7 @@ _espn_team_cache: Dict[str, Dict[str, Any]] = {}
 
 
 def _espn_session() -> Optional[Any]:
-    if not _requests_ok:
+    if not _requests_ok or requests is None:
         return None
     session = requests.Session()
     session.headers.update({
@@ -133,7 +126,7 @@ def espn_search_team(team_name: str, sport: str = 'football') -> Optional[Dict[s
                 if (team_name.lower() in name.lower()
                     or team_name.lower() in short.lower()
                     or team_name.lower() == abbr.lower()):
-                    result = {
+                    result: Dict[str, Any] = {
                         'id': team.get('id'),
                         'name': name,
                         'abbreviation': abbr,
@@ -173,16 +166,16 @@ def espn_get_team_injuries(team_id: str, sport_path: str) -> List[Dict[str, Any]
             for athlete_entry in item.get('injuries', []):
                 athlete = athlete_entry.get('athlete', {})
                 status_obj = athlete_entry.get('status', '')
-                detail = athlete_entry.get('details', {})
+                detail: Dict[str, Any] = athlete_entry.get('details', {})
 
                 injuries.append({
                     'name': athlete.get('displayName', ''),
                     'position': athlete.get('position', {}).get('abbreviation', ''),
                     'status': status_obj if isinstance(status_obj, str)
                               else status_obj.get('type', 'unknown'),
-                    'injury_type': detail.get('type', '') if isinstance(detail, dict) else '',
-                    'detail': detail.get('detail', '') if isinstance(detail, dict) else str(detail),
-                    'return_date': detail.get('returnDate', '') if isinstance(detail, dict) else '',
+                    'injury_type': detail.get('type', ''),
+                    'detail': detail.get('detail', ''),
+                    'return_date': detail.get('returnDate', ''),
                 })
 
     except Exception as e:
@@ -200,12 +193,12 @@ def espn_get_team_injuries(team_id: str, sport_path: str) -> List[Dict[str, Any]
 
 def fetch_injuries_for_match(
     home_team: str, away_team: str, sport: str = 'football'
-) -> Dict[str, List[Dict]]:
+) -> Dict[str, List[Dict[str, Any]]]:
     """Fetch injuries for both teams in a match via ESPN.
 
     Returns {'home': [...], 'away': [...]}.
     """
-    result: Dict[str, List[Dict]] = {'home': [], 'away': []}
+    result: Dict[str, List[Dict[str, Any]]] = {'home': [], 'away': []}
 
     if sport not in ESPN_SPORT_PATHS:
         return result
@@ -235,7 +228,7 @@ SOFASCORE_HEADERS = {
 
 
 def _sofascore_session() -> Optional[Any]:
-    if not _requests_ok:
+    if not _requests_ok or requests is None:
         return None
     session = requests.Session()
     session.headers.update(SOFASCORE_HEADERS)
@@ -267,7 +260,7 @@ def sofascore_get_lineups(event_id: int) -> Optional[Dict[str, Any]]:
 
         for side in ('home', 'away'):
             lineup = data.get(side, {})
-            players = []
+            players: List[Dict[str, Any]] = []
             for p in lineup.get('players', []):
                 player = p.get('player', {})
                 players.append({
@@ -351,7 +344,7 @@ def enrich_availability_from_injuries(
             away_key_out += 1
 
     # Update availability dict
-    avail_dict = row.get('availability', {}) or {}
+    avail_dict: Dict[str, Any] = row.get('availability', {}) or {}
     avail_dict['home_key_absences'] = home_key_out
     avail_dict['away_key_absences'] = away_key_out
 
@@ -361,7 +354,7 @@ def enrich_availability_from_injuries(
         avail_dict['away_injuries'] = injuries.get('away', [])[:5]
 
         # Recalculate availability impact
-        impact = avail_dict.get('availability_impact', 0.0)
+        impact: float = float(avail_dict.get('availability_impact', 0.0))
         if home_key_out >= 3 or away_key_out >= 3:
             impact = max(impact, 0.3)
         elif home_key_out >= 1 or away_key_out >= 1:

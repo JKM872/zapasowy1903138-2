@@ -23,7 +23,7 @@ import os
 import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Union, cast
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,13 +31,8 @@ try:
     from prediction_evaluator import PredictionEvaluator
     _evaluator_ok = True
 except ImportError:
+    PredictionEvaluator = None  # type: ignore[assignment,misc]
     _evaluator_ok = False
-
-try:
-    from result_store import ResultStore
-    _store_ok = True
-except ImportError:
-    _store_ok = False
 
 
 OUTPUTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outputs")
@@ -55,7 +50,7 @@ def _load_recent_results(days: int = 30) -> List[Dict[str, Any]]:
         return []
 
     cutoff = datetime.now() - timedelta(days=days)
-    all_matches = []
+    all_matches: List[Dict[str, Any]] = []
 
     for fn in sorted(glob.glob(os.path.join(results_dir, "*.json"))):
         basename = os.path.basename(fn)
@@ -76,19 +71,20 @@ def _load_recent_results(days: int = 30) -> List[Dict[str, Any]]:
 
         try:
             with open(fn, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+                data: Any = json.load(f)
 
             if isinstance(data, dict):
-                for sport, matches in data.items():
+                typed_data = cast(Dict[str, Any], data)
+                for sport, matches in typed_data.items():
                     if isinstance(matches, list):
-                        for m in matches:
-                            m['_date'] = date_str or basename
-                            m['_sport'] = m.get('sport', sport)
-                            all_matches.append(m)
+                        for m_entry in cast(List[Dict[str, Any]], matches):
+                            m_entry['_date'] = date_str or basename
+                            m_entry['_sport'] = m_entry.get('sport', sport)
+                            all_matches.append(m_entry)
             elif isinstance(data, list):
-                for m in data:
-                    m['_date'] = date_str or basename
-                    all_matches.append(m)
+                for m_entry in cast(List[Dict[str, Any]], data):
+                    m_entry['_date'] = date_str or basename
+                    all_matches.append(m_entry)
         except Exception:
             continue
 
@@ -111,7 +107,7 @@ def generate_pipeline_stats(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
     with_scoring = sum(1 for m in matches if m.get('scoring_pick'))
 
     # Grade distribution
-    grades = defaultdict(int)
+    grades: defaultdict[str, int] = defaultdict(int)
     for m in matches:
         g = m.get('prediction_grade', 'N/A')
         grades[g] += 1
@@ -121,7 +117,8 @@ def generate_pipeline_stats(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
     for m in matches:
         dq = m.get('data_quality', {})
         if isinstance(dq, dict):
-            qs = dq.get('quality_score', 0)
+            dq_typed = cast(Dict[str, Any], dq)
+            qs: Any = dq_typed.get('quality_score', 0)
         else:
             qs = 0
         if qs >= 0.8:
@@ -132,15 +129,15 @@ def generate_pipeline_stats(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
             dq_buckets["low (<0.5)"] += 1
 
     # Channel skip reasons
-    skip_reasons = defaultdict(int)
+    skip_reasons: defaultdict[str, int] = defaultdict(int)
     for m in matches:
         reasons = m.get('channel_skip_reasons', [])
         if isinstance(reasons, list):
-            for r in reasons:
+            for r in cast(List[str], reasons):
                 skip_reasons[r] += 1
 
     # Per-sport breakdown
-    sport_counts = defaultdict(lambda: {"total": 0, "qualifying": 0, "channel_q": 0})
+    sport_counts: defaultdict[str, Dict[str, int]] = defaultdict(lambda: {"total": 0, "qualifying": 0, "channel_q": 0})
     for m in matches:
         sp = m.get('_sport', m.get('sport', 'unknown'))
         sport_counts[sp]["total"] += 1
@@ -167,7 +164,7 @@ def generate_pipeline_stats(matches: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 def generate_accuracy_report(days: int = 30) -> Dict[str, Any]:
     """Generate accuracy stats if result data is available."""
-    if not _evaluator_ok:
+    if not _evaluator_ok or PredictionEvaluator is None:
         return {"error": "PredictionEvaluator not available"}
 
     ev = PredictionEvaluator()
@@ -187,18 +184,18 @@ def generate_accuracy_report(days: int = 30) -> Dict[str, Any]:
     draws = sum(1 for m in settled if m.outcome == 'draw')
 
     # Per-sport accuracy
-    sport_acc = defaultdict(lambda: {"settled": 0, "won": 0})
+    sport_acc: defaultdict[str, Dict[str, Union[int, float]]] = defaultdict(lambda: {"settled": 0, "won": 0})
     for m in settled:
-        sport_acc[m.sport]["settled"] += 1
+        sport_acc[m.sport]["settled"] = int(sport_acc[m.sport]["settled"]) + 1
         if m.outcome == 'won':
-            sport_acc[m.sport]["won"] += 1
+            sport_acc[m.sport]["won"] = int(sport_acc[m.sport]["won"]) + 1
 
     for sport in sport_acc:
         s = sport_acc[sport]
-        s["accuracy"] = round(s["won"] / s["settled"], 4) if s["settled"] else 0
+        s["accuracy"] = round(int(s["won"]) / int(s["settled"]), 4) if s["settled"] else 0
 
     # Confidence buckets
-    conf_buckets = defaultdict(lambda: {"count": 0, "won": 0})
+    conf_buckets: defaultdict[str, Dict[str, Union[int, float]]] = defaultdict(lambda: {"count": 0, "won": 0})
     for m in settled:
         conf = m.confidence or 0
         if conf >= 80:
@@ -217,7 +214,7 @@ def generate_accuracy_report(days: int = 30) -> Dict[str, Any]:
 
     for bucket in conf_buckets:
         b = conf_buckets[bucket]
-        b["accuracy"] = round(b["won"] / b["count"], 4) if b["count"] else 0
+        b["accuracy"] = round(int(b["won"]) / int(b["count"]), 4) if b["count"] else 0
 
     # ROI
     total_profit = 0.0
@@ -329,7 +326,7 @@ def print_quality_report(matches: List[Dict[str, Any]], days: int = 30):
 def export_report(matches: List[Dict[str, Any]], days: int = 30) -> str:
     os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
-    report = {
+    report: Dict[str, Any] = {
         "generated_at": datetime.now().isoformat(),
         "days": days,
         "pipeline_stats": generate_pipeline_stats(matches),

@@ -30,30 +30,33 @@ import json
 import math
 import os
 import sys
-from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
-    from prediction_evaluator import PredictionEvaluator, SportMetrics
+    from prediction_evaluator import PredictionEvaluator
     _evaluator_ok = True
 except ImportError:
+    PredictionEvaluator = None  # type: ignore[assignment,misc]
     _evaluator_ok = False
 
 try:
     from football_scoring_engine import FootballScoringEngine
     _football_ok = True
 except ImportError:
+    FootballScoringEngine = None  # type: ignore[assignment,misc]
     _football_ok = False
 
+_tennis_ok = False
 try:
-    from tennis_scoring_engine import TennisScoringEngine
+    import importlib
+    importlib.import_module('tennis_scoring_engine')
     _tennis_ok = True
 except ImportError:
-    _tennis_ok = False
+    pass
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -138,8 +141,8 @@ class WeightOptimizer:
 
     def __init__(self, sport: str = "football"):
         self.sport = sport
-        self.eval_matches: List[Dict[str, Any]] = []
-        self.settled_matches: List[Dict[str, Any]] = []
+        self.eval_matches: List[Any] = []
+        self.settled_matches: List[Any] = []
 
     # ------------------------------------------------------------------
     # DATA LOADING
@@ -147,7 +150,7 @@ class WeightOptimizer:
 
     def load_data(self, days: int = 60, all_data: bool = False) -> int:
         """Load historical prediction+result data via PredictionEvaluator."""
-        if not _evaluator_ok:
+        if not _evaluator_ok or PredictionEvaluator is None:
             print("[WeightOptimizer] PredictionEvaluator not available")
             return 0
 
@@ -173,7 +176,7 @@ class WeightOptimizer:
     # ------------------------------------------------------------------
 
     def _simulate_weights(
-        self, weights: Dict[str, float], matches: List[Dict[str, Any]]
+        self, weights: Dict[str, float], matches: List[Any]
     ) -> Tuple[float, float, float]:
         """
         Re-score matches with given weights, return (accuracy, brier, roi).
@@ -210,7 +213,6 @@ class WeightOptimizer:
 
             # Pick
             pick = 'home' if prob_home >= 0.5 else 'away'
-            pick_prob = prob_home if pick == 'home' else 1.0 - prob_home
 
             # Check result
             actual = m.actual_winner  # 'home', 'away', 'draw'
@@ -237,36 +239,36 @@ class WeightOptimizer:
 
         return accuracy, brier, roi
 
-    def _extract_estimates(self, m) -> Dict[str, float]:
+    def _extract_estimates(self, m: Any) -> Dict[str, float]:
         """Extract per-source probability estimates from an EvalMatch."""
-        estimates = {}
+        estimates: Dict[str, float] = {}
 
         # H2H
         if hasattr(m, 'features') and m.features:
-            feats = m.features
+            feats: Dict[str, Any] = m.features
         else:
-            feats = {}
+            feats: Dict[str, Any] = {}
 
         # Use stored data to reconstruct source estimates
         # H2H
-        h2h_wr = feats.get('h2h_win_rate_a', feats.get('h2h_win_rate', None))
+        h2h_wr: Optional[float] = feats.get('h2h_win_rate_a', feats.get('h2h_win_rate', None))
         if h2h_wr is not None:
             estimates['h2h'] = h2h_wr if h2h_wr <= 1.0 else h2h_wr / 100.0
 
         # Form — approximate from scoring data
         if m.scoring_prob is not None:
-            estimates['form'] = m.scoring_prob
+            estimates['form'] = float(m.scoring_prob)
 
         # Odds
         if m.home_odds and m.home_odds > 1.0 and m.away_odds and m.away_odds > 1.0:
-            total_inv = 1.0 / m.home_odds + 1.0 / m.away_odds
+            total_inv: float = 1.0 / m.home_odds + 1.0 / m.away_odds
             if m.draw_odds and m.draw_odds > 1.0:
                 total_inv += 1.0 / m.draw_odds
             estimates['odds'] = (1.0 / m.home_odds) / total_inv
 
         # Forebet
         if m.forebet_probability and m.forebet_probability > 0:
-            fp = m.forebet_probability
+            fp: float = float(m.forebet_probability)
             if fp > 1:
                 fp = fp / 100.0
             # Forebet prediction direction
@@ -279,14 +281,14 @@ class WeightOptimizer:
 
         # SofaScore
         if m.sofascore_home is not None and m.sofascore_home > 0:
-            ss_total = (m.sofascore_home or 0) + (m.sofascore_away or 0)
+            ss_total: float = float(m.sofascore_home or 0) + float(m.sofascore_away or 0)
             if ss_total > 0:
-                estimates['sofascore'] = m.sofascore_home / ss_total
+                estimates['sofascore'] = float(m.sofascore_home) / ss_total
 
         # Gemini
         gemini_map = {'LOCK': 0.85, 'HIGH': 0.72, 'MEDIUM': 0.58, 'LOW': 0.42, 'AVOID': 0.25}
         if m.gemini_recommendation:
-            g_base = gemini_map.get(m.gemini_recommendation, 0.5)
+            g_base: float = gemini_map.get(str(m.gemini_recommendation), 0.5)
             # Flip if focus is away
             if m.focus_team == 'away':
                 g_base = 1.0 - g_base
@@ -317,7 +319,7 @@ class WeightOptimizer:
         if initial_weights is None:
             initial_weights = self._default_weights()
 
-        weights = copy.deepcopy(initial_weights)
+        weights: Dict[str, float] = copy.deepcopy(initial_weights)
         keys = list(weights.keys())
 
         # Baseline
@@ -331,7 +333,7 @@ class WeightOptimizer:
             iteration += 1
             for k in keys:
                 for delta in [step, -step]:
-                    candidate = copy.deepcopy(weights)
+                    candidate: Dict[str, float] = copy.deepcopy(weights)
                     candidate[k] = max(min_weight, min(max_weight, candidate[k] + delta))
 
                     # Normalize to sum=1
@@ -443,7 +445,7 @@ class WeightOptimizer:
 
         Returns (buckets, expected_calibration_error).
         """
-        buckets = []
+        buckets: List[CalibrationBucket] = []
         step = 1.0 / n_buckets
         for i in range(n_buckets):
             lo = i * step
@@ -543,7 +545,7 @@ class WeightOptimizer:
         """Save full optimization report."""
         os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
-        report = {
+        report: Dict[str, Any] = {
             "generated_at": datetime.now().isoformat(),
             "sports": [r.to_dict() for r in results],
         }
@@ -562,7 +564,7 @@ class WeightOptimizer:
         if self.sport == 'tennis' and _tennis_ok:
             from tennis_scoring_engine import DEFAULT_WEIGHTS as TENNIS_DEFAULTS
             return dict(TENNIS_DEFAULTS)
-        elif _football_ok:
+        elif _football_ok and FootballScoringEngine is not None:
             return FootballScoringEngine.DEFAULT_WEIGHTS.copy()
         # Generic fallback
         return {
@@ -677,7 +679,7 @@ def main():
 
     if args.report:
         # Run all sports
-        results = []
+        results: List[OptimizationResult] = []
         for sport in ["football", "tennis"]:
             opt = WeightOptimizer(sport=sport)
             n = opt.load_data(days=args.days, all_data=args.all)

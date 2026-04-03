@@ -12,7 +12,7 @@ Used by scrape_and_notify.py (enrichment phase) and prediction_evaluator.py.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 import math
 
@@ -204,8 +204,12 @@ class AvailabilityReport:
 @dataclass
 class PredictionExplanation:
     """Human-readable explanation of why this prediction was made."""
-    primary_factors: List[str] = field(default_factory=list)   # Top 3 reasons
-    risk_factors: List[str] = field(default_factory=list)      # Top concerns
+    primary_factors: List[str] = field(
+        default_factory=lambda: []  # type: ignore[assignment]
+    )
+    risk_factors: List[str] = field(
+        default_factory=lambda: []  # type: ignore[assignment]
+    )
     data_quality_note: str = ''
     availability_note: str = ''
     expected_edge: Optional[float] = None   # % edge over market
@@ -292,8 +296,8 @@ def compute_data_quality(row: Dict[str, Any]) -> DataQualityReport:
                           away_odds is not None and away_odds > 1.0)
 
     # Form
-    home_form = row.get('home_form') or row.get('homeForm') or []
-    away_form = row.get('away_form') or row.get('awayForm') or []
+    home_form: List[Any] = row.get('home_form') or row.get('homeForm') or []
+    away_form: List[Any] = row.get('away_form') or row.get('awayForm') or []
     dq.form_available = len(home_form) > 0 and len(away_form) > 0
 
     # Scoring
@@ -402,8 +406,8 @@ def compute_availability(row: Dict[str, Any], sport: str = '') -> AvailabilityRe
 
     else:
         # Team sports — approximate from form arrays
-        home_form = row.get('home_form') or row.get('homeForm') or []
-        away_form = row.get('away_form') or row.get('awayForm') or []
+        home_form: List[Any] = row.get('home_form') or row.get('homeForm') or []
+        away_form: List[Any] = row.get('away_form') or row.get('awayForm') or []
 
         # Use form array length as rough match count proxy
         if len(home_form) >= 5:
@@ -455,7 +459,7 @@ def compute_explanation(row: Dict[str, Any], dq: DataQualityReport,
     expl.consensus_note = f'{dq.consensus_strength} ({dq.sources_agree} sources agree)'
 
     if avail.availability_impact > 0:
-        parts = []
+        parts: List[str] = []
         if avail.home_retirement_flag:
             parts.append('home retirement')
         if avail.away_retirement_flag:

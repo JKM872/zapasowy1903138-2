@@ -21,13 +21,9 @@ Usage from scrape_and_notify.py:
 import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional
+from zoneinfo import ZoneInfo
 
-try:
-    from zoneinfo import ZoneInfo
-except ImportError:
-    from backports.zoneinfo import ZoneInfo  # type: ignore
-
-_WARSAW_TZ = ZoneInfo("Europe/Warsaw")
+_WARSAW_TZ: ZoneInfo = ZoneInfo("Europe/Warsaw")
 
 # ── Per-sport minimum odds thresholds ──────────────────────────────────────
 SPORT_MIN_ODDS: Dict[str, float] = {

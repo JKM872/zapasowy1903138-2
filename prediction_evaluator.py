@@ -27,8 +27,6 @@ import glob
 import json
 import math
 import os
-import sys
-from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
@@ -37,6 +35,7 @@ try:
     from result_store import ResultStore
     _result_store_ok = True
 except ImportError:
+    ResultStore = None  # type: ignore[assignment,misc]
     _result_store_ok = False
 
 
@@ -121,10 +120,14 @@ class SportMetrics:
     brier_count: int = 0
 
     # Confidence calibration
-    conf_buckets: Dict[str, Dict[str, float]] = field(default_factory=dict)
+    conf_buckets: Dict[str, Dict[str, float]] = field(
+        default_factory=lambda: {}  # type: ignore[assignment]
+    )
 
     # Source agreement
-    source_agreement: Dict[str, Dict[str, int]] = field(default_factory=dict)
+    source_agreement: Dict[str, Dict[str, int]] = field(
+        default_factory=lambda: {}  # type: ignore[assignment]
+    )
 
     @property
     def accuracy(self) -> float:
@@ -154,7 +157,7 @@ class SportMetrics:
             return 0.0
         return self.total_staked / (self.won + self.lost) if (self.won + self.lost) > 0 else 0.0
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             'label': self.label,
             'total': self.total,
@@ -184,10 +187,10 @@ OUTPUTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'outputs'
 SPORT_LIST = ['football', 'tennis', 'basketball', 'handball', 'volleyball', 'hockey']
 
 
-def _load_results_json(date: str) -> Dict[str, List[Dict]]:
+def _load_results_json(date: str) -> Dict[str, List[Dict[str, Any]]]:
     """Load all results/matches_{date}_{sport}.json for a date.
     Returns {sport: [match_dict, ...]}."""
-    out: Dict[str, List[Dict]] = {}
+    out: Dict[str, List[Dict[str, Any]]] = {}
     for sport in SPORT_LIST:
         path = os.path.join(RESULTS_DIR, f'matches_{date}_{sport}.json')
         if not os.path.isfile(path):
@@ -203,30 +206,10 @@ def _load_results_json(date: str) -> Dict[str, List[Dict]]:
     return out
 
 
-def _load_manifest(date: str) -> List[Dict]:
-    """Load mailed manifests for a date (from outputs/)."""
-    pattern = os.path.join(OUTPUTS_DIR, f'mailed_manifest_{date}*.json')
-    files = sorted(glob.glob(pattern))
-    all_matches: List[Dict] = []
-    seen: set = set()
-    for fpath in files:
-        try:
-            with open(fpath, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            for m in data:
-                url = m.get('match_url', '')
-                if url and url not in seen:
-                    all_matches.append(m)
-                    seen.add(url)
-        except (json.JSONDecodeError, OSError):
-            pass
-    return all_matches
-
-
 def _get_available_dates(days: Optional[int] = None, start_date: Optional[str] = None,
                          end_date: Optional[str] = None) -> List[str]:
     """Return sorted list of dates with data in results/ directory."""
-    dates: set = set()
+    dates: set[str] = set()
     for fname in os.listdir(RESULTS_DIR) if os.path.isdir(RESULTS_DIR) else []:
         if fname.startswith('matches_') and fname.endswith('.json'):
             parts = fname.replace('matches_', '').split('_')
@@ -246,19 +229,11 @@ def _get_available_dates(days: Optional[int] = None, start_date: Optional[str] =
     return sorted_dates
 
 
-def _determine_winner(match: Dict) -> Optional[str]:
-    """Try to determine actual winner from a results/matches_*.json entry.
-    Uses matchUrl to scrape or infer from stored data. For now, returns None
-    (actual result checking requires Selenium — done via check_results.py).
-    This function reads from results_summary files if available."""
-    return None
-
-
-def _predicted_winner_from_match(match: Dict, sport: str) -> str:
+def _predicted_winner_from_match(match: Dict[str, Any], sport: str) -> str:
     """Determine who our pipeline predicted to win from a match dict."""
     if sport == 'tennis':
-        scoring = match.get('scoring') or {}
-        pick = scoring.get('pick', '')
+        scoring: Dict[str, Any] = match.get('scoring') or {}
+        pick: str = scoring.get('pick', '')
         if pick:
             return 'home' if '1' in str(pick) or 'A' in str(pick).upper() else 'away'
         return 'home'
@@ -267,12 +242,12 @@ def _predicted_winner_from_match(match: Dict, sport: str) -> str:
     return focus
 
 
-def _extract_eval_match(match: Dict, sport: str, date: str) -> EvalMatch:
+def _extract_eval_match(match: Dict[str, Any], sport: str, date: str) -> EvalMatch:
     """Convert a results/matches_*.json match dict into EvalMatch."""
-    scoring = match.get('scoring') or {}
-    odds = match.get('odds') or {}
-    forebet = match.get('forebet') or {}
-    sofascore = match.get('sofascore') or {}
+    scoring: Dict[str, Any] = match.get('scoring') or {}
+    odds: Dict[str, Any] = match.get('odds') or {}
+    forebet: Dict[str, Any] = match.get('forebet') or {}
+    sofascore: Dict[str, Any] = match.get('sofascore') or {}
 
     predicted = _predicted_winner_from_match(match, sport)
     confidence = match.get('confidence', 0) or 0
@@ -321,7 +296,7 @@ def _safe_float(val: Any) -> Optional[float]:
 def load_result_summaries() -> Dict[str, Dict[str, Any]]:
     """Load all results_summary_*.json files.
     Returns {date: summary_dict}."""
-    summaries: Dict[str, Dict] = {}
+    summaries: Dict[str, Dict[str, Any]] = {}
     pattern = os.path.join(OUTPUTS_DIR, 'results_summary_*.json')
     for fpath in glob.glob(pattern):
         try:
@@ -343,7 +318,7 @@ def _match_results_from_summary(
     Returns number of matches updated."""
     summary_details = summary.get('matches', [])
     # Build lookup by (home, away) for matching
-    lookup: Dict[Tuple[str, str], Dict] = {}
+    lookup: Dict[Tuple[str, str], Dict[str, Any]] = {}
     for detail in summary_details:
         key = (detail.get('home', '').strip().lower(),
                detail.get('away', '').strip().lower())
@@ -467,7 +442,7 @@ def compute_metrics(
 
 def _track_source_agreement(em: EvalMatch, metrics: SportMetrics):
     """Track how often each source agreed with the final pick and was correct."""
-    sources = {}
+    sources: Dict[str, bool] = {}
 
     # Forebet
     if em.forebet_prediction:
@@ -544,7 +519,7 @@ class PredictionEvaluator:
         total_updated = 0
 
         # 1. Result store (persistent, accumulated)
-        if _result_store_ok:
+        if _result_store_ok and ResultStore is not None:
             store = ResultStore()
             finished = store.get_all_finished()
             for em in self.all_matches:
@@ -648,7 +623,7 @@ class PredictionEvaluator:
     def export_report(self, path: str, sport: Optional[str] = None) -> str:
         """Export full evaluation report as JSON."""
         metrics = self.evaluate(sport=sport)
-        report = {
+        report: Dict[str, Any] = {
             'generated_at': datetime.now().isoformat(),
             'dates_range': f'{self.dates_loaded[0]} → {self.dates_loaded[-1]}' if self.dates_loaded else 'none',
             'dates_count': len(self.dates_loaded),

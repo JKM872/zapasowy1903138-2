@@ -55,7 +55,7 @@ class ResultStore:
         if existing and existing.get('status') == 'finished':
             return False  # Already have final result
 
-        entry = {
+        entry: Dict[str, Any] = {
             'status': result.get('status', 'unknown'),
             'score_home': result.get('score_home'),
             'score_away': result.get('score_away'),

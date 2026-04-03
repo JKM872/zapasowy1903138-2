@@ -10,7 +10,6 @@ Covers:
   - tennis_scoring_engine: new availability features
 """
 
-import json
 import os
 import sys
 import tempfile
@@ -33,9 +32,9 @@ from prediction_data_contract import (
 from qualification_gate import (
     qualify_match,
     apply_qualification_gate,
-    _passes_odds_filter,
-    _passes_fan_vote_filter,
-    _is_future_match,
+    _passes_odds_filter,  # pyright: ignore[reportPrivateUsage]
+    _passes_fan_vote_filter,  # pyright: ignore[reportPrivateUsage]
+    _is_future_match,  # pyright: ignore[reportPrivateUsage]
 )
 from result_store import ResultStore
 from weight_optimizer import WeightOptimizer, CalibrationBucket, OptimizationResult
@@ -204,33 +203,33 @@ class TestFanVoteFilter:
         assert _passes_fan_vote_filter("football", m)
 
     def test_low_dominant_fails_basketball(self):
-        m = {"sofascore_home_win_prob": 40, "sofascore_away_win_prob": 35}
+        m: Dict[str, Any] = {"sofascore_home_win_prob": 40, "sofascore_away_win_prob": 35}
         assert not _passes_fan_vote_filter("basketball", m)
 
     def test_no_data_passes(self):
-        m = {}
+        m: Dict[str, Any] = {}
         assert _passes_fan_vote_filter("football", m)
 
 
 class TestFutureMatchFilter:
     def test_future_match_passes(self):
         now = datetime(2025, 6, 15, 10, 0)
-        m = {"match_time": "15.06.2025 14:00"}
+        m: Dict[str, Any] = {"match_time": "15.06.2025 14:00"}
         assert _is_future_match(m, now)
 
     def test_past_match_fails(self):
         now = datetime(2025, 6, 15, 16, 0)
-        m = {"match_time": "15.06.2025 14:00"}
+        m: Dict[str, Any] = {"match_time": "15.06.2025 14:00"}
         assert not _is_future_match(m, now)
 
     def test_different_date_passes(self):
         now = datetime(2025, 6, 15, 16, 0)
-        m = {"match_time": "16.06.2025 14:00"}
+        m: Dict[str, Any] = {"match_time": "16.06.2025 14:00"}
         assert _is_future_match(m, now)
 
     def test_no_time_passes(self):
         now = datetime(2025, 6, 15, 16, 0)
-        m = {}
+        m: Dict[str, Any] = {}
         assert _is_future_match(m, now)
 
 
@@ -322,25 +321,25 @@ class TestResultStore:
 class TestWeightOptimizer:
     def test_default_weights_football(self):
         opt = WeightOptimizer("football")
-        w = opt._default_weights()
+        w = opt._default_weights()  # pyright: ignore[reportPrivateUsage]
         assert "h2h" in w
         assert "odds" in w
         assert abs(sum(w.values()) - 1.0) < 0.01
 
     def test_default_weights_tennis(self):
         opt = WeightOptimizer("tennis")
-        w = opt._default_weights()
+        w = opt._default_weights()  # pyright: ignore[reportPrivateUsage]
         assert "h2h" in w
         assert "surface_form" in w
         assert abs(sum(w.values()) - 1.0) < 0.01
 
     def test_objective_score_accuracy(self):
         opt = WeightOptimizer("football")
-        assert opt._objective_score(0.7, 0.3, 0.05, "accuracy") == 0.7
+        assert opt._objective_score(0.7, 0.3, 0.05, "accuracy") == 0.7  # pyright: ignore[reportPrivateUsage]
 
     def test_objective_score_brier(self):
         opt = WeightOptimizer("football")
-        assert opt._objective_score(0.7, 0.3, 0.05, "brier") == -0.3
+        assert opt._objective_score(0.7, 0.3, 0.05, "brier") == -0.3  # pyright: ignore[reportPrivateUsage]
 
     def test_empty_result_no_data(self):
         opt = WeightOptimizer("football")
@@ -349,9 +348,9 @@ class TestWeightOptimizer:
 
     def test_calibration_bucket(self):
         b = CalibrationBucket(predicted_low=0.6, predicted_high=0.7, count=10, actual_wins=7)
-        assert b.midpoint == pytest.approx(0.65, abs=0.001)
+        assert b.midpoint == pytest.approx(0.65, abs=0.001)  # pyright: ignore[reportUnknownMemberType]
         assert b.actual_rate == 0.7
-        assert b.calibration_error == pytest.approx(0.05, abs=0.01)
+        assert b.calibration_error == pytest.approx(0.05, abs=0.01)  # pyright: ignore[reportUnknownMemberType]
 
 
 class TestOptimizationResult:
@@ -400,13 +399,13 @@ class TestFootballNewFeatures:
         m["availability_impact"] = -0.1
         m["fatigue_risk"] = "medium"
         m["consensus_strength"] = "strong"
-        sm = engine.score_match(m)
-        assert sm.prob_home + sm.prob_draw + sm.prob_away == pytest.approx(1.0, abs=0.01)
+        sm = engine.score_match(m)  # pyright: ignore[reportUnknownMemberType]
+        assert sm.prob_home + sm.prob_draw + sm.prob_away == pytest.approx(1.0, abs=0.01)  # pyright: ignore[reportUnknownMemberType]
 
     def test_feature_extraction_includes_new_fields(self):
         from football_scoring_engine import FeatureExtractor
         ext = FeatureExtractor()
-        feats = ext.extract(_team_match())
+        feats = ext.extract(_team_match())  # pyright: ignore[reportUnknownMemberType]
         assert "availability_impact" in feats
         assert "consensus" in feats
 
@@ -429,7 +428,7 @@ class TestTennisNewFeatures:
         m["retirement_a"] = 0
         m["retirement_b"] = 1
         sm = engine.score_match(m)
-        assert sm.prob_a + sm.prob_b == pytest.approx(1.0, abs=0.001)
+        assert sm.prob_a + sm.prob_b == pytest.approx(1.0, abs=0.001)  # pyright: ignore[reportUnknownMemberType]
         # Player B has retirement flag → A should be favored more
         assert sm.best_pick == "A"
 

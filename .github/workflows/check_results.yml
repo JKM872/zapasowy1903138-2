@@ -50,11 +50,14 @@ jobs:
 
       # 5. Determine target date
       - name: Set target date
+        id: set-date
         run: |
           if [ -n "${{ github.event.inputs.date }}" ]; then
             echo "TARGET_DATE=${{ github.event.inputs.date }}" >> $GITHUB_ENV
+            echo "date=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
           else
             echo "TARGET_DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+            echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
           fi
           echo "📅 Checking results for: $TARGET_DATE"
 
@@ -94,6 +97,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: results-summary-${{ env.TARGET_DATE }}-${{ github.run_id }}
+          name: results-summary-${{ steps.set-date.outputs.date }}-${{ github.run_id }}
           path: outputs/results_summary_*.json
           retention-days: 30

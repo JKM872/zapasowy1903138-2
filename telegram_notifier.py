@@ -313,14 +313,13 @@ def _build_summary(
 
             # Model explanation — primary factors & risk
             grade = m.get("prediction_grade", "")
-            explanation = m.get("explanation", {})
-            if isinstance(explanation, dict):
-                factors = explanation.get("primary_factors", [])
-                risks = explanation.get("risk_factors", [])
-                if factors:
-                    lines.append(f"✅ {' · '.join(factors[:3])}")
-                if risks:
-                    lines.append(f"⚠️ {' · '.join(risks[:2])}")
+            explanation: Dict[str, Any] = m.get("explanation") or {}
+            factors: List[str] = explanation.get("primary_factors", [])
+            risks: List[str] = explanation.get("risk_factors", [])
+            if factors:
+                lines.append(f"✅ {' · '.join(factors[:3])}")
+            if risks:
+                lines.append(f"⚠️ {' · '.join(risks[:2])}")
             if grade and grade in ("A", "B"):
                 lines.append(f"🏅 Grade: {grade}")
 

@@ -12,23 +12,28 @@
 ## 🚀 QUICK SETUP (5 minutes)
 
 ### Step 1: Create Environment File
+
 ```bash
 cp .env.example .env
 # Edit .env with your Supabase project credentials
 ```
 
 ### Step 2: Open Supabase SQL Editor
+
 1. Go to your Supabase project → SQL Editor
 2. Click "New Query"
 
 ### Step 3: Run Schema Script
+
 1. Open file: `supabase_schema.sql`
 2. Copy **ALL** content (Ctrl+A, Ctrl+C)
 3. Paste into Supabase SQL Editor
 4. Click **"RUN"** button (bottom right)
 
 ### Step 4: Verify Table Created
+
 Run this query:
+
 ```sql
 SELECT * FROM predictions LIMIT 10;
 ```
@@ -36,12 +41,14 @@ SELECT * FROM predictions LIMIT 10;
 Expected result: Empty table (0 rows) with all columns
 
 ### Step 5: Test Connection
+
 ```bash
 python supabase_manager.py
 ```
 
 Expected output:
-```
+
+```text
 ✅ Connected to Supabase: https://<your-project>.supabase.co
 ✅ Test save: True
 ```
@@ -113,21 +120,25 @@ Already configured in `supabase_schema.sql`:
 ## 📊 Useful Queries
 
 ### 1. View Recent Predictions (Last 7 Days)
+
 ```sql
 SELECT * FROM recent_predictions;
 ```
 
 ### 2. View Predictions with Results
+
 ```sql
 SELECT * FROM predictions_with_results;
 ```
 
 ### 3. View Only Qualified Matches
+
 ```sql
 SELECT * FROM qualified_predictions;
 ```
 
 ### 4. Count Predictions by Sport
+
 ```sql
 SELECT sport, COUNT(*) as total
 FROM predictions
@@ -136,6 +147,7 @@ ORDER BY total DESC;
 ```
 
 ### 5. Today's Predictions
+
 ```sql
 SELECT home_team, away_team, 
        livesport_win_rate,
@@ -148,6 +160,7 @@ ORDER BY match_time;
 ```
 
 ### 6. Accuracy by Source (Last 30 Days)
+
 ```sql
 SELECT 
   COUNT(*) FILTER (WHERE actual_result IS NOT NULL) as total_with_results,
@@ -162,12 +175,14 @@ WHERE match_date >= CURRENT_DATE - INTERVAL '30 days';
 ## 🧹 Maintenance
 
 ### Clean Old Predictions (>90 days)
+
 ```sql
 DELETE FROM predictions
 WHERE match_date < CURRENT_DATE - INTERVAL '90 days';
 ```
 
 ### Update Match Result
+
 ```sql
 UPDATE predictions
 SET 
@@ -179,7 +194,9 @@ WHERE id = 123;
 ```
 
 ### Backup to CSV
+
 In Supabase Dashboard:
+
 1. Go to: Table Editor → predictions
 2. Click "..." (top right)
 3. Select "Export as CSV"
@@ -189,16 +206,19 @@ In Supabase Dashboard:
 ## 📈 Monitoring
 
 ### Database Size
+
 ```sql
 SELECT pg_size_pretty(pg_database_size(current_database())) as size;
 ```
 
 ### Table Size
+
 ```sql
 SELECT pg_size_pretty(pg_total_relation_size('predictions')) as size;
 ```
 
 ### Row Count
+
 ```sql
 SELECT COUNT(*) FROM predictions;
 ```
@@ -208,16 +228,21 @@ SELECT COUNT(*) FROM predictions;
 ## 🔧 Troubleshooting
 
 ### Error: "Could not find table 'predictions'"
+
 **Solution:** Run `supabase_schema.sql` in SQL Editor
 
 ### Error: "Insufficient permissions"
+
 **Solution:** Check RLS policies, use correct API key
 
 ### Error: "Connection timeout"
+
 **Solution:** Check internet, verify Supabase URL
 
 ### Table exists but empty
+
 **Solution:** Run scraper with `--use-supabase` flag:
+
 ```bash
 python livesport_h2h_scraper.py --mode auto --date 2025-11-18 --sports football --use-supabase
 ```
@@ -227,12 +252,14 @@ python livesport_h2h_scraper.py --mode auto --date 2025-11-18 --sports football 
 ## 📦 Free Tier Limits
 
 Supabase Free Tier:
+
 - ✅ 500 MB database storage
 - ✅ 2 GB bandwidth per month
 - ✅ 50,000 monthly active users
 - ✅ Unlimited API requests
 
-**Estimate:** 
+**Estimate:**
+
 - 1 prediction ≈ 2 KB
 - 500 MB ≈ 250,000 predictions
 - Daily scraping (100 matches/day) = 36,500/year ✅ (fits easily)
@@ -265,6 +292,7 @@ Supabase Free Tier:
 ## 📞 Help
 
 If issues persist:
+
 1. Check Supabase logs in your project dashboard under Logs
 2. Verify environment variables in `.env`
 3. Run test: `python supabase_manager.py`
