@@ -2,6 +2,18 @@
 
 Wszystkie istotne zmiany w projekcie będą dokumentowane w tym pliku.
 
+## [5.1.0-telegram-results] - 2026-03-31
+
+### 📊 Dzienny raport skuteczności typów na Telegramie
+
+- **Nowa metoda `get_telegram_daily_stats(hours)`** w `supabase_manager.py` — pobiera kwalifikujące predykcje z ostatnich N godzin i klasyfikuje je jako win / loss / pending (pick 1/X/2 vs actual_result).
+- **Nowy moduł `telegram_results_report.py`** — buduje sformatowaną wiadomość HTML z podsumowaniem globalnym, podziałem per sport oraz listą rozliczonych i oczekujących meczów.
+- **Nowy CLI `run_daily_telegram_results.py`** — punkt wejścia do uruchamiania raportu ręcznie lub przez CI. Opcje: `--hours`, `--date`, `--dry-run`.
+- **Nowy job `telegram-results-report`** w `.github/workflows/daily_report.yml` — automatycznie wysyła raport skuteczności na Telegramie (wymaga `TELEGRAM_ENABLED=true`).
+- Kolejność: `check_results.yml` (22:00 UTC) aktualizuje wyniki → `daily_report.yml` (07:00 UTC) wysyła raport skuteczności z już rozliczonymi meczami.
+
+---
+
 ## [5.0.0-tennis-rebuild] - 2026-02-28
 
 ### 🎾 Tennis Scoring Engine v4 (nowy)

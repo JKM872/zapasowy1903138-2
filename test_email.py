@@ -67,8 +67,8 @@ test_matches = [
         'away_wins_in_h2h_last5': 1,
         'forebet_probability': 75.5,
         'gemini_reasoning': 'Test reasoning',
-        'gemini_recommendation': 'HIGH',  # Required for TOP PICKS
-        'gemini_confidence': 90,  # Required >= 85 for TOP PICKS
+        'gemini_recommendation': 'HIGH',
+        'gemini_confidence': 90,
         'home_odds': 1.85,
         'draw_odds': 3.50,
         'away_odds': 4.20,
@@ -85,6 +85,10 @@ try:
         ('Manchester United', 'away_team'),
         ('1.85', 'home_odds'),
     ]
+    negative_checks = [
+        ('TOP PICKS - Najlepsze Typy AI', 'top_picks_section'),
+        ('KURSY POSORTOWANE', 'sorted_odds_section'),
+    ]
     
     all_ok = True
     for text, field in checks:
@@ -93,6 +97,15 @@ try:
             tests_passed += 1
         else:
             print(f"   ❌ HTML nie zawiera {field}: {text}")
+            tests_failed += 1
+            all_ok = False
+
+    for text, field in negative_checks:
+        if text not in html:
+            print(f"   ✅ HTML nie zawiera {field}: {text}")
+            tests_passed += 1
+        else:
+            print(f"   ❌ HTML nadal zawiera {field}: {text}")
             tests_failed += 1
             all_ok = False
     

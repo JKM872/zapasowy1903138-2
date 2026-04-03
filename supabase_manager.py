@@ -638,6 +638,138 @@ class SupabaseManager:
             print(f"[ERROR] Error deleting bet: {e}")
             return False
 
+    # ========================================================================
+    # TELEGRAM DAILY STATS
+    # ========================================================================
+
+    def get_telegram_daily_stats(self, hours: int = 24) -> Dict[str, Any]:
+        """
+        Pobiera statystyki skuteczności typów wysłanych na Telegramie
+        (kwalifikujące się predykcje) za ostatnie N godzin.
+
+        Pick jest wyznaczany tak samo jak w telegram_notifier._pick_odds():
+        scoring_pick > forebet_prediction.
+
+        Returns:
+            Dict:
+              global: {total, win, loss, pending, win_rate}
+              per_sport: {sport: {total, win, loss, pending, win_rate}}
+              matches: [{home_team, away_team, sport, pick, actual_result,
+                         home_score, away_score, status, odds}]
+        """
+        from datetime import timedelta
+
+        try:
+            cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
+
+            response = (
+                self.client.table('predictions')
+                .select('*')
+                .eq('qualifies', True)
+                .gte('created_at', cutoff)
+                .order('match_date', desc=True)
+                .order('match_time', desc=False)
+                .execute()
+            )
+
+            predictions = cast(List[Dict[str, Any]], response.data or [])
+
+            # --- classify each prediction --------------------------------
+            matches_detail: List[Dict[str, Any]] = []
+            sport_agg: Dict[str, Dict[str, int]] = {}
+            g_win = g_loss = g_pending = 0
+
+            for pred in predictions:
+                sport = pred.get('sport', 'football')
+                pick = (
+                    pred.get('forebet_prediction') or ''
+                ).strip().upper()
+
+                actual = (pred.get('actual_result') or '').strip().upper()
+
+                # Determine status
+                if not actual:
+                    status = 'pending'
+                    g_pending += 1
+                elif pick and pick == actual:
+                    status = 'win'
+                    g_win += 1
+                else:
+                    status = 'loss'
+                    g_loss += 1
+
+                # Odds for the pick
+                odds_val: Any = None
+                if pick in ('1', 'H', '1X'):
+                    odds_val = pred.get('forebet_home_odds')
+                elif pick in ('2', 'A', 'X2'):
+                    odds_val = pred.get('forebet_away_odds')
+                elif pick == 'X':
+                    odds_val = pred.get('forebet_draw_odds')
+                try:
+                    odds_val = float(odds_val) if odds_val else None
+                except (ValueError, TypeError):
+                    odds_val = None
+
+                matches_detail.append({
+                    'home_team': pred.get('home_team'),
+                    'away_team': pred.get('away_team'),
+                    'sport': sport,
+                    'league': pred.get('league'),
+                    'match_date': pred.get('match_date'),
+                    'match_time': pred.get('match_time'),
+                    'pick': pick,
+                    'actual_result': actual or None,
+                    'home_score': pred.get('home_score'),
+                    'away_score': pred.get('away_score'),
+                    'status': status,
+                    'odds': odds_val,
+                })
+
+                # Aggregate per sport
+                agg = sport_agg.setdefault(sport, {'total': 0, 'win': 0, 'loss': 0, 'pending': 0})
+                agg['total'] += 1
+                if status == 'win':
+                    agg['win'] += 1
+                elif status == 'loss':
+                    agg['loss'] += 1
+                else:
+                    agg['pending'] += 1
+
+            total = g_win + g_loss + g_pending
+            settled = g_win + g_loss
+            win_rate = round((g_win / settled) * 100, 1) if settled > 0 else 0.0
+
+            # win_rate per sport
+            per_sport: Dict[str, Any] = {}
+            for sp, agg in sport_agg.items():
+                sp_settled = agg['win'] + agg['loss']
+                per_sport[sp] = {
+                    **agg,
+                    'win_rate': round((agg['win'] / sp_settled) * 100, 1) if sp_settled > 0 else 0.0,
+                }
+
+            return {
+                'global': {
+                    'total': total,
+                    'win': g_win,
+                    'loss': g_loss,
+                    'pending': g_pending,
+                    'settled': settled,
+                    'win_rate': win_rate,
+                },
+                'per_sport': per_sport,
+                'matches': matches_detail,
+            }
+
+        except Exception as e:
+            print(f"[ERROR] Error fetching telegram daily stats: {e}")
+            return {
+                'global': {'total': 0, 'win': 0, 'loss': 0, 'pending': 0, 'settled': 0, 'win_rate': 0.0},
+                'per_sport': {},
+                'matches': [],
+            }
+
 
 # ============================================================================
 # DATABASE SCHEMA (SQL)

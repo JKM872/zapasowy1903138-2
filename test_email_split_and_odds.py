@@ -60,6 +60,38 @@ def _write_csv(tmp_path: Any, matches: list[dict[str, Any]] | None = None) -> st
     return csv_path
 
 
+def test_create_html_email_omits_top_picks_and_sorted_odds_sections() -> None:
+    from email_notifier import create_html_email
+
+    html = create_html_email([
+        dict(
+            home_team='Liverpool',
+            away_team='Manchester United',
+            match_time='2026-03-08 20:00',
+            home_wins_in_h2h_last5=3,
+            away_wins_in_h2h_last5=1,
+            forebet_probability=75.5,
+            gemini_reasoning='Test reasoning',
+            gemini_recommendation='HIGH',
+            gemini_confidence=90,
+            home_odds=1.85,
+            draw_odds=3.50,
+            away_odds=4.20,
+            focus_team='home',
+            ai_prediction={
+                'confidenceTier': 'VERY HIGH',
+                'compositeConfidence': 98,
+                'pick': '2',
+                'pickLabel': 'Away Win',
+            },
+        )
+    ], '2026-03-08', include_sorted_odds=True, odds_limit=5)
+
+    assert 'TOP PICKS - Najlepsze Typy AI' not in html
+    assert 'KURSY POSORTOWANE' not in html
+    assert 'Liverpool' in html
+
+
 # ---------------------------------------------------------------------------
 # Tests: _passes_sport_odds_threshold helper
 # ---------------------------------------------------------------------------

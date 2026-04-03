@@ -593,8 +593,8 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         matches: Lista meczów
         date: Data
         sort_by: 'time' (godzina), 'wins' (liczba wygranych), 'team' (alfabetycznie)
-        include_sorted_odds: Czy dodać sekcje z kursami posortowanymi od najwyższych
-        odds_limit: Max liczba meczów w każdej sekcji kursów
+        include_sorted_odds: Parametr zachowany dla kompatybilności; sekcje kursów nie są już renderowane w mailu
+        odds_limit: Parametr zachowany dla kompatybilności; nie wpływa już na HTML maila
     """
     
     # SORTOWANIE MECZÓW
@@ -630,14 +630,10 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         # Sortuj alfabetycznie po nazwie gospodarzy
         sorted_matches = sorted(sorted_matches, key=lambda x: x.get('home_team', '').lower())
     
-    # Dodaj CSS dla sorted odds jeśli włączone
-    extra_css = ODDS_SECTIONS_CSS if include_sorted_odds else ''
-    
     html = f"""
     <html>
     <head>
         <style>
-            {extra_css}
             body {{
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
@@ -697,64 +693,6 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                 border-radius: 3px;
                 margin-right: 10px;
             }}
-            .top-picks-section {{
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 10px;
-                padding: 25px;
-                margin: 20px 0;
-                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            }}
-            .top-picks-header {{
-                color: #fff;
-                font-size: 26px;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 20px;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            }}
-            .top-pick-card {{
-                background: white;
-                border-radius: 8px;
-                padding: 20px;
-                margin: 15px 0;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                border-left: 6px solid #ffd700;
-            }}
-            .top-pick-team {{
-                font-size: 20px;
-                font-weight: bold;
-                color: #2196F3;
-                margin-bottom: 10px;
-            }}
-            .top-pick-stats {{
-                display: flex;
-                justify-content: space-around;
-                margin: 15px 0;
-                flex-wrap: wrap;
-            }}
-            .top-pick-stat {{
-                text-align: center;
-                padding: 10px;
-                min-width: 100px;
-            }}
-            .top-pick-stat-value {{
-                font-size: 24px;
-                font-weight: bold;
-                color: #4CAF50;
-            }}
-            .top-pick-stat-label {{
-                font-size: 12px;
-                color: #666;
-                text-transform: uppercase;
-            }}
-            .top-pick-reasoning {{
-                background: #f8f9fa;
-                border-left: 4px solid #667eea;
-                padding: 12px;
-                margin: 10px 0;
-                font-style: italic;
-                color: #333;
-            }}
         </style>
     </head>
     <body>
@@ -766,115 +704,6 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         
         <div class="content">
     """
-    
-    # ========================================================================
-    # TOP PICKS SECTION - Mecze z HIGH recommendation i wysokim confidence
-    # ========================================================================
-    top_picks = [m for m in sorted_matches
-                 if (m.get('gemini_recommendation') == 'HIGH' and m.get('gemini_confidence', 0) >= 85)
-                 or (ensure_ai_prediction_dict(m.get('ai_prediction')).get('confidenceTier') in ('VERY HIGH', 'HIGH')
-                     and ensure_ai_prediction_dict(m.get('ai_prediction')).get('compositeConfidence', 0) >= 75)]
-    # Deduplicate (a match might qualify via both gemini and ai_prediction)
-    seen_tp: set[tuple[Any, ...]] = set()
-    unique_top_picks: List[Dict[str, Any]] = []
-    for _tp in top_picks:
-        _tp_key = (_tp.get('home_team', ''), _tp.get('away_team', ''), _tp.get('match_time', ''))
-        if _tp_key not in seen_tp:
-            seen_tp.add(_tp_key)
-            unique_top_picks.append(_tp)
-    top_picks = unique_top_picks
-    
-    if top_picks:
-        html += f"""
-        <div class="top-picks-section">
-            <div class="top-picks-header">
-                ⭐ TOP PICKS - Najlepsze Typy AI ({len(top_picks)}) ⭐
-            </div>
-    """
-        
-        for pick in top_picks:
-            home = pick.get('home_team', 'N/A')
-            away = pick.get('away_team', 'N/A')
-            _confidence: float = pick.get('gemini_confidence') or 0
-            _prediction = pick.get('gemini_prediction', 'N/A')
-            tp_ai = ensure_ai_prediction_dict(pick.get('ai_prediction'))
-            # Pre-compute AI Pro color values (avoids {{dict}} syntax errors inside f-strings)
-            _tp_tc = {'VERY HIGH': '#00e676', 'HIGH': '#69f0ae', 'MEDIUM': '#ffd740'}.get(tp_ai.get('confidenceTier', ''), '#555')
-            _tp_tc2 = {'VERY HIGH': '#00e676', 'HIGH': '#69f0ae', 'MEDIUM': '#ffd740'}.get(tp_ai.get('confidenceTier', ''), '#999')
-            _tp_risk: Dict[str, Any] = tp_ai.get('risk') or {}
-            _tp_rc: str = {'LOW': '#69f0ae', 'MEDIUM': '#ffd740', 'HIGH': '#ff5252'}.get(str(_tp_risk.get('level', '')), '#999')
-            _tp_rs: Any = _tp_risk.get('score', '?')
-            # Bezpieczne pobieranie reasoning (może być NaN/float z pandas)
-            raw_reasoning = pick.get('gemini_reasoning', '')
-            if raw_reasoning is None or (isinstance(raw_reasoning, float) and str(raw_reasoning) == 'nan'):
-                _reasoning = ''
-            else:
-                _reasoning = str(raw_reasoning)[:300]  # First 300 chars
-            
-            # Calculate stats
-            focus_team = pick.get('focus_team', 'home')
-            if focus_team == 'away':
-                wins = pick.get('away_wins_in_h2h_last5', 0)
-                h2h_count = pick.get('h2h_count', pick.get('h2h_last5', 0))
-                _team_emoji = '🚀'
-            else:
-                wins = pick.get('home_wins_in_h2h_last5', 0)
-                h2h_count = pick.get('h2h_count', pick.get('h2h_last5', 0))
-                _team_emoji = '🏠'
-            
-            win_rate = (wins / h2h_count * 100) if h2h_count > 0 else 0
-            
-            # Forebet data - obsługa braku danych
-            raw_forebet_prob = pick.get('forebet_probability')
-            if raw_forebet_prob is None or (isinstance(raw_forebet_prob, float) and str(raw_forebet_prob) == 'nan'):
-                _forebet_prob = 'Brak'
-                _forebet_style = 'color: #999; font-size: 12px;'
-            else:
-                _forebet_prob = f"{raw_forebet_prob}%" if isinstance(raw_forebet_prob, (int, float)) else str(raw_forebet_prob)
-                _forebet_style = ''
-            match_time = pick.get('match_time', 'Brak danych')
-            
-            # Logos for top picks
-            _home_logo = pick.get('home_logo_url', '')
-            _away_logo = pick.get('away_logo_url', '')
-            _home_badge = f'<img src="{_home_logo}" alt="{home}" width="28" height="28" style="vertical-align:middle;border-radius:50%;margin-right:6px;" onerror="this.style.display=\'none\'">' if _home_logo else ''
-            _away_badge = f'<img src="{_away_logo}" alt="{away}" width="28" height="28" style="vertical-align:middle;border-radius:50%;margin-left:6px;" onerror="this.style.display=\'none\'">' if _away_logo else ''
-            _tp_kaf: List[str] = [str(x) for x in (tp_ai.get('keyArgumentsFor') or [])]  # type: ignore[misc]
-
-            html += f"""
-            <div class="top-pick-card">
-                {(
-                '<div style="margin-top: 12px; background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-radius: 10px; padding: 14px; border: 1px solid ' + _tp_tc + '33;">'
-                '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">'
-                '<span style="font-size: 10px; font-weight: 700; color: ' + _tp_tc2 + '; letter-spacing: 1px;">AI PRO VERDICT</span>'
-                '<span style="background: ' + _tp_tc2 + '; color: #000; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700;">' + tp_ai.get("confidenceTier", "") + '</span>'
-                '</div>'
-                '<div style="display: flex; justify-content: space-around; text-align: center; margin-bottom: 10px;">'
-                '<div><div style="font-size: 22px; font-weight: 800; color: white;">' + tp_ai.get("pick", "") + '</div>'
-                '<div style="font-size: 8px; color: #aaa;">' + tp_ai.get("pickLabel", "") + '</div></div>'
-                '<div><div style="font-size: 22px; font-weight: 800; color: white;">' + f'{(tp_ai.get("compositeConfidence") or 0):.0f}' + '%</div>'
-                '<div style="font-size: 8px; color: #aaa;">AI CONF</div></div>'
-                '<div><div style="font-size: 22px; font-weight: 800; color: ' + _tp_rc + ';">' + str(_tp_rs) + '/10</div>'
-                '<div style="font-size: 8px; color: #aaa;">RISK</div></div>'
-                '</div>'
-                '<div style="font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.4; padding: 8px; background: rgba(255,255,255,0.04); border-radius: 6px;">' + tp_ai.get("shortVerdict", "") + '</div>'
-                + ('<div style="margin-top: 8px;">' + ''.join('<span style="display:inline-block;font-size:10px;color:#69f0ae;margin-right:8px;">+ ' + a + '</span>' for a in _tp_kaf[:2]) + '</div>' if _tp_kaf else '')
-                + '</div>'
-                ) if tp_ai.get("pick") else ''}
-            </div>
-    """
-        
-        html += """
-        </div>
-        """
-    
-    # ========================================================================
-    # SORTED ODDS SECTIONS (jeśli włączone) - zawsze przed REGULAR MATCHES
-    # ========================================================================
-    if include_sorted_odds:
-        odds_sections_html = create_sorted_odds_sections(sorted_matches, limit=odds_limit)
-        if odds_sections_html:
-            html += odds_sections_html
     
     # ========================================================================
     # REGULAR MATCHES SECTION
@@ -1271,8 +1100,8 @@ def send_email_notification(
         sort_by: Sortowanie: 'time' (godzina), 'wins' (wygrane), 'team' (alfabetycznie)
         only_form_advantage: Wysyłaj tylko mecze z przewagą formy gospodarzy (🔥)
         skip_no_odds: Pomijaj mecze bez kursów bukmacherskich
-        include_sorted_odds: Dodaj sekcje z kursami posortowanymi od najwyższych (domyślnie True)
-        odds_limit: Max liczba meczów w każdej sekcji kursów (domyślnie 15)
+        include_sorted_odds: Parametr zachowany dla kompatybilności; sekcje kursów nie są już renderowane
+        odds_limit: Parametr zachowany dla kompatybilności; nie wpływa już na HTML maila
         min_odds_threshold: Minimalny kurs (np. 1.19) — mecze z jakimkolwiek kursem poniżej są pomijane
     """
     

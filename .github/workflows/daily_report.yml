@@ -157,6 +157,38 @@ jobs:
           print('Telegram notification sent')
           "
 
+  # ── Daily results accuracy report on Telegram ──────────────
+  telegram-results-report:
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: ${{ vars.TELEGRAM_ENABLED == 'true' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || pip install requests supabase
+
+      - name: Send Telegram Results Report
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: 'true'
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "📊 Sending Telegram results report (last 24h)..."
+          python run_daily_telegram_results.py --hours 24 || echo "Results report skipped or failed"
+
   notify-discord:
     runs-on: ubuntu-latest
     needs: health-check
