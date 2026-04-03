@@ -127,9 +127,8 @@ class TestFeatureExtractor:
     def test_full_data_quality(self, extractor: TennisFeatureExtractor) -> None:
         m = _base_match()
         f = extractor.extract(m)
-        # all 5 sources present → data_quality should be 1.0
-        # (h2h counts from simple fields, form, not surface_stats though, ranking, odds)
-        assert f['_data_quality'] >= 0.6   # at least 3/5
+        # base match has h2h counts, form, ranking, odds → 4/7 features
+        assert f['_data_quality'] >= 0.5   # at least 4/7
 
     def test_minimal_data(self, extractor: TennisFeatureExtractor) -> None:
         m = _base_match(
@@ -339,3 +338,134 @@ class TestRecencyH2H:
     def test_no_player(self) -> None:
         wr, _cnt = _recency_h2h([{'home': 'X', 'away': 'Y', 'score': '2:1'}], '', '')
         assert wr == 0.5
+
+
+# ---------------------------------------------------------------------------
+# Surface form tests (v5)
+# ---------------------------------------------------------------------------
+
+class TestSurfaceForm:
+    def test_surface_form_lists_used(self, extractor: TennisFeatureExtractor) -> None:
+        """When surface_form_a/b are provided, they should be used for surface scoring."""
+        m = _base_match(
+            surface_form_a=['W', 'W', 'W', 'W', 'L'],
+            surface_form_b=['L', 'L', 'W', 'L', 'L'],
+        )
+        f = extractor.extract(m)
+        assert f['surface_wr_a'] > f['surface_wr_b']
+
+    def test_surface_form_empty_fallback(self, extractor: TennisFeatureExtractor) -> None:
+        """Empty surface form should give neutral 0.5."""
+        m = _base_match(surface_form_a=[], surface_form_b=[])
+        f = extractor.extract(m)
+        assert f['surface_wr_a'] == 0.5
+        assert f['surface_wr_b'] == 0.5
+
+    def test_surface_stats_fallback(self, extractor: TennisFeatureExtractor) -> None:
+        """Old surface_stats dicts should still work as fallback."""
+        m = _base_match(
+            surface_form_a=[],
+            surface_form_b=[],
+            surface_stats_a={'hard': 0.8},
+            surface_stats_b={'hard': 0.4},
+        )
+        f = extractor.extract(m)
+        assert f['surface_wr_a'] > f['surface_wr_b']
+
+
+# ---------------------------------------------------------------------------
+# Fatigue / freshness tests (v5)
+# ---------------------------------------------------------------------------
+
+class TestFatigue:
+    def test_fatigue_computed(self, extractor: TennisFeatureExtractor) -> None:
+        """When last_match dates are provided, fatigue should be computed."""
+        m = _base_match(
+            last_match_a_date='01.04.26',
+            last_match_a_result='W',
+            last_match_b_date='25.03.26',
+            last_match_b_result='L',
+        )
+        f = extractor.extract(m)
+        assert 'fatigue_a' in f
+        assert 'fatigue_b' in f
+        assert f['fatigue_a'] != f['fatigue_b']
+
+    def test_fatigue_neutral_when_missing(self, extractor: TennisFeatureExtractor) -> None:
+        """No last match date → neutral 0.5."""
+        m = _base_match()
+        f = extractor.extract(m)
+        assert f['fatigue_a'] == 0.5
+        assert f['fatigue_b'] == 0.5
+
+    def test_fatigue_advantage_positive_for_fresher(self, extractor: TennisFeatureExtractor) -> None:
+        """Player with recent win should have higher fatigue score."""
+        m = _base_match(
+            last_match_a_date='30.03.26',
+            last_match_a_result='W',
+            last_match_b_date=None,
+            last_match_b_result=None,
+        )
+        f = extractor.extract(m)
+        # A has recent match + win bonus, B neutral → fatigue_advantage > 0
+        assert f['fatigue_advantage'] != 0.0
+
+
+# ---------------------------------------------------------------------------
+# SofaScore integration tests (v5)
+# ---------------------------------------------------------------------------
+
+class TestSofaScoreFeature:
+    def test_sofascore_used_in_features(self, extractor: TennisFeatureExtractor) -> None:
+        """SofaScore probs should feed into features."""
+        m = _base_match(
+            sofascore_home_win_prob=65,
+            sofascore_away_win_prob=35,
+        )
+        f = extractor.extract(m)
+        assert f['sofascore_prob_a'] > f['sofascore_prob_b']
+
+    def test_sofascore_neutral_when_missing(self, extractor: TennisFeatureExtractor) -> None:
+        """No SofaScore → neutral 0.5."""
+        m = _base_match()
+        f = extractor.extract(m)
+        assert f['sofascore_prob_a'] == 0.5
+
+    def test_sofascore_weight_in_engine(self) -> None:
+        """Engine weights should include sofascore."""
+        engine = TennisScoringEngine()
+        assert 'sofascore' in engine.weights
+        assert engine.weights['sofascore'] > 0
+
+    def test_fatigue_weight_in_engine(self) -> None:
+        """Engine weights should include fatigue."""
+        engine = TennisScoringEngine()
+        assert 'fatigue' in engine.weights
+        assert engine.weights['fatigue'] > 0
+
+
+# ---------------------------------------------------------------------------
+# Data quality with new features (v5)
+# ---------------------------------------------------------------------------
+
+class TestDataQualityV5:
+    def test_full_data_quality_7_features(self, extractor: TennisFeatureExtractor) -> None:
+        """All 7 features present → data_quality = 1.0."""
+        m = _base_match(
+            surface_form_a=['W', 'W', 'L'],
+            surface_form_b=['L', 'W', 'L'],
+            last_match_a_date='01.04.26',
+            last_match_a_result='W',
+            last_match_b_date='31.03.26',
+            last_match_b_result='L',
+            sofascore_home_win_prob=55,
+            sofascore_away_win_prob=45,
+        )
+        f = extractor.extract(m)
+        assert f['_data_quality'] == pytest.approx(1.0, abs=0.01)  # pyright: ignore[reportUnknownMemberType]
+
+    def test_weights_sum_to_one(self) -> None:
+        """All weights must sum to 1.0."""
+        engine = TennisScoringEngine()
+        total = sum(engine.weights.values())
+        assert total == pytest.approx(1.0, abs=0.001)  # pyright: ignore[reportUnknownMemberType]

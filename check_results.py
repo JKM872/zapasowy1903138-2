@@ -24,6 +24,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Any, Dict, List, Union
 
+# Result store for persistent accumulation
+try:
+    from result_store import ResultStore
+    _result_store_ok = True
+except ImportError:
+    _result_store_ok = False
+
 # Selenium — optional; results can also come from API
 try:
     from selenium import webdriver
@@ -620,6 +627,28 @@ def main():
 
     # 4. Save summary
     save_summary(stats, target_date)
+
+    # 4b. Persist to result store for backtesting
+    if _result_store_ok:
+        store = ResultStore()
+        added = 0
+        for m in matches:
+            url = m.get('match_url', '')
+            res = results.get(url, {})
+            if url and res.get('status') == 'finished':
+                was_new = store.add_result(
+                    match_url=url,
+                    result=res,
+                    sport=(m.get('sport') or 'football').lower(),
+                    home_team=m.get('home_team', ''),
+                    away_team=m.get('away_team', ''),
+                    date=target_date,
+                )
+                if was_new:
+                    added += 1
+        if added:
+            store.save()
+            print(f'📦 Result store: +{added} results (total: {len(store)})')
 
     # 5. Send email report
     if args.send_email:

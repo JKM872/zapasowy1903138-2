@@ -1043,7 +1043,28 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                 </div>
                 
                 <!-- FOOTER -->
-                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">
+                <div style="background: rgba(0,0,0,0.1); padding: 10px 20px; text-align: center;">"""
+
+        # Model explanation: prediction grade + primary factors
+        grade = match.get('prediction_grade', '')
+        explanation = match.get('explanation')
+        grade_colors = {'A': '#00e676', 'B': '#69f0ae', 'C': '#ffd740', 'D': '#ff9100', 'F': '#ff5252'}
+        if grade and grade in grade_colors:
+            gc = grade_colors[grade]
+            html += f"""
+                    <div style="margin-bottom: 6px;">
+                        <span style="display: inline-block; background: {gc}; color: #111; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 4px;">Grade {grade}</span>
+                    </div>"""
+        if isinstance(explanation, dict):
+            factors = explanation.get('primary_factors', [])
+            risks = explanation.get('risk_factors', [])
+            if factors:
+                html += f"""
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.6); margin-bottom: 3px;">✅ {' · '.join(str(f) for f in factors[:3])}</div>"""
+            if risks:
+                html += f"""
+                    <div style="font-size: 10px; color: #ff8a80; margin-bottom: 3px;">⚠️ {' · '.join(str(r) for r in risks[:2])}</div>"""
+        html += f"""
                     <a href="{match_url}" style="color: white; text-decoration: none; font-size: 12px;">🔗 Zobacz szczegóły meczu →</a>
                 </div>
             </div>
@@ -1131,8 +1152,12 @@ def send_email_notification(
     df = clean_dataframe_for_email(df)
     print(f"   🔧 Wyczyszczono dane z 'nan' stringów")
     
-    # Filtruj kwalifikujące się mecze
-    qualified = df[df['qualifies'] == True]
+    # Filtruj kwalifikujące się mecze — use centralized qualification gate if available
+    if 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any():
+        qualified = df[df['channel_qualifies'] == True]
+        print(f"   🚦 Unified qualification gate: {len(qualified)} matches")
+    else:
+        qualified = df[df['qualifies'] == True]
     
     # OPCJA 1: Filtruj tylko mecze z przewagą formy
     if only_form_advantage:

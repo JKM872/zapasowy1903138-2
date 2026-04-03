@@ -224,11 +224,15 @@ def _build_summary(
     lines.append(f"🟢 <b>FormRadar</b> | {date_display}")
     lines.append("")
 
-    # Filter pipeline
-    qual = [r for r in rows if r.get("qualifies")]
-    qual = [r for r in qual if _passes_odds_filter(r.get("sport", "football"), r.get("home_odds"), r.get("away_odds"))]
-    qual = [r for r in qual if _passes_fan_vote_filter(r.get("sport", "football"), r)]
-    qual = [r for r in qual if _is_future_match(r, now_warsaw)]
+    # Filter pipeline — use centralized qualification gate if available,
+    # fall back to local filters for backward compatibility
+    if any(r.get("channel_qualifies") is not None for r in rows):
+        qual = [r for r in rows if r.get("channel_qualifies")]
+    else:
+        qual = [r for r in rows if r.get("qualifies")]
+        qual = [r for r in qual if _passes_odds_filter(r.get("sport", "football"), r.get("home_odds"), r.get("away_odds"))]
+        qual = [r for r in qual if _passes_fan_vote_filter(r.get("sport", "football"), r)]
+        qual = [r for r in qual if _is_future_match(r, now_warsaw)]
 
     # Group by sport
     sports: Dict[str, List[Dict[str, Any]]] = {}
@@ -306,6 +310,19 @@ def _build_summary(
 
             if extras:
                 lines.append(f"📌 {' | '.join(extras)}")
+
+            # Model explanation — primary factors & risk
+            grade = m.get("prediction_grade", "")
+            explanation = m.get("explanation", {})
+            if isinstance(explanation, dict):
+                factors = explanation.get("primary_factors", [])
+                risks = explanation.get("risk_factors", [])
+                if factors:
+                    lines.append(f"✅ {' · '.join(factors[:3])}")
+                if risks:
+                    lines.append(f"⚠️ {' · '.join(risks[:2])}")
+            if grade and grade in ("A", "B"):
+                lines.append(f"🏅 Grade: {grade}")
 
             lines.append("")  # blank line between matches
 

@@ -290,6 +290,33 @@ class FeatureExtractor:
         # 8. Form advantage flag
         f['form_advantage'] = 1.0 if m.get('form_advantage') else 0.0
 
+        # 9. Availability / injury impact (from data contract)
+        avail = m.get('availability', {})
+        if isinstance(avail, dict):
+            f['availability_impact'] = _safe_float(avail.get('availability_impact'), 0.0)
+            f['home_key_absences'] = min(_safe_float(avail.get('home_key_absences'), 0.0) / 5.0, 1.0)
+            f['away_key_absences'] = min(_safe_float(avail.get('away_key_absences'), 0.0) / 5.0, 1.0)
+            f['fatigue_risk'] = {'high': 1.0, 'moderate': 0.5, 'low': 0.0}.get(
+                avail.get('fatigue_risk', 'low'), 0.0)
+            if f['availability_impact'] > 0 or f['home_key_absences'] > 0 or f['away_key_absences'] > 0:
+                available += 1
+        else:
+            f['availability_impact'] = 0.0
+            f['home_key_absences'] = 0.0
+            f['away_key_absences'] = 0.0
+            f['fatigue_risk'] = 0.0
+
+        # 10. Source consensus (from data contract)
+        dq = m.get('data_quality', {})
+        if isinstance(dq, dict):
+            consensus_map = {'strong': 1.0, 'moderate': 0.6, 'weak': 0.3, 'none': 0.0}
+            f['consensus'] = consensus_map.get(dq.get('consensus_strength', 'none'), 0.0)
+            f['market_model_gap'] = max(-1.0, min(1.0,
+                _safe_float(dq.get('market_model_gap'), 0.0) / 20.0))
+        else:
+            f['consensus'] = 0.0
+            f['market_model_gap'] = 0.0
+
         # Data quality metric
         f['_data_quality'] = available / total_features
 
@@ -313,13 +340,15 @@ class FootballScoringEngine:
 
     # Source weights (tunable via calibration file)
     DEFAULT_WEIGHTS = {
-        'h2h':        0.20,
-        'form':       0.15,
-        'venue_form': 0.10,
-        'forebet':    0.15,
-        'sofascore':  0.10,
-        'odds':       0.20,
-        'gemini':     0.10,
+        'h2h':          0.18,
+        'form':         0.13,
+        'venue_form':   0.08,
+        'forebet':      0.13,
+        'sofascore':    0.08,
+        'odds':         0.22,
+        'gemini':       0.08,
+        'availability': 0.05,
+        'consensus':    0.05,
     }
 
     CALIBRATION_PATH = os.path.join(
@@ -435,6 +464,35 @@ class FootballScoringEngine:
                 sources_draw.append((gc * 0.6, gem_w))
                 sources_home.append((gc * 0.25, gem_w))
                 sources_away.append((gc * 0.15, gem_w))
+
+        # Availability / injury adjustment
+        avail_impact = feats.get('availability_impact', 0.0)
+        home_abs = feats.get('home_key_absences', 0.0)
+        away_abs = feats.get('away_key_absences', 0.0)
+        if avail_impact > 0 or home_abs > 0 or away_abs > 0:
+            # Absences hurt the team: shift probability to opponent
+            abs_diff = away_abs - home_abs  # positive = away more hurt → home favored
+            avail_home = 0.40 + abs_diff * 0.15
+            avail_away = 0.35 - abs_diff * 0.15
+            avail_draw = 0.25
+            sources_home.append((max(0.1, min(0.8, avail_home)), w.get('availability', 0.05)))
+            sources_draw.append((max(0.1, min(0.5, avail_draw)), w.get('availability', 0.05)))
+            sources_away.append((max(0.1, min(0.8, avail_away)), w.get('availability', 0.05)))
+
+        # Consensus strength boost
+        cons = feats.get('consensus', 0.0)
+        mmg = feats.get('market_model_gap', 0.0)
+        if cons > 0:
+            # Strong consensus reinforces the predicted side
+            cons_boost = cons * 0.15
+            if focus == 'home':
+                sources_home.append((0.45 + cons_boost + mmg * 0.1, w.get('consensus', 0.05)))
+                sources_draw.append((0.25 - cons_boost * 0.3, w.get('consensus', 0.05)))
+                sources_away.append((0.30 - cons_boost * 0.7, w.get('consensus', 0.05)))
+            else:
+                sources_away.append((0.40 + cons_boost + mmg * 0.1, w.get('consensus', 0.05)))
+                sources_draw.append((0.25 - cons_boost * 0.3, w.get('consensus', 0.05)))
+                sources_home.append((0.35 - cons_boost * 0.7, w.get('consensus', 0.05)))
 
         # ---- Weighted average ------------------------------------------
         def _wavg(pairs: List[Tuple[float, float]]) -> float:

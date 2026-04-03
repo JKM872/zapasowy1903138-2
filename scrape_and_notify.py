@@ -598,6 +598,32 @@ def scrape_and_send_email(
             elif not (use_forebet or use_sofascore or use_gemini):
                 print(f"\n⚠️ Forebet/SofaScore/Gemini wyłączone - pomijam FAZĘ 2")
         
+        # ========================================================================
+        # FAZA 2.1: TENNIS — mandatory SofaScore check (hard skip)
+        # ========================================================================
+        _tennis_disqualified = 0
+        for row in rows:
+            is_tennis = (
+                row.get('sport') == 'tennis'
+                or '/tenis/' in str(row.get('match_url', '')).lower()
+            )
+            if not is_tennis or not row.get('qualifies'):
+                continue
+
+            has_sofascore = (
+                row.get('sofascore_home_win_prob') is not None
+                and row.get('sofascore_away_win_prob') is not None
+            )
+            if not has_sofascore:
+                row['qualifies'] = False
+                row['tennis_skip_reason'] = row.get('tennis_skip_reason') or 'Brak obowiązkowego SofaScore fan vote'
+                qualifying_count -= 1
+                _tennis_disqualified += 1
+                print(f"   ❌ Tennis SKIP (no SofaScore): {row.get('home_team')} vs {row.get('away_team')}")
+
+        if _tennis_disqualified > 0:
+            print(f"\n🎾 Tennis SofaScore check: {_tennis_disqualified} meczów zdyskwalifikowanych (brak SofaScore)")
+
         # Zapisz finalne wyniki (plik już istnieje jeśli były checkpointy)
         # ========================================================================
         # FAZA 2.5: SCORING ENGINE (tylko piłka nożna)
@@ -695,6 +721,60 @@ def scrape_and_send_email(
                 print(f"   High confidence picks: {high_conf}/{_ai_count}")
             except Exception as e:
                 print(f"\n⚠️ AI prediction engine error: {e}")
+
+        # ========================================================================
+        # FAZA 2.7: DATA CONTRACT ENRICHMENT (quality, availability, explanation)
+        # ========================================================================
+        try:
+            from prediction_data_contract import enrich_match_with_contract
+            _contract_count = 0
+            for row in rows:
+                if row.get('qualifies'):
+                    enrich_match_with_contract(row)
+                    _contract_count += 1
+            print(f"\n📋 DATA CONTRACT: {_contract_count} matches enriched with quality/availability signals")
+
+            # Log grade distribution
+            grades = {}
+            for row in rows:
+                g = row.get('prediction_grade', '?')
+                grades[g] = grades.get(g, 0) + 1
+            grade_str = ', '.join(f'{g}:{c}' for g, c in sorted(grades.items()) if g != '?')
+            if grade_str:
+                print(f"   Grades: {grade_str}")
+        except Exception as e:
+            print(f"\n⚠️ Data contract enrichment error: {e}")
+
+        # ========================================================================
+        # FAZA 2.8: INJURY DATA ENRICHMENT (ESPN injuries for team sports)
+        # ========================================================================
+        try:
+            from injury_data_fetcher import enrich_availability_from_injuries
+            _injury_count = 0
+            for row in rows:
+                if row.get('qualifies') and row.get('sport') != 'tennis':
+                    enrich_availability_from_injuries(row)
+                    avail = row.get('availability', {})
+                    if avail.get('home_key_absences', 0) > 0 or avail.get('away_key_absences', 0) > 0:
+                        _injury_count += 1
+            if _injury_count > 0:
+                print(f"\n🏥 INJURY DATA: {_injury_count} matches with injury data enriched")
+        except Exception as e:
+            print(f"\n⚠️ Injury data enrichment error: {e}")
+
+        # ========================================================================
+        # FAZA 2.9: UNIFIED QUALIFICATION GATE (odds + fan vote + future-only)
+        # ========================================================================
+        try:
+            from qualification_gate import apply_qualification_gate
+            channel_q = apply_qualification_gate(rows, date)
+            skipped = sum(1 for r in rows if r.get('qualifies') and not r.get('channel_qualifies'))
+            print(f"\n🚦 QUALIFICATION GATE: {channel_q} channel-qualified ({skipped} filtered out by odds/fan-vote/time)")
+        except Exception as e:
+            print(f"\n⚠️ Qualification gate error: {e}")
+            # Fallback: channel_qualifies = qualifies
+            for row in rows:
+                row['channel_qualifies'] = row.get('qualifies', False)
 
         print("\n💾 Zapisywanie finalnych wyników...")
         
@@ -829,6 +909,27 @@ def scrape_and_send_email(
                     'rankingB': row.get('ranking_b'),
                     'probA': row.get('scoring_prob_a', 0),
                     'probB': row.get('scoring_prob_b', 0),
+                    'lastH2H': {
+                        'date': row.get('last_h2h_date'),
+                        'score': row.get('last_h2h_score'),
+                        'home': row.get('last_h2h_home'),
+                        'away': row.get('last_h2h_away'),
+                    } if row.get('last_h2h_date') else None,
+                    'lastMatchA': {
+                        'date': row.get('last_match_a_date'),
+                        'score': row.get('last_match_a_score'),
+                        'opponent': row.get('last_match_a_opponent'),
+                        'result': row.get('last_match_a_result'),
+                    } if row.get('last_match_a_date') else None,
+                    'lastMatchB': {
+                        'date': row.get('last_match_b_date'),
+                        'score': row.get('last_match_b_score'),
+                        'opponent': row.get('last_match_b_opponent'),
+                        'result': row.get('last_match_b_result'),
+                    } if row.get('last_match_b_date') else None,
+                    'surfaceFormA': row.get('surface_form_a', []),
+                    'surfaceFormB': row.get('surface_form_b', []),
+                    'skipReason': row.get('tennis_skip_reason'),
                 } if row.get('sport') == 'tennis' else None,
                 # Top-level confidence: gemini > scoring > forebet fallback
                 'confidence': (
@@ -839,6 +940,11 @@ def scrape_and_send_email(
                 ),
                 # Value bet: scoring engine EV > 0
                 'value_bet': (clean_for_json(row.get('scoring_ev')) or 0) > 0,
+                # Data contract fields (quality, availability, explanation)
+                'dataQuality': row.get('data_quality'),
+                'availability': row.get('availability'),
+                'explanation': row.get('explanation'),
+                'predictionGrade': row.get('prediction_grade'),
             }
             frontend_matches.append(match_data)
         

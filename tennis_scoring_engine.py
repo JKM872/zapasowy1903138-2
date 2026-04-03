@@ -1,17 +1,25 @@
 """
-🎾 TENNIS SCORING ENGINE v4
+🎾 TENNIS SCORING ENGINE v5
 ============================
 Unified probability model for tennis — Player A / Player B semantics.
 NO home/away bias.  Two-outcome only (no draw in tennis).
 
 Factors (weights sum to 1.0):
-  H2H recency-weighted   0.30
-  Current form            0.25
-  Surface form            0.20
-  Ranking gap             0.15
+  H2H recency-weighted   0.25
+  Current form            0.20
+  Surface form            0.15
+  Ranking gap             0.12
   Odds-implied            0.10
+  Fatigue / freshness     0.08
+  SofaScore fan vote      0.10
 
 Qualification threshold: 45/100 advanced_score  (configurable)
+
+Hard skip (before scoring):
+  - Missing last H2H date/score
+  - Missing last match for either player
+  - Odds < 1.35 on either side
+  - Missing SofaScore fan vote (enforced in scrape_and_notify.py)
 
 Outputs per match:
   prob_a, prob_b          calibrated win probabilities (sum ≈ 1)
@@ -209,7 +217,7 @@ class TennisFeatureExtractor:
     def extract(self, m: Dict[str, Any]) -> Dict[str, float]:
         f: Dict[str, float] = {}
         available = 0
-        total_features = 5   # h2h, form, surface_form, ranking, odds
+        total_features = 7   # h2h, form, surface_form, ranking, odds, fatigue, sofascore
 
         player_a = m.get('home_team', '') or ''
         player_b = m.get('away_team', '') or ''
@@ -242,21 +250,31 @@ class TennisFeatureExtractor:
         if form_a or form_b:
             available += 1
 
-        # 3. Surface form (approximate from available data)
+        # 3. Surface form (from real surface_form_a/b or surface_stats_a/b)
         surface = m.get('surface', '')
-        surface_stats_a = m.get('surface_stats_a')
-        surface_stats_b = m.get('surface_stats_b')
-        if surface and surface_stats_a and surface_stats_b:
-            sa = _sf(surface_stats_a.get(surface, 0.5))
-            sb = _sf(surface_stats_b.get(surface, 0.5))
-            f['surface_wr_a'] = sa
-            f['surface_wr_b'] = sb
-            f['surface_advantage'] = sa - sb
+        # Prefer new surface_form lists (last 5 matches on surface)
+        sf_a = _parse_form_list(m.get('surface_form_a', []))
+        sf_b = _parse_form_list(m.get('surface_form_b', []))
+        if sf_a or sf_b:
+            f['surface_wr_a'] = _form_score(sf_a) if sf_a else 0.5
+            f['surface_wr_b'] = _form_score(sf_b) if sf_b else 0.5
+            f['surface_advantage'] = f['surface_wr_a'] - f['surface_wr_b']
             available += 1
         else:
-            f['surface_wr_a'] = 0.5
-            f['surface_wr_b'] = 0.5
-            f['surface_advantage'] = 0.0
+            # Fallback to old surface_stats dicts
+            surface_stats_a = m.get('surface_stats_a')
+            surface_stats_b = m.get('surface_stats_b')
+            if surface and surface_stats_a and surface_stats_b:
+                sa = _sf(surface_stats_a.get(surface, 0.5))
+                sb = _sf(surface_stats_b.get(surface, 0.5))
+                f['surface_wr_a'] = sa
+                f['surface_wr_b'] = sb
+                f['surface_advantage'] = sa - sb
+                available += 1
+            else:
+                f['surface_wr_a'] = 0.5
+                f['surface_wr_b'] = 0.5
+                f['surface_advantage'] = 0.0
 
         # 4. Ranking gap
         rank_a = m.get('ranking_a')
@@ -293,8 +311,91 @@ class TennisFeatureExtractor:
             f['odds_a'] = 0.0
             f['odds_b'] = 0.0
 
+        # 6. Fatigue / freshness (based on last match recency + result)
+        f['fatigue_a'] = self._compute_fatigue(m.get('last_match_a_date'), m.get('last_match_a_result'))
+        f['fatigue_b'] = self._compute_fatigue(m.get('last_match_b_date'), m.get('last_match_b_result'))
+        f['fatigue_advantage'] = f['fatigue_a'] - f['fatigue_b']  # >0 = A fresher/better
+        if m.get('last_match_a_date') or m.get('last_match_b_date'):
+            available += 1
+
+        # 7. SofaScore fan vote (crowd wisdom signal)
+        ss_a = _sf(m.get('sofascore_home_win_prob', 0))
+        ss_b = _sf(m.get('sofascore_away_win_prob', 0))
+        if ss_a > 0 and ss_b > 0:
+            ss_total = ss_a + ss_b
+            f['sofascore_prob_a'] = ss_a / ss_total
+            f['sofascore_prob_b'] = ss_b / ss_total
+            available += 1
+        else:
+            f['sofascore_prob_a'] = 0.5
+            f['sofascore_prob_b'] = 0.5
+
         f['_data_quality'] = available / total_features
+
+        # 8. Retirement / walkover flags (from data contract or raw data)
+        avail = m.get('availability', {})
+        if isinstance(avail, dict):
+            f['retirement_a'] = 1.0 if avail.get('home_retirement_flag') else 0.0
+            f['retirement_b'] = 1.0 if avail.get('away_retirement_flag') else 0.0
+            f['avail_impact'] = _sf(avail.get('availability_impact', 0))
+        else:
+            # Detect from raw last match data
+            lm_a_score = str(m.get('last_match_a_score', '') or '').lower()
+            lm_b_score = str(m.get('last_match_b_score', '') or '').lower()
+            ret_markers = ['ret', 'w.o', 'walkover', 'retired']
+            f['retirement_a'] = 1.0 if any(mk in lm_a_score for mk in ret_markers) else 0.0
+            f['retirement_b'] = 1.0 if any(mk in lm_b_score for mk in ret_markers) else 0.0
+            f['avail_impact'] = 0.0
+
         return f
+
+    @staticmethod
+    def _compute_fatigue(last_match_date: Optional[str], last_match_result: Optional[str]) -> float:
+        """
+        Compute freshness/fatigue score (0-1) from last match date and result.
+        Higher = better condition.
+        
+        - 1-2 days ago: 0.4 (fatigued)
+        - 3-5 days ago: 0.7 (good rhythm)
+        - 6-10 days ago: 0.5 (moderate rest)
+        - 11+ days ago: 0.35 (rusty)
+        - Win bonus: +0.1, Loss penalty: -0.05
+        """
+        if not last_match_date:
+            return 0.5  # neutral
+
+        try:
+            now = datetime.now()
+            dm = re.search(r'(\d{2})\.(\d{2})\.(\d{2,4})', str(last_match_date))
+            if not dm:
+                return 0.5
+            d, mo, y = dm.groups()
+            yr = int(y)
+            if yr < 100:
+                yr = 2000 + yr if yr <= 50 else 1900 + yr
+            dt = datetime(yr, int(mo), int(d))
+            age_days = (now - dt).days
+
+            if age_days <= 0:
+                score = 0.5
+            elif age_days <= 2:
+                score = 0.4   # fatigued
+            elif age_days <= 5:
+                score = 0.7   # rhythm
+            elif age_days <= 10:
+                score = 0.5   # moderate
+            else:
+                score = 0.35  # rusty
+
+            # Result bonus
+            if last_match_result == 'W':
+                score += 0.1
+            elif last_match_result == 'L':
+                score -= 0.05
+
+            return max(0.05, min(0.95, score))
+        except (ValueError, TypeError):
+            return 0.5
 
 
 # ---------------------------------------------------------------------------
@@ -302,11 +403,14 @@ class TennisFeatureExtractor:
 # ---------------------------------------------------------------------------
 
 DEFAULT_WEIGHTS = {
-    'h2h':          0.30,
-    'form':         0.25,
-    'surface_form': 0.20,
-    'ranking':      0.15,
-    'odds':         0.10,
+    'h2h':          0.22,
+    'form':         0.18,
+    'surface_form': 0.13,
+    'ranking':      0.12,
+    'odds':         0.12,
+    'fatigue':      0.08,
+    'sofascore':    0.10,
+    'availability': 0.05,
 }
 
 
@@ -376,8 +480,32 @@ class TennisScoringEngine:
         # Odds
         estimates['odds'] = feats['odds_prob_a']
 
+        # Fatigue / freshness
+        fat_a = feats.get('fatigue_a', 0.5)
+        fat_b = feats.get('fatigue_b', 0.5)
+        if fat_a + fat_b > 0:
+            fatigue_p = fat_a / (fat_a + fat_b)
+        else:
+            fatigue_p = 0.5
+        estimates['fatigue'] = max(0.05, min(0.95, fatigue_p))
+
+        # SofaScore fan vote
+        estimates['sofascore'] = feats.get('sofascore_prob_a', 0.5)
+
+        # Availability / injury impact
+        avail_impact = feats.get('avail_impact', 0.0)  # [-1,+1], >0 favours A
+        avail_p = 0.5 + avail_impact * 0.3  # maps to [0.2, 0.8]
+        # Retirement flag penalty
+        ret_a = feats.get('retirement_a', 0)
+        ret_b = feats.get('retirement_b', 0)
+        if ret_a and not ret_b:
+            avail_p = max(avail_p - 0.15, 0.05)
+        elif ret_b and not ret_a:
+            avail_p = min(avail_p + 0.15, 0.95)
+        estimates['availability'] = max(0.05, min(0.95, avail_p))
+
         # --- Weighted average ---
-        prob_a = sum(estimates[k] * w[k] for k in w)
+        prob_a = sum(estimates.get(k, 0.5) * w[k] for k in w)
         prob_a = max(0.02, min(0.98, prob_a))
         prob_b = 1.0 - prob_a
 
