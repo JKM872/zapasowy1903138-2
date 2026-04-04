@@ -194,113 +194,99 @@ class TestTennisDataContract:
 
 
 class TestHardSkipLogic:
-    """Test tennis data completeness checking."""
+    """Test tennis data completeness checking (hard/soft split)."""
+
+    @staticmethod
+    def _full_out(**overrides):
+        base = {
+            'home_team': 'Player A',
+            'away_team': 'Player B',
+            'last_h2h_date': '01.01.26',
+            'last_h2h_score': '2-1',
+            'last_match_a_date': '28.03.26',
+            'last_match_a_score': '2-0',
+            'last_match_b_date': '29.03.26',
+            'last_match_b_score': '2-1',
+            'home_odds': 1.80,
+            'away_odds': 2.10,
+            'form_a': ['W', 'L'],
+            'form_b': ['W', 'W'],
+        }
+        base.update(overrides)
+        return base
 
     def test_complete_data_passes(self):
         from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
-        out = {
-            'home_team': 'Player A',
-            'away_team': 'Player B',
-            'last_h2h_date': '01.01.26',
-            'last_h2h_score': '2-1',
-            'last_match_a_date': '28.03.26',
-            'last_match_a_score': '2-0',
-            'last_match_b_date': '29.03.26',
-            'last_match_b_score': '2-1',
-            'home_odds': 1.80,
-            'away_odds': 2.10,
-        }
-        assert _check_tennis_data_completeness(out) is None
+        hard, soft = _check_tennis_data_completeness(self._full_out())
+        assert hard is None
+        assert soft == []
 
-    def test_missing_last_h2h_fails(self):
+    def test_missing_last_h2h_is_soft_warning(self):
+        """Missing H2H should be a soft warning, not a hard fail."""
         from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
-        out = {
-            'home_team': 'Player A',
-            'away_team': 'Player B',
-            'last_h2h_date': None,
-            'last_h2h_score': None,
-            'last_match_a_date': '28.03.26',
-            'last_match_a_score': '2-0',
-            'last_match_b_date': '29.03.26',
-            'last_match_b_score': '2-1',
-            'home_odds': 1.80,
-            'away_odds': 2.10,
-        }
-        result = _check_tennis_data_completeness(out)
-        assert result is not None
-        assert 'H2H' in result
+        hard, soft = _check_tennis_data_completeness(
+            self._full_out(last_h2h_date=None, last_h2h_score=None)
+        )
+        assert hard is None
+        assert any('h2h' in w.lower() for w in soft)
 
-    def test_missing_last_match_a_fails(self):
+    def test_missing_last_match_a_is_soft_warning(self):
+        """Missing recent match for player A should be a soft warning."""
         from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
-        out = {
-            'home_team': 'Player A',
-            'away_team': 'Player B',
-            'last_h2h_date': '01.01.26',
-            'last_h2h_score': '2-1',
-            'last_match_a_date': None,
-            'last_match_a_score': None,
-            'last_match_b_date': '29.03.26',
-            'last_match_b_score': '2-1',
-            'home_odds': 1.80,
-            'away_odds': 2.10,
-        }
-        result = _check_tennis_data_completeness(out)
-        assert result is not None
-        assert 'zawodnika A' in result
+        hard, soft = _check_tennis_data_completeness(
+            self._full_out(last_match_a_date=None, last_match_a_score=None)
+        )
+        assert hard is None
+        assert any('missing_recent_matches_A' in w for w in soft)
 
-    def test_odds_below_threshold_fails(self):
+    def test_missing_last_match_b_is_soft_warning(self):
+        """Missing recent match for player B should be a soft warning."""
         from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
-        out = {
-            'home_team': 'Player A',
-            'away_team': 'Player B',
-            'last_h2h_date': '01.01.26',
-            'last_h2h_score': '2-1',
-            'last_match_a_date': '28.03.26',
-            'last_match_a_score': '2-0',
-            'last_match_b_date': '29.03.26',
-            'last_match_b_score': '2-1',
-            'home_odds': 1.10,  # Below 1.35
-            'away_odds': 5.50,
-        }
-        result = _check_tennis_data_completeness(out)
-        assert result is not None
-        assert '1.35' in result
+        hard, soft = _check_tennis_data_completeness(
+            self._full_out(last_match_b_date=None, last_match_b_score=None)
+        )
+        assert hard is None
+        assert any('missing_recent_matches_B' in w for w in soft)
 
-    def test_missing_odds_fails(self):
+    def test_odds_below_threshold_hard_fails(self):
         from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
-        out = {
-            'home_team': 'Player A',
-            'away_team': 'Player B',
-            'last_h2h_date': '01.01.26',
-            'last_h2h_score': '2-1',
-            'last_match_a_date': '28.03.26',
-            'last_match_a_score': '2-0',
-            'last_match_b_date': '29.03.26',
-            'last_match_b_score': '2-1',
-            'home_odds': None,
-            'away_odds': None,
-        }
-        result = _check_tennis_data_completeness(out)
-        assert result is not None
-        assert 'kursów' in result.lower()
+        hard, _ = _check_tennis_data_completeness(
+            self._full_out(home_odds=1.10, away_odds=5.50)
+        )
+        assert hard is not None
+        assert '1.35' in hard
 
-    def test_missing_player_names_fails(self):
+    def test_missing_odds_hard_fails(self):
         from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
-        out = {
-            'home_team': None,
-            'away_team': 'Player B',
-            'last_h2h_date': '01.01.26',
-            'last_h2h_score': '2-1',
-            'last_match_a_date': '28.03.26',
-            'last_match_a_score': '2-0',
-            'last_match_b_date': '29.03.26',
-            'last_match_b_score': '2-1',
-            'home_odds': 1.80,
-            'away_odds': 2.10,
-        }
-        result = _check_tennis_data_completeness(out)
-        assert result is not None
-        assert 'zawodników' in result.lower()
+        hard, _ = _check_tennis_data_completeness(
+            self._full_out(home_odds=None, away_odds=None)
+        )
+        assert hard is not None
+        assert 'odds' in hard.lower()
+
+    def test_missing_player_names_hard_fails(self):
+        from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
+        hard, _ = _check_tennis_data_completeness(
+            self._full_out(home_team=None)
+        )
+        assert hard is not None
+        assert 'player_names' in hard.lower()
+
+    def test_multiple_soft_warnings_combined(self):
+        """All soft-fail conditions should accumulate in warnings list."""
+        from livesport_h2h_scraper import _check_tennis_data_completeness  # pyright: ignore[reportPrivateUsage]
+        hard, soft = _check_tennis_data_completeness(
+            self._full_out(
+                last_h2h_date=None, last_h2h_score=None,
+                last_match_a_date=None, last_match_a_score=None,
+                last_match_b_date=None, last_match_b_score=None,
+                form_a=[], form_b=[],
+            )
+        )
+        assert hard is None
+        # Expect: missing_h2h, missing_recent_matches_A, missing_recent_matches_B,
+        #         missing_form_A, missing_form_B
+        assert len(soft) >= 5
 
 
 class TestSofaScoreMandatory:
@@ -338,3 +324,113 @@ class TestSofaScoreMandatory:
             source = f.read()
         assert "'surfaceFormA'" in source
         assert "'surfaceFormB'" in source
+
+
+# ---------------------------------------------------------------------------
+# URL builder tests
+# ---------------------------------------------------------------------------
+
+class TestBuildTennisH2hUrl:
+    """Test _build_tennis_h2h_url normalisation."""
+
+    def test_detail_url(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        url = 'https://www.livesport.com/pl/tenis/mecz/atp-singles/abc123/szczegoly/'
+        result = _build_tennis_h2h_url(url)
+        assert result == 'https://www.livesport.com/pl/tenis/mecz/atp-singles/abc123/h2h/wszystkie-nawierzchnie/'
+
+    def test_already_h2h_url(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        url = 'https://www.livesport.com/pl/tenis/mecz/atp-singles/abc123/h2h/antuka/'
+        result = _build_tennis_h2h_url(url)
+        assert result == 'https://www.livesport.com/pl/tenis/mecz/atp-singles/abc123/h2h/wszystkie-nawierzchnie/'
+
+    def test_bare_match_url(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        url = 'https://www.livesport.com/pl/tenis/mecz/atp-singles/abc123/'
+        result = _build_tennis_h2h_url(url)
+        assert result is not None
+        assert result.endswith('/h2h/wszystkie-nawierzchnie/')
+
+    def test_non_tennis_url_returns_none(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        url = 'https://www.livesport.com/pl/pilka-nozna/mecz/premier-league/abc123/'
+        result = _build_tennis_h2h_url(url)
+        assert result is None
+
+    def test_empty_url_returns_none(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        assert _build_tennis_h2h_url('') is None
+        assert _build_tennis_h2h_url(None) is None
+
+    def test_non_http_url_returns_none(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        assert _build_tennis_h2h_url('ftp://example.com/tenis/mecz/x/y') is None
+
+    def test_english_tennis_url(self):
+        from livesport_h2h_scraper import _build_tennis_h2h_url  # pyright: ignore[reportPrivateUsage]
+        url = 'https://www.livesport.com/en/tennis/match/wta-singles/xyz789/szczegoly/'
+        result = _build_tennis_h2h_url(url)
+        assert result is not None
+        assert '/h2h/wszystkie-nawierzchnie/' in result
+
+
+# ---------------------------------------------------------------------------
+# Player name extraction helper tests
+# ---------------------------------------------------------------------------
+
+class TestExtractPlayerNamesFromSoup:
+    """Test _extract_player_names_from_soup."""
+
+    def test_exists_and_callable(self):
+        from livesport_h2h_scraper import _extract_player_names_from_soup  # pyright: ignore[reportPrivateUsage]
+        assert callable(_extract_player_names_from_soup)
+
+    def test_title_based_extraction(self):
+        from bs4 import BeautifulSoup
+        from livesport_h2h_scraper import _extract_player_names_from_soup  # pyright: ignore[reportPrivateUsage]
+        html = '<html><head><title>Djokovic N. - Nadal R. | ATP</title></head><body></body></html>'
+        soup = BeautifulSoup(html, 'html.parser')
+        pa, pb = _extract_player_names_from_soup(soup)
+        assert pa == 'Djokovic N.'
+        assert pb == 'Nadal R.'
+
+    def test_empty_html_returns_none(self):
+        from bs4 import BeautifulSoup
+        from livesport_h2h_scraper import _extract_player_names_from_soup  # pyright: ignore[reportPrivateUsage]
+        soup = BeautifulSoup('<html><body></body></html>', 'html.parser')
+        pa, pb = _extract_player_names_from_soup(soup)
+        assert pa is None
+        assert pb is None
+
+    def test_participant_selectors(self):
+        from bs4 import BeautifulSoup
+        from livesport_h2h_scraper import _extract_player_names_from_soup  # pyright: ignore[reportPrivateUsage]
+        html = '''<html><body>
+            <div class="duelParticipant__home"><a class="participant__participantName">Sinner J.</a></div>
+            <div class="duelParticipant__away"><a class="participant__participantName">Alcaraz C.</a></div>
+        </body></html>'''
+        soup = BeautifulSoup(html, 'html.parser')
+        pa, pb = _extract_player_names_from_soup(soup)
+        assert pa == 'Sinner J.'
+        assert pb == 'Alcaraz C.'
+
+
+# ---------------------------------------------------------------------------
+# Tennis data_warnings field presence tests
+# ---------------------------------------------------------------------------
+
+class TestTennisDataWarningsField:
+    """Verify process_match_tennis defines the tennis_data_warnings field."""
+
+    def test_tennis_data_warnings_field_in_source(self):
+        import inspect
+        from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
+        source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
+        assert 'tennis_data_warnings' in source
+
+    def test_build_tennis_h2h_url_in_source(self):
+        import inspect
+        from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
+        source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
+        assert '_build_tennis_h2h_url' in source

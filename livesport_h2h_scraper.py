@@ -813,18 +813,36 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         return out
 
     # try to extract team names from the page header - NOWE SELEKTORY
+    # Ordered fallback chain that works for all sports (football, basketball, etc.)
+    _PARTICIPANT_SELECTORS_HOME = [
+        "div.smv__participantRow.smv__homeParticipant a.participant__participantName",
+        "div.duelParticipant__home a.participant__participantName",
+        "div.duelParticipant__home .participant__participantNameWrapper",
+        "a.participant__participantName",  # generic first-match fallback
+    ]
+    _PARTICIPANT_SELECTORS_AWAY = [
+        "div.smv__participantRow.smv__awayParticipant a.participant__participantName",
+        "div.duelParticipant__away a.participant__participantName",
+        "div.duelParticipant__away .participant__participantNameWrapper",
+    ]
+
     try:
-        # Nowa struktura Livesport (2025)
-        home_el = soup.select_one("div.smv__participantRow.smv__homeParticipant a.participant__participantName")
-        if not home_el:
-            home_el = soup.select_one("a.participant__participantName")
+        home_el = None
+        for sel in _PARTICIPANT_SELECTORS_HOME:
+            home_el = soup.select_one(sel)
+            if home_el:
+                break
         if home_el:
             out['home_team'] = safe_get_text(home_el, out['home_team'])
     except (AttributeError, TypeError) as e:
         logger.debug(f"process_match: Błąd przy pobieraniu nazwy gospodarzy: {e}")
 
     try:
-        away_el = soup.select_one("div.smv__participantRow.smv__awayParticipant a.participant__participantName")
+        away_el = None
+        for sel in _PARTICIPANT_SELECTORS_AWAY:
+            away_el = soup.select_one(sel)
+            if away_el:
+                break
         if not away_el:
             # Fallback: weź drugą nazwę drużyny
             all_teams = soup.select("a.participant__participantName")
@@ -834,6 +852,13 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             out['away_team'] = safe_get_text(away_el, out['away_team'])
     except (AttributeError, TypeError) as e:
         logger.debug(f"process_match: Błąd przy pobieraniu nazwy gości: {e}")
+
+    # If team names are still missing after all selectors, log for diagnosis
+    if not out['home_team'] or not out['away_team']:
+        logger.warning(
+            f"process_match: Could not extract participant names for {sport} match {url} "
+            f"(home={out['home_team']!r}, away={out['away_team']!r})"
+        )
     
     # Wydobądź datę i godzinę meczu
     try:
@@ -2343,6 +2368,109 @@ def calculate_surface_stats_from_h2h(
         }
 
 
+def _build_tennis_h2h_url(original_url: str) -> Optional[str]:
+    """Build a valid Livesport tennis H2H URL from a match detail or partial URL.
+
+    Accepts:
+      - Detail page:  .../tenis/mecz/.../szczegoly/
+      - Already H2H:  .../tenis/mecz/.../h2h/...
+      - Bare match:   .../tenis/mecz/LEAGUE/ID/
+
+    Returns a normalised H2H URL or None if the input cannot be resolved.
+    """
+    if not original_url or not isinstance(original_url, str):
+        return None
+
+    url = original_url.strip()
+
+    if not url.startswith('http'):
+        return None
+
+    # Normalise: ensure trailing /  so segment splitting works reliably
+    if not url.endswith('/'):
+        url += '/'
+
+    # Strip existing tail segments to get the match base
+    if '/h2h/' in url:
+        base = url.split('/h2h/')[0]
+    elif '/szczegoly/' in url:
+        base = url.split('/szczegoly/')[0]
+    elif '/statystyki/' in url:
+        base = url.split('/statystyki/')[0]
+    elif '/wyniki/' in url:
+        base = url.split('/wyniki/')[0]
+    else:
+        base = url
+
+    # Validate: a Livesport tennis match URL must contain '/tenis/' and '/mecz/'
+    base_lower = base.lower()
+    if '/tenis/' not in base_lower and '/tennis/' not in base_lower:
+        return None
+    if '/mecz/' not in base_lower and '/match/' not in base_lower:
+        return None
+
+    h2h_url = base + '/h2h/wszystkie-nawierzchnie/'
+    return h2h_url
+
+
+def _extract_player_names_from_soup(soup: BeautifulSoup) -> tuple:
+    """Extract player A (home) and player B (away) names from a Livesport match page.
+
+    Returns (player_a, player_b) — either may be None.
+    Uses an ordered fallback chain identical to the team-sport scraper.
+    """
+    player_a = None
+    player_b = None
+
+    # Strategy 1: CSS selectors for participant rows
+    try:
+        home_el = soup.select_one(
+            "div.duelParticipant__home a.participant__participantName, "
+            "div.smv__participantRow.smv__homeParticipant a.participant__participantName"
+        )
+        if home_el:
+            player_a = home_el.get_text(strip=True)
+    except Exception:
+        pass
+
+    try:
+        away_el = soup.select_one(
+            "div.duelParticipant__away a.participant__participantName, "
+            "div.smv__participantRow.smv__awayParticipant a.participant__participantName"
+        )
+        if away_el:
+            player_b = away_el.get_text(strip=True)
+    except Exception:
+        pass
+
+    # Strategy 2: generic participant__participantName elements (first = A, second = B)
+    if not player_a or not player_b:
+        try:
+            all_players = soup.select("a.participant__participantName")
+            if not player_a and len(all_players) >= 1:
+                player_a = all_players[0].get_text(strip=True)
+            if not player_b and len(all_players) >= 2:
+                player_b = all_players[1].get_text(strip=True)
+        except Exception:
+            pass
+
+    # Strategy 3: page title split  "Player A - Player B | …"
+    if not player_a or not player_b:
+        try:
+            title = soup.title.string if soup.title else ''
+            if title:
+                m = re.split(r"\s[-–—|]\s|\svs\.?\s|\sv\s", title)
+                if len(m) >= 2:
+                    if not player_a:
+                        player_a = m[0].strip()
+                    if not player_b:
+                        player_b = m[1].strip()
+        except Exception:
+            pass
+
+    return player_a, player_b
+
+
 def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
     """
     Przetwarzanie meczu tenisowego – silnik v5 (Player A / Player B).
@@ -2357,13 +2485,17 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
       SofaScore fan vote      0.10
 
     Próg kwalifikacji: ≥45/100 advanced_score.
-    
+
     HARD SKIP (przed scoringiem):
+      - Brak obu nazw zawodników po wszystkich fallbackach
+      - Kursy bukmacherskie < 1.35 po którejś stronie
+      - Nieodwracalny błąd nawigacji (invalid URL)
+
+    SOFT FAIL (obniża data_quality, nie odrzuca):
       - Brak ostatniego H2H (data + wynik)
       - Brak ostatniego meczu któregokolwiek zawodnika
-      - Kursy bukmacherskie < 1.35 po którejś stronie
-      - Brak SofaScore (wymuszany w scrape_and_notify.py)
-    
+      - Brak form / surface form
+
     NIE generuje syntetycznych danych – brak danych = neutralne 0.5.
     """
     out: Dict = {
@@ -2444,97 +2576,100 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
             o['ranking_info'] = f"ATP/WTA: #{o['ranking_a']} vs #{o['ranking_b']}"
         return o
 
+    # ── tennis_data_warnings collects soft-fail reasons (not fatal) ──
+    tennis_warnings: List[str] = []
+    h2h_navigation_ok = False
+    match_page_soup = None  # preserved for odds extraction
+
     try:
         if not url or not isinstance(url, str):
-            print(f"   ⚠️ Tennis: Brak URL (None/empty)")
+            print(f"   ⚠️ Tennis: missing URL (None/empty)")
             return _finalise(out)
-        
+
         url = url.strip()
         if not url.startswith('http'):
-            print(f"   ⚠️ Tennis: Nieprawidłowy URL: {url[:50]}...")
+            print(f"   ⚠️ Tennis: invalid URL: {url[:80]}...")
             return _finalise(out)
-        
-        # KROK 1: Przejdź do strony meczu
+
+        # ── STEP 1: Navigate to match detail page ──
         driver.get(url)
         time.sleep(2.5)
-        
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        
-        # KROK 2: Znajdź link do H2H na stronie
-        h2h_link = None
-        for link in soup.find_all('a', href=True):
+
+        match_page_soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+        # ── STEP 2: Extract player names from match page (before leaving) ──
+        pa, pb = _extract_player_names_from_soup(match_page_soup)
+        if pa:
+            out['home_team'] = pa
+        if pb:
+            out['away_team'] = pb
+
+        # ── STEP 2b: Extract match time from match page ──
+        try:
+            time_el = match_page_soup.select_one("div.duelParticipant__startTime")
+            if time_el:
+                out['match_time'] = time_el.get_text(strip=True)
+
+            if not out['match_time'] and match_page_soup.title:
+                title = match_page_soup.title.string
+                date_match = re.search(r'(\d{1,2}\.\d{1,2}\.\d{2,4})\s*(\d{1,2}:\d{2})?', title)
+                if date_match:
+                    date_str = date_match.group(1)
+                    time_str = date_match.group(2) if date_match.group(2) else ''
+                    out['match_time'] = f"{date_str} {time_str}".strip()
+        except Exception:
+            pass
+
+        # ── STEP 2c: Extract odds from match page (most reliable source) ──
+        odds = extract_betting_odds(match_page_soup)
+        out['home_odds'] = odds['home_odds']
+        out['away_odds'] = odds['away_odds']
+
+        # ── STEP 3: Build & validate H2H URL, then navigate ──
+        # Strategy A: find an H2H link on the match page itself
+        h2h_url = None
+        for link in match_page_soup.find_all('a', href=True):
             href = link.get('href', '')
             if '/h2h/' in href.lower():
-                h2h_link = href
+                h2h_url = 'https://www.livesport.com' + href if href.startswith('/') else href
                 break
-        
-        if h2h_link:
-            # Zbuduj pełny URL do H2H
-            h2h_url = 'https://www.livesport.com' + h2h_link if h2h_link.startswith('/') else h2h_link
-            driver.get(h2h_url)
-            time.sleep(3.0)  # Tennis H2H wymaga więcej czasu na załadowanie
+
+        # Strategy B: deterministic URL builder
+        if not h2h_url:
+            h2h_url = _build_tennis_h2h_url(url)
+
+        if not h2h_url:
+            print(f"   ⚠️ Tennis: cannot build H2H URL from: {url[:80]}")
+            tennis_warnings.append("navigation_failed: cannot build H2H URL")
+            # Continue with match-page data only (no H2H, no last-match sections)
         else:
-            # Fallback: użyj starej metody jeśli nie znaleziono linku
-            h2h_url = url.replace('/szczegoly/', '/h2h/wszystkie-nawierzchnie/')
-            if 'szczegoly' not in url and 'h2h' not in url:
-                h2h_url = url.rstrip('/') + '/h2h/wszystkie-nawierzchnie/'
-            driver.get(h2h_url)
-            time.sleep(3.0)
-            
+            try:
+                driver.get(h2h_url)
+                time.sleep(3.0)
+                h2h_navigation_ok = True
+            except WebDriverException as e:
+                err_short = str(e).split('\n')[0][:120]
+                print(f"   ⚠️ Tennis: H2H navigation failed: {err_short}")
+                tennis_warnings.append(f"navigation_failed: {err_short}")
+
     except WebDriverException as e:
-        print(f"   ⚠️ Błąd nawigacji dla tenisa: {e}")
+        err_short = str(e).split('\n')[0][:120]
+        print(f"   ⚠️ Tennis: match-page navigation failed: {err_short}")
+        out['tennis_skip_reason'] = f"navigation_failed: {err_short}"
         return _finalise(out)
 
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-    # Wydobądź nazwy zawodników
-    try:
-        title = soup.title.string if soup.title else ''
-        if title:
-            # Tennis: często "Zawodnik A - Zawodnik B"
-            m = re.split(r"\s[-–—|]\s|\svs\s|\sv\s", title)
-            if len(m) >= 2:
-                out['home_team'] = m[0].strip()
-                out['away_team'] = m[1].strip()
-    except Exception:
-        pass
-
-    # Alternatywnie: z selektorów na stronie
-    try:
-        home_el = soup.select_one("div.smv__participantRow.smv__homeParticipant a.participant__participantName")
-        if not home_el:
-            home_el = soup.select_one("a.participant__participantName")
-        if home_el:
-            out['home_team'] = home_el.get_text(strip=True)
-    except Exception:
-        pass
-    
-    try:
-        away_el = soup.select_one("div.smv__participantRow.smv__awayParticipant a.participant__participantName")
-        if not away_el:
-            all_players = soup.select("a.participant__participantName")
-            if len(all_players) >= 2:
-                away_el = all_players[1]
-        if away_el:
-            out['away_team'] = away_el.get_text(strip=True)
-    except Exception:
-        pass
-    
-    # Wydobądź datę i godzinę
-    try:
-        time_el = soup.select_one("div.duelParticipant__startTime")
-        if time_el:
-            out['match_time'] = time_el.get_text(strip=True)
-        
-        if not out['match_time'] and soup.title:
-            title = soup.title.string
-            date_match = re.search(r'(\d{1,2}\.\d{1,2}\.\d{2,4})\s*(\d{1,2}:\d{2})?', title)
-            if date_match:
-                date_str = date_match.group(1)
-                time_str = date_match.group(2) if date_match.group(2) else ''
-                out['match_time'] = f"{date_str} {time_str}".strip()
-    except Exception:
-        pass
+    # ── Build soup for H2H parsing (H2H page if available, else match page) ──
+    if h2h_navigation_ok:
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        # Re-extract player names from H2H page if missing
+        if not out['home_team'] or not out['away_team']:
+            pa2, pb2 = _extract_player_names_from_soup(soup)
+            if pa2 and not out['home_team']:
+                out['home_team'] = pa2
+            if pb2 and not out['away_team']:
+                out['away_team'] = pb2
+    else:
+        soup = match_page_soup or BeautifulSoup('<html></html>', 'html.parser')
 
     # Parse H2H
     h2h = parse_h2h_from_soup(soup, out['home_team'] or '')
@@ -2616,11 +2751,15 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
     # 3. FORM — REAL form badges only (no fake defaults)
     out['form_a'] = _extract_real_form_badges(soup, player_a)
     out['form_b'] = _extract_real_form_badges(soup, player_b)
-    
-    # 4. ODDS
-    odds = extract_betting_odds(soup)
-    out['home_odds'] = odds['home_odds']
-    out['away_odds'] = odds['away_odds']
+
+    # 4. ODDS — already extracted from match-page soup (more reliable);
+    #    try H2H page only if match page had nothing
+    if not out['home_odds'] or not out['away_odds']:
+        odds = extract_betting_odds(soup)
+        if odds['home_odds']:
+            out['home_odds'] = odds['home_odds']
+        if odds['away_odds']:
+            out['away_odds'] = odds['away_odds']
 
     # ===================================================================
     # 5. LAST MATCH PER PLAYER (from "Ostatnie mecze" / "Last matches" tabs)
@@ -2633,21 +2772,30 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
     _compute_surface_form(soup, driver, url, out, player_a, player_b)
 
     # ===================================================================
-    # HARD SKIP: check completeness of critical tennis data
+    # DATA COMPLETENESS: hard fails vs soft warnings
     # ===================================================================
-    skip_reason = _check_tennis_data_completeness(out)
-    if skip_reason:
-        out['tennis_skip_reason'] = skip_reason
+    hard_reason, soft_warnings = _check_tennis_data_completeness(out)
+    tennis_warnings.extend(soft_warnings)
+
+    if hard_reason:
+        out['tennis_skip_reason'] = hard_reason
+        out['tennis_data_warnings'] = tennis_warnings
         out['qualifies'] = False
-        print(f"   ❌ Tennis HARD SKIP: {skip_reason}")
+        print(f"   ❌ Tennis HARD SKIP: {hard_reason}")
         return _finalise(out)
-    
+
+    if tennis_warnings:
+        out['tennis_data_warnings'] = tennis_warnings
+        print(f"   ⚠️ Tennis partial data ({len(tennis_warnings)} warnings): "
+              f"{'; '.join(tennis_warnings)}")
+
     # ===================================================================
     # SCORING: Tennis Scoring Engine v4
     # ===================================================================
-    
+
     if not player_a or not player_b:
-        print(f"   ⚠️ Tennis: Brak nazw zawodników (A: {player_a}, B: {player_b})")
+        out['tennis_skip_reason'] = "missing_player_names"
+        print(f"   ❌ Tennis HARD SKIP: missing player names (A: {player_a}, B: {player_b})")
         return _finalise(out)
     
     try:
@@ -2715,45 +2863,29 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
                                        player_a: str, player_b: str) -> None:
     """
     Extract last match (date, score, opponent, result) for each player
-    from Livesport's "Ostatnie mecze" / "Last matches" H2H sub-tabs.
-    
+    from Livesport's H2H sub-sections.
+
+    Uses three ordered strategies:
+      1. Player-specific sections identified by header containing the player name.
+      2. Non-H2H sections without recognisable headers — scan rows for the player.
+      3. Row-level scan across ALL sections (including the direct H2H block)
+         to find any recent row involving the target player.
+
     Populates out['last_match_a_*'] and out['last_match_b_*'] fields in-place.
     """
     if not player_a or not player_b:
         return
 
-    # Livesport H2H page has sub-sections for each player's recent matches
-    # These are in h2h__section divs after the direct H2H section
-    try:
-        h2h_sections = soup.find_all('div', class_='h2h__section')
-    except Exception:
-        return
-
-    # We need sections for individual players (not the direct H2H section)
-    player_sections = []
-    for section in h2h_sections:
-        try:
-            header_text = ''
-            header_el = section.select_one('div.h2h__sectionHeader, div.section__title')
-            if header_el:
-                header_text = header_el.get_text(strip=True).lower()
-
-            # Skip the direct H2H section
-            if 'pojedynki' in header_text or 'bezpośrednie' in header_text or 'head' in header_text:
-                continue
-
-            player_sections.append((header_text, section))
-        except Exception:
-            continue
-
+    # ------------------------------------------------------------------
+    # Inner helper: extract the most recent valid match row for a player
+    # ------------------------------------------------------------------
     def _extract_last_from_section(section, target_player: str):
         """Extract the most recent match from a section's rows."""
         rows = section.select('a.h2h__row')
         if not rows:
             return None, None, None, None
 
-        # rows should be sorted newest-first by page structure
-        for row in rows[:5]:
+        for row in rows[:8]:
             try:
                 date_el = row.select_one('span.h2h__date')
                 match_date = date_el.get_text(strip=True) if date_el else None
@@ -2773,7 +2905,6 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
                 if s1 == s2:
                     continue  # no draws in tennis
 
-                # Determine opponent and result for target player
                 if _teams_match(home_name, target_player):
                     opponent = away_name
                     result = 'W' if s1 > s2 else 'L'
@@ -2788,10 +2919,66 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
                 continue
         return None, None, None, None
 
-    # Try to match sections to players
+    # ------------------------------------------------------------------
+    # Collect all h2h__section divs
+    # ------------------------------------------------------------------
+    try:
+        all_sections = soup.find_all('div', class_='h2h__section')
+    except Exception:
+        return
+
+    # Classify sections: direct-H2H vs player-specific vs unknown
+    h2h_direct_section = None
+    player_sections = []   # (header_text, section)
+    unknown_sections = []  # sections with empty/unrecognised headers
+
+    for section in all_sections:
+        try:
+            header_text = ''
+            header_el = section.select_one(
+                'div.h2h__sectionHeader, div.section__title, '
+                'div.h2h__sectionHeader span, h2, h3'
+            )
+            if header_el:
+                header_text = header_el.get_text(strip=True).lower()
+
+            # Identify the direct H2H section
+            if any(kw in header_text for kw in (
+                'pojedynki', 'bezpośrednie', 'head-to-head', 'head to head',
+                'direct', 'h2h'
+            )):
+                h2h_direct_section = section
+                continue
+
+            if header_text:
+                player_sections.append((header_text, section))
+            else:
+                unknown_sections.append(section)
+        except Exception:
+            continue
+
+    # ------------------------------------------------------------------
+    # STRATEGY 1: match sections to players by header text
+    # ------------------------------------------------------------------
+    def _header_matches_player(header: str, player_name: str) -> bool:
+        """Check if a section header refers to a specific player."""
+        if not header or not player_name:
+            return False
+        h = header.lower()
+        pn = player_name.lower()
+        # Direct containment
+        if pn in h:
+            return True
+        # Any significant word (>2 chars) from the player name in the header
+        if any(part.lower() in h for part in player_name.split() if len(part) > 2):
+            return True
+        # Fuzzy match
+        if _teams_match(header, player_name):
+            return True
+        return False
+
     for header_text, section in player_sections:
-        if player_a and (player_a.lower() in header_text or
-                         any(part.lower() in header_text for part in player_a.split() if len(part) > 2)):
+        if not out.get('last_match_a_date') and _header_matches_player(header_text, player_a):
             d, s, o, r = _extract_last_from_section(section, player_a)
             if d and s:
                 out['last_match_a_date'] = d
@@ -2799,8 +2986,7 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
                 out['last_match_a_opponent'] = o
                 out['last_match_a_result'] = r
 
-        if player_b and (player_b.lower() in header_text or
-                         any(part.lower() in header_text for part in player_b.split() if len(part) > 2)):
+        if not out.get('last_match_b_date') and _header_matches_player(header_text, player_b):
             d, s, o, r = _extract_last_from_section(section, player_b)
             if d and s:
                 out['last_match_b_date'] = d
@@ -2808,25 +2994,51 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
                 out['last_match_b_opponent'] = o
                 out['last_match_b_result'] = r
 
-    # Fallback: if we couldn't find player-specific sections,
-    # try to extract from a generic "Ostatnie mecze" section
+    # ------------------------------------------------------------------
+    # STRATEGY 2: scan unknown (header-less) sections for player rows
+    # ------------------------------------------------------------------
     if not out.get('last_match_a_date') or not out.get('last_match_b_date'):
-        for header_text, section in player_sections:
-            if 'ostatni' in header_text or 'recent' in header_text or 'last' in header_text:
-                if not out.get('last_match_a_date'):
-                    d, s, o, r = _extract_last_from_section(section, player_a)
-                    if d and s:
-                        out['last_match_a_date'] = d
-                        out['last_match_a_score'] = s
-                        out['last_match_a_opponent'] = o
-                        out['last_match_a_result'] = r
-                if not out.get('last_match_b_date'):
-                    d, s, o, r = _extract_last_from_section(section, player_b)
-                    if d and s:
-                        out['last_match_b_date'] = d
-                        out['last_match_b_score'] = s
-                        out['last_match_b_opponent'] = o
-                        out['last_match_b_result'] = r
+        # Also include player_sections that didn't match either player
+        remaining = unknown_sections + [
+            sec for hdr, sec in player_sections
+            if not _header_matches_player(hdr, player_a)
+            and not _header_matches_player(hdr, player_b)
+        ]
+        for section in remaining:
+            if not out.get('last_match_a_date'):
+                d, s, o, r = _extract_last_from_section(section, player_a)
+                if d and s:
+                    out['last_match_a_date'] = d
+                    out['last_match_a_score'] = s
+                    out['last_match_a_opponent'] = o
+                    out['last_match_a_result'] = r
+            if not out.get('last_match_b_date'):
+                d, s, o, r = _extract_last_from_section(section, player_b)
+                if d and s:
+                    out['last_match_b_date'] = d
+                    out['last_match_b_score'] = s
+                    out['last_match_b_opponent'] = o
+                    out['last_match_b_result'] = r
+
+    # ------------------------------------------------------------------
+    # STRATEGY 3: last-resort row scan of direct H2H section
+    # ------------------------------------------------------------------
+    if not out.get('last_match_a_date') or not out.get('last_match_b_date'):
+        if h2h_direct_section:
+            if not out.get('last_match_a_date'):
+                d, s, o, r = _extract_last_from_section(h2h_direct_section, player_a)
+                if d and s:
+                    out['last_match_a_date'] = d
+                    out['last_match_a_score'] = s
+                    out['last_match_a_opponent'] = o
+                    out['last_match_a_result'] = r
+            if not out.get('last_match_b_date'):
+                d, s, o, r = _extract_last_from_section(h2h_direct_section, player_b)
+                if d and s:
+                    out['last_match_b_date'] = d
+                    out['last_match_b_score'] = s
+                    out['last_match_b_opponent'] = o
+                    out['last_match_b_result'] = r
 
 
 def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
@@ -2934,47 +3146,61 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
 # Tennis data completeness threshold
 TENNIS_MIN_ODDS = 1.35
 
-def _check_tennis_data_completeness(out: Dict) -> Optional[str]:
+def _check_tennis_data_completeness(out: Dict) -> tuple:
     """
-    Validate that a tennis match has all required data.
-    Returns skip reason string if data is incomplete, None if OK.
-    
-    Hard skip conditions (user decision: missing data = hard skip):
-    1. No last H2H date/score
-    2. No last match for either player (date + score)
-    3. Odds missing or below 1.35 on either side
-    4. No player names
+    Validate tennis match data.
+
+    Returns (hard_reason, soft_warnings):
+      hard_reason  – str  → match must be discarded (None if OK)
+      soft_warnings – list[str] → informational; match is still scoreable
+
+    Hard-fail conditions (discard the match):
+      1. Both player names missing
+      2. Odds missing or below 1.35 on either side
+
+    Soft-fail conditions (lower data_quality, keep the match):
+      1. No last H2H date/score
+      2. No last match for either player
+      3. No form data
     """
-    # Players
+    warnings: List[str] = []
+
+    # ── HARD: player names ──
     if not out.get('home_team') or not out.get('away_team'):
-        return "Brak nazw zawodników"
+        return "missing_player_names", warnings
 
-    # Last H2H
-    if not out.get('last_h2h_date') or not out.get('last_h2h_score'):
-        return "Brak ostatniego H2H (data lub wynik)"
-
-    # Last match per player
-    if not out.get('last_match_a_date') or not out.get('last_match_a_score'):
-        return f"Brak ostatniego meczu zawodnika A ({out.get('home_team', '?')})"
-    if not out.get('last_match_b_date') or not out.get('last_match_b_score'):
-        return f"Brak ostatniego meczu zawodnika B ({out.get('away_team', '?')})"
-
-    # Odds >= 1.35 both sides
+    # ── HARD: odds threshold ──
     home_odds = out.get('home_odds')
     away_odds = out.get('away_odds')
     if not home_odds or not away_odds:
-        return "Brak kursów bukmacherskich"
+        return "odds_missing", warnings
     try:
         ho = float(home_odds)
         ao = float(away_odds)
         if ho < TENNIS_MIN_ODDS:
-            return f"Kurs A ({ho:.2f}) poniżej progu {TENNIS_MIN_ODDS}"
+            return f"odds_below_threshold: A ({ho:.2f}) < {TENNIS_MIN_ODDS}", warnings
         if ao < TENNIS_MIN_ODDS:
-            return f"Kurs B ({ao:.2f}) poniżej progu {TENNIS_MIN_ODDS}"
+            return f"odds_below_threshold: B ({ao:.2f}) < {TENNIS_MIN_ODDS}", warnings
     except (ValueError, TypeError):
-        return "Nieprawidłowe kursy bukmacherskie"
+        return "odds_invalid", warnings
 
-    return None  # All checks passed
+    # ── SOFT: last H2H ──
+    if not out.get('last_h2h_date') or not out.get('last_h2h_score'):
+        warnings.append("missing_h2h")
+
+    # ── SOFT: last match per player ──
+    if not out.get('last_match_a_date') or not out.get('last_match_a_score'):
+        warnings.append(f"missing_recent_matches_A ({out.get('home_team', '?')})")
+    if not out.get('last_match_b_date') or not out.get('last_match_b_score'):
+        warnings.append(f"missing_recent_matches_B ({out.get('away_team', '?')})")
+
+    # ── SOFT: form ──
+    if not out.get('form_a'):
+        warnings.append("missing_form_A")
+    if not out.get('form_b'):
+        warnings.append("missing_form_B")
+
+    return None, warnings  # No hard failure
 
 
 def _extract_real_form_badges(soup: BeautifulSoup, player_name: str) -> List[str]:

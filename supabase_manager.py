@@ -87,6 +87,14 @@ class SupabaseManager:
             True jeśli sukces, False jeśli błąd
         """
         try:
+            # Guard: refuse inserts with missing required identifiers
+            home = match_data.get('home_team')
+            away = match_data.get('away_team')
+            if not home or not away:
+                print(f"[SKIP] Refusing Supabase insert — missing team names "
+                      f"(home={home!r}, away={away!r}, url={match_data.get('match_url', '?')})")
+                return False
+
             # Prepare data for insert
             raw_date = match_data.get('match_date')
             if not raw_date or (isinstance(raw_date, float) and str(raw_date) == 'nan'):

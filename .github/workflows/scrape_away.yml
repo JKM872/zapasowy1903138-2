@@ -53,20 +53,20 @@ jobs:
     steps:
       # 1. Checkout repository
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       # 2. Setup Python
       - name: Setup Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
       
       # 3. Setup Node.js (for Puppeteer)
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
       
       # 4. Install Chrome for Puppeteer and Selenium
@@ -151,7 +151,7 @@ jobs:
       
       # 9. Upload results as artifact
       - name: Upload results (AWAY) - ${{ matrix.sport }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: results-away-${{ matrix.sport }}-${{ github.run_id }}
@@ -173,10 +173,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
           merge-multiple: false

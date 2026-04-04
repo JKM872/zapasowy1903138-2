@@ -108,6 +108,26 @@ def _send_message(text: str, token: str = "", chat_id: str = "") -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Send-worthiness check
+# ---------------------------------------------------------------------------
+
+def _has_settled_matches(stats: Dict[str, Any]) -> bool:
+    """True when at least one match has been settled (win or loss)."""
+    g = stats.get("global", {})
+    if int(g.get("settled", 0) or 0) > 0:
+        return True
+    matches = stats.get("matches", [])
+    return any(m.get("status") in {"win", "loss"} for m in matches)
+
+
+def should_send_daily_results_summary(stats: Dict[str, Any]) -> bool:
+    """Return True only when there are tips AND at least one is settled."""
+    g = stats.get("global", {})
+    total = int(g.get("total", 0) or 0)
+    return total > 0 and _has_settled_matches(stats)
+
+
+# ---------------------------------------------------------------------------
 # Summary builder
 # ---------------------------------------------------------------------------
 
@@ -143,16 +163,16 @@ def build_daily_results_summary(
     lines: list[str] = []
 
     # ── Header ──────────────────────────────────────────────
-    lines.append(f"📊 <b>FormRadar — Raport Skuteczności</b>")
-    lines.append(f"📅 {date_display} (ostatnie 24h)")
+    lines.append(f"📊 <b>FormRadar — Results Report</b>")
+    lines.append(f"📅 {date_display} (last 24h)")
     lines.append("")
 
     total = g.get("total", 0)
 
     if total == 0:
-        lines.append("Brak typów w ostatnich 24 godzinach.")
+        lines.append("No tips in the last 24 hours.")
         lines.append("")
-        lines.append("⚠️ Typuj odpowiedzialnie")
+        lines.append("⚠️ Bet responsibly")
         return "\n".join(lines)
 
     # ── Global KPIs ─────────────────────────────────────────
@@ -163,23 +183,23 @@ def build_daily_results_summary(
     win_rate = g.get("win_rate", 0.0)
 
     lines.append("━━━━━━━━━━━━━━━")
-    lines.append(f"📋 <b>Podsumowanie</b>")
-    lines.append(f"  Typów łącznie: <b>{total}</b>")
-    lines.append(f"  ✅ Trafionych: <b>{win}</b>")
-    lines.append(f"  ❌ Nietrafionych: <b>{loss}</b>")
+    lines.append(f"📋 <b>Summary</b>")
+    lines.append(f"  Total tips: <b>{total}</b>")
+    lines.append(f"  ✅ Won: <b>{win}</b>")
+    lines.append(f"  ❌ Lost: <b>{loss}</b>")
     if pending:
-        lines.append(f"  ⏳ Oczekujących: <b>{pending}</b>")
+        lines.append(f"  ⏳ Pending: <b>{pending}</b>")
     lines.append("")
     if settled > 0:
-        lines.append(f"  📈 Skuteczność (settled): <b>{win_rate:.1f}%</b> ({win}/{settled})")
+        lines.append(f"  📈 Win rate (settled): <b>{win_rate:.1f}%</b> ({win}/{settled})")
     else:
-        lines.append(f"  📈 Skuteczność: <i>brak rozliczonych</i>")
+        lines.append(f"  📈 Win rate: <i>no settled picks yet</i>")
     lines.append("")
 
     # ── Per-sport breakdown ─────────────────────────────────
     if len(per_sport) > 1:
         lines.append("━━━━━━━━━━━━━━━")
-        lines.append("📊 <b>Według sportu</b>")
+        lines.append("📊 <b>By sport</b>")
         for sport in sorted(per_sport.keys()):
             sp = per_sport[sport]
             sp_settled = sp["win"] + sp["loss"]
@@ -198,7 +218,7 @@ def build_daily_results_summary(
 
     if settled_matches:
         lines.append("━━━━━━━━━━━━━━━")
-        lines.append("🏟 <b>Rozliczone mecze</b>")
+        lines.append("🏟 <b>Settled matches</b>")
         for m in settled_matches[:15]:
             icon = _status_icon(m["status"])
             score = ""
@@ -214,7 +234,7 @@ def build_daily_results_summary(
 
     if pending_matches:
         lines.append("━━━━━━━━━━━━━━━")
-        lines.append("⏳ <b>Oczekujące</b>")
+        lines.append("⏳ <b>Pending</b>")
         for m in pending_matches[:10]:
             pick_str = f' [{m["pick"]}]' if m.get("pick") else ""
             odds_str = f' @{m["odds"]:.2f}' if m.get("odds") else ""
@@ -227,7 +247,7 @@ def build_daily_results_summary(
 
     # ── Footer ──────────────────────────────────────────────
     lines.append("━━━━━━━━━━━━━━━")
-    lines.append("⚠️ Typuj odpowiedzialnie")
+    lines.append("⚠️ Bet responsibly")
 
     return "\n".join(lines)
 
@@ -247,10 +267,15 @@ def send_daily_results_summary(
     Build and send the daily results summary to Telegram.
 
     Returns True on success, False on any error (never raises).
-    Silently skips when TELEGRAM_ENABLED is not 'true'.
+    Silently skips when TELEGRAM_ENABLED is not 'true' or there are
+    no settled matches.
     """
     if not _ENABLED:
-        print("ℹ️  Telegram Results: wyłączony (TELEGRAM_ENABLED != true)")
+        print("ℹ️  Telegram Results: disabled (TELEGRAM_ENABLED != true)")
+        return False
+
+    if not should_send_daily_results_summary(stats):
+        print("ℹ️  Telegram Results: no settled matches yet — skipping report")
         return False
 
     text = build_daily_results_summary(stats, report_date)

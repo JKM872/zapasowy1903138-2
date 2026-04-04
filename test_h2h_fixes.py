@@ -183,5 +183,193 @@ class TestHistoricalOrientation:
         assert h2h_away == "Team Alpha", "Historical away must stay Team Alpha"
 
 
+# ---------------------------------------------------------------------------
+# 6. Participant extraction fallback selectors
+# ---------------------------------------------------------------------------
+class TestParticipantExtractionFallbacks:
+    """Verify that participant names are extracted via fallback selectors
+    when the primary Livesport CSS classes are absent (non-football sports)."""
+
+    def _make_soup(self, html):
+        from bs4 import BeautifulSoup
+        return BeautifulSoup(html, 'html.parser')
+
+    def test_primary_selectors(self):
+        """Primary selector chain (smv__homeParticipant / smv__awayParticipant)."""
+        html = """
+        <div class="smv__participantRow smv__homeParticipant">
+          <a class="participant__participantName">FC Barcelona</a>
+        </div>
+        <div class="smv__participantRow smv__awayParticipant">
+          <a class="participant__participantName">Real Madrid</a>
+        </div>
+        """
+        soup = self._make_soup(html)
+        _PARTICIPANT_SELECTORS_HOME = [
+            "div.smv__participantRow.smv__homeParticipant a.participant__participantName",
+            "div.duelParticipant__home a.participant__participantName",
+            "div.duelParticipant__home .participant__participantNameWrapper",
+            "a.participant__participantName",
+        ]
+        _PARTICIPANT_SELECTORS_AWAY = [
+            "div.smv__participantRow.smv__awayParticipant a.participant__participantName",
+            "div.duelParticipant__away a.participant__participantName",
+            "div.duelParticipant__away .participant__participantNameWrapper",
+        ]
+        home_el = None
+        for sel in _PARTICIPANT_SELECTORS_HOME:
+            home_el = soup.select_one(sel)
+            if home_el:
+                break
+        away_el = None
+        for sel in _PARTICIPANT_SELECTORS_AWAY:
+            away_el = soup.select_one(sel)
+            if away_el:
+                break
+        assert home_el is not None
+        assert away_el is not None
+        assert home_el.get_text(strip=True) == "FC Barcelona"
+        assert away_el.get_text(strip=True) == "Real Madrid"
+
+    def test_duelParticipant_fallback(self):
+        """Fallback to duelParticipant__home/away selectors (non-football)."""
+        html = """
+        <div class="duelParticipant__home">
+          <a class="participant__participantName">Łomża Vive Kielce</a>
+        </div>
+        <div class="duelParticipant__away">
+          <a class="participant__participantName">THW Kiel</a>
+        </div>
+        """
+        soup = self._make_soup(html)
+        _PARTICIPANT_SELECTORS_HOME = [
+            "div.smv__participantRow.smv__homeParticipant a.participant__participantName",
+            "div.duelParticipant__home a.participant__participantName",
+        ]
+        _PARTICIPANT_SELECTORS_AWAY = [
+            "div.smv__participantRow.smv__awayParticipant a.participant__participantName",
+            "div.duelParticipant__away a.participant__participantName",
+        ]
+        home_el = None
+        for sel in _PARTICIPANT_SELECTORS_HOME:
+            home_el = soup.select_one(sel)
+            if home_el:
+                break
+        away_el = None
+        for sel in _PARTICIPANT_SELECTORS_AWAY:
+            away_el = soup.select_one(sel)
+            if away_el:
+                break
+        assert home_el is not None and home_el.get_text(strip=True) == "Łomża Vive Kielce"
+        assert away_el is not None and away_el.get_text(strip=True) == "THW Kiel"
+
+    def test_generic_fallback_for_away(self):
+        """When away-specific selectors fail, second generic participant__participantName is used."""
+        html = """
+        <a class="participant__participantName">Team A</a>
+        <a class="participant__participantName">Team B</a>
+        """
+        soup = self._make_soup(html)
+        _PARTICIPANT_SELECTORS_AWAY = [
+            "div.smv__participantRow.smv__awayParticipant a.participant__participantName",
+            "div.duelParticipant__away a.participant__participantName",
+        ]
+        away_el = None
+        for sel in _PARTICIPANT_SELECTORS_AWAY:
+            away_el = soup.select_one(sel)
+            if away_el:
+                break
+        if not away_el:
+            all_teams = soup.select("a.participant__participantName")
+            if len(all_teams) >= 2:
+                away_el = all_teams[1]
+        assert away_el is not None
+        assert away_el.get_text(strip=True) == "Team B"
+
+    def test_no_crash_on_empty_html(self):
+        """Empty HTML should not crash, just return None."""
+        soup = self._make_soup("<html></html>")
+        _PARTICIPANT_SELECTORS_HOME = [
+            "div.smv__participantRow.smv__homeParticipant a.participant__participantName",
+            "div.duelParticipant__home a.participant__participantName",
+            "a.participant__participantName",
+        ]
+        home_el = None
+        for sel in _PARTICIPANT_SELECTORS_HOME:
+            home_el = soup.select_one(sel)
+            if home_el:
+                break
+        assert home_el is None
+
+
+# ---------------------------------------------------------------------------
+# 7. Supabase save_prediction guard (rejects missing team names)
+# ---------------------------------------------------------------------------
+class TestSupabaseSaveGuard:
+    """Verify that save_prediction refuses rows with missing team names
+    before attempting the Supabase insert call."""
+
+    def test_rejects_null_home_team(self):
+        """save_prediction must return False when home_team is None."""
+        from unittest.mock import MagicMock, patch
+        with patch.dict('os.environ', {
+            'SUPABASE_SERVICE_ROLE_KEY': 'test-key-for-init',
+            'SUPABASE_URL': 'https://fake.supabase.co',
+        }):
+            with patch('supabase_manager.create_client') as mock_client:
+                mock_client.return_value = MagicMock()
+                from supabase_manager import SupabaseManager
+                mgr = SupabaseManager()
+                result = mgr.save_prediction({
+                    'home_team': None,
+                    'away_team': 'Team B',
+                    'match_date': '2026-04-04',
+                })
+                assert result is False
+                # Ensure insert was never called
+                mgr.client.table.assert_not_called()
+
+    def test_rejects_empty_away_team(self):
+        """save_prediction must return False when away_team is empty string."""
+        from unittest.mock import MagicMock, patch
+        with patch.dict('os.environ', {
+            'SUPABASE_SERVICE_ROLE_KEY': 'test-key-for-init',
+            'SUPABASE_URL': 'https://fake.supabase.co',
+        }):
+            with patch('supabase_manager.create_client') as mock_client:
+                mock_client.return_value = MagicMock()
+                from supabase_manager import SupabaseManager
+                mgr = SupabaseManager()
+                result = mgr.save_prediction({
+                    'home_team': 'Team A',
+                    'away_team': '',
+                    'match_date': '2026-04-04',
+                })
+                assert result is False
+                mgr.client.table.assert_not_called()
+
+    def test_accepts_valid_row(self):
+        """save_prediction must attempt insert when both team names are present."""
+        from unittest.mock import MagicMock, patch
+        with patch.dict('os.environ', {
+            'SUPABASE_SERVICE_ROLE_KEY': 'test-key-for-init',
+            'SUPABASE_URL': 'https://fake.supabase.co',
+        }):
+            with patch('supabase_manager.create_client') as mock_client:
+                mock_instance = MagicMock()
+                mock_client.return_value = mock_instance
+                # Chain: client.table('predictions').insert(...).execute()
+                mock_instance.table.return_value.insert.return_value.execute.return_value = MagicMock()
+                from supabase_manager import SupabaseManager
+                mgr = SupabaseManager()
+                result = mgr.save_prediction({
+                    'home_team': 'Team A',
+                    'away_team': 'Team B',
+                    'match_date': '2026-04-04',
+                })
+                assert result is True
+                mock_instance.table.assert_called_once_with('predictions')
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

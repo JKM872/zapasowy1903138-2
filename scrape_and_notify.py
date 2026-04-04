@@ -262,6 +262,13 @@ def scrape_and_send_email(
                     if is_tennis:
                         # Użyj dedykowanej funkcji dla tenisa (ADVANCED)
                         info = process_match_tennis(url, driver)
+
+                        # Validate: skip rows with missing participant names
+                        if not info.get('home_team') or not info.get('away_team'):
+                            print(f"   ⚠️ Skipping tennis match with missing participant names: {url}")
+                            success = True
+                            continue
+
                         rows.append(info)
                         
                         if info['qualifies']:
@@ -286,7 +293,10 @@ def scrape_and_send_email(
                             player_a_wins = info['home_wins_in_h2h_last5']
                             player_b_wins = info.get('away_wins_in_h2h_last5', 0)
                             advanced_score = info.get('advanced_score', 0)
-                            print(f"   ❌ Nie kwalifikuje (Score: {advanced_score:.1f}/100, H2H: {player_a_wins}-{player_b_wins})")
+                            skip = info.get('tennis_skip_reason', '')
+                            warns = info.get('tennis_data_warnings', [])
+                            reason = skip if skip else (f"partial_data({len(warns)})" if warns else "below_threshold")
+                            print(f"   ❌ Nie kwalifikuje (Score: {advanced_score:.1f}/100, H2H: {player_a_wins}-{player_b_wins}, reason: {reason})")
                         
                         success = True
                     
@@ -297,6 +307,13 @@ def scrape_and_send_email(
                                            require_form_advantage=require_form_advantage,
                                            use_forebet=False, use_gemini=False, 
                                            use_sofascore=False, sport=current_sport)
+
+                        # Validate: skip rows with missing participant names
+                        if not info.get('home_team') or not info.get('away_team'):
+                            print(f"   ⚠️ Skipping {current_sport} match with missing team names: {url}")
+                            success = True
+                            continue
+
                         rows.append(info)
                         
                         if info['qualifies']:

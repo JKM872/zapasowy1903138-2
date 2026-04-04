@@ -188,6 +188,30 @@ def _pick_odds(match: Dict[str, Any]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Qualification helper
+# ---------------------------------------------------------------------------
+
+def _get_qualifying_rows(
+    rows: List[Dict[str, Any]],
+    now_warsaw: datetime,
+) -> List[Dict[str, Any]]:
+    """Return rows that pass all Telegram channel filters."""
+    if any(r.get("channel_qualifies") is not None for r in rows):
+        return [r for r in rows if r.get("channel_qualifies")]
+
+    qual = [r for r in rows if r.get("qualifies")]
+    qual = [
+        r for r in qual
+        if _passes_odds_filter(
+            r.get("sport", "football"), r.get("home_odds"), r.get("away_odds")
+        )
+    ]
+    qual = [r for r in qual if _passes_fan_vote_filter(r.get("sport", "football"), r)]
+    qual = [r for r in qual if _is_future_match(r, now_warsaw)]
+    return qual
+
+
+# ---------------------------------------------------------------------------
 # Summary builder
 # ---------------------------------------------------------------------------
 
@@ -224,15 +248,8 @@ def _build_summary(
     lines.append(f"🟢 <b>FormRadar</b> | {date_display}")
     lines.append("")
 
-    # Filter pipeline — use centralized qualification gate if available,
-    # fall back to local filters for backward compatibility
-    if any(r.get("channel_qualifies") is not None for r in rows):
-        qual = [r for r in rows if r.get("channel_qualifies")]
-    else:
-        qual = [r for r in rows if r.get("qualifies")]
-        qual = [r for r in qual if _passes_odds_filter(r.get("sport", "football"), r.get("home_odds"), r.get("away_odds"))]
-        qual = [r for r in qual if _passes_fan_vote_filter(r.get("sport", "football"), r)]
-        qual = [r for r in qual if _is_future_match(r, now_warsaw)]
+    # Filter pipeline
+    qual = _get_qualifying_rows(rows, now_warsaw)
 
     # Group by sport
     sports: Dict[str, List[Dict[str, Any]]] = {}
@@ -274,14 +291,14 @@ def _build_summary(
             try:
                 conf_val = float(conf)
                 if conf_val > 0:
-                    lines.append(f"📊 Przewaga formy: {conf_val:.0f}%")
+                    lines.append(f"📊 Form edge: {conf_val:.0f}%")
             except (ValueError, TypeError):
                 pass
 
             # Odds for recommended pick
             odds_str = _pick_odds(m)
             if odds_str:
-                lines.append(f"💰 Kurs: {odds_str}")
+                lines.append(f"💰 Odds: {odds_str}")
 
             # Premium extras — compact single line
             extras: list[str] = []
@@ -325,13 +342,9 @@ def _build_summary(
 
             lines.append("")  # blank line between matches
 
-    if not qual:
-        lines.append("Brak kwalifikujących się meczów.")
-        lines.append("")
-
     lines.append("━━━━━━━━━━━━━━━")
-    lines.append(f"📈 Sygnałów dziś: {total_signals}")
-    lines.append("⚠️ Typuj odpowiedzialnie")
+    lines.append(f"📈 Signals today: {total_signals}")
+    lines.append("⚠️ Bet responsibly")
     return "\n".join(lines)
 
 
@@ -351,12 +364,18 @@ def send_telegram_summary(
     Send a daily qualifying-match summary to Telegram.
 
     Returns True on success, False on any error (never raises).
-    Silently skips when TELEGRAM_ENABLED is not 'true' or credentials
-    are missing.
+    Silently skips when TELEGRAM_ENABLED is not 'true', credentials
+    are missing, or there are no qualifying matches.
     """
     if not _ENABLED:
-        print("ℹ️  Telegram: wyłączony (TELEGRAM_ENABLED != true)")
+        print("ℹ️  Telegram: disabled (TELEGRAM_ENABLED != true)")
         return False
 
-    text = _build_summary(rows, qualifying_count, date)
+    now_warsaw = datetime.now(_WARSAW_TZ).replace(tzinfo=None)
+    qual = _get_qualifying_rows(rows, now_warsaw)
+    if not qual:
+        print("ℹ️  Telegram: no qualifying matches — skipping summary")
+        return False
+
+    text = _build_summary(rows, qualifying_count, date, _now=now_warsaw)
     return _send_message(text, token=token, chat_id=chat_id)

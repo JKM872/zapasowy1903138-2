@@ -52,7 +52,15 @@ def main() -> int:
     print(f"   Łącznie: {g.get('total', 0)}  ✅ {g.get('win', 0)}  ❌ {g.get('loss', 0)}  ⏳ {g.get('pending', 0)}")
 
     # ── 2. Build message ─────────────────────────────────────
-    from telegram_results_report import build_daily_results_summary, send_daily_results_summary
+    from telegram_results_report import (
+        build_daily_results_summary,
+        send_daily_results_summary,
+        should_send_daily_results_summary,
+    )
+
+    if not should_send_daily_results_summary(stats):
+        print("ℹ️  No settled matches yet — skipping Telegram results report")
+        return 0
 
     text = build_daily_results_summary(stats, report_date)
 

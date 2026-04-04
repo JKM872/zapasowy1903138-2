@@ -121,22 +121,22 @@ class TestBuildSummary:
     def test_form_advantage_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Przewaga formy: 75%" in text  # Liverpool's confidence
+        assert "Form edge: 75%" in text  # Liverpool's confidence
 
     def test_pick_odds_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "💰 Kurs:" in text
+        assert "💰 Odds:" in text
 
     def test_signal_count(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Sygnałów dziś:" in text
+        assert "Signals today:" in text
 
     def test_responsible_gambling_footer(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Typuj odpowiedzialnie" in text
+        assert "Bet responsibly" in text
 
     def test_respects_max_per_sport(self):
         mod = _load_module()
@@ -161,7 +161,8 @@ class TestBuildSummary:
         mod = _load_module()
         rows = [{"home_team": "A", "away_team": "B", "sport": "football", "qualifies": False}]
         text = mod._build_summary(rows, 0, "2026-03-14")
-        assert "Brak kwalifikujących" in text
+        # No special "no qualifying" text — just 0 signals
+        assert "Signals today: 0" in text
 
 
 # ---------------------------------------------------------------------------
@@ -306,7 +307,7 @@ class TestFiltersInBuildSummary:
         ]
         text = mod._build_summary(rows, 1, "2026-03-14")
         assert "A vs B" not in text
-        assert "Brak kwalifikuj\u0105cych" in text
+        assert "Signals today: 0" in text
 
     def test_low_fanvote_excluded(self):
         mod = _load_module()
@@ -442,3 +443,28 @@ class TestPickOdds:
         mod = _load_module()
         m = {"home_odds": 1.85, "away_odds": 3.40}
         assert mod._pick_odds(m) == "1.85"
+
+
+# ---------------------------------------------------------------------------
+# Tests: zero-signal suppression — send_telegram_summary must not call API
+# ---------------------------------------------------------------------------
+
+class TestZeroSignalSuppression:
+    def test_no_qualifying_skips_sending(self):
+        mod = _load_module()
+        rows = [{"home_team": "A", "away_team": "B", "sport": "football", "qualifies": False}]
+        with patch("telegram_notifier.urllib.request.urlopen") as mock_open:
+            result = mod.send_telegram_summary(rows, 0, "2026-03-14")
+            assert result is False
+            mock_open.assert_not_called()
+
+    def test_all_filtered_by_odds_skips_sending(self):
+        mod = _load_module()
+        rows = [
+            {"home_team": "A", "away_team": "B", "sport": "football",
+             "qualifies": True, "home_odds": 1.10, "away_odds": 1.10},
+        ]
+        with patch("telegram_notifier.urllib.request.urlopen") as mock_open:
+            result = mod.send_telegram_summary(rows, 1, "2026-03-14")
+            assert result is False
+            mock_open.assert_not_called()
