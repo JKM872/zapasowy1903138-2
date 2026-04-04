@@ -332,7 +332,10 @@ def _build_summary(
             grade = m.get("prediction_grade", "")
             explanation: Dict[str, Any] = m.get("explanation") or {}
             factors: List[str] = explanation.get("primary_factors", [])
-            risks: List[str] = explanation.get("risk_factors", [])
+            risks: List[str] = [
+                r for r in explanation.get("risk_factors", [])
+                if r != "Fatigue risk: high"
+            ]
             if factors:
                 lines.append(f"✅ {' · '.join(factors[:3])}")
             if risks:

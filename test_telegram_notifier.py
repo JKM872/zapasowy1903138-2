@@ -468,3 +468,48 @@ class TestZeroSignalSuppression:
             result = mod.send_telegram_summary(rows, 1, "2026-03-14")
             assert result is False
             mock_open.assert_not_called()
+
+# ---------------------------------------------------------------------------
+# Tests: fatigue risk filtering
+# ---------------------------------------------------------------------------
+
+class TestFatigueRiskFilter:
+    """Fatigue risk: high is suppressed in Telegram summaries."""
+
+    def _make_row(self, risk_factors):
+        return {
+            "home_team": "X", "away_team": "Y", "sport": "football",
+            "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
+            "scoring_confidence": 70,
+            "explanation": {"risk_factors": risk_factors},
+        }
+
+    def test_fatigue_high_suppressed(self):
+        mod = _load_module()
+        rows = [self._make_row(["Fatigue risk: high", "Sources disagree on prediction"])]
+        text = mod._build_summary(rows, 1, "2026-03-14")
+        assert "Fatigue risk: high" not in text
+        assert "Sources disagree on prediction" in text
+
+    def test_fatigue_moderate_shown(self):
+        mod = _load_module()
+        rows = [self._make_row(["Fatigue risk: moderate"])]
+        text = mod._build_summary(rows, 1, "2026-03-14")
+        assert "Fatigue risk: moderate" in text
+
+    def test_other_risks_shown_when_fatigue_high_only(self):
+        mod = _load_module()
+        rows = [self._make_row(["Fatigue risk: high", "Low data quality: 40%", "Sources disagree on prediction"])]
+        text = mod._build_summary(rows, 1, "2026-03-14")
+        assert "Fatigue risk: high" not in text
+        assert "Low data quality: 40%" in text
+
+    def test_no_warning_line_when_only_fatigue_high(self):
+        mod = _load_module()
+        rows = [self._make_row(["Fatigue risk: high"])]
+        text = mod._build_summary(rows, 1, "2026-03-14")
+        assert "Fatigue risk: high" not in text
+        # No ⚠️ line at all when fatigue was the only risk
+        for line in text.splitlines():
+            if line.strip().startswith("⚠️"):
+                assert "Fatigue" not in line
