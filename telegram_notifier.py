@@ -43,6 +43,7 @@ _SPORT_MIN_ODDS: Dict[str, float] = {
     "volleyball": 1.30,
     "hockey": 1.50,
     "tennis": 1.35,
+    "baseball": 1.40,
 }
 _SPORT_MIN_ODDS_FALLBACK = 1.35
 

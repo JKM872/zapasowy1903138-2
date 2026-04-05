@@ -81,6 +81,7 @@ FOREBET_SPORT_URLS = {
     'handball': 'https://www.forebet.com/en/handball/predictions-today',
     'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
     'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+    'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
 }
 
 

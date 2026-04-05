@@ -33,6 +33,7 @@ SPORT_MIN_ODDS: Dict[str, float] = {
     "volleyball": 1.30,
     "hockey": 1.50,
     "tennis": 1.35,
+    "baseball": 1.40,
 }
 SPORT_MIN_ODDS_FALLBACK = 1.35
 
@@ -131,6 +132,11 @@ def qualify_match(match: Dict[str, Any], now_warsaw: Optional[datetime] = None) 
     # Gate 3: future match only
     if not _is_future_match(match, now_warsaw):
         reasons.append("match_already_started")
+
+    # Gate 4: baseball requires starter pitcher data
+    if sport == "baseball":
+        if not match.get("pitcher_home") or not match.get("pitcher_away"):
+            reasons.append("baseball_missing_pitcher")
 
     match["channel_skip_reasons"] = reasons
     qualifies = len(reasons) == 0

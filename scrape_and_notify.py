@@ -1173,7 +1173,7 @@ WAŻNE dla Gmail:
     
     parser.add_argument('--date', required=True, help='Data YYYY-MM-DD')
     parser.add_argument('--sports', nargs='+', required=True,
-                       choices=['football', 'soccer', 'basketball', 'volleyball', 'handball', 'rugby', 'hockey', 'tennis'],
+                       choices=['football', 'soccer', 'basketball', 'volleyball', 'handball', 'rugby', 'hockey', 'tennis', 'baseball'],
                        help='Lista sportów')
     parser.add_argument('--to', required=True, help='Email odbiorcy')
     parser.add_argument('--from-email', required=True, help='Email nadawcy')

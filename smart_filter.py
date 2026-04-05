@@ -73,6 +73,14 @@ class SmartFilter:
             'min_confidence': 70,
             'min_forebet': 60,
             'min_h2h': 60,
+        },
+        'baseball': {
+            'min_confidence': 75,
+            'min_forebet': 55,
+            'min_h2h': 55,
+            'min_odds': 1.40,
+            'max_odds': 3.00,
+            'pitcher_required': True,
         }
     }
     

@@ -308,6 +308,8 @@ def detect_sport_from_url(url):
         return 'hockey'
     elif '/tenis/' in url_lower or '/tennis/' in url_lower:
         return 'tennis'
+    elif '/baseball/' in url_lower or '/bejsbol/' in url_lower:
+        return 'baseball'
     else:
         return 'football'  # domyślnie football
 
@@ -322,6 +324,7 @@ SPORT_URLS = {
     'hockey': 'https://www.livesport.com/pl/hokej/',
     'ice-hockey': 'https://www.livesport.com/pl/hokej/',
     'tennis': 'https://www.livesport.com/pl/tenis/',
+    'baseball': 'https://www.livesport.com/pl/baseball/',
 }
 
 # Sporty indywidualne (inna logika kwalifikacji)
@@ -359,6 +362,11 @@ POPULAR_LEAGUES = {
     'hockey': {
         'nhl': 'NHL',
         'khl': 'KHL',
+    },
+    'baseball': {
+        'mlb': 'MLB',
+        'npb': 'NPB',
+        'kbo': 'KBO',
     },
 }
 
