@@ -793,6 +793,12 @@ def scrape_and_send_email(
             for row in rows:
                 row['channel_qualifies'] = row.get('qualifies', False)
 
+        # ── Grade tier breakdown ──
+        _cq = [r for r in rows if r.get('channel_qualifies')]
+        _ab = sum(1 for r in _cq if (r.get('prediction_grade') or 'F') in ('A', 'B'))
+        _cf = len(_cq) - _ab
+        print(f"🏅 Grade tiers: {_ab} A/B (→ email + Telegram) | {_cf} C-F (→ email only)")
+
         print("\n💾 Zapisywanie finalnych wyników...")
         
         # 🔧 Upewnij się, że odds_source jest ustawiony (dla emaila)
@@ -1022,31 +1028,35 @@ def scrape_and_send_email(
                     odds_limit=odds_limit,
                 )
             else:
-                # --- TRYB KLASYCZNY: 1 email ---
-                subject_parts = []
-                if only_form_advantage:
-                    subject_parts.append("🔥 PRZEWAGA FORMY")
-                if skip_no_odds:
-                    subject_parts.append("💰 Z KURSAMI")
-                
-                if subject_parts:
-                    subject = f"Mecze ({' + '.join(subject_parts)}) - {date}"
-                else:
-                    subject = f"🏆 {qualifying_count} kwalifikujących się meczów - {date}"
-                
-                send_email_notification(
+                # --- TRYB TIERED: 2 maile wg grade (A/B premium + C-F rest) ---
+                _email_kwargs = dict(
                     csv_file=outfn,
                     to_email=to_email,
                     from_email=from_email,
                     password=password,
                     provider=provider,
-                    subject=subject,
                     sort_by=sort_by,
                     only_form_advantage=only_form_advantage,
                     skip_no_odds=skip_no_odds,
                     include_sorted_odds=include_sorted_odds,
                     odds_limit=odds_limit,
                     min_odds_threshold=min_odds_threshold,
+                )
+
+                # Mail 1 — Premium: Grade A & B
+                print("\n📧 Mail 1/2 — 🏅 Top Picks (Grade A/B)")
+                send_email_notification(
+                    **_email_kwargs,
+                    subject=f"🏅 Top Picks (Grade A/B) — {date}",
+                    grade_filter={"A", "B"},
+                )
+
+                # Mail 2 — Rest: Grade C-F
+                print("\n📧 Mail 2/2 — 📋 Additional Picks (Grade C-F)")
+                send_email_notification(
+                    **_email_kwargs,
+                    subject=f"📋 Additional Picks (Grade C-F) — {date}",
+                    grade_filter={"C", "D", "F"},
                 )
             
             print("\n✅ SUKCES! Email wysłany.")

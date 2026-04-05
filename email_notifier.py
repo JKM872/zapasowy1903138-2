@@ -1106,7 +1106,8 @@ def send_email_notification(
     skip_no_odds: bool = True,
     include_sorted_odds: bool = True,
     odds_limit: int = 15,
-    min_odds_threshold: float = 0.0
+    min_odds_threshold: float = 0.0,
+    grade_filter: Optional[set] = None,
 ):
     """
     Wysyła email z powiadomieniem o kwalifikujących się meczach
@@ -1124,6 +1125,8 @@ def send_email_notification(
         include_sorted_odds: Parametr zachowany dla kompatybilności; sekcje kursów nie są już renderowane
         odds_limit: Parametr zachowany dla kompatybilności; nie wpływa już na HTML maila
         min_odds_threshold: Minimalny kurs (np. 1.19) — mecze z jakimkolwiek kursem poniżej są pomijane
+        grade_filter: Optional set of allowed prediction_grade values (e.g. {'A','B'}).
+                      None = send all grades (legacy behavior).
     """
     
     # Wczytaj dane
@@ -1198,6 +1201,21 @@ def send_email_notification(
             qualified = qualified[qualified.apply(_sport_odds_ok, axis=1)]
             skipped = before_count - len(qualified)
             print(f"   Pominięto {skipped} meczów poniżej progu kursowego per sport")
+
+    # OPCJA 4: Filtr po grade (A/B vs C-F tier split)
+    if grade_filter is not None:
+        before_count = len(qualified)
+        if 'prediction_grade' in qualified.columns:
+            qualified = qualified[qualified['prediction_grade'].apply(
+                lambda g: (g if isinstance(g, str) else 'F') in grade_filter
+            )]
+        else:
+            # No grade column — if filtering for premium only, skip all
+            if grade_filter == {'A', 'B'}:
+                qualified = qualified.iloc[0:0]
+        skipped = before_count - len(qualified)
+        grade_label = '/'.join(sorted(grade_filter))
+        print(f"🏅 Grade filter [{grade_label}]: {len(qualified)} matches (pominięto {skipped})")
 
     if len(qualified) == 0:
         messages: List[str] = []

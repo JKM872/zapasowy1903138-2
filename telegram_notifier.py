@@ -226,6 +226,9 @@ def _sport_emoji(sport: str) -> str:
     }.get(sport, "🏅")
 
 
+_PREMIUM_GRADES = frozenset({"A", "B"})
+
+
 def _build_summary(
     rows: List[Dict[str, Any]],
     qualifying_count: int,
@@ -233,7 +236,7 @@ def _build_summary(
     *,
     _now: datetime | None = None,
 ) -> str:
-    """Build FormRadar-style daily summary for Telegram."""
+    """Build FormRadar-style daily summary for Telegram (Grade A/B only)."""
     now_warsaw = _now or datetime.now(_WARSAW_TZ).replace(tzinfo=None)
 
     lines: list[str] = []
@@ -245,11 +248,12 @@ def _build_summary(
     except ValueError:
         date_display = date
 
-    lines.append(f"🟢 <b>FormRadar</b> | {date_display}")
+    lines.append(f"🟢 <b>FormRadar — Top Picks</b> | {date_display}")
     lines.append("")
 
-    # Filter pipeline
+    # Filter pipeline — only premium grades (A/B)
     qual = _get_qualifying_rows(rows, now_warsaw)
+    qual = [r for r in qual if (r.get("prediction_grade") or "F") in _PREMIUM_GRADES]
 
     # Group by sport
     sports: Dict[str, List[Dict[str, Any]]] = {}
@@ -340,13 +344,14 @@ def _build_summary(
                 lines.append(f"✅ {' · '.join(factors[:3])}")
             if risks:
                 lines.append(f"⚠️ {' · '.join(risks[:2])}")
-            if grade and grade in ("A", "B"):
+            if grade:
                 lines.append(f"🏅 Grade: {grade}")
 
             lines.append("")  # blank line between matches
 
     lines.append("━━━━━━━━━━━━━━━")
-    lines.append(f"📈 Signals today: {total_signals}")
+    lines.append(f"📈 Top signals today: {total_signals}")
+    lines.append("🏅 Only Grade A & B picks")
     lines.append("⚠️ Bet responsibly")
     return "\n".join(lines)
 
@@ -373,6 +378,7 @@ def _save_telegram_manifest(
                 "match_time": m.get("match_time"),
                 "scoring_pick": m.get("scoring_pick"),
                 "forebet_prediction": m.get("forebet_prediction"),
+                "prediction_grade": m.get("prediction_grade"),
                 "home_odds": m.get("home_odds"),
                 "away_odds": m.get("away_odds"),
             }
@@ -404,11 +410,11 @@ def send_telegram_summary(
     chat_id: str = "",
 ) -> bool:
     """
-    Send a daily qualifying-match summary to Telegram.
+    Send a daily qualifying-match summary to Telegram (Grade A/B only).
 
     Returns True on success, False on any error (never raises).
     Silently skips when TELEGRAM_ENABLED is not 'true', credentials
-    are missing, or there are no qualifying matches.
+    are missing, or there are no Grade A/B qualifying matches.
     """
     if not _ENABLED:
         print("ℹ️  Telegram: disabled (TELEGRAM_ENABLED != true)")
@@ -420,8 +426,17 @@ def send_telegram_summary(
         print("ℹ️  Telegram: no qualifying matches — skipping summary")
         return False
 
+    # Only send A/B picks on Telegram
+    premium = [r for r in qual if (r.get("prediction_grade") or "F") in _PREMIUM_GRADES]
+    rest_count = len(qual) - len(premium)
+    print(f"📊 Telegram tier split: {len(premium)} A/B, {rest_count} C-F (hidden)")
+
+    if not premium:
+        print("ℹ️  Telegram: no Grade A/B picks today — skipping summary")
+        return False
+
     text = _build_summary(rows, qualifying_count, date, _now=now_warsaw)
     ok = _send_message(text, token=token, chat_id=chat_id)
     if ok:
-        _save_telegram_manifest(qual, date)
+        _save_telegram_manifest(premium, date)
     return ok
