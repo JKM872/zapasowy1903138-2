@@ -351,6 +351,46 @@ def _build_summary(
     return "\n".join(lines)
 
 
+def _save_telegram_manifest(
+    qual: List[Dict[str, Any]],
+    date: str,
+) -> None:
+    """Save a JSON manifest of matches sent to Telegram (for follow-up report)."""
+    import os as _os
+    import json as _json
+
+    manifest = {
+        "date": date,
+        "sent_at": datetime.now(_WARSAW_TZ).isoformat(),
+        "count": len(qual),
+        "matches": [
+            {
+                "home_team": m.get("home_team"),
+                "away_team": m.get("away_team"),
+                "sport": m.get("sport", "football"),
+                "league": m.get("league"),
+                "match_date": m.get("match_date"),
+                "match_time": m.get("match_time"),
+                "scoring_pick": m.get("scoring_pick"),
+                "forebet_prediction": m.get("forebet_prediction"),
+                "home_odds": m.get("home_odds"),
+                "away_odds": m.get("away_odds"),
+            }
+            for m in qual
+        ],
+    }
+
+    out_dir = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "outputs")
+    _os.makedirs(out_dir, exist_ok=True)
+    path = _os.path.join(out_dir, f"telegram_manifest_{date}.json")
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            _json.dump(manifest, f, ensure_ascii=False, indent=2, default=str)
+        print(f"📋 Telegram manifest saved: {path} ({len(qual)} matches)")
+    except OSError as exc:
+        print(f"⚠️  Cannot save telegram manifest: {exc}")
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -381,4 +421,7 @@ def send_telegram_summary(
         return False
 
     text = _build_summary(rows, qualifying_count, date, _now=now_warsaw)
-    return _send_message(text, token=token, chat_id=chat_id)
+    ok = _send_message(text, token=token, chat_id=chat_id)
+    if ok:
+        _save_telegram_manifest(qual, date)
+    return ok

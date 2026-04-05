@@ -650,10 +650,15 @@ class SupabaseManager:
     # TELEGRAM DAILY STATS
     # ========================================================================
 
-    def get_telegram_daily_stats(self, hours: int = 24) -> Dict[str, Any]:
+    def get_telegram_daily_stats(self, hours: int = 24,
+                                  manifest_matches: list | None = None) -> Dict[str, Any]:
         """
-        Pobiera statystyki skuteczności typów wysłanych na Telegramie
-        (kwalifikujące się predykcje) za ostatnie N godzin.
+        Pobiera statystyki skuteczności typów wysłanych na Telegramie.
+
+        When *manifest_matches* is provided (list of dicts with home_team,
+        away_team, sport, match_date), only those specific matches are
+        checked.  Otherwise falls back to the last *hours* qualifying
+        predictions.
 
         Pick jest wyznaczany tak samo jak w telegram_notifier._pick_odds():
         scoring_pick > forebet_prediction.
@@ -668,19 +673,39 @@ class SupabaseManager:
         from datetime import timedelta
 
         try:
-            cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
-
-            response = (
-                self.client.table('predictions')
-                .select('*')
-                .eq('qualifies', True)
-                .gte('created_at', cutoff)
-                .order('match_date', desc=True)
-                .order('match_time', desc=False)
-                .execute()
-            )
-
-            predictions = cast(List[Dict[str, Any]], response.data or [])
+            if manifest_matches:
+                # Query by specific matches from the Telegram manifest
+                predictions: List[Dict[str, Any]] = []
+                for mm in manifest_matches:
+                    ht = mm.get("home_team", "")
+                    at = mm.get("away_team", "")
+                    md = mm.get("match_date", "")
+                    if not ht or not at:
+                        continue
+                    q = (
+                        self.client.table('predictions')
+                        .select('*')
+                        .eq('home_team', ht)
+                        .eq('away_team', at)
+                    )
+                    if md:
+                        q = q.eq('match_date', md)
+                    resp = q.limit(1).execute()
+                    if resp.data:
+                        predictions.extend(resp.data)
+                print(f"   📋 Manifest lookup: found {len(predictions)}/{len(manifest_matches)} matches in Supabase")
+            else:
+                cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
+                response = (
+                    self.client.table('predictions')
+                    .select('*')
+                    .eq('qualifies', True)
+                    .gte('created_at', cutoff)
+                    .order('match_date', desc=True)
+                    .order('match_time', desc=False)
+                    .execute()
+                )
+                predictions = cast(List[Dict[str, Any]], response.data or [])
 
             # --- classify each prediction --------------------------------
             matches_detail: List[Dict[str, Any]] = []

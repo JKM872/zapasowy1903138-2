@@ -46,15 +46,16 @@ FAN_VOTE_DEFAULT_THRESHOLD = 80.0
 # ═══════════════════════════════════════════════════════════════════════════
 
 def _passes_odds_filter(sport: str, match: Dict[str, Any]) -> bool:
-    """Both home_odds and away_odds must exist and be >= sport threshold."""
+    """Both home_odds and away_odds must be >= sport threshold when present.
+    Missing odds → pass (don't penalize scrapers that couldn't fetch odds)."""
     ho = match.get("home_odds")
     ao = match.get("away_odds")
     if not ho or not ao:
-        return False  # unified: require odds
+        return True  # missing odds → don't block qualification
     try:
         ho_f, ao_f = float(ho), float(ao)
     except (ValueError, TypeError):
-        return False
+        return True
     threshold = SPORT_MIN_ODDS.get(sport, SPORT_MIN_ODDS_FALLBACK)
     return ho_f >= threshold and ao_f >= threshold
 
@@ -119,14 +120,9 @@ def qualify_match(match: Dict[str, Any], now_warsaw: Optional[datetime] = None) 
     if not match.get("qualifies"):
         reasons.append("base_qualification_failed")
 
-    # Gate 1: odds must exist and be above threshold
+    # Gate 1: odds must be above threshold (missing odds → pass)
     if not _passes_odds_filter(sport, match):
-        ho = match.get("home_odds")
-        ao = match.get("away_odds")
-        if not ho or not ao:
-            reasons.append("missing_odds")
-        else:
-            reasons.append("odds_below_threshold")
+        reasons.append("odds_below_threshold")
 
     # Gate 2: fan vote consensus
     if not _passes_fan_vote_filter(sport, match):
@@ -153,8 +149,30 @@ def apply_qualification_gate(
         now_warsaw = datetime.now(_WARSAW_TZ).replace(tzinfo=None)
 
     count = 0
+    sport_stats: Dict[str, Dict[str, int]] = {}
+    reason_counts: Dict[str, int] = {}
+
     for row in rows:
+        sport = row.get("sport", "football")
+        stats = sport_stats.setdefault(sport, {"total": 0, "qualified": 0})
+        stats["total"] += 1
+
         if qualify_match(row, now_warsaw):
             count += 1
+            stats["qualified"] += 1
+        else:
+            for reason in row.get("channel_skip_reasons", []):
+                reason_counts[reason] = reason_counts.get(reason, 0) + 1
+
+    # ── Per-sport breakdown ──
+    for sport, stats in sorted(sport_stats.items()):
+        q = stats["qualified"]
+        t = stats["total"]
+        tag = "✅" if q > 0 else "⚠️"
+        print(f"   {tag} {sport}: {q}/{t} channel-qualified")
+
+    if reason_counts:
+        parts = [f"{r}={c}" for r, c in sorted(reason_counts.items())]
+        print(f"   📋 Rejection reasons: {', '.join(parts)}")
 
     return count

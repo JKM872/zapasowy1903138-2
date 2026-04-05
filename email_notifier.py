@@ -1153,7 +1153,8 @@ def send_email_notification(
     print(f"   🔧 Wyczyszczono dane z 'nan' stringów")
     
     # Filtruj kwalifikujące się mecze — use centralized qualification gate if available
-    if 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any():
+    _gate_used = 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any()
+    if _gate_used:
         qualified = df[df['channel_qualifies'] == True]
         print(f"   🚦 Unified qualification gate: {len(qualified)} matches")
     else:
@@ -1181,18 +1182,22 @@ def send_email_notification(
             print("   ⚠️ Brak kolumn z kursami w danych - pokazuję wszystkie mecze")
 
     # OPCJA 3: Filtr progów kursowych per sport (AND — oba kursy >= progu)
-    print("📉 TRYB: Progi kursowe per sport (AND)")
-    before_count = len(qualified)
-    if 'home_odds' in qualified.columns and 'away_odds' in qualified.columns:
-        sport_col = 'sport' if 'sport' in qualified.columns else None
+    # Skip when qualification gate already applied odds filtering
+    if _gate_used:
+        print("📉 Progi kursowe: pomijam (już zastosowane w qualification gate)")
+    else:
+        print("📉 TRYB: Progi kursowe per sport (AND)")
+        before_count = len(qualified)
+        if 'home_odds' in qualified.columns and 'away_odds' in qualified.columns:
+            sport_col = 'sport' if 'sport' in qualified.columns else None
 
-        def _sport_odds_ok(row: pd.Series) -> bool:  # type: ignore[type-arg]
-            sp = row[sport_col] if sport_col else 'football'
-            return _passes_sport_odds_threshold(sp, row.get('home_odds'), row.get('away_odds'), min_odds_threshold)
+            def _sport_odds_ok(row: pd.Series) -> bool:  # type: ignore[type-arg]
+                sp = row[sport_col] if sport_col else 'football'
+                return _passes_sport_odds_threshold(sp, row.get('home_odds'), row.get('away_odds'), min_odds_threshold)
 
-        qualified = qualified[qualified.apply(_sport_odds_ok, axis=1)]
-        skipped = before_count - len(qualified)
-        print(f"   Pominięto {skipped} meczów poniżej progu kursowego per sport")
+            qualified = qualified[qualified.apply(_sport_odds_ok, axis=1)]
+            skipped = before_count - len(qualified)
+            print(f"   Pominięto {skipped} meczów poniżej progu kursowego per sport")
 
     if len(qualified) == 0:
         messages: List[str] = []
@@ -1450,8 +1455,13 @@ def send_split_emails_by_sport(
             )
 
     # --- filtruj kwalifikujące ---
-    qualified = df[df['qualifies'] == True].copy()
-    print(f"   Kwalifikujące się: {len(qualified)}")
+    _gate_used = 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any()
+    if _gate_used:
+        qualified = df[df['channel_qualifies'] == True].copy()
+        print(f"   🚦 Unified qualification gate: {len(qualified)} matches")
+    else:
+        qualified = df[df['qualifies'] == True].copy()
+        print(f"   Kwalifikujące się: {len(qualified)}")
 
     # --- filtr: brak kursów ---
     if 'home_odds' in qualified.columns and 'away_odds' in qualified.columns:
@@ -1459,8 +1469,10 @@ def send_split_emails_by_sport(
         qualified = qualified[(qualified['home_odds'].notna()) & (qualified['away_odds'].notna())]
         print(f"   Pominięto {before - len(qualified)} meczów bez kursów")
 
-    # --- filtr: progi kursowe per sport (AND) ---
-    if 'home_odds' in qualified.columns:
+    # --- filtr: progi kursowe per sport (AND) — skip when gate already ran ---
+    if _gate_used:
+        print(f"   📉 Progi kursowe: pomijam (już zastosowane w qualification gate)")
+    elif 'home_odds' in qualified.columns:
         before = len(qualified)
         sport_col = 'sport' if 'sport' in qualified.columns else None
 

@@ -6,6 +6,9 @@ CLI entry-point for the daily accuracy summary sent to Telegram.
 Reads qualifying predictions from the last N hours, computes win/loss/pending,
 builds a formatted message, and sends it via the Telegram Bot API.
 
+Prefers the telegram manifest (saved by telegram_notifier) when available,
+so the follow-up reports only on matches that were actually sent to Telegram.
+
 Usage:
     python run_daily_telegram_results.py                  # default: last 24h
     python run_daily_telegram_results.py --hours 48       # last 48h
@@ -16,11 +19,39 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import glob
+import json
 import os
 import sys
 from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _load_telegram_manifest(date: str) -> list[dict] | None:
+    """Try to load the telegram manifest for *date* (YYYY-MM-DD).
+    Returns list of match dicts or None if not found."""
+    base = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(base, "outputs", f"telegram_manifest_{date}.json")
+    if not os.path.isfile(path):
+        # Also search one day before (scraper may run around midnight)
+        from datetime import timedelta
+        prev = (datetime.strptime(date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+        path_prev = os.path.join(base, "outputs", f"telegram_manifest_{prev}.json")
+        if os.path.isfile(path_prev):
+            path = path_prev
+        else:
+            return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        matches = data.get("matches", [])
+        if matches:
+            print(f"📋 Loaded telegram manifest: {path} ({len(matches)} matches)")
+        return matches or None
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"⚠️  Cannot read manifest {path}: {exc}")
+        return None
 
 
 def main() -> int:
@@ -45,10 +76,18 @@ def main() -> int:
         print(f"❌ Nie można połączyć z Supabase: {exc}")
         return 1
 
+    # Try manifest first (only matches actually sent to Telegram)
+    manifest_matches = _load_telegram_manifest(report_date)
+
     print(f"📊 Pobieram statystyki za ostatnie {args.hours}h…")
-    stats = db.get_telegram_daily_stats(hours=args.hours)
+    stats = db.get_telegram_daily_stats(
+        hours=args.hours,
+        manifest_matches=manifest_matches,
+    )
 
     g = stats.get("global", {})
+    source = "manifest" if manifest_matches else "24h window"
+    print(f"   Źródło: {source}")
     print(f"   Łącznie: {g.get('total', 0)}  ✅ {g.get('win', 0)}  ❌ {g.get('loss', 0)}  ⏳ {g.get('pending', 0)}")
 
     # ── 2. Build message ─────────────────────────────────────

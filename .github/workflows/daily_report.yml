@@ -177,6 +177,15 @@ jobs:
         run: |
           pip install -r requirements.txt || pip install requests supabase
 
+      - name: Update match results in Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "🔄 Updating match results before report..."
+          python auto_result_updater.py --check || echo "Result update skipped or partial"
+
       - name: Send Telegram Results Report
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

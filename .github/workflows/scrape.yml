@@ -158,6 +158,7 @@ jobs:
             *.html
             outputs/*.csv
             outputs/mailed_manifest_*.json
+            outputs/telegram_manifest_*.json
             logs/
           retention-days: 7
 
@@ -195,6 +196,12 @@ jobs:
             echo "  → $fname"
             cp "$f" "outputs/$fname"
           done
+          echo "📦 Collecting telegram manifests from artifacts..."
+          find artifacts -name 'telegram_manifest_*.json' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "outputs/$fname"
+          done
           echo "📋 Results directory:"
           ls -la results/ || echo "No results found"
           echo "📋 Outputs directory:"
@@ -206,6 +213,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/*.json
           git add outputs/mailed_manifest_*.json 2>/dev/null || true
+          git add outputs/telegram_manifest_*.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ No new results to commit"
           else
