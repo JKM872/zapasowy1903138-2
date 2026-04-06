@@ -33,10 +33,8 @@ import json
 import math
 import os
 import re
-import sys
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 
 # ---------------------------------------------------------------------------
@@ -84,9 +82,9 @@ class ScoredBaseballMatch:
     is_back_to_back: bool = False
 
     # Feature breakdown
-    features: Dict = field(default_factory=dict)
+    features: Dict[str, float] = field(default_factory=lambda: {})
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             'home_team': self.home_team,
             'away_team': self.away_team,
@@ -115,7 +113,7 @@ class ScoredBaseballMatch:
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _safe_float(val, default: float = 0.0) -> float:
+def _safe_float(val: Any, default: float = 0.0) -> float:
     if val is None:
         return default
     if isinstance(val, float) and (math.isnan(val) or math.isinf(val)):
@@ -126,7 +124,7 @@ def _safe_float(val, default: float = 0.0) -> float:
         return default
 
 
-def _parse_form(raw) -> List[str]:
+def _parse_form(raw: Union[List[Any], str, None]) -> List[str]:
     """Normalize form data to list of 'W'/'L' (no draws in baseball)."""
     if isinstance(raw, list):
         return [str(x).upper()[:1] for x in raw if str(x).upper()[:1] in ('W', 'L')]
@@ -154,7 +152,7 @@ def _form_points_baseball(form: List[str], decay: float = 0.95) -> float:
     return weighted_sum / weight_total if weight_total > 0 else 0.5
 
 
-def _h2h_win_rate_extended(h2h: List[Dict], team_name: str,
+def _h2h_win_rate_extended(h2h: List[Dict[str, Any]], team_name: str,
                             decay: float = 0.95,
                             max_games: int = 20) -> Tuple[float, int]:
     """Extended H2H win rate for baseball (20-game window, lighter decay).
@@ -201,8 +199,8 @@ def _h2h_win_rate_extended(h2h: List[Dict], team_name: str,
     return w_sum / w_total, counted
 
 
-def _detect_series_context(h2h: List[Dict], home_team: str,
-                            away_team: str) -> Dict:
+def _detect_series_context(h2h: List[Dict[str, Any]], home_team: str,
+                            away_team: str) -> Dict[str, Any]:
     """Detect if teams are in a back-to-back series (same opponent
     in recent games)."""
     if not h2h:
@@ -232,7 +230,7 @@ def _detect_series_context(h2h: List[Dict], home_team: str,
     }
 
 
-def _pitcher_quality_signal(match: Dict) -> Tuple[float, float, bool]:
+def _pitcher_quality_signal(match: Dict[str, Any]) -> Tuple[float, float, bool]:
     """Extract pitcher quality signals.
     Returns (home_pitcher_score, away_pitcher_score, pitcher_available).
 
@@ -301,7 +299,7 @@ class BaseballFeatureExtractor:
     # Baseball home advantage is lower: ~54 % home win historically
     HOME_ADVANTAGE = 0.54
 
-    def extract(self, m: Dict) -> Dict[str, float]:
+    def extract(self, m: Dict[str, Any]) -> Dict[str, float]:
         f: Dict[str, float] = {}
         available = 0
         total_features = 7
@@ -434,7 +432,7 @@ class BaseballScoringEngine:
             except Exception:
                 pass
 
-    def score_match(self, match: Dict) -> ScoredBaseballMatch:
+    def score_match(self, match: Dict[str, Any]) -> ScoredBaseballMatch:
         """Score a single baseball game and return ScoredBaseballMatch."""
         feats = self.extractor.extract(match)
         w = self.weights
@@ -619,10 +617,9 @@ def main():
     args = parser.parse_args()
 
     with open(args.file, 'r', encoding='utf-8') as fh:
-        matches = json.load(fh)
+        raw_data: Any = json.load(fh)
 
-    if isinstance(matches, dict):
-        matches = [matches]
+    matches: List[Dict[str, Any]] = [raw_data] if isinstance(raw_data, dict) else raw_data
 
     engine = BaseballScoringEngine()
 

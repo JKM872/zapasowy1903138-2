@@ -365,7 +365,7 @@ def _save_telegram_manifest(
     import os as _os
     import json as _json
 
-    manifest = {
+    manifest: Dict[str, Any] = {
         "date": date,
         "sent_at": datetime.now(_WARSAW_TZ).isoformat(),
         "count": len(qual),

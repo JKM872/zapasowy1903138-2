@@ -1446,16 +1446,15 @@ def send_split_emails_by_sport(
     min_odds_threshold: float = 0.0,
 ):
     """
-    Wysyła 2 osobne maile dla każdego sportu:
-      Mail 1 — 🔥 mecze z przewagą formy + dane
-      Mail 2 — 📋 mecze zwykłe (bez przewagi formy)
+    Wysyła 1 mail dla każdego sportu ze wszystkimi kwalifikującymi
+    się meczami (Grade A-F) w jednej wiadomości.
 
     Filtry:
       - brak kursów → pominięty
       - per-sport progi kursowe (AND — oba kursy >= progu sportu)
     """
     print("=" * 70)
-    print("📧 TRYB SPLIT: 2 maile na każdy sport")
+    print("📧 TRYB: 1 mail na każdy sport (all grades)")
     print("   Progi kursowe per sport (AND)")
     print("=" * 70)
 
@@ -1526,51 +1525,25 @@ def send_split_emails_by_sport(
                 emoji = SPORT_EMOJI.get(sport, '🏆')
                 label = SPORT_LABEL.get(sport, sport.capitalize())
 
-                # grupa A: przewaga formy
-                if 'form_advantage' in sport_df.columns:  # type: ignore[union-attr]
-                    group_form: pd.DataFrame = sport_df[sport_df['form_advantage'] == True]  # type: ignore[assignment]
-                    group_normal: pd.DataFrame = sport_df[sport_df['form_advantage'] != True]  # type: ignore[assignment]
-                else:
-                    group_form = sport_df.iloc[0:0]  # type: ignore[assignment]  # pusty
-                    group_normal = sport_df  # type: ignore[assignment]
+                if len(sport_df) == 0:  # type: ignore[arg-type]
+                    continue
 
-                # --- Mail 1: forma ---
-                if len(group_form) > 0:  # type: ignore[arg-type]
-                    matches_form: List[Dict[str, Any]] = group_form.to_dict('records')  # type: ignore[assignment]
-                    for m in matches_form:
-                        m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
-                    _save_mailed_manifest(matches_form, date, tag=f'{sport}_form')
-                    subj = f"🔥 {emoji} {label}: {len(group_form)} meczów z PRZEWAGĄ FORMY — {date}"  # type: ignore[arg-type]
-                    html = create_html_email(matches_form, date, sort_by=sort_by,  # type: ignore[arg-type]
-                                             include_sorted_odds=include_sorted_odds,
-                                             odds_limit=odds_limit)
-                    msg = MIMEMultipart('alternative')
-                    msg['Subject'] = subj
-                    msg['From'] = from_email
-                    msg['To'] = to_email
-                    msg.attach(MIMEText(html, 'html'))
-                    server.send_message(msg)
-                    sent_count += 1
-                    print(f"   ✅ Wysłano: {subj}")
-
-                # --- Mail 2: zwykłe ---
-                if len(group_normal) > 0:  # type: ignore[arg-type]
-                    matches_normal: List[Dict[str, Any]] = group_normal.to_dict('records')  # type: ignore[assignment]
-                    for m in matches_normal:
-                        m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
-                    _save_mailed_manifest(matches_normal, date, tag=f'{sport}_normal')
-                    subj = f"📋 {emoji} {label}: {len(group_normal)} meczów zwykłych — {date}"  # type: ignore[arg-type]
-                    html = create_html_email(matches_normal, date, sort_by=sort_by,  # type: ignore[arg-type]
-                                             include_sorted_odds=include_sorted_odds,
-                                             odds_limit=odds_limit)
-                    msg = MIMEMultipart('alternative')
-                    msg['Subject'] = subj
-                    msg['From'] = from_email
-                    msg['To'] = to_email
-                    msg.attach(MIMEText(html, 'html'))
-                    server.send_message(msg)
-                    sent_count += 1
-                    print(f"   ✅ Wysłano: {subj}")
+                matches_list: List[Dict[str, Any]] = sport_df.to_dict('records')  # type: ignore[assignment]
+                for m in matches_list:
+                    m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
+                _save_mailed_manifest(matches_list, date, tag=sport)
+                subj = f"{emoji} {label}: {len(matches_list)} meczów — {date}"  # type: ignore[arg-type]
+                html = create_html_email(matches_list, date, sort_by=sort_by,  # type: ignore[arg-type]
+                                         include_sorted_odds=include_sorted_odds,
+                                         odds_limit=odds_limit)
+                msg = MIMEMultipart('alternative')
+                msg['Subject'] = subj
+                msg['From'] = from_email
+                msg['To'] = to_email
+                msg.attach(MIMEText(html, 'html'))
+                server.send_message(msg)
+                sent_count += 1
+                print(f"   ✅ Wysłano: {subj}")
 
     except Exception as e:
         print(f"   ❌ Błąd wysyłania: {e}")

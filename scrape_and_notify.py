@@ -182,10 +182,8 @@ def scrape_and_send_email(
         print(f"🔥 TRYB: Tylko mecze z PRZEWAGĄ FORMY {'gości' if away_team_focus else 'gospodarzy'}")
     if skip_no_odds:
         print(f"💰 TRYB: Pomijam mecze BEZ KURSÓW bukmacherskich")
-    if split_emails:
-        print(f"📧 TRYB: 2 maile na każdy sport (forma vs zwykłe)")
-        if min_odds_threshold > 0:
-            print(f"📉 TRYB: Minimalny kurs {min_odds_threshold}")
+    if min_odds_threshold > 0:
+        print(f"📉 TRYB: Minimalny kurs {min_odds_threshold}")
     if use_odds:
         print(f"💰 TRYB: Pobieranie kursów z FlashScore")
     if use_forebet:
@@ -1015,49 +1013,18 @@ def scrape_and_send_email(
             print(f"\n📧 KROK 3/4: Wysyłanie powiadomienia email...")
             print("="*70)
             
-            if split_emails:
-                # --- TRYB SPLIT: 2 maile na każdy sport ---
-                send_split_emails_by_sport(
-                    csv_file=outfn,
-                    to_email=to_email,
-                    from_email=from_email,
-                    password=password,
-                    provider=provider,
-                    sort_by=sort_by,
-                    include_sorted_odds=include_sorted_odds,
-                    odds_limit=odds_limit,
-                )
-            else:
-                # --- TRYB TIERED: 2 maile wg grade (A/B premium + C-F rest) ---
-                _email_kwargs = dict(
-                    csv_file=outfn,
-                    to_email=to_email,
-                    from_email=from_email,
-                    password=password,
-                    provider=provider,
-                    sort_by=sort_by,
-                    only_form_advantage=only_form_advantage,
-                    skip_no_odds=skip_no_odds,
-                    include_sorted_odds=include_sorted_odds,
-                    odds_limit=odds_limit,
-                    min_odds_threshold=min_odds_threshold,
-                )
-
-                # Mail 1 — Premium: Grade A & B
-                print("\n📧 Mail 1/2 — 🏅 Top Picks (Grade A/B)")
-                send_email_notification(
-                    **_email_kwargs,
-                    subject=f"🏅 Top Picks (Grade A/B) — {date}",
-                    grade_filter={"A", "B"},
-                )
-
-                # Mail 2 — Rest: Grade C-F
-                print("\n📧 Mail 2/2 — 📋 Additional Picks (Grade C-F)")
-                send_email_notification(
-                    **_email_kwargs,
-                    subject=f"📋 Additional Picks (Grade C-F) — {date}",
-                    grade_filter={"C", "D", "F"},
-                )
+            # --- 1 mail per sport (all grades A-F) ---
+            send_split_emails_by_sport(
+                csv_file=outfn,
+                to_email=to_email,
+                from_email=from_email,
+                password=password,
+                provider=provider,
+                sort_by=sort_by,
+                include_sorted_odds=include_sorted_odds,
+                odds_limit=odds_limit,
+                min_odds_threshold=min_odds_threshold,
+            )
             
             print("\n✅ SUKCES! Email wysłany.")
 

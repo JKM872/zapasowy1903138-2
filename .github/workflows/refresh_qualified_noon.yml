@@ -1,16 +1,20 @@
-name: Baseball Scraper Pipeline (Experimental)
+name: Noon Refresh — Forebet + SofaScore Update
 
 on:
-  # MLB games typically start 17:00-22:00 ET → run at 14:00 UTC (10 AM ET)
-  # to catch lineup/pitcher announcements
+  # Run daily at 12:00 UTC (14:00 CEST / 13:00 CET)
   schedule:
-    - cron: '0 14 * * *'
+    - cron: '0 12 * * *'
 
   # Allow manual trigger
   workflow_dispatch:
     inputs:
-      send_email:
-        description: 'Send email notification (experimental)'
+      date:
+        description: 'Date to refresh (YYYY-MM-DD, empty = today)'
+        required: false
+        default: ''
+        type: string
+      skip_email:
+        description: 'Skip sending email (refresh data only)'
         required: false
         default: false
         type: boolean
@@ -19,7 +23,7 @@ env:
   PYTHONIOENCODING: utf-8
 
 jobs:
-  scrape-baseball:
+  refresh:
     runs-on: ubuntu-latest
 
     services:
@@ -77,65 +81,67 @@ jobs:
             sleep 2
           done
 
-      # ── Run baseball scraper ──
-      - name: Run baseball scraper
+      - name: Determine date
+        id: date
+        run: |
+          INPUT_DATE="${{ github.event.inputs.date }}"
+          if [ -n "$INPUT_DATE" ]; then
+            echo "today=$INPUT_DATE" >> $GITHUB_OUTPUT
+          else
+            echo "today=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+          fi
+          echo "📅 Date: $(cat $GITHUB_OUTPUT | grep today | cut -d= -f2)"
+
+      - name: Check morning manifest exists
+        id: manifest
+        run: |
+          TODAY="${{ steps.date.outputs.today }}"
+          FOUND=$(find outputs -name "mailed_manifest_${TODAY}*.json" ! -name "*_noon*" 2>/dev/null | head -1)
+          if [ -n "$FOUND" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Morning manifest found: $FOUND"
+            echo "📋 Files:"
+            ls -la outputs/mailed_manifest_${TODAY}*.json 2>/dev/null || true
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No morning manifest for $TODAY — skipping refresh"
+          fi
+
+      # ── Run noon refresh ──
+      - name: Run noon refresh
+        if: steps.manifest.outputs.exists == 'true'
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_ENABLED: 'false'
         run: |
-          echo "⚾ Scraping baseball..."
-          TODAY=$(date +%Y-%m-%d)
+          TODAY="${{ steps.date.outputs.today }}"
+          SKIP_EMAIL="${{ github.event.inputs.skip_email }}"
 
-          # Determine email flags
-          SEND_EMAIL="${{ github.event.inputs.send_email }}"
-          if [ "$SEND_EMAIL" = "true" ]; then
-            EMAIL_FLAGS="--to ${{ secrets.EMAIL_RECIPIENT }} --from-email ${{ secrets.EMAIL_SENDER }} --password ${{ secrets.EMAIL_PASSWORD }}"
-          else
-            EMAIL_FLAGS="--to noreply@localhost --from-email noreply@localhost --password dummy"
+          EMAIL_FLAGS="--to ${{ secrets.EMAIL_RECIPIENT }} --from-email ${{ secrets.EMAIL_SENDER }} --password ${{ secrets.EMAIL_PASSWORD }} --provider gmail"
+
+          EXTRA_FLAGS="--headless"
+          if [ "$SKIP_EMAIL" = "true" ]; then
+            EXTRA_FLAGS="$EXTRA_FLAGS --skip-email"
           fi
 
-          python scrape_and_notify.py \
+          python refresh_qualified_manifest.py \
             --date $TODAY \
-            --sports baseball \
             $EMAIL_FLAGS \
-            --provider gmail \
-            --use-forebet \
-            --use-sofascore \
-            --use-odds \
-            --use-gemini \
-            --headless
+            $EXTRA_FLAGS
 
-      # ── Data quality report ──
-      - name: Baseball data quality report
-        if: always()
-        run: |
-          echo "⚾ Baseball Data Quality Report"
-          echo "================================"
-          TODAY=$(date +%Y-%m-%d)
-          python3 baseball_data_quality_report.py "$TODAY"
-
-      - name: Upload baseball results
+      - name: Upload noon artifacts
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: results-baseball-${{ github.run_id }}
+          name: noon-refresh-${{ steps.date.outputs.today }}-${{ github.run_id }}
           path: |
-            results/*baseball*.json
-            outputs/*.csv
-            outputs/mailed_manifest_*.json
+            outputs/mailed_manifest_*_noon.json
             logs/
-          retention-days: 14
+          retention-days: 7
 
-  # ── Commit results ──
-  commit-results:
-    needs: scrape-baseball
+  # ── Commit noon results ──
+  commit-noon:
+    needs: refresh
     if: always()
     runs-on: ubuntu-latest
     permissions:
@@ -145,32 +151,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Download baseball artifacts
+      - name: Download noon artifacts
         uses: actions/download-artifact@v8
         with:
           path: artifacts
           merge-multiple: false
 
-      - name: Collect results
+      - name: Collect noon manifest
         run: |
-          mkdir -p results
           mkdir -p outputs
-          find artifacts -name '*baseball*.json' -path '*/results/*' | while read f; do
+          find artifacts -name 'mailed_manifest_*_noon.json' | while read f; do
             fname=$(basename "$f")
             echo "  → $fname"
-            cp "$f" "results/$fname"
+            cp "$f" "outputs/$fname"
           done
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results/*baseball*.json 2>/dev/null || true
+          git add outputs/mailed_manifest_*_noon.json 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "ℹ️ No baseball results to commit"
+            echo "ℹ️ No noon results to commit"
           else
             TODAY=$(date +%Y-%m-%d)
-            git commit -m "data: baseball results for $TODAY [skip ci]"
+            git commit -m "data: noon refresh for $TODAY [skip ci]"
             git push
-            echo "✅ Baseball results committed"
+            echo "✅ Noon results committed"
           fi

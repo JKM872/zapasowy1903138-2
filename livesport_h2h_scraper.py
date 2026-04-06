@@ -2418,6 +2418,13 @@ def _build_tennis_h2h_url(original_url: str) -> Optional[str]:
         return None
 
     h2h_url = base + '/h2h/wszystkie-nawierzchnie/'
+
+    # Percent-encode non-ASCII characters (e.g. Polish path segments)
+    from urllib.parse import urlsplit, urlunsplit, quote
+    parts = urlsplit(h2h_url)
+    encoded_path = quote(parts.path, safe='/:@!$&\'()*+,;=')
+    h2h_url = urlunsplit((parts.scheme, parts.netloc, encoded_path, parts.query, parts.fragment))
+
     return h2h_url
 
 
@@ -2628,10 +2635,25 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         except Exception:
             pass
 
-        # ── STEP 2c: Extract odds from match page (most reliable source) ──
+        # ── STEP 2c: Extract odds from match page (CSS selectors) ──
         odds = extract_betting_odds(match_page_soup)
         out['home_odds'] = odds['home_odds']
         out['away_odds'] = odds['away_odds']
+
+        # ── STEP 2d: Livesport API odds fallback (if CSS extraction failed) ──
+        if not out['home_odds'] or not out['away_odds']:
+            try:
+                print(f"   💰 Tennis: CSS odds empty, trying Livesport API...")
+                livesport_odds = fetch_odds_from_livesport(driver, url, 'tennis')
+                if livesport_odds.get('odds_found'):
+                    out['home_odds'] = livesport_odds.get('home_odds')
+                    out['away_odds'] = livesport_odds.get('away_odds')
+                    out['odds_bookmaker'] = livesport_odds.get('bookmaker')
+                    print(f"      ✅ Tennis API odds: {out['home_odds']}/{out['away_odds']} ({out['odds_bookmaker']})")
+                else:
+                    print(f"      ⚠️ Tennis: Livesport API odds not found")
+            except Exception as e:
+                print(f"      ⚠️ Tennis: Livesport API odds error: {e}")
 
         # ── STEP 3: Build & validate H2H URL, then navigate ──
         # Strategy A: find an H2H link on the match page itself
@@ -2639,10 +2661,15 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         for link in match_page_soup.find_all('a', href=True):
             href = link.get('href', '')
             if '/h2h/' in href.lower():
-                h2h_url = 'https://www.livesport.com' + href if href.startswith('/') else href
+                raw = 'https://www.livesport.com' + href if href.startswith('/') else href
+                # Percent-encode non-ASCII characters in Strategy A URLs
+                from urllib.parse import urlsplit, urlunsplit, quote
+                _p = urlsplit(raw)
+                raw = urlunsplit((_p.scheme, _p.netloc, quote(_p.path, safe='/:@!$&\'()*+,;='), _p.query, _p.fragment))
+                h2h_url = raw
                 break
 
-        # Strategy B: deterministic URL builder
+        # Strategy B: deterministic URL builder (already encodes non-ASCII)
         if not h2h_url:
             h2h_url = _build_tennis_h2h_url(url)
 
@@ -2768,6 +2795,33 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
             out['home_odds'] = odds['home_odds']
         if odds['away_odds']:
             out['away_odds'] = odds['away_odds']
+
+    # 4b. FLASHSCORE odds fallback — last resort if both API and CSS failed
+    if not out.get('home_odds') or not out.get('away_odds'):
+        if FLASHSCORE_AVAILABLE and out.get('home_team') and out.get('away_team'):
+            try:
+                print(f"   💰 Tennis FlashScore fallback: Pobieranie kursów...")
+                flashscore_scraper = FlashScoreOddsScraper(headless=True)
+                flashscore_result = flashscore_scraper.get_odds(
+                    home_team=out['home_team'],
+                    away_team=out['away_team'],
+                    sport='tennis',
+                    driver=driver
+                )
+                if flashscore_result.get('found'):
+                    if not out.get('home_odds') and flashscore_result.get('home_odds'):
+                        out['home_odds'] = flashscore_result.get('home_odds')
+                    if not out.get('away_odds') and flashscore_result.get('away_odds'):
+                        out['away_odds'] = flashscore_result.get('away_odds')
+                    out['flashscore_home_odds'] = flashscore_result.get('home_odds')
+                    out['flashscore_away_odds'] = flashscore_result.get('away_odds')
+                    out['flashscore_bookmaker'] = flashscore_result.get('bookmaker', 'FlashScore')
+                    out['flashscore_found'] = True
+                    print(f"      ✅ FlashScore tennis: {flashscore_result.get('home_odds')}/{flashscore_result.get('away_odds')}")
+                else:
+                    print(f"      ⚠️ FlashScore tennis: Kursy nie znalezione")
+            except Exception as e:
+                print(f"      ⚠️ FlashScore tennis error: {e}")
 
     # ===================================================================
     # 5. LAST MATCH PER PLAYER (from "Ostatnie mecze" / "Last matches" tabs)
