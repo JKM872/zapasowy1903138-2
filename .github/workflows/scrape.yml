@@ -147,6 +147,13 @@ jobs:
             --use-gemini \
             --headless
       
+      # 8b. Channel qualification summary (observability)
+      - name: Channel qualification summary - ${{ matrix.sport }}
+        if: always()
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+          python ci_step_summary.py "${{ matrix.sport }}" "$TODAY" >> "$GITHUB_STEP_SUMMARY" || true
+
       # 9. Upload results as artifact
       - name: Upload results - ${{ matrix.sport }}
         uses: actions/upload-artifact@v7

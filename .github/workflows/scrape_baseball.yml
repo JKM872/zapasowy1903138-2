@@ -121,6 +121,12 @@ jobs:
           TODAY=$(date +%Y-%m-%d)
           python3 baseball_data_quality_report.py "$TODAY"
 
+      - name: Channel qualification summary - baseball
+        if: always()
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+          python3 ci_step_summary.py baseball "$TODAY" >> "$GITHUB_STEP_SUMMARY" || true
+
       - name: Upload baseball results
         uses: actions/upload-artifact@v7
         if: always()

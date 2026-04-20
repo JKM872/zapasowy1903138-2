@@ -38,8 +38,21 @@ SPORT_MIN_ODDS: Dict[str, float] = {
 SPORT_MIN_ODDS_FALLBACK = 1.35
 
 # ── SofaScore fan vote thresholds (dominant vote %) ────────────────────────
-FAN_VOTE_THRESHOLDS: Dict[str, float] = {"football": 65.0}
+# Tennis is a 2-way sport where 55/45 splits are common and meaningful; a
+# dedicated SofaScore check already runs in scrape_and_notify.py (FAZA 2.1),
+# so the secondary channel gate uses a much softer threshold to avoid
+# silently dropping all tennis matches.
+FAN_VOTE_THRESHOLDS: Dict[str, float] = {
+    "football": 65.0,
+    "tennis": 55.0,
+}
 FAN_VOTE_DEFAULT_THRESHOLD = 80.0
+
+# Sports where pitcher/starter data is required for gate (soft-fail by default
+# until the scraper populates these fields reliably for baseball).
+# When True, missing pitcher data blocks channel_qualifies. When False, it is
+# only recorded as a non-blocking warning in channel_skip_reasons_warnings.
+BASEBALL_PITCHER_REQUIRED: bool = False
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -115,6 +128,7 @@ def qualify_match(match: Dict[str, Any], now_warsaw: Optional[datetime] = None) 
         now_warsaw = datetime.now(_WARSAW_TZ).replace(tzinfo=None)
 
     reasons: List[str] = []
+    warnings: List[str] = []
     sport = match.get("sport", "football")
 
     # Gate 0: must have base qualification
@@ -134,11 +148,18 @@ def qualify_match(match: Dict[str, Any], now_warsaw: Optional[datetime] = None) 
         reasons.append("match_already_started")
 
     # Gate 4: baseball requires starter pitcher data
+    # Soft-fail by default: record the missing data as a warning so the match
+    # can still flow to channels (email/Telegram) while we finish the pitcher
+    # scraper. Flip BASEBALL_PITCHER_REQUIRED to True once data is reliable.
     if sport == "baseball":
         if not match.get("pitcher_home") or not match.get("pitcher_away"):
-            reasons.append("baseball_missing_pitcher")
+            if BASEBALL_PITCHER_REQUIRED:
+                reasons.append("baseball_missing_pitcher")
+            else:
+                warnings.append("baseball_missing_pitcher")
 
     match["channel_skip_reasons"] = reasons
+    match["channel_skip_reasons_warnings"] = warnings
     qualifies = len(reasons) == 0
     match["channel_qualifies"] = qualifies
     return qualifies
@@ -157,6 +178,7 @@ def apply_qualification_gate(
     count = 0
     sport_stats: Dict[str, Dict[str, int]] = {}
     reason_counts: Dict[str, int] = {}
+    warning_counts: Dict[str, int] = {}
 
     for row in rows:
         sport = row.get("sport", "football")
@@ -170,6 +192,9 @@ def apply_qualification_gate(
             for reason in row.get("channel_skip_reasons", []):
                 reason_counts[reason] = reason_counts.get(reason, 0) + 1
 
+        for warn in row.get("channel_skip_reasons_warnings", []) or []:
+            warning_counts[warn] = warning_counts.get(warn, 0) + 1
+
     # ── Per-sport breakdown ──
     for sport, stats in sorted(sport_stats.items()):
         q = stats["qualified"]
@@ -180,5 +205,9 @@ def apply_qualification_gate(
     if reason_counts:
         parts = [f"{r}={c}" for r, c in sorted(reason_counts.items())]
         print(f"   📋 Rejection reasons: {', '.join(parts)}")
+
+    if warning_counts:
+        parts = [f"{r}={c}" for r, c in sorted(warning_counts.items())]
+        print(f"   ⚠️  Soft warnings (non-blocking): {', '.join(parts)}")
 
     return count

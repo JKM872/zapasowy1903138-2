@@ -618,9 +618,12 @@ def scrape_and_send_email(
         # ========================================================================
         _tennis_disqualified = 0
         for row in rows:
+            _url_lower = str(row.get('match_url', '')).lower()
             is_tennis = (
                 row.get('sport') == 'tennis'
-                or '/tenis/' in str(row.get('match_url', '')).lower()
+                or '/tenis/' in _url_lower
+                or '/tennis/' in _url_lower
+                or 'tennis' in _url_lower
             )
             if not is_tennis or not row.get('qualifies'):
                 continue
@@ -872,6 +875,9 @@ def scrape_and_send_email(
                 'sport': sport_suffix if len(sports) == 1 else row.get('sport', 'football'),
                 'matchUrl': row.get('match_url', row.get('url', '')),
                 'qualifies': row.get('qualifies', False),
+                'channelQualifies': row.get('channel_qualifies', False),
+                'channelSkipReasons': row.get('channel_skip_reasons', []) or [],
+                'channelSkipWarnings': row.get('channel_skip_reasons_warnings', []) or [],
                 # H2H
                 'h2h': {
                     'home': row.get('home_wins_in_h2h_last5', 0),
@@ -952,6 +958,16 @@ def scrape_and_send_email(
                     'surfaceFormB': row.get('surface_form_b', []),
                     'skipReason': row.get('tennis_skip_reason'),
                 } if row.get('sport') == 'tennis' else None,
+                # Baseball-specific metadata (pitcher matchup when available)
+                'baseball': {
+                    'pitcherHome': clean_for_json(row.get('pitcher_home')),
+                    'pitcherAway': clean_for_json(row.get('pitcher_away')),
+                    'pitcherHomeEra': clean_for_json(row.get('pitcher_home_era')),
+                    'pitcherAwayEra': clean_for_json(row.get('pitcher_away_era')),
+                    'pitcherHomeWhip': clean_for_json(row.get('pitcher_home_whip')),
+                    'pitcherAwayWhip': clean_for_json(row.get('pitcher_away_whip')),
+                    'pitcherAvailable': bool(row.get('pitcher_home') and row.get('pitcher_away')),
+                } if row.get('sport') == 'baseball' else None,
                 # Top-level confidence: gemini > scoring > forebet fallback
                 'confidence': (
                     clean_for_json(row.get('gemini_confidence'))
