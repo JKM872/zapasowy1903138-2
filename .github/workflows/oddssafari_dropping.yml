@@ -1,0 +1,159 @@
+name: OddsSafari Dropping Odds Pipeline
+
+# Independent of other scrapers. Runs daily at 10:00 UTC which equals
+# 12:00 Europe/Warsaw in CEST (summer). During CET (winter) the same cron
+# fires at 11:00 local time; GitHub Actions cron does not support timezones
+# natively. Trigger manually via workflow_dispatch to adjust when needed.
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Livesport lookup date (YYYY-MM-DD, empty = today Europe/Warsaw)'
+        required: false
+        default: ''
+        type: string
+      min_odds:
+        description: 'Lower bound of qualifying current odds (inclusive)'
+        required: false
+        default: '1.35'
+        type: string
+      max_odds:
+        description: 'Upper bound of qualifying current odds (inclusive)'
+        required: false
+        default: '2.00'
+        type: string
+      dry_run:
+        description: 'Skip Livesport enrichment (scrape OddsSafari only)'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  dropping-odds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
+          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser" >> $GITHUB_ENV
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi cloudscraper httpx[http2]
+
+      - name: Install Node.js dependencies
+        run: npm ci || npm install
+
+      - name: Wait for FlareSolverr
+        run: |
+          echo "Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "FlareSolverr is ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+
+      - name: Resolve target date
+        id: resolve-date
+        run: |
+          INPUT_DATE="${{ github.event.inputs.date }}"
+          if [ -n "$INPUT_DATE" ]; then
+            echo "target=$INPUT_DATE" >> $GITHUB_OUTPUT
+          else
+            echo "target=$(TZ='Europe/Warsaw' date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run OddsSafari dropping-odds pipeline
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
+          MIN_ODDS="${{ github.event.inputs.min_odds || '1.35' }}"
+          MAX_ODDS="${{ github.event.inputs.max_odds || '2.00' }}"
+          EXTRA=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            EXTRA="--dry-run"
+          fi
+          echo "Running pipeline for $TARGET_DATE (odds ${MIN_ODDS}-${MAX_ODDS})"
+          python oddssafari_dropping_pipeline.py \
+            --date "$TARGET_DATE" \
+            --min-odds "$MIN_ODDS" \
+            --max-odds "$MAX_ODDS" \
+            --headless \
+            $EXTRA
+
+      - name: Summary
+        if: always()
+        run: |
+          TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
+          OUT="outputs/oddssafari_dropping_${TARGET_DATE}.json"
+          echo "## OddsSafari dropping odds — ${TARGET_DATE}" >> "$GITHUB_STEP_SUMMARY"
+          python ci_oddssafari_summary.py "$OUT" >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: oddssafari-dropping-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
+          path: |
+            outputs/oddssafari_dropping_*.json
+            logs/
+          retention-days: 14
+
+      - name: Commit dropping-odds output
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/oddssafari_dropping_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No dropping-odds output to commit"
+          else
+            TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
+            git commit -m "data: oddssafari dropping odds for $TARGET_DATE [skip ci]"
+            git push
+          fi

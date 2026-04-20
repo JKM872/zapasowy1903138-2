@@ -74,6 +74,10 @@ jobs:
     - name: Test Tennis Fixes (field names, no synthetics)
       run: |
         python -m pytest test_tennis_fixes.py -v
+
+    - name: Test OddsSafari dropping pipeline (unit)
+      run: |
+        python -m pytest test_oddssafari_dropping.py -v
     
     - name: Test FlashScore Odds Scraper (unit tests)
       run: |
