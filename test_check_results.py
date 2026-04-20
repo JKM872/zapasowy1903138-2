@@ -14,12 +14,15 @@ import os
 
 from check_results import (
     load_manifests,
+    load_telegram_manifest,
+    merge_manifests,
     evaluate,
     _predicted_winner,
     generate_report_html,
     save_summary,
 )
 from email_notifier import _save_mailed_manifest
+from telegram_notifier import _save_telegram_manifest, _MANIFEST_FIELDS
 
 
 # ---------------------------------------------------------------------------
@@ -299,3 +302,155 @@ class TestSaveSummary:
         with open('outputs/results_summary_2026-03-14.json', 'r') as f:
             data = json.load(f)
         assert data['match_count'] == 1
+
+    def test_tag_writes_separate_file(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        matches = [_match(url='http://m1')]
+        results = {'http://m1': {'status': 'finished', 'score_home': 1, 'score_away': 0, 'winner': 'home'}}
+        stats = evaluate(matches, results)
+        email_path = save_summary(stats, '2026-03-14')
+        tg_path = save_summary(stats, '2026-03-14', tag='telegram')
+        assert email_path.endswith('results_summary_2026-03-14.json')
+        assert tg_path.endswith('results_summary_2026-03-14_telegram.json')
+        assert os.path.exists(email_path)
+        assert os.path.exists(tg_path)
+        assert email_path != tg_path
+
+
+# ---------------------------------------------------------------------------
+# Telegram manifest — writer + loader + merge
+# ---------------------------------------------------------------------------
+
+class TestTelegramManifest:
+    def test_save_includes_url_and_core_fields(self, tmp_path, monkeypatch):
+        # telegram_notifier writes to <module_dir>/outputs, so patch the helper
+        # to target tmp_path by monkeypatching the module-level os.path.dirname.
+        import telegram_notifier as tn
+
+        monkeypatch.setattr(
+            tn, '_save_telegram_manifest',
+            tn._save_telegram_manifest,  # keep original
+        )
+        # Run from tmp_path and point outputs to cwd/outputs by chdir.
+        monkeypatch.chdir(tmp_path)
+
+        # The real helper resolves outputs relative to the module file; emulate
+        # it by writing a manifest using the same logic but targeting cwd.
+        m = _match(url='http://tg/m1', focus_team='home', favorite='A')
+        m['draw_odds'] = 3.2
+        m['prediction_grade'] = 'A'
+        os.makedirs('outputs', exist_ok=True)
+
+        # Call the real writer and then copy the produced file next to cwd.
+        _save_telegram_manifest([m], '2026-03-14')
+        module_path = os.path.join(
+            os.path.dirname(os.path.abspath(tn.__file__)),
+            'outputs',
+            'telegram_manifest_2026-03-14.json',
+        )
+        assert os.path.exists(module_path)
+        with open(module_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        os.remove(module_path)
+
+        assert data['count'] == 1
+        rec = data['matches'][0]
+        for field in ('match_url', 'focus_team', 'favorite', 'draw_odds',
+                      'prediction_grade', 'sport'):
+            assert field in rec, f'missing {field} in telegram manifest'
+        assert rec['match_url'] == 'http://tg/m1'
+        assert rec['favorite'] == 'A'
+
+    def test_manifest_fields_covers_email_critical(self):
+        for field in ('match_url', 'match_date', 'match_time', 'sport',
+                      'home_team', 'away_team', 'home_odds', 'draw_odds',
+                      'away_odds', 'scoring_pick', 'focus_team',
+                      'prediction_grade', 'favorite'):
+            assert field in _MANIFEST_FIELDS
+
+    def test_load_new_format_with_matches_key(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        payload = {
+            'date': '2026-03-14',
+            'count': 2,
+            'matches': [
+                _match(url='http://tg/a'),
+                _match(url='http://tg/b'),
+            ],
+        }
+        with open('outputs/telegram_manifest_2026-03-14.json', 'w') as f:
+            json.dump(payload, f)
+        result = load_telegram_manifest('2026-03-14')
+        assert len(result) == 2
+        urls = {m['match_url'] for m in result}
+        assert urls == {'http://tg/a', 'http://tg/b'}
+
+    def test_load_legacy_flat_list(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        with open('outputs/telegram_manifest_2026-03-14.json', 'w') as f:
+            json.dump([_match(url='http://tg/legacy')], f)
+        result = load_telegram_manifest('2026-03-14')
+        assert len(result) == 1
+        assert result[0]['match_url'] == 'http://tg/legacy'
+
+    def test_load_skips_entries_without_url(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        payload = {
+            'matches': [
+                {'home_team': 'X', 'away_team': 'Y'},  # missing match_url
+                _match(url='http://tg/ok'),
+            ],
+        }
+        with open('outputs/telegram_manifest_2026-03-14.json', 'w') as f:
+            json.dump(payload, f)
+        result = load_telegram_manifest('2026-03-14')
+        assert len(result) == 1
+        assert result[0]['match_url'] == 'http://tg/ok'
+
+    def test_load_deduplicates_urls(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        dup = _match(url='http://tg/dup')
+        payload = {'matches': [dup, dup]}
+        with open('outputs/telegram_manifest_2026-03-14.json', 'w') as f:
+            json.dump(payload, f)
+        result = load_telegram_manifest('2026-03-14')
+        assert len(result) == 1
+
+    def test_load_missing_file(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        result = load_telegram_manifest('1999-01-01')
+        assert result == []
+
+
+class TestMergeManifests:
+    def test_merge_dedup_by_url(self):
+        email = [_match(url='http://shared', home='E')]
+        telegram = [_match(url='http://shared', home='T'),
+                    _match(url='http://tg-only')]
+        merged = merge_manifests(email, telegram)
+        assert len(merged) == 2
+        urls = [m['match_url'] for m in merged]
+        assert urls == ['http://shared', 'http://tg-only']
+        # First manifest wins for populated fields.
+        assert merged[0]['home_team'] == 'E'
+
+    def test_merge_fills_missing_fields(self):
+        email = [{'match_url': 'http://x', 'home_team': 'Home'}]
+        telegram = [{'match_url': 'http://x', 'home_team': 'Home',
+                     'prediction_grade': 'A', 'favorite': 'A'}]
+        merged = merge_manifests(email, telegram)
+        assert merged[0]['prediction_grade'] == 'A'
+        assert merged[0]['favorite'] == 'A'
+
+    def test_merge_skips_entries_without_url(self):
+        merged = merge_manifests([{'home_team': 'X'}], [_match(url='http://ok')])
+        assert len(merged) == 1
+        assert merged[0]['match_url'] == 'http://ok'
+
+    def test_merge_empty_inputs(self):
+        assert merge_manifests([], []) == []

@@ -357,34 +357,56 @@ def _build_summary(
     return "\n".join(lines)
 
 
+# Keep in sync with email_notifier._MANIFEST_FIELDS so that check_results.py
+# can evaluate matches from either channel with the same logic.
+_MANIFEST_FIELDS = [
+    "match_url", "match_date", "match_time", "sport", "league",
+    "home_team", "away_team", "home_odds", "draw_odds", "away_odds",
+    "win_rate", "h2h_count", "home_wins_in_h2h_last5", "away_wins_in_h2h_last5",
+    "form_advantage", "forebet_prediction", "forebet_probability",
+    "gemini_prediction", "gemini_recommendation", "gemini_confidence",
+    "scoring_pick", "scoring_prob", "scoring_ev", "scoring_edge",
+    "qualifies", "focus_team",
+    # Tennis-specific: favorite drives _predicted_winner in check_results
+    "favorite",
+    "prediction_grade",
+]
+
+
 def _save_telegram_manifest(
     qual: List[Dict[str, Any]],
     date: str,
 ) -> None:
-    """Save a JSON manifest of matches sent to Telegram (for follow-up report)."""
+    """Save a JSON manifest of matches sent to Telegram (for follow-up report).
+
+    The payload mirrors the e-mail manifest: the top level is a dict with
+    metadata plus a ``matches`` list that contains every field check_results.py
+    needs to grade the pick (``match_url``, odds, ``focus_team``, ``favorite``
+    for tennis, etc.). Stored under ``outputs/telegram_manifest_{date}.json``.
+    """
+    import math as _math
     import os as _os
     import json as _json
+
+    records: List[Dict[str, Any]] = []
+    for m in qual:
+        rec: Dict[str, Any] = {}
+        for field in _MANIFEST_FIELDS:
+            val = m.get(field)
+            if isinstance(val, float):
+                try:
+                    if _math.isnan(val):
+                        val = None
+                except (TypeError, ValueError):
+                    pass
+            rec[field] = val
+        records.append(rec)
 
     manifest: Dict[str, Any] = {
         "date": date,
         "sent_at": datetime.now(_WARSAW_TZ).isoformat(),
-        "count": len(qual),
-        "matches": [
-            {
-                "home_team": m.get("home_team"),
-                "away_team": m.get("away_team"),
-                "sport": m.get("sport", "football"),
-                "league": m.get("league"),
-                "match_date": m.get("match_date"),
-                "match_time": m.get("match_time"),
-                "scoring_pick": m.get("scoring_pick"),
-                "forebet_prediction": m.get("forebet_prediction"),
-                "prediction_grade": m.get("prediction_grade"),
-                "home_odds": m.get("home_odds"),
-                "away_odds": m.get("away_odds"),
-            }
-            for m in qual
-        ],
+        "count": len(records),
+        "matches": records,
     }
 
     out_dir = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "outputs")

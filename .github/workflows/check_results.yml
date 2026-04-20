@@ -78,6 +78,26 @@ jobs:
             --password "${{ secrets.EMAIL_PASSWORD }}" \
             --provider gmail
 
+      # 6b. Check Telegram-only subset (accuracy of picks actually sent to Telegram).
+      # Runs only when a telegram manifest exists for the target date; skips mailing
+      # to avoid a duplicate report — the JSON summary is committed alongside the email one.
+      - name: Check Telegram-sent matches
+        if: always()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -f "outputs/telegram_manifest_${TARGET_DATE}.json" ]; then
+            echo "📨 Telegram manifest found — checking results for picks sent to Telegram..."
+            python check_results.py \
+              --date $TARGET_DATE \
+              --headless \
+              --manifest telegram
+          else
+            echo "ℹ️ No telegram manifest for $TARGET_DATE — skipping Telegram subset check"
+          fi
+
       # 7. Commit result summary
       - name: Commit result summary
         run: |

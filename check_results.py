@@ -65,7 +65,7 @@ def load_manifests(date: str) -> List[Dict[str, Any]]:
     files = sorted(glob.glob(pattern))
 
     if not files:
-        print(f"❌ Brak manifestów dla daty {date}")
+        print(f"❌ Brak manifestów email dla daty {date}")
         print(f"   Szukano: {pattern}")
         return []
 
@@ -85,8 +85,84 @@ def load_manifests(date: str) -> List[Dict[str, Any]]:
         except (json.JSONDecodeError, OSError) as e:
             print(f"   ⚠️ Błąd wczytywania {fpath}: {e}")
 
-    print(f"✅ Wczytano łącznie {len(all_matches)} unikalnych meczów z manifestów")
+    print(f"✅ Wczytano łącznie {len(all_matches)} unikalnych meczów z manifestów email")
     return all_matches
+
+
+def load_telegram_manifest(date: str) -> List[Dict[str, Any]]:
+    """Load the Telegram manifest for *date* and return a list of match dicts.
+
+    Supports both the current schema (``{"matches": [...]}``) and a legacy
+    flat-list schema. Matches without ``match_url`` are skipped with a warning
+    because the result scraper relies on it.
+    """
+    path = f'outputs/telegram_manifest_{date}.json'
+    if not os.path.isfile(path):
+        print(f"❌ Brak manifestu Telegram dla daty {date}")
+        print(f"   Szukano: {path}")
+        return []
+
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"   ⚠️ Błąd wczytywania {path}: {e}")
+        return []
+
+    if isinstance(data, list):
+        raw = data
+    elif isinstance(data, dict):
+        raw = data.get('matches', []) or []
+    else:
+        raw = []
+
+    matches: List[Dict[str, Any]] = []
+    missing_url = 0
+    seen_urls: set[str] = set()
+    for m in raw:
+        if not isinstance(m, dict):
+            continue
+        url = m.get('match_url')
+        if not url:
+            missing_url += 1
+            continue
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+        matches.append(m)
+
+    print(f"   📂 {path}: {len(matches)} meczów")
+    if missing_url:
+        print(
+            f"   ⚠️ Pominięto {missing_url} rekord(ów) bez match_url — "
+            "manifest pochodzi ze starej wersji telegram_notifier.py"
+        )
+    print(f"✅ Wczytano łącznie {len(matches)} unikalnych meczów z manifestu Telegram")
+    return matches
+
+
+def merge_manifests(*manifests: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Merge one or more manifest lists, deduplicating by ``match_url``.
+
+    Later manifests can enrich earlier entries with fields that were missing
+    (e.g. the Telegram manifest may carry ``prediction_grade`` while the mail
+    manifest wins on URL presence).
+    """
+    merged: Dict[str, Dict[str, Any]] = {}
+    order: List[str] = []
+    for manifest in manifests:
+        for m in manifest:
+            url = m.get('match_url')
+            if not url:
+                continue
+            if url not in merged:
+                merged[url] = dict(m)
+                order.append(url)
+            else:
+                for k, v in m.items():
+                    if v not in (None, '') and merged[url].get(k) in (None, ''):
+                        merged[url][k] = v
+    return [merged[u] for u in order]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -507,10 +583,15 @@ def send_report_email(
 # 5. SUMMARY PERSISTENCE (idempotent)
 # ═══════════════════════════════════════════════════════════════════════════
 
-def save_summary(stats: Dict[str, Any], date: str) -> str:
-    """Save evaluation summary JSON for auditing. Returns file path."""
+def save_summary(stats: Dict[str, Any], date: str, tag: str = '') -> str:
+    """Save evaluation summary JSON for auditing. Returns file path.
+
+    ``tag`` suffixes the filename so email and Telegram audits do not
+    overwrite each other (e.g. ``results_summary_2026-04-21_telegram.json``).
+    """
     os.makedirs('outputs', exist_ok=True)
-    path = f'outputs/results_summary_{date}.json'
+    suffix = f'_{tag}' if tag else ''
+    path = f'outputs/results_summary_{date}{suffix}.json'
 
     # Strip full details for the summary file (keep it concise)
     summary = {k: v for k, v in stats.items() if k != 'details'}
@@ -557,6 +638,15 @@ def main():
     parser.add_argument('--from-email', help='Email nadawcy')
     parser.add_argument('--password', help='Hasło email (lub App Password)')
     parser.add_argument('--provider', default='gmail', choices=['gmail', 'outlook', 'yahoo'])
+    parser.add_argument(
+        '--manifest',
+        default='email',
+        choices=['email', 'telegram', 'both'],
+        help=(
+            'Źródło manifestu: email (domyślnie; outputs/mailed_manifest_*.json), '
+            'telegram (outputs/telegram_manifest_{date}.json) lub both (unia po match_url).'
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -568,12 +658,28 @@ def main():
     else:
         target_date = datetime.now().strftime('%Y-%m-%d')
 
+    source = args.manifest
+    summary_tag = '' if source == 'email' else source  # email keeps legacy filename
+    channel_label = {
+        'email': 'wysłanych mailem',
+        'telegram': 'wysłanych na Telegram',
+        'both': 'wysłanych mailem lub na Telegram',
+    }[source]
+
     print(f"\n{'='*70}")
-    print(f"📊 CHECK RESULTS — {target_date}")
+    print(f"📊 CHECK RESULTS — {target_date} ({source})")
     print(f"{'='*70}\n")
 
     # 1. Load manifests
-    matches = load_manifests(target_date)
+    if source == 'email':
+        matches = load_manifests(target_date)
+    elif source == 'telegram':
+        matches = load_telegram_manifest(target_date)
+    else:  # both
+        matches = merge_manifests(
+            load_manifests(target_date),
+            load_telegram_manifest(target_date),
+        )
     if not matches:
         print("⚠️ Brak danych do sprawdzenia — koniec.")
         return
@@ -615,7 +721,7 @@ def main():
     print(f"\n{'='*70}")
     print(f"📊 PODSUMOWANIE — {target_date}")
     print(f"{'='*70}")
-    print(f"  Łącznie wysłanych mailem: {stats['total']}")
+    print(f"  Łącznie {channel_label}: {stats['total']}")
     print(f"  Zakończone:              {stats['finished']}")
     print(f"  ✅ Wygrane:               {stats['won']}")
     print(f"  ❌ Przegrane:             {stats['lost']}")
@@ -626,7 +732,7 @@ def main():
     print(f"{'='*70}\n")
 
     # 4. Save summary
-    save_summary(stats, target_date)
+    save_summary(stats, target_date, tag=summary_tag)
 
     # 4b. Persist to result store for backtesting
     if _result_store_ok:
