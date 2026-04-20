@@ -165,20 +165,42 @@ def _is_future_match(match: Dict[str, Any], now_warsaw: datetime) -> bool:
     return parsed.hour * 60 + parsed.minute > now_warsaw.hour * 60 + now_warsaw.minute
 
 
+def _canonical_pick(match: Dict[str, Any]) -> str:
+    """Return '1', 'X', '2' or '' for the recommended pick.
+
+    Falls back to ``focus_team`` when neither ``scoring_pick`` nor
+    ``forebet_prediction`` is set (edge case where Forebet failed but the
+    form-advantage focus is still known).
+    """
+    raw = (match.get("scoring_pick") or match.get("forebet_prediction") or "").strip().upper()
+    if raw in ("1", "H", "1X"):
+        return "1"
+    if raw in ("2", "A", "X2"):
+        return "2"
+    if raw == "X":
+        return "X"
+    focus = (match.get("focus_team") or "").strip().lower()
+    if focus == "home":
+        return "1"
+    if focus == "away":
+        return "2"
+    return ""
+
+
 def _pick_odds(match: Dict[str, Any]) -> str:
     """Return formatted odds value for the recommended pick, or ''."""
-    pick = (match.get("scoring_pick") or match.get("forebet_prediction") or "").strip().upper()
+    pick = _canonical_pick(match)
     ho = match.get("home_odds")
     ao = match.get("away_odds")
     do = match.get("draw_odds")
     odds_val = None
-    if pick in ("1", "H", "1X"):
+    if pick == "1":
         odds_val = ho
-    elif pick in ("2", "A", "X2"):
+    elif pick == "2":
         odds_val = ao
-    elif pick == "X" and do:
+    elif pick == "X":
         odds_val = do
-    elif ho:
+    if odds_val is None:
         odds_val = ho
     if odds_val:
         try:
@@ -186,6 +208,69 @@ def _pick_odds(match: Dict[str, Any]) -> str:
         except (ValueError, TypeError):
             pass
     return ""
+
+
+def _describe_pick(match: Dict[str, Any]) -> str:
+    """Human-readable 'what to bet' line, e.g. 'Home win (1) — Arsenal'.
+
+    Returns an empty string when no pick can be inferred — callers skip the
+    Bet line in that case so the template never prints a half-empty entry.
+    """
+    pick = _canonical_pick(match)
+    home = (match.get("home_team") or "").strip()
+    away = (match.get("away_team") or "").strip()
+    sport = (match.get("sport") or "").lower()
+
+    if pick == "1":
+        label = "Player 1 to win (1)" if sport == "tennis" else "Home win (1)"
+        side = home
+    elif pick == "2":
+        label = "Player 2 to win (2)" if sport == "tennis" else "Away win (2)"
+        side = away
+    elif pick == "X":
+        return "Draw (X)"
+    else:
+        return ""
+
+    return f"{label} \u2014 {side}" if side else label
+
+
+def _forebet_line(match: Dict[str, Any]) -> str:
+    """Labeled Forebet line, e.g. 'Forebet: pick 1 at 65%'. Returns '' when missing."""
+    pred = (match.get("forebet_prediction") or "").strip()
+    prob = match.get("forebet_probability")
+    if not pred or prob is None:
+        return ""
+    try:
+        return f"Forebet: pick {pred} at {float(prob):.0f}%"
+    except (ValueError, TypeError):
+        return ""
+
+
+def _sofascore_fan_vote_line(match: Dict[str, Any]) -> str:
+    """Labeled SofaScore fan-vote line with the leading outcome.
+
+    Example: 'SofaScore fan vote: 83% on 1' (where 1/X/2 follows the
+    outcome with the highest share). Returns '' when no probabilities
+    are present.
+    """
+    probs = {
+        "1": match.get("sofascore_home_win_prob"),
+        "X": match.get("sofascore_draw_prob"),
+        "2": match.get("sofascore_away_win_prob"),
+    }
+    numeric = {}
+    for key, val in probs.items():
+        if val is None:
+            continue
+        try:
+            numeric[key] = float(val)
+        except (ValueError, TypeError):
+            continue
+    if not numeric:
+        return ""
+    leading = max(numeric, key=lambda k: numeric[k])
+    return f"SofaScore fan vote: {numeric[leading]:.0f}% on {leading}"
 
 
 # ---------------------------------------------------------------------------
@@ -284,57 +369,53 @@ def _build_summary(
             home = m.get("home_team", "?")
             away = m.get("away_team", "?")
 
-            lines.append(f"🏠 {home} vs {away}")
+            lines.append(f"🏠 <b>{home}</b> vs <b>{away}</b>")
 
-            # Match time
+            league = (m.get("league") or "").strip()
+            if league:
+                lines.append(f"🏆 League: {league}")
+
             parsed_time = _parse_match_time(m.get("match_time"))
             if parsed_time:
-                lines.append(f"🕐 {parsed_time.strftime('%H:%M')}")
+                lines.append(f"🕐 Kick-off: {parsed_time.strftime('%H:%M')}")
 
-            # Form advantage (confidence %)
+            bet_text = _describe_pick(m)
+            if bet_text:
+                lines.append(f"🎯 <b>Bet:</b> {bet_text}")
+
+            odds_str = _pick_odds(m)
+            if odds_str:
+                lines.append(f"💰 Odds (this line): {odds_str}")
+
             conf = m.get("ai_composite_confidence") or m.get("scoring_confidence") or 0
             try:
                 conf_val = float(conf)
                 if conf_val > 0:
-                    lines.append(f"📊 Form edge: {conf_val:.0f}%")
+                    lines.append(f"📊 Model confidence: {conf_val:.0f}%")
             except (ValueError, TypeError):
                 pass
 
-            # Odds for recommended pick
-            odds_str = _pick_odds(m)
-            if odds_str:
-                lines.append(f"💰 Odds: {odds_str}")
-
-            # Premium extras — compact single line
-            extras: list[str] = []
             ev = m.get("scoring_ev")
+            has_value = False
             try:
                 if ev is not None and float(ev) > 0:
-                    extras.append("💰VALUE")
+                    has_value = True
             except (ValueError, TypeError):
-                pass
-
-            fb_pred = m.get("forebet_prediction", "")
-            fb_prob = m.get("forebet_probability")
-            if fb_pred and fb_prob:
+                has_value = False
+            if has_value:
                 try:
-                    extras.append(f"Forebet: {fb_pred} {float(fb_prob):.0f}%")
+                    lines.append(f"💎 Value: positive EV ({float(ev):+.2f})")
                 except (ValueError, TypeError):
-                    pass
+                    lines.append("💎 Value: positive EV")
 
-            fv_probs = [m.get("sofascore_home_win_prob"), m.get("sofascore_draw_prob"), m.get("sofascore_away_win_prob")]
-            fv_vals = [p for p in fv_probs if p is not None]
-            if fv_vals:
-                try:
-                    extras.append(f"👥{max(float(p) for p in fv_vals):.0f}%")
-                except (ValueError, TypeError):
-                    pass
+            forebet = _forebet_line(m)
+            if forebet:
+                lines.append(f"🧮 {forebet}")
 
-            if extras:
-                lines.append(f"📌 {' | '.join(extras)}")
+            fan_vote = _sofascore_fan_vote_line(m)
+            if fan_vote:
+                lines.append(f"👥 {fan_vote}")
 
-            # Model explanation — primary factors & risk
-            grade = m.get("prediction_grade", "")
             explanation: Dict[str, Any] = m.get("explanation") or {}
             factors: List[str] = explanation.get("primary_factors", [])
             risks: List[str] = [
@@ -342,17 +423,20 @@ def _build_summary(
                 if r != "Fatigue risk: high"
             ]
             if factors:
-                lines.append(f"✅ {' · '.join(factors[:3])}")
+                lines.append(f"✅ Why: {' · '.join(factors[:3])}")
             if risks:
-                lines.append(f"⚠️ {' · '.join(risks[:2])}")
+                lines.append(f"⚠️ Risks: {' · '.join(risks[:2])}")
+
+            grade = m.get("prediction_grade", "")
             if grade:
                 lines.append(f"🏅 Grade: {grade}")
 
-            lines.append("")  # blank line between matches
+            lines.append("")
 
     lines.append("━━━━━━━━━━━━━━━")
     lines.append(f"📈 Top signals today: {total_signals}")
-    lines.append("🏅 Only Grade A & B picks")
+    lines.append("🏅 Only Grade A &amp; B picks")
+    lines.append("ℹ️ EV = expected value from the model (positive EV = edge vs. offered odds).")
     lines.append("⚠️ Bet responsibly")
     return "\n".join(lines)
 

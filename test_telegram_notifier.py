@@ -49,6 +49,7 @@ _ROWS = [
         "forebet_prediction": "1",
         "forebet_probability": 72,
         "match_time": "14.03.2026 20:45",
+        "prediction_grade": "A",
     },
     {
         "home_team": "Barcelona",
@@ -61,6 +62,7 @@ _ROWS = [
         "home_odds": 2.10,
         "away_odds": 2.90,
         "match_time": "14.03.2026 18:30",
+        "prediction_grade": "B",
     },
     {
         "home_team": "Djokovic",
@@ -76,6 +78,7 @@ _ROWS = [
         "sofascore_draw_prob": None,
         "sofascore_away_win_prob": 15,
         "match_time": "14.03.2026 19:00",
+        "prediction_grade": "A",
     },
     {
         "home_team": "TeamA",
@@ -110,28 +113,34 @@ class TestBuildSummary:
     def test_match_details_present(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Liverpool vs Arsenal" in text
-        assert "Djokovic vs Nadal" in text
+        assert "<b>Liverpool</b> vs <b>Arsenal</b>" in text
+        assert "<b>Djokovic</b> vs <b>Nadal</b>" in text
 
     def test_match_time_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "🕐 20:45" in text  # Liverpool's match time
+        assert "🕐 Kick-off: 20:45" in text  # Liverpool's match time
 
-    def test_form_advantage_shown(self):
+    def test_model_confidence_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Form edge: 75%" in text  # Liverpool's confidence
+        assert "Model confidence: 75%" in text  # Liverpool's composite confidence
+
+    def test_bet_line_shown(self):
+        mod = _load_module()
+        text = mod._build_summary(_ROWS, 3, "2026-03-14")
+        # Liverpool's scoring_pick = "1" → "Home win (1) — Liverpool"
+        assert "<b>Bet:</b> Home win (1) \u2014 Liverpool" in text
 
     def test_pick_odds_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "💰 Odds:" in text
+        assert "💰 Odds (this line):" in text
 
     def test_signal_count(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Signals today:" in text
+        assert "Top signals today:" in text
 
     def test_responsible_gambling_footer(self):
         mod = _load_module()
@@ -150,19 +159,20 @@ class TestBuildSummary:
                 "scoring_confidence": 60,
                 "home_odds": 1.80,
                 "away_odds": 3.00,
+                "prediction_grade": "A",
             }
             for i in range(200)
         ]
         text = mod._build_summary(big_rows, 200, "2026-03-14")
         # Only 10 matches should appear (cap per sport)
-        assert text.count("🏠 Home") == 10
+        assert text.count("🏠 <b>Home") == 10
 
     def test_empty_qualifying(self):
         mod = _load_module()
         rows = [{"home_team": "A", "away_team": "B", "sport": "football", "qualifies": False}]
         text = mod._build_summary(rows, 0, "2026-03-14")
         # No special "no qualifying" text — just 0 signals
-        assert "Signals today: 0" in text
+        assert "Top signals today: 0" in text
 
 
 # ---------------------------------------------------------------------------
@@ -307,7 +317,7 @@ class TestFiltersInBuildSummary:
         ]
         text = mod._build_summary(rows, 1, "2026-03-14")
         assert "A vs B" not in text
-        assert "Signals today: 0" in text
+        assert "Top signals today: 0" in text
 
     def test_low_fanvote_excluded(self):
         mod = _load_module()
@@ -323,25 +333,28 @@ class TestFiltersInBuildSummary:
         mod = _load_module()
         rows = [
             {"home_team": "E", "away_team": "F", "sport": "football",
-             "qualifies": True, "home_odds": 1.85, "away_odds": 3.40},
+             "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
+             "prediction_grade": "A"},
         ]
         text = mod._build_summary(rows, 1, "2026-03-14")
-        assert "E vs F" in text
+        assert "E</b> vs <b>F" in text
 
     def test_value_tag_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "💰VALUE" in text  # Liverpool has scoring_ev > 0
+        # Liverpool has scoring_ev > 0 → labeled Value line
+        assert "Value: positive EV" in text
 
     def test_forebet_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Forebet:" in text  # Liverpool has forebet data
+        assert "Forebet: pick 1 at 72%" in text  # Liverpool has forebet data
 
     def test_fan_vote_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "👥" in text  # Liverpool has sofascore data
+        # Liverpool leads with home (1) at 68% via SofaScore
+        assert "SofaScore fan vote: 68% on 1" in text
 
 
 # ---------------------------------------------------------------------------
@@ -366,10 +379,10 @@ class TestTimeFilter:
         rows = [
             {"home_team": "A", "away_team": "B", "sport": "football",
              "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
-             "match_time": "14.03.2026 20:45"},
+             "match_time": "14.03.2026 20:45", "prediction_grade": "A"},
         ]
         text = mod._build_summary(rows, 1, "2026-03-14", _now=now)
-        assert "A vs B" in text
+        assert "A</b> vs <b>B" in text
 
     def test_different_date_not_filtered(self):
         mod = _load_module()
@@ -377,20 +390,21 @@ class TestTimeFilter:
         rows = [
             {"home_team": "A", "away_team": "B", "sport": "football",
              "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
-             "match_time": "14.03.2026 12:00"},
+             "match_time": "14.03.2026 12:00", "prediction_grade": "A"},
         ]
         text = mod._build_summary(rows, 1, "2026-03-14", _now=now)
-        assert "A vs B" in text
+        assert "A</b> vs <b>B" in text
 
     def test_no_match_time_included(self):
         mod = _load_module()
         now = datetime(2026, 3, 14, 23, 0)
         rows = [
             {"home_team": "A", "away_team": "B", "sport": "football",
-             "qualifies": True, "home_odds": 1.85, "away_odds": 3.40},
+             "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
+             "prediction_grade": "A"},
         ]
         text = mod._build_summary(rows, 1, "2026-03-14", _now=now)
-        assert "A vs B" in text
+        assert "A</b> vs <b>B" in text
 
     def test_invalid_match_time_included(self):
         mod = _load_module()
@@ -398,10 +412,10 @@ class TestTimeFilter:
         rows = [
             {"home_team": "A", "away_team": "B", "sport": "football",
              "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
-             "match_time": "invalid format"},
+             "match_time": "invalid format", "prediction_grade": "A"},
         ]
         text = mod._build_summary(rows, 1, "2026-03-14", _now=now)
-        assert "A vs B" in text
+        assert "A</b> vs <b>B" in text
 
 
 # ---------------------------------------------------------------------------
@@ -481,6 +495,7 @@ class TestFatigueRiskFilter:
             "home_team": "X", "away_team": "Y", "sport": "football",
             "qualifies": True, "home_odds": 1.85, "away_odds": 3.40,
             "scoring_confidence": 70,
+            "prediction_grade": "A",
             "explanation": {"risk_factors": risk_factors},
         }
 

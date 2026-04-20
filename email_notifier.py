@@ -208,6 +208,84 @@ def _clean_odds_for_render(val: Any) -> Optional[float]:
         return None
 
 
+def _canonical_pick_code(raw: Any) -> Optional[str]:
+    """
+    Normalizuj surowy typ modelu/Forebet do kodu '1' / 'X' / '2'.
+
+    Akceptuje warianty używane w różnych silnikach: '1'/'H'/'1X' → '1',
+    '2'/'A'/'X2' → '2', 'X' → 'X'. Zwraca None gdy wartość jest pusta
+    lub nieznana, żeby wywołujący mógł pominąć linię „Typ modelu".
+    """
+    if raw is None:
+        return None
+    s = str(raw).strip().upper()
+    if not s or s in ('NONE', 'NAN'):
+        return None
+    if s in ('1', 'H', '1X'):
+        return '1'
+    if s in ('2', 'A', 'X2'):
+        return '2'
+    if s == 'X':
+        return 'X'
+    return None
+
+
+def _pick_odds_value(pick: Optional[str], home_odds: Optional[float],
+                     draw_odds: Optional[float], away_odds: Optional[float]) -> Optional[float]:
+    """Zwróć kurs odpowiadający znormalizowanemu pickowi ('1'/'X'/'2')."""
+    if pick == '1':
+        return home_odds if home_odds and home_odds > 0 else None
+    if pick == '2':
+        return away_odds if away_odds and away_odds > 0 else None
+    if pick == 'X':
+        return draw_odds if draw_odds and draw_odds > 0 else None
+    return None
+
+
+def _render_model_pick_section(match: Dict[str, Any],
+                               home_odds: Optional[float],
+                               draw_odds: Optional[float],
+                               away_odds: Optional[float],
+                               is_tennis: bool) -> str:
+    """
+    Renderuj wyraźną linię „Typ modelu" z pickiem i odpowiadającym mu kursem.
+
+    Pick pochodzi ze `scoring_pick` (lub `forebet_prediction` jako fallback),
+    znormalizowany przez :func:`_canonical_pick_code`. Dzięki temu użytkownik
+    widzi jasną rekomendację zamiast domyślać się jej z kolorowania sekcji
+    kursów (gdzie zielony = najniższy kurs, a nie typ modelu).
+    """
+    pick = _canonical_pick_code(match.get('scoring_pick'))
+    source = 'Scoring'
+    if pick is None:
+        pick = _canonical_pick_code(match.get('forebet_prediction'))
+        source = 'Forebet'
+    if pick is None:
+        return ''
+
+    home = safe_value(match.get('home_team'), '')
+    away = safe_value(match.get('away_team'), '')
+    if is_tennis:
+        pick_labels = {'1': f'Gracz 1 — {home}' if home else 'Gracz 1',
+                       '2': f'Gracz 2 — {away}' if away else 'Gracz 2',
+                       'X': 'Remis (X)'}
+    else:
+        pick_labels = {'1': f'Gospodarze (1) — {home}' if home else 'Gospodarze (1)',
+                       '2': f'Goście (2) — {away}' if away else 'Goście (2)',
+                       'X': 'Remis (X)'}
+    label = pick_labels.get(pick, pick)
+
+    odds_val = _pick_odds_value(pick, home_odds, draw_odds, away_odds)
+    odds_str = f'@ {odds_val:.2f}' if odds_val else ''
+
+    return f'''
+    <div style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); border-radius: 8px; color: white;">
+        <div style="font-size: 11px; color: rgba(255,255,255,0.75); margin-bottom: 4px;">🎯 Typ modelu ({source})</div>
+        <div style="font-size: 18px; font-weight: 700;">{pick} — {label} <span style="color: #ffd740;">{odds_str}</span></div>
+    </div>
+    '''
+
+
 def _render_odds_section(home_odds: Optional[float], draw_odds: Optional[float], away_odds: Optional[float]) -> str:
     """
     Renderuje sekcję kursów w HTML.
@@ -243,7 +321,8 @@ def _render_odds_section(home_odds: Optional[float], draw_odds: Optional[float],
     
     html = '''
     <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
-        <div style="font-size: 11px; color: #666; margin-bottom: 8px;">💰 Kursy bukmacherskie</div>
+        <div style="font-size: 11px; color: #666; margin-bottom: 4px;">💰 Kursy bukmacherskie</div>
+        <div style="font-size: 10px; color: #999; margin-bottom: 8px;">Zielone podświetlenie = najniższy kurs (faworyt bukmachera), nie typ modelu</div>
         <div style="display: flex; justify-content: space-around;">
     '''
     
@@ -819,7 +898,12 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         sc_tpa = safe_float(sc_tpa_raw) if not is_nan_or_none(sc_tpa_raw) else None
         sc_tpb_raw = match.get('scoring_prob_b')
         sc_tpb = safe_float(sc_tpb_raw) if not is_nan_or_none(sc_tpb_raw) else None
-        has_scoring = sc_pick is not None and sc_prob is not None
+        # Pokaż blok Scoring Engine, jeśli dostępny jest choć pick lub prob.
+        # Brakujące pola renderują się jako "—", więc użytkownik nie widzi
+        # dziury w miejsce promowanej rekomendacji.
+        has_scoring = sc_pick is not None or sc_prob is not None
+        sc_prob_str = f"{sc_prob:.0f}%" if sc_prob is not None else "—"
+        sc_pick_str = sc_pick if sc_pick is not None else "—"
         
         # AI PREDICTION PRO - bezpieczne pobieranie
         ai_pred = ensure_ai_prediction_dict(match.get('ai_prediction'))
@@ -881,7 +965,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     <div style="font-size: 22px; font-weight: bold; color: #333;">
                         {'🎾' if is_tennis else '🏠'} {home} <span style="color: #999; font-size: 16px;">vs</span> {away} {'🎾' if is_tennis else '✈️'}
                     </div>
-                    {f'<div style="margin-top: 5px;"><span style="background: #FFD700; color: #333; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">🔥 Przewaga gospodarzy!</span></div>' if form_advantage and not is_tennis else ''}
+                    {f'<div style="margin-top: 5px;"><span style="background: #FFD700; color: #333; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">🔥 Przewaga { "gości" if focus_team == "away" else "gospodarzy" }!</span></div>' if form_advantage and not is_tennis else ''}
                     {f'<div style="margin-top: 8px;"><span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Advanced Score: {advanced_score:.0f}/100</span></div>' if is_tennis and advanced_score > 0 else ''}
                     {f'<div style="margin-top: 5px; font-size: 12px; color: #666;">{ranking_info}</div>' if is_tennis and ranking_info else ''}
                 </div>
@@ -953,6 +1037,9 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     </div>
                     ''' if has_sofascore else ''}
                     
+                    <!-- TYP MODELU (wyraźna rekomendacja) -->
+                    {_render_model_pick_section(match, home_odds, draw_odds, away_odds, is_tennis)}
+
                     <!-- KURSY -->
                     {_render_odds_section(home_odds, draw_odds, away_odds) if has_odds else ''}
                     
@@ -965,11 +1052,11 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                         <div style="font-size: 11px; color: rgba(255,255,255,0.8); margin-bottom: 8px;">{"🎾 Tennis Engine (5-factor)" if is_tennis else "🧠 Scoring Engine (7-source model)"}</div>
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
                             <div style="text-align: center; min-width: 60px;">
-                                <div style="font-size: 20px; font-weight: bold; color: #ffd740;">{sc_pick}</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #ffd740;">{sc_pick_str}</div>
                                 <div style="font-size: 9px; color: rgba(255,255,255,0.6);">TYP</div>
                             </div>
                             <div style="text-align: center; min-width: 60px;">
-                                <div style="font-size: 20px; font-weight: bold;">{sc_prob:.0f}%</div>
+                                <div style="font-size: 20px; font-weight: bold;">{sc_prob_str}</div>
                                 <div style="font-size: 9px; color: rgba(255,255,255,0.6);">PROB</div>
                             </div>
                             <div style="text-align: center; min-width: 60px;">
