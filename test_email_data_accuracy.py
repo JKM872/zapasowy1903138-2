@@ -16,6 +16,7 @@ from email_notifier import (
     _canonical_pick_code,
     _pick_odds_value,
     _render_model_pick_section,
+    _sofascore_from_match,
     create_html_email,
 )
 
@@ -46,6 +47,33 @@ class TestPickOddsValue:
 
     def test_zero_treated_as_missing(self):
         assert _pick_odds_value("1", 0.0, 3.40, 4.20) is None
+
+
+class TestSofascoreFromMatch:
+    def test_flat_keys_preferred(self):
+        m = {
+            "sofascore_home_win_prob": 60, "sofascore_draw_prob": 20,
+            "sofascore_away_win_prob": 20, "sofascore_total_votes": 500,
+            "sofascore": {"home": 1, "draw": 1, "away": 1, "votes": 1},
+        }
+        assert _sofascore_from_match(m) == (60.0, 20.0, 20.0, 500)
+
+    def test_nested_dict_used_when_flat_missing(self):
+        m = {"sofascore": {"home": 58, "draw": 13, "away": 29, "votes": 1000}}
+        assert _sofascore_from_match(m) == (58.0, 13.0, 29.0, 1000)
+
+    def test_nested_partial(self):
+        m = {"sofascore": {"home": 70, "away": 30}}
+        h, d, a, v = _sofascore_from_match(m)
+        assert (h, a, v) == (70.0, 30.0, 0)
+        assert d is None
+
+    def test_json_string_nested(self):
+        m = {"sofascore": '{"home": 55, "draw": 25, "away": 20, "votes": 200}'}
+        assert _sofascore_from_match(m) == (55.0, 25.0, 20.0, 200)
+
+    def test_no_data(self):
+        assert _sofascore_from_match({}) == (None, None, None, 0)
 
 
 class TestModelPickSection:
@@ -131,6 +159,27 @@ class TestBuildHtmlContract:
         # Blok musi się pojawić, a brak prob pokazuje się jako "—".
         assert "Scoring Engine" in html
         assert ">\u2014<" in html  # placeholder gdzieś w bloku
+
+    def test_sofascore_block_from_nested_dict(self):
+        """Mecz bez płaskich `sofascore_*`, ale z `sofascore={...}` musi pokazać Fan Vote."""
+        match = self._base_match()
+        for k in ("sofascore_home_win_prob", "sofascore_draw_prob",
+                  "sofascore_away_win_prob", "sofascore_total_votes"):
+            match.pop(k, None)
+        match["sofascore"] = {"home": 58, "draw": 13, "away": 29, "votes": 1000}
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote" in html
+        assert "58.0%" in html
+        assert "29.0%" in html
+        assert "(1000 g\u0142os\u00f3w)" in html
+
+    def test_sofascore_block_hidden_without_any_data(self):
+        match = self._base_match()
+        for k in ("sofascore_home_win_prob", "sofascore_draw_prob",
+                  "sofascore_away_win_prob", "sofascore_total_votes"):
+            match.pop(k, None)
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote" not in html
 
     def test_scoring_block_hidden_when_no_pick_and_no_prob(self):
         match = self._base_match()

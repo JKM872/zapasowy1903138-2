@@ -208,6 +208,59 @@ def _clean_odds_for_render(val: Any) -> Optional[float]:
         return None
 
 
+def _sofascore_from_match(match: Dict[str, Any]) -> tuple:
+    """Zwróć (home, draw, away, votes) dla bloku Fan Vote w mailu.
+
+    Najpierw bierze płaskie pola (`sofascore_home_win_prob`, …), a w razie
+    braku — sięga do zagnieżdżonego ``match['sofascore']`` (klucze ``home`` /
+    ``draw`` / ``away`` / ``votes``), żeby zachować spójność z kontraktem
+    używanym w :mod:`api_server` i artefaktach JSON. ``sofascore`` może być
+    słownikiem albo stringiem JSON (po round-tripie przez CSV).
+    """
+    flat_home = match.get('sofascore_home_win_prob')
+    if is_nan_or_none(flat_home):
+        flat_home = match.get('sofascore_home')
+    flat_draw = match.get('sofascore_draw_prob')
+    if is_nan_or_none(flat_draw):
+        flat_draw = match.get('sofascore_draw')
+    flat_away = match.get('sofascore_away_win_prob')
+    if is_nan_or_none(flat_away):
+        flat_away = match.get('sofascore_away')
+    flat_votes = match.get('sofascore_total_votes')
+    if is_nan_or_none(flat_votes):
+        flat_votes = match.get('sofascore_votes')
+
+    nested_raw = match.get('sofascore')
+    nested: Dict[str, Any] = {}
+    if isinstance(nested_raw, dict):
+        nested = nested_raw  # type: ignore[assignment]
+    elif isinstance(nested_raw, str):
+        s = nested_raw.strip()
+        if s and s.lower() not in ('nan', 'none'):
+            try:
+                parsed = json.loads(s.replace("'", '"'))
+                if isinstance(parsed, dict):
+                    nested = parsed  # type: ignore[assignment]
+            except (json.JSONDecodeError, ValueError):
+                nested = {}
+
+    def _coalesce(flat: Any, key: str) -> Any:
+        if not is_nan_or_none(flat):
+            return flat
+        return nested.get(key) if nested else None
+
+    home_raw = _coalesce(flat_home, 'home')
+    draw_raw = _coalesce(flat_draw, 'draw')
+    away_raw = _coalesce(flat_away, 'away')
+    votes_raw = _coalesce(flat_votes, 'votes')
+
+    home = safe_float(home_raw) if not is_nan_or_none(home_raw) else None
+    draw = safe_float(draw_raw) if not is_nan_or_none(draw_raw) else None
+    away = safe_float(away_raw) if not is_nan_or_none(away_raw) else None
+    votes = int(safe_float(votes_raw)) if not is_nan_or_none(votes_raw) else 0
+    return home, draw, away, votes
+
+
 def _canonical_pick_code(raw: Any) -> Optional[str]:
     """
     Normalizuj surowy typ modelu/Forebet do kodu '1' / 'X' / '2'.
@@ -834,24 +887,8 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         else:
             wins = int(safe_float(match.get('home_wins_in_h2h_last5', 0)))
         
-        # SofaScore - bezpieczne pobieranie z obsługą NaN i wartości 0
-        ss_home_raw = match.get('sofascore_home_win_prob')
-        if is_nan_or_none(ss_home_raw):
-            ss_home_raw = match.get('sofascore_home')
-        ss_draw_raw = match.get('sofascore_draw_prob')
-        if is_nan_or_none(ss_draw_raw):
-            ss_draw_raw = match.get('sofascore_draw')
-        ss_away_raw = match.get('sofascore_away_win_prob')
-        if is_nan_or_none(ss_away_raw):
-            ss_away_raw = match.get('sofascore_away')
-        ss_votes_raw = match.get('sofascore_total_votes')
-        if is_nan_or_none(ss_votes_raw):
-            ss_votes_raw = match.get('sofascore_votes', 0)
-        
-        ss_home = safe_float(ss_home_raw) if not is_nan_or_none(ss_home_raw) else None
-        ss_draw = safe_float(ss_draw_raw) if not is_nan_or_none(ss_draw_raw) else None
-        ss_away = safe_float(ss_away_raw) if not is_nan_or_none(ss_away_raw) else None
-        ss_votes = int(safe_float(ss_votes_raw))
+        # SofaScore - jednolita ekstrakcja z płaskich pól lub zagnieżdżonego dict
+        ss_home, ss_draw, ss_away, ss_votes = _sofascore_from_match(match)
         # Flaga: pokaż SofaScore jeśli DOWOLNA wartość jest dostępna (home/away/draw/votes)
         has_sofascore = (ss_home is not None or ss_away is not None or 
                          ss_draw is not None or ss_votes > 0)
