@@ -68,10 +68,22 @@ jobs:
       - name: Install Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser chromium-chromedriver
-          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
-          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
-          echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser" >> $GITHUB_ENV
+          sudo apt-get install -y google-chrome-stable
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          echo "CHROME_BIN=${CHROME_PATH}" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=${CHROME_PATH}" >> $GITHUB_ENV
+
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Verify Chrome
+        run: |
+          CHROMEDRIVER_PATH="$(command -v chromedriver)"
+          echo "CHROMEDRIVER_PATH=${CHROMEDRIVER_PATH}" >> $GITHUB_ENV
+          test -x "$CHROME_BIN"
+          test -x "$CHROMEDRIVER_PATH"
+          "$CHROME_BIN" --version
+          "$CHROMEDRIVER_PATH" --version
 
       - name: Install Python dependencies
         run: |

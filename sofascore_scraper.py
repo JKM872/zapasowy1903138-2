@@ -185,6 +185,30 @@ def _get_api_session():
     _session_initialized = True
     return _api_session
 
+
+def _build_warmed_requests_session():
+    """Create a one-off requests session for curl_cffi 403 fallback."""
+    if 'requests' not in globals():
+        return None
+
+    session = requests.Session()
+    session.headers.update(API_HEADERS)
+    warmup_headers = {
+        'User-Agent': API_HEADERS['User-Agent'],
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Upgrade-Insecure-Requests': '1',
+    }
+
+    try:
+        session.get('https://www.sofascore.com/', headers=warmup_headers, timeout=8)
+    except Exception as e:
+        logger.debug(f"SofaScore requests fallback warmup failed: {type(e).__name__}")
+    return session
+
 # ============================================================================
 # CACHE SYSTEM
 # ============================================================================
@@ -254,6 +278,7 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     use_curl = CURL_CFFI_AVAILABLE and session == 'curl_cffi'
     
     last_exception = None
+    tried_requests_fallback = False
     
     for attempt in range(MAX_RETRIES):
         try:
@@ -281,6 +306,25 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 logger.debug(f"SofaScore API: 403 Forbidden - prawdopodobnie brak cookies lub rate limit")
                 if IS_CI:
                     print(f"   ⚠️ SofaScore API: 403 Forbidden")
+                if use_curl and not tried_requests_fallback:
+                    tried_requests_fallback = True
+                    fallback_session = _build_warmed_requests_session()
+                    if fallback_session is not None:
+                        if IS_CI:
+                            print("   🔄 SofaScore API: 403 z curl_cffi, próba requests session")
+                        try:
+                            fallback_response = fallback_session.get(url, timeout=timeout, **kwargs)
+                            if fallback_response.status_code == 200:
+                                if fallback_response.content and len(fallback_response.content) > 2:
+                                    return fallback_response
+                                logger.debug(
+                                    "SofaScore API fallback: pusta odpowiedź "
+                                    f"(200 ale {len(fallback_response.content or b'')}B)"
+                                )
+                            return fallback_response
+                        except Exception as e:
+                            last_exception = e
+                            logger.debug(f"SofaScore API fallback failed: {type(e).__name__}: {str(e)[:100]}")
                 return response  # Zwróć 403 - caller zdecyduje
             else:
                 return response  # Inne błędy - zwróć natychmiast
@@ -1480,8 +1524,32 @@ def scrape_sofascore_full(
         chrome_options.add_argument('--blink-settings=imagesEnabled=false')
         chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
         chrome_options.page_load_strategy = 'eager'
-        
-        sofascore_driver = webdriver.Chrome(options=chrome_options)
+
+        chrome_bin = os.getenv('CHROME_BIN')
+        if chrome_bin and os.path.exists(chrome_bin):
+            chrome_options.binary_location = chrome_bin
+        elif IS_CI:
+            for candidate in (
+                '/usr/bin/google-chrome',
+                '/usr/bin/google-chrome-stable',
+                '/usr/bin/chromium',
+                '/usr/bin/chromium-browser',
+            ):
+                if os.path.exists(candidate):
+                    chrome_options.binary_location = candidate
+                    break
+
+        chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+        service = None
+        if chromedriver_path and os.path.exists(chromedriver_path):
+            service = Service(executable_path=chromedriver_path)
+        elif IS_CI and os.path.exists('/usr/bin/chromedriver'):
+            service = Service(executable_path='/usr/bin/chromedriver')
+
+        if service:
+            sofascore_driver = webdriver.Chrome(service=service, options=chrome_options)
+        else:
+            sofascore_driver = webdriver.Chrome(options=chrome_options)
         sofascore_driver.set_page_load_timeout(10)
         sofascore_driver.set_script_timeout(5)
         
