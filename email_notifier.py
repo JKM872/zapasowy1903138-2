@@ -208,6 +208,108 @@ def _clean_odds_for_render(val: Any) -> Optional[float]:
         return None
 
 
+def _sofascore_status(match: Dict[str, Any]) -> Optional[bool]:
+    """Zwróć tri-state status SofaScore dla rekordu meczu.
+
+    - ``True``  — scraper próbował i znalazł dane (mogą być częściowe);
+    - ``False`` — scraper próbował i jawnie nie znalazł (placeholder w mailu);
+    - ``None``  — nie wiemy (legacy CSV/dict bez kolumny ``sofascore_found``).
+
+    Czytane jest pole ``match['sofascore_found']``; akceptujemy wartości
+    bool, stringi ``'true'/'false'/'nan'/'none'`` i ``None``/NaN, bo CSV
+    często serializuje wszystko do stringa.
+    """
+    raw = match.get('sofascore_found')
+    if raw is None:
+        return None
+    if isinstance(raw, bool):
+        return raw
+    try:
+        if pd.isna(raw):  # type: ignore[arg-type]
+            return None
+    except (TypeError, ValueError):
+        pass
+    if isinstance(raw, str):
+        s = raw.strip().lower()
+        if s in ('true', '1', 'yes'):
+            return True
+        if s in ('false', '0', 'no'):
+            return False
+        if s in ('', 'nan', 'none'):
+            return None
+    if isinstance(raw, (int, float)):
+        try:
+            if math.isnan(float(raw)):
+                return None
+        except (TypeError, ValueError):
+            pass
+        return bool(raw)
+    return None
+
+
+def _summarize_sofascore_coverage(matches: List[Dict[str, Any]]) -> Dict[str, int]:
+    """Podlicz pokrycie SofaScore Fan Vote w paczce meczów wysyłanych mailem.
+
+    Zwraca słownik z licznikami:
+    - ``with_data``     — sekcja Fan Vote będzie wyrenderowana z liczbami,
+    - ``placeholder``   — sekcja będzie pokazana jako "brak danych" (sofascore_found=False),
+    - ``hidden``        — sekcja będzie cicho ukryta (legacy, brak sofascore_found).
+    Plus rozbicie ``skip_reasons`` (np. ``not_found=12``).
+
+    Logujemy to przed wysyłką, żeby od razu wiedzieć, czy problem leży w
+    scraperze (mass ``placeholder``/``not_found``) czy w starym CSV bez
+    flagi (mass ``hidden``).
+    """
+    counts = {"with_data": 0, "placeholder": 0, "hidden": 0}
+    skip_reasons: Dict[str, int] = {}
+    for m in matches:
+        h, d, a, v = _sofascore_from_match(m)
+        has_data = h is not None or d is not None or a is not None or v > 0
+        if has_data:
+            counts["with_data"] += 1
+            continue
+        status = _sofascore_status(m)
+        if status is False:
+            counts["placeholder"] += 1
+            reason = m.get("sofascore_skip_reason") or "unknown"
+            if isinstance(reason, float):
+                try:
+                    if math.isnan(reason):
+                        reason = "unknown"
+                except (TypeError, ValueError):
+                    pass
+            key = str(reason).split(":", 1)[0]
+            skip_reasons[key] = skip_reasons.get(key, 0) + 1
+        else:
+            counts["hidden"] += 1
+    if skip_reasons:
+        counts["_skip_reasons"] = skip_reasons  # type: ignore[assignment]
+    return counts
+
+
+def _log_sofascore_coverage(matches: List[Dict[str, Any]], label: str = "") -> None:
+    """Wypisz na stdout zwięzłe podsumowanie pokrycia SofaScore.
+
+    Cel: gdy użytkownik raportuje "nie ma sofascore fan vote w mailu",
+    od razu po logach widać, czy to problem braku danych (scraper) czy
+    błędnego mapowania (legacy hidden).
+    """
+    if not matches:
+        return
+    summary = _summarize_sofascore_coverage(matches)
+    total = len(matches)
+    prefix = f"   🗳️ SofaScore Fan Vote{f' [{label}]' if label else ''}:"
+    print(
+        f"{prefix} {summary['with_data']}/{total} z danymi"
+        f" | {summary['placeholder']} placeholder (próbowano, brak)"
+        f" | {summary['hidden']} ukryte (legacy)"
+    )
+    skip = summary.get("_skip_reasons")
+    if isinstance(skip, dict) and skip:
+        parts = [f"{k}={v}" for k, v in sorted(skip.items())]
+        print(f"      ↳ skip_reasons: {', '.join(parts)}")
+
+
 def _sofascore_from_match(match: Dict[str, Any]) -> tuple:
     """Zwróć (home, draw, away, votes) dla bloku Fan Vote w mailu.
 
@@ -893,6 +995,19 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         has_sofascore = (ss_home is not None or ss_away is not None or 
                          ss_draw is not None or ss_votes > 0)
         _ss_draw_color = '#FFC107' if (ss_draw is not None and ss_draw >= max(ss_home or 0, ss_draw or 0, ss_away or 0)) else '#333'
+        # Tri-state: rozróżnij "nie próbowano" vs "próbowano i nie znaleziono".
+        # Gdy scraper jawnie zwrócił sofascore_found=False i nie mamy żadnej
+        # wartości, pokazujemy mały placeholder zamiast cicho ukrywać sekcję
+        # — żeby użytkownik widział, że SofaScore był sprawdzany, ale brak danych.
+        ss_status = _sofascore_status(match)
+        ss_skip_reason = match.get('sofascore_skip_reason')
+        if isinstance(ss_skip_reason, float):
+            try:
+                if math.isnan(ss_skip_reason):
+                    ss_skip_reason = None
+            except (TypeError, ValueError):
+                pass
+        show_sofascore_placeholder = (not has_sofascore) and (ss_status is False)
         
         # Odds - bezpieczne pobieranie z obsługą NaN
         home_odds_raw = match.get('home_odds')
@@ -1072,7 +1187,11 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                             </div>
                         </div>
                     </div>
-                    ''' if has_sofascore else ''}
+                    ''' if has_sofascore else (f'''
+                    <div style="margin-bottom: 12px; padding: 10px; background: #fff8e1; border: 1px dashed #ffc107; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #8a6d3b;">🗳️ SofaScore Fan Vote: brak danych{f" ({ss_skip_reason})" if ss_skip_reason else ""}</div>
+                    </div>
+                    ''' if show_sofascore_placeholder else '')}
                     
                     <!-- TYP MODELU (wyraźna rekomendacja) -->
                     {_render_model_pick_section(match, home_odds, draw_odds, away_odds, is_tennis)}
@@ -1262,10 +1381,10 @@ def send_email_notification(
         """Czyści DataFrame po wczytaniu z CSV - zamienia string 'nan' na None"""
         # Zamień stringi 'nan' na None
         df_in = df_in.replace({'nan': None, 'NaN': None, 'None': None})
-        
+
         # Dla kolumn numerycznych (kursy, prawdopodobieństwa) - zamień NaN na None
-        numeric_cols = ['home_odds', 'draw_odds', 'away_odds', 
-                        'forebet_probability', 'sofascore_home_win_prob', 
+        numeric_cols = ['home_odds', 'draw_odds', 'away_odds',
+                        'forebet_probability', 'sofascore_home_win_prob',
                         'sofascore_draw_prob', 'sofascore_away_win_prob',
                         'sofascore_total_votes', 'gemini_confidence']
         for col in numeric_cols:
@@ -1273,7 +1392,32 @@ def send_email_notification(
                 df_in[col] = df_in[col].apply(
                     lambda x: None if pd.isna(x) or (isinstance(x, str) and x.lower() == 'nan') else x  # type: ignore[arg-type]
                 )
-        
+
+        # `sofascore_found` po round-tripie przez CSV bywa stringiem "True"/"False" /"nan".
+        # Normalizujemy do bool/None, by renderer maila mógł odróżnić
+        # "nie próbowano" (None) od "próbowano i brak danych" (False).
+        if 'sofascore_found' in df_in.columns:
+            def _norm_found(v: Any) -> Any:
+                if v is None:
+                    return None
+                try:
+                    if pd.isna(v):
+                        return None
+                except (TypeError, ValueError):
+                    pass
+                if isinstance(v, bool):
+                    return v
+                if isinstance(v, str):
+                    s = v.strip().lower()
+                    if s in ('true', '1', 'yes'):
+                        return True
+                    if s in ('false', '0', 'no'):
+                        return False
+                    if s in ('', 'nan', 'none'):
+                        return None
+                return v
+            df_in['sofascore_found'] = df_in['sofascore_found'].apply(_norm_found)
+
         return df_in
     
     df = clean_dataframe_for_email(df)
@@ -1380,6 +1524,7 @@ def send_email_notification(
     matches = qualified.to_dict('records')
     for m in matches:
         m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
+    _log_sofascore_coverage(matches)
     date = datetime.now().strftime('%Y-%m-%d')
 
     # Zapisz manifest meczów wysłanych mailem (źródło prawdy dla rozliczenia)
@@ -1595,6 +1740,31 @@ def send_split_emails_by_sport(
                 lambda x: None if pd.isna(x) or (isinstance(x, str) and x.lower() == 'nan') else x  # type: ignore[arg-type]
             )
 
+    # Normalizuj `sofascore_found` (string po round-tripie CSV) do bool/None,
+    # tak jak w `send_email_notification` — żeby placeholder "brak danych
+    # SofaScore" w mailu zachowywał się spójnie w obu ścieżkach.
+    if 'sofascore_found' in df.columns:
+        def _norm_found_split(v: Any) -> Any:
+            if v is None:
+                return None
+            try:
+                if pd.isna(v):
+                    return None
+            except (TypeError, ValueError):
+                pass
+            if isinstance(v, bool):
+                return v
+            if isinstance(v, str):
+                s = v.strip().lower()
+                if s in ('true', '1', 'yes'):
+                    return True
+                if s in ('false', '0', 'no'):
+                    return False
+                if s in ('', 'nan', 'none'):
+                    return None
+            return v
+        df['sofascore_found'] = df['sofascore_found'].apply(_norm_found_split)
+
     # --- filtruj kwalifikujące ---
     _gate_used = 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any()
     if _gate_used:
@@ -1655,6 +1825,7 @@ def send_split_emails_by_sport(
                 matches_list: List[Dict[str, Any]] = sport_df.to_dict('records')  # type: ignore[assignment]
                 for m in matches_list:
                     m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
+                _log_sofascore_coverage(matches_list, label=sport)
                 _save_mailed_manifest(matches_list, date, tag=sport)
                 subj = f"{emoji} {label}: {len(matches_list)} meczów — {date}"  # type: ignore[arg-type]
                 html = create_html_email(matches_list, date, sort_by=sort_by,  # type: ignore[arg-type]

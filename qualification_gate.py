@@ -74,20 +74,43 @@ def _passes_odds_filter(sport: str, match: Dict[str, Any]) -> bool:
     return ho_f >= threshold and ao_f >= threshold
 
 
-def _passes_fan_vote_filter(sport: str, match: Dict[str, Any]) -> bool:
-    """Dominant SofaScore fan vote must meet threshold. No data → pass."""
+def _fan_vote_diagnostics(sport: str, match: Dict[str, Any]) -> tuple:
+    """Zwróć (passes, dominant, threshold, reason).
+
+    - ``passes`` (bool): True gdy mecz przechodzi filtr fan-vote.
+    - ``dominant`` (Optional[float]): najwyższy procent z H/D/A albo None.
+    - ``threshold`` (float): próg per sport zastosowany do oceny.
+    - ``reason`` (Optional[str]): kod logujący (``fan_vote_missing`` /
+      ``fan_vote_below_threshold:DOMINANT/THRESHOLD``) albo None gdy passes.
+
+    Brak danych SofaScore → zwracamy ``passes=True`` (nie penalizujemy
+    scrapera, który nie znalazł meczu), ale zapisujemy ``fan_vote_missing``
+    jako warning, żeby powód był jawny w logach gate i w `channel_skip_reasons_warnings`.
+    """
     h = match.get("sofascore_home_win_prob")
     d = match.get("sofascore_draw_prob")
     a = match.get("sofascore_away_win_prob")
     probs = [p for p in (h, d, a) if p is not None]
+    threshold = FAN_VOTE_THRESHOLDS.get(sport, FAN_VOTE_DEFAULT_THRESHOLD)
     if not probs:
-        return True  # no fan vote data → don't penalize
+        return True, None, threshold, "fan_vote_missing"
     try:
         dominant = max(float(p) for p in probs)
     except (ValueError, TypeError):
-        return True
-    threshold = FAN_VOTE_THRESHOLDS.get(sport, FAN_VOTE_DEFAULT_THRESHOLD)
-    return dominant >= threshold
+        return True, None, threshold, "fan_vote_unparseable"
+    if dominant >= threshold:
+        return True, dominant, threshold, None
+    return False, dominant, threshold, f"fan_vote_below_threshold:{dominant:.0f}/{threshold:.0f}"
+
+
+def _passes_fan_vote_filter(sport: str, match: Dict[str, Any]) -> bool:
+    """Dominant SofaScore fan vote must meet threshold. No data → pass.
+
+    Cienki adapter zachowany dla zewnętrznych konsumentów; pełną diagnostykę
+    daje :func:`_fan_vote_diagnostics`.
+    """
+    passes, _, _, _ = _fan_vote_diagnostics(sport, match)
+    return passes
 
 
 def _parse_match_time(match_time_str: Any) -> Optional[datetime]:
@@ -140,8 +163,19 @@ def qualify_match(match: Dict[str, Any], now_warsaw: Optional[datetime] = None) 
         reasons.append("odds_below_threshold")
 
     # Gate 2: fan vote consensus
-    if not _passes_fan_vote_filter(sport, match):
-        reasons.append("fan_vote_below_threshold")
+    fv_passes, fv_dominant, fv_threshold, fv_reason = _fan_vote_diagnostics(sport, match)
+    if not fv_passes:
+        # Konkretny powód z wartością (np. "fan_vote_below_threshold:62/65"),
+        # żeby logi gate jasno mówiły "ile zabrakło" zamiast tylko "below_threshold".
+        reasons.append(fv_reason or "fan_vote_below_threshold")
+    elif fv_reason in ("fan_vote_missing", "fan_vote_unparseable"):
+        # Brak danych SofaScore nie blokuje kanału, ale chcemy go widzieć
+        # w warnings — to częsta i nieoczywista przyczyna pustej sekcji
+        # SofaScore Fan Vote w mailu.
+        warnings.append(fv_reason)
+    # Wzbogać rekord o stałe pola diagnostyczne (czytane przez mail/Telegram).
+    match["fan_vote_dominant"] = fv_dominant
+    match["fan_vote_threshold"] = fv_threshold
 
     # Gate 3: future match only
     if not _is_future_match(match, now_warsaw):
@@ -190,10 +224,15 @@ def apply_qualification_gate(
             stats["qualified"] += 1
         else:
             for reason in row.get("channel_skip_reasons", []):
-                reason_counts[reason] = reason_counts.get(reason, 0) + 1
+                # Grupuj dynamiczne powody (np. "fan_vote_below_threshold:62/65")
+                # po prefiksie sprzed ":" — chcemy widzieć "ilu meczów odpadło
+                # przez fan-vote", nie listę unikalnych par dominant/threshold.
+                key = reason.split(":", 1)[0] if isinstance(reason, str) else str(reason)
+                reason_counts[key] = reason_counts.get(key, 0) + 1
 
         for warn in row.get("channel_skip_reasons_warnings", []) or []:
-            warning_counts[warn] = warning_counts.get(warn, 0) + 1
+            key = warn.split(":", 1)[0] if isinstance(warn, str) else str(warn)
+            warning_counts[key] = warning_counts.get(key, 0) + 1
 
     # ── Per-sport breakdown ──
     for sport, stats in sorted(sport_stats.items()):

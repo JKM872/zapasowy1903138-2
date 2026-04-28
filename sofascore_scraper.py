@@ -28,6 +28,7 @@ NOWE W v3.0:
 - Dedykowany driver z optymalnymi timeoutami
 """
 
+import os
 import time
 import re
 import hashlib
@@ -209,6 +210,152 @@ def _build_warmed_requests_session():
         logger.debug(f"SofaScore requests fallback warmup failed: {type(e).__name__}")
     return session
 
+
+# ============================================================================
+# HTTP DIAGNOSTICS COUNTER (v4.1)
+# ============================================================================
+# Globalny licznik wyników HTTP per klient - na koniec runu wypisujemy
+# zwięzłe statystyki, dzięki którym widać od razu czy problem to 403/WAF
+# (większość requestów na 403), timeout (większość na timeout) czy zwykły
+# brak meczu (200/404 dominują, a Fan Vote i tak nie przychodzi).
+
+_http_stats: Dict[str, Dict[str, int]] = {
+    "curl_cffi": {},
+    "requests": {},
+    "flaresolverr": {},
+    "selenium": {},
+}
+
+
+def _record_http_outcome(client: str, outcome: str) -> None:
+    """Zarejestruj wynik requestu (np. 'ok', '403', '404', 'timeout', 'error').
+
+    `client` ∈ {'curl_cffi', 'requests', 'flaresolverr', 'selenium'}.
+    """
+    bucket = _http_stats.setdefault(client, {})
+    bucket[outcome] = bucket.get(outcome, 0) + 1
+
+
+def get_http_stats_snapshot() -> Dict[str, Dict[str, int]]:
+    """Zwróć kopię statystyk HTTP, czytaną przez orchestrator (scrape_and_notify).
+    Pozwala wypisać po runie: ile requestów dostało 200/403/404/timeout
+    z rozbiciem na klienta. Kluczowe dla diagnozy `Fan Vote` w CI.
+    """
+    return {client: dict(v) for client, v in _http_stats.items()}
+
+
+def _format_http_stats(stats: Optional[Dict[str, Dict[str, int]]] = None) -> str:
+    """Krótki, czytelny dump dla logów CI (jeden wiersz per klient)."""
+    snap = stats if stats is not None else get_http_stats_snapshot()
+    lines: List[str] = []  # type: ignore[name-defined]
+    for client, buckets in snap.items():
+        if not buckets:
+            continue
+        total = sum(buckets.values())
+        parts = ", ".join(f"{k}={v}" for k, v in sorted(buckets.items()))
+        lines.append(f"   📊 SofaScore HTTP[{client}] total={total} ({parts})")
+    return "\n".join(lines)
+
+
+def print_http_stats() -> None:
+    """Wypisz statystyki HTTP do stdout (no-op gdy brak requestów).
+
+    Wywoływane przez orchestrator po zakończeniu fazy scrapowania, żeby
+    user/CI miał wprost odpowiedź "ile 403 w tym runie", bez przekopywania
+    setek linii logów.
+    """
+    snap = get_http_stats_snapshot()
+    body = _format_http_stats(snap)
+    if body:
+        print("📊 SofaScore HTTP statistics:")
+        print(body)
+
+
+# ============================================================================
+# FLARESOLVERR FALLBACK FOR SOFASCORE API (v4.1)
+# ============================================================================
+# Workflow GitHub Actions już wystawia FlareSolverr na FLARESOLVERR_URL
+# (`scrape.yml` / pokrewne), ale dotąd korzystał z niego tylko Forebet.
+# Po serii `403` z `curl_cffi`/`requests` próbujemy SofaScore przez
+# FlareSolverr, bo on wykonuje request prawdziwą przeglądarką i ma
+# znacznie wyższą szansę przejścia ochrony WAF z runnerów GitHub.
+
+_FLARESOLVERR_URL_ENV = os.getenv('FLARESOLVERR_URL', '').strip()
+# Domyślnie unikamy `localhost:8191` poza CI, żeby nie blokować lokalnego
+# uruchomienia 60-sekundowym timeoutem na nieistniejący serwis.
+_FLARESOLVERR_AVAILABLE = bool(_FLARESOLVERR_URL_ENV)
+_flaresolverr_disabled_for_run: bool = False
+
+
+def _try_flaresolverr_json(url: str, timeout: int = 25) -> Optional[Any]:
+    """Pobierz JSON z SofaScore API przez FlareSolverr (fallback po 403).
+
+    Zwraca sparsowany JSON albo `None`. Po pierwszej porażce na poziomie
+    samego serwisu (np. brak FlareSolverr, błąd transportu) wyłącza dalsze
+    próby w tym runie, żeby nie przepalać czasu w CI.
+    """
+    global _flaresolverr_disabled_for_run
+
+    if not _FLARESOLVERR_AVAILABLE or _flaresolverr_disabled_for_run:
+        return None
+    if 'requests' not in globals():
+        return None
+
+    payload = {
+        "cmd": "request.get",
+        "url": url,
+        "maxTimeout": max(20000, timeout * 1000),
+    }
+    try:
+        resp = requests.post(
+            _FLARESOLVERR_URL_ENV,
+            headers={"Content-Type": "application/json"},
+            json=payload,
+            timeout=timeout + 30,
+        )
+    except Exception as e:
+        logger.debug(f"FlareSolverr transport error for SofaScore: {type(e).__name__}")
+        _flaresolverr_disabled_for_run = True
+        _record_http_outcome('flaresolverr', 'error')
+        return None
+
+    if resp.status_code != 200:
+        _record_http_outcome('flaresolverr', f'http_{resp.status_code}')
+        return None
+
+    try:
+        data = resp.json()
+    except Exception:
+        _record_http_outcome('flaresolverr', 'parse_error')
+        return None
+
+    if data.get("status") != "ok":
+        _record_http_outcome('flaresolverr', 'fs_error')
+        return None
+
+    solution = data.get("solution") or {}
+    body = solution.get("response") or ""
+    if not body:
+        _record_http_outcome('flaresolverr', 'empty')
+        return None
+
+    # FlareSolverr zwraca pełny HTML; dla endpointów `api.sofascore.com/...`
+    # zwykle to JSON owinięty w `<pre>...</pre>` lub czysty JSON.
+    text = body
+    if '<pre' in text:
+        m = re.search(r'<pre[^>]*>(.*?)</pre>', text, re.DOTALL)
+        if m:
+            text = m.group(1)
+    text = text.strip()
+    try:
+        parsed = __import__('json').loads(text)
+        _record_http_outcome('flaresolverr', 'ok')
+        return parsed
+    except Exception:
+        _record_http_outcome('flaresolverr', 'json_error')
+        logger.debug("FlareSolverr returned non-JSON body for SofaScore API")
+        return None
+
 # ============================================================================
 # CACHE SYSTEM
 # ============================================================================
@@ -249,8 +396,7 @@ def _set_cached_result(home_team: str, away_team: str, sport: str, result: Dict)
 # RETRY LOGIC - zoptymalizowane dla CI (mniej retry)
 # ============================================================================
 
-# Wykrywanie CI - w CI zmniejszamy retry aby nie tracić czasu
-import os
+# Wykrywanie CI - w CI zmniejszamy retry aby nie tracić czasu.
 IS_CI = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
 
 # W CI: 2 próby (1 retry), lokalnie: 3 próby
@@ -283,19 +429,30 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     for attempt in range(MAX_RETRIES):
         try:
             if use_curl:
-                response = curl_requests.get(url, impersonate='chrome', timeout=timeout)
+                # v4.1: jawnie przekazujemy headers do curl_cffi. Sam
+                # `impersonate='chrome'` daje TLS fingerprint, ale bez
+                # `Origin`/`Referer`/`Sec-*` SofaScore częściej zwraca 403.
+                response = curl_requests.get(
+                    url,
+                    impersonate='chrome',
+                    headers=API_HEADERS,
+                    timeout=timeout,
+                )
             else:
                 response = session.get(url, timeout=timeout, **kwargs)
+            client_label = 'curl_cffi' if use_curl else 'requests'
             if response.status_code == 200:
-                # Walidacja odpowiedzi - sprawdź czy jest content
                 if response.content and len(response.content) > 2:
+                    _record_http_outcome(client_label, 'ok')
                     return response
                 else:
+                    _record_http_outcome(client_label, 'empty_200')
                     logger.debug(f"SofaScore API: Pusta odpowiedź (200 ale {len(response.content or b'')}B)")
                     if attempt < MAX_RETRIES - 1:
                         time.sleep(RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1])
                     continue
-            elif response.status_code in [429, 503]:  # Rate limited lub service unavailable
+            elif response.status_code in [429, 503]:
+                _record_http_outcome(client_label, str(response.status_code))
                 wait_time = RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1]
                 logger.debug(f"SofaScore API: Status {response.status_code}, czekam {wait_time}s...")
                 if IS_CI:
@@ -303,9 +460,10 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 time.sleep(wait_time)
                 continue
             elif response.status_code == 403:
+                _record_http_outcome(client_label, '403')
                 logger.debug(f"SofaScore API: 403 Forbidden - prawdopodobnie brak cookies lub rate limit")
                 if IS_CI:
-                    print(f"   ⚠️ SofaScore API: 403 Forbidden")
+                    print(f"   ⚠️ SofaScore API: 403 Forbidden ({client_label})")
                 if use_curl and not tried_requests_fallback:
                     tried_requests_fallback = True
                     fallback_session = _build_warmed_requests_session()
@@ -316,20 +474,27 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                             fallback_response = fallback_session.get(url, timeout=timeout, **kwargs)
                             if fallback_response.status_code == 200:
                                 if fallback_response.content and len(fallback_response.content) > 2:
+                                    _record_http_outcome('requests', 'ok')
                                     return fallback_response
+                                _record_http_outcome('requests', 'empty_200')
                                 logger.debug(
                                     "SofaScore API fallback: pusta odpowiedź "
                                     f"(200 ale {len(fallback_response.content or b'')}B)"
                                 )
+                            else:
+                                _record_http_outcome('requests', str(fallback_response.status_code))
                             return fallback_response
                         except Exception as e:
                             last_exception = e
+                            _record_http_outcome('requests', 'error')
                             logger.debug(f"SofaScore API fallback failed: {type(e).__name__}: {str(e)[:100]}")
-                return response  # Zwróć 403 - caller zdecyduje
+                return response  # Zwróć 403 - caller zdecyduje (ew. FlareSolverr)
             else:
-                return response  # Inne błędy - zwróć natychmiast
+                _record_http_outcome(client_label, str(response.status_code))
+                return response
         except (TimeoutError, OSError) as e:
             last_exception = e
+            _record_http_outcome('curl_cffi' if use_curl else 'requests', 'timeout')
             if attempt < MAX_RETRIES - 1:
                 wait_time = RETRY_BACKOFF[attempt]
                 logger.debug(f"SofaScore API: Timeout/Connection error, próba {attempt + 2}/{MAX_RETRIES}...")
@@ -339,14 +504,48 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                     print(f"   ⚠️ SofaScore API: {type(e).__name__} po {MAX_RETRIES} próbach")
         except Exception as e:
             last_exception = e
+            _record_http_outcome('curl_cffi' if use_curl else 'requests', 'error')
             logger.debug(f"SofaScore API: Nieoczekiwany błąd: {type(e).__name__}: {str(e)[:100]}")
             if attempt < MAX_RETRIES - 1:
                 time.sleep(RETRY_BACKOFF[attempt] if attempt < len(RETRY_BACKOFF) else RETRY_BACKOFF[-1])
             else:
                 break
-    
+
     if last_exception:
         logger.debug(f"SofaScore API: Wszystkie próby zawiodły - {type(last_exception).__name__}")
+    return None
+
+
+def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
+    """Pobierz JSON z SofaScore API z trójstopniową ścieżką klientów.
+
+    1. `curl_cffi` (Chrome TLS impersonation, najszybsze).
+    2. `requests.Session()` z warmupem (po 403 z curl_cffi).
+    3. FlareSolverr (po 403 / wyczerpaniu API), jeśli dostępny.
+
+    Zwraca sparsowany dict / list albo None. Każda próba inkrementuje
+    `_http_stats`, dzięki czemu po runie wiadomo, gdzie zatrzymał się
+    pipeline: `curl_cffi 403=N` vs `requests 403=N` vs `flaresolverr ok=K`.
+    """
+    response = _retry_request_with_session(url, timeout=timeout)
+    if response is not None:
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except Exception:
+                return None
+        if response.status_code == 403 and _FLARESOLVERR_AVAILABLE:
+            if IS_CI:
+                print("   🐳 SofaScore: 403 z curl/requests, próba FlareSolverr...")
+            data = _try_flaresolverr_json(url, timeout=max(timeout, 25))
+            if data is not None:
+                return data
+        return None
+    if _FLARESOLVERR_AVAILABLE:
+        # Brak odpowiedzi z curl/requests (timeouts, errors) — spróbuj FS jako last resort.
+        if IS_CI:
+            print("   🐳 SofaScore: brak odpowiedzi curl/requests, próba FlareSolverr...")
+        return _try_flaresolverr_json(url, timeout=max(timeout, 25))
     return None
 
 
@@ -548,62 +747,44 @@ def get_votes_via_api(event_id: int) -> Optional[Dict]:
         return None
     try:
         url = f"https://api.sofascore.com/api/v1/event/{event_id}/votes"
-        response = _retry_request_with_session(url, timeout=10)
-        
-        if response is None:
-            print(f"   ⚠️ SofaScore API: Brak odpowiedzi (event_id={event_id})")
+        # v4.1: jednolity helper z FlareSolverr fallbackiem po 403.
+        data = _api_get_json(url, timeout=10)
+        if data is None:
             return None
-            
-        if response.status_code == 200:
-            data = response.json()
-            vote = data.get('vote', {})
-            
-            # Sprawdź czy są dane głosowania
-            if not vote or vote.get('vote1') is None:
-                print(f"   ⚠️ SofaScore API: Brak danych głosowania (event_id={event_id})")
-                return None
-            
-            # API zwraca surowe liczby głosów - przelicz na procenty
-            vote1 = vote.get('vote1', 0) or 0
-            voteX = vote.get('voteX', 0) or 0
-            vote2 = vote.get('vote2', 0) or 0
-            total_votes = vote1 + voteX + vote2
-            
-            if total_votes == 0:
-                print(f"   ⚠️ SofaScore API: 0 głosów (event_id={event_id})")
-                return None
-            
-            home_pct = round(vote1 / total_votes * 100)
-            draw_pct = round(voteX / total_votes * 100) if voteX else None
-            away_pct = round(vote2 / total_votes * 100)
-            
-            # BTTS data
-            btts = data.get('bothTeamsToScoreVote', {})
-            btts_yes = btts.get('voteYes', 0) or 0
-            btts_no = btts.get('voteNo', 0) or 0
-            btts_total = btts_yes + btts_no
-            
-            result = {
-                'sofascore_home_win_prob': home_pct,
-                'sofascore_draw_prob': draw_pct,
-                'sofascore_away_win_prob': away_pct,
-                'sofascore_total_votes': total_votes,
-            }
-            
-            if btts_total > 0:
-                result['sofascore_btts_yes'] = round(btts_yes / btts_total * 100)
-                result['sofascore_btts_no'] = round(btts_no / btts_total * 100)
-            
-            return result
-        elif response.status_code == 403:
-            print(f"   ⚠️ SofaScore API: Zablokowane (403) - możliwe blokady geograficzne/rate limit")
+
+        vote = data.get('vote', {})
+        if not vote or vote.get('vote1') is None:
+            print(f"   ⚠️ SofaScore API: Brak danych głosowania (event_id={event_id})")
             return None
-        elif response.status_code == 404:
-            print(f"   ⚠️ SofaScore API: Nie znaleziono meczu (404, event_id={event_id})")
+
+        vote1 = vote.get('vote1', 0) or 0
+        voteX = vote.get('voteX', 0) or 0
+        vote2 = vote.get('vote2', 0) or 0
+        total_votes = vote1 + voteX + vote2
+
+        if total_votes == 0:
+            print(f"   ⚠️ SofaScore API: 0 głosów (event_id={event_id})")
             return None
-        else:
-            print(f"   ⚠️ SofaScore API: HTTP {response.status_code}")
-            return None
+
+        home_pct = round(vote1 / total_votes * 100)
+        draw_pct = round(voteX / total_votes * 100) if voteX else None
+        away_pct = round(vote2 / total_votes * 100)
+
+        btts = data.get('bothTeamsToScoreVote', {})
+        btts_yes = btts.get('voteYes', 0) or 0
+        btts_no = btts.get('voteNo', 0) or 0
+        btts_total = btts_yes + btts_no
+
+        result = {
+            'sofascore_home_win_prob': home_pct,
+            'sofascore_draw_prob': draw_pct,
+            'sofascore_away_win_prob': away_pct,
+            'sofascore_total_votes': total_votes,
+        }
+        if btts_total > 0:
+            result['sofascore_btts_yes'] = round(btts_yes / btts_total * 100)
+            result['sofascore_btts_no'] = round(btts_no / btts_total * 100)
+        return result
     except Exception as e:
         print(f"   ⚠️ SofaScore API error: {type(e).__name__}: {str(e)[:50]}")
         logger.debug(f"SofaScore API error details: {e}")
@@ -696,28 +877,17 @@ def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, sear
     Wewnętrzna funkcja: szuka event ID dla konkretnej daty.
     v3.5: Wydzielono z search_event_via_api dla date window search.
     v3.8: Dodano debug logging dla diagnostyki.
+    v4.1: `_api_get_json` automatycznie próbuje FlareSolverr po 403.
     """
     url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{search_date}"
-    response = _retry_request_with_session(url, timeout=10)
-    
-    if not response:
+    data = _api_get_json(url, timeout=10)
+
+    if data is None:
         if debug:
             print(f"      [DEBUG] SofaScore API: No response for {search_date}")
         return None
-        
-    if response.status_code != 200:
-        if debug:
-            print(f"      [DEBUG] SofaScore API: Status {response.status_code} for {search_date}")
-        return None
-    
-    try:
-        data = response.json()
-    except Exception as e:
-        if debug:
-            print(f"      [DEBUG] SofaScore API: JSON parse error: {e}")
-        return None
-    
-    events = data.get('events', [])
+
+    events = data.get('events', []) if isinstance(data, dict) else []
     if debug:
         print(f"      [DEBUG] SofaScore API returned {len(events)} events for {search_date}")
     
@@ -834,25 +1004,21 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
     for team_query in [home_team, away_team]:
         try:
             search_url = f"https://api.sofascore.com/api/v1/search/teams/{team_query.replace(' ', '%20')}"
-            response = _retry_request_with_session(search_url, timeout=10)
-            if response and response.status_code == 200:
-                search_data = response.json()
+            search_data = _api_get_json(search_url, timeout=10)
+            if search_data and isinstance(search_data, dict):
                 teams = search_data.get('teams', [])
                 if teams:
                     team_id = teams[0].get('id')
                     team_name = teams[0].get('name', '')
                     print(f"      Found team: '{team_name}' (ID: {team_id})")
-                    # Get team's next/recent events
                     for endpoint in ['next', 'last']:
                         events_url = f"https://api.sofascore.com/api/v1/team/{team_id}/events/{endpoint}/0"
-                        ev_response = _retry_request_with_session(events_url, timeout=10)
-                        if ev_response and ev_response.status_code == 200:
-                            ev_data = ev_response.json()
+                        ev_data = _api_get_json(events_url, timeout=10)
+                        if ev_data and isinstance(ev_data, dict):
                             events = ev_data.get('events', [])
                             for event in events:
                                 event_home = event.get('homeTeam', {}).get('name', '')
                                 event_away = event.get('awayTeam', {}).get('name', '')
-                                # Check if OTHER team matches
                                 other_team = away_team if team_query == home_team else home_team
                                 other_event = event_away if team_query == home_team else event_home
                                 other_sim = similarity_score(other_team, other_event)
@@ -861,15 +1027,14 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
                                     return event.get('id')
         except Exception as e:
             logger.debug(f"SofaScore team search error for '{team_query}': {e}")
-    
+
     # ====== STRATEGY 3: Relaxed matching (home-only or away-only with lower threshold) ======
     print(f"   🔄 SofaScore Strategy 3: Luźne dopasowanie (home/away osobno)...")
     for search_date in dates_to_try[:3]:  # Only first 3 dates
         url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{search_date}"
-        response = _retry_request_with_session(url, timeout=10)
-        if response and response.status_code == 200:
+        data = _api_get_json(url, timeout=10)
+        if data and isinstance(data, dict):
             try:
-                data = response.json()
                 events = data.get('events', [])
                 best_event_id = None
                 best_score = 0.0

@@ -555,6 +555,14 @@ def scrape_and_send_email(
                 
                 # SOFASCORE
                 if use_sofascore and SOFASCORE_AVAILABLE:
+                    # Inicjalizuj jawnie, by w mailu odróżnić "nie próbowano"
+                    # od "próbowano ale brak danych" (sofascore_found=False).
+                    row.setdefault('sofascore_home_win_prob', None)
+                    row.setdefault('sofascore_draw_prob', None)
+                    row.setdefault('sofascore_away_win_prob', None)
+                    row.setdefault('sofascore_total_votes', 0)
+                    row['sofascore_found'] = False
+                    row['sofascore_skip_reason'] = None
                     try:
                         sofascore_result = get_sofascore_prediction(
                             home_team=home_team,
@@ -562,16 +570,19 @@ def scrape_and_send_email(
                             sport=current_sport,
                             date_str=match_date
                         )
-                        
+
                         if sofascore_result.get('found'):
                             row['sofascore_home_win_prob'] = sofascore_result.get('home_win_prob')
                             row['sofascore_draw_prob'] = sofascore_result.get('draw_prob')
                             row['sofascore_away_win_prob'] = sofascore_result.get('away_win_prob')
                             row['sofascore_total_votes'] = sofascore_result.get('total_votes')
+                            row['sofascore_found'] = True
                             print(f"   ✅ SofaScore: H:{row['sofascore_home_win_prob']}% D:{row['sofascore_draw_prob']}% A:{row['sofascore_away_win_prob']}%")
                         else:
+                            row['sofascore_skip_reason'] = 'not_found'
                             print(f"   ⚠️ SofaScore: nie znaleziono")
                     except Exception as e:
+                        row['sofascore_skip_reason'] = f'error:{str(e)[:60]}'
                         print(f"   ❌ SofaScore błąd: {str(e)[:50]}")
                 
                 # GEMINI AI (jeśli włączone)
@@ -600,12 +611,18 @@ def scrape_and_send_email(
             
             phase2_end = time_module.time()
             phase2_duration = phase2_end - phase2_start
-            
+
             print(f"\n" + "="*70)
             print(f"🎯 FAZA 2 ZAKOŃCZONA!")
             print(f"   Czas: {phase2_duration/60:.1f} min ({phase2_duration:.0f}s)")
             print(f"   Wzbogaconych: {enriched_count}/{qualifying_count}")
             print(f"   Średni czas/mecz: {phase2_duration/qualifying_count:.2f}s" if qualifying_count > 0 else "")
+            # v4.1: Statystyki HTTP SofaScore - podpowiedź czy 403 / WAF / brak meczu.
+            try:
+                from sofascore_scraper import print_http_stats as _ss_http_stats
+                _ss_http_stats()
+            except Exception:
+                pass
             print("="*70)
         else:
             if qualifying_count == 0:
@@ -910,13 +927,25 @@ def scrape_and_send_email(
                     'drawProb': clean_for_json(row.get('forebet_draw_prob')),
                     'awayProb': clean_for_json(row.get('forebet_away_prob')),
                 } if clean_for_json(row.get('forebet_prediction')) else None,
-                # SofaScore - czyść NaN przed eksportem
+                # SofaScore - czyść NaN przed eksportem.
+                # Buduj obiekt jeśli mamy KTÓRĄKOLWIEK wartość (home/draw/away/votes>0)
+                # albo gdy scraper jawnie zaznaczył sofascore_found=True. Dzięki temu
+                # mail/frontend nie traci nested fallbacku przy częściowych danych
+                # (np. samo draw/away bez home).
                 'sofascore': {
                     'home': clean_for_json(row.get('sofascore_home_win_prob')),
                     'draw': clean_for_json(row.get('sofascore_draw_prob')),
                     'away': clean_for_json(row.get('sofascore_away_win_prob')),
                     'votes': clean_for_json(row.get('sofascore_total_votes', 0))
-                } if clean_for_json(row.get('sofascore_home_win_prob')) else None,
+                } if (
+                    clean_for_json(row.get('sofascore_home_win_prob')) is not None
+                    or clean_for_json(row.get('sofascore_draw_prob')) is not None
+                    or clean_for_json(row.get('sofascore_away_win_prob')) is not None
+                    or (clean_for_json(row.get('sofascore_total_votes', 0)) or 0) > 0
+                    or row.get('sofascore_found') is True
+                ) else None,
+                'sofascoreFound': row.get('sofascore_found'),
+                'sofascoreSkipReason': row.get('sofascore_skip_reason'),
                 # Focus
                 'focusTeam': row.get('focus_team', 'away' if away_team_focus else 'home'),
                 # Scoring engine output (both football and tennis)

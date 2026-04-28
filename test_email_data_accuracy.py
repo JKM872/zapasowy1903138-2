@@ -17,6 +17,8 @@ from email_notifier import (
     _pick_odds_value,
     _render_model_pick_section,
     _sofascore_from_match,
+    _sofascore_status,
+    _summarize_sofascore_coverage,
     create_html_email,
 )
 
@@ -187,3 +189,146 @@ class TestBuildHtmlContract:
         match["scoring_prob"] = None
         html = create_html_email([match], "2026-04-20")
         assert "Scoring Engine" not in html
+
+
+class TestSofascoreStatus:
+    @pytest.mark.parametrize("raw,expected", [
+        (True, True),
+        (False, False),
+        ("True", True),
+        ("FALSE", False),
+        ("nan", None),
+        ("", None),
+        (None, None),
+        (1, True),
+        (0, False),
+        (float("nan"), None),
+    ])
+    def test_normalizes_found_field(self, raw, expected):
+        assert _sofascore_status({"sofascore_found": raw}) is expected
+
+    def test_missing_field_is_unknown(self):
+        # Legacy CSV bez kolumny → status nieznany (sekcja powinna pozostać
+        # cicho ukryta, dla kompatybilności wstecz).
+        assert _sofascore_status({}) is None
+
+
+class TestSofascorePlaceholder:
+    """Regression: użytkownik raportuje brak Fan Vote w mailu — sekcja musi
+    JAWNIE komunikować "próbowano i brak", a nie cicho znikać."""
+
+    def _base(self):
+        return {
+            "home_team": "A", "away_team": "B",
+            "sport": "football", "match_time": "20.04.2026 20:00",
+            "home_odds": 2.55, "draw_odds": 3.3, "away_odds": 2.85,
+            "scoring_pick": "1", "scoring_prob": 57.5,
+        }
+
+    def test_placeholder_when_scrape_attempted_and_not_found(self):
+        match = self._base()
+        match["sofascore_found"] = False
+        match["sofascore_skip_reason"] = "not_found"
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote: brak danych" in html
+        assert "not_found" in html
+
+    def test_no_placeholder_when_status_unknown(self):
+        # Legacy CSV bez `sofascore_found` musi nadal cicho ukrywać sekcję
+        # (zachowanie z istniejącego testu `test_sofascore_block_hidden_without_any_data`).
+        match = self._base()
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote" not in html
+
+    def test_real_data_overrides_placeholder(self):
+        # Gdy scraper znalazł dane, sekcja pokazuje liczby, a nie "brak danych".
+        match = self._base()
+        match["sofascore_found"] = True
+        match["sofascore_skip_reason"] = None
+        match["sofascore_home_win_prob"] = 60
+        match["sofascore_draw_prob"] = 20
+        match["sofascore_away_win_prob"] = 20
+        match["sofascore_total_votes"] = 500
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote: brak danych" not in html
+        assert "60.0%" in html
+
+    def test_placeholder_when_found_string_false_from_csv(self):
+        # Po round-tripie przez CSV `sofascore_found` to string "False".
+        match = self._base()
+        match["sofascore_found"] = "False"
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote: brak danych" in html
+
+
+class TestSofascoreCoverageSummary:
+    def test_counts_with_data_placeholder_and_hidden(self):
+        with_data = {
+            "sofascore_home_win_prob": 60, "sofascore_draw_prob": 20,
+            "sofascore_away_win_prob": 20, "sofascore_total_votes": 500,
+            "sofascore_found": True,
+        }
+        placeholder = {"sofascore_found": False, "sofascore_skip_reason": "not_found"}
+        legacy_hidden = {}  # brak `sofascore_found`
+        summary = _summarize_sofascore_coverage([with_data, placeholder, legacy_hidden])
+        assert summary["with_data"] == 1
+        assert summary["placeholder"] == 1
+        assert summary["hidden"] == 1
+        assert summary["_skip_reasons"] == {"not_found": 1}
+
+    def test_skip_reasons_grouped_by_prefix(self):
+        # Powody z dwukropkiem i wartością są grupowane do prefiksu.
+        rows = [
+            {"sofascore_found": False, "sofascore_skip_reason": "error:timeout"},
+            {"sofascore_found": False, "sofascore_skip_reason": "error:403"},
+            {"sofascore_found": False, "sofascore_skip_reason": "not_found"},
+        ]
+        summary = _summarize_sofascore_coverage(rows)
+        assert summary["placeholder"] == 3
+        assert summary["_skip_reasons"] == {"error": 2, "not_found": 1}
+
+
+class TestQualificationGateFanVote:
+    """Bezpośrednia diagnostyka: powody odrzucenia przez gate muszą zawierać
+    konkretną wartość, a brak danych SofaScore musi być warningiem, nie
+    blokerem."""
+
+    def test_below_threshold_records_value(self):
+        from qualification_gate import qualify_match
+        match = {
+            "qualifies": True, "sport": "football", "match_time": "20.04.2050 20:00",
+            "home_odds": 2.0, "away_odds": 2.5,
+            "sofascore_home_win_prob": 50, "sofascore_draw_prob": 30,
+            "sofascore_away_win_prob": 20,
+        }
+        passes = qualify_match(match)
+        assert passes is False
+        reasons = match["channel_skip_reasons"]
+        # Próg piłki to 65, dominant to 50 → konkretny powód z liczbami.
+        assert any(r.startswith("fan_vote_below_threshold:50/65") for r in reasons)
+        assert match["fan_vote_dominant"] == 50.0
+        assert match["fan_vote_threshold"] == 65.0
+
+    def test_missing_data_is_warning_not_blocker(self):
+        from qualification_gate import qualify_match
+        match = {
+            "qualifies": True, "sport": "football", "match_time": "20.04.2050 20:00",
+            "home_odds": 2.0, "away_odds": 2.5,
+        }
+        passes = qualify_match(match)
+        assert passes is True
+        assert "fan_vote_missing" in match.get("channel_skip_reasons_warnings", [])
+        assert match["channel_skip_reasons"] == []
+
+    def test_passes_when_dominant_meets_threshold(self):
+        from qualification_gate import qualify_match
+        match = {
+            "qualifies": True, "sport": "football", "match_time": "20.04.2050 20:00",
+            "home_odds": 2.0, "away_odds": 2.5,
+            "sofascore_home_win_prob": 70, "sofascore_draw_prob": 20,
+            "sofascore_away_win_prob": 10,
+        }
+        passes = qualify_match(match)
+        assert passes is True
+        assert match["channel_skip_reasons"] == []
+        assert match["fan_vote_dominant"] == 70.0
