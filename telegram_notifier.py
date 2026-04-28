@@ -250,16 +250,21 @@ def _forebet_line(match: Dict[str, Any]) -> str:
 def _sofascore_fan_vote_line(match: Dict[str, Any]) -> str:
     """Labeled SofaScore fan-vote line with the leading outcome.
 
-    Example: 'SofaScore fan vote: 83% on 1' (where 1/X/2 follows the
-    outcome with the highest share). Returns '' when no probabilities
-    are present.
+    Example: ``'SofaScore fan vote: 83% on 1'`` (where 1/X/2 follows the
+    outcome with the highest share).
+
+    Gdy nie ma żadnych liczb, ale scraper jawnie zaznaczył próbę
+    (``sofascore_found=False`` lub ``sofascore_skip_reason``), zwracamy
+    krótką diagnostyczną linijkę typu ``'SofaScore fan vote: brak danych
+    (not_found)'`` zamiast pustego stringu — żeby użytkownik od razu
+    widział, że źródło było sprawdzane, a nie wycięte.
     """
     probs = {
         "1": match.get("sofascore_home_win_prob"),
         "X": match.get("sofascore_draw_prob"),
         "2": match.get("sofascore_away_win_prob"),
     }
-    numeric = {}
+    numeric: Dict[str, float] = {}
     for key, val in probs.items():
         if val is None:
             continue
@@ -267,10 +272,27 @@ def _sofascore_fan_vote_line(match: Dict[str, Any]) -> str:
             numeric[key] = float(val)
         except (ValueError, TypeError):
             continue
-    if not numeric:
+    if numeric:
+        leading = max(numeric, key=lambda k: numeric[k])
+        return f"SofaScore fan vote: {numeric[leading]:.0f}% on {leading}"
+
+    # Brak liczb — sprawdź czy scraper coś próbował.
+    found_raw = match.get("sofascore_found")
+    skip_reason = match.get("sofascore_skip_reason")
+    tried = False
+    if isinstance(found_raw, bool):
+        tried = found_raw is False
+    elif isinstance(found_raw, str):
+        tried = found_raw.strip().lower() in ("false", "0", "no")
+    if not tried and skip_reason:
+        tried = True
+    if not tried:
         return ""
-    leading = max(numeric, key=lambda k: numeric[k])
-    return f"SofaScore fan vote: {numeric[leading]:.0f}% on {leading}"
+
+    reason_label = ""
+    if skip_reason:
+        reason_label = f" ({str(skip_reason).split(':', 1)[0]})"
+    return f"SofaScore fan vote: brak danych{reason_label}"
 
 
 # ---------------------------------------------------------------------------

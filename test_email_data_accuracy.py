@@ -260,6 +260,28 @@ class TestSofascorePlaceholder:
         html = create_html_email([match], "2026-04-20")
         assert "SofaScore Fan Vote: brak danych" in html
 
+    def test_placeholder_when_step_skipped_due_to_flag_off(self):
+        # FAZA 2 jawnie pominęła krok SofaScore — chcemy nadal widzieć
+        # placeholder z czytelnym powodem, żeby user wiedział, że źródło
+        # zostało celowo pominięte.
+        match = self._base()
+        match["sofascore_found"] = False
+        match["sofascore_skip_reason"] = "use_sofascore_flag_off"
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote: brak danych" in html
+        assert "use_sofascore_flag_off" in html
+
+    def test_placeholder_when_module_import_error(self):
+        # Import sofascore_scraper padł w CI — placeholder musi to pokazać.
+        match = self._base()
+        match["sofascore_found"] = False
+        match["sofascore_skip_reason"] = "import_error:ImportError: cannot import"
+        html = create_html_email([match], "2026-04-20")
+        assert "SofaScore Fan Vote: brak danych" in html
+        # Pokazujemy pełny powód w mailu (placeholder dopuszcza dłuższy tekst);
+        # Telegram skraca go do prefiksu, ale mail może nieść więcej kontekstu.
+        assert "import_error" in html
+
 
 class TestSofascoreCoverageSummary:
     def test_counts_with_data_placeholder_and_hidden(self):

@@ -16,6 +16,7 @@ import json
 import math
 import re
 from datetime import datetime
+from typing import Any, Dict, Optional
 from livesport_h2h_scraper import start_driver, get_match_links_from_day, process_match, process_match_tennis, detect_sport_from_url
 from email_notifier import send_email_notification, send_split_emails_by_sport
 from telegram_notifier import send_telegram_summary
@@ -489,17 +490,35 @@ def scrape_and_send_email(
                     print(f"   ⚠️ Forebet scraper niedostępny: {type(e).__name__} - {e}")
             
             # Import SofaScore jeśli potrzebny
+            sofascore_unavailable_reason: Optional[str] = None
             if use_sofascore:
                 try:
                     from sofascore_scraper import get_sofascore_prediction
                     SOFASCORE_AVAILABLE = True
+                    print(f"   ✅ SofaScore scraper załadowany (gotowy do Fan Vote)")
                 except ImportError as ie:
                     SOFASCORE_AVAILABLE = False
+                    sofascore_unavailable_reason = f"import_error:{str(ie)[:80]}"
                     print(f"   ⚠️ SofaScore scraper niedostępny: ImportError - {ie}")
                 except Exception as e:
                     SOFASCORE_AVAILABLE = False
+                    sofascore_unavailable_reason = f"import_error:{type(e).__name__}:{str(e)[:80]}"
                     print(f"   ⚠️ SofaScore scraper niedostępny: {type(e).__name__} - {e}")
-            
+            else:
+                SOFASCORE_AVAILABLE = False
+                sofascore_unavailable_reason = "use_sofascore_flag_off"
+                print(f"   ℹ️ SofaScore wyłączone flagą (--use-sofascore nie podane)")
+
+            # Liczniki statusów SofaScore — chcemy w jednej linii zobaczyć
+            # po fazie 2 ile meczów dostało fan vote, ile było „not found",
+            # a ile w ogóle pominięto (flaga off / import padł).
+            sofascore_stats: Dict[str, int] = {
+                'found': 0,
+                'not_found': 0,
+                'error': 0,
+                'unavailable': 0,
+            }
+
             # Przetwórz każdy kwalifikujący się mecz
             enriched_count = 0
             for j, idx in enumerate(qualifying_indices, 1):
@@ -554,15 +573,18 @@ def scrape_and_send_email(
                         print(f"   ❌ Forebet błąd: {str(e)[:50]}")
                 
                 # SOFASCORE
+                # Kontrakt: pola sofascore_* MUSZĄ istnieć w każdym kwalifikującym
+                # rekordzie, niezależnie od tego czy moduł SofaScore był wywołany.
+                # Dzięki temu mailer/Telegram potrafi pokazać czytelny placeholder
+                # zamiast cicho ukrywać sekcję Fan Vote.
+                row.setdefault('sofascore_home_win_prob', None)
+                row.setdefault('sofascore_draw_prob', None)
+                row.setdefault('sofascore_away_win_prob', None)
+                row.setdefault('sofascore_total_votes', 0)
+                row.setdefault('sofascore_found', False)
+                row.setdefault('sofascore_skip_reason', None)
+
                 if use_sofascore and SOFASCORE_AVAILABLE:
-                    # Inicjalizuj jawnie, by w mailu odróżnić "nie próbowano"
-                    # od "próbowano ale brak danych" (sofascore_found=False).
-                    row.setdefault('sofascore_home_win_prob', None)
-                    row.setdefault('sofascore_draw_prob', None)
-                    row.setdefault('sofascore_away_win_prob', None)
-                    row.setdefault('sofascore_total_votes', 0)
-                    row['sofascore_found'] = False
-                    row['sofascore_skip_reason'] = None
                     try:
                         sofascore_result = get_sofascore_prediction(
                             home_team=home_team,
@@ -577,13 +599,32 @@ def scrape_and_send_email(
                             row['sofascore_away_win_prob'] = sofascore_result.get('away_win_prob')
                             row['sofascore_total_votes'] = sofascore_result.get('total_votes')
                             row['sofascore_found'] = True
-                            print(f"   ✅ SofaScore: H:{row['sofascore_home_win_prob']}% D:{row['sofascore_draw_prob']}% A:{row['sofascore_away_win_prob']}%")
+                            row['sofascore_skip_reason'] = None
+                            sofascore_stats['found'] += 1
+                            print(
+                                f"   ✅ SofaScore: H:{row['sofascore_home_win_prob']}% "
+                                f"D:{row['sofascore_draw_prob']}% A:{row['sofascore_away_win_prob']}% "
+                                f"({row.get('sofascore_total_votes') or 0} głosów)"
+                            )
                         else:
                             row['sofascore_skip_reason'] = 'not_found'
-                            print(f"   ⚠️ SofaScore: nie znaleziono")
+                            sofascore_stats['not_found'] += 1
+                            print(f"   ⚠️ SofaScore: nie znaleziono (brak meczu w API)")
                     except Exception as e:
                         row['sofascore_skip_reason'] = f'error:{str(e)[:60]}'
-                        print(f"   ❌ SofaScore błąd: {str(e)[:50]}")
+                        sofascore_stats['error'] += 1
+                        print(f"   ❌ SofaScore błąd: {str(e)[:80]}")
+                else:
+                    # Jawnie zaznacz, że krok został pominięty — w przeciwnym
+                    # razie użytkownik widzi mecz bez fan vote i nie wie czemu.
+                    row['sofascore_skip_reason'] = (
+                        sofascore_unavailable_reason or 'sofascore_step_skipped'
+                    )
+                    sofascore_stats['unavailable'] += 1
+                    print(
+                        f"   ⏭️ SofaScore pominięty: "
+                        f"{row['sofascore_skip_reason']}"
+                    )
                 
                 # GEMINI AI (jeśli włączone)
                 if use_gemini:
@@ -617,6 +658,30 @@ def scrape_and_send_email(
             print(f"   Czas: {phase2_duration/60:.1f} min ({phase2_duration:.0f}s)")
             print(f"   Wzbogaconych: {enriched_count}/{qualifying_count}")
             print(f"   Średni czas/mecz: {phase2_duration/qualifying_count:.2f}s" if qualifying_count > 0 else "")
+            # Podsumowanie SofaScore Fan Vote (jednolinijkowo, żeby od razu
+            # widzieć czy fan vote działa, niezależnie od logów per mecz).
+            ss_total = (
+                sofascore_stats['found']
+                + sofascore_stats['not_found']
+                + sofascore_stats['error']
+                + sofascore_stats['unavailable']
+            )
+            ss_pct = (sofascore_stats['found'] / ss_total * 100) if ss_total else 0.0
+            print(
+                f"   🗳️ SofaScore Fan Vote: "
+                f"{sofascore_stats['found']} found"
+                f" / {sofascore_stats['not_found']} not_found"
+                f" / {sofascore_stats['error']} error"
+                f" / {sofascore_stats['unavailable']} unavailable"
+                f"  → coverage {ss_pct:.0f}%"
+            )
+            if sofascore_stats['unavailable'] == ss_total and ss_total > 0:
+                print(
+                    f"   ⚠️ Fan Vote pominięty dla wszystkich meczów"
+                    f" (powód: {sofascore_unavailable_reason or 'unknown'})."
+                    f" Sprawdź czy --use-sofascore jest ustawione i czy"
+                    f" sofascore_scraper importuje się poprawnie."
+                )
             # v4.1: Statystyki HTTP SofaScore - podpowiedź czy 403 / WAF / brak meczu.
             try:
                 from sofascore_scraper import print_http_stats as _ss_http_stats

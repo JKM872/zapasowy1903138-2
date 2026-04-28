@@ -358,6 +358,50 @@ class TestFiltersInBuildSummary:
 
 
 # ---------------------------------------------------------------------------
+# Tests: fan vote line — diagnostic fallback when scraper had no data
+# ---------------------------------------------------------------------------
+
+class TestSofascoreFanVoteLine:
+    def test_returns_value_when_present(self):
+        mod = _load_module()
+        m = {"sofascore_home_win_prob": 81, "sofascore_away_win_prob": 19}
+        line = mod._sofascore_fan_vote_line(m)
+        assert line == "SofaScore fan vote: 81% on 1"
+
+    def test_returns_empty_when_never_attempted(self):
+        mod = _load_module()
+        # No probs, no found flag, no skip reason → SofaScore step nie był odpalony.
+        # Nadal pomijamy, żeby legacy wiersze bez kontraktu nie zaśmiecały Telegramu.
+        line = mod._sofascore_fan_vote_line({})
+        assert line == ""
+
+    def test_returns_diagnostic_when_not_found(self):
+        mod = _load_module()
+        m = {"sofascore_found": False, "sofascore_skip_reason": "not_found"}
+        line = mod._sofascore_fan_vote_line(m)
+        assert line == "SofaScore fan vote: brak danych (not_found)"
+
+    def test_returns_diagnostic_when_step_skipped(self):
+        mod = _load_module()
+        m = {
+            "sofascore_found": False,
+            "sofascore_skip_reason": "use_sofascore_flag_off",
+        }
+        line = mod._sofascore_fan_vote_line(m)
+        assert line == "SofaScore fan vote: brak danych (use_sofascore_flag_off)"
+
+    def test_strips_long_error_payload(self):
+        mod = _load_module()
+        m = {
+            "sofascore_found": False,
+            "sofascore_skip_reason": "error:RuntimeError: timeout after 30s",
+        }
+        line = mod._sofascore_fan_vote_line(m)
+        # Bierzemy tylko prefix przed `:`, żeby Telegram nie pokazywał stack-traces.
+        assert line == "SofaScore fan vote: brak danych (error)"
+
+
+# ---------------------------------------------------------------------------
 # Tests: time filter
 # ---------------------------------------------------------------------------
 
