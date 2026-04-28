@@ -231,6 +231,18 @@ def scrape_and_send_email(
         # FAZA 1: SZYBKIE SPRAWDZENIE KWALIFIKACJI (BEZ Forebet/SofaScore)
         # ========================================================================
         phase1_start = time_module.time()
+        # Tennis-specific telemetry — pomaga porównać wpływ balanced fast-path
+        # (early odds gate + warunkowe pominięcie last-match/surface) na czas
+        # FAZY 1. Liczymy tylko mecze tenisowe, niezależnie od pozostałych
+        # sportów w runie.
+        tennis_phase_paths: Dict[str, int] = {
+            'full_pipeline': 0,
+            'fast_odds_skip': 0,
+            'partial_data_fastpath': 0,
+        }
+        tennis_total_time = 0.0
+        tennis_processed = 0
+        tennis_qualifies_count = 0
         print(f"\n" + "="*70)
         print(f"⚡ FAZA 1/2: SZYBKIE SPRAWDZENIE KWALIFIKACJI ({len(urls)} meczów)")
         print(f"   (bez Forebet/SofaScore - tylko H2H + forma)")
@@ -260,7 +272,15 @@ def scrape_and_send_email(
                     
                     if is_tennis:
                         # Użyj dedykowanej funkcji dla tenisa (ADVANCED)
+                        _t_start = time_module.time()
                         info = process_match_tennis(url, driver)
+                        _t_elapsed = time_module.time() - _t_start
+                        tennis_total_time += _t_elapsed
+                        tennis_processed += 1
+                        path_label = info.get('tennis_phase_path') or 'full_pipeline'
+                        tennis_phase_paths[path_label] = tennis_phase_paths.get(path_label, 0) + 1
+                        if info.get('qualifies'):
+                            tennis_qualifies_count += 1
 
                         # Validate: skip rows with missing participant names
                         if not info.get('home_team') or not info.get('away_team'):
@@ -418,6 +438,18 @@ def scrape_and_send_email(
             print(f"      With ranking: {len(tennis_with_ranking)}")
             print(f"      With form: {len(tennis_with_form)}")
             print(f"      With odds: {len(tennis_with_odds)}")
+            # Balanced fast-path telemetry: pokazuje, ile meczów odpadło na
+            # tanim odds gate, a ile w skróconej ścieżce partial_data_fastpath.
+            # Dzięki temu można jednym spojrzeniem zweryfikować, czy fast-path
+            # rzeczywiście oszczędza czas vs full_pipeline.
+            if tennis_processed > 0:
+                avg_tennis = tennis_total_time / tennis_processed
+                print(f"      Phase1 paths: full={tennis_phase_paths.get('full_pipeline', 0)} "
+                      f"| fast_odds_skip={tennis_phase_paths.get('fast_odds_skip', 0)} "
+                      f"| partial_data_fastpath={tennis_phase_paths.get('partial_data_fastpath', 0)}")
+                print(f"      Tennis time: {tennis_total_time:.0f}s total, "
+                      f"avg {avg_tennis:.2f}s/match "
+                      f"(processed={tennis_processed}, qualifies={tennis_qualifies_count})")
             
             # Debug: Pokaż przykładowe dane (w CI)
             if IS_CI and tennis_qualifying and len(tennis_qualifying) > 0:

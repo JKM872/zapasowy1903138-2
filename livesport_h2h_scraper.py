@@ -2547,6 +2547,8 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         'home_odds': None,
         'away_odds': None,
         'tennis_skip_reason': None, # Reason for hard skip (if any)
+        'tennis_phase_path': 'full_pipeline',  # full_pipeline | fast_odds_skip | partial_data_fastpath
+
         # Compatibility fields (always present)
         'home_form': [],
         'away_form': [],
@@ -2654,6 +2656,20 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
                     print(f"      ⚠️ Tennis: Livesport API odds not found")
             except Exception as e:
                 print(f"      ⚠️ Tennis: Livesport API odds error: {e}")
+
+        # ── EARLY ODDS GATE (balanced fast-path) ──
+        # Najczęstszy powód odrzucenia tenisa to `odds_below_threshold`. Jeżeli
+        # obydwa kursy są już znane i któryś leży poniżej progu, nie ma sensu
+        # nawigować do H2H ani ekstrahować last-match/surface form — to
+        # oszczędza ~5–15 s na mecz przy niskich kursach typu 1.05/8.0.
+        gate_reason = _tennis_odds_gate_reason(out)
+        if gate_reason:
+            out['tennis_skip_reason'] = gate_reason
+            out['tennis_data_warnings'] = ['fast_path_odds_gate']
+            out['qualifies'] = False
+            out['tennis_phase_path'] = 'fast_odds_skip'
+            print(f"   ❌ Tennis HARD SKIP: {gate_reason}  [fast_path_odds_gate]")
+            return _finalise(out)
 
         # ── STEP 3: Build & validate H2H URL, then navigate ──
         # Strategy A: find an H2H link on the match page itself
@@ -2825,13 +2841,21 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
 
     # ===================================================================
     # 5. LAST MATCH PER PLAYER (from "Ostatnie mecze" / "Last matches" tabs)
+    #    + 6. SURFACE FORM
+    # Balanced fast-path: gdy mecz nie ma żadnych podstawowych sygnałów
+    # (brak H2H, brak rankingów, brak form), oba kroki nie zmienią wyniku
+    # (i tak skończy jako partial_data z bardzo niskim score'em), a każdy
+    # robi własny driver.get + sleep ≥1.5 s. Pomijamy je, oszczędzając
+    # zwykle ~5 s/mecz, i zostawiamy explicit warning dla audytu.
     # ===================================================================
-    _extract_last_matches_for_players(soup, driver, url, out, player_a, player_b)
-
-    # ===================================================================
-    # 6. SURFACE FORM: last 5 matches on same surface per player
-    # ===================================================================
-    _compute_surface_form(soup, driver, url, out, player_a, player_b)
+    if _tennis_should_skip_expensive_steps(out):
+        tennis_warnings.append('fast_path_skipped_expensive_steps')
+        out['tennis_phase_path'] = 'partial_data_fastpath'
+        print(f"   ⏭️ Tennis fast-path: pomijam last-matches + surface form "
+              f"(brak h2h/rankingów/form — i tak partial_data)")
+    else:
+        _extract_last_matches_for_players(soup, driver, url, out, player_a, player_b)
+        _compute_surface_form(soup, driver, url, out, player_a, player_b)
 
     # ===================================================================
     # DATA COMPLETENESS: hard fails vs soft warnings
@@ -3207,6 +3231,62 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
 
 # Tennis data completeness threshold
 TENNIS_MIN_ODDS = 1.35
+
+
+def _tennis_odds_gate_reason(out: Dict) -> Optional[str]:
+    """Early-skip reason oparty wyłącznie o kursy.
+
+    Zwraca powód skipu (`odds_below_threshold: …`) tylko gdy oba kursy są już
+    pobrane i któryś jest poniżej `TENNIS_MIN_ODDS`. Gdy któregoś brak lub są
+    nieliczbowe, zwracamy `None` — to pozostawia szansę kolejnym fallbackom
+    (np. FlashScore) i nie odrzuca meczu pochopnie.
+
+    Używane w `process_match_tennis` jako szybki gate zaraz po pobraniu kursów,
+    przed kosztowną nawigacją do H2H i ekstrakcją last-matches/surface form.
+    Dzięki temu mecze z bardzo niskim/wysokim kursem (najczęstszy powód
+    `odds_below_threshold` w logach) odpadają w sekundach zamiast w minutach.
+    """
+    ho = out.get('home_odds')
+    ao = out.get('away_odds')
+    if ho is None or ao is None:
+        return None
+    try:
+        ho_f = float(ho)
+        ao_f = float(ao)
+    except (ValueError, TypeError):
+        return None
+    if ho_f < TENNIS_MIN_ODDS:
+        return f"odds_below_threshold: A ({ho_f:.2f}) < {TENNIS_MIN_ODDS}"
+    if ao_f < TENNIS_MIN_ODDS:
+        return f"odds_below_threshold: B ({ao_f:.2f}) < {TENNIS_MIN_ODDS}"
+    return None
+
+
+def _tennis_should_skip_expensive_steps(out: Dict) -> bool:
+    """Heurystyka „balanced": pomiń droższe kroki gdy mecz prawie na pewno
+    skończy jako `partial_data` z bardzo niskim score'em.
+
+    Skip kosztownych etapów (`_extract_last_matches_for_players`,
+    `_compute_surface_form` — każdy robi własny `driver.get` + `time.sleep`)
+    tylko jeśli wszystkie poniższe są prawdą:
+
+      * brak ostatniego H2H (`h2h_count == 0`),
+      * brak rankingów dla obu graczy,
+      * brak form badges dla obu graczy.
+
+    Mecz z którymkolwiek z tych sygnałów daje szansę na zdobycie sensownego
+    score'u, więc tam pełny pipeline zostawiamy. Heurystyka jest celowo
+    konserwatywna — nie zmienia progów biznesowych ani struktury wyjścia,
+    tylko unika minutowego czekania na dane i tak nie do uratowania.
+    """
+    if (out.get('h2h_count') or 0) > 0:
+        return False
+    if out.get('ranking_a') or out.get('ranking_b'):
+        return False
+    if out.get('form_a') or out.get('form_b'):
+        return False
+    return True
+
 
 def _check_tennis_data_completeness(out: Dict) -> tuple:
     """

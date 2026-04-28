@@ -434,3 +434,140 @@ class TestTennisDataWarningsField:
         from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
         source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
         assert '_build_tennis_h2h_url' in source
+
+
+# ---------------------------------------------------------------------------
+# Balanced fast-path: early odds gate + warunkowe pominięcie kosztownych
+# kroków ekstrakcji.  Cel: skrócenie FAZY 1 dla tenisa bez utraty trafnych
+# kwalifikacji.
+# ---------------------------------------------------------------------------
+
+class TestTennisOddsGate:
+    """Czysty helper `_tennis_odds_gate_reason` — wczesny skip oparty wyłącznie
+    o kursy.  Testowany w izolacji, bez selenium, na sztucznych dictach."""
+
+    def test_below_threshold_home_returns_reason(self):
+        from livesport_h2h_scraper import _tennis_odds_gate_reason, TENNIS_MIN_ODDS  # pyright: ignore[reportPrivateUsage]
+        reason = _tennis_odds_gate_reason({'home_odds': 1.10, 'away_odds': 5.50})
+        assert reason is not None
+        assert 'A (1.10)' in reason
+        assert str(TENNIS_MIN_ODDS) in reason
+
+    def test_below_threshold_away_returns_reason(self):
+        from livesport_h2h_scraper import _tennis_odds_gate_reason  # pyright: ignore[reportPrivateUsage]
+        reason = _tennis_odds_gate_reason({'home_odds': 5.50, 'away_odds': 1.20})
+        assert reason is not None
+        assert 'B (1.20)' in reason
+
+    def test_both_above_threshold_returns_none(self):
+        from livesport_h2h_scraper import _tennis_odds_gate_reason  # pyright: ignore[reportPrivateUsage]
+        assert _tennis_odds_gate_reason({'home_odds': 1.85, 'away_odds': 2.10}) is None
+
+    def test_missing_odds_returns_none_to_allow_fallback(self):
+        # Gate celowo nie odpala gdy brakuje któregoś kursu — zostawiamy
+        # szansę kolejnym fallbackom (np. FlashScore).
+        from livesport_h2h_scraper import _tennis_odds_gate_reason  # pyright: ignore[reportPrivateUsage]
+        assert _tennis_odds_gate_reason({'home_odds': 1.85, 'away_odds': None}) is None
+        assert _tennis_odds_gate_reason({'home_odds': None, 'away_odds': 2.10}) is None
+        assert _tennis_odds_gate_reason({}) is None
+
+    def test_invalid_odds_returns_none(self):
+        from livesport_h2h_scraper import _tennis_odds_gate_reason  # pyright: ignore[reportPrivateUsage]
+        assert _tennis_odds_gate_reason({'home_odds': 'n/a', 'away_odds': 'n/a'}) is None
+
+    def test_at_threshold_passes(self):
+        # Boundary: dokładnie 1.35 — nie powinno być traktowane jako poniżej.
+        from livesport_h2h_scraper import _tennis_odds_gate_reason, TENNIS_MIN_ODDS  # pyright: ignore[reportPrivateUsage]
+        assert _tennis_odds_gate_reason(
+            {'home_odds': TENNIS_MIN_ODDS, 'away_odds': TENNIS_MIN_ODDS}
+        ) is None
+
+
+class TestTennisShouldSkipExpensiveSteps:
+    """Heurystyka pomijania `_extract_last_matches_for_players` /
+    `_compute_surface_form` — pomijaj tylko gdy nic z H2H/rankingu/form."""
+
+    def test_skips_when_no_signals_at_all(self):
+        from livesport_h2h_scraper import _tennis_should_skip_expensive_steps  # pyright: ignore[reportPrivateUsage]
+        out = {'h2h_count': 0, 'ranking_a': None, 'ranking_b': None,
+               'form_a': [], 'form_b': []}
+        assert _tennis_should_skip_expensive_steps(out) is True
+
+    def test_keeps_full_pipeline_when_h2h_present(self):
+        from livesport_h2h_scraper import _tennis_should_skip_expensive_steps  # pyright: ignore[reportPrivateUsage]
+        out = {'h2h_count': 2, 'ranking_a': None, 'ranking_b': None,
+               'form_a': [], 'form_b': []}
+        assert _tennis_should_skip_expensive_steps(out) is False
+
+    def test_keeps_full_pipeline_when_ranking_present(self):
+        from livesport_h2h_scraper import _tennis_should_skip_expensive_steps  # pyright: ignore[reportPrivateUsage]
+        out = {'h2h_count': 0, 'ranking_a': 50, 'ranking_b': None,
+               'form_a': [], 'form_b': []}
+        assert _tennis_should_skip_expensive_steps(out) is False
+
+    def test_keeps_full_pipeline_when_form_present(self):
+        from livesport_h2h_scraper import _tennis_should_skip_expensive_steps  # pyright: ignore[reportPrivateUsage]
+        out = {'h2h_count': 0, 'ranking_a': None, 'ranking_b': None,
+               'form_a': ['W', 'L'], 'form_b': []}
+        assert _tennis_should_skip_expensive_steps(out) is False
+
+    def test_handles_missing_keys_gracefully(self):
+        # Brak kluczy = brak sygnałów = pomijamy.  Helper musi być odporny.
+        from livesport_h2h_scraper import _tennis_should_skip_expensive_steps  # pyright: ignore[reportPrivateUsage]
+        assert _tennis_should_skip_expensive_steps({}) is True
+
+
+class TestTennisFastPathIntegration:
+    """Integracja: process_match_tennis musi mieć early-skip gate + fast-path
+    branching widoczny w kodzie źródłowym i nową kolumnę telemetryczną."""
+
+    def test_early_odds_gate_called_before_h2h_navigation(self):
+        # Gate musi być umieszczony PO bloku Livesport API odds, ale PRZED
+        # nawigacją do H2H — inaczej oszczędność czasu znika.
+        import inspect
+        from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
+        source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
+        gate_idx = source.find('_tennis_odds_gate_reason(out)')
+        h2h_nav_idx = source.find("# ── STEP 3: Build & validate H2H URL")
+        assert gate_idx != -1, 'odds gate not invoked in process_match_tennis'
+        assert h2h_nav_idx != -1, 'STEP 3 marker missing'
+        assert gate_idx < h2h_nav_idx, 'odds gate must precede H2H navigation'
+
+    def test_fast_path_branch_present(self):
+        import inspect
+        from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
+        source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
+        assert '_tennis_should_skip_expensive_steps' in source
+        assert 'fast_path_skipped_expensive_steps' in source
+
+    def test_phase_path_field_initialised(self):
+        import inspect
+        from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
+        source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
+        assert "'tennis_phase_path'" in source
+
+    def test_fast_skip_marks_phase_path(self):
+        # Skip ścieżką odds musi ustawić tennis_phase_path='fast_odds_skip',
+        # żeby telemetria w scrape_and_notify mogła to policzyć.
+        import inspect
+        from livesport_h2h_scraper import process_match_tennis  # pyright: ignore[reportUnknownVariableType]
+        source = inspect.getsource(process_match_tennis)  # pyright: ignore[reportUnknownArgumentType]
+        assert "'fast_odds_skip'" in source
+        assert "'partial_data_fastpath'" in source
+
+
+class TestTennisPhase1Telemetry:
+    """scrape_and_notify musi zliczać tennis_phase_paths i czas tenisa."""
+
+    def test_telemetry_counters_in_source(self):
+        with open('scrape_and_notify.py', 'r', encoding='utf-8') as f:
+            source = f.read()
+        assert 'tennis_phase_paths' in source
+        assert 'tennis_total_time' in source
+        assert 'tennis_qualifies_count' in source
+
+    def test_telemetry_summary_printed(self):
+        with open('scrape_and_notify.py', 'r', encoding='utf-8') as f:
+            source = f.read()
+        assert 'Phase1 paths:' in source
+        assert 'Tennis time:' in source
