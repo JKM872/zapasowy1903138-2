@@ -161,17 +161,30 @@ jobs:
         run: |
           mkdir -p results
           mkdir -p outputs
+          echo "📦 Collecting baseball JSON results..."
           find artifacts -name '*baseball*.json' -path '*/results/*' | while read f; do
             fname=$(basename "$f")
             echo "  → $fname"
             cp "$f" "results/$fname"
           done
+          echo "📦 Collecting mailed manifests (needed by check_results)..."
+          find artifacts -name 'mailed_manifest_*.json' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "outputs/$fname"
+          done
+          echo "📋 Outputs directory:"
+          ls -la outputs/mailed_manifest_*.json 2>/dev/null || echo "No baseball manifests found"
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/*baseball*.json 2>/dev/null || true
+          # Bez tego linijki workflow `Check Results & Accuracy Report` nie
+          # widziałby manifestów baseballowych po `actions/checkout`, bo żyły
+          # one tylko jako artifacty z 14-dniową retencją.
+          git add outputs/mailed_manifest_*.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ No baseball results to commit"
           else

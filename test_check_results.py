@@ -20,8 +20,10 @@ from check_results import (
     _predicted_winner,
     generate_report_html,
     save_summary,
+    diagnose_manifest_state,
+    save_diagnostic_summary,
 )
-from email_notifier import _save_mailed_manifest
+from email_notifier import _save_mailed_manifest, _save_empty_manifest_marker
 from telegram_notifier import _save_telegram_manifest, _MANIFEST_FIELDS
 
 
@@ -454,3 +456,167 @@ class TestMergeManifests:
 
     def test_merge_empty_inputs(self):
         assert merge_manifests([], []) == []
+
+
+# ---------------------------------------------------------------------------
+# Manifest diagnosis (no_manifest / empty_run / has_matches)
+# ---------------------------------------------------------------------------
+
+class TestManifestDiagnosis:
+    def test_state_has_matches(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        with open('outputs/mailed_manifest_2026-04-27_football.json', 'w') as f:
+            json.dump([_match(url='http://m1')], f)
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        assert info['state'] == 'has_matches'
+        assert any('mailed_manifest_2026-04-27' in p for p in info['files'])
+        assert info['empty_reasons'] == []
+
+    def test_state_empty_run_via_marker(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        _save_empty_manifest_marker('2026-04-27', reason='no_qualified_after_filters')
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        assert info['state'] == 'empty_run'
+        assert 'no_qualified_after_filters' in info['empty_reasons']
+
+    def test_state_no_manifest(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        assert info['state'] == 'no_manifest'
+        assert info['files'] == []
+        assert info['has_results_fallback'] is False
+
+    def test_state_no_manifest_with_results_fallback(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('results', exist_ok=True)
+        with open('results/matches_2026-04-27_football.json', 'w') as f:
+            json.dump([], f)
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        assert info['state'] == 'no_manifest'
+        assert info['has_results_fallback'] is True
+
+    def test_state_telegram_present(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        with open('outputs/telegram_manifest_2026-04-27.json', 'w') as f:
+            json.dump({'matches': [_match(url='http://t1')]}, f)
+        info = diagnose_manifest_state('2026-04-27', source='telegram')
+        assert info['state'] == 'has_matches'
+
+    def test_save_diagnostic_summary_empty_run(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        _save_empty_manifest_marker('2026-04-27', reason='no_qualified_after_filters')
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        path = save_diagnostic_summary('2026-04-27', info, source='email')
+        assert os.path.exists(path)
+        with open(path, 'r') as f:
+            data = json.load(f)
+        assert data['status'] == 'pipeline_ok_but_no_qualified_matches'
+        assert data['state'] == 'empty_run'
+        assert data['date'] == '2026-04-27'
+        assert data['total'] == 0
+
+    def test_save_diagnostic_summary_no_manifest(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        path = save_diagnostic_summary('2026-04-27', info, source='email')
+        with open(path, 'r') as f:
+            data = json.load(f)
+        assert data['status'] == 'manifest_missing_no_upstream_data'
+        assert data['has_results_fallback'] is False
+
+    def test_save_diagnostic_summary_no_manifest_but_results(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+        os.makedirs('results', exist_ok=True)
+        with open('results/matches_2026-04-27_football.json', 'w') as f:
+            json.dump([], f)
+        info = diagnose_manifest_state('2026-04-27', source='email')
+        path = save_diagnostic_summary('2026-04-27', info, source='email')
+        with open(path, 'r') as f:
+            data = json.load(f)
+        assert data['status'] == 'manifest_missing_but_results_present'
+        assert data['has_results_fallback'] is True
+
+    def test_load_manifests_skips_empty_marker(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        _save_empty_manifest_marker('2026-04-27', reason='no_qualified_after_filters')
+        # Empty marker shouldn't poison real loaders with placeholder rows.
+        result = load_manifests('2026-04-27')
+        assert result == []
+
+
+# ---------------------------------------------------------------------------
+# send_split_emails_by_sport date contract
+# ---------------------------------------------------------------------------
+
+class TestSendSplitEmailsDateContract:
+    def test_uses_explicit_date_for_manifest(self, tmp_path, monkeypatch):
+        """Manifest filename must match `--date` from the CLI (not `now()`)."""
+        import pandas as pd  # local import — pandas is heavy
+        from email_notifier import send_split_emails_by_sport
+
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+
+        df = pd.DataFrame([
+            {
+                'match_url': 'http://m1', 'home_team': 'A', 'away_team': 'B',
+                'sport': 'football', 'home_odds': 1.80, 'away_odds': 2.10,
+                'draw_odds': 3.20,
+                'qualifies': True, 'channel_qualifies': True,
+            }
+        ])
+        csv_path = str(tmp_path / 'matches.csv')
+        df.to_csv(csv_path, index=False)
+
+        # Dummy SMTP credentials should short-circuit before SMTP login,
+        # but manifest must still be written.
+        sent = send_split_emails_by_sport(
+            csv_file=csv_path,
+            to_email='noreply@localhost',
+            from_email='noreply@localhost',
+            password='dummy',
+            date='2026-04-27',
+        )
+        assert sent == 0  # dummy creds → no real send
+        manifest = 'outputs/mailed_manifest_2026-04-27_football.json'
+        assert os.path.exists(manifest), 'manifest must use --date, not datetime.now()'
+        with open(manifest, 'r') as f:
+            data = json.load(f)
+        assert data[0]['match_url'] == 'http://m1'
+
+    def test_writes_empty_marker_when_no_qualified(self, tmp_path, monkeypatch):
+        import pandas as pd
+        from email_notifier import send_split_emails_by_sport
+
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs', exist_ok=True)
+
+        df = pd.DataFrame([
+            {
+                'match_url': 'http://m1', 'home_team': 'A', 'away_team': 'B',
+                'sport': 'football', 'home_odds': None, 'away_odds': None,
+                'draw_odds': None,
+                'qualifies': False, 'channel_qualifies': False,
+            }
+        ])
+        csv_path = str(tmp_path / 'matches.csv')
+        df.to_csv(csv_path, index=False)
+
+        sent = send_split_emails_by_sport(
+            csv_file=csv_path,
+            to_email='noreply@localhost',
+            from_email='noreply@localhost',
+            password='dummy',
+            date='2026-04-27',
+        )
+        assert sent == 0
+        marker = 'outputs/mailed_manifest_2026-04-27_empty.json'
+        assert os.path.exists(marker), 'empty marker must be created so check_results can diagnose'
+        with open(marker, 'r') as f:
+            data = json.load(f)
+        assert data[0].get('empty_reason') == 'no_qualified_after_filters'

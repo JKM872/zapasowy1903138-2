@@ -60,7 +60,13 @@ SMTP_CONFIG: Dict[str, Dict[str, Union[str, int, bool]]] = {
 # ═══════════════════════════════════════════════════════════════════════════
 
 def load_manifests(date: str) -> List[Dict[str, Any]]:
-    """Load all mailed-event manifest files for a given date and merge."""
+    """Load all mailed-event manifest files for a given date and merge.
+
+    Plik z sufiksem ``_empty`` jest celowo wyprodukowanym przez
+    ``email_notifier`` markerem typu „pipeline OK, ale nic nie kwalifikowało
+    się do wysyłki” — nie traktujemy go jako rekord meczu, ale jego
+    obecność pozwala odróżnić ten przypadek od „manifest zaginął”.
+    """
     pattern = f'outputs/mailed_manifest_{date}*.json'
     files = sorted(glob.glob(pattern))
 
@@ -76,6 +82,9 @@ def load_manifests(date: str) -> List[Dict[str, Any]]:
         try:
             with open(fpath, 'r', encoding='utf-8') as f:
                 data = json.load(f)
+            if isinstance(data, list) and data and isinstance(data[0], dict) and data[0].get('empty_reason'):
+                print(f"   ℹ️ {fpath}: empty marker (reason={data[0].get('empty_reason')})")
+                continue
             for m in data:
                 url = m.get('match_url')
                 if url and url not in seen_urls:
@@ -87,6 +96,113 @@ def load_manifests(date: str) -> List[Dict[str, Any]]:
 
     print(f"✅ Wczytano łącznie {len(all_matches)} unikalnych meczów z manifestów email")
     return all_matches
+
+
+def diagnose_manifest_state(date: str, source: str) -> Dict[str, Any]:
+    """Return a structured diagnosis of manifest availability for *date*.
+
+    Keys:
+      - ``state``: one of
+        ``has_matches``  – manifest jest, są mecze do oceny
+        ``empty_run``    – manifest jest, ale to marker pustego runu
+        ``no_manifest``  – brak jakiegokolwiek pliku
+        ``no_results``   – brak ``results/`` jako fallback w tej dacie
+      - ``files``: lista znalezionych ścieżek
+      - ``empty_reasons``: zebrane powody z empty markerów
+      - ``has_results_fallback``: bool, czy `results/*{date}*` istnieje
+    """
+    info: Dict[str, Any] = {
+        'state': 'no_manifest',
+        'files': [],
+        'empty_reasons': [],
+        'has_results_fallback': False,
+    }
+
+    if source == 'telegram':
+        path = f'outputs/telegram_manifest_{date}.json'
+        if os.path.isfile(path):
+            info['files'].append(path)
+            info['state'] = 'has_matches'
+        return info
+
+    pattern = f'outputs/mailed_manifest_{date}*.json'
+    files = sorted(glob.glob(pattern))
+    info['files'] = files
+
+    has_real = False
+    for fpath in files:
+        try:
+            with open(fpath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
+        if isinstance(data, list) and data and isinstance(data[0], dict) and data[0].get('empty_reason'):
+            info['empty_reasons'].append(data[0].get('empty_reason'))
+            continue
+        if isinstance(data, list) and data:
+            has_real = True
+
+    if has_real:
+        info['state'] = 'has_matches'
+    elif info['empty_reasons']:
+        info['state'] = 'empty_run'
+    elif not files:
+        info['state'] = 'no_manifest'
+    else:
+        info['state'] = 'no_manifest'
+
+    # Fallback do scrapingu
+    results_pattern = f'results/*{date}*.json'
+    info['has_results_fallback'] = bool(glob.glob(results_pattern))
+
+    return info
+
+
+def save_diagnostic_summary(date: str, diagnosis: Dict[str, Any], source: str) -> str:
+    """Zapisz diagnostyczny `results_summary_{date}.json`, gdy nie ma danych
+    do oceny — workflow `Check Results` ma wtedy artefakt do commita zamiast
+    cichego "brak meczów".
+    """
+    os.makedirs('outputs', exist_ok=True)
+    tag = '' if source == 'email' else source
+    suffix = f'_{tag}' if tag else ''
+    path = f'outputs/results_summary_{date}{suffix}.json'
+
+    state = diagnosis.get('state', 'no_manifest')
+    if state == 'empty_run':
+        human_status = 'pipeline_ok_but_no_qualified_matches'
+    elif state == 'no_manifest' and diagnosis.get('has_results_fallback'):
+        human_status = 'manifest_missing_but_results_present'
+    elif state == 'no_manifest':
+        human_status = 'manifest_missing_no_upstream_data'
+    else:
+        human_status = state
+
+    summary = {
+        'date': date,
+        'generated_at': datetime.now().isoformat(),
+        'source': source,
+        'status': human_status,
+        'state': state,
+        'empty_reasons': diagnosis.get('empty_reasons', []),
+        'manifest_files': diagnosis.get('files', []),
+        'has_results_fallback': diagnosis.get('has_results_fallback', False),
+        'total': 0,
+        'finished': 0,
+        'won': 0,
+        'lost': 0,
+        'draw': 0,
+        'pending': 0,
+        'errors': 0,
+        'accuracy': 0.0,
+        'roi_pct': 0.0,
+        'roi_pln': 0.0,
+        'matches': [],
+    }
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
+    print(f"📁 Diagnostic summary zapisany: {path} (status={human_status})")
+    return path
 
 
 def load_telegram_manifest(date: str) -> List[Dict[str, Any]]:
@@ -681,7 +797,29 @@ def main():
             load_telegram_manifest(target_date),
         )
     if not matches:
+        diagnosis = diagnose_manifest_state(target_date, source)
+        state = diagnosis['state']
         print("⚠️ Brak danych do sprawdzenia — koniec.")
+        if state == 'empty_run':
+            print(
+                "   ℹ️ Pipeline zakończył się poprawnie, ale żaden mecz nie "
+                "zakwalifikował się do wysyłki (empty marker)."
+            )
+            if diagnosis.get('empty_reasons'):
+                print(f"   📌 Powody: {', '.join(sorted(set(diagnosis['empty_reasons'])))}")
+        elif state == 'no_manifest' and diagnosis.get('has_results_fallback'):
+            print(
+                "   ⚠️ Manifest jest pusty, ale w `results/` są dane scrapingu — "
+                "prawdopodobnie upstream workflow nie commitował manifestu "
+                "(np. baseball / przerwany run)."
+            )
+        elif state == 'no_manifest':
+            print(
+                "   ❌ Brak manifestu i brak fallback `results/` — "
+                "scraping w ogóle się nie wydarzył lub artefakty nie zostały "
+                "wgrane do repo."
+            )
+        save_diagnostic_summary(target_date, diagnosis, source)
         return
 
     # 2. Scrape results

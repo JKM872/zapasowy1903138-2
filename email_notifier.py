@@ -1351,6 +1351,7 @@ def send_email_notification(
     odds_limit: int = 15,
     min_odds_threshold: float = 0.0,
     grade_filter: Optional[set] = None,
+    date: Optional[str] = None,
 ):
     """
     Wysyła email z powiadomieniem o kwalifikujących się meczach
@@ -1525,7 +1526,10 @@ def send_email_notification(
     for m in matches:
         m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
     _log_sofascore_coverage(matches)
-    date = datetime.now().strftime('%Y-%m-%d')
+    # Spójność z `send_split_emails_by_sport`: bierzemy `--date` z wołającego
+    # zamiast `datetime.now()`, żeby manifest pasował do scrapingu.
+    if not date:
+        date = datetime.now().strftime('%Y-%m-%d')
 
     # Zapisz manifest meczów wysłanych mailem (źródło prawdy dla rozliczenia)
     if matches:
@@ -1664,6 +1668,33 @@ def _save_mailed_manifest(matches: List[Dict[str, Any]], date: str, tag: str = '
     return path
 
 
+def _save_empty_manifest_marker(date: str, reason: str) -> str:
+    """Zapisz pusty/diagnostyczny manifest, gdy żaden mecz nie kwalifikuje się
+    do wysyłki.
+
+    Plik trafia do `outputs/mailed_manifest_{date}_empty.json` i ma kształt
+    listy z jednym opisowym rekordem, dzięki czemu `check_results.py`
+    rozpoznaje "scraping ok, ale brak meczów do wysyłki" zamiast pokazywać
+    twardy błąd "brak manifestów" (z którym nie wiadomo co zrobić).
+    """
+    os.makedirs('outputs', exist_ok=True)
+    path = f'outputs/mailed_manifest_{date}_empty.json'
+    payload = [{
+        'match_url': None,
+        'home_team': None,
+        'away_team': None,
+        'sport': None,
+        'qualifies': False,
+        'channel_qualifies': False,
+        'empty_reason': reason,
+        'note': 'Pipeline run finished but no matches qualified for delivery.',
+    }]
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    print(f"📋 Empty manifest marker zapisany: {path} (reason={reason})")
+    return path
+
+
 SPORT_MIN_ODDS: Dict[str, float] = {
     'football': 1.50,
     'basketball': 1.30,
@@ -1713,6 +1744,7 @@ def send_split_emails_by_sport(
     include_sorted_odds: bool = True,
     odds_limit: int = 15,
     min_odds_threshold: float = 0.0,
+    date: Optional[str] = None,
 ):
     """
     Wysyła 1 mail dla każdego sportu ze wszystkimi kwalifikującymi
@@ -1794,8 +1826,21 @@ def send_split_emails_by_sport(
         qualified = qualified[qualified.apply(_above, axis=1)]
         print(f"   Pominięto {before - len(qualified)} meczów poniżej progu kursowego per sport")
 
+    # Data dla nazewnictwa manifestu MUSI być spójna z `--date` użytym przy
+    # scrapowaniu — `Check Results` szuka plików po tej dacie. Wcześniej brana
+    # była z `datetime.now()`, co przy uruchomieniach o północy / w innej
+    # strefie potrafiło zapisać manifest pod inną datą niż folder `results/`.
+    if not date:
+        date = datetime.now().strftime('%Y-%m-%d')
+
     if len(qualified) == 0:
         print("   ⚠️ Brak meczów po filtrach — żaden email nie zostanie wysłany")
+        # Zapisujemy diagnostyczną notatkę, żeby `check_results` mógł odróżnić
+        # "manifest zaginął" od "świadomie nie wysłano nic".
+        try:
+            _save_empty_manifest_marker(date, reason='no_qualified_after_filters')
+        except Exception:
+            pass
         return 0
 
     # --- podział po sporcie ---
@@ -1803,10 +1848,42 @@ def send_split_emails_by_sport(
         qualified['sport'] = 'football'  # fallback
 
     sports = qualified['sport'].unique()
-    date = datetime.now().strftime('%Y-%m-%d')
     sent_count = 0
 
+    # ── Najpierw zapisz manifesty per sport (PRZED SMTP) ──
+    # Zapis manifestu przed wysyłką sprawia, że `check_results` ma z czego
+    # liczyć skuteczność predykcji nawet jeśli SMTP padnie (np. zła konfiguracja
+    # serwera, hasło, baseballowy workflow z dummy SMTP). Manifest opisuje co
+    # było *zakwalifikowane* do wysłania, a nie co dotarło do skrzynki — to
+    # jest oczekiwana semantyka dla raportu accuracy.
+    sport_payloads: Dict[str, List[Dict[str, Any]]] = {}
+    for sport in sorted(sports):
+        sport_df: pd.DataFrame = qualified[qualified['sport'] == sport]  # type: ignore[assignment]
+        if len(sport_df) == 0:  # type: ignore[arg-type]
+            continue
+        matches_list: List[Dict[str, Any]] = sport_df.to_dict('records')  # type: ignore[assignment]
+        for m in matches_list:
+            m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
+        _log_sofascore_coverage(matches_list, label=sport)
+        _save_mailed_manifest(matches_list, date, tag=sport)
+        sport_payloads[sport] = matches_list
+
     smtp_config = SMTP_CONFIG[provider]
+
+    # ── Krótki preflight: dummy SMTP credentials = nie próbuj logować się ──
+    # Baseballowy workflow z `--send-email false` przekazuje `noreply@localhost`
+    # / `dummy`, więc próba SMTP jest gwarantowanym błędem. Manifest jest już
+    # zapisany powyżej, więc po prostu nie próbujemy logować się i raportujemy
+    # to jasno w logach.
+    is_dummy_smtp = (
+        not from_email
+        or 'noreply@localhost' in str(from_email).lower()
+        or str(password).strip().lower() in ('', 'dummy')
+    )
+    if is_dummy_smtp:
+        print("   ℹ️ Dummy SMTP credentials — pomijam realną wysyłkę "
+              "(manifest został zapisany dla raportu accuracy).")
+        return 0
 
     try:
         with smtplib.SMTP(smtp_config['server'], smtp_config['port']) as server:
@@ -1814,21 +1891,11 @@ def send_split_emails_by_sport(
                 server.starttls()
             server.login(from_email, password)
 
-            for sport in sorted(sports):
-                sport_df: pd.DataFrame = qualified[qualified['sport'] == sport]  # type: ignore[assignment]
+            for sport, matches_list in sport_payloads.items():
                 emoji = SPORT_EMOJI.get(sport, '🏆')
                 label = SPORT_LABEL.get(sport, sport.capitalize())
-
-                if len(sport_df) == 0:  # type: ignore[arg-type]
-                    continue
-
-                matches_list: List[Dict[str, Any]] = sport_df.to_dict('records')  # type: ignore[assignment]
-                for m in matches_list:
-                    m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
-                _log_sofascore_coverage(matches_list, label=sport)
-                _save_mailed_manifest(matches_list, date, tag=sport)
-                subj = f"{emoji} {label}: {len(matches_list)} meczów — {date}"  # type: ignore[arg-type]
-                html = create_html_email(matches_list, date, sort_by=sort_by,  # type: ignore[arg-type]
+                subj = f"{emoji} {label}: {len(matches_list)} meczów — {date}"
+                html = create_html_email(matches_list, date, sort_by=sort_by,
                                          include_sorted_odds=include_sorted_odds,
                                          odds_limit=odds_limit)
                 msg = MIMEMultipart('alternative')

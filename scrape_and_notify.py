@@ -1069,6 +1069,7 @@ def scrape_and_send_email(
                 include_sorted_odds=include_sorted_odds,
                 odds_limit=odds_limit,
                 min_odds_threshold=min_odds_threshold,
+                date=date,
             )
             
             print("\n✅ SUKCES! Email wysłany.")
@@ -1090,6 +1091,15 @@ def scrape_and_send_email(
                 print(f"\n⚠️  Brak kwalifikujących się meczów z {' i '.join(msg_parts)} - email nie został wysłany")
             else:
                 print(f"\n⚠️  Brak kwalifikujących się meczów - email nie został wysłany")
+
+            # Diagnostyczny marker dla `check_results`: scraping się udał,
+            # ale nic nie zakwalifikowało się do wysyłki — chcemy odróżnić to
+            # od "manifest zaginął w workflow".
+            try:
+                from email_notifier import _save_empty_manifest_marker as _empty_mark
+                _empty_mark(date, reason='no_qualified_after_base_gate')
+            except Exception:
+                pass
         
         # KROK 4: Wyślij dane do aplikacji UI (jeśli skonfigurowane)
         if app_url:
