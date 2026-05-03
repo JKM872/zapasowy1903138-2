@@ -545,15 +545,28 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     return None
 
 
+def _try_alt_domain_url(url: str) -> Optional[str]:
+    """Zamień api.sofascore.com na www.sofascore.com/api (same-origin path).
+
+    Przeglądarka SofaScore używa www.sofascore.com/api/v1/... zamiast
+    api.sofascore.com/api/v1/... — same-origin requesty mogą mieć inne
+    (łagodniejsze) reguły WAF niż cross-origin na subdomenie api.
+    """
+    if 'api.sofascore.com/api/' in url:
+        return url.replace('api.sofascore.com/api/', 'www.sofascore.com/api/')
+    return None
+
+
 def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
-    """Pobierz JSON z SofaScore API z trójstopniową ścieżką klientów.
+    """Pobierz JSON z SofaScore API z wielostopniową ścieżką klientów.
 
-    1. `curl_cffi` (Chrome TLS impersonation, najszybsze).
-    2. `requests.Session()` z warmupem (po 403 z curl_cffi).
-    3. FlareSolverr (po 403 / wyczerpaniu API), jeśli dostępny.
+    v5.1 — kolejność prób:
+    1. curl_cffi na oryginalnym URL (api.sofascore.com)
+    2. curl_cffi na alternatywnej domenie (www.sofascore.com/api) z profilem chrome124
+    3. requests.Session z warmupem na alt domenie
+    4. FlareSolverr (jeśli dostępny)
 
-    v5.0: Globalny circuit breaker — po 3 kolejnych 403 zwraca None
-    natychmiast, oszczędzając godziny na CI.
+    Globalny circuit breaker — po 3 kolejnych 403 zwraca None natychmiast.
     """
     # CIRCUIT BREAKER: jeśli tripped, natychmiast None
     if _api_circuit_breaker_tripped:
@@ -568,13 +581,57 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
             except Exception:
                 return None
         if response.status_code == 403:
+            # ── Fallback A: alternatywna domena (www.sofascore.com/api) ──
+            alt_url = _try_alt_domain_url(url)
+            if alt_url and CURL_CFFI_AVAILABLE:
+                try:
+                    alt_resp = curl_requests.get(
+                        alt_url,
+                        impersonate='chrome124',
+                        headers={**API_HEADERS, 'Referer': 'https://www.sofascore.com/'},
+                        timeout=timeout,
+                    )
+                    if alt_resp.status_code == 200 and alt_resp.content and len(alt_resp.content) > 2:
+                        _record_http_outcome('curl_cffi', 'ok_alt')
+                        _api_cb_record_success()
+                        try:
+                            return alt_resp.json()
+                        except Exception:
+                            pass
+                    else:
+                        _record_http_outcome('curl_cffi', f'{alt_resp.status_code}_alt')
+                except Exception:
+                    _record_http_outcome('curl_cffi', 'error_alt')
+
+            # ── Fallback B: requests session na alt domenie ──
+            if alt_url:
+                fallback_session = _build_warmed_requests_session()
+                if fallback_session is not None:
+                    try:
+                        fb_resp = fallback_session.get(alt_url, timeout=timeout)
+                        if fb_resp.status_code == 200 and fb_resp.content and len(fb_resp.content) > 2:
+                            _record_http_outcome('requests', 'ok_alt')
+                            _api_cb_record_success()
+                            try:
+                                return fb_resp.json()
+                            except Exception:
+                                pass
+                        else:
+                            _record_http_outcome('requests', f'{fb_resp.status_code}_alt')
+                    except Exception:
+                        _record_http_outcome('requests', 'error_alt')
+
             _api_cb_record_403()
             if _api_circuit_breaker_tripped:
                 return None
+
+            # ── Fallback C: FlareSolverr ──
             if _FLARESOLVERR_AVAILABLE:
                 if IS_CI:
                     print("   🐳 SofaScore: 403 z curl/requests, próba FlareSolverr...")
-                data = _try_flaresolverr_json(url, timeout=max(timeout, 25))
+                # Próbuj FlareSolverr na alt URL jeśli dostępny
+                fs_url = alt_url or url
+                data = _try_flaresolverr_json(fs_url, timeout=max(timeout, 25))
                 if data is not None:
                     _api_cb_record_success()
                     return data
