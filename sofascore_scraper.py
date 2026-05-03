@@ -83,7 +83,7 @@ _IS_CI_TIMEOUT = _os_timeout.getenv('CI') == 'true' or _os_timeout.getenv('GITHU
 SOFASCORE_GLOBAL_TIMEOUT = 30 if _IS_CI_TIMEOUT else 35
 
 # Sporty BEZ REMISÓW (tylko Home/Away win)
-SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'basketball', 'handball', 'hockey', 'ice-hockey']
+SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'basketball', 'handball', 'hockey', 'ice-hockey', 'baseball', 'cricket']
 
 # Mapowanie nazw sportów na SofaScore URL slugs
 SOFASCORE_SPORT_SLUGS = {
@@ -96,6 +96,8 @@ SOFASCORE_SPORT_SLUGS = {
     'hockey': 'ice-hockey',
     'ice-hockey': 'ice-hockey',
     'tennis': 'tennis',
+    'baseball': 'baseball',
+    'cricket': 'cricket',
 }
 
 # Headers dla requests API - v5.0: Zaktualizowane do Chrome 136
