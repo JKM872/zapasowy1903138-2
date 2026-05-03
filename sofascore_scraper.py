@@ -406,6 +406,24 @@ MAX_RETRIES = 2 if IS_CI else 3
 RETRY_BACKOFF = [0.5, 1, 2] if IS_CI else [1, 2, 4]  # Szybsze w CI
 
 # ============================================================================
+# IMPERSONATE PROFILE ROTATION (v5.2)
+# ============================================================================
+# Cloudflare na GHA blokuje stale TLS fingerprints. Rotujemy profile,
+# żeby zwiększyć szansę przejścia przez WAF.
+
+_IMPERSONATE_PROFILES = ['chrome131', 'chrome124', 'chrome120', 'chrome110', 'safari17_0', 'edge101']
+_impersonate_idx: int = 0
+
+
+def _next_impersonate_profile() -> str:
+    """Zwróć następny profil TLS w rotacji."""
+    global _impersonate_idx
+    profile = _IMPERSONATE_PROFILES[_impersonate_idx % len(_IMPERSONATE_PROFILES)]
+    _impersonate_idx += 1
+    return profile
+
+
+# ============================================================================
 # GLOBAL API CIRCUIT BREAKER (v5.0)
 # ============================================================================
 # Po N kolejnych 403 z WSZYSTKICH klientów (curl_cffi + requests + FlareSolverr)
@@ -413,7 +431,7 @@ RETRY_BACKOFF = [0.5, 1, 2] if IS_CI else [1, 2, 4]  # Szybsze w CI
 # gdzie 400 meczów × 15+ requestów = 6000+ martwych requestów i 6h runu.
 
 _api_consecutive_403: int = 0
-_API_403_CIRCUIT_BREAKER_THRESHOLD: int = 3  # Po 3 kolejnych 403 → wyłącz
+_API_403_CIRCUIT_BREAKER_THRESHOLD: int = 5  # v5.2: podniesiono z 3 do 5 (dajemy rotacji profili szansę)
 _api_circuit_breaker_tripped: bool = False
 
 
@@ -460,12 +478,12 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     for attempt in range(MAX_RETRIES):
         try:
             if use_curl:
-                # v4.1: jawnie przekazujemy headers do curl_cffi. Sam
-                # `impersonate='chrome'` daje TLS fingerprint, ale bez
-                # `Origin`/`Referer`/`Sec-*` SofaScore częściej zwraca 403.
+                # v5.2: rotacja profili TLS — każdy request próbuje inny
+                # fingerprint, zwiększając szansę przejścia przez WAF.
+                profile = _next_impersonate_profile()
                 response = curl_requests.get(
                     url,
-                    impersonate='chrome',
+                    impersonate=profile,
                     headers=API_HEADERS,
                     timeout=timeout,
                 )
