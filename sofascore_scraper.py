@@ -98,15 +98,15 @@ SOFASCORE_SPORT_SLUGS = {
     'tennis': 'tennis',
 }
 
-# Headers dla requests API - v3.5: Ulepszone headers jak w przeglądarce
+# Headers dla requests API - v5.0: Zaktualizowane do Chrome 136
 API_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
     'Accept': '*/*',
     'Accept-Language': 'en-US,en;q=0.9,pl;q=0.8',
     'Accept-Encoding': 'gzip, deflate, br',
     'Origin': 'https://www.sofascore.com',
     'Referer': 'https://www.sofascore.com/',
-    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua': '"Google Chrome";v="136", "Chromium";v="136", "Not_A Brand";v="99"',
     'Sec-Ch-Ua-Mobile': '?0',
     'Sec-Ch-Ua-Platform': '"Windows"',
     'Sec-Fetch-Dest': 'empty',
@@ -403,6 +403,35 @@ IS_CI = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
 MAX_RETRIES = 2 if IS_CI else 3
 RETRY_BACKOFF = [0.5, 1, 2] if IS_CI else [1, 2, 4]  # Szybsze w CI
 
+# ============================================================================
+# GLOBAL API CIRCUIT BREAKER (v5.0)
+# ============================================================================
+# Po N kolejnych 403 z WSZYSTKICH klientów (curl_cffi + requests + FlareSolverr)
+# całkowicie wyłączamy SofaScore API na resztę runu. Zapobiega sytuacji
+# gdzie 400 meczów × 15+ requestów = 6000+ martwych requestów i 6h runu.
+
+_api_consecutive_403: int = 0
+_API_403_CIRCUIT_BREAKER_THRESHOLD: int = 3  # Po 3 kolejnych 403 → wyłącz
+_api_circuit_breaker_tripped: bool = False
+
+
+def _api_cb_record_success() -> None:
+    """Reset circuit breaker po udanym requeście."""
+    global _api_consecutive_403
+    _api_consecutive_403 = 0
+
+
+def _api_cb_record_403() -> None:
+    """Inkrementuj licznik 403 i trip jeśli przekroczono próg."""
+    global _api_consecutive_403, _api_circuit_breaker_tripped
+    _api_consecutive_403 += 1
+    if _api_consecutive_403 >= _API_403_CIRCUIT_BREAKER_THRESHOLD and not _api_circuit_breaker_tripped:
+        _api_circuit_breaker_tripped = True
+        print(
+            f"   🛑 SofaScore API CIRCUIT BREAKER: {_api_consecutive_403} kolejnych 403 — "
+            f"wyłączam SofaScore API na resztę runu (oszczędzam czas CI)."
+        )
+
 
 def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     """
@@ -523,29 +552,40 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     2. `requests.Session()` z warmupem (po 403 z curl_cffi).
     3. FlareSolverr (po 403 / wyczerpaniu API), jeśli dostępny.
 
-    Zwraca sparsowany dict / list albo None. Każda próba inkrementuje
-    `_http_stats`, dzięki czemu po runie wiadomo, gdzie zatrzymał się
-    pipeline: `curl_cffi 403=N` vs `requests 403=N` vs `flaresolverr ok=K`.
+    v5.0: Globalny circuit breaker — po 3 kolejnych 403 zwraca None
+    natychmiast, oszczędzając godziny na CI.
     """
+    # CIRCUIT BREAKER: jeśli tripped, natychmiast None
+    if _api_circuit_breaker_tripped:
+        return None
+
     response = _retry_request_with_session(url, timeout=timeout)
     if response is not None:
         if response.status_code == 200:
+            _api_cb_record_success()
             try:
                 return response.json()
             except Exception:
                 return None
-        if response.status_code == 403 and _FLARESOLVERR_AVAILABLE:
-            if IS_CI:
-                print("   🐳 SofaScore: 403 z curl/requests, próba FlareSolverr...")
-            data = _try_flaresolverr_json(url, timeout=max(timeout, 25))
-            if data is not None:
-                return data
+        if response.status_code == 403:
+            _api_cb_record_403()
+            if _api_circuit_breaker_tripped:
+                return None
+            if _FLARESOLVERR_AVAILABLE:
+                if IS_CI:
+                    print("   🐳 SofaScore: 403 z curl/requests, próba FlareSolverr...")
+                data = _try_flaresolverr_json(url, timeout=max(timeout, 25))
+                if data is not None:
+                    _api_cb_record_success()
+                    return data
         return None
-    if _FLARESOLVERR_AVAILABLE:
-        # Brak odpowiedzi z curl/requests (timeouts, errors) — spróbuj FS jako last resort.
+    if _FLARESOLVERR_AVAILABLE and not _api_circuit_breaker_tripped:
         if IS_CI:
             print("   🐳 SofaScore: brak odpowiedzi curl/requests, próba FlareSolverr...")
-        return _try_flaresolverr_json(url, timeout=max(timeout, 25))
+        data = _try_flaresolverr_json(url, timeout=max(timeout, 25))
+        if data is not None:
+            _api_cb_record_success()
+            return data
     return None
 
 
@@ -981,16 +1021,23 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
     else:
         base_date = today
     
-    # Date window: ±3 dni (v3.7: rozszerzono z ±1 dla lepszego pokrycia)
-    dates_to_try = [
-        base_date.strftime('%Y-%m-%d'),                          # Podana data (priorytet)
-        (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),    # -1 dzień
-        (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),    # +1 dzień
-        (base_date - timedelta(days=2)).strftime('%Y-%m-%d'),    # -2 dni
-        (base_date + timedelta(days=2)).strftime('%Y-%m-%d'),    # +2 dni
-        (base_date - timedelta(days=3)).strftime('%Y-%m-%d'),    # -3 dni
-        (base_date + timedelta(days=3)).strftime('%Y-%m-%d'),    # +3 dni
-    ]
+    # Date window: w CI ±1 dzień (oszczędność requestów), lokalnie ±3 dni
+    if IS_CI:
+        dates_to_try = [
+            base_date.strftime('%Y-%m-%d'),                          # Podana data
+            (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),    # -1 dzień
+            (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),    # +1 dzień
+        ]
+    else:
+        dates_to_try = [
+            base_date.strftime('%Y-%m-%d'),
+            (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),
+            (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),
+            (base_date - timedelta(days=2)).strftime('%Y-%m-%d'),
+            (base_date + timedelta(days=2)).strftime('%Y-%m-%d'),
+            (base_date - timedelta(days=3)).strftime('%Y-%m-%d'),
+            (base_date + timedelta(days=3)).strftime('%Y-%m-%d'),
+        ]
     
     # ====== STRATEGY 1: Standard search (both teams, strict matching) ======
     for search_date in dates_to_try:
@@ -1632,7 +1679,7 @@ def scrape_sofascore_full(
     # =============================================
     # METODA SZYBKA: Tylko API (bez Selenium)
     # =============================================
-    if REQUESTS_AVAILABLE:
+    if REQUESTS_AVAILABLE and not _api_circuit_breaker_tripped:
         print(f"   🚀 SofaScore: Szybka ścieżka przez API...")
         event_id = search_event_via_api(home_team, away_team, sport, date_str)
         
@@ -1656,6 +1703,10 @@ def scrape_sofascore_full(
     # ZAWSZE tworzy dedykowany driver z krótkim timeout
     # (nie używa zewnętrznego drivera który może mieć 60-120s timeout)
     # =============================================
+    if _api_circuit_breaker_tripped:
+        print("   🛑 SofaScore: Circuit breaker aktywny — pomijam (oszczędzam czas CI)")
+        return result
+
     if not SELENIUM_AVAILABLE:
         print("   ❌ SofaScore: Selenium niedostępne, API nie znalazło meczu")
         return result
