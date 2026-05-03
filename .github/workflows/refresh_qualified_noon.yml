@@ -51,13 +51,16 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Install Chrome
+      - name: Setup Chrome (pre-installed)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser chromium-chromedriver
-          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
-          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
-          echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser" >> $GITHUB_ENV
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || echo "")
+          if [ -z "$CHROME_PATH" ]; then
+            echo "::error::Chrome not found on runner"
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_PATH" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> $GITHUB_ENV
+          echo "✅ Chrome: $($CHROME_PATH --version)"
 
       - name: Install Python dependencies
         run: |

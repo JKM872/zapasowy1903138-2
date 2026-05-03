@@ -34,13 +34,17 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      # 3. Install Chrome for Selenium
-      - name: Install Chrome
+      - name: Setup Chrome (pre-installed)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser chromium-chromedriver
-          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
-          echo "CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
+          # google-chrome-stable is pre-installed on ubuntu-latest runners
+          # chromium-browser is a snap package that CANNOT install on GHA (no Snap Store)
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || echo "")
+          if [ -z "$CHROME_PATH" ]; then
+            echo "::error::Chrome not found on runner"
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_PATH" >> $GITHUB_ENV
+          echo "✅ Chrome: $($CHROME_PATH --version)"
 
       # 4. Install Python dependencies
       - name: Install Python dependencies
