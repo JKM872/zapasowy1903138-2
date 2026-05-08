@@ -661,8 +661,24 @@ def scrape_and_send_email(
                 # GEMINI AI (jeśli włączone)
                 if use_gemini:
                     try:
-                        from gemini_analyzer import analyze_match_with_gemini
-                        gemini_result = analyze_match_with_gemini(row)
+                        from gemini_analyzer import analyze_match as _gemini_analyze_match
+                        gemini_result = _gemini_analyze_match(
+                            home_team=row.get('home_team', ''),
+                            away_team=row.get('away_team', ''),
+                            sport=row.get('sport', 'football'),
+                            h2h_data={
+                                'home_wins': row.get('home_wins_in_h2h_last5', 0),
+                                'away_wins': row.get('away_wins_in_h2h_last5', 0),
+                                'draws': row.get('draws_in_h2h_last5', 0),
+                                'total': row.get('h2h_count', 5),
+                            },
+                            home_form=str(row.get('home_form', '')) or None,
+                            away_form=str(row.get('away_form', '')) or None,
+                            forebet_prediction=row.get('forebet_prediction'),
+                            home_odds=row.get('home_odds'),
+                            away_odds=row.get('away_odds'),
+                            draw_odds=row.get('draw_odds'),
+                        )
                         if gemini_result:
                             row['gemini_prediction'] = gemini_result.get('prediction')
                             row['gemini_confidence'] = gemini_result.get('confidence')
@@ -718,6 +734,12 @@ def scrape_and_send_email(
             try:
                 from sofascore_scraper import print_http_stats as _ss_http_stats
                 _ss_http_stats()
+            except Exception:
+                pass
+            # v7.0: Zamknij singleton browser API session (headless Chrome)
+            try:
+                from sofascore_scraper import cleanup_browser_api_session
+                cleanup_browser_api_session()
             except Exception:
                 pass
             print("="*70)

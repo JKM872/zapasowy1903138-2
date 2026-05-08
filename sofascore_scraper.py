@@ -31,10 +31,12 @@ NOWE W v3.0:
 import os
 import time
 import re
+import json
 import hashlib
 import threading
 import logging
 import random
+import base64
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Any, List
 from difflib import SequenceMatcher
@@ -1707,6 +1709,618 @@ def format_sofascore_for_email(result: Dict) -> str:
     return f'<span style="color: {winner_color}; font-weight: bold;">{winner}</span> <small>({votes_str})</small>'
 
 
+# ============================================================================
+# BROWSER-BASED API FETCH (v7.0) — bypass Cloudflare WAF
+# ============================================================================
+# Cloudflare na GHA blokuje WSZYSTKIE server-side requesty (curl_cffi,
+# requests, FlareSolverr) z 403. Ale API działa z kontekstu przeglądarki
+# (same-origin). Więc otwieramy sofascore.com w headless Chrome i robimy
+# fetch() z poziomu JS — WAF to przepuszcza.
+
+_browser_api_session_driver = None
+_browser_api_session_ready: bool = False
+_browser_api_failed_count: int = 0
+_BROWSER_API_MAX_FAILURES: int = 3
+
+
+def _create_lightweight_driver():
+    """Tworzy minimalny headless Chrome driver do API fetch."""
+    if not SELENIUM_AVAILABLE:
+        return None
+    try:
+        chrome_options = Options()
+        chrome_options.add_argument('--headless=new')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument('--window-size=1280,720')
+        chrome_options.add_argument('--disable-extensions')
+        chrome_options.add_argument('--disable-notifications')
+        chrome_options.add_argument('--blink-settings=imagesEnabled=false')
+        chrome_options.add_argument(f'--user-agent={API_HEADERS["User-Agent"]}')
+        chrome_options.page_load_strategy = 'eager'
+
+        chrome_bin = os.getenv('CHROME_BIN')
+        if chrome_bin and os.path.exists(chrome_bin):
+            chrome_options.binary_location = chrome_bin
+        elif IS_CI:
+            for candidate in (
+                '/usr/bin/google-chrome',
+                '/usr/bin/google-chrome-stable',
+                '/usr/bin/chromium',
+                '/usr/bin/chromium-browser',
+            ):
+                if os.path.exists(candidate):
+                    chrome_options.binary_location = candidate
+                    break
+
+        chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+        service = None
+        if chromedriver_path and os.path.exists(chromedriver_path):
+            service = Service(executable_path=chromedriver_path)
+        elif IS_CI and os.path.exists('/usr/bin/chromedriver'):
+            service = Service(executable_path='/usr/bin/chromedriver')
+
+        if service:
+            d = webdriver.Chrome(service=service, options=chrome_options)
+        else:
+            d = webdriver.Chrome(options=chrome_options)
+        d.set_page_load_timeout(15)
+        d.set_script_timeout(10)
+        return d
+    except Exception as e:
+        logger.debug(f"_create_lightweight_driver failed: {type(e).__name__}: {e}")
+        return None
+
+
+def _get_browser_api_session():
+    """Zwraca (driver, ready) gotowy do fetch() z sofascore.com.
+
+    Singleton — tworzy driver raz, nawiguje do sofascore.com,
+    akceptuje consent, i potem reużywa do wielokrotnych fetch().
+    """
+    global _browser_api_session_driver, _browser_api_session_ready, _browser_api_failed_count
+
+    if _browser_api_failed_count >= _BROWSER_API_MAX_FAILURES:
+        return None, False
+
+    if _browser_api_session_driver is not None and _browser_api_session_ready:
+        return _browser_api_session_driver, True
+
+    print(f"   🌐 SofaScore Browser API: Tworzę sesję przeglądarki...")
+    driver = _create_lightweight_driver()
+    if not driver:
+        _browser_api_failed_count += 1
+        return None, False
+
+    try:
+        driver.get('https://www.sofascore.com/football')
+        time.sleep(2)
+        accept_consent_popup(driver)
+        time.sleep(1)
+        _browser_api_session_driver = driver
+        _browser_api_session_ready = True
+        print(f"   ✅ SofaScore Browser API: Sesja gotowa")
+        return driver, True
+    except Exception as e:
+        logger.debug(f"Browser API session setup failed: {type(e).__name__}: {e}")
+        _browser_api_failed_count += 1
+        try:
+            driver.quit()
+        except Exception:
+            pass
+        return None, False
+
+
+def _fetch_json_via_browser(driver, api_path: str, timeout: int = 8) -> Optional[Any]:
+    """Wykonaj fetch() do SofaScore API z kontekstu przeglądarki.
+
+    Używa window.fetch() z same-origin na www.sofascore.com, co omija
+    Cloudflare WAF (przeglądarka ma cookies i challenge-token).
+
+    Args:
+        driver: Selenium driver z załadowaną stroną sofascore.com
+        api_path: Ścieżka API, np. '/api/v1/event/12345/votes'
+        timeout: Timeout w sekundach
+
+    Returns:
+        Sparsowany JSON lub None
+    """
+    # Upewnij się, że ścieżka zaczyna się od /api/
+    if not api_path.startswith('/api/'):
+        if 'api.sofascore.com/api/' in api_path:
+            api_path = '/api/' + api_path.split('api.sofascore.com/api/')[1]
+        elif 'sofascore.com/api/' in api_path:
+            api_path = '/api/' + api_path.split('sofascore.com/api/')[1]
+
+    js_script = f"""
+    var callback = arguments[arguments.length - 1];
+    fetch('{api_path}')
+        .then(function(response) {{
+            if (!response.ok) {{
+                callback(JSON.stringify({{"_error": response.status}}));
+                return;
+            }}
+            return response.json();
+        }})
+        .then(function(data) {{
+            if (data) callback(JSON.stringify(data));
+        }})
+        .catch(function(err) {{
+            callback(JSON.stringify({{"_error": err.toString()}}));
+        }});
+    """
+
+    try:
+        driver.set_script_timeout(timeout)
+        raw = driver.execute_async_script(js_script)
+        if not raw:
+            return None
+        data = json.loads(raw)
+        if '_error' in data:
+            logger.debug(f"Browser fetch error for {api_path}: {data['_error']}")
+            return None
+        _record_http_outcome('selenium', 'ok')
+        return data
+    except Exception as e:
+        _record_http_outcome('selenium', 'error')
+        logger.debug(f"Browser fetch exception for {api_path}: {type(e).__name__}: {e}")
+        return None
+
+
+def _search_event_via_browser(home_team: str, away_team: str, sport: str = 'football', date_str: str = None) -> Optional[int]:
+    """Szuka event ID przez Browser API Fetch (bypass WAF).
+
+    Używa Selenium + JS fetch() żeby pobrać scheduled-events z kontekstu
+    przeglądarki — WAF nie blokuje same-origin requestów.
+    """
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return None
+
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+
+    today = datetime.now(timezone.utc).replace(tzinfo=None)
+    if date_str:
+        try:
+            base_date = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            base_date = today
+    else:
+        base_date = today
+
+    dates_to_try = [
+        base_date.strftime('%Y-%m-%d'),
+        (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),
+        (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),
+    ]
+
+    home_norm = normalize_team_name(home_team)
+    away_norm = normalize_team_name(away_team)
+
+    for search_date in dates_to_try:
+        api_path = f'/api/v1/sport/{sport_slug}/scheduled-events/{search_date}'
+        data = _fetch_json_via_browser(driver, api_path, timeout=10)
+        if not data or not isinstance(data, dict):
+            continue
+
+        events = data.get('events', [])
+        if not events:
+            continue
+
+        best_match_id = None
+        best_combined_sim = 0.0
+
+        for event in events:
+            event_home = event.get('homeTeam', {}).get('name', '')
+            event_away = event.get('awayTeam', {}).get('name', '')
+            if not event_home or not event_away:
+                continue
+
+            home_sim = similarity_score(home_team, event_home)
+            away_sim = similarity_score(away_team, event_away)
+            combined_sim = home_sim + away_sim
+            min_sim = min(home_sim, away_sim)
+            max_sim = max(home_sim, away_sim)
+
+            is_match = (
+                (home_sim >= 0.35 and away_sim >= 0.35)
+                or combined_sim >= 0.85
+                or (max_sim >= 0.75 and min_sim >= 0.25)
+                or (max_sim >= 0.90 and min_sim >= 0.20)
+            )
+
+            if is_match and combined_sim > best_combined_sim:
+                best_combined_sim = combined_sim
+                best_match_id = event.get('id')
+
+        if best_match_id:
+            return best_match_id
+
+    return None
+
+
+def _get_votes_via_browser(event_id: int) -> Optional[Dict]:
+    """Pobiera głosy Fan Vote przez Browser API Fetch (bypass WAF)."""
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return None
+
+    api_path = f'/api/v1/event/{event_id}/votes'
+    data = _fetch_json_via_browser(driver, api_path, timeout=8)
+    if not data or not isinstance(data, dict):
+        return None
+
+    vote = data.get('vote', {})
+    if not vote or vote.get('vote1') is None:
+        return None
+
+    vote1 = vote.get('vote1', 0) or 0
+    voteX = vote.get('voteX', 0) or 0
+    vote2 = vote.get('vote2', 0) or 0
+    total_votes = vote1 + voteX + vote2
+
+    if total_votes == 0:
+        return None
+
+    home_pct = round(vote1 / total_votes * 100)
+    draw_pct = round(voteX / total_votes * 100) if voteX else None
+    away_pct = round(vote2 / total_votes * 100)
+
+    btts = data.get('bothTeamsToScoreVote', {})
+    btts_yes = btts.get('voteYes', 0) or 0
+    btts_no = btts.get('voteNo', 0) or 0
+    btts_total = btts_yes + btts_no
+
+    result = {
+        'sofascore_home_win_prob': home_pct,
+        'sofascore_draw_prob': draw_pct,
+        'sofascore_away_win_prob': away_pct,
+        'sofascore_total_votes': total_votes,
+    }
+    if btts_total > 0:
+        result['sofascore_btts_yes'] = round(btts_yes / btts_total * 100)
+        result['sofascore_btts_no'] = round(btts_no / btts_total * 100)
+    return result
+
+
+def cleanup_browser_api_session():
+    """Zamknij singleton browser API session (wywoływane na koniec runu)."""
+    global _browser_api_session_driver, _browser_api_session_ready
+    if _browser_api_session_driver:
+        try:
+            _browser_api_session_driver.quit()
+        except Exception:
+            pass
+        _browser_api_session_driver = None
+        _browser_api_session_ready = False
+
+
+# ============================================================================
+# AI VISION EXTRACTION (v6.0) — Gemini / Groq fallback po 403
+# ============================================================================
+# Gdy SofaScore API zwraca 403 (Cloudflare/WAF), robimy screenshot
+# sekcji fan vote i wysyłamy do Gemini Vision API lub Groq Vision API
+# żeby AI wyekstraktował procenty głosowania z obrazu.
+
+# Lazy imports — ładowane tylko gdy potrzebne
+_GENAI_MODULE = None
+_GROQ_MODULE = None
+
+
+def _get_genai():
+    """Lazy import google.generativeai."""
+    global _GENAI_MODULE
+    if _GENAI_MODULE is not None:
+        return _GENAI_MODULE
+    try:
+        import google.generativeai as genai
+        _GENAI_MODULE = genai
+        return genai
+    except ImportError:
+        _GENAI_MODULE = False
+        return False
+
+
+def _get_groq():
+    """Lazy import groq."""
+    global _GROQ_MODULE
+    if _GROQ_MODULE is not None:
+        return _GROQ_MODULE
+    try:
+        import groq as groq_module
+        _GROQ_MODULE = groq_module
+        return groq_module
+    except ImportError:
+        _GROQ_MODULE = False
+        return False
+
+
+def _take_fan_vote_screenshot(driver, event_url: str) -> Optional[bytes]:
+    """
+    Otwiera stronę meczu SofaScore, scrolluje do sekcji fan vote
+    i robi screenshot widocznej strony.
+
+    Returns:
+        bytes PNG obrazu lub None jeśli nie udało się.
+    """
+    if not SELENIUM_AVAILABLE:
+        return None
+
+    try:
+        try:
+            driver.set_page_load_timeout(15)
+        except (WebDriverException,) as e:
+            logger.debug(f"Nie można ustawić page_load_timeout: {e}")
+
+        try:
+            driver.get(event_url)
+        except (TimeoutException, WebDriverException) as e:
+            logger.debug(f"Timeout przy ładowaniu strony fan vote (kontynuuję): {e}")
+
+        # Akceptuj consent popup
+        accept_consent_popup(driver)
+
+        # Czekaj na załadowanie JS
+        time.sleep(4)
+
+        # Scroll w dół żeby załadować sekcję fan vote
+        for _ in range(8):
+            driver.execute_script('window.scrollBy(0, 400);')
+            time.sleep(0.3)
+
+        # Scroll do ~połowy strony gdzie zwykle jest fan vote
+        driver.execute_script('window.scrollTo(0, document.body.scrollHeight * 0.4);')
+        time.sleep(1.5)
+
+        # Zrób screenshot całej widocznej strony
+        screenshot_bytes = driver.get_screenshot_as_png()
+        if screenshot_bytes and len(screenshot_bytes) > 1000:
+            print(f"   📸 SofaScore AI Vision: Screenshot OK ({len(screenshot_bytes)//1024}KB)")
+            return screenshot_bytes
+        else:
+            print(f"   ⚠️ SofaScore AI Vision: Screenshot za mały")
+            return None
+
+    except Exception as e:
+        print(f"   ⚠️ SofaScore AI Vision: Błąd screenshot: {type(e).__name__}: {e}")
+        return None
+
+
+def _build_vision_prompt(home_team: str, away_team: str, sport: str) -> str:
+    """Buduje prompt do ekstrakcji fan vote z screenshota."""
+    has_draw = sport not in SPORTS_WITHOUT_DRAW
+    draw_part = ', "draw_pct": <number or null>' if has_draw else ''
+    return (
+        f"This is a screenshot of a SofaScore match page for {home_team} vs {away_team}.\n"
+        f"Find the \"Who will win?\" or \"Kto wygra?\" fan vote section.\n"
+        f"Extract the voting percentages shown in the widget.\n"
+        f"The widget shows three buttons: home team, draw (X), and away team, "
+        f"with percentage bars below them.\n\n"
+        f"Respond ONLY with valid JSON (no markdown, no extra text):\n"
+        f'{{"home_pct": <number>, "away_pct": <number>{draw_part}, '
+        f'"total_votes": <number or null>, "found": true}}\n\n'
+        f'If you cannot find the fan vote section, respond with:\n'
+        f'{{"found": false}}'
+    )
+
+
+def _parse_vision_response(response_text: str, sport: str) -> Optional[Dict]:
+    """Parsuje odpowiedź AI Vision na dict z procentami."""
+    has_draw = sport not in SPORTS_WITHOUT_DRAW
+    try:
+        # Wyczyść odpowiedź — AI czasem opakowuje w markdown
+        text = response_text.strip()
+        if text.startswith('```'):
+            text = re.sub(r'^```(?:json)?\s*', '', text)
+            text = re.sub(r'\s*```$', '', text)
+        text = text.strip()
+
+        data = json.loads(text)
+
+        if not data.get('found', False):
+            return None
+
+        home_pct = data.get('home_pct')
+        away_pct = data.get('away_pct')
+        if home_pct is None or away_pct is None:
+            return None
+
+        result = {
+            'sofascore_home_win_prob': int(round(float(home_pct))),
+            'sofascore_away_win_prob': int(round(float(away_pct))),
+            'sofascore_draw_prob': None,
+            'sofascore_total_votes': int(data.get('total_votes') or 0),
+        }
+
+        if has_draw and data.get('draw_pct') is not None:
+            result['sofascore_draw_prob'] = int(round(float(data['draw_pct'])))
+
+        # Walidacja — procenty powinny sumować się do ~100%
+        total_pct = result['sofascore_home_win_prob'] + result['sofascore_away_win_prob']
+        if result['sofascore_draw_prob'] is not None:
+            total_pct += result['sofascore_draw_prob']
+        if total_pct < 80 or total_pct > 120:
+            logger.warning(f"SofaScore AI Vision: procenty sumują się do {total_pct}% — odrzucam")
+            return None
+
+        return result
+
+    except (json.JSONDecodeError, ValueError, TypeError) as e:
+        logger.debug(f"SofaScore AI Vision: Błąd parsowania: {e}, raw: {response_text[:200]}")
+        return None
+
+
+def _extract_votes_via_gemini_vision(
+    image_bytes: bytes,
+    home_team: str,
+    away_team: str,
+    sport: str = 'football'
+) -> Optional[Dict]:
+    """
+    Wyślij screenshot do Gemini Vision API i wyekstraktuj fan vote.
+
+    Returns:
+        Dict z sofascore_home_win_prob, sofascore_draw_prob, etc. lub None
+    """
+    genai = _get_genai()
+    if not genai:
+        logger.debug("SofaScore AI Vision: google-generativeai niedostępne")
+        return None
+
+    api_key = os.environ.get('GEMINI_API_KEY')
+    if not api_key:
+        try:
+            from gemini_config import GEMINI_API_KEY
+            api_key = GEMINI_API_KEY
+        except ImportError:
+            pass
+    if not api_key:
+        logger.debug("SofaScore AI Vision: Brak GEMINI_API_KEY")
+        return None
+
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-2.0-flash')
+
+        prompt = _build_vision_prompt(home_team, away_team, sport)
+
+        # Przygotuj obraz jako Part
+        image_part = {
+            'mime_type': 'image/png',
+            'data': image_bytes,
+        }
+
+        response = model.generate_content([prompt, image_part])
+        if not response or not response.text:
+            print(f"   ⚠️ SofaScore Gemini Vision: Pusta odpowiedź")
+            return None
+
+        result = _parse_vision_response(response.text, sport)
+        if result:
+            print(f"   ✅ SofaScore Gemini Vision: Wyekstraktowano fan vote!")
+        else:
+            print(f"   ⚠️ SofaScore Gemini Vision: Nie znaleziono fan vote w screenshocie")
+            logger.debug(f"Gemini Vision raw: {response.text[:300]}")
+        return result
+
+    except Exception as e:
+        print(f"   ⚠️ SofaScore Gemini Vision error: {type(e).__name__}: {str(e)[:80]}")
+        return None
+
+
+def _extract_votes_via_groq_vision(
+    image_bytes: bytes,
+    home_team: str,
+    away_team: str,
+    sport: str = 'football'
+) -> Optional[Dict]:
+    """
+    Wyślij screenshot do Groq Vision API i wyekstraktuj fan vote.
+    Fallback po Gemini.
+
+    Returns:
+        Dict z sofascore_home_win_prob, sofascore_draw_prob, etc. lub None
+    """
+    groq_module = _get_groq()
+    if not groq_module:
+        logger.debug("SofaScore AI Vision: groq module niedostępne")
+        return None
+
+    api_key = os.environ.get('GROQ_API_KEY')
+    if not api_key:
+        try:
+            from groq_config import GROQ_API_KEY
+            api_key = GROQ_API_KEY
+        except ImportError:
+            pass
+    if not api_key:
+        logger.debug("SofaScore AI Vision: Brak GROQ_API_KEY")
+        return None
+
+    try:
+        client = groq_module.Groq(api_key=api_key)
+
+        prompt = _build_vision_prompt(home_team, away_team, sport)
+
+        # Groq Vision wymaga base64 w URL
+        b64_image = base64.b64encode(image_bytes).decode('utf-8')
+
+        response = client.chat.completions.create(
+            model='llama-3.2-90b-vision-preview',
+            messages=[
+                {
+                    'role': 'user',
+                    'content': [
+                        {'type': 'text', 'text': prompt},
+                        {
+                            'type': 'image_url',
+                            'image_url': {
+                                'url': f'data:image/png;base64,{b64_image}',
+                            },
+                        },
+                    ],
+                }
+            ],
+            max_tokens=256,
+            temperature=0.1,
+        )
+
+        if not response or not response.choices:
+            print(f"   ⚠️ SofaScore Groq Vision: Pusta odpowiedź")
+            return None
+
+        text = response.choices[0].message.content or ''
+        result = _parse_vision_response(text, sport)
+        if result:
+            print(f"   ✅ SofaScore Groq Vision: Wyekstraktowano fan vote!")
+        else:
+            print(f"   ⚠️ SofaScore Groq Vision: Nie znaleziono fan vote w screenshocie")
+            logger.debug(f"Groq Vision raw: {text[:300]}")
+        return result
+
+    except Exception as e:
+        print(f"   ⚠️ SofaScore Groq Vision error: {type(e).__name__}: {str(e)[:80]}")
+        return None
+
+
+def extract_fan_vote_via_ai_vision(
+    driver,
+    event_url: str,
+    home_team: str,
+    away_team: str,
+    sport: str = 'football'
+) -> Optional[Dict]:
+    """
+    Orchestrator: screenshot → Gemini Vision → Groq Vision.
+
+    Próbuje wyekstraktować fan vote z screenshota strony meczu
+    używając AI Vision (Gemini preferowane, Groq jako fallback).
+
+    Returns:
+        Dict z sofascore_* kluczami lub None
+    """
+    print(f"   🤖 SofaScore AI Vision: Próbuję ekstrakcję ze screenshota...")
+
+    # 1. Zrób screenshot
+    screenshot = _take_fan_vote_screenshot(driver, event_url)
+    if not screenshot:
+        return None
+
+    # 2. Próbuj Gemini Vision
+    result = _extract_votes_via_gemini_vision(screenshot, home_team, away_team, sport)
+    if result:
+        return result
+
+    # 3. Fallback: Groq Vision
+    result = _extract_votes_via_groq_vision(screenshot, home_team, away_team, sport)
+    if result:
+        return result
+
+    print(f"   ⚠️ SofaScore AI Vision: Żadne AI nie wyekstraktowało fan vote")
+    return None
+
+
 def scrape_sofascore_full(
     driver: webdriver.Chrome = None,
     home_team: str = None,
@@ -1754,8 +2368,9 @@ def scrape_sofascore_full(
             return cached
     
     # =============================================
-    # METODA SZYBKA: Tylko API (bez Selenium)
+    # METODA 1: Bezpośredni API (bez Selenium)
     # =============================================
+    event_id = None
     if REQUESTS_AVAILABLE and not _api_circuit_breaker_tripped:
         print(f"   🚀 SofaScore: Szybka ścieżka przez API...")
         event_id = search_event_via_api(home_team, away_team, sport, date_str)
@@ -1774,6 +2389,108 @@ def scrape_sofascore_full(
                 if use_cache:
                     _set_cached_result(home_team, away_team, sport, result)
                 return result
+    
+    # =============================================
+    # METODA 2: Browser API Fetch (v7.0 — bypass WAF)
+    # =============================================
+    # Cloudflare blokuje curl/requests z 403, ale same-origin fetch()
+    # z kontekstu przeglądarki przechodzi. Otwieramy sofascore.com
+    # w headless Chrome i robimy fetch() przez JS.
+    if SELENIUM_AVAILABLE and _browser_api_failed_count < _BROWSER_API_MAX_FAILURES:
+        print(f"   🌐 SofaScore: Browser API Fetch (bypass WAF)...")
+        browser_event_id = event_id  # reuse if found above
+        if not browser_event_id:
+            browser_event_id = _search_event_via_browser(home_team, away_team, sport, date_str)
+        
+        if browser_event_id:
+            browser_votes = _get_votes_via_browser(browser_event_id)
+            if browser_votes and browser_votes.get('sofascore_home_win_prob') is not None:
+                result.update(browser_votes)
+                sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+                result['sofascore_url'] = f"https://www.sofascore.com/{sport_slug}/match/{browser_event_id}"
+                result['sofascore_found'] = True
+                draw_str = f"🤝{result['sofascore_draw_prob']}% | " if result['sofascore_draw_prob'] else ""
+                print(f"   ✅ Fan Vote (Browser API): 🏠{result['sofascore_home_win_prob']}% | "
+                      f"{draw_str}✈️{result['sofascore_away_win_prob']}% "
+                      f"({result['sofascore_total_votes']:,} głosów)")
+                if use_cache:
+                    _set_cached_result(home_team, away_team, sport, result)
+                return result
+            elif browser_event_id and not event_id:
+                event_id = browser_event_id  # zachowaj na wypadek AI Vision
+    
+    # =============================================
+    # METODA AI VISION: Screenshot → Gemini/Groq (v6.0)
+    # =============================================
+    # Jeśli API nie zadziałało (403 / brak danych), ale mamy event_id,
+    # próbuj AI Vision ze screenshotem strony meczu.
+    if event_id and SELENIUM_AVAILABLE:
+        sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+        event_url = f"https://www.sofascore.com/{sport_slug}/match/{event_id}"
+        
+        # Potrzebujemy drivera — stwórzmy tymczasowy
+        _vision_driver = None
+        try:
+            chrome_options = Options()
+            chrome_options.add_argument('--headless=new')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--window-size=1920,1080')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-notifications')
+            chrome_options.add_argument(f'--user-agent={API_HEADERS["User-Agent"]}')
+            chrome_options.page_load_strategy = 'eager'
+
+            chrome_bin = os.getenv('CHROME_BIN')
+            if chrome_bin and os.path.exists(chrome_bin):
+                chrome_options.binary_location = chrome_bin
+            elif IS_CI:
+                for candidate in (
+                    '/usr/bin/google-chrome',
+                    '/usr/bin/google-chrome-stable',
+                    '/usr/bin/chromium',
+                    '/usr/bin/chromium-browser',
+                ):
+                    if os.path.exists(candidate):
+                        chrome_options.binary_location = candidate
+                        break
+
+            chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+            service = None
+            if chromedriver_path and os.path.exists(chromedriver_path):
+                service = Service(executable_path=chromedriver_path)
+            elif IS_CI and os.path.exists('/usr/bin/chromedriver'):
+                service = Service(executable_path='/usr/bin/chromedriver')
+
+            if service:
+                _vision_driver = webdriver.Chrome(service=service, options=chrome_options)
+            else:
+                _vision_driver = webdriver.Chrome(options=chrome_options)
+            _vision_driver.set_page_load_timeout(15)
+            _vision_driver.set_script_timeout(5)
+
+            vision_result = extract_fan_vote_via_ai_vision(
+                _vision_driver, event_url, home_team, away_team, sport
+            )
+            if vision_result and vision_result.get('sofascore_home_win_prob') is not None:
+                result.update(vision_result)
+                result['sofascore_url'] = event_url
+                result['sofascore_found'] = True
+                draw_str = f"🤝{result['sofascore_draw_prob']}% | " if result['sofascore_draw_prob'] else ""
+                print(f"   ✅ Fan Vote (AI Vision): 🏠{result['sofascore_home_win_prob']}% | "
+                      f"{draw_str}✈️{result['sofascore_away_win_prob']}%")
+                if use_cache:
+                    _set_cached_result(home_team, away_team, sport, result)
+                return result
+        except Exception as e:
+            print(f"   ⚠️ SofaScore AI Vision: Błąd drivera: {type(e).__name__}: {e}")
+        finally:
+            if _vision_driver:
+                try:
+                    _vision_driver.quit()
+                except Exception:
+                    pass
     
     # =============================================
     # METODA WOLNA: Selenium (fallback)
