@@ -1,15 +1,15 @@
 {
   "date": "2026-05-15",
   "sport": "volleyball",
-  "generatedAt": "2026-05-15T03:49:26.150265",
+  "generatedAt": "2026-05-15T18:02:03.725182",
   "stats": {
     "total": 14,
-    "qualifying": 7,
-    "formAdvantage": 6
+    "qualifying": 8,
+    "formAdvantage": 8
   },
   "matches": [
     {
-      "id": -6028982529546376062,
+      "id": 6392587091107740329,
       "homeTeam": "Frejus",
       "awayTeam": "Chalon-sur-Saone",
       "time": "15.05.2026 18:00",
@@ -19,8 +19,11 @@
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/chalon-sur-saone-vLYhoMN5/frejus-f7rWjRhD/?mid=fwQnlQ4T",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -60,38 +63,52 @@
         "L"
       ],
       "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 1.12,
+        "draw": null,
+        "away": 5.0,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 73.0,
+        "exactScore": "3-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 66.0,
-        "ev": -999.0,
-        "edge": 0.0,
+        "prob": 73.5,
+        "ev": -0.177,
+        "edge": -15.8,
         "kelly": 0.0,
-        "confidence": 41.0,
-        "dataQuality": 0.5
+        "confidence": 32.0,
+        "dataQuality": 0.8
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 41.0,
+      "confidence": 90,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.4,
+        "sources_available": 3,
+        "quality_score": 0.85,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 2,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "consensus_strength": "moderate",
+        "market_model_gap": -15.786,
+        "skip_reason": null
       },
       "availability": {
         "home_days_since_last": null,
@@ -107,22 +124,22 @@
       },
       "explanation": {
         "primary_factors": [
+          "Model probability: 74%",
+          "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Low data quality: 40%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 40%)",
+        "data_quality_note": "3/4 sources available (quality: 85%)",
         "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -15.8,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "C"
     },
     {
-      "id": -5078719457386139997,
+      "id": 3163413295583334788,
       "homeTeam": "Illacaise",
       "awayTeam": "Cambrai",
       "time": "15.05.2026 18:00",
@@ -134,7 +151,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -168,7 +186,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5625906499833141120,
+      "id": -551629915362906622,
       "homeTeam": "Martigues",
       "awayTeam": "France Avenir",
       "time": "15.05.2026 18:00",
@@ -178,8 +196,11 @@
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/france-avenir-E72UoNpF/martigues-4WRY1Ma8/?mid=j9BIr4Sj",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -219,38 +240,52 @@
         "W"
       ],
       "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 1.02,
+        "draw": null,
+        "away": 9.0,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 74.0,
+        "exactScore": "3-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
       "scoring": {
-        "pick": "1",
-        "prob": 52.7,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 36.0,
-        "dataQuality": 0.5
+        "pick": "2",
+        "prob": 15.1,
+        "ev": 0.356,
+        "edge": 4.0,
+        "kelly": 4.4,
+        "confidence": 45.0,
+        "dataQuality": 0.8
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 36.0,
-      "value_bet": false,
+      "confidence": 95,
+      "value_bet": true,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "consensus_strength": "moderate",
+        "market_model_gap": -82.939,
+        "skip_reason": null
       },
       "availability": {
         "home_days_since_last": null,
@@ -266,22 +301,22 @@
       },
       "explanation": {
         "primary_factors": [
+          "Positive expected value: 0.36",
+          "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 4.0,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "C"
     },
     {
-      "id": 8132163357164887463,
+      "id": -7670373819815275231,
       "homeTeam": "Reims",
       "awayTeam": "Royan",
       "time": "15.05.2026 18:00",
@@ -293,7 +328,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -327,7 +363,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2718047383739116187,
+      "id": 7523058440458029461,
       "homeTeam": "St-Quentin",
       "awayTeam": "REC Volley",
       "time": "15.05.2026 18:00",
@@ -337,8 +373,11 @@
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/rennes-etudiants-club-4AY0Qpfs/st-quentin-p2sD73D9/?mid=YTpM2PJM",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -378,38 +417,52 @@
         "W"
       ],
       "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 1.06,
+        "draw": null,
+        "away": 6.25,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 81.0,
+        "exactScore": "3-0",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 63.2,
-        "ev": -999.0,
-        "edge": 0.0,
+        "prob": 73.4,
+        "ev": -0.222,
+        "edge": -20.9,
         "kelly": 0.0,
-        "confidence": 40.0,
-        "dataQuality": 0.5
+        "confidence": 25.0,
+        "dataQuality": 0.8
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 40.0,
+      "confidence": 95,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "consensus_strength": "moderate",
+        "market_model_gap": -20.94,
+        "skip_reason": null
       },
       "availability": {
         "home_days_since_last": null,
@@ -425,25 +478,25 @@
       },
       "explanation": {
         "primary_factors": [
+          "Model probability: 73%",
+          "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -20.9,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "C"
     },
     {
-      "id": 2654266969700123337,
+      "id": -9209325778948180907,
       "homeTeam": "Guaguas",
       "awayTeam": "Melilla",
-      "time": "15.05.2026 18:00",
+      "time": "15.05.2026 17:00",
       "date": "2026-05-15",
       "league": null,
       "country": "",
@@ -452,7 +505,8 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "odds_below_threshold",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -494,41 +548,50 @@
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 1.08,
+        "home": 1.06,
         "draw": null,
-        "away": 5.75,
+        "away": 7.5,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 77.0,
+        "exactScore": "3-0",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 81.1,
-        "ev": -0.125,
-        "edge": -11.5,
+        "prob": 77.5,
+        "ev": -0.178,
+        "edge": -16.8,
         "kelly": 0.0,
-        "confidence": 35.0,
-        "dataQuality": 0.6
+        "confidence": 33.0,
+        "dataQuality": 0.8
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 35.0,
+      "confidence": 95,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -11.493,
+        "consensus_strength": "moderate",
+        "market_model_gap": -16.84,
         "skip_reason": null
       },
       "availability": {
@@ -545,22 +608,22 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 81%",
+          "Model probability: 78%",
+          "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": -11.5,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -16.8,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "B"
     },
     {
-      "id": -7886759206490763583,
+      "id": -910430780312805963,
       "homeTeam": "Suntory Sunbirds",
       "awayTeam": "Osaka Bluteon",
       "time": "15.05.2026 10:02",
@@ -570,8 +633,10 @@
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/osaka-bluteon-lY4LB6zN/suntory-sunbirds-SO3PAQkT/?mid=dMT5PFSP",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -590,7 +655,7 @@
         "W"
       ],
       "awayForm": [
-        "W",
+        "L",
         "W",
         "W",
         "W",
@@ -601,20 +666,20 @@
         "W",
         "W",
         "W",
-        "L"
+        "W"
       ],
       "awayFormAway": [
         "L",
         "L",
+        "L",
         "W",
-        "W",
-        "L"
+        "W"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 1.43,
+        "home": 1.38,
         "draw": null,
-        "away": 2.5,
+        "away": 2.65,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -624,16 +689,16 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 64.8,
-        "ev": -0.074,
-        "edge": -5.2,
+        "prob": 69.6,
+        "ev": -0.039,
+        "edge": -2.8,
         "kelly": 0.0,
-        "confidence": 37.0,
+        "confidence": 42.0,
         "dataQuality": 0.6
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 37.0,
+      "confidence": 42.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 2,
@@ -646,7 +711,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -5.13,
+        "market_model_gap": -2.864,
         "skip_reason": null
       },
       "availability": {
@@ -662,20 +727,22 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [],
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
         "risk_factors": [
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
         "data_quality_note": "2/4 sources available (quality: 70%)",
         "availability_note": "",
-        "expected_edge": -5.2,
+        "expected_edge": -2.8,
         "consensus_note": "none (0 sources agree)"
       },
       "predictionGrade": "D"
     },
     {
-      "id": 1060451168801746388,
+      "id": -5624008307549769482,
       "homeTeam": "Anwar",
       "awayTeam": "Knat",
       "time": "15.05.2026 16:30",
@@ -685,8 +752,10 @@
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/anwar-fVGyENIC/knat-vs5JeUU2/?mid=SvyC19PN",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -727,35 +796,44 @@
       ],
       "formAdvantage": true,
       "odds": null,
-      "forebet": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "exactScore": "3-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 71.9,
+        "prob": 72.7,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 44.0,
-        "dataQuality": 0.5
+        "confidence": 47.0,
+        "dataQuality": 0.6
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 44.0,
+      "confidence": 47.0,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
+        "sources_available": 3,
+        "quality_score": 0.65,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
+        "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -773,23 +851,22 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 72%",
+          "Model probability: 73%",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Low data quality: 45%",
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
+        "data_quality_note": "3/4 sources available (quality: 65%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "D"
     },
     {
-      "id": 7742844475393583986,
+      "id": 1539653515888027355,
       "homeTeam": "Sarafand",
       "awayTeam": "Machaal Kosba",
       "time": "15.05.2026 16:30",
@@ -801,7 +878,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -835,7 +913,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2946487980107002619,
+      "id": 8004688799015317575,
       "homeTeam": "Chikka",
       "awayTeam": "Chabeb Batroun",
       "time": "15.05.2026 17:00",
@@ -847,7 +925,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -881,7 +960,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2036426053334212759,
+      "id": 8108183016478705102,
       "homeTeam": "MGTU Moscow",
       "awayTeam": "Nizhnevartovsk",
       "time": "15.05.2026 16:00",
@@ -893,7 +972,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -927,7 +1007,7 @@
       "predictionGrade": null
     },
     {
-      "id": 543740147054229376,
+      "id": 1642492385246051315,
       "homeTeam": "Minchanka K",
       "awayTeam": "Murom K",
       "time": "15.05.2026 14:00",
@@ -939,16 +1019,17 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "odds_below_threshold",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 2,
+        "home": 3,
         "draw": 0,
         "away": 0,
-        "total": 2,
+        "total": 3,
         "winRate": 100
       },
       "homeForm": [
@@ -960,30 +1041,30 @@
       ],
       "awayForm": [
         "L",
-        "W",
         "L",
         "W",
-        "L"
+        "L",
+        "W"
       ],
       "homeFormHome": [
         "W",
         "W",
         "W",
-        "L",
+        "W",
         "L"
       ],
       "awayFormAway": [
         "L",
-        "W",
-        "W",
         "L",
+        "W",
+        "W",
         "L"
       ],
       "formAdvantage": true,
       "odds": {
         "home": 1.28,
         "draw": null,
-        "away": 2.85,
+        "away": 3.15,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
@@ -1002,29 +1083,29 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 74.9,
-        "ev": -0.041,
-        "edge": -3.2,
+        "prob": 73.3,
+        "ev": -0.062,
+        "edge": -4.9,
         "kelly": 0.0,
         "confidence": 44.0,
-        "dataQuality": 0.6
+        "dataQuality": 0.7
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 44.0,
+      "confidence": 85,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 3,
-        "quality_score": 0.85,
+        "quality_score": 0.9,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "none",
-        "market_model_gap": -3.225,
+        "h2h_count": 3,
+        "consensus_strength": "weak",
+        "market_model_gap": -4.825,
         "skip_reason": null
       },
       "availability": {
@@ -1041,25 +1122,25 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 75%",
+          "Model probability: 73%",
           "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": -3.2,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -4.9,
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "C"
     },
     {
-      "id": -1774074650618312447,
+      "id": -1048872377634034931,
       "homeTeam": "Dinamo Bukareszt",
       "awayTeam": "Arcada Galati",
-      "time": "15.05.2026 15:00",
+      "time": "15.05.2026 16:30",
       "date": "2026-05-15",
       "league": null,
       "country": "",
@@ -1068,7 +1149,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -1102,50 +1184,134 @@
       "predictionGrade": null
     },
     {
-      "id": -2007445919359834610,
-      "homeTeam": "Zalau",
-      "awayTeam": "Steaua Bukareszt",
-      "time": "15.05.2026 15:00",
+      "id": -6912036193058875920,
+      "homeTeam": "Włochy K",
+      "awayTeam": "Francja K",
+      "time": "15.05.2026 19:00",
       "date": "2026-05-15",
       "league": null,
       "country": "",
       "sport": "volleyball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/steaua-bukareszt-UXklKmvh/zalau-Czpgdpno/?mid=xnOQAuHP",
-      "qualifies": false,
+      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/francja-WSCmiNN9/wlochy-WOxNzHzR/?mid=Gbvs0cwI",
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "odds_below_threshold",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 2,
+        "home": 5,
         "draw": 0,
-        "away": 3,
+        "away": 0,
         "total": 5,
-        "winRate": 40
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.03,
+        "draw": null,
+        "away": 8.5,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 75.0,
+        "exactScore": "3-2",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
-      "scoring": null,
+      "scoring": {
+        "pick": "1",
+        "prob": 84.8,
+        "ev": -0.126,
+        "edge": -12.3,
+        "kelly": 0.0,
+        "confidence": 39.0,
+        "dataQuality": 0.7
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
+      "confidence": 39.0,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -12.287,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 85%",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": -12.3,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
     }
   ]
 }
