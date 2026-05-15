@@ -2153,6 +2153,268 @@ def _get_votes_via_browser_html(
     return votes
 
 
+# ============================================================================
+# v7.2 — GROQ EVENT RESOLVER (LLM-assisted match identification)
+# ============================================================================
+# Gdy `_search_event_via_browser` nie znajdzie eventu (np. nazwy drużyn po PL,
+# aliasy, transliteracje cyrylica↔łacina), Groq dostaje listę kandydatów z
+# scheduled-events JSON i wybiera najlepszy match.
+
+def _build_candidate_list_via_browser(
+    home_team: str,
+    away_team: str,
+    sport: str,
+    date_str: Optional[str],
+    max_candidates: int = 80,
+) -> List[Dict]:
+    """Pobiera scheduled-events przez browser fetch (same-origin) i filtruje
+    wstępnie po częściowym dopasowaniu nazw — żeby Groq dostawał ≤ N
+    kandydatów, a nie 1500+ meczów dziennie."""
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return []
+
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+    today = datetime.now(timezone.utc).replace(tzinfo=None)
+    if date_str:
+        try:
+            base_date = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            base_date = today
+    else:
+        base_date = today
+
+    dates_to_try = [
+        base_date.strftime('%Y-%m-%d'),
+        (base_date - timedelta(days=1)).strftime('%Y-%m-%d'),
+        (base_date + timedelta(days=1)).strftime('%Y-%m-%d'),
+    ]
+
+    home_norm = normalize_team_name(home_team).lower()
+    away_norm = normalize_team_name(away_team).lower()
+    home_tokens = [t for t in home_norm.split() if len(t) > 2]
+    away_tokens = [t for t in away_norm.split() if len(t) > 2]
+
+    candidates: List[Dict] = []
+    seen_ids: set = set()
+
+    for search_date in dates_to_try:
+        api_path = f'/api/v1/sport/{sport_slug}/scheduled-events/{search_date}'
+        data = _fetch_json_via_browser(driver, api_path, timeout=10)
+        if not data or not isinstance(data, dict):
+            continue
+
+        for event in data.get('events', []) or []:
+            ev_id = event.get('id')
+            if not ev_id or ev_id in seen_ids:
+                continue
+
+            ev_home = (event.get('homeTeam', {}) or {}).get('name', '') or ''
+            ev_away = (event.get('awayTeam', {}) or {}).get('name', '') or ''
+            if not ev_home or not ev_away:
+                continue
+
+            ev_home_l = ev_home.lower()
+            ev_away_l = ev_away.lower()
+
+            # Wstępny filtr: choć jeden token z nazw oryginalnych musi być
+            # widoczny w ev_home lub ev_away — żeby Groq nie dostał 1500
+            # losowych meczów.
+            home_hit = (
+                any(t in ev_home_l for t in home_tokens)
+                or any(t in ev_home_l for t in away_tokens)
+                or similarity_score(home_team, ev_home) >= 0.3
+            )
+            away_hit = (
+                any(t in ev_away_l for t in away_tokens)
+                or any(t in ev_away_l for t in home_tokens)
+                or similarity_score(away_team, ev_away) >= 0.3
+            )
+            if not (home_hit or away_hit):
+                continue
+
+            tournament = (event.get('tournament', {}) or {}).get('name', '') or ''
+            seen_ids.add(ev_id)
+            candidates.append({
+                'id': int(ev_id),
+                'home': ev_home,
+                'away': ev_away,
+                'tournament': tournament,
+                'date': search_date,
+            })
+
+            if len(candidates) >= max_candidates:
+                return candidates
+
+    return candidates
+
+
+def _build_event_resolver_prompt(
+    home_team: str, away_team: str, sport: str, candidates: List[Dict]
+) -> str:
+    """Buduje prompt dla Groq LLM event-resolvera.
+
+    Prompt musi być deterministyczny — żądamy odpowiedzi WYŁĄCZNIE w JSON
+    z `event_id` lub `null`.
+    """
+    rows = []
+    for c in candidates:
+        # Forma: "id|home|away|tournament|date"
+        row = f"{c['id']}|{c['home']}|{c['away']}|{c['tournament']}|{c['date']}"
+        rows.append(row)
+
+    candidates_block = "\n".join(rows) if rows else "(no candidates)"
+
+    return (
+        "You are matching a single sports fixture to one of a list of "
+        "candidate events from SofaScore.\n\n"
+        f"TARGET FIXTURE:\n  sport     : {sport}\n"
+        f"  home_team : {home_team}\n"
+        f"  away_team : {away_team}\n\n"
+        "CANDIDATES (one per line, format: "
+        "id|home_team|away_team|tournament|date):\n"
+        f"{candidates_block}\n\n"
+        "Pick the SINGLE best matching candidate. Consider that team names "
+        "may differ in language (e.g. Polish vs English), transliteration "
+        "(Cyrillic vs Latin), use of city/sponsor prefixes, and abbreviations. "
+        "Home/away orientation MUST match (do NOT pick a candidate where "
+        "home and away are swapped relative to the target).\n\n"
+        "If NO candidate is a confident match, return null.\n\n"
+        "Respond with ONLY valid JSON, no markdown:\n"
+        '{"event_id": <number or null>, "confidence": <0.0..1.0>, '
+        '"reason": "<short>"}'
+    )
+
+
+def _resolve_event_via_groq(
+    home_team: str,
+    away_team: str,
+    sport: str,
+    date_str: Optional[str] = None,
+) -> Optional[int]:
+    """v7.2 — Groq LLM event-resolver.
+
+    Wywoływane gdy `_search_event_via_browser` zwraca None: pobiera listę
+    kandydatów z scheduled-events przez browser fetch, wysyła do Groq LLM
+    i zwraca wybrany `event_id` (lub None).
+
+    Rotuje przez `_GROQ_TEXT_MODEL_CHAIN` na 429 / deprecated-model errors.
+    """
+    global _groq_active_text_model
+
+    groq_module = _get_groq()
+    if not groq_module:
+        logger.debug("SofaScore Groq Resolver: groq module niedostępne")
+        return None
+
+    api_key = os.environ.get('GROQ_API_KEY')
+    if not api_key:
+        try:
+            from groq_config import GROQ_API_KEY  # type: ignore[no-redef]
+            api_key = GROQ_API_KEY
+        except ImportError:
+            pass
+    if not api_key:
+        logger.debug("SofaScore Groq Resolver: Brak GROQ_API_KEY")
+        return None
+
+    candidates = _build_candidate_list_via_browser(home_team, away_team, sport, date_str)
+    if not candidates:
+        print(f"   ⚠️ SofaScore Groq Resolver: brak kandydatów (pusta lista scheduled-events)")
+        return None
+
+    print(f"   🤖 SofaScore Groq Resolver: {len(candidates)} kandydatów dla {home_team} vs {away_team}")
+
+    try:
+        client = groq_module.Groq(api_key=api_key)
+    except Exception as e:
+        print(f"   ⚠️ SofaScore Groq Resolver: client init error: {type(e).__name__}: {e}")
+        return None
+
+    prompt = _build_event_resolver_prompt(home_team, away_team, sport, candidates)
+    chain = list(_GROQ_TEXT_MODEL_CHAIN)
+    if _groq_active_text_model and _groq_active_text_model in chain:
+        chain.remove(_groq_active_text_model)
+        chain.insert(0, _groq_active_text_model)
+
+    last_err: Optional[BaseException] = None
+    for model_name in chain:
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[{'role': 'user', 'content': prompt}],
+                max_tokens=128,
+                temperature=0.0,
+                response_format={'type': 'json_object'},
+            )
+            if not response or not response.choices:
+                continue
+
+            text = response.choices[0].message.content or ''
+            try:
+                parsed = json.loads(text.strip())
+            except (json.JSONDecodeError, TypeError):
+                # Spróbuj wyciąć { ... }
+                m = re.search(r'\{[^{}]*\}', text or '')
+                if not m:
+                    print(f"   ⚠️ SofaScore Groq Resolver ({model_name}): JSON parse fail, raw={text[:200]}")
+                    return None
+                try:
+                    parsed = json.loads(m.group(0))
+                except (json.JSONDecodeError, TypeError):
+                    print(f"   ⚠️ SofaScore Groq Resolver ({model_name}): JSON parse fail (rescue), raw={text[:200]}")
+                    return None
+
+            ev_id = parsed.get('event_id')
+            confidence = parsed.get('confidence') or 0.0
+            reason = parsed.get('reason') or ''
+
+            _groq_active_text_model = model_name
+
+            if ev_id is None:
+                print(f"   ❌ SofaScore Groq Resolver ({model_name}): no match (reason={reason!r})")
+                return None
+
+            try:
+                ev_id_int = int(ev_id)
+            except (TypeError, ValueError):
+                print(f"   ⚠️ SofaScore Groq Resolver ({model_name}): event_id nie int: {ev_id!r}")
+                return None
+
+            # Sanity check: event_id musi być na naszej liście kandydatów
+            cand_ids = {c['id'] for c in candidates}
+            if ev_id_int not in cand_ids:
+                print(
+                    f"   ⚠️ SofaScore Groq Resolver ({model_name}): "
+                    f"event_id {ev_id_int} nie ma na liście kandydatów — odrzucam"
+                )
+                return None
+
+            print(
+                f"   ✅ SofaScore Groq Resolver ({model_name}): "
+                f"event_id={ev_id_int} confidence={confidence:.2f} ({reason[:50]})"
+            )
+            return ev_id_int
+
+        except Exception as e:
+            last_err = e
+            if _is_quota_or_rate_error(e):
+                print(f"   🔁 SofaScore Groq Resolver ({model_name}): quota/rate limit — rotuję")
+                continue
+            if _is_model_unavailable_error(e):
+                print(f"   🔁 SofaScore Groq Resolver ({model_name}): model niedostępny — rotuję")
+                continue
+            print(f"   ⚠️ SofaScore Groq Resolver ({model_name}) błąd: {type(e).__name__}: {str(e)[:80]}")
+            return None
+
+    if last_err is not None:
+        print(
+            f"   ⚠️ SofaScore Groq Resolver: wyczerpano modele ({len(chain)}) — "
+            f"ostatni błąd: {type(last_err).__name__}"
+        )
+    return None
+
+
 def cleanup_browser_api_session():
     """Zamknij singleton browser API session (wywoływane na koniec runu)."""
     global _browser_api_session_driver, _browser_api_session_ready
@@ -2175,6 +2437,66 @@ def cleanup_browser_api_session():
 # Lazy imports — ładowane tylko gdy potrzebne
 _GENAI_MODULE = None
 _GROQ_MODULE = None
+
+# ──────────────────────────────────────────────────────────────────────
+# v7.2 — AI MODEL CONFIGURATION (rotation + production-ready defaults)
+# ──────────────────────────────────────────────────────────────────────
+# Gemini text/vision models, próbowane po kolei. Pierwszy dostępny zostaje
+# zapamiętany w `_gemini_active_model` aby nie marnować quoty na sondaże.
+# Model można nadpisać env var `SOFASCORE_GEMINI_MODELS=model1,model2,...`.
+_GEMINI_MODEL_CHAIN_DEFAULT = [
+    'gemini-2.5-flash',         # Najnowszy production flash (maj 2025)
+    'gemini-2.0-flash-001',     # Stable production
+    'gemini-2.0-flash',          # Alias bieżącej generacji
+    'gemini-1.5-flash-002',      # Starszy stable
+    'gemini-1.5-flash-8b',       # Najtańszy fallback
+]
+_GEMINI_MODEL_CHAIN: List[str] = [
+    m.strip() for m in (
+        os.getenv('SOFASCORE_GEMINI_MODELS', '').strip()
+        or ','.join(_GEMINI_MODEL_CHAIN_DEFAULT)
+    ).split(',') if m.strip()
+]
+_gemini_active_model: Optional[str] = None  # zapamiętany pierwszy działający
+
+# Groq models — production replacements po deprecations 04/2025.
+# llama-3.2-*-vision-preview → llama-4-scout (vision capable).
+# llama-3.3-70b-versatile dla text-only event resolution.
+_GROQ_VISION_MODEL_CHAIN = [
+    'meta-llama/llama-4-scout-17b-16e-instruct',
+    'meta-llama/llama-4-maverick-17b-128e-instruct',
+]
+_GROQ_TEXT_MODEL_CHAIN = [
+    'llama-3.3-70b-versatile',
+    'llama-3.1-8b-instant',
+    'meta-llama/llama-4-scout-17b-16e-instruct',  # vision model also handles text
+]
+_groq_active_vision_model: Optional[str] = None
+_groq_active_text_model: Optional[str] = None
+
+
+def _is_quota_or_rate_error(exc: BaseException) -> bool:
+    """Heurystyka: czy wyjątek to 429/RESOURCE_EXHAUSTED/quota — sygnał do
+    rotacji modelu (zamiast natychmiastowej rezygnacji)."""
+    msg = f"{type(exc).__name__}: {exc}".lower()
+    needles = (
+        '429', 'resource_exhausted', 'quota', 'rate limit',
+        'rate_limit', 'too many requests', 'overloaded',
+    )
+    return any(n in msg for n in needles)
+
+
+def _is_model_unavailable_error(exc: BaseException) -> bool:
+    """Heurystyka: czy wyjątek to 'model nie istnieje / deprecated /
+    decommissioned' — sygnał do rotacji modelu zamiast retry."""
+    msg = f"{type(exc).__name__}: {exc}".lower()
+    needles = (
+        'model_not_found', 'model not found', 'decommissioned',
+        'deprecated', 'does not exist', 'invalid model',
+        'not_found_error', 'unsupported model', '404',
+    )
+    return any(n in msg for n in needles)
+
 
 
 def _get_genai():
@@ -2329,9 +2651,13 @@ def _extract_votes_via_gemini_vision(
     """
     Wyślij screenshot do Gemini Vision API i wyekstraktuj fan vote.
 
+    v7.2: rotuje przez `_GEMINI_MODEL_CHAIN` przy 429 / quota / deprecated
+    model errors — zamiast cicho zwracać None na 1. niepowodzeniu.
+
     Returns:
         Dict z sofascore_home_win_prob, sofascore_draw_prob, etc. lub None
     """
+    global _gemini_active_model
     genai = _get_genai()
     if not genai:
         logger.debug("SofaScore AI Vision: google-generativeai niedostępne")
@@ -2350,32 +2676,56 @@ def _extract_votes_via_gemini_vision(
 
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash')
+    except Exception as e:
+        print(f"   ⚠️ SofaScore Gemini Vision: configure() błąd: {type(e).__name__}: {e}")
+        return None
 
-        prompt = _build_vision_prompt(home_team, away_team, sport)
+    prompt = _build_vision_prompt(home_team, away_team, sport)
+    image_part = {'mime_type': 'image/png', 'data': image_bytes}
 
-        # Przygotuj obraz jako Part
-        image_part = {
-            'mime_type': 'image/png',
-            'data': image_bytes,
-        }
+    # v7.2 — preferuj zapamiętany model jeśli był ostatnio OK.
+    chain = list(_GEMINI_MODEL_CHAIN)
+    if _gemini_active_model and _gemini_active_model in chain:
+        chain.remove(_gemini_active_model)
+        chain.insert(0, _gemini_active_model)
 
-        response = model.generate_content([prompt, image_part])
-        if not response or not response.text:
-            print(f"   ⚠️ SofaScore Gemini Vision: Pusta odpowiedź")
+    last_err: Optional[BaseException] = None
+    for model_name in chain:
+        try:
+            model = genai.GenerativeModel(model_name)
+            response = model.generate_content([prompt, image_part])
+            text = response.text if response else None
+            if not text:
+                print(f"   ⚠️ SofaScore Gemini Vision ({model_name}): pusta odpowiedź")
+                continue
+
+            result = _parse_vision_response(text, sport)
+            if result:
+                _gemini_active_model = model_name
+                print(f"   ✅ SofaScore Gemini Vision ({model_name}): wyekstraktowano fan vote")
+                return result
+            print(f"   ⚠️ SofaScore Gemini Vision ({model_name}): brak fan vote w screenshocie")
+            logger.debug(f"Gemini Vision raw ({model_name}): {text[:300]}")
+            # Pusty parsing nie jest powodem do rotacji modelu — wracamy.
             return None
 
-        result = _parse_vision_response(response.text, sport)
-        if result:
-            print(f"   ✅ SofaScore Gemini Vision: Wyekstraktowano fan vote!")
-        else:
-            print(f"   ⚠️ SofaScore Gemini Vision: Nie znaleziono fan vote w screenshocie")
-            logger.debug(f"Gemini Vision raw: {response.text[:300]}")
-        return result
+        except Exception as e:
+            last_err = e
+            if _is_quota_or_rate_error(e):
+                print(f"   🔁 SofaScore Gemini Vision ({model_name}): quota/rate limit — rotuję")
+                continue
+            if _is_model_unavailable_error(e):
+                print(f"   🔁 SofaScore Gemini Vision ({model_name}): model niedostępny — rotuję")
+                continue
+            print(f"   ⚠️ SofaScore Gemini Vision ({model_name}) błąd: {type(e).__name__}: {str(e)[:80]}")
+            return None
 
-    except Exception as e:
-        print(f"   ⚠️ SofaScore Gemini Vision error: {type(e).__name__}: {str(e)[:80]}")
-        return None
+    if last_err is not None:
+        print(
+            f"   ⚠️ SofaScore Gemini Vision: wyczerpano modele ({len(chain)}) — "
+            f"ostatni błąd: {type(last_err).__name__}"
+        )
+    return None
 
 
 def _extract_votes_via_groq_vision(
@@ -2409,48 +2759,73 @@ def _extract_votes_via_groq_vision(
 
     try:
         client = groq_module.Groq(api_key=api_key)
+    except Exception as e:
+        print(f"   ⚠️ SofaScore Groq Vision: client init error: {type(e).__name__}: {e}")
+        return None
 
-        prompt = _build_vision_prompt(home_team, away_team, sport)
+    global _groq_active_vision_model
+    prompt = _build_vision_prompt(home_team, away_team, sport)
+    b64_image = base64.b64encode(image_bytes).decode('utf-8')
 
-        # Groq Vision wymaga base64 w URL
-        b64_image = base64.b64encode(image_bytes).decode('utf-8')
+    chain = list(_GROQ_VISION_MODEL_CHAIN)
+    if _groq_active_vision_model and _groq_active_vision_model in chain:
+        chain.remove(_groq_active_vision_model)
+        chain.insert(0, _groq_active_vision_model)
 
-        response = client.chat.completions.create(
-            model='llama-3.2-90b-vision-preview',
-            messages=[
-                {
-                    'role': 'user',
-                    'content': [
-                        {'type': 'text', 'text': prompt},
-                        {
-                            'type': 'image_url',
-                            'image_url': {
-                                'url': f'data:image/png;base64,{b64_image}',
+    last_err: Optional[BaseException] = None
+    for model_name in chain:
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {
+                        'role': 'user',
+                        'content': [
+                            {'type': 'text', 'text': prompt},
+                            {
+                                'type': 'image_url',
+                                'image_url': {
+                                    'url': f'data:image/png;base64,{b64_image}',
+                                },
                             },
-                        },
-                    ],
-                }
-            ],
-            max_tokens=256,
-            temperature=0.1,
-        )
+                        ],
+                    }
+                ],
+                max_tokens=256,
+                temperature=0.1,
+            )
 
-        if not response or not response.choices:
-            print(f"   ⚠️ SofaScore Groq Vision: Pusta odpowiedź")
+            if not response or not response.choices:
+                print(f"   ⚠️ SofaScore Groq Vision ({model_name}): pusta odpowiedź")
+                continue
+
+            text = response.choices[0].message.content or ''
+            result = _parse_vision_response(text, sport)
+            if result:
+                _groq_active_vision_model = model_name
+                print(f"   ✅ SofaScore Groq Vision ({model_name}): wyekstraktowano fan vote")
+                return result
+            print(f"   ⚠️ SofaScore Groq Vision ({model_name}): brak fan vote w screenshocie")
+            logger.debug(f"Groq Vision raw ({model_name}): {text[:300]}")
             return None
 
-        text = response.choices[0].message.content or ''
-        result = _parse_vision_response(text, sport)
-        if result:
-            print(f"   ✅ SofaScore Groq Vision: Wyekstraktowano fan vote!")
-        else:
-            print(f"   ⚠️ SofaScore Groq Vision: Nie znaleziono fan vote w screenshocie")
-            logger.debug(f"Groq Vision raw: {text[:300]}")
-        return result
+        except Exception as e:
+            last_err = e
+            if _is_quota_or_rate_error(e):
+                print(f"   🔁 SofaScore Groq Vision ({model_name}): quota/rate limit — rotuję")
+                continue
+            if _is_model_unavailable_error(e):
+                print(f"   🔁 SofaScore Groq Vision ({model_name}): model niedostępny — rotuję")
+                continue
+            print(f"   ⚠️ SofaScore Groq Vision ({model_name}) błąd: {type(e).__name__}: {str(e)[:80]}")
+            return None
 
-    except Exception as e:
-        print(f"   ⚠️ SofaScore Groq Vision error: {type(e).__name__}: {str(e)[:80]}")
-        return None
+    if last_err is not None:
+        print(
+            f"   ⚠️ SofaScore Groq Vision: wyczerpano modele ({len(chain)}) — "
+            f"ostatni błąd: {type(last_err).__name__}"
+        )
+    return None
 
 
 def extract_fan_vote_via_ai_vision(
@@ -2594,6 +2969,52 @@ def scrape_sofascore_full(
                 return result
             elif browser_event_id and not event_id:
                 event_id = browser_event_id  # zachowaj na wypadek AI Vision
+
+        # =============================================
+        # METODA 2.5: Groq Event Resolver (v7.2 — LLM-assisted match)
+        # =============================================
+        # `_search_event_via_browser` używa similarity_score na łacinkowych
+        # tokenach; potyka się o aliasy PL↔EN, transliteracje cyrylica→łacina
+        # i nazwy z prefiksami sponsora. Groq dostaje listę kandydatów ze
+        # scheduled-events i wybiera prawidłowy event_id.
+        if not event_id:
+            try:
+                groq_event_id = _resolve_event_via_groq(
+                    home_team, away_team, sport, date_str
+                )
+            except Exception as e:
+                logger.debug(
+                    f"METODA 2.5 (Groq Resolver) error: {type(e).__name__}: {e}"
+                )
+                groq_event_id = None
+
+            if groq_event_id:
+                event_id = groq_event_id
+                # Spróbuj jeszcze raz fan-vote przez Browser API z odzyskanym id
+                browser_votes_retry = _get_votes_via_browser(groq_event_id)
+                if (
+                    browser_votes_retry
+                    and browser_votes_retry.get('sofascore_home_win_prob') is not None
+                ):
+                    result.update(browser_votes_retry)
+                    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+                    result['sofascore_url'] = (
+                        f"https://www.sofascore.com/{sport_slug}/match/{groq_event_id}"
+                    )
+                    result['sofascore_found'] = True
+                    draw_str = (
+                        f"🤝{result['sofascore_draw_prob']}% | "
+                        if result['sofascore_draw_prob'] else ""
+                    )
+                    print(
+                        f"   ✅ Fan Vote (Browser API + Groq Resolver): "
+                        f"🏠{result['sofascore_home_win_prob']}% | {draw_str}"
+                        f"✈️{result['sofascore_away_win_prob']}% "
+                        f"({result['sofascore_total_votes']:,} głosów)"
+                    )
+                    if use_cache:
+                        _set_cached_result(home_team, away_team, sport, result)
+                    return result
 
         # =============================================
         # METODA 3: Browser HTML fallback (v7.1 — Specific Change 5)
