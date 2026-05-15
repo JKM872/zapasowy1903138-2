@@ -1756,12 +1756,144 @@ except (TypeError, ValueError):
 
 _browser_api_reuse_counter: int = 0
 
+# v7.5 — Cloudflare bypass via undetected_chromedriver + Xvfb.
+# Cloudflare WAF na GHA wykrywa standardowy headless Chrome jako bota
+# (Sec-CH-UA, navigator.webdriver, brak realnego renderingu) i blokuje
+# zarówno same-origin fetch() jak i całe nawigacje stron z meczami.
+# `forebet_scraper.py` od dawna pokonuje tę samą ochronę używając
+# undetected_chromedriver + Xvfb — replikujemy ten przepis tu.
+#
+# Można nadpisać:
+#   SOFASCORE_USE_UNDETECTED=0  → wymuś standardowy webdriver.Chrome
+#   SOFASCORE_USE_XVFB=0        → wyłącz Xvfb (np. dla diagnostyki)
+_SOFASCORE_USE_UNDETECTED: bool = (
+    os.getenv('SOFASCORE_USE_UNDETECTED', '1').strip().lower() not in ('0', 'false', 'no')
+)
+_SOFASCORE_USE_XVFB: bool = (
+    IS_CI
+    and os.getenv('SOFASCORE_USE_XVFB', '1').strip().lower() not in ('0', 'false', 'no')
+)
+_browser_api_xvfb_display = None  # uchwyt do Xvfb żeby zamknąć przy cleanup
+_undetected_chromedriver_available: Optional[bool] = None  # lazy probe
+
+
+def _is_undetected_chromedriver_available() -> bool:
+    """Lazy-check czy undetected_chromedriver da się zaimportować (cached)."""
+    global _undetected_chromedriver_available
+    if _undetected_chromedriver_available is not None:
+        return _undetected_chromedriver_available
+    try:
+        import undetected_chromedriver  # noqa: F401
+        _undetected_chromedriver_available = True
+    except ImportError:
+        _undetected_chromedriver_available = False
+    return _undetected_chromedriver_available
+
+
+def _start_xvfb_if_needed() -> None:
+    """Uruchom Xvfb dla CI (singleton). No-op poza CI lub jeśli już startuje."""
+    global _browser_api_xvfb_display
+    if not _SOFASCORE_USE_XVFB or _browser_api_xvfb_display is not None:
+        return
+    if os.environ.get('DISPLAY'):
+        # Xvfb już prawdopodobnie zarządzany przez inny scraper (forebet) —
+        # nie startuj drugiej instancji, użyj istniejącego DISPLAY.
+        return
+    try:
+        from xvfbwrapper import Xvfb
+        display = Xvfb(width=1920, height=1080)
+        display.start()
+        _browser_api_xvfb_display = display
+        print("   🖥️ SofaScore: Xvfb virtual display started (CI/CD mode)")
+    except ImportError:
+        logger.debug("xvfbwrapper not installed — fallback to headless Chrome")
+    except Exception as e:
+        logger.debug(f"Xvfb start failed: {type(e).__name__}: {e}")
+
+
+def _stop_xvfb_if_needed() -> None:
+    """Zatrzymaj Xvfb jeśli wystartowaliśmy go w tym module."""
+    global _browser_api_xvfb_display
+    if _browser_api_xvfb_display is not None:
+        try:
+            _browser_api_xvfb_display.stop()
+            print("   🖥️ SofaScore: Xvfb virtual display stopped")
+        except Exception:
+            pass
+        _browser_api_xvfb_display = None
+
 
 def _create_lightweight_driver():
-    """Tworzy minimalny headless Chrome driver do API fetch."""
+    """Tworzy minimalny driver do API fetch.
+
+    v7.5: w CI (GitHub Actions) używamy undetected_chromedriver + Xvfb
+    (non-headless) żeby ominąć Cloudflare bot fingerprinting — standardowy
+    headless Chrome jest ostro filtrowany przez WAF od stycznia 2026,
+    przez co same-origin fetch() i nawigacje wracają z 403 / pustym DOM.
+    Lokalnie (lub gdy SOFASCORE_USE_UNDETECTED=0) używamy zwykłego
+    webdriver.Chrome — nikt poza CI nie potrzebuje pełnego CF bypassu.
+    """
     if not SELENIUM_AVAILABLE:
         return None
+
+    use_uc = (
+        _SOFASCORE_USE_UNDETECTED
+        and IS_CI
+        and _is_undetected_chromedriver_available()
+    )
+
+    # Jeśli wybieramy non-headless tryb (UC + CI), wystartuj Xvfb teraz —
+    # po stworzeniu drivera jest za późno.
+    if use_uc:
+        _start_xvfb_if_needed()
+
     try:
+        if use_uc:
+            import undetected_chromedriver as uc
+
+            uc_options = uc.ChromeOptions()
+            # ŚWIADOMIE BEZ --headless — Cloudflare wykrywa headless Chrome.
+            # Zamiast tego polegamy na Xvfb (virtual display) w CI.
+            # Jeśli Xvfb się nie uda, headless=False bez DISPLAY rzuci błędem
+            # i wpadniemy w fallback do standardowego Chrome niżej.
+            uc_options.add_argument('--disable-gpu')
+            uc_options.add_argument('--no-sandbox')
+            uc_options.add_argument('--disable-dev-shm-usage')
+            uc_options.add_argument('--window-size=1920,1080')
+            uc_options.add_argument('--disable-extensions')
+            uc_options.add_argument('--disable-notifications')
+            uc_options.add_argument('--disable-blink-features=AutomationControlled')
+            uc_options.add_argument(f'--user-agent={API_HEADERS["User-Agent"]}')
+            uc_options.page_load_strategy = 'eager'
+
+            chrome_bin = os.getenv('CHROME_BIN')
+            if chrome_bin and os.path.exists(chrome_bin):
+                uc_options.binary_location = chrome_bin
+            elif IS_CI:
+                for candidate in (
+                    '/usr/bin/google-chrome',
+                    '/usr/bin/google-chrome-stable',
+                    '/usr/bin/chromium',
+                    '/usr/bin/chromium-browser',
+                ):
+                    if os.path.exists(candidate):
+                        uc_options.binary_location = candidate
+                        break
+
+            try:
+                d = uc.Chrome(options=uc_options, version_main=None, headless=False)
+                d.set_page_load_timeout(30)
+                d.set_script_timeout(15)
+                print("   🛡️ SofaScore Browser: undetected_chromedriver (CF bypass)")
+                return d
+            except Exception as e:
+                logger.debug(
+                    f"undetected_chromedriver failed, fallback to webdriver.Chrome: "
+                    f"{type(e).__name__}: {e}"
+                )
+                # Fall through do standardowego Chrome niżej.
+
+        # Standardowa ścieżka: webdriver.Chrome (lokalnie lub gdy UC zawiedzie)
         chrome_options = Options()
         chrome_options.add_argument('--headless=new')
         chrome_options.add_argument('--disable-gpu')
@@ -1771,6 +1903,7 @@ def _create_lightweight_driver():
         chrome_options.add_argument('--disable-extensions')
         chrome_options.add_argument('--disable-notifications')
         chrome_options.add_argument('--blink-settings=imagesEnabled=false')
+        chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         chrome_options.add_argument(f'--user-agent={API_HEADERS["User-Agent"]}')
         chrome_options.page_load_strategy = 'eager'
 
@@ -1865,6 +1998,44 @@ def _get_browser_api_session():
     try:
         driver.get('https://www.sofascore.com/football')
         time.sleep(2)
+
+        # v7.5 — Cloudflare challenge wait. Po nawigacji może pojawić się
+        # interstitial "Just a moment..." / "Verifying you are human" — UC
+        # zwykle przejdzie sam, ale potrzebuje 5-25s. Czekamy aż HTML
+        # przestanie być interstitialem (max 30s).
+        max_cf_wait = 30
+        cf_start = time.time()
+        cf_cleared = False
+        while time.time() - cf_start < max_cf_wait:
+            try:
+                html = driver.page_source or ''
+            except Exception:
+                html = ''
+            is_interstitial = (
+                'Just a moment' in html
+                or 'Verifying you are human' in html
+                or 'challenge-platform' in html
+                or 'cf-browser-verification' in html
+            )
+            if not is_interstitial and len(html) > 5000:
+                cf_cleared = True
+                break
+            logger.debug("SofaScore Browser API: Cloudflare challenge w toku, czekam...")
+            time.sleep(2)
+
+        if not cf_cleared:
+            print(
+                "   ⚠️ SofaScore Browser API: Cloudflare nie ustąpił po "
+                f"{max_cf_wait}s — sesja prawdopodobnie zablokowana"
+            )
+            _record_http_outcome('selenium', 'cf_session_blocked')
+            _browser_api_failed_count += 1
+            try:
+                driver.quit()
+            except Exception:
+                pass
+            return None, False
+
         accept_consent_popup(driver)
         time.sleep(1)
         _browser_api_session_driver = driver
@@ -1965,6 +2136,176 @@ def _fetch_json_via_browser(driver, api_path: str, timeout: int = 8) -> Optional
         return None
 
 
+def _build_candidate_list_via_dom(
+    home_team: str,
+    away_team: str,
+    sport: str,
+    date_str: Optional[str],
+    max_candidates: int = 80,
+) -> List[Dict]:
+    """v7.4 — DOM scrape kandydatów po JS hydration.
+
+    SofaScore obecnie renderuje listę meczów po stronie klienta — fetch JSON
+    XHR jest blokowany na GHA, a `__NEXT_DATA__` zawiera tylko Redux store
+    (`uicontrols`, `votes`, ...) bez listy meczów. Ale po hydration DOM ma
+    linki do meczów w postaci:
+        /{sport}/match/{slug}/{shortId}#id:{event_id}
+    np. `/football/match/ks-lechia-gdansk-legia-warszawa/gmbsnid#id:13982032`
+
+    Pobieramy stronę `/sport/date`, czekamy aż JS się załaduje i wyciągamy
+    event_id + slug z linków. Slug zawiera obie nazwy drużyn — używamy
+    similarity match na slugu zamiast na pełnych nazwach z API.
+    """
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return []
+
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+    today = datetime.now(timezone.utc).replace(tzinfo=None)
+    if date_str:
+        try:
+            base_date = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            base_date = today
+    else:
+        base_date = today
+
+    home_norm = normalize_team_name(home_team).lower().replace(' ', '-')
+    away_norm = normalize_team_name(away_team).lower().replace(' ', '-')
+    home_tokens = [t for t in home_norm.split('-') if len(t) > 2]
+    away_tokens = [t for t in away_norm.split('-') if len(t) > 2]
+
+    # Match URL pattern: /football/match/<slug>/<shortId>#id:<event_id>
+    # gdzie slug to "home-team-away-team" all lowercase, dashed.
+    LINK_RE = re.compile(
+        r'/(?:[\w-]+)/match/([\w-]+)/([\w-]+)#id:(\d+)',
+        re.IGNORECASE,
+    )
+
+    candidates: List[Dict] = []
+    seen_ids: set = set()
+
+    # v7.4 — tylko 1 dzień. Multi-day skanowanie kosztuje ~36s na GHA
+    # (3× nawigacja + scroll), a 99% meczów spada na właściwą datę.
+    for offset in (0,):
+        d = (base_date + timedelta(days=offset)).strftime('%Y-%m-%d')
+        url = f'https://www.sofascore.com/{sport_slug}/{d}'
+        # v7.4 — używamy page_load_strategy='eager' (driver utworzony tak)
+        # więc timeout 30s na wszelki wypadek wystarczy
+        try:
+            driver.set_page_load_timeout(30)
+        except Exception:
+            pass
+        try:
+            driver.get(url)
+        except Exception as e:
+            logger.debug(f"_build_candidate_list_via_dom get() error: {type(e).__name__}: {e}")
+            # Mimo timeoutu strona może być częściowo załadowana; kontynuujemy
+        try:
+            accept_consent_popup(driver)
+        except Exception:
+            pass
+
+        # Czas na JS hydration + lazy-loading list meczów (virtualized list).
+        # Lokalnie: 4s. Na GHA pewniej 6-8s, ale tylko gdy potrzeba.
+        time.sleep(5)
+        # Scroll uruchamia lazy-loadery. Powtórz kilka razy bo lista
+        # jest bardzo długa i każdy scroll ładuje ~10 nowych meczów.
+        try:
+            for _ in range(8):
+                driver.execute_script('window.scrollBy(0, 800);')
+                time.sleep(0.4)
+            driver.execute_script('window.scrollTo(0, 0);')
+            time.sleep(0.5)
+        except Exception:
+            pass
+
+        try:
+            page_html = driver.page_source
+        except Exception as e:
+            logger.debug(f"_build_candidate_list_via_dom page_source error: {type(e).__name__}: {e}")
+            continue
+
+        # v7.4 — diagnostyka jak co przyszło z Cloudflare
+        is_cf_interstitial = (
+            'Just a moment' in page_html or 'challenge-platform' in page_html
+        )
+        if is_cf_interstitial:
+            # v7.5 — daj UC szansę przejść CF challenge zamiast od razu rzucać.
+            print(f"   ⏳ DOM scrape ({sport_slug}/{d}): Cloudflare challenge — czekam max 20s")
+            cf_wait_start = time.time()
+            while time.time() - cf_wait_start < 20:
+                time.sleep(2)
+                try:
+                    page_html = driver.page_source
+                except Exception:
+                    break
+                still_blocked = (
+                    'Just a moment' in page_html or 'challenge-platform' in page_html
+                )
+                if not still_blocked and len(page_html) > 10000:
+                    print(f"   ✅ DOM scrape ({sport_slug}/{d}): Cloudflare przeszedł")
+                    is_cf_interstitial = False
+                    break
+        if is_cf_interstitial:
+            print(f"   ⛔ DOM scrape ({sport_slug}/{d}): Cloudflare interstitial — pomijam")
+            _record_http_outcome('selenium', 'cf_interstitial')
+            continue
+
+        # Parsuj wszystkie linki match
+        all_matches = LINK_RE.findall(page_html)
+        # all_matches: list of tuples (slug, shortId, event_id)
+        unique_per_page: Dict[int, str] = {}
+        for slug, _short, ev_id_str in all_matches:
+            try:
+                ev_id = int(ev_id_str)
+            except (TypeError, ValueError):
+                continue
+            unique_per_page.setdefault(ev_id, slug)
+
+        if offset == 0:
+            print(
+                f"   📋 DOM scrape ({sport_slug}/{d}): "
+                f"{len(unique_per_page)} unique events on page"
+            )
+
+        for ev_id, slug in unique_per_page.items():
+            if ev_id in seen_ids:
+                continue
+            slug_l = slug.lower()
+            # Slug = "home-team-away-team" wszystkimi małymi literami,
+            # bez dystynkcji home/away → wystarczy że oba zespoły są obecne.
+            home_hit = (
+                any(t in slug_l for t in home_tokens)
+                if home_tokens else False
+            )
+            away_hit = (
+                any(t in slug_l for t in away_tokens)
+                if away_tokens else False
+            )
+            if not (home_hit and away_hit):
+                # Loose: pojedynczy hit jeśli token jest długi i charakterystyczny
+                if not (
+                    any(t in slug_l for t in home_tokens if len(t) >= 5)
+                    or any(t in slug_l for t in away_tokens if len(t) >= 5)
+                ):
+                    continue
+            seen_ids.add(ev_id)
+            # Parsing slug → home / away nazwy. Bez API nie znamy granicy
+            # podziału, więc oddajemy slug Groq-owi do rozstrzygnięcia.
+            candidates.append({
+                'id': ev_id,
+                'home': slug,         # cały slug — Groq sobie poradzi
+                'away': '',
+                'tournament': '',
+                'date': d,
+            })
+            if len(candidates) >= max_candidates:
+                return candidates
+
+    return candidates
+
+
 def _fetch_next_data_via_browser(api_path: str, sport: str, date_str: Optional[str] = None) -> Optional[Dict]:
     """v7.3 — Pobierz `__NEXT_DATA__` JSON z renderowanej HTML strony SofaScore.
 
@@ -2009,17 +2350,47 @@ def _fetch_next_data_via_browser(api_path: str, sport: str, date_str: Optional[s
         logger.debug(f"_fetch_next_data_via_browser: page_source error: {type(e).__name__}: {e}")
         return None
 
+    # v7.4 — diagnostyka jak co przyszło z Cloudflare/SofaScore
+    html_len = len(page_html or '')
+    is_cf_interstitial = (
+        ('Just a moment' in page_html)
+        or ('challenge-platform' in page_html)
+        or ('cf-browser-verification' in page_html)
+    )
+    has_next_data = '__NEXT_DATA__' in page_html
+    print(
+        f"   📊 NEXT_DATA fetch ({sport} {api_path}): "
+        f"html_len={html_len} cf_interstitial={is_cf_interstitial} "
+        f"has_next_data={has_next_data}"
+    )
+    if is_cf_interstitial:
+        _record_http_outcome('selenium', 'cf_interstitial')
+        return None
+
     # Wyciągnij <script id="__NEXT_DATA__">...</script>
     m = re.search(
         r'<script[^>]+id=["\']__NEXT_DATA__["\'][^>]*>(.*?)</script>',
         page_html, re.DOTALL
     )
     if not m:
+        # Spróbuj alternatywny pattern z innym order atrybutów
+        m = re.search(
+            r'<script[^>]*id=["\']__NEXT_DATA__["\'][^>]*type=["\']application/json["\'][^>]*>(.*?)</script>',
+            page_html, re.DOTALL
+        )
+    if not m:
         logger.debug(f"_fetch_next_data_via_browser ({sport}/{api_path}): brak __NEXT_DATA__ w HTML")
         _record_http_outcome('selenium', 'no_next_data')
+        # v7.4 — log fragmentu HTML do diagnostyki (pierwsze 400 znaków
+        # bez tagów <head> aby nie zalogować ogromnej linii)
+        if html_len > 0:
+            sample = re.sub(r'\s+', ' ', page_html[:400])
+            print(f"   📋 HTML sample (first 400 chars): {sample}")
         return None
 
     raw = m.group(1).strip()
+    print(f"   📦 __NEXT_DATA__ raw size: {len(raw)} chars")
+
     try:
         next_data = json.loads(raw)
     except (json.JSONDecodeError, TypeError) as e:
@@ -2031,8 +2402,19 @@ def _fetch_next_data_via_browser(api_path: str, sport: str, date_str: Optional[s
         (next_data.get('props') or {}).get('pageProps') or {}
     )
     if not page_props:
-        logger.debug(f"_fetch_next_data_via_browser ({sport}/{api_path}): pusty pageProps")
+        # v7.4 — diagnostyka kluczy struktury żeby wiedzieć czy mamy
+        # alternatywną ścieżkę
+        top_keys = list(next_data.keys())[:10] if isinstance(next_data, dict) else []
+        props_keys = list((next_data.get('props') or {}).keys())[:10] if isinstance(next_data, dict) else []
+        print(
+            f"   ⚠️ NEXT_DATA pusty pageProps. top_keys={top_keys} "
+            f"props_keys={props_keys}"
+        )
         return None
+
+    # v7.4 — log struktury aby zobaczyć gdzie są events/votes
+    pp_keys = list(page_props.keys())[:15]
+    print(f"   ✓ pageProps keys ({len(page_props)}): {pp_keys}")
 
     _record_http_outcome('selenium', 'next_data_ok')
     _api_cb_record_success()
@@ -2229,6 +2611,59 @@ def _search_event_via_browser(home_team: str, away_team: str, sport: str = 'foot
     return None
 
 
+def _get_votes_via_dom(event_id: int, sport: str = 'football') -> Optional[Dict]:
+    """v7.4 — pobiera fan vote z renderowanego DOM strony meczu.
+
+    Cloudflare blokuje XHR `/api/v1/event/{id}/votes`, ale strona meczu
+    renderuje sekcję "Who will win?" z procentami w DOM-ie po hydration.
+    Reużywamy `extract_votes_from_page` na pełnej HTML strony.
+    """
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return None
+
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+    url = f'https://www.sofascore.com/{sport_slug}/match/{event_id}'
+
+    try:
+        driver.set_page_load_timeout(20)
+    except Exception:
+        pass
+    try:
+        driver.get(url)
+    except Exception as e:
+        logger.debug(f"_get_votes_via_dom get() error: {type(e).__name__}: {e}")
+        return None
+    try:
+        accept_consent_popup(driver)
+    except Exception:
+        pass
+
+    # Sekcja "Who will win" jest rendered ~połowy strony, lazy load
+    time.sleep(3)
+    try:
+        for _ in range(6):
+            driver.execute_script('window.scrollBy(0, 500);')
+            time.sleep(0.3)
+        driver.execute_script('window.scrollTo(0, document.body.scrollHeight * 0.4);')
+        time.sleep(1.5)
+    except Exception:
+        pass
+
+    try:
+        # Reuse rendered-HTML parser — szuka >XX%< w sekcji Who will win
+        result = extract_votes_from_page(driver, sport)
+    except Exception as e:
+        logger.debug(f"_get_votes_via_dom extract error: {type(e).__name__}: {e}")
+        return None
+
+    if not result or result.get('sofascore_home_win_prob') is None:
+        return None
+
+    _api_cb_record_success()
+    return result
+
+
 def _parse_vote_payload(data: Dict) -> Optional[Dict]:
     """v7.3 — wspólny parser SofaScore vote JSON.
 
@@ -2274,6 +2709,8 @@ def _get_votes_via_browser(event_id: int, sport: str = 'football') -> Optional[D
 
     v7.3: gdy fetch JSON zwraca 403/empty, fallbackuje na pobranie pełnej
     HTML strony meczu i wyciągnięcie `vote` z `__NEXT_DATA__.props.pageProps`.
+    v7.4: dodatkowy fallback — DOM scrape sekcji "Who will win?" po
+    hydration, gdy ani fetch JSON ani __NEXT_DATA__ nie zawierają vote.
     """
     driver, ready = _get_browser_api_session()
     if not ready or not driver:
@@ -2292,31 +2729,31 @@ def _get_votes_via_browser(event_id: int, sport: str = 'football') -> Optional[D
     page_props = _fetch_next_data_via_browser(
         f'/{sport_slug}/match/{event_id}', sport, None
     )
-    if not page_props:
-        return None
+    if page_props:
+        # Struktura NEXT_DATA może mieć vote pod różnymi kluczami
+        candidate_objs = []
+        for key in ('event', 'fanVote', 'votes', 'vote'):
+            v = page_props.get(key)
+            if isinstance(v, dict):
+                candidate_objs.append(v)
 
-    # Struktura NEXT_DATA może mieć vote pod różnymi kluczami
-    candidate_objs = []
-    for key in ('event', 'fanVote', 'votes', 'vote'):
-        v = page_props.get(key)
-        if isinstance(v, dict):
-            candidate_objs.append(v)
+        for obj in candidate_objs:
+            parsed = _parse_vote_payload(obj)
+            if parsed:
+                _api_cb_record_success()
+                return parsed
 
-    for obj in candidate_objs:
-        parsed = _parse_vote_payload(obj)
-        if parsed:
-            _api_cb_record_success()
-            return parsed
+        # Ostatnia próba na NEXT_DATA: rekursywnie znajdź dict z polami vote1/vote2
+        found_vote = _walk_find_vote(page_props)
+        if found_vote:
+            parsed = _parse_vote_payload(found_vote)
+            if parsed:
+                _api_cb_record_success()
+                return parsed
 
-    # Ostatnia próba: rekursywnie znajdź dict z polami vote1/vote2
-    found_vote = _walk_find_vote(page_props)
-    if found_vote:
-        parsed = _parse_vote_payload(found_vote)
-        if parsed:
-            _api_cb_record_success()
-            return parsed
-
-    return None
+    # Próba 3: DOM scrape (v7.4) — sekcja "Who will win?" po hydration
+    print(f"   🔄 SofaScore votes ({event_id}): JSON+NEXT_DATA puste, próba DOM scrape...")
+    return _get_votes_via_dom(event_id, sport)
 
 
 def _walk_find_vote(node: Any, depth: int = 0, max_depth: int = 6) -> Optional[Dict]:
@@ -2521,16 +2958,34 @@ def _build_event_resolver_prompt(
 ) -> str:
     """Buduje prompt dla Groq LLM event-resolvera.
 
+    v7.4: kandydaty z DOM scrape mają tylko `home` (slug w formacie
+    `home-team-away-team`) i puste `away`/`tournament`. Prompt obsługuje
+    obie formy.
+
     Prompt musi być deterministyczny — żądamy odpowiedzi WYŁĄCZNIE w JSON
     z `event_id` lub `null`.
     """
     rows = []
+    has_slug_only = any((not c.get('away') and c.get('home')) for c in candidates)
     for c in candidates:
         # Forma: "id|home|away|tournament|date"
-        row = f"{c['id']}|{c['home']}|{c['away']}|{c['tournament']}|{c['date']}"
+        # Dla DOM-scraped: home jest slugiem typu "ks-lechia-gdansk-legia-warszawa"
+        row = f"{c['id']}|{c['home']}|{c.get('away') or ''}|{c.get('tournament') or ''}|{c.get('date') or ''}"
         rows.append(row)
 
     candidates_block = "\n".join(rows) if rows else "(no candidates)"
+
+    extra_note = ""
+    if has_slug_only:
+        extra_note = (
+            "\nNOTE: Some candidates have only a SLUG in the second column "
+            "(format like 'home-team-away-team' all-lowercase, dash-separated). "
+            "When the away column is empty, parse the slug yourself: it "
+            "concatenates the home team name then the away team name. "
+            "E.g. 'ks-lechia-gdansk-legia-warszawa' = home 'KS Lechia Gdansk' "
+            "vs away 'Legia Warszawa'. Match the target by checking that "
+            "BOTH team names appear in the slug, in the right order.\n"
+        )
 
     return (
         "You are matching a single sports fixture to one of a list of "
@@ -2539,8 +2994,9 @@ def _build_event_resolver_prompt(
         f"  home_team : {home_team}\n"
         f"  away_team : {away_team}\n\n"
         "CANDIDATES (one per line, format: "
-        "id|home_team|away_team|tournament|date):\n"
+        "id|home_or_slug|away|tournament|date):\n"
         f"{candidates_block}\n\n"
+        f"{extra_note}"
         "Pick the SINGLE best matching candidate. Consider that team names "
         "may differ in language (e.g. Polish vs English), transliteration "
         "(Cyrillic vs Latin), use of city/sponsor prefixes, and abbreviations. "
@@ -2587,17 +3043,29 @@ def _resolve_event_via_groq(
 
     candidates = _build_candidate_list_via_browser(home_team, away_team, sport, date_str)
     if not candidates:
-        # v7.3 — fallback: HTML page → __NEXT_DATA__ (cookie-bearing nav,
-        # przechodzi przez Cloudflare nawet gdy fetch() z JS jest blokowany).
+        # v7.4 — fallback: DOM scrape po hydration. SofaScore zmieniło
+        # __NEXT_DATA__ — teraz zawiera tylko Redux store, nie listę meczów.
+        # Lista meczów jest renderowana po stronie klienta — dostępna
+        # tylko przez DOM po JS hydration.
         print(
             f"   🔄 SofaScore Groq Resolver: pusta lista z fetch JSON, "
+            f"próbuję DOM scrape..."
+        )
+        candidates = _build_candidate_list_via_dom(
+            home_team, away_team, sport, date_str
+        )
+    if not candidates:
+        # v7.4 — ostatnia próba: __NEXT_DATA__ (chociaż obecnie pusty,
+        # zostawiamy na wypadek gdyby SofaScore wrócił do SSR).
+        print(
+            f"   🔄 SofaScore Groq Resolver: pusta lista z DOM, "
             f"próbuję __NEXT_DATA__..."
         )
         candidates = _build_candidate_list_via_next_data(
             home_team, away_team, sport, date_str
         )
     if not candidates:
-        print(f"   ⚠️ SofaScore Groq Resolver: brak kandydatów (pusta lista scheduled-events)")
+        print(f"   ⚠️ SofaScore Groq Resolver: brak kandydatów (DOM + fetch + NEXT_DATA puste)")
         return None
 
     print(f"   🤖 SofaScore Groq Resolver: {len(candidates)} kandydatów dla {home_team} vs {away_team}")
@@ -2702,6 +3170,8 @@ def cleanup_browser_api_session():
             pass
         _browser_api_session_driver = None
         _browser_api_session_ready = False
+    # v7.5 — domknij Xvfb jeśli wystartowaliśmy go w tym module.
+    _stop_xvfb_if_needed()
 
 
 # ============================================================================
