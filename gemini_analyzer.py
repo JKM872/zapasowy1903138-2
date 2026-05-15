@@ -61,6 +61,42 @@ except ImportError:
 # Model - Gemini 2.0 Flash (fast + free tier)
 GEMINI_MODEL = "models/gemini-2.0-flash"
 
+# v7.3 — łańcuch modeli próbowanych w kolejności przy quota/deprecated.
+# Pierwszy działający zostaje zapamiętany w `_GEMINI_ACTIVE_MODEL`.
+# Override przez env var: GEMINI_MODEL_CHAIN=model1,model2,...
+_GEMINI_MODEL_CHAIN_DEFAULT = [
+    "models/gemini-2.5-flash",
+    "models/gemini-2.0-flash-001",
+    "models/gemini-2.0-flash",
+    "models/gemini-1.5-flash-002",
+    "models/gemini-1.5-flash-8b",
+]
+GEMINI_MODEL_CHAIN = [
+    m.strip() for m in (
+        os.getenv('GEMINI_MODEL_CHAIN', '').strip()
+        or ','.join(_GEMINI_MODEL_CHAIN_DEFAULT)
+    ).split(',') if m.strip()
+]
+_GEMINI_ACTIVE_MODEL: Optional[str] = None
+
+
+def _is_quota_or_rate_error(exc: BaseException) -> bool:
+    msg = f"{type(exc).__name__}: {exc}".lower()
+    return any(n in msg for n in (
+        '429', 'resource_exhausted', 'quota', 'rate limit',
+        'rate_limit', 'too many requests', 'overloaded',
+    ))
+
+
+def _is_model_unavailable_error(exc: BaseException) -> bool:
+    msg = f"{type(exc).__name__}: {exc}".lower()
+    return any(n in msg for n in (
+        'model_not_found', 'model not found', 'decommissioned',
+        'deprecated', 'does not exist', 'invalid model',
+        'not_found_error', 'unsupported model', '404',
+    ))
+
+
 # Timeout i retry
 REQUEST_TIMEOUT = 10  # sekundy
 MAX_RETRIES = 2
@@ -135,7 +171,6 @@ def analyze_match(
     # Skonfiguruj API
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel(GEMINI_MODEL)
     except Exception as e:
         return {
             'prediction': 'Błąd konfiguracji API',
@@ -144,7 +179,7 @@ def analyze_match(
             'recommendation': 'SKIP',
             'error': f'API configuration error: {e}'
         }
-    
+
     # Przygotuj prompt dla AI
     prompt = _build_analysis_prompt(
         home_team=home_team,
@@ -161,28 +196,65 @@ def analyze_match(
         draw_odds=draw_odds,
         additional_info=additional_info
     )
-    
-    # Wywołaj API z retry
-    for attempt in range(MAX_RETRIES + 1):
+
+    # v7.3 — rotacja modeli z chain. Pierwszy działający → cache.
+    global _GEMINI_ACTIVE_MODEL
+    chain = list(GEMINI_MODEL_CHAIN)
+    if _GEMINI_ACTIVE_MODEL and _GEMINI_ACTIVE_MODEL in chain:
+        chain.remove(_GEMINI_ACTIVE_MODEL)
+        chain.insert(0, _GEMINI_ACTIVE_MODEL)
+
+    last_err: Optional[BaseException] = None
+    for model_name in chain:
         try:
-            response = model.generate_content(prompt)
-            
-            # Parsuj odpowiedź
-            result = _parse_gemini_response(response.text)
-            return result
-            
+            model = genai.GenerativeModel(model_name)
         except Exception as e:
-            if attempt < MAX_RETRIES:
-                print(f"⚠️ Gemini API error (attempt {attempt + 1}/{MAX_RETRIES + 1}): {e}")
-                time.sleep(2)  # Odczekaj przed retry
-            else:
-                return {
-                    'prediction': f'Błąd API (po {MAX_RETRIES + 1} próbach)',
-                    'confidence': 0,
-                    'reasoning': str(e),
-                    'recommendation': 'SKIP',
-                    'error': f'API error after {MAX_RETRIES + 1} attempts: {e}'
-                }
+            last_err = e
+            if _is_model_unavailable_error(e):
+                print(f"   🔁 Gemini ({model_name}): model niedostępny — rotuję")
+                continue
+            return {
+                'prediction': 'Błąd inicjalizacji modelu',
+                'confidence': 0,
+                'reasoning': str(e),
+                'recommendation': 'SKIP',
+                'error': f'Model init error: {e}'
+            }
+
+        # Per-model retry z krótkim backoffem dla transient errors
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                response = model.generate_content(prompt)
+                result = _parse_gemini_response(response.text)
+                _GEMINI_ACTIVE_MODEL = model_name
+                return result
+            except Exception as e:
+                last_err = e
+                if _is_quota_or_rate_error(e):
+                    print(f"   🔁 Gemini ({model_name}): quota/429 — rotuję")
+                    break  # przerwij retry, przejdź do kolejnego modelu
+                if _is_model_unavailable_error(e):
+                    print(f"   🔁 Gemini ({model_name}): model niedostępny — rotuję")
+                    break
+                if attempt < MAX_RETRIES:
+                    print(f"   ⚠️ Gemini ({model_name}) attempt {attempt + 1}/{MAX_RETRIES + 1}: {type(e).__name__}: {str(e)[:80]}")
+                    time.sleep(2)
+                # ostatnia próba - wyjdź z attempt loopa, ale NIE rotuj
+                # (transient błąd, niezwiązany z modelem)
+
+        # Jeśli pętla retry skończyła się BEZ break (= bez quota/model error),
+        # to znaczy ostatni attempt rzucił, ale to nie quota — nie rotujemy.
+        if not (_is_quota_or_rate_error(last_err) or _is_model_unavailable_error(last_err)):
+            break
+
+    # Wyczerpaliśmy chain albo jeden model padł na transient
+    return {
+        'prediction': f'Błąd API (po {len(chain)} modelach)',
+        'confidence': 0,
+        'reasoning': str(last_err) if last_err else 'unknown',
+        'recommendation': 'SKIP',
+        'error': f'API error: {type(last_err).__name__ if last_err else "?"}'
+    }
 
 
 # ============================================

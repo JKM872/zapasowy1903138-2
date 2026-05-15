@@ -1905,16 +1905,29 @@ def _fetch_json_via_browser(driver, api_path: str, timeout: int = 8) -> Optional
 
     js_script = f"""
     var callback = arguments[arguments.length - 1];
-    fetch('{api_path}')
+    fetch({json.dumps(api_path)}, {{
+        method: 'GET',
+        credentials: 'include',
+        headers: {{
+            'Accept': 'application/json, text/plain, */*',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Language': 'en-US,en;q=0.9'
+        }},
+        cache: 'no-cache',
+        referrerPolicy: 'strict-origin-when-cross-origin'
+    }})
         .then(function(response) {{
             if (!response.ok) {{
                 callback(JSON.stringify({{"_error": response.status}}));
                 return;
             }}
-            return response.json();
+            return response.text().then(function(t) {{
+                try {{ return JSON.parse(t); }} catch (e) {{ return null; }}
+            }});
         }})
         .then(function(data) {{
             if (data) callback(JSON.stringify(data));
+            else callback(JSON.stringify({{"_error": "empty_or_unparseable"}}));
         }})
         .catch(function(err) {{
             callback(JSON.stringify({{"_error": err.toString()}}));
@@ -1950,6 +1963,198 @@ def _fetch_json_via_browser(driver, api_path: str, timeout: int = 8) -> Optional
             _record_http_outcome('selenium', 'error')
         logger.debug(f"Browser fetch exception for {api_path}: {type(e).__name__}: {e}")
         return None
+
+
+def _fetch_next_data_via_browser(api_path: str, sport: str, date_str: Optional[str] = None) -> Optional[Dict]:
+    """v7.3 — Pobierz `__NEXT_DATA__` JSON z renderowanej HTML strony SofaScore.
+
+    Cloudflare puszcza HTML page navigations (mamy clearance cookie) ale
+    blokuje bezpośrednie API XHR. Next.js embeduje pełen state w
+    `<script id="__NEXT_DATA__">{...}</script>`, w tym `events` z
+    `scheduledEventsByDay/{date}` oraz `votes` w stronie meczu.
+
+    Args:
+        api_path: ścieżka aplikacyjna SofaScore (np. '/football/2026-05-15')
+        sport: sport (do logowania)
+        date_str: data, jeśli api_path nie zawiera
+
+    Returns:
+        Sparsowany `props.pageProps` lub None
+    """
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return None
+
+    url = f'https://www.sofascore.com{api_path}'
+    try:
+        driver.set_page_load_timeout(15)
+    except Exception:
+        pass
+    try:
+        driver.get(url)
+    except Exception as e:
+        logger.debug(f"_fetch_next_data_via_browser: get() error: {type(e).__name__}: {e}")
+    try:
+        accept_consent_popup(driver)
+    except Exception:
+        pass
+
+    # Niech JS się załaduje (Next.js hydration), choć __NEXT_DATA__ jest
+    # już w HTML response (server-rendered), więc nie musimy długo czekać.
+    time.sleep(1.0)
+
+    try:
+        page_html = driver.page_source
+    except Exception as e:
+        logger.debug(f"_fetch_next_data_via_browser: page_source error: {type(e).__name__}: {e}")
+        return None
+
+    # Wyciągnij <script id="__NEXT_DATA__">...</script>
+    m = re.search(
+        r'<script[^>]+id=["\']__NEXT_DATA__["\'][^>]*>(.*?)</script>',
+        page_html, re.DOTALL
+    )
+    if not m:
+        logger.debug(f"_fetch_next_data_via_browser ({sport}/{api_path}): brak __NEXT_DATA__ w HTML")
+        _record_http_outcome('selenium', 'no_next_data')
+        return None
+
+    raw = m.group(1).strip()
+    try:
+        next_data = json.loads(raw)
+    except (json.JSONDecodeError, TypeError) as e:
+        logger.debug(f"_fetch_next_data_via_browser: JSON decode error: {e}")
+        _record_http_outcome('selenium', 'next_data_parse_error')
+        return None
+
+    page_props = (
+        (next_data.get('props') or {}).get('pageProps') or {}
+    )
+    if not page_props:
+        logger.debug(f"_fetch_next_data_via_browser ({sport}/{api_path}): pusty pageProps")
+        return None
+
+    _record_http_outcome('selenium', 'next_data_ok')
+    _api_cb_record_success()
+    return page_props
+
+
+def _build_candidate_list_via_next_data(
+    home_team: str,
+    away_team: str,
+    sport: str,
+    date_str: Optional[str],
+    max_candidates: int = 80,
+) -> List[Dict]:
+    """v7.3 — alternatywny budowniczy listy kandydatów: HTML page → __NEXT_DATA__.
+
+    Wywoływany gdy `_build_candidate_list_via_browser` (czysty fetch JSON API)
+    zwrócił pustą listę, czyli prawdopodobnie Cloudflare zablokował same-origin
+    fetch. HTML page navigation jest cookie-bearing i przechodzi.
+    """
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+    today = datetime.now(timezone.utc).replace(tzinfo=None)
+    if date_str:
+        try:
+            base_date = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            base_date = today
+    else:
+        base_date = today
+
+    home_norm = normalize_team_name(home_team).lower()
+    away_norm = normalize_team_name(away_team).lower()
+    home_tokens = [t for t in home_norm.split() if len(t) > 2]
+    away_tokens = [t for t in away_norm.split() if len(t) > 2]
+
+    candidates: List[Dict] = []
+    seen_ids: set = set()
+
+    for offset in (0, -1, 1):
+        d = (base_date + timedelta(days=offset)).strftime('%Y-%m-%d')
+        page_path = f'/{sport_slug}/{d}'
+        page_props = _fetch_next_data_via_browser(page_path, sport, d)
+        if not page_props or not isinstance(page_props, dict):
+            continue
+
+        # SofaScore Next.js zwraca events pod różnymi kluczami w zależności
+        # od wersji frontendu. Spróbujmy wszystkich znanych ścieżek.
+        events: List[Dict] = []
+        for key in ('events', 'scheduledEvents', 'eventsByDay'):
+            cand = page_props.get(key)
+            if isinstance(cand, list) and cand:
+                events = cand
+                break
+            if isinstance(cand, dict):
+                # Czasem to dict {date: [events]}; sklejmy wszystkie wartości.
+                merged = []
+                for v in cand.values():
+                    if isinstance(v, list):
+                        merged.extend(v)
+                if merged:
+                    events = merged
+                    break
+
+        # Fallback — szukaj zagnieżdżonych „events" na dowolnej głębokości.
+        if not events:
+            events = _walk_collect_events(page_props)
+
+        for event in events:
+            if not isinstance(event, dict):
+                continue
+            ev_id = event.get('id')
+            if not ev_id or ev_id in seen_ids:
+                continue
+            ev_home = (event.get('homeTeam', {}) or {}).get('name', '') or ''
+            ev_away = (event.get('awayTeam', {}) or {}).get('name', '') or ''
+            if not ev_home or not ev_away:
+                continue
+            ev_home_l = ev_home.lower()
+            ev_away_l = ev_away.lower()
+
+            home_hit = (
+                any(t in ev_home_l for t in home_tokens)
+                or any(t in ev_home_l for t in away_tokens)
+                or similarity_score(home_team, ev_home) >= 0.3
+            )
+            away_hit = (
+                any(t in ev_away_l for t in away_tokens)
+                or any(t in ev_away_l for t in home_tokens)
+                or similarity_score(away_team, ev_away) >= 0.3
+            )
+            if not (home_hit or away_hit):
+                continue
+
+            tournament = (event.get('tournament', {}) or {}).get('name', '') or ''
+            seen_ids.add(ev_id)
+            candidates.append({
+                'id': int(ev_id),
+                'home': ev_home,
+                'away': ev_away,
+                'tournament': tournament,
+                'date': d,
+            })
+            if len(candidates) >= max_candidates:
+                return candidates
+
+    return candidates
+
+
+def _walk_collect_events(node: Any, depth: int = 0, max_depth: int = 6) -> List[Dict]:
+    """Best-effort: rekurencyjnie szuka list „events" w zagnieżdżonej strukturze."""
+    if depth > max_depth or node is None:
+        return []
+    found: List[Dict] = []
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == 'events' and isinstance(v, list):
+                found.extend([e for e in v if isinstance(e, dict)])
+            else:
+                found.extend(_walk_collect_events(v, depth + 1, max_depth))
+    elif isinstance(node, list):
+        for item in node:
+            found.extend(_walk_collect_events(item, depth + 1, max_depth))
+    return found
 
 
 def _search_event_via_browser(home_team: str, away_team: str, sport: str = 'football', date_str: str = None) -> Optional[int]:
@@ -2024,26 +2229,22 @@ def _search_event_via_browser(home_team: str, away_team: str, sport: str = 'foot
     return None
 
 
-def _get_votes_via_browser(event_id: int) -> Optional[Dict]:
-    """Pobiera głosy Fan Vote przez Browser API Fetch (bypass WAF)."""
-    driver, ready = _get_browser_api_session()
-    if not ready or not driver:
-        return None
+def _parse_vote_payload(data: Dict) -> Optional[Dict]:
+    """v7.3 — wspólny parser SofaScore vote JSON.
 
-    api_path = f'/api/v1/event/{event_id}/votes'
-    data = _fetch_json_via_browser(driver, api_path, timeout=8)
-    if not data or not isinstance(data, dict):
+    Akceptuje zarówno wynik z `/api/v1/event/{id}/votes` jak i z
+    `__NEXT_DATA__.props.pageProps.event.vote` (struktura jest identyczna).
+    """
+    if not isinstance(data, dict):
         return None
-
-    vote = data.get('vote', {})
-    if not vote or vote.get('vote1') is None:
+    vote = data.get('vote') if 'vote' in data else data
+    if not isinstance(vote, dict) or vote.get('vote1') is None:
         return None
 
     vote1 = vote.get('vote1', 0) or 0
     voteX = vote.get('voteX', 0) or 0
     vote2 = vote.get('vote2', 0) or 0
     total_votes = vote1 + voteX + vote2
-
     if total_votes == 0:
         return None
 
@@ -2051,9 +2252,9 @@ def _get_votes_via_browser(event_id: int) -> Optional[Dict]:
     draw_pct = round(voteX / total_votes * 100) if voteX else None
     away_pct = round(vote2 / total_votes * 100)
 
-    btts = data.get('bothTeamsToScoreVote', {})
-    btts_yes = btts.get('voteYes', 0) or 0
-    btts_no = btts.get('voteNo', 0) or 0
+    btts = data.get('bothTeamsToScoreVote', {}) if isinstance(data, dict) else {}
+    btts_yes = (btts or {}).get('voteYes', 0) or 0
+    btts_no = (btts or {}).get('voteNo', 0) or 0
     btts_total = btts_yes + btts_no
 
     result = {
@@ -2065,11 +2266,77 @@ def _get_votes_via_browser(event_id: int) -> Optional[Dict]:
     if btts_total > 0:
         result['sofascore_btts_yes'] = round(btts_yes / btts_total * 100)
         result['sofascore_btts_no'] = round(btts_no / btts_total * 100)
-    # v7.1 — Specific Change 4: a successful browser-fetch resets the global
-    # API circuit breaker (clause 3.5) so the next match in the same run can
-    # also try the cheap curl path opportunistically.
-    _api_cb_record_success()
     return result
+
+
+def _get_votes_via_browser(event_id: int, sport: str = 'football') -> Optional[Dict]:
+    """Pobiera głosy Fan Vote przez Browser API Fetch (bypass WAF).
+
+    v7.3: gdy fetch JSON zwraca 403/empty, fallbackuje na pobranie pełnej
+    HTML strony meczu i wyciągnięcie `vote` z `__NEXT_DATA__.props.pageProps`.
+    """
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return None
+
+    # Próba 1: same-origin fetch JSON API (działa gdy Cloudflare puszcza XHR)
+    api_path = f'/api/v1/event/{event_id}/votes'
+    data = _fetch_json_via_browser(driver, api_path, timeout=8)
+    parsed = _parse_vote_payload(data) if isinstance(data, dict) else None
+    if parsed:
+        _api_cb_record_success()
+        return parsed
+
+    # Próba 2: __NEXT_DATA__ ze strony meczu (cookie-bearing HTML nav)
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+    page_props = _fetch_next_data_via_browser(
+        f'/{sport_slug}/match/{event_id}', sport, None
+    )
+    if not page_props:
+        return None
+
+    # Struktura NEXT_DATA może mieć vote pod różnymi kluczami
+    candidate_objs = []
+    for key in ('event', 'fanVote', 'votes', 'vote'):
+        v = page_props.get(key)
+        if isinstance(v, dict):
+            candidate_objs.append(v)
+
+    for obj in candidate_objs:
+        parsed = _parse_vote_payload(obj)
+        if parsed:
+            _api_cb_record_success()
+            return parsed
+
+    # Ostatnia próba: rekursywnie znajdź dict z polami vote1/vote2
+    found_vote = _walk_find_vote(page_props)
+    if found_vote:
+        parsed = _parse_vote_payload(found_vote)
+        if parsed:
+            _api_cb_record_success()
+            return parsed
+
+    return None
+
+
+def _walk_find_vote(node: Any, depth: int = 0, max_depth: int = 6) -> Optional[Dict]:
+    """Best-effort: rekursywnie szuka dict z `vote1` / `vote2` (struktura
+    SofaScore fan vote)."""
+    if depth > max_depth or node is None:
+        return None
+    if isinstance(node, dict):
+        if 'vote1' in node and 'vote2' in node:
+            return node
+        for v in node.values():
+            res = _walk_find_vote(v, depth + 1, max_depth)
+            if res is not None:
+                return res
+    elif isinstance(node, list):
+        for item in node:
+            res = _walk_find_vote(item, depth + 1, max_depth)
+            if res is not None:
+                return res
+    return None
 
 
 def _get_votes_via_browser_html(
@@ -2319,6 +2586,16 @@ def _resolve_event_via_groq(
         return None
 
     candidates = _build_candidate_list_via_browser(home_team, away_team, sport, date_str)
+    if not candidates:
+        # v7.3 — fallback: HTML page → __NEXT_DATA__ (cookie-bearing nav,
+        # przechodzi przez Cloudflare nawet gdy fetch() z JS jest blokowany).
+        print(
+            f"   🔄 SofaScore Groq Resolver: pusta lista z fetch JSON, "
+            f"próbuję __NEXT_DATA__..."
+        )
+        candidates = _build_candidate_list_via_next_data(
+            home_team, away_team, sport, date_str
+        )
     if not candidates:
         print(f"   ⚠️ SofaScore Groq Resolver: brak kandydatów (pusta lista scheduled-events)")
         return None
@@ -2954,7 +3231,7 @@ def scrape_sofascore_full(
             browser_event_id = _search_event_via_browser(home_team, away_team, sport, date_str)
 
         if browser_event_id:
-            browser_votes = _get_votes_via_browser(browser_event_id)
+            browser_votes = _get_votes_via_browser(browser_event_id, sport)
             if browser_votes and browser_votes.get('sofascore_home_win_prob') is not None:
                 result.update(browser_votes)
                 sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
@@ -2991,7 +3268,7 @@ def scrape_sofascore_full(
             if groq_event_id:
                 event_id = groq_event_id
                 # Spróbuj jeszcze raz fan-vote przez Browser API z odzyskanym id
-                browser_votes_retry = _get_votes_via_browser(groq_event_id)
+                browser_votes_retry = _get_votes_via_browser(groq_event_id, sport)
                 if (
                     browser_votes_retry
                     and browser_votes_retry.get('sofascore_home_win_prob') is not None
