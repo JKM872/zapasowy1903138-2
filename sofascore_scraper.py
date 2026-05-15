@@ -368,6 +368,20 @@ _sofascore_cache: Dict[str, Dict] = {}
 _cache_expiry: Dict[str, datetime] = {}
 CACHE_DURATION_MINUTES = 30
 
+# v7.1 — Cache shape contract for clause 3.8 (preservation across strategies).
+# Every strategy that writes via _set_cached_result MUST produce a dict whose
+# `set(keys()) == EXPECTED_CACHE_KEYS`. Pinned by tests/test_sofascore_cache_shape.py.
+EXPECTED_CACHE_KEYS = frozenset({
+    'sofascore_home_win_prob',
+    'sofascore_draw_prob',
+    'sofascore_away_win_prob',
+    'sofascore_total_votes',
+    'sofascore_btts_yes',
+    'sofascore_btts_no',
+    'sofascore_url',
+    'sofascore_found',
+})
+
 
 def _get_cache_key(home_team: str, away_team: str, sport: str) -> str:
     """Generuje klucz cache na podstawie meczu"""
@@ -1722,6 +1736,26 @@ _browser_api_session_ready: bool = False
 _browser_api_failed_count: int = 0
 _BROWSER_API_MAX_FAILURES: int = 3
 
+# v7.1 — Specific Change 1: gate the browser-fetch path on CI by default.
+# Local runs (neither GITHUB_ACTIONS nor CI set, and no explicit opt-in) keep
+# the curl_cffi fast path as primary so clause 3.1 holds bit-for-bit.
+_SOFASCORE_BROWSER_FETCH_ENABLED: bool = (
+    IS_CI
+    or os.getenv('SOFASCORE_BROWSER_FETCH_ENABLED', '').strip().lower() in ('1', 'true', 'yes')
+)
+
+# v7.1 — Specific Change 6: cap singleton driver reuse to mitigate Risk #3
+# (memory growth across many matches in a matrix shard). Default 50, override
+# via env var.
+try:
+    _SOFASCORE_BROWSER_FETCH_MAX_REUSE: int = max(
+        1, int(os.getenv('SOFASCORE_BROWSER_FETCH_MAX_REUSE', '50') or '50')
+    )
+except (TypeError, ValueError):
+    _SOFASCORE_BROWSER_FETCH_MAX_REUSE = 50
+
+_browser_api_reuse_counter: int = 0
+
 
 def _create_lightweight_driver():
     """Tworzy minimalny headless Chrome driver do API fetch."""
@@ -1758,15 +1792,27 @@ def _create_lightweight_driver():
         service = None
         if chromedriver_path and os.path.exists(chromedriver_path):
             service = Service(executable_path=chromedriver_path)
-        elif IS_CI and os.path.exists('/usr/bin/chromedriver'):
-            service = Service(executable_path='/usr/bin/chromedriver')
+        elif IS_CI:
+            # Ubuntu 24.04 runner: CHROMEWEBDRIVER=/usr/local/share/chromedriver-linux64
+            # Ubuntu 22.04 runner: /usr/bin/chromedriver
+            # nanasess/setup-chromedriver action: /usr/local/bin/chromedriver
+            for _cd in (
+                os.path.join(os.getenv('CHROMEWEBDRIVER', ''), 'chromedriver'),
+                '/usr/local/bin/chromedriver',
+                '/usr/bin/chromedriver',
+                '/usr/local/share/chromedriver-linux64/chromedriver',
+            ):
+                if _cd and os.path.exists(_cd):
+                    service = Service(executable_path=_cd)
+                    break
 
         if service:
             d = webdriver.Chrome(service=service, options=chrome_options)
         else:
             d = webdriver.Chrome(options=chrome_options)
-        d.set_page_load_timeout(15)
-        d.set_script_timeout(10)
+        # v7.1 — Specific Change 6: tighter CI timeouts (12s page-load, 8s script)
+        d.set_page_load_timeout(12)
+        d.set_script_timeout(8)
         return d
     except Exception as e:
         logger.debug(f"_create_lightweight_driver failed: {type(e).__name__}: {e}")
@@ -1778,13 +1824,36 @@ def _get_browser_api_session():
 
     Singleton — tworzy driver raz, nawiguje do sofascore.com,
     akceptuje consent, i potem reużywa do wielokrotnych fetch().
+
+    v7.1: po `_SOFASCORE_BROWSER_FETCH_MAX_REUSE` udanych użyciach driver
+    jest recyklowany (mitigation Risk #3 — wzrost pamięci w matrix shard).
     """
-    global _browser_api_session_driver, _browser_api_session_ready, _browser_api_failed_count
+    global _browser_api_session_driver, _browser_api_session_ready
+    global _browser_api_failed_count, _browser_api_reuse_counter
 
     if _browser_api_failed_count >= _BROWSER_API_MAX_FAILURES:
         return None, False
 
+    # v7.1 — Specific Change 6: recycle the singleton after MAX_REUSE successful uses.
+    if (
+        _browser_api_session_driver is not None
+        and _browser_api_session_ready
+        and _browser_api_reuse_counter >= _SOFASCORE_BROWSER_FETCH_MAX_REUSE
+    ):
+        print(
+            f"   ♻️ SofaScore Browser API: rotuję driver po "
+            f"{_browser_api_reuse_counter} użyciach (max={_SOFASCORE_BROWSER_FETCH_MAX_REUSE})"
+        )
+        try:
+            _browser_api_session_driver.quit()
+        except Exception:
+            pass
+        _browser_api_session_driver = None
+        _browser_api_session_ready = False
+        _browser_api_reuse_counter = 0
+
     if _browser_api_session_driver is not None and _browser_api_session_ready:
+        _browser_api_reuse_counter += 1
         return _browser_api_session_driver, True
 
     print(f"   🌐 SofaScore Browser API: Tworzę sesję przeglądarki...")
@@ -1800,6 +1869,7 @@ def _get_browser_api_session():
         time.sleep(1)
         _browser_api_session_driver = driver
         _browser_api_session_ready = True
+        _browser_api_reuse_counter = 1
         print(f"   ✅ SofaScore Browser API: Sesja gotowa")
         return driver, True
     except Exception as e:
@@ -1855,15 +1925,29 @@ def _fetch_json_via_browser(driver, api_path: str, timeout: int = 8) -> Optional
         driver.set_script_timeout(timeout)
         raw = driver.execute_async_script(js_script)
         if not raw:
+            _record_http_outcome('selenium', 'empty')
             return None
         data = json.loads(raw)
-        if '_error' in data:
-            logger.debug(f"Browser fetch error for {api_path}: {data['_error']}")
+        if isinstance(data, dict) and '_error' in data:
+            err = data['_error']
+            # v7.1 — Specific Change 3: classify the JS-side error so
+            # `print_http_stats()` shows actionable buckets (e.g. selenium=403=2).
+            if isinstance(err, int):
+                _record_http_outcome('selenium', str(err))
+            elif isinstance(err, str) and err.isdigit():
+                _record_http_outcome('selenium', err)
+            else:
+                _record_http_outcome('selenium', 'js_error')
+            logger.debug(f"Browser fetch error for {api_path}: {err}")
             return None
         _record_http_outcome('selenium', 'ok')
         return data
     except Exception as e:
-        _record_http_outcome('selenium', 'error')
+        # Map common transport-level failures into stable buckets.
+        if isinstance(e, TimeoutException):
+            _record_http_outcome('selenium', 'timeout')
+        else:
+            _record_http_outcome('selenium', 'error')
         logger.debug(f"Browser fetch exception for {api_path}: {type(e).__name__}: {e}")
         return None
 
@@ -1981,7 +2065,92 @@ def _get_votes_via_browser(event_id: int) -> Optional[Dict]:
     if btts_total > 0:
         result['sofascore_btts_yes'] = round(btts_yes / btts_total * 100)
         result['sofascore_btts_no'] = round(btts_no / btts_total * 100)
+    # v7.1 — Specific Change 4: a successful browser-fetch resets the global
+    # API circuit breaker (clause 3.5) so the next match in the same run can
+    # also try the cheap curl path opportunistically.
+    _api_cb_record_success()
     return result
+
+
+def _get_votes_via_browser_html(
+    home_team: str,
+    away_team: str,
+    sport: str = 'football',
+    event_id: Optional[int] = None,
+) -> Optional[Dict]:
+    """v7.1 — Specific Change 5: rendered-HTML fan-vote fallback (METODA 3).
+
+    Uses the same singleton browser driver from `_get_browser_api_session`
+    to navigate the rendered match page and parse percentages via
+    `extract_votes_from_page`. Independent of having a numeric API event id
+    (clause 2.4): when `event_id` is None we discover the URL through
+    `find_match_on_main_page`.
+
+    Returns the same dict shape as `_get_votes_via_browser` (without
+    `sofascore_url` / `sofascore_found` — those are filled in by the
+    caller in `scrape_sofascore_full` to keep cache-shape consistency,
+    clause 3.8).
+    """
+    driver, ready = _get_browser_api_session()
+    if not ready or not driver:
+        return None
+
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+
+    match_url: Optional[str] = None
+    if event_id:
+        match_url = f"https://www.sofascore.com/{sport_slug}/match/{event_id}"
+    else:
+        try:
+            match_url = find_match_on_main_page(driver, home_team, away_team, sport)
+        except Exception as e:
+            logger.debug(
+                f"_get_votes_via_browser_html: find_match_on_main_page error: "
+                f"{type(e).__name__}: {e}"
+            )
+            match_url = None
+
+    if not match_url:
+        return None
+
+    try:
+        try:
+            driver.set_page_load_timeout(12)
+        except Exception:
+            pass
+        try:
+            driver.get(match_url)
+        except Exception as e:
+            logger.debug(f"_get_votes_via_browser_html: driver.get error: {type(e).__name__}: {e}")
+        # Consent popup may reappear on a fresh navigation
+        try:
+            accept_consent_popup(driver)
+        except Exception:
+            pass
+        # Scroll to the fan-vote section (rendered lazily lower on the page)
+        try:
+            time.sleep(1.5)
+            for _ in range(4):
+                driver.execute_script('window.scrollBy(0, 600);')
+                time.sleep(0.25)
+            driver.execute_script('window.scrollTo(0, document.body.scrollHeight / 2);')
+            time.sleep(0.5)
+        except Exception as e:
+            logger.debug(f"_get_votes_via_browser_html: scroll error: {type(e).__name__}: {e}")
+
+        votes = extract_votes_from_page(driver, sport)
+    except Exception as e:
+        logger.debug(
+            f"_get_votes_via_browser_html: extract error: {type(e).__name__}: {e}"
+        )
+        return None
+
+    if not votes or votes.get('sofascore_home_win_prob') is None:
+        return None
+    # Synthesise the URL for the caller and reset the breaker on success.
+    votes['sofascore_url'] = match_url
+    _api_cb_record_success()
+    return votes
 
 
 def cleanup_browser_api_session():
@@ -2396,12 +2565,19 @@ def scrape_sofascore_full(
     # Cloudflare blokuje curl/requests z 403, ale same-origin fetch()
     # z kontekstu przeglądarki przechodzi. Otwieramy sofascore.com
     # w headless Chrome i robimy fetch() przez JS.
-    if SELENIUM_AVAILABLE and _browser_api_failed_count < _BROWSER_API_MAX_FAILURES:
+    # v7.1 — Specific Change 2: gate the path on _SOFASCORE_BROWSER_FETCH_ENABLED
+    # (defaults to IS_CI). Local runs without GITHUB_ACTIONS / CI keep the
+    # curl_cffi fast path as primary so clause 3.1 stays bit-for-bit.
+    if (
+        SELENIUM_AVAILABLE
+        and _SOFASCORE_BROWSER_FETCH_ENABLED
+        and _browser_api_failed_count < _BROWSER_API_MAX_FAILURES
+    ):
         print(f"   🌐 SofaScore: Browser API Fetch (bypass WAF)...")
         browser_event_id = event_id  # reuse if found above
         if not browser_event_id:
             browser_event_id = _search_event_via_browser(home_team, away_team, sport, date_str)
-        
+
         if browser_event_id:
             browser_votes = _get_votes_via_browser(browser_event_id)
             if browser_votes and browser_votes.get('sofascore_home_win_prob') is not None:
@@ -2418,6 +2594,47 @@ def scrape_sofascore_full(
                 return result
             elif browser_event_id and not event_id:
                 event_id = browser_event_id  # zachowaj na wypadek AI Vision
+
+        # =============================================
+        # METODA 3: Browser HTML fallback (v7.1 — Specific Change 5)
+        # =============================================
+        # Same-origin fetch() returned no votes (or no event id at all):
+        # navigate the singleton driver to the rendered match page (via
+        # `find_match_on_main_page` if needed) and parse percentages from
+        # the DOM via `extract_votes_from_page`. Satisfies clause 2.4 — the
+        # rendered HTML path no longer needs a numeric API event id.
+        try:
+            html_votes = _get_votes_via_browser_html(
+                home_team, away_team, sport, event_id=event_id
+            )
+        except Exception as e:
+            logger.debug(
+                f"METODA 3 (_get_votes_via_browser_html) error: {type(e).__name__}: {e}"
+            )
+            html_votes = None
+
+        if html_votes and html_votes.get('sofascore_home_win_prob') is not None:
+            html_url = html_votes.pop('sofascore_url', None)
+            result.update(html_votes)
+            if html_url:
+                result['sofascore_url'] = html_url
+            elif event_id:
+                sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, 'football')
+                result['sofascore_url'] = f"https://www.sofascore.com/{sport_slug}/match/{event_id}"
+            result['sofascore_found'] = True
+            draw_str = f"🤝{result['sofascore_draw_prob']}% | " if result['sofascore_draw_prob'] else ""
+            total_str = (
+                f" ({result['sofascore_total_votes']:,} głosów)"
+                if result.get('sofascore_total_votes')
+                else ""
+            )
+            print(
+                f"   ✅ Fan Vote (Browser HTML): 🏠{result['sofascore_home_win_prob']}% | "
+                f"{draw_str}✈️{result['sofascore_away_win_prob']}%{total_str}"
+            )
+            if use_cache:
+                _set_cached_result(home_team, away_team, sport, result)
+            return result
     
     # =============================================
     # METODA AI VISION: Screenshot → Gemini/Groq (v6.0)
