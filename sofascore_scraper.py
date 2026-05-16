@@ -357,6 +357,163 @@ def _ingest_flaresolverr_cookies(cookies: List[Dict[str, Any]]) -> None:
         print(f"   🍪 SofaScore: zapisano {len(new_cookies)} cookies z FlareSolverr ({cookie_names})")
 
 
+# v8.0 — DrissionPage cookie warmup. Proven CF bypass — uzywany przez
+# forebet_scraper od dawna i dziala w GHA. Otwiera SofaScore prawdziwa
+# przegladarka z anti-detection, przechodzi CF challenge, oddaje cookies
+# (m.in. cf_clearance, __cf_bm). Te cookies wstrzykujemy do curl_cffi przez
+# globalny cache _flaresolverr_cookies (TTL 25 min).
+_drissionpage_warmup_attempted: bool = False
+_drissionpage_warmup_failed: bool = False
+
+
+def _warmup_cookies_via_drissionpage() -> bool:
+    """Otworz SofaScore w DrissionPage, przejdz CF challenge, wyciagnij cookies.
+
+    Wynik trafia do tego samego globalnego cache co cookies z FlareSolverr —
+    `_get_active_flaresolverr_cookies()` zwroci je curl_cffi.
+
+    Wywolywane tylko raz na run (lub po wygasnieciu TTL) — DrissionPage
+    spawnuje pelnego Chromium ktory kosztuje 5-15s w CI, wiec robimy to
+    minimalnie ile sie da.
+
+    Returns True if cookies were successfully harvested.
+    """
+    global _drissionpage_warmup_attempted, _drissionpage_warmup_failed
+    global _flaresolverr_cookies, _flaresolverr_cookies_at
+
+    _drissionpage_warmup_attempted = True
+
+    # W CI uruchamiamy Xvfb najpierw — DrissionPage NIE chce headless
+    # (Cloudflare go wykrywa).
+    if IS_CI:
+        _start_xvfb_if_needed()
+
+    try:
+        from DrissionPage import ChromiumPage, ChromiumOptions
+    except ImportError as e:
+        logger.debug(f"DrissionPage import failed: {e}")
+        _drissionpage_warmup_failed = True
+        return False
+
+    page = None
+    try:
+        co = ChromiumOptions()
+        co.set_argument('--disable-gpu')
+        co.set_argument('--no-sandbox')
+        co.set_argument('--disable-dev-shm-usage')
+        co.set_argument('--disable-blink-features=AutomationControlled')
+        co.set_argument(f'--user-agent={API_HEADERS["User-Agent"]}')
+        co.set_argument('--window-size=1920,1080')
+
+        # CHROME_BIN z workflow (np. /usr/bin/google-chrome-stable)
+        chrome_bin = os.getenv('CHROME_BIN')
+        if chrome_bin and os.path.exists(chrome_bin):
+            try:
+                co.set_browser_path(chrome_bin)
+            except Exception:
+                pass
+
+        if IS_CI:
+            print("   🌐 SofaScore: cookie warmup przez DrissionPage (proven CF bypass)...")
+
+        page = ChromiumPage(co)
+        page.get('https://www.sofascore.com/', timeout=20)
+
+        # Czekaj na rozwiazanie CF challenge (max 20s — DrissionPage zwykle
+        # przechodzi w 5-12s, dluzsze czekanie nic nie da).
+        max_wait = 20
+        start_time = time.time()
+        cf_cleared = False
+        while time.time() - start_time < max_wait:
+            try:
+                html = page.html or ''
+            except Exception:
+                html = ''
+            is_challenge = (
+                'Verifying you are human' in html
+                or 'Just a moment' in html
+                or 'checking your browser' in html.lower()
+                or 'cf-browser-verification' in html
+            )
+            if not is_challenge and len(html) > 5000:
+                cf_cleared = True
+                break
+            time.sleep(2)
+
+        if not cf_cleared:
+            if IS_CI:
+                print(
+                    f"   ⚠️ SofaScore DrissionPage: CF nie ustapil po {max_wait}s — "
+                    "warmup nieudany"
+                )
+            _drissionpage_warmup_failed = True
+            return False
+
+        # Wyciagnij cookies. DrissionPage zwraca CookiesList — konwertujemy
+        # do listy dictow podobnej do FlareSolverr `solution.cookies`.
+        try:
+            raw_cookies = page.cookies(all_domains=True, all_info=True)
+        except TypeError:
+            # Starsze API DrissionPage
+            raw_cookies = page.cookies()
+        except Exception as e:
+            logger.debug(f"DrissionPage cookies extract failed: {type(e).__name__}: {e}")
+            _drissionpage_warmup_failed = True
+            return False
+
+        normalized: List[Dict[str, Any]] = []
+        for c in raw_cookies or []:
+            if isinstance(c, dict):
+                normalized.append(c)
+            else:
+                # CookiesList element ma .name/.value/.domain attrs
+                try:
+                    normalized.append({
+                        'name': getattr(c, 'name', None) or c.get('name'),
+                        'value': getattr(c, 'value', None) or c.get('value'),
+                        'domain': getattr(c, 'domain', None) or c.get('domain', ''),
+                    })
+                except Exception:
+                    pass
+
+        _ingest_flaresolverr_cookies(normalized)
+
+        if _get_active_flaresolverr_cookies() is not None:
+            return True
+        _drissionpage_warmup_failed = True
+        return False
+
+    except Exception as e:
+        logger.debug(f"DrissionPage warmup error: {type(e).__name__}: {e}")
+        if IS_CI:
+            print(f"   ⚠️ SofaScore DrissionPage warmup error: {type(e).__name__}: {str(e)[:100]}")
+        _drissionpage_warmup_failed = True
+        return False
+    finally:
+        if page is not None:
+            try:
+                page.quit()
+            except Exception:
+                pass
+
+
+def _try_drissionpage_warmup_if_needed() -> bool:
+    """Wywolaj DrissionPage warmup jesli to ma sens (raz na run, brak
+    aktywnych cookies, nie probowalismy juz nieudanie).
+
+    Returns True if cookies became available after this call.
+    """
+    if _get_active_flaresolverr_cookies() is not None:
+        return True
+    if _drissionpage_warmup_failed:
+        return False
+    if _drissionpage_warmup_attempted:
+        # Probowalismy juz raz w tym runie — TTL >= cookies_at, wiec
+        # dalsze proby beda dopiero po wygasnieciu cookies_at + TTL.
+        return _get_active_flaresolverr_cookies() is not None
+    return _warmup_cookies_via_drissionpage()
+
+
 def _get_active_flaresolverr_cookies() -> Optional[Dict[str, str]]:
     """Zwróć cookies z FlareSolverr jeśli wciąż świeże (<TTL), w przeciwnym
     razie None — caller wtedy nie próbuje ich wstrzykiwać do curl_cffi."""
@@ -776,9 +933,31 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
             except Exception:
                 return None
         if response.status_code == 403:
-            # v7.7+v7.8: proaktywny cookie warming. Tylko raz na
-            # _COOKIE_WARMING_COOLDOWN sek (zamiast każdy 403) i tylko gdy
-            # FlareSolverr nie został oznaczony jako bezskuteczny w tym runie.
+            # v8.0: DrissionPage cookie warmup PIERWSZA proba — proven
+            # bypass z forebet. Otwiera SofaScore prawdziwa przegladarka,
+            # przechodzi CF challenge, oddaje cookies (cf_clearance,
+            # __cf_bm). Te cookies wstrzykujemy do curl_cffi przez TTL
+            # 25 min — nastepne setki requestow ida szybka sciezka.
+            if (
+                IS_CI
+                and not _drissionpage_warmup_attempted
+                and _get_active_flaresolverr_cookies() is None
+            ):
+                got_cookies = _try_drissionpage_warmup_if_needed()
+                if got_cookies:
+                    if IS_CI:
+                        print("   🔁 SofaScore: retry curl_cffi z DrissionPage cookies")
+                    retry_resp = _retry_request_with_session(url, timeout=timeout)
+                    if retry_resp is not None and retry_resp.status_code == 200:
+                        _api_cb_record_success()
+                        try:
+                            return retry_resp.json()
+                        except Exception:
+                            return None
+
+            # v7.7+v7.8: proaktywny cookie warming z FlareSolverr (drugi
+            # wybor — FlareSolverr dziala jako Docker service ale czasem
+            # wraca z pustym cookies dla SofaScore).
             if _should_attempt_cookie_warming():
                 _record_cookie_warming_attempt()
                 if IS_CI:
@@ -795,9 +974,6 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
                         except Exception:
                             return None
                 else:
-                    # FlareSolverr nie dał cookies — zlicz porażkę. Po
-                    # _FLARESOLVERR_COOKIE_FAILURES_LIMIT bez cookies wyłączamy
-                    # cookie warming dla reszty runu.
                     _record_cookie_warming_failure()
 
             # ── Fallback A: alternatywna domena (www.sofascore.com/api) ──
