@@ -252,6 +252,83 @@ _flaresolverr_cookies: Dict[str, str] = {}
 _flaresolverr_cookies_at: float = 0.0
 _FLARESOLVERR_COOKIES_TTL: int = 1500  # 25 min — Cloudflare cookies typowo żyją 30 min
 
+# v7.8 — cooldown dla cookie warming. Bez tego każdy 403 wywoływał FlareSolverr
+# na 25s (każdy mecz × 8 requestów = 3+ min na sam warming).
+_cookie_warming_last_attempt: float = 0.0
+_COOKIE_WARMING_COOLDOWN: int = 300  # 5 min — jedna próba na 5 min
+_cookie_warming_failures: int = 0
+_FLARESOLVERR_COOKIE_FAILURES_LIMIT: int = 2  # po 2 porażkach wyłącz dla całego runu
+_cookie_warming_disabled_for_run: bool = False
+
+# v7.8 — globalny SofaScore-unreachable detector. Jeśli przez N kolejnych
+# meczów wszystkie strategie (curl_cffi/requests/FlareSolverr/UC/HTML) padają,
+# wyłączamy SofaScore na resztę runu zamiast topić CI w 6h pętli 403.
+_sofascore_consecutive_failures: int = 0
+_SOFASCORE_UNREACHABLE_THRESHOLD: int = 5
+_sofascore_unreachable_for_run: bool = False
+
+
+def _should_attempt_cookie_warming() -> bool:
+    """Czy warto teraz próbować cookie warming z FlareSolverr?
+
+    Warunki:
+    - FlareSolverr dostępny i nie wyłączony dla runu
+    - Cookie warming nie wyłączony przez N porażek
+    - Mamy aktywne cookies (świeże) → nie potrzebujemy
+    - Cooldown nie minął
+    """
+    if not _FLARESOLVERR_AVAILABLE or _flaresolverr_disabled_for_run:
+        return False
+    if _cookie_warming_disabled_for_run:
+        return False
+    if _get_active_flaresolverr_cookies() is not None:
+        return False
+    if (time.time() - _cookie_warming_last_attempt) < _COOKIE_WARMING_COOLDOWN:
+        return False
+    return True
+
+
+def _record_cookie_warming_attempt() -> None:
+    """Zaznacz timestamp ostatniej próby cookie warmingu (do cooldownu)."""
+    global _cookie_warming_last_attempt
+    _cookie_warming_last_attempt = time.time()
+
+
+def _record_cookie_warming_failure() -> None:
+    """Zwiększ licznik porażek warmingu (FlareSolverr nie zwrócił cookies).
+    Po `_FLARESOLVERR_COOKIE_FAILURES_LIMIT` porażkach wyłącz dla runu."""
+    global _cookie_warming_failures, _cookie_warming_disabled_for_run
+    _cookie_warming_failures += 1
+    if _cookie_warming_failures >= _FLARESOLVERR_COOKIE_FAILURES_LIMIT and not _cookie_warming_disabled_for_run:
+        _cookie_warming_disabled_for_run = True
+        if IS_CI:
+            print(
+                f"   🛑 SofaScore: cookie warming wyłączony dla runu — "
+                f"{_cookie_warming_failures} porażek FlareSolverr (CF interstitial bez cookies)"
+            )
+
+
+def _record_sofascore_match_outcome(found: bool) -> None:
+    """Zlicz konsekutywne porażki/sukcesy SofaScore. Po N porażkach
+    wyłącz SofaScore na resztę runu (oszczędność czasu CI)."""
+    global _sofascore_consecutive_failures, _sofascore_unreachable_for_run
+    if found:
+        _sofascore_consecutive_failures = 0
+        return
+    _sofascore_consecutive_failures += 1
+    if (
+        _sofascore_consecutive_failures >= _SOFASCORE_UNREACHABLE_THRESHOLD
+        and not _sofascore_unreachable_for_run
+    ):
+        _sofascore_unreachable_for_run = True
+        if IS_CI:
+            print(
+                f"   🛑 SofaScore: WYŁĄCZONY dla runu po "
+                f"{_sofascore_consecutive_failures} kolejnych porażkach. "
+                f"Cloudflare/WAF zablokował dostęp z tego shard. "
+                f"Mail i Telegram pokażą 'brak danych' dla SofaScore Fan Vote."
+            )
+
 
 def _ingest_flaresolverr_cookies(cookies: List[Dict[str, Any]]) -> None:
     """Wstrzyknij cookies z FlareSolverr do globalnego cache curl_cffi.
@@ -677,10 +754,17 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     request curl_cffi z tymi cookies powinien wrócić 200 i kolejne setki
     requestów też pójdą szybką ścieżką, nie cmentarzem 403.
 
+    v7.8: cookie warming ma cooldown 5 min — bez tego każdy 403 wywoływał
+    FlareSolverr na 25s, robiąc CI godzinami zamiast minutami.
+
     Globalny circuit breaker — po 3 kolejnych 403 zwraca None natychmiast.
     """
     # CIRCUIT BREAKER: jeśli tripped, natychmiast None
     if _api_circuit_breaker_tripped:
+        return None
+
+    # SOFASCORE-WIDE UNREACHABLE BREAKER (v7.8)
+    if _sofascore_unreachable_for_run:
         return None
 
     response = _retry_request_with_session(url, timeout=timeout)
@@ -692,23 +776,14 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
             except Exception:
                 return None
         if response.status_code == 403:
-            # v7.7: proaktywny cookie warming. Jeśli nie mamy świeżych
-            # cookies z FlareSolverr — pobierz je teraz przez request na
-            # homepage. Potem retry curl_cffi z tymi cookies (warming
-            # robimy raz na ~25 min, więc to nie spowalnia kolejnych
-            # requestów w runie).
-            if (
-                _FLARESOLVERR_AVAILABLE
-                and _get_active_flaresolverr_cookies() is None
-                and not _flaresolverr_disabled_for_run
-            ):
+            # v7.7+v7.8: proaktywny cookie warming. Tylko raz na
+            # _COOKIE_WARMING_COOLDOWN sek (zamiast każdy 403) i tylko gdy
+            # FlareSolverr nie został oznaczony jako bezskuteczny w tym runie.
+            if _should_attempt_cookie_warming():
+                _record_cookie_warming_attempt()
                 if IS_CI:
                     print("   🔥 SofaScore: cookie warming z FlareSolverr (homepage)...")
-                # Zlecamy FlareSolverr nawigację na homepage — to najtańszy
-                # request który da nam cf_clearance bez parsowania API JSON.
                 _try_flaresolverr_json('https://www.sofascore.com/', timeout=max(timeout, 25))
-                # Po tym _flaresolverr_cookies powinien być wypełniony
-                # (ingestion w _try_flaresolverr_json). Powtórz curl_cffi:
                 if _get_active_flaresolverr_cookies():
                     if IS_CI:
                         print("   🔁 SofaScore: retry curl_cffi z FlareSolverr cookies")
@@ -719,6 +794,11 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
                             return retry_resp.json()
                         except Exception:
                             return None
+                else:
+                    # FlareSolverr nie dał cookies — zlicz porażkę. Po
+                    # _FLARESOLVERR_COOKIE_FAILURES_LIMIT bez cookies wyłączamy
+                    # cookie warming dla reszty runu.
+                    _record_cookie_warming_failure()
 
             # ── Fallback A: alternatywna domena (www.sofascore.com/api) ──
             alt_url = _try_alt_domain_url(url)
@@ -1884,6 +1964,7 @@ _SOFASCORE_USE_XVFB: bool = (
 )
 _browser_api_xvfb_display = None  # uchwyt do Xvfb żeby zamknąć przy cleanup
 _undetected_chromedriver_available: Optional[bool] = None  # lazy probe
+_driver_config_logged: bool = False  # v7.8 — log konfiguracji raz na run
 
 
 def _is_undetected_chromedriver_available() -> bool:
@@ -1950,6 +2031,20 @@ def _create_lightweight_driver():
         and IS_CI
         and _is_undetected_chromedriver_available()
     )
+
+    # v7.8: jednorazowa diagnostyka konfiguracji — żeby widzieć w logach
+    # CI dlaczego use_uc=False (np. brak undetected_chromedriver, brak CI).
+    global _driver_config_logged
+    if not _driver_config_logged:
+        _driver_config_logged = True
+        uc_avail = _is_undetected_chromedriver_available()
+        print(
+            f"   ⚙️ SofaScore Browser config: use_uc={use_uc} "
+            f"(uc_module={uc_avail}, IS_CI={IS_CI}, "
+            f"USE_UNDETECTED={_SOFASCORE_USE_UNDETECTED}, "
+            f"USE_XVFB={_SOFASCORE_USE_XVFB}, "
+            f"DISPLAY={os.environ.get('DISPLAY', '<unset>')!r})"
+        )
 
     # Jeśli wybieramy non-headless tryb (UC + CI), wystartuj Xvfb teraz —
     # po stworzeniu drivera jest za późno.
@@ -2124,11 +2219,11 @@ def _get_browser_api_session():
         driver.get('https://www.sofascore.com/football')
         time.sleep(2)
 
-        # v7.5 — Cloudflare challenge wait. Po nawigacji może pojawić się
-        # interstitial "Just a moment..." / "Verifying you are human" — UC
-        # zwykle przejdzie sam, ale potrzebuje 5-25s. Czekamy aż HTML
-        # przestanie być interstitialem (max 30s).
-        max_cf_wait = 30
+        # v7.5+v7.8 — Cloudflare challenge wait. UC zwykle przejdzie sam,
+        # ale potrzebuje 5-12s. Dłuższe czekanie nic nie da — jeśli WAF
+        # zwróci interstitial po 12s, to zwrócił "permanent block" a nie
+        # tylko challenge. Skracamy z 30s do 12s żeby nie tracić CI time.
+        max_cf_wait = 12
         cf_start = time.time()
         cf_cleared = False
         while time.time() - cf_start < max_cf_wait:
@@ -2151,7 +2246,7 @@ def _get_browser_api_session():
         if not cf_cleared:
             print(
                 "   ⚠️ SofaScore Browser API: Cloudflare nie ustąpił po "
-                f"{max_cf_wait}s — sesja prawdopodobnie zablokowana"
+                f"{max_cf_wait}s — sesja zablokowana"
             )
             _record_http_outcome('selenium', 'cf_session_blocked')
             _browser_api_failed_count += 1
@@ -4016,24 +4111,43 @@ def scrape_sofascore_full(
     date_str: str = None,
     use_cache: bool = True
 ) -> Dict:
-    """v7.6 — SofaScore scraper z Groq Fan-Vote Estimator jako last-resort.
+    """v7.8 — SofaScore scraper z run-wide unreachable detector.
 
     Przepływ:
       1. Cache hit → zwraca natychmiast.
-      2. Pełny pipeline SofaScore (METODY 1-5: API, Browser API, Browser HTML,
-         AI Vision, Selenium HTML).
-      3. Jeśli wszystko zawiodło i `sofascore_found=False` — Groq Estimator
-         szacuje H/D/A na podstawie wiedzy o drużynach. Dodaje
-         `sofascore_estimated_by_ai=True`.
+      2. Run-wide unreachable check — jeśli SofaScore zostało wyłączone
+         dla całego runu (po N kolejnych porażkach), zwraca pusty result
+         natychmiast. Oszczędza wielogodzinne pętle 403 w CI.
+      3. Pełny pipeline SofaScore (METODY 1-5).
+      4. Opcjonalny Groq Estimator jako METODA 6 (domyślnie OFF).
+      5. Zlicza wynik do unreachable detectora.
 
-    Lokalnie (gdy curl_cffi 200 zadziała w pkt 2) Groq estimator nigdy nie
-    rusza — clause 3.1 zachowana.
+    Lokalnie (gdy curl_cffi 200 zadziała) wszystkie nowe bezpieczniki są
+    wyłączone — clause 3.1 zachowana.
     """
+    # Pusty result szablon — wracany gdy SofaScore wyłączone dla runu.
+    empty_result = {
+        'sofascore_home_win_prob': None,
+        'sofascore_draw_prob': None,
+        'sofascore_away_win_prob': None,
+        'sofascore_total_votes': 0,
+        'sofascore_btts_yes': None,
+        'sofascore_btts_no': None,
+        'sofascore_url': None,
+        'sofascore_found': False,
+    }
+
     # Cache check FIRST — żeby nie odpalać Groq dla zbuforowanych negatywów.
     if use_cache and home_team and away_team:
         cached = _get_cached_result(home_team, away_team, sport)
         if cached is not None:
             return cached
+
+    # v7.8: Run-wide unreachable check. Jeśli zaliczyliśmy
+    # _SOFASCORE_UNREACHABLE_THRESHOLD kolejnych porażek, wyłączamy
+    # SofaScore dla reszty runu zamiast topić CI w 6h pętli 403.
+    if _sofascore_unreachable_for_run:
+        return empty_result
 
     # Wywołaj cały istniejący pipeline (METODY 1-5).
     result = _scrape_sofascore_full_inner(
@@ -4047,13 +4161,14 @@ def scrape_sofascore_full(
 
     # Jeśli pipeline znalazł realne dane — zapisz do cache i zwróć.
     if result.get('sofascore_found'):
+        _record_sofascore_match_outcome(found=True)
         if use_cache and home_team and away_team:
             _set_cached_result(home_team, away_team, sport, result)
         return result
 
     # METODA 6 (v7.6): Groq Fan Vote Estimator — last-resort dla zdarzeń
-    # niedostępnych przez SofaScore. Działa gdy wszystkie METODY 1-5 zawiodły
-    # (Cloudflare blokuje wszystko / mecz spoza SofaScore).
+    # niedostępnych przez SofaScore. DOMYŚLNIE WYŁĄCZONY (v7.7) bo użytkownik
+    # chce widzieć tylko prawdziwe Fan Vote z SofaScore.
     if home_team and away_team and _SOFASCORE_GROQ_ESTIMATOR_ENABLED:
         try:
             estimated = _estimate_fan_vote_via_groq(
@@ -4067,14 +4182,14 @@ def scrape_sofascore_full(
 
         if estimated:
             result.update(estimated)
-            # `sofascore_found=True` żeby qualification_gate / notyfikatory
-            # użyły tych procentów. Flaga `sofascore_estimated_by_ai` w
-            # estimated pozostaje, więc downstream może to odróżnić.
             result['sofascore_found'] = True
             if use_cache and home_team and away_team:
                 _set_cached_result(home_team, away_team, sport, result)
+            # Estymacja AI nie liczy się jako sukces SofaScore w detectorze
             return result
 
+    # v7.8: brak danych z żadnej strategii — zlicz porażkę.
+    _record_sofascore_match_outcome(found=False)
     return result
 
 
