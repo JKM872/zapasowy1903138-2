@@ -716,9 +716,157 @@ _FLARESOLVERR_URL_ENV = os.getenv('FLARESOLVERR_URL', '').strip()
 _FLARESOLVERR_AVAILABLE = bool(_FLARESOLVERR_URL_ENV)
 _flaresolverr_disabled_for_run: bool = False
 
+# v8.2 — persistent FlareSolverr session.
+# Zamiast tworzyc nowa CF challenge dla kazdego requestu (slow, ~25s na request),
+# tworzymy 1 session ID na starcie scrapera, robimy warmup na homepage zeby
+# dostac CF clearance, i potem wszystkie requesty SofaScore lecą przez ta sama
+# sesje. FlareSolverr trzyma cookies w pamieci sesji - kolejny request to
+# ~2s zamiast ~25s, i CF challenge nie powtarza sie.
+_flaresolverr_session_id: Optional[str] = None
+_flaresolverr_session_warmed: bool = False
+_flaresolverr_session_failed: bool = False  # po porazce nie probujemy znowu
+
+
+def _ensure_flaresolverr_session() -> Optional[str]:
+    """Stworz lub zwroc istniejaca FlareSolverr session ID dla SofaScore.
+
+    Tworzy sesję raz na proces. Po stworzeniu robi warmup request na
+    https://www.sofascore.com/ zeby Chrome w FlareSolverr przeszedl CF
+    challenge i zapisal cookies w sesji. Wszystkie kolejne requesty z
+    `session: <id>` dziedzicza CF clearance.
+
+    Returns session ID albo None jesli FlareSolverr niedostepny / setup padl.
+    """
+    global _flaresolverr_session_id, _flaresolverr_session_warmed, _flaresolverr_session_failed
+
+    if not _FLARESOLVERR_AVAILABLE or _flaresolverr_disabled_for_run:
+        return None
+    if _flaresolverr_session_failed:
+        return None
+    if _flaresolverr_session_id and _flaresolverr_session_warmed:
+        return _flaresolverr_session_id
+    if 'requests' not in globals():
+        return None
+
+    import uuid
+    session_id = _flaresolverr_session_id or f"sofascore_{uuid.uuid4().hex[:8]}"
+
+    # 1. Stworz sesje jesli nie istnieje
+    if not _flaresolverr_session_id:
+        try:
+            create_resp = requests.post(
+                _FLARESOLVERR_URL_ENV,
+                headers={"Content-Type": "application/json"},
+                json={"cmd": "sessions.create", "session": session_id},
+                timeout=30,
+            )
+            if create_resp.status_code != 200:
+                logger.debug(f"FlareSolverr sessions.create failed: HTTP {create_resp.status_code}")
+                _flaresolverr_session_failed = True
+                return None
+            data = create_resp.json()
+            if data.get("status") != "ok":
+                logger.debug(f"FlareSolverr sessions.create returned status={data.get('status')}")
+                _flaresolverr_session_failed = True
+                return None
+            _flaresolverr_session_id = session_id
+            if IS_CI:
+                print(f"   🐳 SofaScore: utworzono FlareSolverr session {session_id}")
+        except Exception as e:
+            logger.debug(f"FlareSolverr sessions.create error: {type(e).__name__}: {e}")
+            _flaresolverr_session_failed = True
+            return None
+
+    # 2. Warmup na homepage zeby przeszedl CF challenge i mial cookies
+    if not _flaresolverr_session_warmed:
+        try:
+            if IS_CI:
+                print("   🔥 SofaScore: warmup FlareSolverr session na homepage (CF challenge)...")
+            warmup_resp = requests.post(
+                _FLARESOLVERR_URL_ENV,
+                headers={"Content-Type": "application/json"},
+                json={
+                    "cmd": "request.get",
+                    "url": "https://www.sofascore.com/",
+                    "session": session_id,
+                    "maxTimeout": 60000,
+                },
+                timeout=90,
+            )
+            if warmup_resp.status_code != 200:
+                logger.debug(f"FlareSolverr warmup failed: HTTP {warmup_resp.status_code}")
+                _flaresolverr_session_failed = True
+                _destroy_flaresolverr_session()
+                return None
+            data = warmup_resp.json()
+            if data.get("status") != "ok":
+                logger.debug(f"FlareSolverr warmup status={data.get('status')}")
+                _flaresolverr_session_failed = True
+                _destroy_flaresolverr_session()
+                return None
+
+            # Sprawdz czy przeszlismy CF — body nie powinno byc interstitialem.
+            solution = data.get("solution") or {}
+            body = (solution.get("response") or "")[:5000]
+            is_challenge = (
+                'Just a moment' in body
+                or 'Verifying you are human' in body
+                or 'challenge-platform' in body
+            )
+            if is_challenge:
+                if IS_CI:
+                    print("   ⚠️ SofaScore: FlareSolverr warmup nie przeszedl CF (interstitial)")
+                _flaresolverr_session_failed = True
+                _destroy_flaresolverr_session()
+                return None
+
+            # Wyciagnij cookies dla dodatkowego cookie warming curl_cffi.
+            try:
+                fs_cookies = solution.get("cookies") or []
+                if fs_cookies:
+                    _ingest_flaresolverr_cookies(fs_cookies)
+            except Exception:
+                pass
+
+            _flaresolverr_session_warmed = True
+            if IS_CI:
+                print(f"   ✅ SofaScore: FlareSolverr session warmed (CF cleared, body={len(body)}B)")
+            return session_id
+        except Exception as e:
+            logger.debug(f"FlareSolverr warmup error: {type(e).__name__}: {e}")
+            if IS_CI:
+                print(f"   ⚠️ SofaScore: FlareSolverr warmup error: {type(e).__name__}: {str(e)[:100]}")
+            _flaresolverr_session_failed = True
+            _destroy_flaresolverr_session()
+            return None
+
+    return _flaresolverr_session_id
+
+
+def _destroy_flaresolverr_session() -> None:
+    """Zniszcz FlareSolverr session (cleanup przy awariach)."""
+    global _flaresolverr_session_id, _flaresolverr_session_warmed
+    if not _flaresolverr_session_id or 'requests' not in globals():
+        return
+    try:
+        requests.post(
+            _FLARESOLVERR_URL_ENV,
+            headers={"Content-Type": "application/json"},
+            json={"cmd": "sessions.destroy", "session": _flaresolverr_session_id},
+            timeout=10,
+        )
+    except Exception:
+        pass
+    _flaresolverr_session_id = None
+    _flaresolverr_session_warmed = False
+
 
 def _try_flaresolverr_json(url: str, timeout: int = 25) -> Optional[Any]:
     """Pobierz JSON z SofaScore API przez FlareSolverr (fallback po 403).
+
+    v8.2: uzywa persistent session — pierwszy call tworzy sesje + warmup
+    na homepage (CF challenge przechodzi raz), kolejne requesty dziedzicza
+    cookies (~2s zamiast ~25s, brak nowego CF challenge).
 
     Zwraca sparsowany JSON albo `None`. Po pierwszej porażce na poziomie
     samego serwisu (np. brak FlareSolverr, błąd transportu) wyłącza dalsze
@@ -731,11 +879,16 @@ def _try_flaresolverr_json(url: str, timeout: int = 25) -> Optional[Any]:
     if 'requests' not in globals():
         return None
 
+    # v8.2: try persistent session first (fast, ~2s)
+    session_id = _ensure_flaresolverr_session()
+
     payload = {
         "cmd": "request.get",
         "url": url,
         "maxTimeout": max(20000, timeout * 1000),
     }
+    if session_id:
+        payload["session"] = session_id
     try:
         resp = requests.post(
             _FLARESOLVERR_URL_ENV,
@@ -1041,20 +1194,12 @@ def _try_alt_domain_url(url: str) -> Optional[str]:
 def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     """Pobierz JSON z SofaScore API z wielostopniową ścieżką klientów.
 
-    v5.1 — kolejność prób:
-    1. curl_cffi na oryginalnym URL (api.sofascore.com)
-    2. curl_cffi na alternatywnej domenie (www.sofascore.com/api) z profilem chrome124
-    3. requests.Session z warmupem na alt domenie
-    4. FlareSolverr (jeśli dostępny)
-
-    v7.7: po pierwszym 403 z curl_cffi próbujemy proaktywnie ogrzać cookies
-    z FlareSolverr (https://www.sofascore.com/) — daje cf_clearance, które
-    następnie wstrzykujemy do curl_cffi przez cały TTL (25 min). Drugi
-    request curl_cffi z tymi cookies powinien wrócić 200 i kolejne setki
-    requestów też pójdą szybką ścieżką, nie cmentarzem 403.
-
-    v7.8: cookie warming ma cooldown 5 min — bez tego każdy 403 wywoływał
-    FlareSolverr na 25s, robiąc CI godzinami zamiast minutami.
+    v8.2 — kolejność prób:
+    1. Proaktywny FlareSolverr session warmup (raz na proces, daje cf_clearance
+       cookies dla curl_cffi via _flaresolverr_cookies)
+    2. curl_cffi z FlareSolverr cookies → szybka ścieżka 200 (~50ms)
+    3. Po 403 — fallback przez FlareSolverr session (~2s, bez nowego CF challenge)
+    4. Alt domain + requests fallback
 
     Globalny circuit breaker — po 3 kolejnych 403 zwraca None natychmiast.
     """
@@ -1065,6 +1210,26 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     # SOFASCORE-WIDE UNREACHABLE BREAKER (v7.8)
     if _sofascore_unreachable_for_run:
         return None
+
+    # v8.2: PROAKTYWNY warmup sesji FlareSolverr przed pierwszym curl_cffi.
+    # FlareSolverr przechodzi CF challenge raz, daje nam cookies, curl_cffi
+    # uzywa tych cookies = 200 OK z pierwszego requestu zamiast czekac na
+    # 3x 403 + warmup. Tylko gdy:
+    # - jestesmy w CI (lokalnie curl_cffi i tak dziala)
+    # - jeszcze nie probowalismy
+    # - nie mamy juz aktywnych cookies
+    if (
+        IS_CI
+        and _FLARESOLVERR_AVAILABLE
+        and not _flaresolverr_session_failed
+        and not _flaresolverr_session_warmed
+        and _get_active_flaresolverr_cookies() is None
+    ):
+        _ensure_flaresolverr_session()
+        # Po warmup — _ingest_flaresolverr_cookies() zostal juz wywolany
+        # wewnatrz _ensure_flaresolverr_session(), wiec curl_cffi automatycznie
+        # uzyje cookies w nastepnym requeście (via _retry_request_with_session
+        # ktory pobiera _get_active_flaresolverr_cookies()).
 
     response = _retry_request_with_session(url, timeout=timeout)
     if response is not None:
@@ -3981,6 +4146,8 @@ def cleanup_browser_api_session():
         _browser_api_session_ready = False
     # v7.5 — domknij Xvfb jeśli wystartowaliśmy go w tym module.
     _stop_xvfb_if_needed()
+    # v8.2 — domknij FlareSolverr session
+    _destroy_flaresolverr_session()
 
 
 # ============================================================================

@@ -158,6 +158,10 @@ class TestFlareSolverrJsonParser:
         monkeypatch.setattr(ss, '_FLARESOLVERR_AVAILABLE', True)
         monkeypatch.setattr(ss, '_FLARESOLVERR_URL_ENV', 'http://localhost:8191/v1')
         monkeypatch.setattr(ss, '_flaresolverr_disabled_for_run', False)
+        # v8.2 — zablokuj proaktywne tworzenie session by jeden test = jeden post
+        monkeypatch.setattr(ss, '_flaresolverr_session_id', None)
+        monkeypatch.setattr(ss, '_flaresolverr_session_warmed', False)
+        monkeypatch.setattr(ss, '_flaresolverr_session_failed', True)
         monkeypatch.setattr(ss.requests, 'post', _fake_post)
         return called
 
