@@ -240,6 +240,56 @@ def _record_http_outcome(client: str, outcome: str) -> None:
     bucket[outcome] = bucket.get(outcome, 0) + 1
 
 
+# ============================================================================
+# FLARESOLVERR COOKIE WARMING (v7.7) — wstrzykiwanie cookies do curl_cffi
+# ============================================================================
+# Gdy FlareSolverr przejdzie Cloudflare challenge i odda cookies (cf_clearance,
+# __cf_bm itp.), wstrzykujemy je do `curl_cffi` żeby kolejne requesty
+# omijały WAF. To powinno przywrócić szybką ścieżkę (curl_cffi 200) nawet
+# w GHA gdy WAF zwraca 403 dla "świeżego" curl_cffi.
+
+_flaresolverr_cookies: Dict[str, str] = {}
+_flaresolverr_cookies_at: float = 0.0
+_FLARESOLVERR_COOKIES_TTL: int = 1500  # 25 min — Cloudflare cookies typowo żyją 30 min
+
+
+def _ingest_flaresolverr_cookies(cookies: List[Dict[str, Any]]) -> None:
+    """Wstrzyknij cookies z FlareSolverr do globalnego cache curl_cffi.
+
+    FlareSolverr cookies format: list of {name, value, domain, path, ...}.
+    Filtrujemy tylko domeny *.sofascore.com.
+    """
+    global _flaresolverr_cookies, _flaresolverr_cookies_at
+    new_cookies: Dict[str, str] = {}
+    for c in cookies or []:
+        try:
+            name = c.get('name')
+            value = c.get('value')
+            domain = (c.get('domain') or '').lstrip('.')
+            if not name or value is None:
+                continue
+            if 'sofascore.com' not in domain:
+                continue
+            new_cookies[name] = value
+        except Exception:
+            continue
+    if new_cookies:
+        _flaresolverr_cookies = new_cookies
+        _flaresolverr_cookies_at = time.time()
+        cookie_names = sorted(new_cookies.keys())
+        print(f"   🍪 SofaScore: zapisano {len(new_cookies)} cookies z FlareSolverr ({cookie_names})")
+
+
+def _get_active_flaresolverr_cookies() -> Optional[Dict[str, str]]:
+    """Zwróć cookies z FlareSolverr jeśli wciąż świeże (<TTL), w przeciwnym
+    razie None — caller wtedy nie próbuje ich wstrzykiwać do curl_cffi."""
+    if not _flaresolverr_cookies:
+        return None
+    if (time.time() - _flaresolverr_cookies_at) > _FLARESOLVERR_COOKIES_TTL:
+        return None
+    return dict(_flaresolverr_cookies)
+
+
 def get_http_stats_snapshot() -> Dict[str, Dict[str, int]]:
     """Zwróć kopię statystyk HTTP, czytaną przez orchestrator (scrape_and_notify).
     Pozwala wypisać po runie: ile requestów dostało 200/403/404/timeout
@@ -338,6 +388,19 @@ def _try_flaresolverr_json(url: str, timeout: int = 25) -> Optional[Any]:
         return None
 
     solution = data.get("solution") or {}
+
+    # v7.7 — Wyciągnij cookies clearance z FlareSolverr i zapisz globalnie.
+    # FlareSolverr po przejściu CF challenge zwraca m.in. `cf_clearance`,
+    # `__cf_bm`. Wstrzyknięcie ich do curl_cffi pozwala curl_cffi NA tej
+    # samej sesji omijać Cloudflare 403 (czyli prawdziwe Fan Vote zaczyna
+    # wracać przez szybką ścieżkę, nie tylko przez FlareSolverr).
+    try:
+        fs_cookies = solution.get("cookies") or []
+        if fs_cookies:
+            _ingest_flaresolverr_cookies(fs_cookies)
+    except Exception as e:
+        logger.debug(f"FlareSolverr cookie extraction failed: {type(e).__name__}: {e}")
+
     body = solution.get("response") or ""
     if not body:
         _record_http_outcome('flaresolverr', 'empty')
@@ -497,12 +560,18 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 # v5.2: rotacja profili TLS — każdy request próbuje inny
                 # fingerprint, zwiększając szansę przejścia przez WAF.
                 profile = _next_impersonate_profile()
-                response = curl_requests.get(
-                    url,
+                # v7.7: użyj cookies z FlareSolverr jeśli są świeże —
+                # dają curl_cffi clearance Cloudflare bez powtarzania CF
+                # challenge dla każdego requestu.
+                cf_cookies = _get_active_flaresolverr_cookies()
+                curl_kwargs = dict(
                     impersonate=profile,
                     headers=API_HEADERS,
                     timeout=timeout,
                 )
+                if cf_cookies:
+                    curl_kwargs['cookies'] = cf_cookies
+                response = curl_requests.get(url, **curl_kwargs)
             else:
                 response = session.get(url, timeout=timeout, **kwargs)
             client_label = 'curl_cffi' if use_curl else 'requests'
@@ -602,6 +671,12 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     3. requests.Session z warmupem na alt domenie
     4. FlareSolverr (jeśli dostępny)
 
+    v7.7: po pierwszym 403 z curl_cffi próbujemy proaktywnie ogrzać cookies
+    z FlareSolverr (https://www.sofascore.com/) — daje cf_clearance, które
+    następnie wstrzykujemy do curl_cffi przez cały TTL (25 min). Drugi
+    request curl_cffi z tymi cookies powinien wrócić 200 i kolejne setki
+    requestów też pójdą szybką ścieżką, nie cmentarzem 403.
+
     Globalny circuit breaker — po 3 kolejnych 403 zwraca None natychmiast.
     """
     # CIRCUIT BREAKER: jeśli tripped, natychmiast None
@@ -617,16 +692,48 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
             except Exception:
                 return None
         if response.status_code == 403:
+            # v7.7: proaktywny cookie warming. Jeśli nie mamy świeżych
+            # cookies z FlareSolverr — pobierz je teraz przez request na
+            # homepage. Potem retry curl_cffi z tymi cookies (warming
+            # robimy raz na ~25 min, więc to nie spowalnia kolejnych
+            # requestów w runie).
+            if (
+                _FLARESOLVERR_AVAILABLE
+                and _get_active_flaresolverr_cookies() is None
+                and not _flaresolverr_disabled_for_run
+            ):
+                if IS_CI:
+                    print("   🔥 SofaScore: cookie warming z FlareSolverr (homepage)...")
+                # Zlecamy FlareSolverr nawigację na homepage — to najtańszy
+                # request który da nam cf_clearance bez parsowania API JSON.
+                _try_flaresolverr_json('https://www.sofascore.com/', timeout=max(timeout, 25))
+                # Po tym _flaresolverr_cookies powinien być wypełniony
+                # (ingestion w _try_flaresolverr_json). Powtórz curl_cffi:
+                if _get_active_flaresolverr_cookies():
+                    if IS_CI:
+                        print("   🔁 SofaScore: retry curl_cffi z FlareSolverr cookies")
+                    retry_resp = _retry_request_with_session(url, timeout=timeout)
+                    if retry_resp is not None and retry_resp.status_code == 200:
+                        _api_cb_record_success()
+                        try:
+                            return retry_resp.json()
+                        except Exception:
+                            return None
+
             # ── Fallback A: alternatywna domena (www.sofascore.com/api) ──
             alt_url = _try_alt_domain_url(url)
             if alt_url and CURL_CFFI_AVAILABLE:
                 try:
-                    alt_resp = curl_requests.get(
-                        alt_url,
+                    # v7.7: dodaj FlareSolverr cookies jeśli świeże
+                    alt_cf_cookies = _get_active_flaresolverr_cookies()
+                    alt_curl_kwargs = dict(
                         impersonate='chrome124',
                         headers={**API_HEADERS, 'Referer': 'https://www.sofascore.com/'},
                         timeout=timeout,
                     )
+                    if alt_cf_cookies:
+                        alt_curl_kwargs['cookies'] = alt_cf_cookies
+                    alt_resp = curl_requests.get(alt_url, **alt_curl_kwargs)
                     if alt_resp.status_code == 200 and alt_resp.content and len(alt_resp.content) > 2:
                         _record_http_outcome('curl_cffi', 'ok_alt')
                         _api_cb_record_success()
@@ -1735,6 +1842,8 @@ _browser_api_session_driver = None
 _browser_api_session_ready: bool = False
 _browser_api_failed_count: int = 0
 _BROWSER_API_MAX_FAILURES: int = 5  # v7.6: raised from 3 — daj UC więcej szans
+_browser_api_last_failure_time: float = 0.0  # v7.7: timestamp ostatniej porażki
+_BROWSER_API_RESET_INTERVAL: int = 180  # v7.7: po 3 min reset countera
 
 # v7.1 — Specific Change 1: gate the browser-fetch path on CI by default.
 # Local runs (neither GITHUB_ACTIONS nor CI set, and no explicit opt-in) keep
@@ -1963,6 +2072,21 @@ def _get_browser_api_session():
     """
     global _browser_api_session_driver, _browser_api_session_ready
     global _browser_api_failed_count, _browser_api_reuse_counter
+    global _browser_api_last_failure_time
+
+    # v7.7: reset countera failures po _BROWSER_API_RESET_INTERVAL sek
+    # nieaktywności — bez tego pojedynczy zły shard wyłącza ścieżkę
+    # browser dla całej reszty runu.
+    if (
+        _browser_api_failed_count > 0
+        and _browser_api_last_failure_time > 0
+        and (time.time() - _browser_api_last_failure_time) > _BROWSER_API_RESET_INTERVAL
+    ):
+        print(
+            f"   ♻️ SofaScore Browser API: reset countera failures "
+            f"(po {_BROWSER_API_RESET_INTERVAL}s nieaktywności)"
+        )
+        _browser_api_failed_count = 0
 
     if _browser_api_failed_count >= _BROWSER_API_MAX_FAILURES:
         return None, False
@@ -1993,6 +2117,7 @@ def _get_browser_api_session():
     driver = _create_lightweight_driver()
     if not driver:
         _browser_api_failed_count += 1
+        _browser_api_last_failure_time = time.time()
         return None, False
 
     try:
@@ -2030,6 +2155,7 @@ def _get_browser_api_session():
             )
             _record_http_outcome('selenium', 'cf_session_blocked')
             _browser_api_failed_count += 1
+            _browser_api_last_failure_time = time.time()
             try:
                 driver.quit()
             except Exception:
@@ -2046,6 +2172,7 @@ def _get_browser_api_session():
     except Exception as e:
         logger.debug(f"Browser API session setup failed: {type(e).__name__}: {e}")
         _browser_api_failed_count += 1
+        _browser_api_last_failure_time = time.time()
         try:
             driver.quit()
         except Exception:
@@ -3173,11 +3300,14 @@ def _resolve_event_via_groq(
 # sofascore_estimated_by_ai pozwala downstream odróżnić źródło, jeśli
 # kiedyś będzie tego potrzebować.
 #
-# Można wyłączyć przez SOFASCORE_GROQ_ESTIMATOR_ENABLED=0.
+# v7.7 — domyślnie WYŁĄCZONY. Użytkownik chce widzieć tylko prawdziwe dane
+# z SofaScore (tak jak działało wcześniej), nie estymacje. Włączyć można
+# jawnie przez SOFASCORE_GROQ_ESTIMATOR_ENABLED=1 jeśli kiedyś zajdzie
+# potrzeba awaryjnego wypełniania pól dla zdarzeń niedostępnych.
 
 _SOFASCORE_GROQ_ESTIMATOR_ENABLED: bool = (
-    os.getenv('SOFASCORE_GROQ_ESTIMATOR_ENABLED', '1').strip().lower()
-    not in ('0', 'false', 'no')
+    os.getenv('SOFASCORE_GROQ_ESTIMATOR_ENABLED', '0').strip().lower()
+    in ('1', 'true', 'yes')
 )
 
 
