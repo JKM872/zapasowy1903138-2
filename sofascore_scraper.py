@@ -1734,7 +1734,7 @@ def format_sofascore_for_email(result: Dict) -> str:
 _browser_api_session_driver = None
 _browser_api_session_ready: bool = False
 _browser_api_failed_count: int = 0
-_BROWSER_API_MAX_FAILURES: int = 3
+_BROWSER_API_MAX_FAILURES: int = 5  # v7.6: raised from 3 — daj UC więcej szans
 
 # v7.1 — Specific Change 1: gate the browser-fetch path on CI by default.
 # Local runs (neither GITHUB_ACTIONS nor CI set, and no explicit opt-in) keep
@@ -3160,6 +3160,272 @@ def _resolve_event_via_groq(
     return None
 
 
+# ============================================================================
+# v7.6 — GROQ FAN VOTE ESTIMATOR (last-resort dla zdarzeń niedostępnych)
+# ============================================================================
+# Gdy WSZYSTKIE strategie SofaScore zawodzą (Cloudflare blokuje API,
+# scheduled-events puste, browser fetch zablokowany, HTML page 403),
+# Groq dostaje czyste dane meczu (drużyny + sport + data) i ESTYMUJE
+# prawdopodobieństwa Fan Vote na podstawie wiedzy o formie, rankingu
+# i kontekście. Wynik wchodzi w te same pola sofascore_* żeby
+# qualification_gate.py / telegram / email mogły go skonsumować
+# bez zmian (clause 3.8 — cache shape preserved). Dodatkowy flag
+# sofascore_estimated_by_ai pozwala downstream odróżnić źródło, jeśli
+# kiedyś będzie tego potrzebować.
+#
+# Można wyłączyć przez SOFASCORE_GROQ_ESTIMATOR_ENABLED=0.
+
+_SOFASCORE_GROQ_ESTIMATOR_ENABLED: bool = (
+    os.getenv('SOFASCORE_GROQ_ESTIMATOR_ENABLED', '1').strip().lower()
+    not in ('0', 'false', 'no')
+)
+
+
+def _build_fan_vote_estimator_prompt(
+    home_team: str, away_team: str, sport: str, date_str: Optional[str]
+) -> str:
+    """Buduje prompt dla Groq estymującego Fan Vote bez dostępu do SofaScore.
+
+    Prosi LLM o oszacowanie procentów głosowania społeczności na podstawie
+    publicznej wiedzy: ranking drużyn, forma, head-to-head, znaczenie meczu.
+    Zwraca odpowiedź w czystym JSON żeby parser był deterministyczny.
+    """
+    has_draw = sport not in SPORTS_WITHOUT_DRAW
+    draw_part = (
+        ', "draw_pct": <int 0..100>'
+        if has_draw
+        else ', "draw_pct": null'
+    )
+    draw_hint = (
+        "Include a draw percentage. Football/soccer typically has 18-30% draws "
+        "for evenly matched teams, 8-15% for mismatches.\n"
+        if has_draw
+        else "This sport does NOT have draws — set draw_pct to null.\n"
+    )
+    date_hint = f"  match_date: {date_str}\n" if date_str else ""
+    return (
+        "You are estimating community fan-vote percentages (\"Who will win?\") "
+        "for a sports match where direct vote data is unavailable. Use your "
+        "knowledge of team strength, recent form, head-to-head history, home "
+        "advantage, league context and tournament stage to estimate the most "
+        "likely distribution of votes a typical sports community would cast.\n\n"
+        f"MATCH:\n  sport      : {sport}\n"
+        f"  home_team  : {home_team}\n"
+        f"  away_team  : {away_team}\n"
+        f"{date_hint}"
+        "\n"
+        "RULES:\n"
+        "1. home_pct + draw_pct + away_pct MUST equal exactly 100.\n"
+        "2. Each percent is an integer in [0, 100].\n"
+        f"3. {draw_hint}"
+        "4. If you have NO real knowledge about either team (e.g. obscure "
+        "amateur league, fictional names), set confidence below 0.3 and "
+        "estimate a generic distribution slightly favoring the home team "
+        "(e.g. 45/25/30 with draw, 55/45 without).\n"
+        "5. Confidence is your self-rated reliability of this estimate "
+        "(0.0 = pure guess, 1.0 = strong public consensus).\n\n"
+        "Respond with ONLY valid JSON, no markdown, no explanation:\n"
+        "{\n"
+        f'  "home_pct": <int 0..100>{draw_part},\n'
+        '  "away_pct": <int 0..100>,\n'
+        '  "confidence": <float 0.0..1.0>,\n'
+        '  "reason": "<one short sentence>"\n'
+        "}"
+    )
+
+
+def _parse_fan_vote_estimator_response(
+    text: str, sport: str
+) -> Optional[Dict[str, Any]]:
+    """Parsuje odpowiedź Groq estymatora do dict z sofascore_* kluczami.
+
+    Waliduje sumę procentów (90..110% tolerancja jak istniejący
+    `_parse_vision_response`) i normalizuje do dokładnie 100.
+    """
+    has_draw = sport not in SPORTS_WITHOUT_DRAW
+    try:
+        cleaned = (text or '').strip()
+        if cleaned.startswith('```'):
+            cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned)
+            cleaned = re.sub(r'\s*```$', '', cleaned)
+        cleaned = cleaned.strip()
+        try:
+            data = json.loads(cleaned)
+        except (json.JSONDecodeError, TypeError):
+            m = re.search(r'\{.*\}', cleaned, re.DOTALL)
+            if not m:
+                return None
+            data = json.loads(m.group(0))
+    except (json.JSONDecodeError, TypeError, ValueError) as e:
+        logger.debug(f"Groq estimator JSON parse: {e}, raw={text[:200]}")
+        return None
+
+    try:
+        home_pct = int(round(float(data.get('home_pct'))))
+        away_pct = int(round(float(data.get('away_pct'))))
+    except (TypeError, ValueError):
+        return None
+
+    draw_pct: Optional[int] = None
+    if has_draw and data.get('draw_pct') is not None:
+        try:
+            draw_pct = int(round(float(data['draw_pct'])))
+        except (TypeError, ValueError):
+            draw_pct = None
+
+    if not (0 <= home_pct <= 100) or not (0 <= away_pct <= 100):
+        return None
+    if draw_pct is not None and not (0 <= draw_pct <= 100):
+        return None
+
+    total = home_pct + away_pct + (draw_pct or 0)
+    if total < 90 or total > 110:
+        logger.debug(f"Groq estimator: suma {total}% poza zakresem 90-110")
+        return None
+
+    # Normalizuj do dokładnie 100% — drobny offset rozdziel proporcjonalnie
+    # do największej kategorii (zachowuje dominującą).
+    if total != 100:
+        diff = 100 - total
+        if home_pct >= away_pct and (draw_pct is None or home_pct >= draw_pct):
+            home_pct += diff
+        elif draw_pct is not None and draw_pct >= away_pct:
+            draw_pct += diff
+        else:
+            away_pct += diff
+
+    confidence = float(data.get('confidence') or 0.0)
+    reason = str(data.get('reason') or '')[:120]
+    return {
+        'sofascore_home_win_prob': home_pct,
+        'sofascore_draw_prob': draw_pct,
+        'sofascore_away_win_prob': away_pct,
+        # `total_votes` = 0 sygnalizuje brak realnych głosów; gate i tak
+        # czyta tylko procenty, więc to bezpieczne. Dla notyfikatorów
+        # zostawimy 0 — UI pokaże "0 głosów" gdy zechce je wyświetlić.
+        'sofascore_total_votes': 0,
+        'sofascore_btts_yes': None,
+        'sofascore_btts_no': None,
+        # Metadane estymacji — opcjonalne dla downstream. Gate je ignoruje.
+        'sofascore_estimated_by_ai': True,
+        'sofascore_ai_confidence': round(confidence, 2),
+        'sofascore_ai_reason': reason,
+    }
+
+
+def _estimate_fan_vote_via_groq(
+    home_team: str,
+    away_team: str,
+    sport: str = 'football',
+    date_str: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    """v7.6 — Groq fan-vote estimator dla zdarzeń niedostępnych przez SofaScore.
+
+    Wywoływane TYLKO gdy wszystkie strategie SofaScore zawiodły (Cloudflare
+    blokuje wszystko). Pyta Groq LLM o oszacowanie procentów głosowania
+    społeczności na podstawie wiedzy o drużynach i kontekście.
+
+    Returns:
+        Dict z polami sofascore_home_win_prob / sofascore_draw_prob /
+        sofascore_away_win_prob / sofascore_total_votes (=0) / flagi AI,
+        lub None gdy Groq niedostępny / odpowiedź nieparsowalna.
+    """
+    global _groq_active_text_model
+
+    if not _SOFASCORE_GROQ_ESTIMATOR_ENABLED:
+        return None
+
+    groq_module = _get_groq()
+    if not groq_module:
+        logger.debug("SofaScore Groq Estimator: groq module niedostępne")
+        return None
+
+    api_key = os.environ.get('GROQ_API_KEY')
+    if not api_key:
+        try:
+            from groq_config import GROQ_API_KEY  # type: ignore[no-redef]
+            api_key = GROQ_API_KEY
+        except ImportError:
+            pass
+    if not api_key:
+        logger.debug("SofaScore Groq Estimator: Brak GROQ_API_KEY")
+        return None
+
+    try:
+        client = groq_module.Groq(api_key=api_key)
+    except Exception as e:
+        print(f"   ⚠️ SofaScore Groq Estimator: client init error: {type(e).__name__}: {e}")
+        return None
+
+    prompt = _build_fan_vote_estimator_prompt(home_team, away_team, sport, date_str)
+
+    chain = list(_GROQ_TEXT_MODEL_CHAIN)
+    if _groq_active_text_model and _groq_active_text_model in chain:
+        chain.remove(_groq_active_text_model)
+        chain.insert(0, _groq_active_text_model)
+
+    last_err: Optional[BaseException] = None
+    for model_name in chain:
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[{'role': 'user', 'content': prompt}],
+                max_tokens=200,
+                temperature=0.2,
+                response_format={'type': 'json_object'},
+            )
+            if not response or not response.choices:
+                continue
+            text = response.choices[0].message.content or ''
+            result = _parse_fan_vote_estimator_response(text, sport)
+            if result is None:
+                logger.debug(
+                    f"Groq Estimator ({model_name}): unparseable, raw={text[:200]}"
+                )
+                continue
+            _groq_active_text_model = model_name
+            draw_str = (
+                f"🤝{result['sofascore_draw_prob']}% | "
+                if result['sofascore_draw_prob'] is not None
+                else ""
+            )
+            print(
+                f"   🤖 SofaScore Groq Estimator ({model_name}): "
+                f"🏠{result['sofascore_home_win_prob']}% | {draw_str}"
+                f"✈️{result['sofascore_away_win_prob']}% "
+                f"(confidence={result['sofascore_ai_confidence']:.2f}, "
+                f"reason={result['sofascore_ai_reason'][:50]!r})"
+            )
+            return result
+
+        except Exception as e:
+            last_err = e
+            if _is_quota_or_rate_error(e):
+                print(
+                    f"   🔁 SofaScore Groq Estimator ({model_name}): "
+                    "quota/rate limit — rotuję"
+                )
+                continue
+            if _is_model_unavailable_error(e):
+                print(
+                    f"   🔁 SofaScore Groq Estimator ({model_name}): "
+                    "model niedostępny — rotuję"
+                )
+                continue
+            print(
+                f"   ⚠️ SofaScore Groq Estimator ({model_name}) błąd: "
+                f"{type(e).__name__}: {str(e)[:80]}"
+            )
+            return None
+
+    if last_err is not None:
+        print(
+            f"   ⚠️ SofaScore Groq Estimator: wyczerpano modele ({len(chain)}) — "
+            f"ostatni błąd: {type(last_err).__name__}"
+        )
+    return None
+
+
 def cleanup_browser_api_session():
     """Zamknij singleton browser API session (wywoływane na koniec runu)."""
     global _browser_api_session_driver, _browser_api_session_ready
@@ -3613,6 +3879,76 @@ def extract_fan_vote_via_ai_vision(
 
 
 def scrape_sofascore_full(
+    driver: webdriver.Chrome = None,
+    home_team: str = None,
+    away_team: str = None,
+    sport: str = 'football',
+    date_str: str = None,
+    use_cache: bool = True
+) -> Dict:
+    """v7.6 — SofaScore scraper z Groq Fan-Vote Estimator jako last-resort.
+
+    Przepływ:
+      1. Cache hit → zwraca natychmiast.
+      2. Pełny pipeline SofaScore (METODY 1-5: API, Browser API, Browser HTML,
+         AI Vision, Selenium HTML).
+      3. Jeśli wszystko zawiodło i `sofascore_found=False` — Groq Estimator
+         szacuje H/D/A na podstawie wiedzy o drużynach. Dodaje
+         `sofascore_estimated_by_ai=True`.
+
+    Lokalnie (gdy curl_cffi 200 zadziała w pkt 2) Groq estimator nigdy nie
+    rusza — clause 3.1 zachowana.
+    """
+    # Cache check FIRST — żeby nie odpalać Groq dla zbuforowanych negatywów.
+    if use_cache and home_team and away_team:
+        cached = _get_cached_result(home_team, away_team, sport)
+        if cached is not None:
+            return cached
+
+    # Wywołaj cały istniejący pipeline (METODY 1-5).
+    result = _scrape_sofascore_full_inner(
+        driver=driver,
+        home_team=home_team,
+        away_team=away_team,
+        sport=sport,
+        date_str=date_str,
+        use_cache=False,  # Cache obsługujemy tu, nie w środku
+    )
+
+    # Jeśli pipeline znalazł realne dane — zapisz do cache i zwróć.
+    if result.get('sofascore_found'):
+        if use_cache and home_team and away_team:
+            _set_cached_result(home_team, away_team, sport, result)
+        return result
+
+    # METODA 6 (v7.6): Groq Fan Vote Estimator — last-resort dla zdarzeń
+    # niedostępnych przez SofaScore. Działa gdy wszystkie METODY 1-5 zawiodły
+    # (Cloudflare blokuje wszystko / mecz spoza SofaScore).
+    if home_team and away_team and _SOFASCORE_GROQ_ESTIMATOR_ENABLED:
+        try:
+            estimated = _estimate_fan_vote_via_groq(
+                home_team, away_team, sport, date_str
+            )
+        except Exception as e:
+            logger.debug(
+                f"METODA 6 (Groq Estimator) error: {type(e).__name__}: {e}"
+            )
+            estimated = None
+
+        if estimated:
+            result.update(estimated)
+            # `sofascore_found=True` żeby qualification_gate / notyfikatory
+            # użyły tych procentów. Flaga `sofascore_estimated_by_ai` w
+            # estimated pozostaje, więc downstream może to odróżnić.
+            result['sofascore_found'] = True
+            if use_cache and home_team and away_team:
+                _set_cached_result(home_team, away_team, sport, result)
+            return result
+
+    return result
+
+
+def _scrape_sofascore_full_inner(
     driver: webdriver.Chrome = None,
     home_team: str = None,
     away_team: str = None,
