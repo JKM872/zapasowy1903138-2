@@ -13,7 +13,11 @@ jobs:
     
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        # Python 3.9 EOL od pazdziernika 2025; production workflows uzywaja
+        # tylko 3.11 (scrape.yml, daily_report.yml, etc.). 3.10/3.11 daja
+        # wystarczajace pokrycie kompatybilnosci dla tego repo.
+        python-version: ['3.10', '3.11']
+      fail-fast: false  # Nie cancel pozostalych pythonow gdy jeden zawiedzie
     
     steps:
     - name: Checkout code
