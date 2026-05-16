@@ -132,6 +132,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
+          # v8.1: SofaScore CF bypass via manual cookies
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           echo "🏃 Scraping ${{ matrix.sport }} (AWAY FOCUS)..."
           TODAY=$(date +%Y-%m-%d)

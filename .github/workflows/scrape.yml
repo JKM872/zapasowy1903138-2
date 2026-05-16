@@ -132,6 +132,13 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
+          # v8.1: SofaScore Cloudflare bypass via manual cookies.
+          # Skopiuj cf_clearance + __cf_bm z prawdziwej przegladarki na
+          # https://www.sofascore.com (F12 -> Application -> Cookies) do
+          # GitHub Secret SOFASCORE_COOKIES w formacie:
+          # cf_clearance=ABC123; __cf_bm=XYZ789
+          # cf_clearance zyje 30 dni - wystarczy odswiezac raz na miesiac.
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           echo "🏃 Scraping ${{ matrix.sport }}..."
           TODAY=$(date +%Y-%m-%d)

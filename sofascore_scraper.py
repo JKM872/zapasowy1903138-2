@@ -252,6 +252,83 @@ _flaresolverr_cookies: Dict[str, str] = {}
 _flaresolverr_cookies_at: float = 0.0
 _FLARESOLVERR_COOKIES_TTL: int = 1500  # 25 min — Cloudflare cookies typowo żyją 30 min
 
+# v8.1 — manual cookies z env (SOFASCORE_COOKIES). User kopiuje cf_clearance,
+# __cf_bm, (opcjonalnie) inne sb-* cookies z przegladarki do GitHub Secret.
+# To jest NAJBARDZIEJ NIEZAWODNE rozwiazanie gdy Cloudflare zaostrzyl WAF
+# tak ze automated browser w GHA nie przechodzi — prawdziwe browser cookies
+# z Twojej sesji nigdy nie sa flagowane jako bot.
+#
+# Format SOFASCORE_COOKIES (dokladnie jak w naglowku Cookie HTTP):
+#   cf_clearance=ABCD1234; __cf_bm=XYZ789; ssfb_pol=true
+#
+# Cookies cf_clearance zyja 30 dni, __cf_bm tylko 30 minut. Wystarczy
+# odswiezac cf_clearance raz na 30 dni — pozostale cookies sa less critical.
+#
+# Jak pobrac:
+# 1. Otworz https://www.sofascore.com w Chrome/Firefox
+# 2. F12 -> Application -> Cookies -> https://www.sofascore.com
+# 3. Skopiuj wartosci cf_clearance i __cf_bm
+# 4. GitHub repo -> Settings -> Secrets -> New: SOFASCORE_COOKIES
+# 5. Wartosc: cf_clearance=<value>; __cf_bm=<value>
+_SOFASCORE_MANUAL_COOKIES_RAW: str = os.getenv('SOFASCORE_COOKIES', '').strip()
+_manual_cookies_loaded: bool = False
+
+
+def _parse_cookie_header(raw: str) -> Dict[str, str]:
+    """Parsuj naglowek Cookie HTTP do dict {name: value}.
+
+    Format: 'name1=value1; name2=value2; ...'
+    """
+    out: Dict[str, str] = {}
+    if not raw:
+        return out
+    for part in raw.split(';'):
+        part = part.strip()
+        if not part or '=' not in part:
+            continue
+        name, _, value = part.partition('=')
+        name = name.strip()
+        value = value.strip()
+        if name:
+            out[name] = value
+    return out
+
+
+def _load_manual_sofascore_cookies() -> None:
+    """Wstrzyknij cookies z env SOFASCORE_COOKIES do globalnego cache curl_cffi.
+
+    Wywoluje raz na proces (idempotent). Cookies z env maja priorytet nad
+    DrissionPage / FlareSolverr — sa najbardziej wiarygodne (z prawdziwej
+    przegladarki uzytkownika).
+    """
+    global _manual_cookies_loaded, _flaresolverr_cookies, _flaresolverr_cookies_at
+    if _manual_cookies_loaded:
+        return
+    _manual_cookies_loaded = True
+
+    raw = _SOFASCORE_MANUAL_COOKIES_RAW
+    if not raw:
+        return
+
+    parsed = _parse_cookie_header(raw)
+    if not parsed:
+        # IS_CI moze nie byc jeszcze zdefiniowane gdy ta funkcja sie ladowala
+        # podczas import — uzyj os.getenv bezposrednio.
+        if os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true':
+            print("   ⚠️ SofaScore: SOFASCORE_COOKIES env wyglada na pusty/nieprawidlowy format")
+        return
+
+    _flaresolverr_cookies = parsed
+    _flaresolverr_cookies_at = time.time()
+    if os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true':
+        cookie_names = sorted(parsed.keys())
+        print(f"   🍪 SofaScore: zaladowano {len(parsed)} manual cookies z SOFASCORE_COOKIES env ({cookie_names})")
+
+
+# Zaladuj manual cookies na starcie modulu — przed pierwszym requestem
+_load_manual_sofascore_cookies()
+
+
 # v7.8 — cooldown dla cookie warming. Bez tego każdy 403 wywoływał FlareSolverr
 # na 25s (każdy mecz × 8 requestów = 3+ min na sam warming).
 _cookie_warming_last_attempt: float = 0.0
@@ -383,6 +460,9 @@ def _warmup_cookies_via_drissionpage() -> bool:
 
     _drissionpage_warmup_attempted = True
 
+    if IS_CI:
+        print("   🌐 SofaScore DrissionPage warmup: start...")
+
     # W CI uruchamiamy Xvfb najpierw — DrissionPage NIE chce headless
     # (Cloudflare go wykrywa).
     if IS_CI:
@@ -391,7 +471,17 @@ def _warmup_cookies_via_drissionpage() -> bool:
     try:
         from DrissionPage import ChromiumPage, ChromiumOptions
     except ImportError as e:
-        logger.debug(f"DrissionPage import failed: {e}")
+        msg = f"DrissionPage nie dostepny: {e}"
+        logger.debug(msg)
+        if IS_CI:
+            print(f"   ⚠️ SofaScore DrissionPage: {msg}")
+        _drissionpage_warmup_failed = True
+        return False
+    except Exception as e:
+        msg = f"DrissionPage import error: {type(e).__name__}: {e}"
+        logger.debug(msg)
+        if IS_CI:
+            print(f"   ⚠️ SofaScore DrissionPage: {msg}")
         _drissionpage_warmup_failed = True
         return False
 
@@ -414,10 +504,27 @@ def _warmup_cookies_via_drissionpage() -> bool:
                 pass
 
         if IS_CI:
-            print("   🌐 SofaScore: cookie warmup przez DrissionPage (proven CF bypass)...")
+            print(f"   🌐 SofaScore DrissionPage: Chromium init (CHROME_BIN={chrome_bin!r}, DISPLAY={os.environ.get('DISPLAY', '<unset>')!r})")
 
-        page = ChromiumPage(co)
-        page.get('https://www.sofascore.com/', timeout=20)
+        try:
+            page = ChromiumPage(co)
+        except Exception as e:
+            msg = f"DrissionPage Chromium init failed: {type(e).__name__}: {str(e)[:200]}"
+            logger.debug(msg)
+            if IS_CI:
+                print(f"   ⚠️ SofaScore DrissionPage: {msg}")
+            _drissionpage_warmup_failed = True
+            return False
+
+        try:
+            page.get('https://www.sofascore.com/', timeout=20)
+        except Exception as e:
+            msg = f"DrissionPage page.get failed: {type(e).__name__}: {str(e)[:200]}"
+            logger.debug(msg)
+            if IS_CI:
+                print(f"   ⚠️ SofaScore DrissionPage: {msg}")
+            _drissionpage_warmup_failed = True
+            return False
 
         # Czekaj na rozwiazanie CF challenge (max 20s — DrissionPage zwykle
         # przechodzi w 5-12s, dluzsze czekanie nic nie da).
@@ -442,10 +549,20 @@ def _warmup_cookies_via_drissionpage() -> bool:
 
         if not cf_cleared:
             if IS_CI:
-                print(
-                    f"   ⚠️ SofaScore DrissionPage: CF nie ustapil po {max_wait}s — "
-                    "warmup nieudany"
-                )
+                # Diagnostyka: pokaz fragment HTML zeby wiedziec co Cloudflare
+                # zwrocilo (interstitial vs blokada vs pusta strona).
+                try:
+                    html_snippet = (page.html or '')[:500]
+                    sample = re.sub(r'\s+', ' ', html_snippet)
+                    print(
+                        f"   ⚠️ SofaScore DrissionPage: CF nie ustapil po {max_wait}s — "
+                        f"warmup nieudany. HTML sample: {sample[:200]!r}"
+                    )
+                except Exception:
+                    print(
+                        f"   ⚠️ SofaScore DrissionPage: CF nie ustapil po {max_wait}s — "
+                        "warmup nieudany"
+                    )
             _drissionpage_warmup_failed = True
             return False
 
@@ -458,6 +575,8 @@ def _warmup_cookies_via_drissionpage() -> bool:
             raw_cookies = page.cookies()
         except Exception as e:
             logger.debug(f"DrissionPage cookies extract failed: {type(e).__name__}: {e}")
+            if IS_CI:
+                print(f"   ⚠️ SofaScore DrissionPage cookies extract: {type(e).__name__}: {str(e)[:100]}")
             _drissionpage_warmup_failed = True
             return False
 
@@ -476,17 +595,23 @@ def _warmup_cookies_via_drissionpage() -> bool:
                 except Exception:
                     pass
 
+        if IS_CI and normalized:
+            sf_count = sum(1 for c in normalized if 'sofascore.com' in (c.get('domain') or ''))
+            print(f"   🌐 SofaScore DrissionPage: zebralem {len(normalized)} cookies, {sf_count} dla sofascore.com")
+
         _ingest_flaresolverr_cookies(normalized)
 
         if _get_active_flaresolverr_cookies() is not None:
             return True
+        if IS_CI:
+            print("   ⚠️ SofaScore DrissionPage: cookies pobrane ale brak cf_clearance/sofascore.com — warmup nieudany")
         _drissionpage_warmup_failed = True
         return False
 
     except Exception as e:
         logger.debug(f"DrissionPage warmup error: {type(e).__name__}: {e}")
         if IS_CI:
-            print(f"   ⚠️ SofaScore DrissionPage warmup error: {type(e).__name__}: {str(e)[:100]}")
+            print(f"   ⚠️ SofaScore DrissionPage warmup error: {type(e).__name__}: {str(e)[:200]}")
         _drissionpage_warmup_failed = True
         return False
     finally:
@@ -516,10 +641,27 @@ def _try_drissionpage_warmup_if_needed() -> bool:
 
 def _get_active_flaresolverr_cookies() -> Optional[Dict[str, str]]:
     """Zwróć cookies z FlareSolverr jeśli wciąż świeże (<TTL), w przeciwnym
-    razie None — caller wtedy nie próbuje ich wstrzykiwać do curl_cffi."""
+    razie None — caller wtedy nie próbuje ich wstrzykiwać do curl_cffi.
+
+    v8.1: jesli cookies wygasly ale mamy je w env (SOFASCORE_COOKIES),
+    automatycznie je odswiezamy — manual cookies sa stabilne 30 dni.
+    """
+    global _manual_cookies_loaded
     if not _flaresolverr_cookies:
+        # Jesli env zostal ustawiony PO imporcie modulu (np. setup test),
+        # sprobuj zaladowac manual cookies teraz.
+        if _SOFASCORE_MANUAL_COOKIES_RAW and not _manual_cookies_loaded:
+            _load_manual_sofascore_cookies()
+            if _flaresolverr_cookies:
+                return dict(_flaresolverr_cookies)
         return None
     if (time.time() - _flaresolverr_cookies_at) > _FLARESOLVERR_COOKIES_TTL:
+        # Cookies wygasly. Jesli pochodzily z env — przeladuj.
+        if _SOFASCORE_MANUAL_COOKIES_RAW:
+            _manual_cookies_loaded = False
+            _load_manual_sofascore_cookies()
+            if _flaresolverr_cookies and (time.time() - _flaresolverr_cookies_at) <= _FLARESOLVERR_COOKIES_TTL:
+                return dict(_flaresolverr_cookies)
         return None
     return dict(_flaresolverr_cookies)
 
