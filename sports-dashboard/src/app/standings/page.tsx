@@ -4,12 +4,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader2, Trophy, Shield } from 'lucide-react'
+import Image from 'next/image'
+import { Loader2, Trophy } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { useStandings, useAvailableLeagues } from '@/hooks/useMatches'
 
@@ -120,7 +120,14 @@ export default function StandingsPage() {
                       <td className="py-2 px-3">
                         <div className="flex items-center gap-2">
                           {row.teamCrest && (
-                            <img src={row.teamCrest} alt="" className="h-5 w-5 object-contain" loading="lazy" />
+                            <Image
+                              src={row.teamCrest}
+                              alt=""
+                              width={20}
+                              height={20}
+                              className="h-5 w-5 object-contain"
+                              unoptimized
+                            />
                           )}
                           <span className="font-medium truncate max-w-[180px]">{row.team}</span>
                         </div>
