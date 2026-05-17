@@ -191,6 +191,27 @@ def _get_api_session():
     return _api_session
 
 
+# v9.0 — Cloudflare WARP proxy. SofaScore blokuje datacenter IPs GitHub Actions
+# (Cloudflare WAF). WARP daje "czyste" IP Cloudflare, ktorego sam Cloudflare
+# nie blokuje. Workflow scrape.yml wystawia caomingjun/warp jako Docker service
+# na localhost:1080 (SOCKS5).
+#
+# Tylko SofaScore requesty ida przez WARP — Telegram/Email/Supabase uzywaja
+# normalnego GHA IP, nic dla nich sie nie zmienia.
+_SOFASCORE_PROXY_URL: str = os.getenv('SOFASCORE_PROXY', '').strip()
+_proxy_config_logged: bool = False  # v9.0 — log proxy raz na run
+
+
+def _get_sofascore_proxies() -> Optional[Dict[str, str]]:
+    """Zwroc proxies dict dla curl_cffi/requests gdy SOFASCORE_PROXY ustawiony."""
+    if not _SOFASCORE_PROXY_URL:
+        return None
+    return {
+        'http': _SOFASCORE_PROXY_URL,
+        'https': _SOFASCORE_PROXY_URL,
+    }
+
+
 def _build_warmed_requests_session():
     """Create a one-off requests session for curl_cffi 403 fallback."""
     if 'requests' not in globals():
@@ -198,6 +219,11 @@ def _build_warmed_requests_session():
 
     session = requests.Session()
     session.headers.update(API_HEADERS)
+    # v9.0: WARP proxy (gdy SOFASCORE_PROXY ustawiony) — kierujemy ruch
+    # przez czyste IP Cloudflare WARP zamiast zablokowanego datacenter GHA.
+    proxies = _get_sofascore_proxies()
+    if proxies:
+        session.proxies.update(proxies)
     warmup_headers = {
         'User-Agent': API_HEADERS['User-Agent'],
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -1141,6 +1167,10 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 )
                 if cf_cookies:
                     curl_kwargs['cookies'] = cf_cookies
+                # v9.0: WARP proxy (Cloudflare clean IP)
+                proxies = _get_sofascore_proxies()
+                if proxies:
+                    curl_kwargs['proxies'] = proxies
                 response = curl_requests.get(url, **curl_kwargs)
             else:
                 response = session.get(url, timeout=timeout, **kwargs)
@@ -1252,6 +1282,20 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     if _sofascore_unreachable_for_run:
         return None
 
+    # v9.0: jednorazowy log proxy config (diagnostyka WARP setup)
+    global _proxy_config_logged
+    if not _proxy_config_logged:
+        _proxy_config_logged = True
+        if IS_CI:
+            proxies = _get_sofascore_proxies()
+            if proxies:
+                # Maskuj credentials w logu
+                proxy_url = _SOFASCORE_PROXY_URL
+                masked = re.sub(r'://([^:]+):([^@]+)@', '://***:***@', proxy_url)
+                print(f"   🌐 SofaScore: proxy aktywne ({masked}) — ruch przez Cloudflare WARP")
+            else:
+                print("   ⚠️ SofaScore: proxy NIE ustawione (SOFASCORE_PROXY env puste) — ruch przez datacenter IP GHA (CF zablokuje)")
+
     # v8.2: PROAKTYWNY warmup sesji FlareSolverr przed pierwszym curl_cffi.
     # FlareSolverr przechodzi CF challenge raz, daje nam cookies, curl_cffi
     # uzywa tych cookies = 200 OK z pierwszego requestu zamiast czekac na
@@ -1337,6 +1381,10 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
                     )
                     if alt_cf_cookies:
                         alt_curl_kwargs['cookies'] = alt_cf_cookies
+                    # v9.0: WARP proxy (Cloudflare clean IP)
+                    alt_proxies = _get_sofascore_proxies()
+                    if alt_proxies:
+                        alt_curl_kwargs['proxies'] = alt_proxies
                     alt_resp = curl_requests.get(alt_url, **alt_curl_kwargs)
                     if alt_resp.status_code == 200 and alt_resp.content and len(alt_resp.content) > 2:
                         _record_http_outcome('curl_cffi', 'ok_alt')
