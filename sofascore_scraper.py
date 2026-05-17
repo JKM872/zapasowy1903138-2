@@ -738,6 +738,8 @@ def _ensure_flaresolverr_session() -> Optional[str]:
     Returns session ID albo None jesli FlareSolverr niedostepny / setup padl.
     """
     global _flaresolverr_session_id, _flaresolverr_session_warmed, _flaresolverr_session_failed
+    global _flaresolverr_disabled_for_run
+    global _sofascore_unreachable_for_run, _cookie_warming_disabled_for_run
 
     if not _FLARESOLVERR_AVAILABLE or _flaresolverr_disabled_for_run:
         return None
@@ -805,18 +807,57 @@ def _ensure_flaresolverr_session() -> Optional[str]:
                 _destroy_flaresolverr_session()
                 return None
 
-            # Sprawdz czy przeszlismy CF — body nie powinno byc interstitialem.
+            # v8.3 — STRICT validation: body musi zawierac SofaScore content,
+            # nie tylko brakowac frazy "Just a moment". Cloudflare zwraca
+            # 1020 banned page (~200B HTML bez frazy CF interstitial), na ktora
+            # poprzednia logika lapala sie jako "CF cleared".
             solution = data.get("solution") or {}
-            body = (solution.get("response") or "")[:5000]
-            is_challenge = (
-                'Just a moment' in body
-                or 'Verifying you are human' in body
-                or 'challenge-platform' in body
+            body = solution.get("response") or ""
+            body_len = len(body)
+            body_lower = body[:5000].lower() if body else ''
+
+            is_cf_block = (
+                'just a moment' in body_lower
+                or 'verifying you are human' in body_lower
+                or 'challenge-platform' in body_lower
+                or 'cf-browser-verification' in body_lower
+                or 'sorry, you have been blocked' in body_lower
+                or 'attention required' in body_lower
+                or 'cloudflare' in body_lower and body_len < 5000
             )
-            if is_challenge:
+            has_sofascore_content = (
+                'sofascore' in body_lower
+                or '__next_data__' in body_lower
+                or '<title>sofascore' in body_lower
+            )
+            # Real SofaScore homepage to ~50-150KB. Cokolwiek <10KB to
+            # blokada / error page.
+            warmup_ok = (
+                body_len >= 10000
+                and has_sofascore_content
+                and not is_cf_block
+            )
+
+            if not warmup_ok:
                 if IS_CI:
-                    print("   ⚠️ SofaScore: FlareSolverr warmup nie przeszedl CF (interstitial)")
+                    block_kind = (
+                        "Cloudflare block page" if is_cf_block
+                        else f"empty/error page (body={body_len}B, has_sofascore={has_sofascore_content})"
+                    )
+                    print(
+                        f"   ⛔ SofaScore: FlareSolverr warmup ZABLOKOWANY przez Cloudflare "
+                        f"({block_kind})"
+                    )
+                    print(
+                        "   🛑 SofaScore UNREACHABLE z tego runnera GHA. Cloudflare WAF blokuje "
+                        "datacenter IPs. Forebet/Gemini/OddsSafari beda dzialac normalnie; "
+                        "Mail/Telegram pokaza 'brak danych' tylko dla SofaScore Fan Vote."
+                    )
                 _flaresolverr_session_failed = True
+                _flaresolverr_disabled_for_run = True
+                # Globalna flaga zeby od razu skipowac wszystkie SofaScore strategie
+                _sofascore_unreachable_for_run = True
+                _cookie_warming_disabled_for_run = True
                 _destroy_flaresolverr_session()
                 return None
 
@@ -830,7 +871,7 @@ def _ensure_flaresolverr_session() -> Optional[str]:
 
             _flaresolverr_session_warmed = True
             if IS_CI:
-                print(f"   ✅ SofaScore: FlareSolverr session warmed (CF cleared, body={len(body)}B)")
+                print(f"   ✅ SofaScore: FlareSolverr session warmed (CF cleared, body={body_len}B)")
             return session_id
         except Exception as e:
             logger.debug(f"FlareSolverr warmup error: {type(e).__name__}: {e}")
