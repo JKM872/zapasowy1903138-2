@@ -874,16 +874,26 @@ def _ensure_flaresolverr_session() -> Optional[str]:
                         f"   ⛔ SofaScore: FlareSolverr warmup ZABLOKOWANY przez Cloudflare "
                         f"({block_kind})"
                     )
-                    print(
-                        "   🛑 SofaScore UNREACHABLE z tego runnera GHA. Cloudflare WAF blokuje "
-                        "datacenter IPs. Forebet/Gemini/OddsSafari beda dzialac normalnie; "
-                        "Mail/Telegram pokaza 'brak danych' tylko dla SofaScore Fan Vote."
-                    )
+                    # v9.0: gdy WARP proxy aktywny, NIE setujemy unreachable —
+                    # curl_cffi przez WARP ma czyste IP i moze dzialac mimo
+                    # ze FS Docker (bez WARP) jest zablokowany.
+                    if _SOFASCORE_PROXY_URL:
+                        print(
+                            "   ℹ️ SofaScore: WARP proxy aktywne — curl_cffi sprobuje przez czyste IP CF "
+                            "(FlareSolverr nie uzywa proxy, wiec naturalnie blokowany)"
+                        )
+                    else:
+                        print(
+                            "   🛑 SofaScore UNREACHABLE z tego runnera GHA. Cloudflare WAF blokuje "
+                            "datacenter IPs. Forebet/Gemini/OddsSafari beda dzialac normalnie; "
+                            "Mail/Telegram pokaza 'brak danych' tylko dla SofaScore Fan Vote."
+                        )
                 _flaresolverr_session_failed = True
                 _flaresolverr_disabled_for_run = True
-                # Globalna flaga zeby od razu skipowac wszystkie SofaScore strategie
-                _sofascore_unreachable_for_run = True
-                _cookie_warming_disabled_for_run = True
+                # Tylko gdy WARP NIE aktywny — wtedy faktycznie nic nie dziala
+                if not _SOFASCORE_PROXY_URL:
+                    _sofascore_unreachable_for_run = True
+                    _cookie_warming_disabled_for_run = True
                 _destroy_flaresolverr_session()
                 return None
 
@@ -1303,8 +1313,13 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
     # - jestesmy w CI (lokalnie curl_cffi i tak dziala)
     # - jeszcze nie probowalismy
     # - nie mamy juz aktywnych cookies
+    # v9.0: SKIP gdy SOFASCORE_PROXY ustawiony — curl_cffi z WARP proxy ma
+    # juz czyste IP Cloudflare i nie potrzebuje cookies z FlareSolverr.
+    # FlareSolverr Docker container nie uzywa naszego WARP proxy, wiec
+    # warmup ZAWSZE pada w GHA (FS laczy sie z datacenter IP = CF block).
     if (
         IS_CI
+        and not _SOFASCORE_PROXY_URL  # v9.0: skip gdy WARP aktywny
         and _FLARESOLVERR_AVAILABLE
         and not _flaresolverr_session_failed
         and not _flaresolverr_session_warmed
