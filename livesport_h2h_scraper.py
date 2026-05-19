@@ -3295,38 +3295,28 @@ def _tennis_should_skip_expensive_steps(out: Dict) -> bool:
 
     Skip kosztownych etapów (`_extract_last_matches_for_players`,
     `_compute_surface_form` — każdy robi własny `driver.get` + `time.sleep`)
-    jeśli KTÓREKOLWIEK z poniższych jest prawdą:
+    tylko jeśli WSZYSTKIE poniższe są prawdą:
 
-      * brak H2H (`h2h_count == 0`) ORAZ brak rankingów dla obu graczy,
-      * brak H2H ORAZ brak form badges dla obu graczy.
+      * brak H2H (`h2h_count == 0`),
+      * brak rankingów dla obu graczy,
+      * brak form badges dla obu graczy.
 
-    Mecz bez H2H i bez rankingów/form nie ma szans na zdobycie 45/100
-    (potrzebuje dominance > 0.45 * (0.5 + 0.5*dq) co wymaga silnych
-    sygnałów z wielu źródeł). Heurystyka jest celowo konserwatywna —
-    nie zmienia progów biznesowych ani struktury wyjścia, tylko unika
-    minutowego czekania na dane i tak nie do uratowania.
+    Mecz z którymkolwiek z tych sygnałów daje szansę na zdobycie sensownego
+    score'u, więc tam pełny pipeline zostawiamy. Heurystyka jest celowo
+    konserwatywna — nie zmienia progów biznesowych ani struktury wyjścia,
+    tylko unika minutowego czekania na dane i tak nie do uratowania.
 
-    W CI (GitHub Actions) jest bardziej agresywna — pomija surface form
-    nawet gdy jest H2H ale brak form (surface_form ma wagę 0.13 i prawie
-    nigdy nie ma danych w Livesport dla tenisa).
+    Oszczędność czasu w CI pochodzi z innych optymalizacji (krótsze sleepy,
+    timeout 20s, brak FlashScore fallback) — ta heurystyka jest identyczna
+    w CI i lokalnie.
     """
-    _is_ci = os.environ.get('GITHUB_ACTIONS') == 'true' or os.environ.get('CI') == 'true'
-    h2h_count = out.get('h2h_count') or 0
-
-    # Brak H2H — bez tego trudno o kwalifikację
-    if h2h_count == 0:
-        # Brak rankingów LUB brak form → na pewno partial_data z niskim score
-        if not out.get('ranking_a') and not out.get('ranking_b'):
-            return True
-        if not out.get('form_a') and not out.get('form_b'):
-            return True
-
-    # CI-only: agresywniejszy skip — jeśli brak form dla obu graczy,
-    # surface form i tak nie pomoże (waga 0.13, dane prawie nigdy niedostępne)
-    if _is_ci and not out.get('form_a') and not out.get('form_b'):
-        return True
-
-    return False
+    if (out.get('h2h_count') or 0) > 0:
+        return False
+    if out.get('ranking_a') or out.get('ranking_b'):
+        return False
+    if out.get('form_a') or out.get('form_b'):
+        return False
+    return True
 
 
 def _check_tennis_data_completeness(out: Dict) -> tuple:
