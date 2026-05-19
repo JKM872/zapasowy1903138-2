@@ -8,12 +8,6 @@ on:
 
   # Allow manual trigger
   workflow_dispatch:
-    inputs:
-      send_email:
-        description: 'Send email notification (experimental)'
-        required: false
-        default: false
-        type: boolean
 
 env:
   PYTHONIOENCODING: utf-8
@@ -62,8 +56,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          # 🔥 Cloudflare Bypass packages (curl_cffi is PRIMARY bypass method)
           sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
           pip install curl-cffi cloudscraper httpx[http2]
+          # v9.0: SOCKS5 proxy support for WARP via SOFASCORE_PROXY env
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
+          python -c "from curl_cffi import requests; print('curl_cffi OK')"
 
       - name: Install Node.js dependencies
         run: npm ci || npm install
@@ -80,6 +78,49 @@ jobs:
             sleep 2
           done
 
+      # Setup Cloudflare WARP proxy (v9.0 — SofaScore CF bypass).
+      # Uruchamiamy jako osobny `docker run` (nie services:) bo wymaga
+      # --cap-add NET_ADMIN ktorego GHA services: nie wspiera.
+      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        run: |
+          echo "🌐 Starting Cloudflare WARP proxy container..."
+          docker run -d --name warp \
+            --restart=always \
+            --device-cgroup-rule='c 10:200 rwm' \
+            -p 1080:1080 \
+            -e WARP_SLEEP=2 \
+            --cap-add NET_ADMIN \
+            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
+            -v /lib/modules:/lib/modules \
+            caomingjun/warp:latest
+
+          echo "⏳ Waiting for WARP to register and establish tunnel..."
+          WARP_READY=false
+          for i in {1..40}; do
+            sleep 3
+            # Test SOCKS5 — pobierz IP zewnetrzny przez WARP
+            CURRENT_IP=$(curl -s --max-time 10 --socks5 localhost:1080 https://api.ipify.org 2>/dev/null || echo "")
+            if [ -n "$CURRENT_IP" ]; then
+              # Sprawdz czy WARP dziala — endpoint cdn-cgi/trace pokaze warp=on
+              WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
+              echo "WARP test ($i/40): IP=$CURRENT_IP, warp=$WARP_STATUS"
+              if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
+                echo "✅ WARP active - SofaScore via clean Cloudflare IP $CURRENT_IP"
+                WARP_READY=true
+                break
+              fi
+            else
+              echo "WARP not responding yet ($i/40)..."
+            fi
+          done
+          if [ "$WARP_READY" != "true" ]; then
+            echo "::warning::WARP not ready after 120s - dumping container logs"
+            docker logs warp 2>&1 | tail -50
+            echo "::warning::SofaScore may still hit CF block, continuing anyway..."
+          fi
+        continue-on-error: true
+
       # ── Run baseball scraper ──
       - name: Run baseball scraper
         env:
@@ -92,22 +133,20 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ENABLED: 'false'
+          # v8.1: SofaScore Cloudflare bypass via manual cookies.
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          # v9.0: SofaScore via Cloudflare WARP (Docker "warp" na 1080).
+          SOFASCORE_PROXY: "socks5://localhost:1080"
         run: |
           echo "⚾ Scraping baseball..."
           TODAY=$(date +%Y-%m-%d)
 
-          # Determine email flags
-          SEND_EMAIL="${{ github.event.inputs.send_email }}"
-          if [ "$SEND_EMAIL" = "true" ]; then
-            EMAIL_FLAGS="--to ${{ secrets.EMAIL_RECIPIENT }} --from-email ${{ secrets.EMAIL_SENDER }} --password ${{ secrets.EMAIL_PASSWORD }}"
-          else
-            EMAIL_FLAGS="--to noreply@localhost --from-email noreply@localhost --password dummy"
-          fi
-
           python scrape_and_notify.py \
             --date $TODAY \
             --sports baseball \
-            $EMAIL_FLAGS \
+            --to "${{ secrets.EMAIL_RECIPIENT }}" \
+            --from-email "${{ secrets.EMAIL_SENDER }}" \
+            --password "${{ secrets.EMAIL_PASSWORD }}" \
             --provider gmail \
             --use-forebet \
             --use-sofascore \

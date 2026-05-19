@@ -1807,9 +1807,18 @@ def send_split_emails_by_sport(
         print(f"   Kwalifikujące się: {len(qualified)}")
 
     # --- filtr: brak kursów ---
+    # Sporty gdzie kursy są opcjonalne (np. baseball — OddsSafari rzadko ma
+    # linie baseballowe, a Forebet/Gemini wystarczają do predykcji).
+    _ODDS_OPTIONAL_SPORTS = {'baseball', 'cricket'}
     if 'home_odds' in qualified.columns and 'away_odds' in qualified.columns:
         before = len(qualified)
-        qualified = qualified[(qualified['home_odds'].notna()) & (qualified['away_odds'].notna())]
+        if 'sport' in qualified.columns:
+            # Zachowaj mecze ze sportów gdzie kursy są opcjonalne
+            has_odds = (qualified['home_odds'].notna()) & (qualified['away_odds'].notna())
+            is_odds_optional_sport = qualified['sport'].isin(_ODDS_OPTIONAL_SPORTS)
+            qualified = qualified[has_odds | is_odds_optional_sport]
+        else:
+            qualified = qualified[(qualified['home_odds'].notna()) & (qualified['away_odds'].notna())]
         print(f"   Pominięto {before - len(qualified)} meczów bez kursów")
 
     # --- filtr: progi kursowe per sport (AND) — skip when gate already ran ---
