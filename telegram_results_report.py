@@ -58,7 +58,7 @@ def _emoji(sport: str) -> str:
 
 
 def _status_icon(status: str) -> str:
-    return {"win": "✅", "loss": "❌", "pending": "⏳"}.get(status, "❓")
+    return {"win": "✅", "loss": "❌", "push": "↩", "pending": "⏳"}.get(status, "❓")
 
 
 # ---------------------------------------------------------------------------
@@ -112,12 +112,12 @@ def _send_message(text: str, token: str = "", chat_id: str = "") -> bool:
 # ---------------------------------------------------------------------------
 
 def _has_settled_matches(stats: Dict[str, Any]) -> bool:
-    """True when at least one match has been settled (win or loss)."""
+    """True when at least one match has been settled (win, loss, or push)."""
     g = stats.get("global", {})
     if int(g.get("settled", 0) or 0) > 0:
         return True
     matches = stats.get("matches", [])
-    return any(m.get("status") in {"win", "loss"} for m in matches)
+    return any(m.get("status") in {"win", "loss", "push"} for m in matches)
 
 
 def should_send_daily_results_summary(stats: Dict[str, Any]) -> bool:
@@ -163,14 +163,15 @@ def build_daily_results_summary(
     lines: list[str] = []
 
     # ── Header ──────────────────────────────────────────────
-    lines.append(f"📊 <b>FormRadar — Results Report</b>")
-    lines.append(f"📅 {date_display} (last 24h)")
+    lines.append(f"📊 <b>FormRadar — Daily Results</b>")
+    lines.append(f"📅 {date_display}")
+    lines.append("🏅 Grade A · Draw No Bet")
     lines.append("")
 
     total = g.get("total", 0)
 
     if total == 0:
-        lines.append("No tips in the last 24 hours.")
+        lines.append("No Grade A picks were sent today.")
         lines.append("")
         lines.append("⚠️ Bet responsibly")
         return "\n".join(lines)
@@ -178,6 +179,7 @@ def build_daily_results_summary(
     # ── Global KPIs ─────────────────────────────────────────
     win = g.get("win", 0)
     loss = g.get("loss", 0)
+    push = g.get("push", 0)
     pending = g.get("pending", 0)
     settled = g.get("settled", 0)
     win_rate = g.get("win_rate", 0.0)
@@ -187,11 +189,16 @@ def build_daily_results_summary(
     lines.append(f"  Total tips: <b>{total}</b>")
     lines.append(f"  ✅ Won: <b>{win}</b>")
     lines.append(f"  ❌ Lost: <b>{loss}</b>")
+    if push:
+        lines.append(f"  ↩ Push (DNB / draw): <b>{push}</b>")
     if pending:
         lines.append(f"  ⏳ Pending: <b>{pending}</b>")
     lines.append("")
-    if settled > 0:
-        lines.append(f"  📈 Win rate (settled): <b>{win_rate:.1f}%</b> ({win}/{settled})")
+    decided = win + loss
+    if decided > 0:
+        lines.append(f"  📈 Win rate (DNB): <b>{win_rate:.1f}%</b> ({win}/{decided})")
+    elif push > 0:
+        lines.append(f"  📈 Win rate: <i>only pushes so far</i>")
     else:
         lines.append(f"  📈 Win rate: <i>no settled picks yet</i>")
     lines.append("")
@@ -202,13 +209,14 @@ def build_daily_results_summary(
         lines.append("📊 <b>By sport</b>")
         for sport in sorted(per_sport.keys()):
             sp = per_sport[sport]
-            sp_settled = sp["win"] + sp["loss"]
-            rate_str = f'{sp["win_rate"]:.0f}%' if sp_settled > 0 else "–"
+            sp_decided = sp.get("win", 0) + sp.get("loss", 0)
+            rate_str = f'{sp.get("win_rate", 0.0):.0f}%' if sp_decided > 0 else "–"
+            push_str = f' {sp.get("push", 0)}↩' if sp.get("push") else ""
+            pending_str = f' {sp.get("pending", 0)}⏳' if sp.get("pending") else ""
             lines.append(
                 f"  {_emoji(sport)} {sport.capitalize()}: "
-                f'{sp["win"]}✅ {sp["loss"]}❌ '
-                + (f'{sp["pending"]}⏳ ' if sp["pending"] else "")
-                + f"| {rate_str}"
+                f'{sp.get("win", 0)}✅ {sp.get("loss", 0)}❌'
+                f'{push_str}{pending_str} | {rate_str}'
             )
         lines.append("")
 
@@ -247,6 +255,7 @@ def build_daily_results_summary(
 
     # ── Footer ──────────────────────────────────────────────
     lines.append("━━━━━━━━━━━━━━━")
+    lines.append("ℹ️ DNB = Draw No Bet · push = stake refunded on draw")
     lines.append("⚠️ Bet responsibly")
 
     return "\n".join(lines)

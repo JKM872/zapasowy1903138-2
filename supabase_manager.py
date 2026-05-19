@@ -651,35 +651,65 @@ class SupabaseManager:
     # ========================================================================
 
     def get_telegram_daily_stats(self, hours: int = 24,
-                                  manifest_matches: list | None = None) -> Dict[str, Any]:
+                                  manifest_matches: list | None = None,
+                                  grade_filter: Optional[set] = None) -> Dict[str, Any]:
         """
         Pobiera statystyki skuteczności typów wysłanych na Telegramie.
 
         When *manifest_matches* is provided (list of dicts with home_team,
-        away_team, sport, match_date), only those specific matches are
-        checked.  Otherwise falls back to the last *hours* qualifying
-        predictions.
+        away_team, sport, match_date, scoring_pick, forebet_prediction,
+        focus_team, favorite, prediction_grade), only those specific
+        matches are checked.  Otherwise falls back to the last *hours*
+        qualifying predictions.
 
-        Pick jest wyznaczany tak samo jak w telegram_notifier._pick_odds():
-        scoring_pick > forebet_prediction.
+        Pick jest wyznaczany jak w telegram_notifier._canonical_pick():
+        scoring_pick > forebet_prediction > focus_team > favorite.
+
+        Status meczu jest klasyfikowany w trybie **Draw No Bet** dla
+        zakładów na 1 lub 2:
+          - actual == pick  -> 'win'
+          - pick in {1,2} and actual == 'X' -> 'push' (zwrot stawki w DNB)
+          - actual is empty -> 'pending'
+          - inne sprzeczności -> 'loss'
+
+        Pushy NIE wpływają na win_rate (są neutralne, jak w prawdziwym DNB).
+
+        Args:
+            hours: Lookback window (ignorowany gdy manifest podany).
+            manifest_matches: Lista wpisów z manifestu Telegrama (preferowana).
+            grade_filter: Zbiór dozwolonych prediction_grade (np. {"A"}).
+                Gdy None — bez filtrowania po grade.
 
         Returns:
             Dict:
-              global: {total, win, loss, pending, win_rate}
-              per_sport: {sport: {total, win, loss, pending, win_rate}}
+              global: {total, win, loss, push, pending, settled, win_rate}
+              per_sport: {sport: {... per status ..., win_rate}}
               matches: [{home_team, away_team, sport, pick, actual_result,
-                         home_score, away_score, status, odds}]
+                         home_score, away_score, status, odds, grade}]
         """
         from datetime import timedelta
 
         try:
+            # Fast lookup z manifestu — pola pomocnicze gdy w bazie brak np.
+            # scoring_pick (legacy rekordy) albo gdy chcemy użyć focus_team.
+            manifest_index: Dict[tuple, Dict[str, Any]] = {}
+            if manifest_matches:
+                for mm in manifest_matches:
+                    key = (
+                        (mm.get('home_team') or '').strip(),
+                        (mm.get('away_team') or '').strip(),
+                        (mm.get('match_date') or '').strip(),
+                    )
+                    if key[0] and key[1]:
+                        manifest_index[key] = mm
+
             if manifest_matches:
                 # Query by specific matches from the Telegram manifest
                 predictions: List[Dict[str, Any]] = []
                 for mm in manifest_matches:
-                    ht = mm.get("home_team", "")
-                    at = mm.get("away_team", "")
-                    md = mm.get("match_date", "")
+                    ht = (mm.get("home_team") or "").strip()
+                    at = (mm.get("away_team") or "").strip()
+                    md = (mm.get("match_date") or "").strip()
                     if not ht or not at:
                         continue
                     q = (
@@ -693,7 +723,27 @@ class SupabaseManager:
                     resp = q.limit(1).execute()
                     if resp.data:
                         predictions.extend(resp.data)
-                print(f"   📋 Manifest lookup: found {len(predictions)}/{len(manifest_matches)} matches in Supabase")
+                    else:
+                        # Mecz wysłany na Telegram, ale brak go w Supabase
+                        # (np. zapis się nie udał) — i tak go uwzględniamy
+                        # na podstawie samego manifestu, status: pending.
+                        synthetic = {
+                            'id': None,
+                            'home_team': ht,
+                            'away_team': at,
+                            'match_date': md or None,
+                            'match_time': mm.get('match_time'),
+                            'sport': mm.get('sport') or 'football',
+                            'league': mm.get('league'),
+                            'forebet_prediction': mm.get('forebet_prediction'),
+                            'forebet_home_odds': mm.get('home_odds'),
+                            'forebet_draw_odds': mm.get('draw_odds'),
+                            'forebet_away_odds': mm.get('away_odds'),
+                            'actual_result': None,
+                            '_synthetic': True,
+                        }
+                        predictions.append(synthetic)
+                print(f"   📋 Manifest lookup: {len(predictions)}/{len(manifest_matches)} matches resolved")
             else:
                 cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
                 response = (
@@ -710,35 +760,96 @@ class SupabaseManager:
             # --- classify each prediction --------------------------------
             matches_detail: List[Dict[str, Any]] = []
             sport_agg: Dict[str, Dict[str, int]] = {}
-            g_win = g_loss = g_pending = 0
+            g_win = g_loss = g_pending = g_push = 0
 
             for pred in predictions:
-                sport = pred.get('sport', 'football')
-                pick = (
-                    pred.get('forebet_prediction') or ''
-                ).strip().upper()
+                # Manifest enrichment — pola, których baza może nie mieć.
+                key = (
+                    (pred.get('home_team') or '').strip(),
+                    (pred.get('away_team') or '').strip(),
+                    (pred.get('match_date') or '').strip(),
+                )
+                manifest_entry = manifest_index.get(key) if manifest_index else None
+
+                # Grade — bierzemy z manifestu (Telegram zapisuje tylko A/B
+                # więc to jedyne wiarygodne źródło). Predictions table go
+                # nie ma — kolumna prediction_grade nie istnieje.
+                grade = None
+                if manifest_entry:
+                    grade = (manifest_entry.get('prediction_grade') or '').strip().upper() or None
+
+                if grade_filter is not None:
+                    if (grade or 'F') not in grade_filter:
+                        # Mecz pomijamy w statystykach.
+                        continue
+
+                sport = pred.get('sport', 'football') or 'football'
+
+                # Pick: scoring_pick > forebet_prediction > focus_team > favorite.
+                # Manifest jest źródłem prawdy o tym co pojawiło się w wiadomości.
+                def _normalize_pick(raw: str, sport: str) -> str:
+                    raw = (raw or '').strip().upper()
+                    if raw in ('1', 'H', '1X', 'HOME'):
+                        return '1'
+                    if raw in ('2', 'A', 'X2', 'AWAY'):
+                        return '2'
+                    if raw == 'X' or raw == 'DRAW':
+                        return 'X'
+                    return ''
+
+                pick = ''
+                if manifest_entry:
+                    pick = _normalize_pick(manifest_entry.get('scoring_pick'), sport)
+                    if not pick:
+                        pick = _normalize_pick(manifest_entry.get('forebet_prediction'), sport)
+                    if not pick:
+                        focus = (manifest_entry.get('focus_team') or '').strip().lower()
+                        if focus == 'home':
+                            pick = '1'
+                        elif focus == 'away':
+                            pick = '2'
+                    if not pick:
+                        fav = (manifest_entry.get('favorite') or '').strip().upper()
+                        if fav in ('A', 'AWAY'):
+                            pick = '2'
+                        elif fav in ('H', 'HOME'):
+                            pick = '1'
+                if not pick:
+                    pick = _normalize_pick(pred.get('scoring_pick'), sport)
+                if not pick:
+                    pick = _normalize_pick(pred.get('forebet_prediction'), sport)
 
                 actual = (pred.get('actual_result') or '').strip().upper()
 
-                # Determine status
+                # Determine status (Draw No Bet for 1/2 picks)
                 if not actual:
                     status = 'pending'
                     g_pending += 1
                 elif pick and pick == actual:
                     status = 'win'
                     g_win += 1
+                elif pick in ('1', '2') and actual == 'X':
+                    # Draw No Bet — remis = zwrot stawki, nie loss.
+                    status = 'push'
+                    g_push += 1
                 else:
                     status = 'loss'
                     g_loss += 1
 
                 # Odds for the pick
                 odds_val: Any = None
-                if pick in ('1', 'H', '1X'):
+                if pick == '1':
                     odds_val = pred.get('forebet_home_odds')
-                elif pick in ('2', 'A', 'X2'):
+                    if odds_val is None and manifest_entry:
+                        odds_val = manifest_entry.get('home_odds')
+                elif pick == '2':
                     odds_val = pred.get('forebet_away_odds')
+                    if odds_val is None and manifest_entry:
+                        odds_val = manifest_entry.get('away_odds')
                 elif pick == 'X':
                     odds_val = pred.get('forebet_draw_odds')
+                    if odds_val is None and manifest_entry:
+                        odds_val = manifest_entry.get('draw_odds')
                 try:
                     odds_val = float(odds_val) if odds_val else None
                 except (ValueError, TypeError):
@@ -757,29 +868,31 @@ class SupabaseManager:
                     'away_score': pred.get('away_score'),
                     'status': status,
                     'odds': odds_val,
+                    'grade': grade,
                 })
 
                 # Aggregate per sport
-                agg = sport_agg.setdefault(sport, {'total': 0, 'win': 0, 'loss': 0, 'pending': 0})
+                agg = sport_agg.setdefault(
+                    sport,
+                    {'total': 0, 'win': 0, 'loss': 0, 'push': 0, 'pending': 0},
+                )
                 agg['total'] += 1
-                if status == 'win':
-                    agg['win'] += 1
-                elif status == 'loss':
-                    agg['loss'] += 1
-                else:
-                    agg['pending'] += 1
+                agg[status] = agg.get(status, 0) + 1
 
-            total = g_win + g_loss + g_pending
-            settled = g_win + g_loss
-            win_rate = round((g_win / settled) * 100, 1) if settled > 0 else 0.0
+            total = g_win + g_loss + g_push + g_pending
+            # W DNB pushe są neutralne — wypadają z win_rate.
+            settled_for_rate = g_win + g_loss
+            settled = g_win + g_loss + g_push
+            win_rate = round((g_win / settled_for_rate) * 100, 1) if settled_for_rate > 0 else 0.0
 
             # win_rate per sport
             per_sport: Dict[str, Any] = {}
             for sp, agg in sport_agg.items():
-                sp_settled = agg['win'] + agg['loss']
+                sp_settled_rate = agg.get('win', 0) + agg.get('loss', 0)
                 per_sport[sp] = {
                     **agg,
-                    'win_rate': round((agg['win'] / sp_settled) * 100, 1) if sp_settled > 0 else 0.0,
+                    'win_rate': round((agg.get('win', 0) / sp_settled_rate) * 100, 1)
+                                if sp_settled_rate > 0 else 0.0,
                 }
 
             return {
@@ -787,6 +900,7 @@ class SupabaseManager:
                     'total': total,
                     'win': g_win,
                     'loss': g_loss,
+                    'push': g_push,
                     'pending': g_pending,
                     'settled': settled,
                     'win_rate': win_rate,
@@ -798,7 +912,10 @@ class SupabaseManager:
         except Exception as e:
             print(f"[ERROR] Error fetching telegram daily stats: {e}")
             return {
-                'global': {'total': 0, 'win': 0, 'loss': 0, 'pending': 0, 'settled': 0, 'win_rate': 0.0},
+                'global': {
+                    'total': 0, 'win': 0, 'loss': 0, 'push': 0,
+                    'pending': 0, 'settled': 0, 'win_rate': 0.0,
+                },
                 'per_sport': {},
                 'matches': [],
             }
