@@ -539,9 +539,33 @@ class TennisScoringEngine:
         # Based on how dominant the prediction is
         dominance = abs(cal_a - cal_b)  # 0 to ~0.96
         advanced_score = dominance * 100  # scale to 0-100
-        # Boost for data richness
+        # Boost for data richness — use weighted data quality that values
+        # the most predictive features (odds, h2h, ranking) more than
+        # form/surface which are often missing for tennis.
         dq = feats['_data_quality']
-        advanced_score = advanced_score * (0.5 + 0.5 * dq)
+        # Weighted DQ: odds(0.30) + h2h(0.25) + ranking(0.20) + form(0.10)
+        # + surface(0.05) + fatigue(0.05) + sofascore(0.05)
+        _wdq_score = 0.0
+        h2h_list_check: List[Dict[str, Any]] = match.get('h2h_last5', [])
+        if feats.get('odds_a', 0) > 1:
+            _wdq_score += 0.30
+        if h2h_list_check:
+            _wdq_score += 0.25
+        if match.get('ranking_a') and match.get('ranking_b'):
+            _wdq_score += 0.20
+        form_a_check = _parse_form_list(match.get('form_a', match.get('home_form', [])))
+        form_b_check = _parse_form_list(match.get('form_b', match.get('away_form', [])))
+        if form_a_check or form_b_check:
+            _wdq_score += 0.10
+        if feats.get('surface_wr_a', 0.5) != 0.5 or feats.get('surface_wr_b', 0.5) != 0.5:
+            _wdq_score += 0.05
+        if match.get('last_match_a_date') or match.get('last_match_b_date'):
+            _wdq_score += 0.05
+        if feats.get('sofascore_prob_a', 0.5) != 0.5:
+            _wdq_score += 0.05
+        # Use the better of raw dq and weighted dq (never penalize more than before)
+        effective_dq = max(dq, _wdq_score)
+        advanced_score = advanced_score * (0.5 + 0.5 * effective_dq)
         advanced_score = min(100, max(0, advanced_score))
 
         _qualifies = advanced_score >= self.threshold

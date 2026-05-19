@@ -2565,9 +2565,29 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         'favorite': 'unknown',
     }
 
+    # CI-aware sleep durations — shorter in GitHub Actions for 6h budget
+    _is_ci_tennis = os.environ.get('GITHUB_ACTIONS') == 'true' or os.environ.get('CI') == 'true'
+    _SLEEP_MATCH_PAGE = 1.5 if _is_ci_tennis else 2.5
+    _SLEEP_H2H_PAGE = 1.8 if _is_ci_tennis else 3.0
+
+    # In CI: reduce page load timeout for tennis to avoid 60s hangs
+    _original_page_load_timeout = None
+    if _is_ci_tennis:
+        try:
+            _original_page_load_timeout = 60  # default
+            driver.set_page_load_timeout(20)  # 20s max per navigation in CI
+        except Exception:
+            pass
+
     # --- Helper: apply compatibility mapping (runs on EVERY exit path) ---
     def _finalise(o: Dict) -> Dict:
         """Set all email-compat fields before returning."""
+        # Restore page load timeout if we reduced it for CI
+        if _is_ci_tennis and _original_page_load_timeout:
+            try:
+                driver.set_page_load_timeout(_original_page_load_timeout)
+            except Exception:
+                pass
         o['home_form'] = o.get('form_a', [])
         o['away_form'] = o.get('form_b', [])
         o['home_form_overall'] = o.get('form_a', [])
@@ -2610,7 +2630,7 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
 
         # ── STEP 1: Navigate to match detail page ──
         driver.get(url)
-        time.sleep(2.5)
+        time.sleep(_SLEEP_MATCH_PAGE)
 
         match_page_soup = BeautifulSoup(driver.page_source, 'html.parser')
 
@@ -2696,7 +2716,7 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         else:
             try:
                 driver.get(h2h_url)
-                time.sleep(3.0)
+                time.sleep(_SLEEP_H2H_PAGE)
                 h2h_navigation_ok = True
             except WebDriverException as e:
                 err_short = str(e).split('\n')[0][:120]
@@ -2813,8 +2833,10 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
             out['away_odds'] = odds['away_odds']
 
     # 4b. FLASHSCORE odds fallback — last resort if both API and CSS failed
+    # In CI: SKIP FlashScore for tennis — it spawns a new scraper and adds
+    # 10-20s per match. Livesport API already provides Pinnacle odds reliably.
     if not out.get('home_odds') or not out.get('away_odds'):
-        if FLASHSCORE_AVAILABLE and out.get('home_team') and out.get('away_team'):
+        if FLASHSCORE_AVAILABLE and out.get('home_team') and out.get('away_team') and not _is_ci_tennis:
             try:
                 print(f"   💰 Tennis FlashScore fallback: Pobieranie kursów...")
                 flashscore_scraper = FlashScoreOddsScraper(headless=True)
@@ -3145,6 +3167,11 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
     if not surface or not player_a or not player_b:
         return
 
+    # CI-aware sleep durations
+    _is_ci_sf = os.environ.get('GITHUB_ACTIONS') == 'true' or os.environ.get('CI') == 'true'
+    _SLEEP_SURFACE = 1.2 if _is_ci_sf else 2.0
+    _SLEEP_BACK = 1.0 if _is_ci_sf else 1.5
+
     surface_form_a = []
     surface_form_b = []
 
@@ -3163,7 +3190,7 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
             base_url = match_url.split('/h2h/')[0] if '/h2h/' in match_url else match_url.rstrip('/')
             surface_h2h_url = base_url + surface_path
             driver.get(surface_h2h_url)
-            time.sleep(2.0)
+            time.sleep(_SLEEP_SURFACE)
             surface_soup = BeautifulSoup(driver.page_source, 'html.parser')
 
             # Parse individual player sections for surface-specific matches
@@ -3209,7 +3236,7 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
             # Navigate back to all-surfaces page for future use
             all_surfaces_url = base_url + '/h2h/wszystkie-nawierzchnie/'
             driver.get(all_surfaces_url)
-            time.sleep(1.5)
+            time.sleep(_SLEEP_BACK)
     except Exception as e:
         print(f"   ⚠️ Surface form extraction error: {e}")
 
@@ -3268,24 +3295,38 @@ def _tennis_should_skip_expensive_steps(out: Dict) -> bool:
 
     Skip kosztownych etapów (`_extract_last_matches_for_players`,
     `_compute_surface_form` — każdy robi własny `driver.get` + `time.sleep`)
-    tylko jeśli wszystkie poniższe są prawdą:
+    jeśli KTÓREKOLWIEK z poniższych jest prawdą:
 
-      * brak ostatniego H2H (`h2h_count == 0`),
-      * brak rankingów dla obu graczy,
-      * brak form badges dla obu graczy.
+      * brak H2H (`h2h_count == 0`) ORAZ brak rankingów dla obu graczy,
+      * brak H2H ORAZ brak form badges dla obu graczy.
 
-    Mecz z którymkolwiek z tych sygnałów daje szansę na zdobycie sensownego
-    score'u, więc tam pełny pipeline zostawiamy. Heurystyka jest celowo
-    konserwatywna — nie zmienia progów biznesowych ani struktury wyjścia,
-    tylko unika minutowego czekania na dane i tak nie do uratowania.
+    Mecz bez H2H i bez rankingów/form nie ma szans na zdobycie 45/100
+    (potrzebuje dominance > 0.45 * (0.5 + 0.5*dq) co wymaga silnych
+    sygnałów z wielu źródeł). Heurystyka jest celowo konserwatywna —
+    nie zmienia progów biznesowych ani struktury wyjścia, tylko unika
+    minutowego czekania na dane i tak nie do uratowania.
+
+    W CI (GitHub Actions) jest bardziej agresywna — pomija surface form
+    nawet gdy jest H2H ale brak form (surface_form ma wagę 0.13 i prawie
+    nigdy nie ma danych w Livesport dla tenisa).
     """
-    if (out.get('h2h_count') or 0) > 0:
-        return False
-    if out.get('ranking_a') or out.get('ranking_b'):
-        return False
-    if out.get('form_a') or out.get('form_b'):
-        return False
-    return True
+    _is_ci = os.environ.get('GITHUB_ACTIONS') == 'true' or os.environ.get('CI') == 'true'
+    h2h_count = out.get('h2h_count') or 0
+
+    # Brak H2H — bez tego trudno o kwalifikację
+    if h2h_count == 0:
+        # Brak rankingów LUB brak form → na pewno partial_data z niskim score
+        if not out.get('ranking_a') and not out.get('ranking_b'):
+            return True
+        if not out.get('form_a') and not out.get('form_b'):
+            return True
+
+    # CI-only: agresywniejszy skip — jeśli brak form dla obu graczy,
+    # surface form i tak nie pomoże (waga 0.13, dane prawie nigdy niedostępne)
+    if _is_ci and not out.get('form_a') and not out.get('form_b'):
+        return True
+
+    return False
 
 
 def _check_tennis_data_completeness(out: Dict) -> tuple:
