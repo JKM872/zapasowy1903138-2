@@ -23,12 +23,17 @@ on:
       max_odds:
         description: 'Upper bound of qualifying current odds (inclusive)'
         required: false
-        default: '2.00'
+        default: '2.20'
         type: string
       dry_run:
         description: 'Skip Livesport enrichment (scrape OddsSafari only)'
         required: false
         default: false
+        type: boolean
+      send_email:
+        description: 'Send email with dropping odds results'
+        required: false
+        default: true
         type: boolean
 
 env:
@@ -91,6 +96,7 @@ jobs:
           pip install -r requirements.txt
           sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
           pip install curl-cffi cloudscraper httpx[http2]
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
 
       - name: Install Node.js dependencies
         run: npm ci || npm install
@@ -107,6 +113,42 @@ jobs:
             sleep 2
           done
 
+      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        run: |
+          echo "🌐 Starting Cloudflare WARP proxy container..."
+          docker run -d --name warp \
+            --restart=always \
+            --device-cgroup-rule='c 10:200 rwm' \
+            -p 1080:1080 \
+            -e WARP_SLEEP=2 \
+            --cap-add NET_ADMIN \
+            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
+            -v /lib/modules:/lib/modules \
+            caomingjun/warp:latest
+
+          echo "⏳ Waiting for WARP to register..."
+          WARP_READY=false
+          for i in {1..40}; do
+            sleep 3
+            CURRENT_IP=$(curl -s --max-time 10 --socks5 localhost:1080 https://api.ipify.org 2>/dev/null || echo "")
+            if [ -n "$CURRENT_IP" ]; then
+              WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
+              echo "WARP test ($i/40): IP=$CURRENT_IP, warp=$WARP_STATUS"
+              if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
+                echo "✅ WARP active — SofaScore via clean IP $CURRENT_IP"
+                WARP_READY=true
+                break
+              fi
+            else
+              echo "WARP not responding yet ($i/40)..."
+            fi
+          done
+          if [ "$WARP_READY" != "true" ]; then
+            echo "::warning::WARP not ready — SofaScore may be blocked"
+          fi
+        continue-on-error: true
+
       - name: Resolve target date
         id: resolve-date
         run: |
@@ -122,10 +164,11 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SOFASCORE_PROXY: "socks5://localhost:1080"
         run: |
           TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
           MIN_ODDS="${{ github.event.inputs.min_odds || '1.35' }}"
-          MAX_ODDS="${{ github.event.inputs.max_odds || '2.00' }}"
+          MAX_ODDS="${{ github.event.inputs.max_odds || '2.20' }}"
           EXTRA=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             EXTRA="--dry-run"
@@ -137,6 +180,29 @@ jobs:
             --max-odds "$MAX_ODDS" \
             --headless \
             $EXTRA
+
+      - name: Send Dropping Odds email
+        if: success() && github.event.inputs.send_email != 'false'
+        env:
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: |
+          TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
+          OUT="outputs/oddssafari_dropping_${TARGET_DATE}.json"
+          if [ ! -f "$OUT" ]; then
+            echo "⚠️ No output file found at $OUT — skipping email"
+            exit 0
+          fi
+          if [ -z "$EMAIL_RECIPIENT" ] || [ -z "$EMAIL_SENDER" ] || [ -z "$EMAIL_PASSWORD" ]; then
+            echo "⚠️ Email secrets not configured — skipping email"
+            exit 0
+          fi
+          python dropping_odds_email.py "$OUT" \
+            --to "$EMAIL_RECIPIENT" \
+            --from-email "$EMAIL_SENDER" \
+            --password "$EMAIL_PASSWORD" \
+            --provider gmail
 
       - name: Summary
         if: always()

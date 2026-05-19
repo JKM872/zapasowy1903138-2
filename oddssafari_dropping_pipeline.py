@@ -214,6 +214,8 @@ _KEEP_KEYS = (
     "home_team", "away_team", "match_time", "sport", "league",
     "h2h_count", "home_wins_in_h2h_last5", "away_wins_in_h2h_last5",
     "win_rate", "qualifies", "home_form", "away_form",
+    "home_form_overall", "away_form_overall",
+    "home_form_home", "away_form_away",
     "home_odds", "draw_odds", "away_odds",
     "forebet_prediction", "forebet_probability",
     "forebet_over_under", "forebet_btts",
@@ -288,7 +290,7 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                         help="Show the browser window (for debugging).")
     parser.add_argument("--min-odds", type=float, default=1.35,
                         help="Lower bound of qualifying current odds (inclusive).")
-    parser.add_argument("--max-odds", type=float, default=2.00,
+    parser.add_argument("--max-odds", type=float, default=2.20,
                         help="Upper bound of qualifying current odds (inclusive).")
     parser.add_argument("--max-rows", type=int, default=0,
                         help="Optional cap on rows processed end-to-end (0 = no cap).")
