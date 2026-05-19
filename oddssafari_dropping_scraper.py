@@ -354,6 +354,21 @@ FALLBACK_SPORT_PAGE_IDS: Tuple[str, ...] = (
     "10",  # Boxing
 )
 
+# Mapping of internal sport name → list of OddsSafari sport page IDs.
+# Used by the per-sport pipeline split to scrape only relevant pages
+# instead of all sports. When discovery yields different IDs, the scraper
+# still falls back to FALLBACK_SPORT_PAGE_IDS.
+SPORT_TO_PAGE_IDS: Dict[str, Tuple[str, ...]] = {
+    "football": ("1",),
+    "basketball": ("20",),
+    "tennis": ("5",),
+    "hockey": ("18",),
+    "handball": ("6",),
+    "volleyball": ("23",),
+    "baseball": ("3",),
+    "rugby": ("24", "25"),
+}
+
 _DEFAULT_PAGE_WAIT_S = 4.0
 _MAX_PAGES_PER_SPORT = 20
 
@@ -490,6 +505,7 @@ __all__ = [
     "SPORT_SLUG_TO_INTERNAL",
     "DROPPING_ODDS_ROOT",
     "FALLBACK_SPORT_PAGE_IDS",
+    "SPORT_TO_PAGE_IDS",
     "DroppingOddsRow",
     "map_slug_to_internal",
     "is_livesport_supported_sport",

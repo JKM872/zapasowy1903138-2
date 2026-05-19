@@ -64,6 +64,35 @@ def _format_form(form_list: Any) -> str:
     return " ".join(icons.get(str(r).upper()[:1], str(r)) for r in form_list[:5])
 
 
+def _pick_form(enrichment: Dict[str, Any], side: str) -> List[Any]:
+    """Pick the best available form list for the given side ('home' or 'away').
+
+    Tries multiple field names because livesport_h2h_scraper writes the form
+    under different keys depending on the path it took (full advanced form,
+    fallback, tennis-specific). Returns the first non-empty list it finds.
+    """
+    candidates = (
+        f"{side}_form",
+        f"{side}_form_overall",
+        f"{side}_form_home" if side == "home" else f"{side}_form_away",
+    )
+    for key in candidates:
+        val = enrichment.get(key)
+        if val:
+            if isinstance(val, str):
+                # CSV round-trip leaves this as a stringified list
+                import ast
+                try:
+                    parsed = ast.literal_eval(val)
+                    if parsed:
+                        return parsed
+                except (ValueError, SyntaxError):
+                    continue
+            elif isinstance(val, list) and len(val) > 0:
+                return val
+    return []
+
+
 def _outcome_label(outcome: str) -> str:
     """Human-readable outcome label."""
     labels = {"1": "Gospodarze (1)", "2": "Goście (2)", "X": "Remis (X)"}
@@ -140,9 +169,11 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
     enrichment = event.get("enrichment") or {}
     enrichment_status = event.get("enrichment_status", "")
     
-    # Form data
-    home_form = enrichment.get("home_form", [])
-    away_form = enrichment.get("away_form", [])
+    # Form data — try multiple field names so we always show something
+    home_form = _pick_form(enrichment, "home")
+    away_form = _pick_form(enrichment, "away")
+    home_form_venue = enrichment.get("home_form_home") or []
+    away_form_venue = enrichment.get("away_form_away") or []
     
     # Odds from Livesport
     home_odds = _safe_float(enrichment.get("home_odds"))
@@ -211,21 +242,42 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
             </div>
     '''
     
-    # Form section
-    if home_form or away_form:
-        html += f'''
+    # Form section — always show, even with placeholders
+    home_form_str = _format_form(home_form)
+    away_form_str = _format_form(away_form)
+    home_venue_str = _format_form(home_form_venue) if home_form_venue else None
+    away_venue_str = _format_form(away_form_venue) if away_form_venue else None
+    
+    venue_html = ""
+    if home_venue_str:
+        venue_html += f'''
+                <div style="margin-top: 4px; padding-left: 8px; border-left: 2px solid #ddd;">
+                    <span style="font-size: 11px; color: #888;">u siebie:</span>
+                    <span style="font-size: 12px;">{home_venue_str}</span>
+                </div>
+        '''
+    if away_venue_str:
+        venue_html += f'''
+                <div style="margin-top: 4px; padding-left: 8px; border-left: 2px solid #ddd;">
+                    <span style="font-size: 11px; color: #888;">na wyjeździe:</span>
+                    <span style="font-size: 12px;">{away_venue_str}</span>
+                </div>
+        '''
+    
+    html += f'''
             <div style="margin-bottom: 14px; padding: 10px; background: #fafafa; border-radius: 8px;">
                 <div style="font-size: 11px; color: #666; margin-bottom: 6px;">📊 Forma drużyn (ostatnie 5)</div>
                 <div style="margin-bottom: 4px;">
                     <span style="font-size: 12px; color: #333; font-weight: 600;">{home}:</span>
-                    <span style="font-size: 12px;">{_format_form(home_form)}</span>
+                    <span style="font-size: 12px;">{home_form_str}</span>
                 </div>
                 <div>
                     <span style="font-size: 12px; color: #333; font-weight: 600;">{away}:</span>
-                    <span style="font-size: 12px;">{_format_form(away_form)}</span>
+                    <span style="font-size: 12px;">{away_form_str}</span>
                 </div>
+                {venue_html}
             </div>
-        '''
+    '''
     
     # H2H section
     if h2h_count and h2h_count > 0:
@@ -332,6 +384,7 @@ def build_dropping_odds_email_html(
     events: List[Dict[str, Any]],
     meta: Dict[str, Any],
     date: str,
+    sport: Optional[str] = None,
 ) -> str:
     """Build the full HTML email body."""
     
@@ -339,6 +392,16 @@ def build_dropping_odds_email_html(
     qualified_count = len(events)
     min_odds = meta.get("filter", {}).get("min_odds", 1.35)
     max_odds = meta.get("filter", {}).get("max_odds", 2.20)
+    
+    sport_emoji = {
+        "football": "⚽", "basketball": "🏀", "tennis": "🎾",
+        "hockey": "🏒", "handball": "🤾", "volleyball": "🏐",
+        "baseball": "⚾", "rugby": "🏉",
+    }
+    sport_label = ""
+    if sport:
+        emoji = sport_emoji.get(sport.lower(), "🏆")
+        sport_label = f" {emoji} {sport.upper()}"
     
     # Sort by drop_pct descending (biggest drops first)
     events_sorted = sorted(events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
@@ -360,7 +423,7 @@ def build_dropping_odds_email_html(
     <div style="max-width: 640px; margin: 0 auto; padding: 20px;">
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #1976d2 100%); border-radius: 16px; padding: 24px; margin-bottom: 20px; text-align: center; color: white;">
-            <div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">📉 Dropping Odds</div>
+            <div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">📉 Dropping Odds{sport_label}</div>
             <div style="font-size: 14px; color: rgba(255,255,255,0.85);">{date} | Wygenerowano o {now}</div>
             <div style="margin-top: 12px; display: flex; justify-content: center; gap: 16px;">
                 <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px;">
@@ -418,6 +481,7 @@ def send_dropping_odds_email(
     password: str,
     provider: str = "gmail",
     run_scoring: bool = True,
+    sport: Optional[str] = None,
 ) -> bool:
     """Load the pipeline JSON output and send the dropping odds email.
     
@@ -452,9 +516,12 @@ def send_dropping_odds_email(
     
     # Build email
     date = meta.get("target_date", datetime.now(WARSAW_TZ).strftime("%Y-%m-%d"))
-    html = build_dropping_odds_email_html(qualified, meta, date)
+    html = build_dropping_odds_email_html(qualified, meta, date, sport=sport)
     
-    subject = f"📉 Dropping Odds — {date} | {len(qualified)} meczów ({meta.get('filter', {}).get('min_odds', 1.35)}-{meta.get('filter', {}).get('max_odds', 2.20)})"
+    sport_label = f" [{sport.upper()}]" if sport else ""
+    min_odds = meta.get("filter", {}).get("min_odds", 1.35)
+    max_odds = meta.get("filter", {}).get("max_odds", 2.20)
+    subject = f"📉 Dropping Odds{sport_label} — {date} | {len(qualified)} meczów ({min_odds}-{max_odds})"
     
     # Send
     smtp_cfg = SMTP_CONFIG.get(provider, SMTP_CONFIG["gmail"])
@@ -496,6 +563,7 @@ def main():
     parser.add_argument("--password", required=True, help="Email password / app password")
     parser.add_argument("--provider", default="gmail", choices=["gmail", "outlook", "yahoo"])
     parser.add_argument("--no-scoring", action="store_true", help="Skip scoring engine")
+    parser.add_argument("--sport", default=None, help="Sport label for the email subject/header")
     
     args = parser.parse_args()
     
@@ -506,6 +574,7 @@ def main():
         password=args.password,
         provider=args.provider,
         run_scoring=not args.no_scoring,
+        sport=args.sport,
     )
     
     sys.exit(0 if success else 1)

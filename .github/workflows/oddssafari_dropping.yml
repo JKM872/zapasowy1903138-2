@@ -4,6 +4,10 @@ name: OddsSafari Dropping Odds Pipeline
 # 12:00 Europe/Warsaw in CEST (summer). During CET (winter) the same cron
 # fires at 11:00 local time; GitHub Actions cron does not support timezones
 # natively. Trigger manually via workflow_dispatch to adjust when needed.
+#
+# Per-sport matrix split (6 jobs running in parallel) — football, basketball,
+# tennis, hockey, handball, volleyball — each producing its own JSON
+# artifact and email. Cuts runtime ~6x vs a single sequential job.
 
 on:
   schedule:
@@ -25,6 +29,19 @@ on:
         required: false
         default: '2.20'
         type: string
+      sport:
+        description: 'Run only one sport (all = run every sport in matrix)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - football
+          - basketball
+          - tennis
+          - hockey
+          - handball
+          - volleyball
       dry_run:
         description: 'Skip Livesport enrichment (scrape OddsSafari only)'
         required: false
@@ -45,6 +62,12 @@ jobs:
     permissions:
       contents: write
 
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        sport: [football, basketball, tennis, hockey, handball, volleyball]
+
     services:
       flaresolverr:
         image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -55,22 +78,37 @@ jobs:
           CAPTCHA_SOLVER: none
 
     steps:
+      - name: Skip non-selected sports
+        id: skip-check
+        run: |
+          REQUESTED="${{ github.event.inputs.sport || 'all' }}"
+          if [ "$REQUESTED" != "all" ] && [ "$REQUESTED" != "${{ matrix.sport }}" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Skipping ${{ matrix.sport }} (user requested $REQUESTED)"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout code
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/checkout@v6
 
       - name: Setup Python 3.11
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
 
       - name: Setup Node.js
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
 
       - name: Install Chrome
+        if: steps.skip-check.outputs.skip != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
@@ -79,9 +117,11 @@ jobs:
           echo "PUPPETEER_EXECUTABLE_PATH=${CHROME_PATH}" >> $GITHUB_ENV
 
       - name: Install ChromeDriver
+        if: steps.skip-check.outputs.skip != 'true'
         uses: nanasess/setup-chromedriver@v2
 
       - name: Verify Chrome
+        if: steps.skip-check.outputs.skip != 'true'
         run: |
           CHROMEDRIVER_PATH="$(command -v chromedriver)"
           echo "CHROMEDRIVER_PATH=${CHROMEDRIVER_PATH}" >> $GITHUB_ENV
@@ -91,6 +131,7 @@ jobs:
           "$CHROMEDRIVER_PATH" --version
 
       - name: Install Python dependencies
+        if: steps.skip-check.outputs.skip != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -99,9 +140,11 @@ jobs:
           pip install 'requests[socks]' 'PySocks>=1.7.1'
 
       - name: Install Node.js dependencies
+        if: steps.skip-check.outputs.skip != 'true'
         run: npm ci || npm install
 
       - name: Wait for FlareSolverr
+        if: steps.skip-check.outputs.skip != 'true'
         run: |
           echo "Waiting for FlareSolverr..."
           for i in {1..30}; do
@@ -114,6 +157,7 @@ jobs:
           done
 
       - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        if: steps.skip-check.outputs.skip != 'true'
         run: |
           echo "🌐 Starting Cloudflare WARP proxy container..."
           docker run -d --name warp \
@@ -150,6 +194,7 @@ jobs:
         continue-on-error: true
 
       - name: Resolve target date
+        if: steps.skip-check.outputs.skip != 'true'
         id: resolve-date
         run: |
           INPUT_DATE="${{ github.event.inputs.date }}"
@@ -159,12 +204,14 @@ jobs:
             echo "target=$(TZ='Europe/Warsaw' date +%Y-%m-%d)" >> $GITHUB_OUTPUT
           fi
 
-      - name: Run OddsSafari dropping-odds pipeline
+      - name: Run OddsSafari dropping-odds pipeline (${{ matrix.sport }})
+        if: steps.skip-check.outputs.skip != 'true'
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
           MIN_ODDS="${{ github.event.inputs.min_odds || '1.35' }}"
@@ -173,25 +220,26 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             EXTRA="--dry-run"
           fi
-          echo "Running pipeline for $TARGET_DATE (odds ${MIN_ODDS}-${MAX_ODDS})"
+          echo "Running ${{ matrix.sport }} pipeline for $TARGET_DATE (odds ${MIN_ODDS}-${MAX_ODDS})"
           python oddssafari_dropping_pipeline.py \
             --date "$TARGET_DATE" \
+            --sport "${{ matrix.sport }}" \
             --min-odds "$MIN_ODDS" \
             --max-odds "$MAX_ODDS" \
             --headless \
             $EXTRA
 
-      - name: Send Dropping Odds email
-        if: success() && github.event.inputs.send_email != 'false'
+      - name: Send Dropping Odds email (${{ matrix.sport }})
+        if: steps.skip-check.outputs.skip != 'true' && success() && github.event.inputs.send_email != 'false'
         env:
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
           TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
-          OUT="outputs/oddssafari_dropping_${TARGET_DATE}.json"
+          OUT="outputs/oddssafari_dropping_${TARGET_DATE}_${{ matrix.sport }}.json"
           if [ ! -f "$OUT" ]; then
-            echo "⚠️ No output file found at $OUT — skipping email"
+            echo "⚠️ No output file at $OUT — skipping email"
             exit 0
           fi
           if [ -z "$EMAIL_RECIPIENT" ] || [ -z "$EMAIL_SENDER" ] || [ -z "$EMAIL_PASSWORD" ]; then
@@ -202,36 +250,66 @@ jobs:
             --to "$EMAIL_RECIPIENT" \
             --from-email "$EMAIL_SENDER" \
             --password "$EMAIL_PASSWORD" \
-            --provider gmail
+            --provider gmail \
+            --sport "${{ matrix.sport }}"
 
-      - name: Summary
-        if: always()
+      - name: Summary (${{ matrix.sport }})
+        if: steps.skip-check.outputs.skip != 'true' && always()
         run: |
           TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
-          OUT="outputs/oddssafari_dropping_${TARGET_DATE}.json"
-          echo "## OddsSafari dropping odds — ${TARGET_DATE}" >> "$GITHUB_STEP_SUMMARY"
+          OUT="outputs/oddssafari_dropping_${TARGET_DATE}_${{ matrix.sport }}.json"
+          echo "## ${{ matrix.sport }} — ${TARGET_DATE}" >> "$GITHUB_STEP_SUMMARY"
           python ci_oddssafari_summary.py "$OUT" >> "$GITHUB_STEP_SUMMARY" || true
 
-      - name: Upload artifact
-        if: always()
+      - name: Upload artifact (${{ matrix.sport }})
+        if: steps.skip-check.outputs.skip != 'true' && always()
         uses: actions/upload-artifact@v7
         with:
-          name: oddssafari-dropping-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
+          name: oddssafari-dropping-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
           path: |
             outputs/oddssafari_dropping_*.json
             logs/
           retention-days: 14
 
-      - name: Commit dropping-odds output
-        if: success()
+  # Single commit job at the end so all sport JSONs land in one commit.
+  commit-results:
+    needs: dropping-odds
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Collect dropping-odds JSONs
+        run: |
+          mkdir -p outputs
+          echo "📦 Collecting dropping-odds JSONs from artifacts..."
+          find artifacts -name 'oddssafari_dropping_*.json' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "outputs/$fname"
+          done
+          ls -la outputs/oddssafari_dropping_*.json 2>/dev/null || echo "No JSONs found"
+
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add outputs/oddssafari_dropping_*.json 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No dropping-odds output to commit"
+            echo "ℹ️ No new dropping-odds output to commit"
           else
-            TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
-            git commit -m "data: oddssafari dropping odds for $TARGET_DATE [skip ci]"
+            TODAY=$(TZ='Europe/Warsaw' date +%Y-%m-%d)
+            git commit -m "data: oddssafari dropping odds for $TODAY [skip ci]"
             git push
+            echo "✅ Pushed dropping odds JSONs"
           fi

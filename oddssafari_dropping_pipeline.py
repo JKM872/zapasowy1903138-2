@@ -298,6 +298,11 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                         help="Max pages of dropping-odds table per sport.")
     parser.add_argument("--sport-ids", default="",
                         help="Comma-separated OddsSafari sport IDs; empty = auto.")
+    parser.add_argument("--sport", default="",
+                        help="Filter to one internal sport (football, basketball, "
+                             "tennis, hockey, handball, volleyball, baseball, rugby). "
+                             "Auto-selects the matching OddsSafari sport IDs and "
+                             "filters rows to that sport. Empty = all sports.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Skip the Livesport enrichment phase entirely.")
     parser.add_argument("--no-forebet", dest="use_forebet", action="store_false",
@@ -323,13 +328,19 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = _parse_args(argv)
 
     target_date = args.date or datetime.now(WARSAW_TZ).strftime("%Y-%m-%d")
-    output_path = args.output or f"outputs/oddssafari_dropping_{target_date}.json"
+    sport_filter = (args.sport or "").strip().lower() or None
+    suffix = f"_{sport_filter}" if sport_filter else ""
+    output_path = (
+        args.output
+        or f"outputs/oddssafari_dropping_{target_date}{suffix}.json"
+    )
 
     print("=" * 70)
     print("OddsSafari Dropping Odds Pipeline")
     print("=" * 70)
     print(f"  Date (Livesport):   {target_date}")
     print(f"  Qualifying range:   [{args.min_odds:.2f}, {args.max_odds:.2f}]")
+    print(f"  Sport filter:       {sport_filter or 'ALL'}")
     print(f"  Output:             {output_path}")
     print(f"  Mode:               {'DRY-RUN' if args.dry_run else 'FULL'}")
     print("=" * 70)
@@ -341,11 +352,35 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     try:
         sport_ids = [s.strip() for s in args.sport_ids.split(",") if s.strip()]
+        # If --sport was provided and --sport-ids was not, auto-select
+        # the matching OddsSafari page IDs to avoid scraping every sport.
+        if sport_filter and not sport_ids:
+            try:
+                from oddssafari_dropping_scraper import SPORT_TO_PAGE_IDS
+                sport_ids = list(SPORT_TO_PAGE_IDS.get(sport_filter, ()))
+                if sport_ids:
+                    logger.info(
+                        "Sport filter '%s' → OddsSafari page IDs %s",
+                        sport_filter, sport_ids,
+                    )
+            except ImportError:
+                pass
         rows = collect_dropping_odds_rows(
             driver,
             sport_page_ids=sport_ids or None,
             max_pages_per_sport=args.max_pages,
         )
+
+        # Post-filter rows by sport when --sport is provided. The OddsSafari
+        # page IDs sometimes contain other sports (especially "all"), and
+        # we want a clean per-sport JSON for the email pipeline.
+        if sport_filter:
+            before = len(rows)
+            rows = [r for r in rows if (r.sport or "").lower() == sport_filter]
+            logger.info(
+                "Sport filter '%s' kept %d/%d rows", sport_filter, len(rows), before
+            )
+
         if args.max_rows:
             rows = rows[: args.max_rows]
         logger.info("OddsSafari returned %d rows in total", len(rows))
