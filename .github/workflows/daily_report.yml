@@ -163,6 +163,17 @@ jobs:
     needs: health-check
     if: ${{ vars.TELEGRAM_ENABLED == 'true' }}
 
+    # FlareSolverr jako fallback CF bypass (taka sama konfiguracja jak w
+    # scrape.yml). Endpoint dostępny pod http://localhost:8191/v1.
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -175,16 +186,78 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt || pip install requests supabase
+          # Te same pakiety bypassu Cloudflare co w scrape.yml — dzięki nim
+          # auto_result_updater.py trafia do SofaScore zamiast łapać 403.
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi cloudscraper httpx[http2]
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
+          python -c "from curl_cffi import requests; print('curl_cffi OK')"
+
+      # FlareSolverr health check (analogicznie do scrape.yml).
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr to be ready..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "✅ FlareSolverr health endpoint responding!"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+        continue-on-error: true
+
+      # Cloudflare WARP proxy jako SOCKS5 :1080 — kierujemy ruch do SofaScore
+      # przez czysty IP CF. Identycznie jak w scrape.yml.
+      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        run: |
+          echo "🌐 Starting Cloudflare WARP proxy container..."
+          docker run -d --name warp \
+            --restart=always \
+            --device-cgroup-rule='c 10:200 rwm' \
+            -p 1080:1080 \
+            -e WARP_SLEEP=2 \
+            --cap-add NET_ADMIN \
+            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
+            -v /lib/modules:/lib/modules \
+            caomingjun/warp:latest
+
+          echo "⏳ Waiting for WARP to register and establish tunnel..."
+          for i in {1..40}; do
+            sleep 3
+            CURRENT_IP=$(curl -s --max-time 10 --socks5 localhost:1080 https://api.ipify.org 2>/dev/null || echo "")
+            if [ -n "$CURRENT_IP" ]; then
+              WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
+              echo "WARP test ($i/40): IP=$CURRENT_IP, warp=$WARP_STATUS"
+              if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
+                echo "✅ WARP active - SofaScore via clean Cloudflare IP $CURRENT_IP"
+                break
+              fi
+            fi
+          done
+        continue-on-error: true
 
       - name: Update match results in Supabase
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          # SofaScore Cloudflare bypass — te same wartości co w scrape.yml.
+          # WARP daje czyste CF IP, FlareSolverr to fallback gdy WARP padnie.
+          SOFASCORE_PROXY: "socks5://localhost:1080"
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          # Opcjonalny manualny cookie cf_clearance (jeśli kiedyś dodasz).
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           echo "🔄 Updating match results before report..."
-          python auto_result_updater.py --check || echo "Result update skipped or partial"
+          # auto_result_updater.py sprawdza dziś + wczoraj, więc wyniki
+          # z wieczornych meczów z poprzedniej doby trafiają do Supabase
+          # zanim wyśle się raport.
+          python auto_result_updater.py --check --lookback-days 2 \
+            || echo "Result update skipped or partial"
 
       - name: Send Telegram Results Report
         env:
