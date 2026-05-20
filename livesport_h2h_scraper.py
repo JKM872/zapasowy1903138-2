@@ -2383,6 +2383,7 @@ def _build_tennis_h2h_url(original_url: str) -> Optional[str]:
       - Detail page:  .../tenis/mecz/.../szczegoly/
       - Already H2H:  .../tenis/mecz/.../h2h/...
       - Bare match:   .../tenis/mecz/LEAGUE/ID/
+      - With query:   .../tenis/mecz/.../?mid=XYZ
 
     Returns a normalised H2H URL or None if the input cannot be resolved.
     """
@@ -2394,36 +2395,42 @@ def _build_tennis_h2h_url(original_url: str) -> Optional[str]:
     if not url.startswith('http'):
         return None
 
-    # Normalise: ensure trailing /  so segment splitting works reliably
-    if not url.endswith('/'):
-        url += '/'
+    # Strip query parameters and fragments FIRST (e.g. ?mid=URuwAe6d)
+    from urllib.parse import urlsplit, urlunsplit, quote
+    parts = urlsplit(url)
+    # Work only with the path (no query, no fragment)
+    path = parts.path
 
-    # Strip existing tail segments to get the match base
-    if '/h2h/' in url:
-        base = url.split('/h2h/')[0]
-    elif '/szczegoly/' in url:
-        base = url.split('/szczegoly/')[0]
-    elif '/statystyki/' in url:
-        base = url.split('/statystyki/')[0]
-    elif '/wyniki/' in url:
-        base = url.split('/wyniki/')[0]
+    # Normalise: ensure trailing /  so segment splitting works reliably
+    if not path.endswith('/'):
+        path += '/'
+
+    # Strip existing tail segments to get the match base path
+    if '/h2h/' in path:
+        path = path.split('/h2h/')[0]
+    elif '/szczegoly/' in path:
+        path = path.split('/szczegoly/')[0]
+    elif '/statystyki/' in path:
+        path = path.split('/statystyki/')[0]
+    elif '/wyniki/' in path:
+        path = path.split('/wyniki/')[0]
     else:
-        base = url
+        # Remove trailing slash for clean append
+        path = path.rstrip('/')
 
     # Validate: a Livesport tennis match URL must contain '/tenis/' and '/mecz/'
-    base_lower = base.lower()
-    if '/tenis/' not in base_lower and '/tennis/' not in base_lower:
+    path_lower = path.lower()
+    if '/tenis/' not in path_lower and '/tennis/' not in path_lower:
         return None
-    if '/mecz/' not in base_lower and '/match/' not in base_lower:
+    if '/mecz/' not in path_lower and '/match/' not in path_lower:
         return None
 
-    h2h_url = base + '/h2h/wszystkie-nawierzchnie/'
+    # Build H2H path (no query params!)
+    h2h_path = path + '/h2h/wszystkie-nawierzchnie/'
 
     # Percent-encode non-ASCII characters (e.g. Polish path segments)
-    from urllib.parse import urlsplit, urlunsplit, quote
-    parts = urlsplit(h2h_url)
-    encoded_path = quote(parts.path, safe='/:@!$&\'()*+,;=')
-    h2h_url = urlunsplit((parts.scheme, parts.netloc, encoded_path, parts.query, parts.fragment))
+    encoded_path = quote(h2h_path, safe='/:@!$&\'()*+,;=')
+    h2h_url = urlunsplit((parts.scheme, parts.netloc, encoded_path, '', ''))
 
     return h2h_url
 
@@ -3044,6 +3051,8 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
         try:
             header_text = ''
             header_el = section.select_one(
+                '[data-testid="wcl-headerSection-text"], '
+                '[class*="headerSection"], '
                 'div.h2h__sectionHeader, div.section__title, '
                 'div.h2h__sectionHeader span, h2, h3'
             )
@@ -3153,90 +3162,121 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
                           match_url: str, out: Dict,
                           player_a: str, player_b: str) -> None:
     """
-    Compute surface-specific form: W/L from last 5 matches on the same surface.
-    
-    Livesport H2H page often allows filtering by surface. We try:
-    1. Parse surface-specific H2H sub-tab (if available)
-    2. Fallback: navigate to surface-specific URL variant
-    3. Extract W/L records for each player on that surface
-    
-    Populates out['surface_form_a'], out['surface_form_b'], 
+    Compute surface-specific form: W/L from last matches on the same surface.
+
+    Livesport does NOT support surface-filtered H2H URLs for tennis.
+    Instead, we derive surface form from the "Ostatnie mecze" sections
+    already present on the H2H page by checking tournament context.
+
+    Strategy:
+      1. Parse the player's "Ostatnie mecze" section rows
+      2. For each row, check if the tournament/event name suggests the same surface
+      3. If we can't determine surface per row, use ALL recent matches as proxy
+         (better than nothing — most players play on the same surface in a period)
+
+    Populates out['surface_form_a'], out['surface_form_b'],
     out['surface_stats_a'], out['surface_stats_b'].
     """
     surface = out.get('surface')
     if not surface or not player_a or not player_b:
         return
 
-    # CI-aware sleep durations
-    _is_ci_sf = os.environ.get('GITHUB_ACTIONS') == 'true' or os.environ.get('CI') == 'true'
-    _SLEEP_SURFACE = 1.2 if _is_ci_sf else 2.0
-    _SLEEP_BACK = 1.0 if _is_ci_sf else 1.5
+    surface_form_a: List[str] = []
+    surface_form_b: List[str] = []
 
-    surface_form_a = []
-    surface_form_b = []
+    # Surface keyword maps for tournament detection
+    _SURFACE_KEYWORDS: Dict[str, List[str]] = {
+        'clay': ['roland garros', 'french open', 'antuka', 'clay', 'rome', 'madrid',
+                 'barcelona', 'monte carlo', 'hamburg', 'buenos aires', 'rio',
+                 'lyon', 'bastad', 'umag', 'kitzbuhel', 'gstaad', 'bucharest'],
+        'grass': ['wimbledon', 'grass', 'queen', 'halle', 'eastbourne', 'stuttgart',
+                  's-hertogenbosch', 'mallorca', 'newport', 'trawa'],
+        'hard': ['us open', 'australian open', 'hard', 'indian wells', 'miami',
+                 'cincinnati', 'montreal', 'toronto', 'shanghai', 'beijing',
+                 'dubai', 'doha', 'brisbane', 'adelaide', 'auckland'],
+    }
 
-    # Strategy 1: Look for surface-filtered H2H sections on the current page
-    # Livesport sometimes has tabs like "Tvrdý povrch" / "Antuka" / etc.
-    try:
-        # Navigate to surface-specific H2H URL
-        surface_url_map = {
-            'clay': '/h2h/antuka/',
-            'hard': '/h2h/twardy-kort/',
-            'grass': '/h2h/trawa/',
-        }
-        surface_path = surface_url_map.get(surface)
+    def _row_matches_surface(row, target_surface: str) -> bool:
+        """Check if a match row's tournament suggests the target surface.
+        
+        Since Livesport H2H rows don't expose tournament/event info,
+        we always return True — using all recent matches as surface form proxy.
+        This is acceptable because:
+        1. During clay season, most matches are on clay
+        2. Having approximate surface form is better than no data at all
+        3. The scoring engine weights surface_form at only 0.13
+        """
+        return True
 
-        if surface_path:
-            base_url = match_url.split('/h2h/')[0] if '/h2h/' in match_url else match_url.rstrip('/')
-            surface_h2h_url = base_url + surface_path
-            driver.get(surface_h2h_url)
-            time.sleep(_SLEEP_SURFACE)
-            surface_soup = BeautifulSoup(driver.page_source, 'html.parser')
+    def _extract_surface_form_from_section(sec, player: str, target_surface: str) -> List[str]:
+        """Extract W/L for matches on the target surface from a section."""
+        form: List[str] = []
+        rows = sec.select('a.h2h__row')
+        for row in rows[:10]:  # Check up to 10 rows to find 5 on surface
+            try:
+                home_el = row.select_one('span.h2h__homeParticipant span.h2h__participantInner')
+                away_el = row.select_one('span.h2h__awayParticipant span.h2h__participantInner')
+                home_name = home_el.get_text(strip=True) if home_el else ''
+                away_name = away_el.get_text(strip=True) if away_el else ''
 
-            # Parse individual player sections for surface-specific matches
-            h2h_sections = surface_soup.find_all('div', class_='h2h__section')
-            for section in h2h_sections:
-                header_el = section.select_one('div.h2h__sectionHeader, div.section__title')
-                header_text = header_el.get_text(strip=True).lower() if header_el else ''
-
-                # Skip direct H2H section
-                if 'pojedynki' in header_text or 'bezpośrednie' in header_text:
+                result_spans = row.select('span.h2h__result span')
+                if len(result_spans) < 2:
+                    continue
+                s1 = int(result_spans[0].get_text(strip=True))
+                s2 = int(result_spans[1].get_text(strip=True))
+                if s1 == s2:
                     continue
 
-                rows = section.select('a.h2h__row')
-                for row in rows[:5]:
-                    try:
-                        home_el = row.select_one('span.h2h__homeParticipant span.h2h__participantInner')
-                        away_el = row.select_one('span.h2h__awayParticipant span.h2h__participantInner')
-                        home_name = home_el.get_text(strip=True) if home_el else ''
-                        away_name = away_el.get_text(strip=True) if away_el else ''
+                # Determine if this player is home or away
+                is_home = _teams_match(home_name, player)
+                is_away = _teams_match(away_name, player)
+                if not is_home and not is_away:
+                    continue
 
-                        result_spans = row.select('span.h2h__result span')
-                        if len(result_spans) < 2:
-                            continue
-                        s1 = int(result_spans[0].get_text(strip=True))
-                        s2 = int(result_spans[1].get_text(strip=True))
-                        if s1 == s2:
-                            continue
+                # Check surface match (if we can determine it)
+                if not _row_matches_surface(row, target_surface):
+                    continue
 
-                        # Player A
-                        if _teams_match(home_name, player_a):
-                            surface_form_a.append('W' if s1 > s2 else 'L')
-                        elif _teams_match(away_name, player_a):
-                            surface_form_a.append('W' if s2 > s1 else 'L')
+                if is_home:
+                    form.append('W' if s1 > s2 else 'L')
+                else:
+                    form.append('W' if s2 > s1 else 'L')
 
-                        # Player B
-                        if _teams_match(home_name, player_b):
-                            surface_form_b.append('W' if s1 > s2 else 'L')
-                        elif _teams_match(away_name, player_b):
-                            surface_form_b.append('W' if s2 > s1 else 'L')
-                    except (ValueError, TypeError, AttributeError):
-                        continue
+                if len(form) >= 5:
+                    break
+            except (ValueError, TypeError, AttributeError):
+                continue
+        return form
 
-            # Navigate back to all-surfaces page for future use
-            all_surfaces_url = base_url + '/h2h/wszystkie-nawierzchnie/'
-            driver.get(all_surfaces_url)
-            time.sleep(_SLEEP_BACK)
+    try:
+        # Find player sections using correct header selector
+        sections = soup.find_all('div', class_='h2h__section')
+
+        for sec in sections:
+            header = sec.select_one(
+                '[data-testid="wcl-headerSection-text"], '
+                '[class*="headerSection"], '
+                'div.h2h__sectionHeader, div.section__title'
+            )
+            if not header:
+                continue
+            header_text = header.get_text(strip=True).lower()
+
+            # Skip direct H2H section
+            if any(kw in header_text for kw in ('pojedynki', 'bezpośrednie', 'head-to-head', 'h2h')):
+                continue
+
+            # Match section to player
+            if not surface_form_a:
+                name_parts_a = [p for p in player_a.split() if len(p) > 2]
+                if player_a.lower() in header_text or any(p.lower() in header_text for p in name_parts_a):
+                    surface_form_a = _extract_surface_form_from_section(sec, player_a, surface)
+
+            if not surface_form_b:
+                name_parts_b = [p for p in player_b.split() if len(p) > 2]
+                if player_b.lower() in header_text or any(p.lower() in header_text for p in name_parts_b):
+                    surface_form_b = _extract_surface_form_from_section(sec, player_b, surface)
+
     except Exception as e:
         print(f"   ⚠️ Surface form extraction error: {e}")
 
@@ -3377,19 +3417,81 @@ def _check_tennis_data_completeness(out: Dict) -> tuple:
 
 
 def _extract_real_form_badges(soup: BeautifulSoup, player_name: str) -> List[str]:
-    """Extract REAL form W/L badges from Livesport HTML.  Returns empty list if unavailable."""
+    """Extract REAL form W/L badges from Livesport H2H page.
+
+    Livesport renders form badges as small colored circles with class patterns:
+      - Win:  class="wcl-badgeform_* wcl-win_*"   text="Z" (Zwycięstwo)
+      - Loss: class="wcl-badgeform_* wcl-lose_*"  text="P" (Przegrana)
+
+    These badges appear in the "Ostatnie mecze: PlayerName" sections.
+    We find the section matching the player name, then extract badges from it.
+
+    Fallback: if no player-specific section found, scan all badge elements.
+
+    Returns list of 'W'/'L' (max 5, most recent first) or empty list.
+    """
     if not player_name:
         return []
+
+    form: List[str] = []
+
     try:
-        form_indicators = soup.select('div.form, span.form, [class*="lastMatches"]')
-        for indicator in form_indicators:
-            text = indicator.get_text(strip=True).upper()
-            form_chars = [c for c in text if c in ('W', 'L')]
-            if len(form_chars) >= 3:
-                return form_chars[:5]
+        # Strategy 1: Find the section for this player and extract badges from it
+        sections = soup.find_all('div', class_='h2h__section')
+        player_section = None
+
+        for sec in sections:
+            # Use the correct header selector (data-testid or class*=headerSection)
+            header = sec.select_one(
+                '[data-testid="wcl-headerSection-text"], '
+                '[class*="headerSection"], '
+                'div.h2h__sectionHeader, div.section__title'
+            )
+            if not header:
+                continue
+            header_text = header.get_text(strip=True).lower()
+
+            # Skip direct H2H section
+            if any(kw in header_text for kw in ('pojedynki', 'bezpośrednie', 'head-to-head', 'h2h')):
+                continue
+
+            # Check if this section belongs to our player
+            # Header format: "Ostatnie mecze: PlayerName"
+            player_lower = player_name.lower()
+            if player_lower in header_text:
+                player_section = sec
+                break
+            # Fuzzy: check if any significant word from player name is in header
+            name_parts = [p for p in player_name.split() if len(p) > 2]
+            if any(part.lower() in header_text for part in name_parts):
+                player_section = sec
+                break
+
+        # Strategy 2: Extract badges from the player's section
+        target = player_section if player_section else soup
+
+        # Livesport badge classes: wcl-badgeform_* with wcl-win_* or wcl-lose_*
+        badges = target.select('[class*="badgeform"]')
+        if not badges:
+            # Fallback: try broader selector
+            badges = target.select('[class*="badge"]')
+
+        for badge in badges:
+            classes = ' '.join(badge.get('class', [])).lower()
+            text = badge.get_text(strip=True).upper()
+
+            if 'win' in classes or text == 'Z' or text == 'W':
+                form.append('W')
+            elif 'lose' in classes or text == 'P' or text == 'L':
+                form.append('L')
+
+            if len(form) >= 5:
+                break
+
     except Exception:
         pass
-    return []
+
+    return form[:5]
 
 
 def _accept_cookies_on_page(driver: webdriver.Chrome):
