@@ -93,6 +93,47 @@ def _pick_form(enrichment: Dict[str, Any], side: str) -> List[Any]:
     return []
 
 
+def _passes_recent_form_filter(
+    event: Dict[str, Any],
+    min_wins: int = 1,
+    window: int = 3,
+) -> tuple:
+    """Dropping-odds-specific qualification: the focused team must have
+    at least `min_wins` wins in their last `window` form matches.
+    
+    Returns (passes, reason). When form data is missing, we conservatively
+    *pass* the event (so we don't drop legitimate opportunities for sports
+    where form scraping is flakier), but mark the reason as
+    'no_form_data'.
+    """
+    enrichment = event.get("enrichment") or {}
+    focus = event.get("focus_team") or "home"
+    
+    # Pick the form for the focused side
+    if focus == "away":
+        form = _pick_form(enrichment, "away")
+    else:
+        form = _pick_form(enrichment, "home")
+    
+    if not form:
+        return True, "no_form_data_passthrough"
+    
+    # Normalize to first letters W/D/L
+    recent = []
+    for r in list(form)[:window]:
+        s = str(r).strip().upper()[:1]
+        if s in ("W", "D", "L"):
+            recent.append(s)
+    
+    if not recent:
+        return True, "no_form_data_passthrough"
+    
+    wins = sum(1 for r in recent if r == "W")
+    if wins >= min_wins:
+        return True, None
+    return False, f"only_{wins}_wins_in_last_{len(recent)}"
+
+
 def _outcome_label(outcome: str) -> str:
     """Human-readable outcome label."""
     labels = {"1": "Gospodarze (1)", "2": "Goście (2)", "X": "Remis (X)"}
@@ -281,10 +322,25 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
     
     # H2H section
     if h2h_count and h2h_count > 0:
+        last_date = enrichment.get("last_h2h_date") or ""
+        last_score = enrichment.get("last_h2h_score") or ""
+        last_home = enrichment.get("last_h2h_home") or ""
+        last_away = enrichment.get("last_h2h_away") or ""
+        last_line = ""
+        if last_date or last_score:
+            parts = []
+            if last_home and last_away and last_score:
+                parts.append(f"{last_home} {last_score} {last_away}")
+            elif last_score:
+                parts.append(last_score)
+            if last_date:
+                parts.append(f"({last_date})")
+            last_line = f'<div style="font-size: 11px; color: #666; margin-top: 4px;">Ostatni mecz: {" ".join(parts)}</div>'
         html += f'''
             <div style="margin-bottom: 14px; padding: 10px; background: #e8f5e9; border-radius: 8px;">
                 <div style="font-size: 11px; color: #666; margin-bottom: 4px;">⚔️ H2H (ostatnie {h2h_count} meczów)</div>
                 <div style="font-size: 14px; font-weight: 600;">Win rate: {win_rate*100:.0f}%</div>
+                {last_line}
             </div>
         '''
     
@@ -380,16 +436,62 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
     return html
 
 
+def _build_skipped_card(event: Dict[str, Any], index: int) -> str:
+    """Compact card for events rejected by the recent-form filter."""
+    home = event.get("home_team", "?")
+    away = event.get("away_team", "?")
+    league = event.get("league", "")
+    outcome = event.get("dropped_outcome") or event.get("outcome", "")
+    current_odds = _safe_float(event.get("current_odds"))
+    drop_pct = _safe_float(event.get("drop_pct"))
+    open_odds = _safe_float(event.get("open_odds"))
+    if drop_pct == 0 and open_odds > 0 and current_odds > 0:
+        drop_pct = ((open_odds - current_odds) / open_odds) * 100
+    
+    enrichment = event.get("enrichment") or {}
+    home_form_str = _format_form(_pick_form(enrichment, "home"))
+    away_form_str = _format_form(_pick_form(enrichment, "away"))
+    
+    skip_reason = event.get("recent_form_skip_reason", "")
+    
+    return f'''
+    <div style="background: #ffffff; border-radius: 10px; padding: 12px 14px; margin: 8px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.05); opacity: 0.85; border-left: 3px solid #bdbdbd;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="flex: 1;">
+                <div style="font-size: 10px; color: #999;">#{index} | {league}</div>
+                <div style="font-size: 14px; font-weight: 600; color: #555;">{home} vs {away}</div>
+                <div style="font-size: 11px; color: #777; margin-top: 4px;">
+                    <span style="color: #333;">{home}:</span> {home_form_str}
+                </div>
+                <div style="font-size: 11px; color: #777;">
+                    <span style="color: #333;">{away}:</span> {away_form_str}
+                </div>
+            </div>
+            <div style="text-align: right; min-width: 90px;">
+                <div style="font-size: 11px; color: #666;">{_outcome_label(outcome)}</div>
+                <div style="font-size: 14px; font-weight: 700; color: #555;">{current_odds:.2f} <span style="font-size: 10px; color: #999;">↓{drop_pct:.0f}%</span></div>
+                <div style="font-size: 9px; color: #aaa; margin-top: 2px;">{skip_reason}</div>
+            </div>
+        </div>
+    </div>
+    '''
+
+
 def build_dropping_odds_email_html(
     events: List[Dict[str, Any]],
     meta: Dict[str, Any],
     date: str,
     sport: Optional[str] = None,
+    skipped_events: Optional[List[Dict[str, Any]]] = None,
+    total_events: Optional[int] = None,
 ) -> str:
     """Build the full HTML email body."""
     
-    total_events = meta.get("totals", {}).get("events", len(events))
+    skipped_events = skipped_events or []
+    if total_events is None:
+        total_events = meta.get("totals", {}).get("events", len(events))
     qualified_count = len(events)
+    skipped_count = len(skipped_events)
     min_odds = meta.get("filter", {}).get("min_odds", 1.35)
     max_odds = meta.get("filter", {}).get("max_odds", 2.20)
     
@@ -405,11 +507,46 @@ def build_dropping_odds_email_html(
     
     # Sort by drop_pct descending (biggest drops first)
     events_sorted = sorted(events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
+    skipped_sorted = sorted(skipped_events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
     
-    # Build match cards
+    # Build qualifying match cards
     cards_html = ""
     for i, event in enumerate(events_sorted, 1):
         cards_html += _build_match_card(event, i)
+    
+    # If empty, show a friendly placeholder
+    if not events_sorted:
+        cards_html = '''
+        <div style="background: #fff3e0; border-radius: 12px; padding: 24px; text-align: center; margin: 16px 0;">
+            <div style="font-size: 40px; margin-bottom: 12px;">😴</div>
+            <div style="font-size: 16px; font-weight: 700; color: #e65100;">Brak okazji w tym sporcie dziś</div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px;">
+                Pipeline przeszedł, ale żaden mecz nie spełnił wszystkich kryteriów
+                (zakres kursów + min. 1 wygrana w ostatnich 3 meczach focus drużyny).
+            </div>
+        </div>
+        '''
+    
+    # Build skipped section (matches that were qualified by the OddsSafari
+    # filter but rejected by the recent-form filter — still useful to see)
+    skipped_html = ""
+    if skipped_sorted:
+        skipped_cards = ""
+        for i, event in enumerate(skipped_sorted, 1):
+            skipped_cards += _build_skipped_card(event, i)
+        skipped_html = f'''
+        <div style="margin-top: 24px;">
+            <div style="background: #fafafa; border-radius: 10px; padding: 12px 16px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #555;">
+                    ⏭️ Odrzucone przez filtr formy ({len(skipped_sorted)})
+                </div>
+                <div style="font-size: 11px; color: #888; margin-top: 4px;">
+                    Te mecze przeszły zakres kursów, ale focus drużyna nie wygrała żadnego z ostatnich 3 meczów.
+                </div>
+            </div>
+            {skipped_cards}
+        </div>
+        '''
     
     now = datetime.now(WARSAW_TZ).strftime("%H:%M")
     
@@ -425,18 +562,22 @@ def build_dropping_odds_email_html(
         <div style="background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #1976d2 100%); border-radius: 16px; padding: 24px; margin-bottom: 20px; text-align: center; color: white;">
             <div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">📉 Dropping Odds{sport_label}</div>
             <div style="font-size: 14px; color: rgba(255,255,255,0.85);">{date} | Wygenerowano o {now}</div>
-            <div style="margin-top: 12px; display: flex; justify-content: center; gap: 16px;">
-                <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px;">
+            <div style="margin-top: 12px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                <div style="background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 8px;">
                     <div style="font-size: 22px; font-weight: 700;">{qualified_count}</div>
-                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Kwalifikujących</div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Okazje</div>
                 </div>
-                <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px;">
+                <div style="background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 8px;">
+                    <div style="font-size: 22px; font-weight: 700;">{skipped_count}</div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Odrzucone (forma)</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 8px;">
                     <div style="font-size: 22px; font-weight: 700;">{total_events}</div>
                     <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Wszystkich</div>
                 </div>
-                <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px;">
+                <div style="background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 8px;">
                     <div style="font-size: 22px; font-weight: 700;">{min_odds}-{max_odds}</div>
-                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Zakres kursów</div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Zakres</div>
                 </div>
             </div>
         </div>
@@ -451,6 +592,9 @@ def build_dropping_odds_email_html(
         
         <!-- Match cards -->
         {cards_html}
+        
+        <!-- Skipped events -->
+        {skipped_html}
         
         <!-- Footer -->
         <div style="text-align: center; padding: 20px; color: #999; font-size: 11px;">
@@ -482,6 +626,9 @@ def send_dropping_odds_email(
     provider: str = "gmail",
     run_scoring: bool = True,
     sport: Optional[str] = None,
+    send_empty: bool = True,
+    min_recent_wins: int = 1,
+    recent_window: int = 3,
 ) -> bool:
     """Load the pipeline JSON output and send the dropping odds email.
     
@@ -489,22 +636,44 @@ def send_dropping_odds_email(
     """
     if not os.path.isfile(json_path):
         print(f"❌ Plik nie istnieje: {json_path}")
-        return False
+        # Not an error: per-sport job may have produced no JSON simply
+        # because there were no rows in OddsSafari for that sport.
+        return True
     
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     
     meta = data.get("meta", {})
-    qualified = data.get("qualified", [])
+    qualified_raw = data.get("qualified", [])
+    all_events = data.get("events", [])
     
-    if not qualified:
-        print("⚠️ Brak kwalifikujących się meczów — email nie zostanie wysłany")
-        return False
+    # Apply additional dropping-odds-specific qualification:
+    # the focused team (the one whose price dropped) must have at least
+    # `min_recent_wins` wins in their last `recent_window` form matches.
+    # Otherwise we still keep the event in the email but mark it as skipped.
+    qualified: List[Dict[str, Any]] = []
+    skipped_no_recent_win: List[Dict[str, Any]] = []
+    for event in qualified_raw:
+        passes, reason = _passes_recent_form_filter(event, min_recent_wins, recent_window)
+        if passes:
+            qualified.append(event)
+        else:
+            event["recent_form_skip_reason"] = reason
+            skipped_no_recent_win.append(event)
     
-    print(f"📧 Przygotowuję email z {len(qualified)} meczami...")
+    print(f"📊 Wynik filtru formy ({min_recent_wins}+ W w ostatnich {recent_window}):")
+    print(f"   ✅ Przechodzą: {len(qualified)}")
+    print(f"   ⏭️  Odrzucone (brak ostatniej wygranej): {len(skipped_no_recent_win)}")
+    
+    if not qualified and not skipped_no_recent_win:
+        print("⚠️ Brak kwalifikujących się meczów dla tego sportu/dnia")
+        if not send_empty:
+            print("ℹ️  Pomijam wysyłkę email (--no-send-empty)")
+            return True  # not an error, just nothing to send
+        print("📧 Wysyłam pusty email statusowy...")
     
     # Run scoring engine on enriched events
-    if run_scoring:
+    if run_scoring and qualified:
         scored_count = 0
         for event in qualified:
             if event.get("enrichment"):
@@ -516,12 +685,19 @@ def send_dropping_odds_email(
     
     # Build email
     date = meta.get("target_date", datetime.now(WARSAW_TZ).strftime("%Y-%m-%d"))
-    html = build_dropping_odds_email_html(qualified, meta, date, sport=sport)
+    html = build_dropping_odds_email_html(
+        qualified, meta, date, sport=sport,
+        skipped_events=skipped_no_recent_win,
+        total_events=len(all_events),
+    )
     
     sport_label = f" [{sport.upper()}]" if sport else ""
     min_odds = meta.get("filter", {}).get("min_odds", 1.35)
     max_odds = meta.get("filter", {}).get("max_odds", 2.20)
-    subject = f"📉 Dropping Odds{sport_label} — {date} | {len(qualified)} meczów ({min_odds}-{max_odds})"
+    if qualified:
+        subject = f"📉 Dropping Odds{sport_label} — {date} | {len(qualified)} okazji ({min_odds}-{max_odds})"
+    else:
+        subject = f"📉 Dropping Odds{sport_label} — {date} | brak okazji (status)"
     
     # Send
     smtp_cfg = SMTP_CONFIG.get(provider, SMTP_CONFIG["gmail"])
@@ -564,6 +740,14 @@ def main():
     parser.add_argument("--provider", default="gmail", choices=["gmail", "outlook", "yahoo"])
     parser.add_argument("--no-scoring", action="store_true", help="Skip scoring engine")
     parser.add_argument("--sport", default=None, help="Sport label for the email subject/header")
+    parser.add_argument("--send-empty", dest="send_empty", action="store_true", default=True,
+                        help="Send a status email even when there are no qualifying matches (default)")
+    parser.add_argument("--no-send-empty", dest="send_empty", action="store_false",
+                        help="Skip sending email when there are no qualifying matches")
+    parser.add_argument("--min-recent-wins", type=int, default=1,
+                        help="Min wins in the last 3 form matches required for the focus team to qualify (default: 1).")
+    parser.add_argument("--recent-window", type=int, default=3,
+                        help="How many recent form matches to inspect for --min-recent-wins (default: 3).")
     
     args = parser.parse_args()
     
@@ -575,6 +759,9 @@ def main():
         provider=args.provider,
         run_scoring=not args.no_scoring,
         sport=args.sport,
+        send_empty=args.send_empty,
+        min_recent_wins=args.min_recent_wins,
+        recent_window=args.recent_window,
     )
     
     sys.exit(0 if success else 1)

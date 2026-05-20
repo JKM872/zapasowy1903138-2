@@ -222,6 +222,9 @@ _KEEP_KEYS = (
     "sofascore_home_win_prob", "sofascore_draw_prob", "sofascore_away_win_prob",
     "sofascore_total_votes",
     "favorite", "advanced_score", "tennis_skip_reason",
+    "h2h_last5", "last_h2h_date", "last_h2h_score",
+    "last_h2h_home", "last_h2h_away",
+    "form_advantage",
 )
 
 
