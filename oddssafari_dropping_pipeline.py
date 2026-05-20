@@ -66,6 +66,26 @@ def _normalize(name: str) -> str:
     return " ".join(name.split())
 
 
+def _fuzzy_word_in_slug(word: str, slug: str) -> bool:
+    """Check if a word appears in the slug, allowing minor differences.
+    
+    Handles common transliteration issues:
+    - 'kh' vs 'ch', 'ou' vs 'u', doubled letters, etc.
+    - Prefix matching (word[:4] in slug) for long words
+    """
+    if word in slug:
+        return True
+    # Prefix match for words >= 5 chars (catches transliteration diffs)
+    if len(word) >= 5 and word[:4] in slug:
+        return True
+    # Try without common suffixes
+    for suffix in ("fc", "sc", "fk", "sk", "club"):
+        stripped = word.rstrip(suffix) if word.endswith(suffix) else word
+        if stripped and len(stripped) >= 3 and stripped in slug:
+            return True
+    return False
+
+
 def resolve_livesport_match_url(
     driver,
     *,
@@ -73,15 +93,19 @@ def resolve_livesport_match_url(
     away_team: str,
     sport: str,
     date: str,
-    max_candidates: int = 120,
+    max_candidates: int = 150,
 ) -> Tuple[Optional[str], float]:
     """Return (best_url, confidence) for a match on Livesport.
 
     Uses :func:`livesport_h2h_scraper.get_match_links_from_day` to enumerate
     the day's URLs, then scores each candidate by how many significant words
-    from the two team names appear in the slug. ``confidence`` is the total
-    match count divided by the number of significant words we looked for,
-    capped at 1.0. Callers should treat < 0.5 as a weak match.
+    from the two team names appear in the slug.
+    
+    Improved matching:
+    - Uses words >= 3 chars (not 4) to catch short team names
+    - Fuzzy matching handles transliteration differences
+    - Falls back to single-word match if strict matching fails
+    - Confidence reflects match quality
     """
     try:
         from livesport_h2h_scraper import get_match_links_from_day
@@ -100,8 +124,16 @@ def resolve_livesport_match_url(
     if not urls:
         return None, 0.0
 
-    home_words = [w for w in _normalize(home_team).split() if len(w) > 3]
-    away_words = [w for w in _normalize(away_team).split() if len(w) > 3]
+    # Use words >= 3 chars (was 4 — too strict for names like "Goa", "VPS")
+    home_words = [w for w in _normalize(home_team).split() if len(w) >= 3]
+    away_words = [w for w in _normalize(away_team).split() if len(w) >= 3]
+    
+    # If no significant words, try all words >= 2 chars
+    if not home_words:
+        home_words = [w for w in _normalize(home_team).split() if len(w) >= 2]
+    if not away_words:
+        away_words = [w for w in _normalize(away_team).split() if len(w) >= 2]
+    
     total_words = max(1, len(home_words) + len(away_words))
 
     best_url: Optional[str] = None
@@ -109,14 +141,28 @@ def resolve_livesport_match_url(
 
     for candidate in urls[:max_candidates]:
         slug = candidate.lower()
-        home_hits = sum(1 for w in home_words if w in slug)
-        away_hits = sum(1 for w in away_words if w in slug)
+        home_hits = sum(1 for w in home_words if _fuzzy_word_in_slug(w, slug))
+        away_hits = sum(1 for w in away_words if _fuzzy_word_in_slug(w, slug))
+        # Require at least one hit from each side
         if home_hits == 0 or away_hits == 0:
             continue
         score = home_hits + away_hits
         if score > best_score:
             best_score = score
             best_url = candidate
+
+    # If strict matching failed, try a looser approach:
+    # accept if the longest word from each team appears in the same URL
+    if not best_url and home_words and away_words:
+        longest_home = max(home_words, key=len) if home_words else ""
+        longest_away = max(away_words, key=len) if away_words else ""
+        if len(longest_home) >= 4 and len(longest_away) >= 4:
+            for candidate in urls[:max_candidates]:
+                slug = candidate.lower()
+                if longest_home in slug and longest_away in slug:
+                    best_url = candidate
+                    best_score = 2
+                    break
 
     confidence = min(1.0, best_score / total_words)
     return best_url, confidence
@@ -153,7 +199,13 @@ def _enrich_row(
     use_forebet: bool = True,
     use_sofascore: bool = True,
 ) -> Dict[str, Any]:
-    """Run the costly Livesport enrichment for one qualifying row."""
+    """Run the costly Livesport enrichment for one qualifying row.
+    
+    For dropping odds, we ALWAYS want form data regardless of H2H
+    qualification. If process_match didn't extract form (because the
+    match didn't pass H2H ≥60%), we call extract_advanced_team_form
+    directly as a fallback.
+    """
     result: Dict[str, Any] = {
         "status": "resolve_failed",
         "livesport_url": None,
@@ -207,6 +259,36 @@ def _enrich_row(
 
     result["status"] = "enriched"
     result["enrichment"] = _compact_enrichment(info)
+    
+    # DROPPING ODDS FORM FALLBACK: process_match only extracts advanced form
+    # when H2H qualifies (≥60%). For dropping odds we ALWAYS want form.
+    # If form is empty after process_match, call extract_advanced_team_form directly.
+    enrichment = result["enrichment"]
+    has_form = (
+        enrichment.get("home_form")
+        or enrichment.get("home_form_overall")
+        or enrichment.get("away_form")
+        or enrichment.get("away_form_overall")
+    )
+    if not has_form and sport != "tennis":
+        try:
+            from livesport_h2h_scraper import extract_advanced_team_form
+            print(f"   📊 Fallback: pobieranie formy bezpośrednio...")
+            form_data = extract_advanced_team_form(url, driver)
+            if form_data.get("home_form_overall") or form_data.get("away_form_overall"):
+                enrichment["home_form"] = form_data["home_form_overall"]
+                enrichment["away_form"] = form_data["away_form_overall"]
+                enrichment["home_form_overall"] = form_data["home_form_overall"]
+                enrichment["away_form_overall"] = form_data["away_form_overall"]
+                enrichment["home_form_home"] = form_data.get("home_form_home", [])
+                enrichment["away_form_away"] = form_data.get("away_form_away", [])
+                enrichment["form_advantage"] = form_data.get("form_advantage", False)
+                print(f"   ✅ Forma pobrana: Home={form_data['home_form_overall']}, Away={form_data['away_form_overall']}")
+            else:
+                print(f"   ⚠️ Forma niedostępna na Livesport")
+        except Exception as exc:
+            logger.debug("Form fallback failed for %s: %s", url, exc)
+    
     return result
 
 

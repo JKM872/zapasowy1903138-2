@@ -101,13 +101,20 @@ def _passes_recent_form_filter(
     """Dropping-odds-specific qualification: the focused team must have
     at least `min_wins` wins in their last `window` form matches.
     
-    Returns (passes, reason). When form data is missing, we conservatively
-    *pass* the event (so we don't drop legitimate opportunities for sports
-    where form scraping is flakier), but mark the reason as
-    'no_form_data'.
+    Rules:
+    - If form data is missing → auto-qualify (don't penalize scraper gaps)
+    - If no H2H data → auto-qualify (dropping odds doesn't require H2H)
+    - Focus team must have at least 1 win in last 3 matches
+    
+    Returns (passes, reason).
     """
     enrichment = event.get("enrichment") or {}
     focus = event.get("focus_team") or "home"
+    
+    # No enrichment at all (resolve_failed) → pass through
+    # We still want to show these in the email with whatever OddsSafari data we have
+    if not enrichment:
+        return True, "no_enrichment_passthrough"
     
     # Pick the form for the focused side
     if focus == "away":
@@ -116,6 +123,7 @@ def _passes_recent_form_filter(
         form = _pick_form(enrichment, "home")
     
     if not form:
+        # No form data available → auto-qualify (don't penalize)
         return True, "no_form_data_passthrough"
     
     # Normalize to first letters W/D/L
