@@ -260,36 +260,129 @@ def _enrich_row(
     result["status"] = "enriched"
     result["enrichment"] = _compact_enrichment(info)
     
-    # DROPPING ODDS FORM FALLBACK: process_match only extracts advanced form
-    # when H2H qualifies (≥60%). For dropping odds we ALWAYS want form.
-    # If form is empty after process_match, call extract_advanced_team_form directly.
+    # DROPPING ODDS FORM EXTRACTION: Always call extract_advanced_team_form
+    # for non-tennis sports to guarantee we have form data, regardless of
+    # whether process_match's H2H qualification (≥60%) was met.
+    # This is the key fix — previously form was only extracted when H2H qualified.
     enrichment = result["enrichment"]
-    has_form = (
-        enrichment.get("home_form")
-        or enrichment.get("home_form_overall")
-        or enrichment.get("away_form")
-        or enrichment.get("away_form_overall")
-    )
-    if not has_form and sport != "tennis":
+    if sport != "tennis":
         try:
             from livesport_h2h_scraper import extract_advanced_team_form
-            print(f"   📊 Fallback: pobieranie formy bezpośrednio...")
+            print(f"   📊 Pobieranie zaawansowanej formy...")
             form_data = extract_advanced_team_form(url, driver)
-            if form_data.get("home_form_overall") or form_data.get("away_form_overall"):
-                enrichment["home_form"] = form_data["home_form_overall"]
-                enrichment["away_form"] = form_data["away_form_overall"]
-                enrichment["home_form_overall"] = form_data["home_form_overall"]
-                enrichment["away_form_overall"] = form_data["away_form_overall"]
-                enrichment["home_form_home"] = form_data.get("home_form_home", [])
-                enrichment["away_form_away"] = form_data.get("away_form_away", [])
+            home_overall = form_data.get("home_form_overall") or []
+            away_overall = form_data.get("away_form_overall") or []
+            
+            # Only overwrite if we got better data than process_match
+            existing_home = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
+            existing_away = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
+            
+            if home_overall:
+                enrichment["home_form"] = home_overall
+                enrichment["home_form_overall"] = home_overall
+                enrichment["home_form_home"] = form_data.get("home_form_home", []) or existing_home
+            if away_overall:
+                enrichment["away_form"] = away_overall
+                enrichment["away_form_overall"] = away_overall
+                enrichment["away_form_away"] = form_data.get("away_form_away", []) or existing_away
+            
+            if home_overall or away_overall:
                 enrichment["form_advantage"] = form_data.get("form_advantage", False)
-                print(f"   ✅ Forma pobrana: Home={form_data['home_form_overall']}, Away={form_data['away_form_overall']}")
+                print(f"   ✅ Forma: H={home_overall} | A={away_overall}")
+            elif existing_home or existing_away:
+                print(f"   ℹ️ Używam formy z process_match (H={existing_home}, A={existing_away})")
             else:
-                print(f"   ⚠️ Forma niedostępna na Livesport")
+                print(f"   ⚠️ Brak danych o formie na Livesport — fallback z H2H")
         except Exception as exc:
-            logger.debug("Form fallback failed for %s: %s", url, exc)
+            logger.debug("extract_advanced_team_form fallback failed for %s: %s", url, exc)
+            print(f"   ⚠️ Błąd przy pobieraniu formy: {exc}")
+    
+    # ULTIMATE FALLBACK: derive form from h2h_last5 results.
+    # When all other form extraction fails, we can at least show how the
+    # focus team performed in their last meetings against this opponent.
+    final_home_form = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
+    final_away_form = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
+    if not final_home_form and not final_away_form:
+        h2h_last5 = enrichment.get("h2h_last5") or info.get("h2h_last5") if info else []
+        if h2h_last5:
+            home_team = enrichment.get("home_team") or row.home_team
+            away_team = enrichment.get("away_team") or row.away_team
+            home_form_h2h, away_form_h2h = _derive_form_from_h2h(
+                h2h_last5, home_team, away_team
+            )
+            if home_form_h2h or away_form_h2h:
+                enrichment["home_form"] = home_form_h2h
+                enrichment["home_form_overall"] = home_form_h2h
+                enrichment["away_form"] = away_form_h2h
+                enrichment["away_form_overall"] = away_form_h2h
+                enrichment["form_source"] = "h2h_derived"
+                print(f"   📊 Forma z H2H: H={home_form_h2h} | A={away_form_h2h}")
     
     return result
+
+
+def _derive_form_from_h2h(
+    h2h: List[Dict[str, Any]],
+    home_team: str,
+    away_team: str,
+) -> Tuple[List[str], List[str]]:
+    """Derive W/D/L form lists for both teams from H2H results.
+    
+    For each H2H entry we determine if the home/away team won, drew, or lost
+    by parsing the score (e.g., "2:1") and matching team names.
+    """
+    home_form: List[str] = []
+    away_form: List[str] = []
+    
+    home_norm = _normalize(home_team or "")
+    away_norm = _normalize(away_team or "")
+    
+    for entry in h2h[:5]:
+        score = str(entry.get("score", ""))
+        m = re.search(r"(\d+)\s*[:\-]\s*(\d+)", score)
+        if not m:
+            continue
+        gh = int(m.group(1))
+        ga = int(m.group(2))
+        
+        h2h_home = _normalize(str(entry.get("home", "")))
+        h2h_away = _normalize(str(entry.get("away", "")))
+        
+        # Determine result for home_team (today's home)
+        if home_norm and (home_norm in h2h_home or h2h_home in home_norm):
+            # Today's home was the home team in this H2H
+            if gh > ga:
+                home_form.append("W")
+            elif gh < ga:
+                home_form.append("L")
+            else:
+                home_form.append("D")
+        elif home_norm and (home_norm in h2h_away or h2h_away in home_norm):
+            # Today's home was the away team in this H2H
+            if ga > gh:
+                home_form.append("W")
+            elif ga < gh:
+                home_form.append("L")
+            else:
+                home_form.append("D")
+        
+        # Determine result for away_team (today's away)
+        if away_norm and (away_norm in h2h_away or h2h_away in away_norm):
+            if ga > gh:
+                away_form.append("W")
+            elif ga < gh:
+                away_form.append("L")
+            else:
+                away_form.append("D")
+        elif away_norm and (away_norm in h2h_home or h2h_home in away_norm):
+            if gh > ga:
+                away_form.append("W")
+            elif gh < ga:
+                away_form.append("L")
+            else:
+                away_form.append("D")
+    
+    return home_form, away_form
 
 
 _KEEP_KEYS = (
@@ -306,7 +399,7 @@ _KEEP_KEYS = (
     "favorite", "advanced_score", "tennis_skip_reason",
     "h2h_last5", "last_h2h_date", "last_h2h_score",
     "last_h2h_home", "last_h2h_away",
-    "form_advantage",
+    "form_advantage", "form_source",
 )
 
 
@@ -459,9 +552,20 @@ def main(argv: Optional[List[str]] = None) -> int:
         # Post-filter rows by sport when --sport is provided. The OddsSafari
         # page IDs sometimes contain other sports (especially "all"), and
         # we want a clean per-sport JSON for the email pipeline.
+        # NOTE: If sport field is None (slug parsing failed), we keep the row
+        # when we explicitly targeted that sport's page ID — the page itself
+        # is sport-specific so the row belongs to that sport.
         if sport_filter:
             before = len(rows)
-            rows = [r for r in rows if (r.sport or "").lower() == sport_filter]
+            rows = [
+                r for r in rows
+                if (r.sport or "").lower() == sport_filter
+                or r.sport is None  # slug parsing failed, but page is sport-specific
+            ]
+            # Also set the sport field for rows where it was None
+            for r in rows:
+                if r.sport is None:
+                    r.sport = sport_filter
             logger.info(
                 "Sport filter '%s' kept %d/%d rows", sport_filter, len(rows), before
             )
