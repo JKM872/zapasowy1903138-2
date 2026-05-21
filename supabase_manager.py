@@ -652,7 +652,8 @@ class SupabaseManager:
 
     def get_telegram_daily_stats(self, hours: int = 24,
                                   manifest_matches: list | None = None,
-                                  grade_filter: Optional[set] = None) -> Dict[str, Any]:
+                                  grade_filter: Optional[set] = None,
+                                  match_dates: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         Pobiera statystyki skuteczności typów wysłanych na Telegramie.
 
@@ -744,6 +745,21 @@ class SupabaseManager:
                         }
                         predictions.append(synthetic)
                 print(f"   📋 Manifest lookup: {len(predictions)}/{len(manifest_matches)} matches resolved")
+            elif match_dates:
+                # Fallback: nie mamy manifestów, ale wiemy w jakim oknie
+                # dat ma być raport. Bierzemy wszystko co qualifies=true
+                # i match_date in window.
+                response = (
+                    self.client.table('predictions')
+                    .select('*')
+                    .eq('qualifies', True)
+                    .in_('match_date', list(match_dates))
+                    .order('match_date', desc=True)
+                    .order('match_time', desc=False)
+                    .execute()
+                )
+                predictions = cast(List[Dict[str, Any]], response.data or [])
+                print(f"   📋 Date-window fallback: {len(predictions)} qualifying matches in {match_dates}")
             else:
                 cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
                 response = (
@@ -781,7 +797,12 @@ class SupabaseManager:
                 if grade_filter is not None:
                     if (grade or 'F') not in grade_filter:
                         # Mecz pomijamy w statystykach.
-                        continue
+                        # Wyjątek: gdy używamy fallbacku (brak manifestu),
+                        # baza nie ma kolumny prediction_grade, więc filtr
+                        # wyrzuciłby wszystko. W tym trybie ignorujemy filtr.
+                        if manifest_index:
+                            continue
+                        # else: fallback mode — log once below, accept match.
 
                 sport = pred.get('sport', 'football') or 'football'
 

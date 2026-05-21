@@ -121,10 +121,13 @@ def _has_settled_matches(stats: Dict[str, Any]) -> bool:
 
 
 def should_send_daily_results_summary(stats: Dict[str, Any]) -> bool:
-    """Return True only when there are tips AND at least one is settled."""
+    """Return True when there is at least one Grade A pick to report.
+
+    Even when nothing is settled yet (early-morning run), we still want to
+    confirm to subscribers that the pipeline is alive and what is in play.
+    """
     g = stats.get("global", {})
-    total = int(g.get("total", 0) or 0)
-    return total > 0 and _has_settled_matches(stats)
+    return int(g.get("total", 0) or 0) > 0
 
 
 # ---------------------------------------------------------------------------
@@ -134,20 +137,34 @@ def should_send_daily_results_summary(stats: Dict[str, Any]) -> bool:
 def build_daily_results_summary(
     stats: Dict[str, Any],
     report_date: str | None = None,
+    date_range: tuple[str, str] | None = None,
 ) -> str:
     """
     Build a human-readable Telegram message from stats returned by
     SupabaseManager.get_telegram_daily_stats().
 
     Sections:
-      1. Header with date
-      2. Global KPIs (total / win / loss / pending / win_rate)
+      1. Header with date (or date range)
+      2. Global KPIs (total / win / loss / push / pending / win_rate)
       3. Per-sport breakdown
       4. Match-by-match results (settled first, then pending)
       5. Footer
+
+    Args:
+        stats: Aggregated stats payload.
+        report_date: Single-day label (YYYY-MM-DD).
+        date_range: Optional (start, end) range. When set, takes precedence
+            over ``report_date`` for the header.
     """
     now = datetime.now(_WARSAW_TZ)
-    if report_date:
+    if date_range:
+        try:
+            d1 = datetime.strptime(date_range[0], "%Y-%m-%d").strftime("%d.%m")
+            d2 = datetime.strptime(date_range[1], "%Y-%m-%d").strftime("%d.%m.%Y")
+            date_display = f"{d1} – {d2}" if date_range[0] != date_range[1] else d2
+        except ValueError:
+            date_display = " – ".join(date_range)
+    elif report_date:
         try:
             d = datetime.strptime(report_date, "%Y-%m-%d")
             date_display = d.strftime("%d.%m.%Y")
@@ -271,21 +288,22 @@ def send_daily_results_summary(
     *,
     token: str = "",
     chat_id: str = "",
+    date_range: tuple[str, str] | None = None,
 ) -> bool:
     """
     Build and send the daily results summary to Telegram.
 
     Returns True on success, False on any error (never raises).
-    Silently skips when TELEGRAM_ENABLED is not 'true' or there are
-    no settled matches.
+    Silently skips when TELEGRAM_ENABLED is not 'true' or when there are
+    no Grade A picks to report at all.
     """
     if not _ENABLED:
         print("ℹ️  Telegram Results: disabled (TELEGRAM_ENABLED != true)")
         return False
 
     if not should_send_daily_results_summary(stats):
-        print("ℹ️  Telegram Results: no settled matches yet — skipping report")
+        print("ℹ️  Telegram Results: no Grade A picks in window — skipping report")
         return False
 
-    text = build_daily_results_summary(stats, report_date)
+    text = build_daily_results_summary(stats, report_date, date_range=date_range)
     return _send_message(text, token=token, chat_id=chat_id)
