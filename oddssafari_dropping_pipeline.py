@@ -260,63 +260,101 @@ def _enrich_row(
     result["status"] = "enriched"
     result["enrichment"] = _compact_enrichment(info)
     
-    # DROPPING ODDS FORM EXTRACTION: Always call extract_advanced_team_form
-    # for non-tennis sports to guarantee we have form data, regardless of
-    # whether process_match's H2H qualification (≥60%) was met.
-    # This is the key fix — previously form was only extracted when H2H qualified.
+    # DROPPING ODDS FORM EXTRACTION: Multi-strategy approach
+    # process_match's form extraction often fails for sports other than basketball.
+    # We try 3 strategies in order: (1) advanced H2H pages, (2) re-parse match
+    # page directly, (3) derive from h2h_last5 results.
     enrichment = result["enrichment"]
     if sport != "tennis":
-        try:
-            from livesport_h2h_scraper import extract_advanced_team_form
-            print(f"   📊 Pobieranie zaawansowanej formy...")
-            form_data = extract_advanced_team_form(url, driver)
-            home_overall = form_data.get("home_form_overall") or []
-            away_overall = form_data.get("away_form_overall") or []
-            
-            # Only overwrite if we got better data than process_match
-            existing_home = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
-            existing_away = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
-            
-            if home_overall:
-                enrichment["home_form"] = home_overall
-                enrichment["home_form_overall"] = home_overall
-                enrichment["home_form_home"] = form_data.get("home_form_home", []) or existing_home
-            if away_overall:
-                enrichment["away_form"] = away_overall
-                enrichment["away_form_overall"] = away_overall
-                enrichment["away_form_away"] = form_data.get("away_form_away", []) or existing_away
-            
-            if home_overall or away_overall:
-                enrichment["form_advantage"] = form_data.get("form_advantage", False)
-                print(f"   ✅ Forma: H={home_overall} | A={away_overall}")
-            elif existing_home or existing_away:
-                print(f"   ℹ️ Używam formy z process_match (H={existing_home}, A={existing_away})")
-            else:
-                print(f"   ⚠️ Brak danych o formie na Livesport — fallback z H2H")
-        except Exception as exc:
-            logger.debug("extract_advanced_team_form fallback failed for %s: %s", url, exc)
-            print(f"   ⚠️ Błąd przy pobieraniu formy: {exc}")
+        existing_home = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
+        existing_away = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
+        
+        # Strategy 1: extract_advanced_team_form (H2H sub-pages with badges)
+        if not (existing_home and existing_away):
+            try:
+                from livesport_h2h_scraper import extract_advanced_team_form
+                print(f"   📊 Strategy 1: zaawansowana forma z H2H...")
+                form_data = extract_advanced_team_form(url, driver)
+                home_overall = form_data.get("home_form_overall") or []
+                away_overall = form_data.get("away_form_overall") or []
+                
+                if home_overall:
+                    enrichment["home_form"] = home_overall
+                    enrichment["home_form_overall"] = home_overall
+                    enrichment["home_form_home"] = form_data.get("home_form_home", [])
+                    existing_home = home_overall
+                if away_overall:
+                    enrichment["away_form"] = away_overall
+                    enrichment["away_form_overall"] = away_overall
+                    enrichment["away_form_away"] = form_data.get("away_form_away", [])
+                    existing_away = away_overall
+                
+                if home_overall or away_overall:
+                    enrichment["form_advantage"] = form_data.get("form_advantage", False)
+                    print(f"   ✅ Strategy 1: H={home_overall} | A={away_overall}")
+            except Exception as exc:
+                logger.debug("extract_advanced_team_form failed: %s", exc)
+        
+        # Strategy 2: Re-parse the match page directly for form badges in team header
+        if not (existing_home and existing_away):
+            try:
+                from livesport_h2h_scraper import extract_team_form
+                from bs4 import BeautifulSoup
+                print(f"   📊 Strategy 2: forma z nagłówka meczu...")
+                # Navigate to the bare match URL (not H2H sub-page)
+                match_base = url.split("?")[0].rstrip("/")
+                if match_base.endswith("/h2h") or "/h2h/" in match_base:
+                    match_base = match_base.split("/h2h")[0]
+                if not match_base.endswith("/szczegoly"):
+                    match_base = match_base + "/"
+                driver.get(match_base)
+                time.sleep(3.0)
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                home_team = info.get("home_team", "") if info else row.home_team
+                away_team = info.get("away_team", "") if info else row.away_team
+                if not existing_home:
+                    s2_home = extract_team_form(soup, driver, "home", home_team)
+                    if s2_home:
+                        enrichment["home_form"] = s2_home
+                        enrichment["home_form_overall"] = s2_home
+                        existing_home = s2_home
+                if not existing_away:
+                    s2_away = extract_team_form(soup, driver, "away", away_team)
+                    if s2_away:
+                        enrichment["away_form"] = s2_away
+                        enrichment["away_form_overall"] = s2_away
+                        existing_away = s2_away
+                if existing_home or existing_away:
+                    print(f"   ✅ Strategy 2: H={existing_home} | A={existing_away}")
+            except Exception as exc:
+                logger.debug("Match-page form re-parse failed: %s", exc)
     
-    # ULTIMATE FALLBACK: derive form from h2h_last5 results.
-    # When all other form extraction fails, we can at least show how the
-    # focus team performed in their last meetings against this opponent.
+    # Strategy 3: Derive form from h2h_last5 results (always works if H2H exists)
     final_home_form = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
     final_away_form = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
-    if not final_home_form and not final_away_form:
-        h2h_last5 = enrichment.get("h2h_last5") or info.get("h2h_last5") if info else []
+    if not (final_home_form and final_away_form):
+        h2h_last5 = enrichment.get("h2h_last5") or (info.get("h2h_last5") if info else None) or []
         if h2h_last5:
             home_team = enrichment.get("home_team") or row.home_team
             away_team = enrichment.get("away_team") or row.away_team
             home_form_h2h, away_form_h2h = _derive_form_from_h2h(
                 h2h_last5, home_team, away_team
             )
-            if home_form_h2h or away_form_h2h:
+            if home_form_h2h and not final_home_form:
                 enrichment["home_form"] = home_form_h2h
                 enrichment["home_form_overall"] = home_form_h2h
+                enrichment["form_source"] = "h2h_derived"
+            if away_form_h2h and not final_away_form:
                 enrichment["away_form"] = away_form_h2h
                 enrichment["away_form_overall"] = away_form_h2h
                 enrichment["form_source"] = "h2h_derived"
-                print(f"   📊 Forma z H2H: H={home_form_h2h} | A={away_form_h2h}")
+            if home_form_h2h or away_form_h2h:
+                print(f"   📊 Strategy 3 (H2H-derived): H={home_form_h2h} | A={away_form_h2h}")
+    
+    final_home = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
+    final_away = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
+    if not (final_home or final_away):
+        print(f"   ⚠️ Wszystkie 3 strategie zawiodły — brak formy")
     
     return result
 
