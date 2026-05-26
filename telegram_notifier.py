@@ -334,7 +334,82 @@ def _sport_emoji(sport: str) -> str:
     }.get(sport, "🏅")
 
 
-_PREMIUM_GRADES = frozenset({"A", "B"})
+_PREMIUM_GRADES = frozenset({"A"})
+_TOP_N = 10
+_SIMILAR_VALUE_EPSILON = 0.5  # below this gap, treat as a tie
+
+
+def _model_score(match: Dict[str, Any]) -> float:
+    """Primary ranking key — uses our own scoring engine output.
+    
+    Prefers scoring_confidence (from FootballScoringEngine), then falls back
+    to ai_composite_confidence (legacy AI prediction engine). Returns 0.0
+    when neither is set so unscored picks land at the bottom.
+    """
+    raw = match.get("scoring_confidence")
+    if raw is None:
+        raw = match.get("ai_composite_confidence")
+    try:
+        val = float(raw) if raw is not None else 0.0
+    except (TypeError, ValueError):
+        val = 0.0
+    return val
+
+
+def _model_ev(match: Dict[str, Any]) -> float:
+    """Secondary ranking key — model EV (positive = edge over market)."""
+    raw = match.get("scoring_ev")
+    try:
+        return float(raw) if raw is not None else 0.0
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _model_pick_odds(match: Dict[str, Any]) -> float:
+    """Tertiary ranking key — odds for the model's pick (lower = stronger fav)."""
+    pick = (match.get("scoring_pick") or "").upper()
+    if pick == "1":
+        odds = match.get("home_odds")
+    elif pick == "2":
+        odds = match.get("away_odds")
+    elif pick == "X":
+        odds = match.get("draw_odds")
+    else:
+        odds = match.get("home_odds") or match.get("away_odds")
+    try:
+        return float(odds) if odds else 999.0
+    except (TypeError, ValueError):
+        return 999.0
+
+
+def _rank_picks_with_tiebreak(matches: List[Dict[str, Any]],
+                               top_n: int = _TOP_N,
+                               epsilon: float = _SIMILAR_VALUE_EPSILON,
+                               ) -> List[Dict[str, Any]]:
+    """Rank by model confidence. When two picks are within `epsilon` confidence
+    points, tie-break on EV (higher better), then on odds (lower better).
+    
+    Implements user-requested 'reset countdown for similar values': similar
+    confidences don't lock in arbitrary order — secondary metrics decide.
+    """
+    if not matches:
+        return []
+    
+    def _bucket(m: Dict[str, Any]) -> int:
+        # Bucket confidences in `epsilon`-wide bins; everything in same bin
+        # is considered tied and sorted by EV/odds within.
+        return -int(_model_score(m) / epsilon)
+    
+    sorted_matches = sorted(
+        matches,
+        key=lambda m: (
+            _bucket(m),                # primary: confidence bucket (desc)
+            -_model_ev(m),             # tie-break 1: EV (desc)
+            _model_pick_odds(m),       # tie-break 2: odds (asc — favorites first)
+            -_model_score(m),          # tie-break 3: raw confidence within bucket
+        ),
+    )
+    return sorted_matches[:top_n]
 
 
 def _build_summary(
@@ -344,7 +419,7 @@ def _build_summary(
     *,
     _now: datetime | None = None,
 ) -> str:
-    """Build FormRadar-style daily summary for Telegram (Grade A/B only)."""
+    """Build FormRadar-style daily summary for Telegram (Grade A only, top 10)."""
     now_warsaw = _now or datetime.now(_WARSAW_TZ).replace(tzinfo=None)
 
     lines: list[str] = []
@@ -356,109 +431,83 @@ def _build_summary(
     except ValueError:
         date_display = date
 
-    lines.append(f"🟢 <b>FormRadar — Top Picks</b> | {date_display}")
+    lines.append(f"🟢 <b>FormRadar — Top {_TOP_N} Picks</b> | {date_display}")
     lines.append("")
 
-    # Filter pipeline — only premium grades (A/B)
+    # Filter: only Grade A, then rank globally (not per-sport) by our model
     qual = _get_qualifying_rows(rows, now_warsaw)
     qual = [r for r in qual if (r.get("prediction_grade") or "F") in _PREMIUM_GRADES]
-
-    # Group by sport
-    sports: Dict[str, List[Dict[str, Any]]] = {}
-    for r in qual:
-        sp = r.get("sport", "football")
-        sports.setdefault(sp, []).append(r)
+    
+    # Rank by model confidence with tie-breaking, cap at top N
+    top_picks = _rank_picks_with_tiebreak(qual, top_n=_TOP_N)
+    
+    if not top_picks:
+        lines.append("ℹ️ No Grade A picks today.")
+        return "\n".join(lines)
 
     total_signals = 0
-
-    for sport, matches in sports.items():
+    for rank, m in enumerate(top_picks, 1):
+        total_signals += 1
+        sport = m.get("sport", "football")
         emoji = _sport_emoji(sport)
-        lines.append(f"{emoji} <b>{sport.upper()}</b>")
-        lines.append("━━━━━━━━━━━━━━━")
+        home = m.get("home_team", "?")
+        away = m.get("away_team", "?")
 
-        # Sort by confidence descending
-        matches.sort(
-            key=lambda m: (
-                m.get("ai_composite_confidence", 0)
-                or m.get("scoring_confidence", 0)
-                or 0
-            ),
-            reverse=True,
-        )
+        lines.append(f"<b>#{rank}</b> {emoji} <b>{home}</b> vs <b>{away}</b>")
 
-        for m in matches[:10]:  # cap per sport
-            total_signals += 1
-            home = m.get("home_team", "?")
-            away = m.get("away_team", "?")
+        league = (m.get("league") or "").strip()
+        if league:
+            lines.append(f"🏆 {league}")
 
-            lines.append(f"🏠 <b>{home}</b> vs <b>{away}</b>")
+        parsed_time = _parse_match_time(m.get("match_time"))
+        if parsed_time:
+            lines.append(f"🕐 Kick-off: {parsed_time.strftime('%H:%M')}")
 
-            league = (m.get("league") or "").strip()
-            if league:
-                lines.append(f"🏆 League: {league}")
+        bet_text = _describe_pick(m)
+        if bet_text:
+            lines.append(f"🎯 <b>Bet:</b> {bet_text}")
 
-            parsed_time = _parse_match_time(m.get("match_time"))
-            if parsed_time:
-                lines.append(f"🕐 Kick-off: {parsed_time.strftime('%H:%M')}")
+        odds_str = _pick_odds(m)
+        if odds_str:
+            lines.append(f"💰 Odds: {odds_str}")
 
-            bet_text = _describe_pick(m)
-            if bet_text:
-                lines.append(f"🎯 <b>Bet:</b> {bet_text}")
+        conf_val = _model_score(m)
+        if conf_val > 0:
+            lines.append(f"📊 Model confidence: {conf_val:.0f}%")
 
-            odds_str = _pick_odds(m)
-            if odds_str:
-                lines.append(f"💰 Odds (this line): {odds_str}")
+        ev_val = _model_ev(m)
+        if ev_val > 0:
+            lines.append(f"💎 Value: positive EV ({ev_val:+.2f})")
 
-            conf = m.get("ai_composite_confidence") or m.get("scoring_confidence") or 0
-            try:
-                conf_val = float(conf)
-                if conf_val > 0:
-                    lines.append(f"📊 Model confidence: {conf_val:.0f}%")
-            except (ValueError, TypeError):
-                pass
+        forebet = _forebet_line(m)
+        if forebet:
+            lines.append(f"🧮 {forebet}")
 
-            ev = m.get("scoring_ev")
-            has_value = False
-            try:
-                if ev is not None and float(ev) > 0:
-                    has_value = True
-            except (ValueError, TypeError):
-                has_value = False
-            if has_value:
-                try:
-                    lines.append(f"💎 Value: positive EV ({float(ev):+.2f})")
-                except (ValueError, TypeError):
-                    lines.append("💎 Value: positive EV")
+        fan_vote = _sofascore_fan_vote_line(m)
+        if fan_vote:
+            lines.append(f"👥 {fan_vote}")
 
-            forebet = _forebet_line(m)
-            if forebet:
-                lines.append(f"🧮 {forebet}")
+        explanation: Dict[str, Any] = m.get("explanation") or {}
+        factors: List[str] = explanation.get("primary_factors", [])
+        risks: List[str] = [
+            r for r in explanation.get("risk_factors", [])
+            if r != "Fatigue risk: high"
+        ]
+        if factors:
+            lines.append(f"✅ Why: {' · '.join(factors[:3])}")
+        if risks:
+            lines.append(f"⚠️ Risks: {' · '.join(risks[:2])}")
 
-            fan_vote = _sofascore_fan_vote_line(m)
-            if fan_vote:
-                lines.append(f"👥 {fan_vote}")
+        grade = m.get("prediction_grade", "")
+        if grade:
+            lines.append(f"🏅 Grade: {grade}")
 
-            explanation: Dict[str, Any] = m.get("explanation") or {}
-            factors: List[str] = explanation.get("primary_factors", [])
-            risks: List[str] = [
-                r for r in explanation.get("risk_factors", [])
-                if r != "Fatigue risk: high"
-            ]
-            if factors:
-                lines.append(f"✅ Why: {' · '.join(factors[:3])}")
-            if risks:
-                lines.append(f"⚠️ Risks: {' · '.join(risks[:2])}")
-
-            grade = m.get("prediction_grade", "")
-            if grade:
-                lines.append(f"🏅 Grade: {grade}")
-
-            lines.append("")
+        lines.append("")
 
     lines.append("━━━━━━━━━━━━━━━")
-    lines.append(f"📈 Top signals today: {total_signals}")
-    lines.append("🏅 Only Grade A &amp; B picks")
-    lines.append("ℹ️ EV = expected value from the model (positive EV = edge vs. offered odds).")
+    lines.append(f"📈 Top signals today: {total_signals}/{_TOP_N}")
+    lines.append("🏅 Only Grade A picks · ranked by own model")
+    lines.append("ℹ️ EV = expected value (positive = edge vs. market odds)")
     lines.append("⚠️ Bet responsibly")
     return "\n".join(lines)
 
@@ -539,11 +588,16 @@ def send_telegram_summary(
     chat_id: str = "",
 ) -> bool:
     """
-    Send a daily qualifying-match summary to Telegram (Grade A/B only).
+    Send a daily qualifying-match summary to Telegram (Grade A only, top 10).
 
     Returns True on success, False on any error (never raises).
     Silently skips when TELEGRAM_ENABLED is not 'true', credentials
-    are missing, or there are no Grade A/B qualifying matches.
+    are missing, or there are no Grade A qualifying matches.
+    
+    Behavior:
+    - Filters to prediction_grade == 'A' only
+    - Ranks by own model (scoring_confidence) with tie-breaking on EV/odds
+    - Caps at top 10 picks across all sports (single global leaderboard)
     """
     if not _ENABLED:
         print("ℹ️  Telegram: disabled (TELEGRAM_ENABLED != true)")
@@ -555,14 +609,18 @@ def send_telegram_summary(
         print("ℹ️  Telegram: no qualifying matches — skipping summary")
         return False
 
-    # Only send A/B picks on Telegram
+    # Only send Grade A picks on Telegram (top 10 globally, ranked by own model)
     premium = [r for r in qual if (r.get("prediction_grade") or "F") in _PREMIUM_GRADES]
     rest_count = len(qual) - len(premium)
-    print(f"📊 Telegram tier split: {len(premium)} A/B, {rest_count} C-F (hidden)")
+    print(f"📊 Telegram tier split: {len(premium)} Grade A, {rest_count} other (hidden)")
 
     if not premium:
-        print("ℹ️  Telegram: no Grade A/B picks today — skipping summary")
+        print("ℹ️  Telegram: no Grade A picks today — skipping summary")
         return False
+    
+    # Limit to top 10 by own model with tie-break (matches what _build_summary shows)
+    premium = _rank_picks_with_tiebreak(premium, top_n=_TOP_N)
+    print(f"   📌 Capped to top {len(premium)}/{_TOP_N} by model confidence")
 
     text = _build_summary(rows, qualifying_count, date, _now=now_warsaw)
     ok = _send_message(text, token=token, chat_id=chat_id)
