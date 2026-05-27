@@ -311,6 +311,130 @@ def _market_efficiency_score(odds_h: float, odds_d: float, odds_a: float) -> flo
     return 1.0 - (margin - 0.05) / 0.15
 
 
+def _entropy(probs: List[float]) -> float:
+    """Shannon entropy of a probability distribution (in nats, normalized to [0,1]).
+    
+    0 = total certainty (one outcome at 100%), 1 = max uncertainty (all equal).
+    For 3-outcome distribution, max entropy = log(3) ≈ 1.0986.
+    """
+    h = 0.0
+    for p in probs:
+        if p > 1e-9:
+            h -= p * math.log(p)
+    return min(1.0, h / math.log(len(probs)))  # normalize to [0,1]
+
+
+def _kl_divergence(p: List[float], q: List[float]) -> float:
+    """KL divergence D(p || q): how different is dist p from dist q.
+    
+    Used for measuring how far our model has moved from the market prior.
+    Returns value >= 0; 0 = identical distributions.
+    """
+    d = 0.0
+    for pi, qi in zip(p, q):
+        if pi > 1e-9 and qi > 1e-9:
+            d += pi * math.log(pi / qi)
+    return d
+
+
+def _source_disagreement(estimates: List[Tuple[str, float]]) -> float:
+    """Measure spread of source picks. Returns value in [0, 1] where:
+    - 0.0 = all sources point same way
+    - 1.0 = sources point completely opposite directions
+    
+    Each estimate is ('1'|'X'|'2', confidence_in_pick).
+    """
+    if len(estimates) < 2:
+        return 0.0
+    
+    # Count weighted votes per outcome
+    votes = {'1': 0.0, 'X': 0.0, '2': 0.0}
+    total_w = 0.0
+    for pick, conf in estimates:
+        votes[pick] = votes.get(pick, 0.0) + conf
+        total_w += conf
+    
+    if total_w == 0:
+        return 0.0
+    
+    # Normalize to distribution and compute entropy
+    probs = [v / total_w for v in votes.values()]
+    return _entropy(probs)
+
+
+def _bayesian_blend(prior: List[float], likelihood: List[float],
+                     prior_weight: float = 0.4) -> List[float]:
+    """Bayesian blending of a prior (e.g., market) with a model likelihood.
+    
+    Args:
+        prior: e.g., market-implied probabilities [home, draw, away]
+        likelihood: e.g., our model's probabilities
+        prior_weight: how much to trust the prior (0..1)
+    
+    Returns posterior probabilities (sum to 1).
+    """
+    posterior = [
+        (prior[i] * prior_weight + likelihood[i] * (1 - prior_weight))
+        for i in range(len(prior))
+    ]
+    total = sum(posterior)
+    return [p / total for p in posterior] if total > 0 else likelihood
+
+
+# Sport-specific characteristics (long-run averages from public datasets)
+SPORT_PROFILES: Dict[str, Dict[str, float]] = {
+    'football': {
+        'home_advantage': 0.46,
+        'draw_rate': 0.26,
+        'away_rate': 0.28,
+        'temperature': 1.15,  # how much to soften model probs
+        'min_draw_prob': 0.18,  # never go below this
+    },
+    'basketball': {
+        'home_advantage': 0.60,  # higher home advantage in basketball
+        'draw_rate': 0.0,        # almost never draws
+        'away_rate': 0.40,
+        'temperature': 1.05,
+        'min_draw_prob': 0.01,
+    },
+    'tennis': {
+        'home_advantage': 0.52,
+        'draw_rate': 0.0,
+        'away_rate': 0.48,
+        'temperature': 1.10,
+        'min_draw_prob': 0.0,
+    },
+    'volleyball': {
+        'home_advantage': 0.58,
+        'draw_rate': 0.0,
+        'away_rate': 0.42,
+        'temperature': 1.05,
+        'min_draw_prob': 0.01,
+    },
+    'handball': {
+        'home_advantage': 0.55,
+        'draw_rate': 0.10,
+        'away_rate': 0.35,
+        'temperature': 1.10,
+        'min_draw_prob': 0.05,
+    },
+    'hockey': {
+        'home_advantage': 0.50,
+        'draw_rate': 0.10,
+        'away_rate': 0.40,
+        'temperature': 1.10,
+        'min_draw_prob': 0.05,
+    },
+    'baseball': {
+        'home_advantage': 0.54,
+        'draw_rate': 0.0,
+        'away_rate': 0.46,
+        'temperature': 1.10,
+        'min_draw_prob': 0.0,
+    },
+}
+
+
 # ---------------------------------------------------------------------------
 # Feature extraction
 # ---------------------------------------------------------------------------
@@ -402,10 +526,18 @@ class FeatureExtractor:
         odds_h = _safe_float(m.get('home_odds'))
         odds_d = _safe_float(m.get('draw_odds'))
         odds_a = _safe_float(m.get('away_odds'))
+        sport_lower = (m.get('sport') or 'football').lower()
+        sport_allows_draw = SPORT_PROFILES.get(sport_lower, SPORT_PROFILES['football']).get('min_draw_prob', 0.0) > 0.01
+        
         if odds_h > 1 and odds_a > 1:
             imp_h = 1.0 / odds_h
-            imp_d = 1.0 / odds_d if odds_d > 1 else 0.25
             imp_a = 1.0 / odds_a
+            if odds_d > 1 and sport_allows_draw:
+                imp_d = 1.0 / odds_d
+            elif sport_allows_draw:
+                imp_d = 0.25  # default football-ish prior when draw odds missing
+            else:
+                imp_d = 0.0  # sport has no draws
             margin = imp_h + imp_d + imp_a
             f['odds_home'] = imp_h / margin
             f['odds_draw'] = imp_d / margin
@@ -414,9 +546,9 @@ class FeatureExtractor:
             f['market_efficiency'] = _market_efficiency_score(odds_h, odds_d, odds_a)
             available += 1
         else:
-            f['odds_home'] = 0.40
-            f['odds_draw'] = 0.27
-            f['odds_away'] = 0.33
+            f['odds_home'] = 0.40 if sport_allows_draw else 0.55
+            f['odds_draw'] = 0.27 if sport_allows_draw else 0.0
+            f['odds_away'] = 0.33 if sport_allows_draw else 0.45
             f['market_efficiency'] = 0.0
 
         # 7. Gemini AI confidence + prediction
@@ -671,8 +803,65 @@ class FootballScoringEngine:
         total = raw_h + raw_d + raw_a
         raw_h, raw_d, raw_a = raw_h / total, raw_d / total, raw_a / total
 
-        # ---- Calibration pass (light sigmoid squeeze) ------------------
-        cal_h, cal_d, cal_a = self._calibrate(raw_h, raw_d, raw_a)
+        # ---- Sport-specific profile ------------------------------------
+        sport = match.get('sport', 'football').lower()
+        profile = SPORT_PROFILES.get(sport, SPORT_PROFILES['football'])
+        
+        # ---- Bayesian blending with market prior -----------------------
+        # When market is sharp and our data is thin, anchor to market.
+        # When data is rich, trust our model more.
+        market_prior = [feats['odds_home'], feats['odds_draw'], feats['odds_away']]
+        market_eff = feats.get('market_efficiency', 0.5)
+        dq = feats['_data_quality']
+        # Prior weight: 50% when we have weak data + sharp market;
+        # 15% when we have strong data + loose market
+        prior_weight = max(0.10, min(0.55, 0.30 + 0.25 * market_eff - 0.20 * dq))
+        
+        # Only blend if we actually have market odds
+        if market_prior[0] > 0.05 and market_prior[2] > 0.05:
+            blended = _bayesian_blend(
+                market_prior, [raw_h, raw_d, raw_a], prior_weight=prior_weight
+            )
+            raw_h, raw_d, raw_a = blended
+        
+        # ---- Sport-specific draw floor ---------------------------------
+        # Some sports (basketball, tennis, baseball) almost never have draws;
+        # our model would learn that, but explicit floor catches edge cases.
+        min_draw = profile['min_draw_prob']
+        if raw_d < min_draw:
+            shortfall = min_draw - raw_d
+            raw_d = min_draw
+            # Take from the side with higher prob proportionally
+            total_ha = raw_h + raw_a
+            if total_ha > 0:
+                raw_h = max(0.02, raw_h - shortfall * raw_h / total_ha)
+                raw_a = max(0.02, raw_a - shortfall * raw_a / total_ha)
+        
+        # Re-normalize
+        total = raw_h + raw_d + raw_a
+        raw_h, raw_d, raw_a = raw_h / total, raw_d / total, raw_a / total
+
+        # ---- Calibration pass (sport-specific temperature) -------------
+        cal_h, cal_d, cal_a = self._calibrate(
+            raw_h, raw_d, raw_a, temperature=profile['temperature']
+        )
+        
+        # ---- Anti-overconfidence regularization ------------------------
+        # When data quality is low or sources strongly disagree, pull
+        # extreme probabilities back toward the market prior.
+        # Compute source disagreement for the dominant pick.
+        disagreement = self._compute_disagreement(feats)
+        # Regularization strength: high when disagreement is high or DQ is low
+        reg_strength = max(0.0, min(0.4,
+            0.15 * disagreement + 0.10 * (1.0 - dq)
+        ))
+        if reg_strength > 0 and market_prior[0] > 0.05:
+            cal_h = cal_h * (1 - reg_strength) + market_prior[0] * reg_strength
+            cal_d = cal_d * (1 - reg_strength) + market_prior[1] * reg_strength
+            cal_a = cal_a * (1 - reg_strength) + market_prior[2] * reg_strength
+            # Re-normalize
+            total = cal_h + cal_d + cal_a
+            cal_h, cal_d, cal_a = cal_h / total, cal_d / total, cal_a / total
 
         # ---- EV / edge / Kelly for each outcome -----------------------
         odds_h = _safe_float(match.get('home_odds'))
@@ -715,14 +904,36 @@ class FootballScoringEngine:
         # all point to the same outcome, confidence should be much higher.
         consensus_boost = self._compute_source_consensus(feats, best_pick)
         
-        # Confidence score (0-100) — improved formula
+        # Disagreement penalty (already computed above as part of regularization)
+        disagreement_pen = disagreement  # from earlier scope
+        
+        # Entropy: how peaked is our final distribution?
+        # Low entropy = one outcome dominates (good); high entropy = uncertain.
+        entropy = _entropy([cal_h, cal_d, cal_a])
+        
+        # KL divergence from market: how far did our model move from the
+        # market prior? Used to flag outlier picks (potential value or risk).
+        market_dist = [feats['odds_home'], feats['odds_draw'], feats['odds_away']]
+        if market_dist[0] > 0.05 and market_dist[2] > 0.05:
+            kl_market = _kl_divergence([cal_h, cal_d, cal_a], market_dist)
+        else:
+            kl_market = 0.0
+        
+        # Outlier flag: model strongly disagrees with market.
+        # Could be value (good) or could be wrong (bad). Flagged for review.
+        is_outlier = kl_market > 0.15  # threshold for "significant divergence"
+        
+        # Confidence score (0-100) — improved formula with uncertainty
         dq = feats['_data_quality']
         confidence = (
-            best_prob * 35           # how sure is the model
-            + dq * 20                # how much data was available
-            + (min(best_edge, 15) / 15) * 15  # size of edge
-            + (1 if best_ev > 0 else 0) * 10  # positive EV bonus
-            + consensus_boost * 20   # source consensus (0-1)
+            best_prob * 30                       # how sure is the model
+            + dq * 15                            # how much data was available
+            + (min(best_edge, 15) / 15) * 12     # size of edge (capped)
+            + (1 if best_ev > 0 else 0) * 8      # positive EV bonus
+            + consensus_boost * 20               # source consensus (0-1)
+            + (1.0 - entropy) * 10               # certainty (low entropy)
+            - disagreement_pen * 15              # disagreement penalty
+            - (10 if is_outlier else 0)          # outlier risk penalty
         )
         confidence = max(0, min(100, confidence))
 
@@ -748,6 +959,77 @@ class FootballScoringEngine:
             features=feats,
         )
 
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _compute_disagreement(feats: Dict[str, float]) -> float:
+        """Measure how strongly our sources disagree on the outcome.
+        
+        Returns value in [0, 1]:
+        - 0.0 = all sources point same way
+        - ~0.5 = mixed signals
+        - 1.0 = sources contradict each other
+        
+        Used to regularize overconfident picks back toward the market prior
+        when sources don't agree.
+        """
+        # Build per-source pick votes weighted by source confidence
+        votes: List[Tuple[str, float]] = []
+        
+        # Form
+        hf = feats.get('home_form', 0.5)
+        af = feats.get('away_form', 0.5)
+        if abs(hf - af) > 0.10:
+            votes.append(('1' if hf > af else '2', abs(hf - af)))
+        else:
+            votes.append(('X', 0.20))
+        
+        # Odds
+        oh = feats.get('odds_home', 0.33)
+        oa = feats.get('odds_away', 0.33)
+        odds_max = max(oh, oa, feats.get('odds_draw', 0.33))
+        if oh == odds_max:
+            votes.append(('1', odds_max))
+        elif oa == odds_max:
+            votes.append(('2', odds_max))
+        else:
+            votes.append(('X', odds_max))
+        
+        # Forebet
+        if feats.get('forebet_prob', 0.5) > 0.5:
+            fp = feats.get('forebet_pred', 0.5)
+            if fp > 0.7:
+                votes.append(('1', feats.get('forebet_prob', 0.5)))
+            elif fp < 0.3:
+                votes.append(('2', feats.get('forebet_prob', 0.5)))
+            else:
+                votes.append(('X', feats.get('forebet_prob', 0.5)))
+        
+        # SofaScore (only with volume)
+        if feats.get('ss_volume_factor', 0) > 0.3:
+            ssh = feats.get('ss_home', 0.33)
+            ssa = feats.get('ss_away', 0.33)
+            ssd = feats.get('ss_draw', 0.33)
+            ss_max = max(ssh, ssd, ssa)
+            if ssh == ss_max:
+                votes.append(('1', ssh * feats.get('ss_volume_factor', 1.0)))
+            elif ssa == ss_max:
+                votes.append(('2', ssa * feats.get('ss_volume_factor', 1.0)))
+            else:
+                votes.append(('X', ssd * feats.get('ss_volume_factor', 1.0)))
+        
+        # H2H (only when meaningful sample)
+        h2h_wr = feats.get('h2h_win_rate', 0.5)
+        h2h_cnt = feats.get('h2h_count', 0)
+        if h2h_cnt >= 0.4:  # at least 2 H2H matches
+            if h2h_wr > 0.65:
+                votes.append(('1', h2h_wr))
+            elif h2h_wr < 0.35:
+                votes.append(('2', 1.0 - h2h_wr))
+            else:
+                votes.append(('X', 0.30))
+        
+        return _source_disagreement(votes)
+    
     # ------------------------------------------------------------------
     @staticmethod
     def _compute_source_consensus(feats: Dict[str, float], pick: str) -> float:
