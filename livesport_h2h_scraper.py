@@ -180,6 +180,39 @@ def _safe_page_source(driver: webdriver.Chrome) -> Optional[str]:
         return None
 
 
+def _wait_for_h2h_rows(driver: webdriver.Chrome, timeout: float = 6.0,
+                       poll: float = 0.4) -> bool:
+    """Poll until H2H rows (``a.h2h__row``) appear in the DOM.
+
+    With page_load_strategy='eager', ``driver.get`` returns at
+    DOMContentLoaded — before LiveSport's JS injects the H2H table. A blind
+    ``time.sleep`` is either too short (no rows) or wastefully long. This
+    waits only as long as needed, returning True as soon as rows are present.
+    """
+    deadline = time.time() + timeout
+    # Temporarily disable implicit wait so each find_elements poll returns
+    # immediately (otherwise implicitly_wait(10) makes every empty poll hang).
+    try:
+        driver.implicitly_wait(0)
+    except WebDriverException:
+        pass
+    try:
+        while time.time() < deadline:
+            try:
+                rows = driver.find_elements(By.CSS_SELECTOR, 'a.h2h__row')
+                if rows:
+                    return True
+            except WebDriverException:
+                pass
+            time.sleep(poll)
+        return False
+    finally:
+        try:
+            driver.implicitly_wait(10)
+        except WebDriverException:
+            pass
+
+
 def check_driver_health(driver: webdriver.Chrome) -> bool:
     """
     Sprawdza czy driver jest w działającym stanie.
@@ -427,7 +460,15 @@ def start_driver(headless: bool = True) -> webdriver.Chrome:
     chrome_options = Options()
     if headless:
         chrome_options.add_argument("--headless=new")
-    
+
+    # 🚀 PAGE LOAD STRATEGY = 'eager': zwróć sterowanie gdy DOM jest gotowy
+    # (DOMContentLoaded), NIE czekaj na pełny event 'load' (obrazki, reklamy,
+    # trackery, websockety). LiveSport to ciężki SPA — pełny 'load' potrafi
+    # trwać 40s+ w CI i powodował timeouty (objaw: h2h=40s, "Brak H2H").
+    # Tabela H2H jest w DOM na długo przed eventem 'load', więc 'eager'
+    # wystarcza i jest wielokrotnie szybszy.
+    chrome_options.page_load_strategy = 'eager'
+
     # 🔥 QUADRUPLE FORCE: Aggressive stability settings
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
@@ -815,6 +856,15 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     _nav_url = _h2h_direct_url or url
     _need_tab_click = _h2h_direct_url is None  # tylko gdy nie mamy bezpośredniego URL
 
+    # ⚡ W CI skróć page-load timeout: z 'eager' DOM jest gotowy w kilka sekund,
+    # więc nie ma sensu czekać 60s na pełny 'load'. Krótszy timeout + fast-path
+    # na TimeoutException (poniżej) daje ~kilka s/mecz zamiast 40s.
+    if _is_ci:
+        try:
+            driver.set_page_load_timeout(15)
+        except WebDriverException:
+            pass
+
     for attempt in range(max_retries):
         try:
             # 🔥 Strategy 1: Normal navigation - szybsze w CI
@@ -859,7 +909,12 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
                 click_h2h_tab(driver)
                 time.sleep(1.5 if _is_ci else 2.5)  # CI: szybciej
             else:
-                time.sleep(0.8 if _is_ci else 1.5)  # daj H2H się doładować
+                # ⏳ Z 'eager' load DOM jest gotowy, ale wiersze H2H wstrzykuje
+                # JS chwilę później. Zamiast ślepego sleep — czekaj jawnie na
+                # pojawienie się 'a.h2h__row' (max ~6s), z krótkim fallbackiem.
+                _waited = _wait_for_h2h_rows(driver, timeout=6.0 if _is_ci else 8.0)
+                if not _waited:
+                    time.sleep(0.8 if _is_ci else 1.5)
 
             # 🔥 KRYTYCZNE: Wykryj "miękką" stronę błędu LiveSport (HTTP 200,
             # ale treść = "Nie można wyświetlić strony / spróbuj później").
@@ -888,6 +943,23 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
         except (WebDriverException, ConnectionResetError, ConnectionError, TimeoutError, TimeoutException) as e:
             last_error = e
             logger.debug(f"Błąd połączenia dla {url}: {type(e).__name__}: {str(e)[:100]}")
+
+            # ⚡ TimeoutException przy 'eager' load = pełny event 'load' nie
+            # zdążył (reklamy/trackery), ALE DOM z H2H może już być gotowy.
+            # Zamiast marnować próby na ponowne ładowanie ciężkiej strony,
+            # sprawdź czy treść H2H jest już obecna — jeśli tak, idź dalej.
+            if isinstance(e, TimeoutException):
+                try:
+                    driver.execute_script("window.stop();")
+                except WebDriverException:
+                    pass
+                try:
+                    _ps = driver.page_source
+                except WebDriverException:
+                    _ps = None
+                if _ps and ('h2h__' in _ps or 'h2h_' in _ps) and not is_livesport_error_page(_ps):
+                    logger.debug(f"Timeout, ale DOM H2H obecny dla {url} — kontynuuję")
+                    break
             
             if attempt < max_retries - 1:
                 # Użyj exponential backoff z jitter

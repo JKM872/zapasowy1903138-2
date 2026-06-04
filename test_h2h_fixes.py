@@ -484,5 +484,45 @@ class TestBuildH2HOverallUrl:
         assert out.endswith("/h2h/ogolem/?mid=Z")
 
 
+# ---------------------------------------------------------------------------
+# 10. _wait_for_h2h_rows (eager-load helper)
+# ---------------------------------------------------------------------------
+class TestWaitForH2HRows:
+    """The eager-load wait must return as soon as rows appear and must not
+    hang on the implicit wait when rows are absent."""
+
+    class _FakeDriver:
+        def __init__(self, rows_after_calls=0):
+            self._calls = 0
+            self._rows_after = rows_after_calls
+            self.implicit = None
+
+        def implicitly_wait(self, t):
+            self.implicit = t
+
+        def find_elements(self, by, value):
+            self._calls += 1
+            if self._calls >= self._rows_after:
+                return ["row1", "row2"]
+            return []
+
+    def test_returns_true_when_rows_present(self):
+        from livesport_h2h_scraper import _wait_for_h2h_rows
+        d = self._FakeDriver(rows_after_calls=1)
+        assert _wait_for_h2h_rows(d, timeout=2.0, poll=0.05) is True
+
+    def test_returns_false_when_never_present(self):
+        from livesport_h2h_scraper import _wait_for_h2h_rows
+        d = self._FakeDriver(rows_after_calls=9999)
+        assert _wait_for_h2h_rows(d, timeout=0.3, poll=0.05) is False
+
+    def test_restores_implicit_wait(self):
+        from livesport_h2h_scraper import _wait_for_h2h_rows
+        d = self._FakeDriver(rows_after_calls=1)
+        _wait_for_h2h_rows(d, timeout=1.0, poll=0.05)
+        # Implicit wait must be restored to 10 after polling.
+        assert d.implicit == 10
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
