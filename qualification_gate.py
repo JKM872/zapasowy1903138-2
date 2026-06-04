@@ -33,6 +33,8 @@ SPORT_MIN_ODDS: Dict[str, float] = {
     "volleyball": 1.30,
     "hockey": 1.50,
     "tennis": 1.35,
+    "table_tennis": 1.35,
+    "table-tennis": 1.35,
     "baseball": 1.40,
 }
 SPORT_MIN_ODDS_FALLBACK = 1.35
@@ -45,6 +47,8 @@ SPORT_MIN_ODDS_FALLBACK = 1.35
 FAN_VOTE_THRESHOLDS: Dict[str, float] = {
     "football": 65.0,
     "tennis": 55.0,
+    "table_tennis": 55.0,
+    "table-tennis": 55.0,
 }
 FAN_VOTE_DEFAULT_THRESHOLD = 80.0
 

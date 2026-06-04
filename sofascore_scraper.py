@@ -85,7 +85,7 @@ _IS_CI_TIMEOUT = _os_timeout.getenv('CI') == 'true' or _os_timeout.getenv('GITHU
 SOFASCORE_GLOBAL_TIMEOUT = 30 if _IS_CI_TIMEOUT else 35
 
 # Sporty BEZ REMISÓW (tylko Home/Away win)
-SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'basketball', 'handball', 'hockey', 'ice-hockey', 'baseball', 'cricket']
+SPORTS_WITHOUT_DRAW = ['volleyball', 'tennis', 'table_tennis', 'table-tennis', 'basketball', 'handball', 'hockey', 'ice-hockey', 'baseball', 'cricket']
 
 # Mapowanie nazw sportów na SofaScore URL slugs
 SOFASCORE_SPORT_SLUGS = {
@@ -98,6 +98,8 @@ SOFASCORE_SPORT_SLUGS = {
     'hockey': 'ice-hockey',
     'ice-hockey': 'ice-hockey',
     'tennis': 'tennis',
+    'table_tennis': 'table-tennis',
+    'table-tennis': 'table-tennis',
     'baseball': 'baseball',
     'cricket': 'cricket',
 }
@@ -1777,6 +1779,103 @@ def get_odds_via_api(event_id: int) -> Optional[Dict]:
         logger.debug(f"SofaScore odds API error: {e}")
         return None
 
+
+
+def list_scheduled_events(sport: str, date_str: str) -> List[Dict[str, Any]]:
+    """List all SofaScore events for a sport on a given date.
+
+    Reuses ``_api_get_json`` so it inherits the full Cloudflare-bypass stack
+    (curl_cffi → FlareSolverr → WARP proxy → alt-domain). This is the match
+    SOURCE for sports (like table tennis) that have far more events on
+    SofaScore than on LiveSport — including amateur/lower-tier events.
+
+    Args:
+        sport: logical sport name (mapped via SOFASCORE_SPORT_SLUGS).
+        date_str: 'YYYY-MM-DD'.
+
+    Returns:
+        List of normalized event dicts::
+
+            {
+              'event_id': int,
+              'home_team': str,
+              'away_team': str,
+              'tournament': str,
+              'category': str,
+              'start_timestamp': int,   # unix seconds (UTC)
+              'status': str,            # 'notstarted' / 'inprogress' / 'finished'
+            }
+
+        Empty list on failure (never raises).
+    """
+    sport_slug = SOFASCORE_SPORT_SLUGS.get(sport, sport)
+    url = f"https://api.sofascore.com/api/v1/sport/{sport_slug}/scheduled-events/{date_str}"
+    data = _api_get_json(url, timeout=12)
+    if not isinstance(data, dict):
+        return []
+
+    out: List[Dict[str, Any]] = []
+    for event in data.get('events', []) or []:
+        try:
+            home = (event.get('homeTeam') or {}).get('name', '')
+            away = (event.get('awayTeam') or {}).get('name', '')
+            if not home or not away:
+                continue
+            tournament = (event.get('tournament') or {}).get('name', '')
+            category = ((event.get('tournament') or {}).get('category') or {}).get('name', '')
+            status = ((event.get('status') or {}).get('type') or '')
+            out.append({
+                'event_id': event.get('id'),
+                'home_team': home,
+                'away_team': away,
+                'tournament': tournament,
+                'category': category,
+                'start_timestamp': event.get('startTimestamp'),
+                'status': status,
+            })
+        except (AttributeError, TypeError) as e:
+            logger.debug(f"list_scheduled_events: skip malformed event: {e}")
+            continue
+    return out
+
+
+def get_event_h2h(event_id: int) -> Optional[Dict[str, Any]]:
+    """Fetch head-to-head summary for a SofaScore event.
+
+    Endpoint: ``/api/v1/event/{event_id}/h2h`` → ``teamDuel`` with
+    ``homeWins / awayWins / draws``. Returns a compact dict, or None on
+    failure.
+
+    Returns::
+
+        {
+          'home_wins': int,
+          'away_wins': int,
+          'draws': int,
+          'total': int,
+        }
+    """
+    if not event_id:
+        return None
+    url = f"https://api.sofascore.com/api/v1/event/{event_id}/h2h"
+    data = _api_get_json(url, timeout=10)
+    if not isinstance(data, dict):
+        return None
+    duel = data.get('teamDuel') or {}
+    home_wins = duel.get('homeWins')
+    away_wins = duel.get('awayWins')
+    draws = duel.get('draws')
+    if home_wins is None and away_wins is None:
+        return None
+    hw = int(home_wins or 0)
+    aw = int(away_wins or 0)
+    dr = int(draws or 0)
+    return {
+        'home_wins': hw,
+        'away_wins': aw,
+        'draws': dr,
+        'total': hw + aw + dr,
+    }
 
 
 def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, search_date: str, debug: bool = False) -> Optional[int]:

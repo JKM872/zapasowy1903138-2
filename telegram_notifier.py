@@ -43,12 +43,22 @@ _SPORT_MIN_ODDS: Dict[str, float] = {
     "volleyball": 1.30,
     "hockey": 1.50,
     "tennis": 1.35,
+    "table_tennis": 1.35,
+    "table-tennis": 1.35,
     "baseball": 1.40,
 }
 _SPORT_MIN_ODDS_FALLBACK = 1.35
 
 # SofaScore fan vote thresholds (dominant vote %)
-_FAN_VOTE_THRESHOLDS: Dict[str, float] = {"football": 65.0}
+# NOTE: tennis intentionally falls back to the 80% default here (the primary
+# tennis fan-vote gate runs earlier in scrape_and_notify). table_tennis gets
+# its own softer threshold because the table-tennis pipeline relies on this
+# value as its display-side gate.
+_FAN_VOTE_THRESHOLDS: Dict[str, float] = {
+    "football": 65.0,
+    "table_tennis": 55.0,
+    "table-tennis": 55.0,
+}
 _FAN_VOTE_DEFAULT_THRESHOLD = 80.0
 
 _WARSAW_TZ = ZoneInfo("Europe/Warsaw")
@@ -220,12 +230,13 @@ def _describe_pick(match: Dict[str, Any]) -> str:
     home = (match.get("home_team") or "").strip()
     away = (match.get("away_team") or "").strip()
     sport = (match.get("sport") or "").lower()
+    _is_player_sport = sport in ("tennis", "table_tennis", "table-tennis")
 
     if pick == "1":
-        label = "Player 1 to win (1)" if sport == "tennis" else "Home win (1)"
+        label = "Player 1 to win (1)" if _is_player_sport else "Home win (1)"
         side = home
     elif pick == "2":
-        label = "Player 2 to win (2)" if sport == "tennis" else "Away win (2)"
+        label = "Player 2 to win (2)" if _is_player_sport else "Away win (2)"
         side = away
     elif pick == "X":
         return "Draw (X)"
@@ -331,6 +342,8 @@ def _sport_emoji(sport: str) -> str:
         "handball": "🤾",
         "hockey": "🏒",
         "tennis": "🎾",
+        "table_tennis": "🏓",
+        "table-tennis": "🏓",
     }.get(sport, "🏅")
 
 
