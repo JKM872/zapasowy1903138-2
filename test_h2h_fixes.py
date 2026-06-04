@@ -440,5 +440,49 @@ class TestLiveSportErrorPageDetection:
         assert good_parsed >= 1
 
 
+# ---------------------------------------------------------------------------
+# 9. Direct H2H URL building (fixes "Brak H2H" from failed tab clicks)
+# ---------------------------------------------------------------------------
+class TestBuildH2HOverallUrl:
+    """Team-sport matches must navigate straight to /h2h/ogolem/ instead of
+    relying on a JS tab click that silently fails in headless CI."""
+
+    @pytest.fixture(autouse=True)
+    def _import(self):
+        from livesport_h2h_scraper import build_h2h_overall_url
+        self.fn = build_h2h_overall_url
+
+    def test_basic_match_url(self):
+        out = self.fn("https://www.livesport.com/pl/mecz/pilka-nozna/t1/t2/?mid=ABC")
+        assert out == "https://www.livesport.com/pl/mecz/pilka-nozna/t1/t2/h2h/ogolem/?mid=ABC"
+
+    def test_preserves_mid(self):
+        out = self.fn("https://www.livesport.com/pl/mecz/pilka-nozna/a/b/?mid=O4wBNeOr")
+        assert out.endswith("/h2h/ogolem/?mid=O4wBNeOr")
+
+    def test_strips_detail_segment(self):
+        out = self.fn("https://www.livesport.com/pl/mecz/pilka-nozna/a/b/szczegoly/?mid=X")
+        assert "/szczegoly" not in out
+        assert "/h2h/ogolem/?mid=X" in out
+
+    def test_already_h2h_unchanged(self):
+        u = "https://www.livesport.com/pl/mecz/pilka-nozna/a/b/h2h/ogolem/?mid=X"
+        assert self.fn(u) == u
+
+    def test_no_mid(self):
+        out = self.fn("https://www.livesport.com/pl/mecz/pilka-nozna/a/b/")
+        assert out == "https://www.livesport.com/pl/mecz/pilka-nozna/a/b/h2h/ogolem/"
+
+    def test_non_match_url_returns_none(self):
+        assert self.fn("https://www.livesport.com/pl/pilka-nozna/") is None
+
+    def test_empty_returns_none(self):
+        assert self.fn("") is None
+
+    def test_match_keyword_variant(self):
+        out = self.fn("https://www.livesport.com/en/match/football/a/b/?mid=Z")
+        assert out.endswith("/h2h/ogolem/?mid=Z")
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

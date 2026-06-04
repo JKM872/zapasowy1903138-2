@@ -692,6 +692,46 @@ def _teams_match(name_a, name_b):
     return overlap >= 0.8
 
 
+def build_h2h_overall_url(match_url: str) -> Optional[str]:
+    """Build the direct LiveSport H2H ('ogolem') URL from a match URL.
+
+    Team-sport match pages load the summary tab by default; the H2H table is
+    only injected after clicking the H2H tab (a JS action that often fails
+    silently in headless CI). Navigating straight to ``.../h2h/ogolem/``
+    renders the H2H markup server-side / on first load, which is far more
+    reliable than depending on a tab click.
+
+    Converts e.g.::
+
+        /mecz/pilka-nozna/team1/team2/?mid=ABC
+        →  /mecz/pilka-nozna/team1/team2/h2h/ogolem/?mid=ABC
+
+    Returns ``None`` when the URL is not a recognisable match URL.
+    """
+    if not match_url or ('/mecz/' not in match_url and '/match/' not in match_url):
+        return None
+    # Already an H2H URL → leave as-is.
+    if '/h2h/' in match_url:
+        return match_url
+
+    base = match_url.split('?')[0].rstrip('/')
+    # Strip a trailing detail-page segment if present.
+    for tail in ('/szczegoly', '/podsumowanie', '/summary', '/details'):
+        if base.endswith(tail):
+            base = base[: -len(tail)]
+            break
+    base = base.rstrip('/')
+
+    mid = ''
+    if 'mid=' in match_url:
+        mid = match_url.split('mid=', 1)[1].split('&', 1)[0]
+
+    h2h_url = f"{base}/h2h/ogolem/"
+    if mid:
+        h2h_url += f"?mid={mid}"
+    return h2h_url
+
+
 def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = False, require_form_advantage: bool = False, use_forebet: bool = False, use_gemini: bool = False, use_sofascore: bool = False, use_flashscore: bool = False, sport: str = 'football') -> Dict:
     """Odwiedza stronę meczu, otwiera H2H i zwraca informację we właściwym formacie.
     
@@ -765,12 +805,21 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
     if not check_driver_health(driver):
         logger.error(f"Driver nie działa przed przetworzeniem {url}")
         return out
-    
+
+    # 🎯 KLUCZOWA POPRAWKA: dla sportów drużynowych nawiguj BEZPOŚREDNIO do
+    # strony H2H (.../h2h/ogolem/), zamiast ładować stronę meczu i klikać
+    # zakładkę H2H w JS. Klik zakładki w trybie headless często cicho zawodzi,
+    # przez co tabela H2H nigdy się nie ładuje i mecz jest pomijany
+    # ("Brak H2H" mimo że H2H istnieje). Bezpośredni URL renderuje H2H od razu.
+    _h2h_direct_url = build_h2h_overall_url(url) if sport != 'tennis' else None
+    _nav_url = _h2h_direct_url or url
+    _need_tab_click = _h2h_direct_url is None  # tylko gdy nie mamy bezpośredniego URL
+
     for attempt in range(max_retries):
         try:
             # 🔥 Strategy 1: Normal navigation - szybsze w CI
             if attempt == 0:
-                driver.get(url)
+                driver.get(_nav_url)
                 time.sleep(1.0 if _is_ci else 3.0)  # CI: szybciej
             
             # 🔥 Strategy 2: Refresh if first failed
@@ -784,7 +833,7 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
                 print(f"   🔄 Próba #3: Via main page...")
                 driver.get("https://www.livesport.com/pl/")
                 time.sleep(1.0 if _is_ci else 2.0)
-                driver.get(url)
+                driver.get(_nav_url)
                 time.sleep(1.5 if _is_ci else 3.0)
             
             # 🔥 Strategy 4: Clear cache and try
@@ -795,18 +844,22 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
                 except WebDriverException:
                     pass  # Ignoruj błędy przy czyszczeniu cookies
                 time.sleep(0.5 if _is_ci else 1.0)
-                driver.get(url)
+                driver.get(_nav_url)
                 time.sleep(1.5 if _is_ci else 3.0)
             
             # 🔥 Strategy 5: Last resort - direct URL
             else:
                 print(f"   🔄 Próba #5: Direct URL (last resort)...")
-                driver.get(url)
+                driver.get(_nav_url)
                 time.sleep(2.0 if _is_ci else 5.0)  # CI: szybciej
             
-            # Teraz spróbuj kliknąć zakładkę H2H
-            click_h2h_tab(driver)
-            time.sleep(1.5 if _is_ci else 2.5)  # CI: szybciej
+            # Klikamy zakładkę H2H tylko jeśli NIE udało się zbudować
+            # bezpośredniego URL-a H2H (np. nietypowy format adresu).
+            if _need_tab_click:
+                click_h2h_tab(driver)
+                time.sleep(1.5 if _is_ci else 2.5)  # CI: szybciej
+            else:
+                time.sleep(0.8 if _is_ci else 1.5)  # daj H2H się doładować
 
             # 🔥 KRYTYCZNE: Wykryj "miękką" stronę błędu LiveSport (HTTP 200,
             # ale treść = "Nie można wyświetlić strony / spróbuj później").
@@ -975,6 +1028,25 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
 
     # parse H2H
     h2h = parse_h2h_from_soup(soup, out['home_team'] or '')
+
+    # 🔁 FALLBACK: jeśli bezpośrednia nawigacja nie dała wierszy H2H,
+    # spróbuj doładować je interaktywnie (scroll + klik zakładki H2H),
+    # a następnie przeparsuj ponownie. Chroni przed sytuacją, gdy tabela
+    # H2H ładuje się leniwie albo wymaga kliknięcia mimo bezpośredniego URL.
+    if not h2h:
+        try:
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight/2);")
+            time.sleep(0.8 if _is_ci else 1.5)
+            click_h2h_tab(driver)
+            time.sleep(1.2 if _is_ci else 2.0)
+            soup_retry = BeautifulSoup(driver.page_source, 'html.parser')
+            h2h_retry = parse_h2h_from_soup(soup_retry, out['home_team'] or '')
+            if h2h_retry:
+                soup = soup_retry
+                h2h = h2h_retry
+                logger.debug(f"process_match: H2H odzyskane przez fallback (klik+scroll) dla {url}")
+        except (WebDriverException, AttributeError) as e:
+            logger.debug(f"process_match: H2H fallback nie powiódł się: {type(e).__name__}: {e}")
 
     # ------------------------------------------------------------------
     # SORT H2H BY DATE (descending) so h2h[0] is always the most recent
