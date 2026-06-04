@@ -1,0 +1,192 @@
+name: World Cup Daily Analysis
+
+on:
+  # Codziennie o 09:00 UTC (11:00 CEST) — przed startem meczowego dnia MŚ.
+  schedule:
+    - cron: '0 9 * * *'
+
+  # Ręczne uruchomienie z możliwością podania daty.
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Data MŚ do analizy (YYYY-MM-DD, puste = dziś)'
+        required: false
+        default: ''
+        type: string
+      max_matches:
+        description: 'Limit meczów (0 = wszystkie)'
+        required: false
+        default: '0'
+        type: string
+      news_locales:
+        description: 'Lokalizacje newsów Google News (np. en-US,en-GB,pl-PL)'
+        required: false
+        default: 'en-US,en-GB,pl-PL'
+        type: string
+      news_max_headlines:
+        description: 'Maks. nagłówków newsowych na mecz'
+        required: false
+        default: '30'
+        type: string
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    services:
+      # FlareSolverr — bypass Cloudflare dla Livesport/SofaScore.
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
+    steps:
+      # 1. Checkout
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      # 2. Python
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # 3. Chrome (pre-installed on ubuntu-latest)
+      - name: Setup Chrome (pre-installed)
+        run: |
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || echo "")
+          if [ -z "$CHROME_PATH" ]; then
+            echo "::error::Chrome not found on runner"
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_PATH" >> $GITHUB_ENV
+          echo "✅ Chrome: $($CHROME_PATH --version)"
+
+      # 4. Python deps
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi cloudscraper httpx[http2]
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
+
+      # 5. Wait for FlareSolverr
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "✅ FlareSolverr ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"; sleep 2
+          done
+
+      # 6. Setup Cloudflare WARP (SofaScore clean IP)
+      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        continue-on-error: true
+        run: |
+          echo "🌐 Starting Cloudflare WARP proxy container..."
+          docker run -d --name warp \
+            --restart=always \
+            --device-cgroup-rule='c 10:200 rwm' \
+            -p 1080:1080 \
+            -e WARP_SLEEP=2 \
+            --cap-add NET_ADMIN \
+            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
+            -v /lib/modules:/lib/modules \
+            caomingjun/warp:latest
+          for i in {1..30}; do
+            sleep 3
+            WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
+            echo "WARP test ($i/30): warp=$WARP_STATUS"
+            if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
+              echo "✅ WARP active"; break
+            fi
+          done
+
+      # 7. Run the World Cup analytical pipeline
+      - name: Run World Cup analysis
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          SOFASCORE_PROXY: "socks5://localhost:1080"
+          # 📰 News intel breadth (worldcup_news_intel). Puste inputy (np. przy
+          # schedule) -> wartości domyślne, żeby CI łapało komplet informacji.
+          WC_NEWS_LOCALES: ${{ github.event.inputs.news_locales || 'en-US,en-GB,pl-PL' }}
+          WC_NEWS_MAX_HEADLINES: ${{ github.event.inputs.news_max_headlines || '30' }}
+        run: |
+          INPUT_DATE="${{ github.event.inputs.date }}"
+          DATE="${INPUT_DATE:-$(date +%Y-%m-%d)}"
+          MAXM="${{ github.event.inputs.max_matches }}"
+          echo "🏆 Analyzing World Cup matches for $DATE"
+          ARGS="--date $DATE --headless"
+          if [ -n "$MAXM" ] && [ "$MAXM" != "0" ]; then
+            ARGS="$ARGS --max-matches $MAXM"
+          fi
+          python worldcup_pipeline.py $ARGS
+
+      # 8. Upload artifact
+      - name: Upload World Cup results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: worldcup-${{ github.run_id }}
+          path: results/worldcup_*.json
+          retention-days: 14
+
+  # ── Commit results back to repo ──
+  commit-results:
+    needs: analyze
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Collect World Cup JSON
+        run: |
+          mkdir -p results
+          echo "📦 Collecting World Cup results..."
+          find artifacts -name 'worldcup_*.json' | while read f; do
+            cp "$f" "results/$(basename "$f")"
+            echo "  → $(basename "$f")"
+          done
+          ls -la results/worldcup_*.json 2>/dev/null || echo "No World Cup results found"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/worldcup_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ No new World Cup results to commit"
+          else
+            DATE=$(date +%Y-%m-%d)
+            git commit -m "data: World Cup analysis for $DATE [skip ci]"
+            git push
+            echo "✅ Committed"
+          fi
