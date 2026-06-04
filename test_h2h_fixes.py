@@ -371,5 +371,74 @@ class TestSupabaseSaveGuard:
                 mock_instance.table.assert_called_once_with('predictions')
 
 
+# ---------------------------------------------------------------------------
+# 8. LiveSport error/block page detection
+# ---------------------------------------------------------------------------
+class TestLiveSportErrorPageDetection:
+    """LiveSport sometimes returns an HTTP-200 'soft' error/block page with no
+    match data. It must be detected so the scraper retries instead of silently
+    dropping the match (the cause of 'no matches today')."""
+
+    @pytest.fixture(autouse=True)
+    def _import(self):
+        from livesport_h2h_scraper import is_livesport_error_page
+        self.fn = is_livesport_error_page
+
+    def test_classic_error_page(self):
+        html = ("<html><body>Error: The requested page can't be displayed. "
+                "Please try again later. Livesport.com</body></html>")
+        assert self.fn(html) is True
+
+    def test_curly_apostrophe_variant(self):
+        html = ("<html><body>The requested page can\u2019t be displayed. "
+                "Please try again later.</body></html>")
+        assert self.fn(html) is True
+
+    def test_bot_wall(self):
+        html = "<html><body>Are you a robot? unusual traffic detected</body></html>"
+        assert self.fn(html) is True
+
+    def test_none_is_error(self):
+        assert self.fn(None) is True
+
+    def test_empty_is_error(self):
+        assert self.fn("") is True
+
+    def test_tiny_page_without_h2h_is_error(self):
+        # Small page, no h2h/participant scaffolding → treat as blocked.
+        assert self.fn("<html><body>loading...</body></html>") is True
+
+    def test_valid_large_page_is_ok(self):
+        # Large page containing real H2H scaffolding must NOT be flagged.
+        html = "<html><body>" + ("<a class='h2h__row'>match</a>" * 2000) + "</body></html>"
+        assert len(html) > 30000
+        assert self.fn(html) is False
+
+    def test_real_fixtures_classified_correctly(self):
+        """Validate against the saved debug_html fixtures when present:
+        blocked pages (~5 KB) flagged, full pages (~360 KB) not flagged."""
+        import glob
+        from bs4 import BeautifulSoup
+        from livesport_h2h_scraper import parse_h2h_from_soup
+
+        files = sorted(glob.glob(os.path.join(
+            os.path.dirname(__file__), 'debug_html', 'h2h_page_*.html')))
+        if not files:
+            pytest.skip("no debug_html fixtures available")
+
+        good_parsed = 0
+        for fn in files:
+            with open(fn, encoding='utf-8', errors='ignore') as fh:
+                html = fh.read()
+            blocked = self.fn(html)
+            if not blocked:
+                # A page we consider valid must actually yield H2H rows.
+                rows = parse_h2h_from_soup(BeautifulSoup(html, 'html.parser'), '')
+                assert len(rows) > 0, f"valid page {fn} parsed 0 H2H rows"
+                good_parsed += 1
+        # At least one good page should exist in the fixture set.
+        assert good_parsed >= 1
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

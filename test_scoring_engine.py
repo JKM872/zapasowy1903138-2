@@ -25,6 +25,13 @@ from football_scoring_engine import (
     _safe_float,
     _parse_form,
     _form_points,
+    _poisson_pmf,
+    _poisson_match_probs,
+    _h2h_outcome_rates,
+    _expected_goals,
+    _implied_probs_from_odds,
+    _solve_lambdas_from_supremacy,
+    SPORT_PROFILES,
 )
 
 
@@ -259,6 +266,163 @@ class TestScoredMatch:
         )
         assert sm.home_team == "A"
         assert sm.prob_home == 0.5
+
+
+# ---------------------------------------------------------------------------
+# 9. Poisson goal model (v3)
+# ---------------------------------------------------------------------------
+class TestPoissonModel:
+    def test_pmf_sums_to_one(self):
+        total = sum(_poisson_pmf(1.4, k) for k in range(30))
+        assert total == pytest.approx(1.0, abs=1e-6)
+
+    def test_pmf_zero_lambda(self):
+        assert _poisson_pmf(0.0, 0) == 1.0
+        assert _poisson_pmf(0.0, 3) == 0.0
+
+    def test_match_probs_sum_to_one(self):
+        ph, pd, pa = _poisson_match_probs(1.5, 1.2)
+        assert ph + pd + pa == pytest.approx(1.0, abs=1e-3)
+
+    def test_symmetric_when_equal(self):
+        ph, pd, pa = _poisson_match_probs(1.3, 1.3)
+        assert ph == pytest.approx(pa, abs=1e-6)
+
+    def test_favorite_has_higher_prob(self):
+        ph, pd, pa = _poisson_match_probs(2.2, 0.7)
+        assert ph > pa
+        assert ph > pd
+
+    def test_low_scoring_raises_draw(self):
+        # Fewer goals → higher draw probability.
+        _, draw_low, _ = _poisson_match_probs(0.6, 0.6)
+        _, draw_high, _ = _poisson_match_probs(2.5, 2.5)
+        assert draw_low > draw_high
+
+    def test_probs_bounded(self):
+        for lh in (0.1, 1.0, 3.5, 6.0):
+            for la in (0.1, 1.0, 3.5, 6.0):
+                ph, pd, pa = _poisson_match_probs(lh, la)
+                assert 0.0 <= ph <= 1.0
+                assert 0.0 <= pd <= 1.0
+                assert 0.0 <= pa <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# 10. H2H outcome-resolved rates (v3)
+# ---------------------------------------------------------------------------
+class TestH2HOutcomeRates:
+    def test_rates_sum_to_one(self):
+        h2h = [
+            {'home': 'A', 'away': 'B', 'score': '2-1'},
+            {'home': 'B', 'away': 'A', 'score': '0-0'},
+            {'home': 'A', 'away': 'B', 'score': '1-3'},
+        ]
+        w, d, l, cnt = _h2h_outcome_rates(h2h, 'A')
+        assert w + d + l == pytest.approx(1.0, abs=1e-6)
+        assert cnt == 3
+
+    def test_draw_preserved(self):
+        # Two of three meetings are draws → meaningful draw rate.
+        h2h = [
+            {'home': 'A', 'away': 'B', 'score': '1-1'},
+            {'home': 'B', 'away': 'A', 'score': '2-2'},
+            {'home': 'A', 'away': 'B', 'score': '2-0'},
+        ]
+        w, d, l, _ = _h2h_outcome_rates(h2h, 'A')
+        assert d > 0.5  # draws are the dominant outcome
+
+    def test_empty_returns_neutral(self):
+        w, d, l, cnt = _h2h_outcome_rates([], 'A')
+        assert cnt == 0
+        assert w == pytest.approx(0.5)
+        assert d == pytest.approx(0.0)
+
+    def test_team_perspective_flips(self):
+        h2h = [
+            {'home': 'A', 'away': 'B', 'score': '3-0'},
+            {'home': 'A', 'away': 'B', 'score': '2-1'},
+        ]
+        wa, _, la, _ = _h2h_outcome_rates(h2h, 'A')
+        wb, _, lb, _ = _h2h_outcome_rates(h2h, 'B')
+        assert wa == pytest.approx(lb)
+        assert la == pytest.approx(wb)
+
+
+# ---------------------------------------------------------------------------
+# 11. Expected goals inference (v3)
+# ---------------------------------------------------------------------------
+class TestExpectedGoals:
+    def test_tier1_forebet_exact_score(self):
+        xg = _expected_goals({'forebet_exact_score': '3-1'})
+        assert xg is not None
+        lh, la = xg
+        assert lh > la  # home expected to score more
+
+    def test_tier2_goal_averages(self):
+        xg = _expected_goals({
+            'home_goals_scored_avg': 2.0, 'home_goals_conceded_avg': 0.8,
+            'away_goals_scored_avg': 0.9, 'away_goals_conceded_avg': 1.6,
+        })
+        assert xg is not None
+        lh, la = xg
+        assert lh > la
+
+    def test_tier3_from_odds(self):
+        # Only odds present — tier-3 inference must still produce lambdas.
+        prof = SPORT_PROFILES['football']
+        xg = _expected_goals(
+            {'home_odds': 1.5, 'draw_odds': 4.0, 'away_odds': 6.5}, prof
+        )
+        assert xg is not None
+        lh, la = xg
+        assert lh > la  # heavy home favorite
+
+    def test_no_data_returns_none(self):
+        assert _expected_goals({}, SPORT_PROFILES['football']) is None
+
+    def test_implied_probs_sum_to_one(self):
+        probs = _implied_probs_from_odds(2.0, 3.5, 4.0)
+        assert probs is not None
+        assert sum(probs) == pytest.approx(1.0, abs=1e-6)
+
+    def test_implied_probs_missing_odds(self):
+        assert _implied_probs_from_odds(0, 0, 0) is None
+
+    def test_solve_lambdas_respects_total(self):
+        lh, la = _solve_lambdas_from_supremacy(1.0, 2.6)
+        assert lh + la == pytest.approx(2.6, abs=1e-6)
+        assert lh > la
+
+
+# ---------------------------------------------------------------------------
+# 12. Poisson integration in engine (v3)
+# ---------------------------------------------------------------------------
+class TestPoissonIntegration:
+    def setup_method(self):
+        self.engine = FootballScoringEngine()
+
+    def test_poisson_activates_on_odds_only(self):
+        sm = self.engine.score_match(_make_match())
+        assert sm.features.get('poisson_available', 0.0) == 1.0
+
+    def test_poisson_skipped_for_basketball(self):
+        m = _make_match(sport='basketball')
+        sm = self.engine.score_match(m)
+        # Draw-less sport must not receive a Poisson draw signal.
+        assert sm.features.get('poisson_available', 0.0) == 0.0
+
+    def test_draw_probability_reasonable(self):
+        # Evenly matched teams at level odds should yield a non-trivial draw.
+        m = _make_match(home_odds=2.6, draw_odds=3.2, away_odds=2.7,
+                        home_form=["W", "D", "W", "D", "L"],
+                        away_form=["D", "W", "L", "D", "W"])
+        sm = self.engine.score_match(m)
+        assert sm.cal_draw > 0.15
+
+    def test_probs_still_sum_to_one_with_poisson(self):
+        sm = self.engine.score_match(_make_match())
+        assert sm.cal_home + sm.cal_draw + sm.cal_away == pytest.approx(1.0, abs=0.01)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,10 @@ from tennis_scoring_engine import (
     _parse_form_list,  # pyright: ignore[reportPrivateUsage]
     _streak_len,       # pyright: ignore[reportPrivateUsage]
     _recency_h2h,      # pyright: ignore[reportPrivateUsage]
+    _prob_win_game,    # pyright: ignore[reportPrivateUsage]
+    _prob_win_set,     # pyright: ignore[reportPrivateUsage]
+    _prob_win_match_bo3,  # pyright: ignore[reportPrivateUsage]
+    _serve_model_prob_a,  # pyright: ignore[reportPrivateUsage]
 )
 
 
@@ -469,3 +473,74 @@ class TestDataQualityV5:
         engine = TennisScoringEngine()
         total = sum(engine.weights.values())
         assert total == pytest.approx(1.0, abs=0.001)  # pyright: ignore[reportUnknownMemberType]
+
+
+# ---------------------------------------------------------------------------
+# Serve/point hierarchical match model (v6)
+# ---------------------------------------------------------------------------
+
+class TestServeModel:
+    def test_hold_prob_at_baseline(self) -> None:
+        """64% service points ≈ 81% hold — matches real ATP hold rates."""
+        hold = _prob_win_game(0.64)
+        assert 0.78 <= hold <= 0.84
+
+    def test_hold_prob_even_is_half(self) -> None:
+        assert _prob_win_game(0.5) == pytest.approx(0.5, abs=1e-6)
+
+    def test_hold_prob_monotonic(self) -> None:
+        assert _prob_win_game(0.55) < _prob_win_game(0.65) < _prob_win_game(0.75)
+
+    def test_set_prob_bounded(self) -> None:
+        for hold in (0.4, 0.6, 0.8):
+            for brk in (0.1, 0.3, 0.5):
+                p = _prob_win_set(hold, brk)
+                assert 0.0 <= p <= 1.0
+
+    def test_match_bo3_amplifies_set_edge(self) -> None:
+        """A per-set edge should amplify at match level."""
+        p_set = 0.6
+        p_match = _prob_win_match_bo3(p_set)
+        assert p_match > p_set  # best-of-3 rewards the stronger player
+
+    def test_match_bo3_even(self) -> None:
+        assert _prob_win_match_bo3(0.5) == pytest.approx(0.5, abs=1e-6)
+
+    def test_serve_model_symmetric(self) -> None:
+        """No edge → 0.5; opposite edges are mirror images."""
+        assert _serve_model_prob_a(0.0) == pytest.approx(0.5, abs=1e-6)
+        assert _serve_model_prob_a(0.4) == pytest.approx(
+            1.0 - _serve_model_prob_a(-0.4), abs=0.02)
+
+    def test_serve_model_amplification(self) -> None:
+        """Small point edge → larger match edge (tennis structure)."""
+        # A 0.5 normalized edge maps to a point edge of ~0.05; the match prob
+        # should be meaningfully above 0.5 but not absurd.
+        p = _serve_model_prob_a(0.5)
+        assert 0.7 < p < 0.95
+
+    def test_serve_model_bounded(self) -> None:
+        for adv in (-1.0, -0.5, 0.0, 0.5, 1.0):
+            p = _serve_model_prob_a(adv)
+            assert 0.02 <= p <= 0.98
+
+    def test_serve_model_weight_in_engine(self) -> None:
+        engine = TennisScoringEngine()
+        assert 'serve_model' in engine.weights
+        assert engine.weights['serve_model'] > 0
+
+    def test_serve_model_in_breakdown(self) -> None:
+        """The serve model should appear in the engine breakdown."""
+        engine = TennisScoringEngine()
+        s = engine.score_match(_base_match())
+        assert 'serve_model_estimate' in s.breakdown
+
+    def test_favorite_by_ranking_uses_serve_model(self) -> None:
+        """A strong #1 vs #50 should get a high probability via serve model."""
+        engine = TennisScoringEngine()
+        m = _base_match(ranking_a=1, ranking_b=50,
+                        form_a=['W', 'W', 'W', 'W', 'W'],
+                        form_b=['L', 'L', 'W', 'L', 'L'])
+        s = engine.score_match(m)
+        assert s.best_pick == 'A'
+        assert s.prob_a > 0.6

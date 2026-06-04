@@ -381,6 +381,232 @@ def _bayesian_blend(prior: List[float], likelihood: List[float],
     return [p / total for p in posterior] if total > 0 else likelihood
 
 
+# ---------------------------------------------------------------------------
+# NEW (v3): Outcome-resolved H2H + Poisson goal model
+# ---------------------------------------------------------------------------
+
+def _h2h_outcome_rates(h2h: List[Dict], team_name: str,
+                       decay: float = 0.90) -> Tuple[float, float, float, int]:
+    """Time-weighted H2H outcome rates for *team_name*.
+
+    Unlike ``_h2h_win_rate_weighted`` (which folds draws into the win rate at
+    0.5), this resolves the three outcomes separately so the draw signal —
+    a real, repeatedly-observed tendency between two specific teams — is not
+    thrown away.
+
+    Returns ``(win_rate, draw_rate, loss_rate, count)`` with rates summing to
+    1.0 when at least one scored meeting is found. Matches are assumed to be
+    ordered newest-first.
+    """
+    if not h2h or not team_name:
+        return 0.5, 0.0, 0.5, 0
+
+    team_lower = team_name.lower().strip()
+    w_win = w_draw = w_loss = w_total = 0.0
+    counted = 0
+
+    for i, item in enumerate(h2h):
+        score = item.get('score', '')
+        sm = re.search(r'(\d+)\s*[:\-]\s*(\d+)', str(score))
+        if not sm:
+            continue
+        gh = int(sm.group(1))
+        ga = int(sm.group(2))
+        h_home = (item.get('home', '') or '').lower().strip()
+        h_away = (item.get('away', '') or '').lower().strip()
+
+        weight = decay ** i
+        w_total += weight
+        counted += 1
+
+        if gh == ga:
+            w_draw += weight
+            continue
+
+        winner = h_home if gh > ga else h_away
+        if team_lower and (team_lower in winner or winner in team_lower):
+            w_win += weight
+        else:
+            w_loss += weight
+
+    if w_total == 0:
+        return 0.5, 0.0, 0.5, 0
+    return w_win / w_total, w_draw / w_total, w_loss / w_total, counted
+
+
+def _poisson_pmf(lmbda: float, k: int) -> float:
+    """Poisson probability mass P(X = k) for rate lmbda."""
+    if lmbda <= 0:
+        return 1.0 if k == 0 else 0.0
+    try:
+        return math.exp(-lmbda) * (lmbda ** k) / math.factorial(k)
+    except (OverflowError, ValueError):
+        return 0.0
+
+
+def _poisson_match_probs(lambda_home: float, lambda_away: float,
+                         max_goals: int = 8) -> Tuple[float, float, float]:
+    """1/X/2 probabilities from an independent bivariate-Poisson goal model.
+
+    Sums the joint probability grid P(home=i) * P(away=j) over all
+    score lines up to ``max_goals`` per side. This is the standard
+    goals-based approach to football outcome modelling and yields a
+    naturally-calibrated draw probability (the diagonal of the grid).
+
+    Returns ``(p_home, p_draw, p_away)`` summing to ~1.0.
+    """
+    lambda_home = max(0.05, min(6.0, lambda_home))
+    lambda_away = max(0.05, min(6.0, lambda_away))
+
+    home_pmf = [_poisson_pmf(lambda_home, i) for i in range(max_goals + 1)]
+    away_pmf = [_poisson_pmf(lambda_away, j) for j in range(max_goals + 1)]
+
+    p_home = p_draw = p_away = 0.0
+    for i in range(max_goals + 1):
+        ph = home_pmf[i]
+        if ph <= 0:
+            continue
+        for j in range(max_goals + 1):
+            p = ph * away_pmf[j]
+            if i > j:
+                p_home += p
+            elif i == j:
+                p_draw += p
+            else:
+                p_away += p
+
+    total = p_home + p_draw + p_away
+    if total <= 0:
+        return 0.40, 0.27, 0.33
+    return p_home / total, p_draw / total, p_away / total
+
+
+def _parse_exact_score(raw) -> Optional[Tuple[float, float]]:
+    """Parse a 'home-away' exact score string (e.g. '2-1', '2:1') to floats.
+
+    Returns ``(home_goals, away_goals)`` or ``None`` when not parseable.
+    """
+    if raw is None:
+        return None
+    m = re.search(r'(\d+)\s*[:\-]\s*(\d+)', str(raw))
+    if not m:
+        return None
+    return float(m.group(1)), float(m.group(2))
+
+
+def _implied_probs_from_odds(odds_h: float, odds_d: float, odds_a: float
+                             ) -> Optional[Tuple[float, float, float]]:
+    """Margin-removed 1/X/2 implied probabilities from decimal odds.
+
+    Returns ``None`` when home/away odds are missing/invalid.
+    """
+    if odds_h <= 1 or odds_a <= 1:
+        return None
+    inv_h = 1.0 / odds_h
+    inv_a = 1.0 / odds_a
+    inv_d = 1.0 / odds_d if odds_d > 1 else 0.0
+    total = inv_h + inv_d + inv_a
+    if total <= 0:
+        return None
+    return inv_h / total, inv_d / total, inv_a / total
+
+
+def _solve_lambdas_from_supremacy(supremacy: float, total_goals: float,
+                                  max_goals: int = 8) -> Tuple[float, float]:
+    """Split an expected goal *total* into home/away rates given a *supremacy*.
+
+    ``supremacy`` is the expected home-minus-away goal difference (can be
+    negative). We keep ``lambda_home + lambda_away = total_goals`` and
+    ``lambda_home - lambda_away = supremacy``, clamped to sane bounds.
+    """
+    total_goals = max(0.4, min(6.0, total_goals))
+    lh = (total_goals + supremacy) / 2.0
+    la = (total_goals - supremacy) / 2.0
+    return max(0.15, lh), max(0.15, la)
+
+
+def _expected_goals(m: Dict, profile: Optional[Dict[str, float]] = None
+                    ) -> Optional[Tuple[float, float]]:
+    """Derive expected goals (lambda_home, lambda_away) for the Poisson model.
+
+    Priority of evidence (most direct first):
+      1. Forebet predicted exact score — a direct goal expectation.
+      2. Team scoring/conceding averages — classic attack-vs-defence xG proxy.
+      3. Market odds + form + H2H — infer a *supremacy* (expected goal
+         difference) and a *match total*, then split into the two rates.
+         This tier almost always fires because odds/form are nearly always
+         present, so the naturally-calibrated Poisson draw probability
+         contributes to essentially every football match.
+
+    Returns ``None`` only when even the fallback inputs are absent.
+    """
+    # --- Tier 1: Forebet exact score -------------------------------------
+    es = _parse_exact_score(m.get('forebet_exact_score'))
+    if es is not None:
+        lh, la = es
+        # Smooth toward league-average to avoid 0-goal lambdas dominating.
+        return max(0.2, lh * 0.85 + 0.20), max(0.2, la * 0.85 + 0.18)
+
+    # --- Tier 2: Team goal averages --------------------------------------
+    hs = _safe_float(m.get('home_goals_scored_avg', m.get('home_avg_goals_scored')))
+    hc = _safe_float(m.get('home_goals_conceded_avg', m.get('home_avg_goals_conceded')))
+    as_ = _safe_float(m.get('away_goals_scored_avg', m.get('away_avg_goals_scored')))
+    ac = _safe_float(m.get('away_goals_conceded_avg', m.get('away_avg_goals_conceded')))
+    if hs > 0 and as_ > 0:
+        # Home attack vs away defence, plus a mild home-scoring bump.
+        lh = (hs + (ac if ac > 0 else hs)) / 2.0 * 1.10
+        la = (as_ + (hc if hc > 0 else as_)) / 2.0 * 0.95
+        return max(0.2, lh), max(0.2, la)
+
+    # --- Tier 3: Infer from odds + form + H2H ----------------------------
+    # Build a "supremacy" signal in [-1, 1] (positive favours home) from the
+    # strongest always-available sources, then map to an expected goal diff.
+    league_total = (profile or {}).get('avg_total_goals', 2.6)
+
+    signals: List[Tuple[float, float]] = []  # (signal in [-1,1], weight)
+
+    implied = _implied_probs_from_odds(
+        _safe_float(m.get('home_odds')),
+        _safe_float(m.get('draw_odds')),
+        _safe_float(m.get('away_odds')),
+    )
+    if implied is not None:
+        ih, _id, ia = implied
+        # Home edge in win probability → supremacy proxy.
+        signals.append((max(-1.0, min(1.0, (ih - ia) * 1.6)), 0.55))
+
+    home_form = _parse_form(m.get('home_form_overall', m.get('home_form', [])))
+    away_form = _parse_form(m.get('away_form_overall', m.get('away_form', [])))
+    if home_form or away_form:
+        fdiff = _form_points(home_form) - _form_points(away_form)  # [-1,1]
+        signals.append((max(-1.0, min(1.0, fdiff * 1.5)), 0.30))
+
+    focus = m.get('focus_team', 'home')
+    team = m.get('away_team', '') if focus == 'away' else m.get('home_team', '')
+    h2h_list = m.get('h2h_last5', [])
+    if h2h_list:
+        gd = _h2h_goal_diff(h2h_list, m.get('home_team', team))  # [-1,1] home frame
+        signals.append((max(-1.0, min(1.0, gd)), 0.15))
+
+    if not signals:
+        return None
+
+    w_sum = sum(wt for _, wt in signals)
+    supremacy_norm = sum(s * wt for s, wt in signals) / w_sum if w_sum else 0.0
+
+    # Map normalized supremacy to an expected goal difference. Calibrated via
+    # Monte-Carlo backtest (backtest_engine.py): a multiplier of ~1.3 best
+    # matches the true draw frequency — higher values sharpen the favourite
+    # and hurt probability calibration (over-confident), lower values
+    # under-separate. A dominant favourite (~1.0) projects to ~1.4 goal margin.
+    goal_supremacy = supremacy_norm * 1.3
+    # Add a small structural home-field goal bump.
+    goal_supremacy += 0.10
+
+    lh, la = _solve_lambdas_from_supremacy(goal_supremacy, league_total)
+    return lh, la
+
+
 # Sport-specific characteristics (long-run averages from public datasets)
 SPORT_PROFILES: Dict[str, Dict[str, float]] = {
     'football': {
@@ -389,6 +615,7 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
         'away_rate': 0.28,
         'temperature': 1.15,  # how much to soften model probs
         'min_draw_prob': 0.18,  # never go below this
+        'avg_total_goals': 2.7,  # long-run avg goals/match (Poisson tier-3)
     },
     'basketball': {
         'home_advantage': 0.60,  # higher home advantage in basketball
@@ -417,6 +644,7 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
         'away_rate': 0.35,
         'temperature': 1.10,
         'min_draw_prob': 0.05,
+        'avg_total_goals': 53.0,
     },
     'hockey': {
         'home_advantage': 0.50,
@@ -424,6 +652,7 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
         'away_rate': 0.40,
         'temperature': 1.10,
         'min_draw_prob': 0.05,
+        'avg_total_goals': 5.5,
     },
     'baseball': {
         'home_advantage': 0.54,
@@ -450,7 +679,7 @@ class FeatureExtractor:
         """Return dict of named features all normalised to [0, 1]."""
         f: Dict[str, float] = {}
         available = 0
-        total_features = 10
+        total_features = 11
 
         # 1. H2H time-weighted win rate for focus team
         focus = m.get('focus_team', 'home')
@@ -464,6 +693,15 @@ class FeatureExtractor:
         
         # 1b. NEW: H2H goal difference (margin of victory matters)
         f['h2h_goal_diff'] = _h2h_goal_diff(h2h_list, team)
+
+        # 1c. NEW (v3): Outcome-resolved H2H rates relative to the HOME team.
+        # Resolves win/draw/loss separately so the draw tendency between
+        # these two specific teams is preserved instead of folded into 0.5.
+        home_team_name = m.get('home_team', '')
+        hw, hd, hl, _hc = _h2h_outcome_rates(h2h_list, home_team_name)
+        f['h2h_home_win_rate'] = hw
+        f['h2h_draw_rate'] = hd
+        f['h2h_away_win_rate'] = hl
 
         # 2. Overall form
         home_form = _parse_form(m.get('home_form_overall', m.get('home_form', [])))
@@ -595,6 +833,36 @@ class FeatureExtractor:
             f['consensus'] = 0.0
             f['market_model_gap'] = 0.0
 
+        # 11. NEW (v3): Poisson goal-expectation model.
+        # When goal-level data exists (forebet exact score or scoring/conceding
+        # averages), derive a full 1/X/2 distribution from an independent
+        # Poisson grid. This is the most principled draw estimator available
+        # and complements the heuristic form/odds sources.
+        sport_lower_pg = (m.get('sport') or 'football').lower()
+        profile_pg = SPORT_PROFILES.get(sport_lower_pg, SPORT_PROFILES['football'])
+        # Only sports that actually produce draws should receive a Poisson
+        # draw signal (football/handball/hockey). For draw-less sports the
+        # model abstains so it never injects a phantom draw probability.
+        sport_has_draws_pg = profile_pg.get('min_draw_prob', 0.0) > 0.01
+        xg = _expected_goals(m, profile_pg) if sport_has_draws_pg else None
+        if xg is not None:
+            lh, la = xg
+            ph, pd, pa = _poisson_match_probs(lh, la)
+            f['poisson_home'] = ph
+            f['poisson_draw'] = pd
+            f['poisson_away'] = pa
+            f['poisson_available'] = 1.0
+            f['exp_goals_home'] = lh
+            f['exp_goals_away'] = la
+            available += 1
+        else:
+            f['poisson_home'] = 0.0
+            f['poisson_draw'] = 0.0
+            f['poisson_away'] = 0.0
+            f['poisson_available'] = 0.0
+            f['exp_goals_home'] = 0.0
+            f['exp_goals_away'] = 0.0
+
         # Data quality metric
         f['_data_quality'] = available / total_features
 
@@ -618,15 +886,16 @@ class FootballScoringEngine:
 
     # Source weights (tunable via calibration file)
     DEFAULT_WEIGHTS = {
-        'h2h':          0.18,
-        'form':         0.13,
-        'venue_form':   0.08,
-        'forebet':      0.13,
-        'sofascore':    0.08,
-        'odds':         0.22,
-        'gemini':       0.08,
+        'h2h':          0.16,
+        'form':         0.12,
+        'venue_form':   0.07,
+        'forebet':      0.12,
+        'sofascore':    0.07,
+        'odds':         0.21,
+        'gemini':       0.07,
         'availability': 0.05,
         'consensus':    0.05,
+        'poisson':      0.08,
     }
 
     CALIBRATION_PATH = os.path.join(
@@ -664,25 +933,32 @@ class FootballScoringEngine:
 
         w = self.weights
 
-        # H2H — now boosted by goal differential (margin of victory)
+        # H2H — now boosted by goal differential (margin of victory) and
+        # using outcome-resolved draw rates (v3) instead of a flat heuristic.
         h2h_wr = feats['h2h_win_rate']
         h2h_cnt = feats['h2h_count']
         h2h_gd = feats.get('h2h_goal_diff', 0.0)  # in [-1, 1]
         # Adjust win-rate by goal diff: dominant wins (e.g., 3-0) signal stronger
         h2h_wr_adj = max(0.0, min(1.0, h2h_wr + h2h_gd * 0.10))
         focus = match.get('focus_team', 'home')
+        # Real draw rate observed in these teams' meetings (home-team frame).
+        h2h_draw_rate = feats.get('h2h_draw_rate', 0.0)
         if h2h_cnt > 0:
             confidence_mult = min(1.0, h2h_cnt / 0.6)  # penalise <3 matches
+            # Blend observed draw rate with a prior; shrink toward prior when
+            # the sample is small so a single historical draw isn't overweighted.
+            draw_signal = h2h_draw_rate * confidence_mult + 0.26 * (1 - confidence_mult)
+            non_draw = max(0.02, 1.0 - draw_signal)
             if focus == 'home':
-                sources_home.append((h2h_wr_adj * confidence_mult + (1 - confidence_mult) * 0.40,
-                                     w['h2h']))
-                sources_draw.append(((1 - h2h_wr_adj) * 0.40, w['h2h']))
-                sources_away.append(((1 - h2h_wr_adj) * 0.60, w['h2h']))
+                win_p = (h2h_wr_adj * confidence_mult + (1 - confidence_mult) * 0.45) * non_draw
+                sources_home.append((win_p, w['h2h']))
+                sources_draw.append((draw_signal, w['h2h']))
+                sources_away.append((max(0.02, non_draw - win_p), w['h2h']))
             else:
-                sources_away.append((h2h_wr_adj * confidence_mult + (1 - confidence_mult) * 0.35,
-                                     w['h2h']))
-                sources_draw.append(((1 - h2h_wr_adj) * 0.40, w['h2h']))
-                sources_home.append(((1 - h2h_wr_adj) * 0.60, w['h2h']))
+                win_p = (h2h_wr_adj * confidence_mult + (1 - confidence_mult) * 0.45) * non_draw
+                sources_away.append((win_p, w['h2h']))
+                sources_draw.append((draw_signal, w['h2h']))
+                sources_home.append((max(0.02, non_draw - win_p), w['h2h']))
 
         # Form (overall) — now boosted by momentum
         hf = feats['home_form']
@@ -735,6 +1011,28 @@ class FootballScoringEngine:
         sources_home.append((feats['odds_home'], odds_w))
         sources_draw.append((feats['odds_draw'], odds_w))
         sources_away.append((feats['odds_away'], odds_w))
+
+        # Poisson goal model (v3) — principled draw estimator from expected
+        # goals. Only contributes when goal-level data is available. The
+        # weight is adaptive: the Poisson signal is most valuable when the
+        # market is absent or loose (it then carries independent information),
+        # and least valuable when a sharp market already prices the game.
+        # Backtests (backtest_engine.py) show the gain concentrates in the
+        # missing/noisy-odds regime, so we up-weight there and down-weight
+        # when a tight book is present.
+        if feats.get('poisson_available', 0.0) > 0:
+            base_pois_w = w.get('poisson', 0.08)
+            has_market = feats.get('odds_home', 0.0) > 0.05 and feats.get('market_efficiency', 0.0) > 0.0
+            if has_market:
+                # Sharp market (efficiency→1) shrinks Poisson toward 60%;
+                # loose market (efficiency→0) keeps it near full weight.
+                pois_w = base_pois_w * (1.0 - 0.4 * feats.get('market_efficiency', 0.5))
+            else:
+                # No usable market data — Poisson is a primary signal here.
+                pois_w = base_pois_w * 1.8
+            sources_home.append((feats['poisson_home'], pois_w))
+            sources_draw.append((feats['poisson_draw'], pois_w))
+            sources_away.append((feats['poisson_away'], pois_w))
 
         # Gemini
         gc = feats['gemini_conf']

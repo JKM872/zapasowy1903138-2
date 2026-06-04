@@ -130,6 +130,56 @@ except ImportError:
 # ROBUST ERROR HANDLING HELPERS
 # ============================================================================
 
+# Markers that identify a LiveSport "soft" error / rate-limit page. These pages
+# return HTTP 200 with a tiny body (~5 KB) and NO match data, so they must be
+# detected by content — otherwise the scraper treats them as a successful load,
+# finds no H2H rows, and silently drops the match ("no matches today").
+_LIVESPORT_ERROR_MARKERS = (
+    "requested page can't be displayed",
+    "requested page can\u2019t be displayed",  # curly apostrophe variant
+    "requested page cannot be displayed",
+    "please try again later",
+    "access denied",
+    "are you a robot",
+    "unusual traffic",
+)
+# A genuine match/H2H page is large; blocked pages are tiny. Used as a
+# secondary signal alongside the text markers.
+_LIVESPORT_MIN_VALID_PAGE_BYTES = 30000
+
+
+def is_livesport_error_page(page_source: Optional[str]) -> bool:
+    """Return True when ``page_source`` is a LiveSport block/error page.
+
+    Detection combines two signals:
+      1. Known error text markers (rate-limit / "can't be displayed" / bot wall)
+      2. Suspiciously small page body that contains no H2H markup
+
+    A real match page is hundreds of KB and contains ``h2h`` classes; a blocked
+    page is ~5 KB with an apology message and returns HTTP 200, so Selenium's
+    ``driver.get`` does not raise.
+    """
+    if not page_source:
+        return True
+    low = page_source.lower()
+    for marker in _LIVESPORT_ERROR_MARKERS:
+        if marker in low:
+            return True
+    # Tiny page with no H2H / participant scaffolding → almost certainly blocked.
+    if len(page_source) < _LIVESPORT_MIN_VALID_PAGE_BYTES:
+        if ('h2h' not in low) and ('participant' not in low):
+            return True
+    return False
+
+
+def _safe_page_source(driver: webdriver.Chrome) -> Optional[str]:
+    """Return ``driver.page_source`` or ``None`` if the driver errors."""
+    try:
+        return driver.page_source
+    except WebDriverException:
+        return None
+
+
 def check_driver_health(driver: webdriver.Chrome) -> bool:
     """
     Sprawdza czy driver jest w działającym stanie.
@@ -757,6 +807,29 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             # Teraz spróbuj kliknąć zakładkę H2H
             click_h2h_tab(driver)
             time.sleep(1.5 if _is_ci else 2.5)  # CI: szybciej
+
+            # 🔥 KRYTYCZNE: Wykryj "miękką" stronę błędu LiveSport (HTTP 200,
+            # ale treść = "Nie można wyświetlić strony / spróbuj później").
+            # driver.get() NIE rzuca wyjątku dla takiej strony, więc bez tej
+            # kontroli scraper traktuje blokadę jako sukces, nie znajduje
+            # wierszy H2H i po cichu pomija mecz ("brak meczów dzisiaj").
+            try:
+                _page_now = driver.page_source
+            except WebDriverException:
+                _page_now = None
+            if is_livesport_error_page(_page_now):
+                last_error = RuntimeError("LiveSport error/block page (HTTP 200, no data)")
+                if attempt < max_retries - 1:
+                    delay = exponential_backoff_with_jitter(attempt)
+                    print(f"   🚫 Strona zablokowana/błąd LiveSport "
+                          f"(próba {attempt + 1}/{max_retries}) — czekam {delay:.1f}s...")
+                    time.sleep(delay)
+                    continue  # ponów nawigację (inna strategia)
+                else:
+                    print(f"   🚫 LiveSport blokuje stronę {url} po {max_retries} próbach")
+                    logger.warning(f"LiveSport error page for {url} after {max_retries} attempts")
+                    return out
+
             break  # Success - wyjdź z pętli
             
         except (WebDriverException, ConnectionResetError, ConnectionError, TimeoutError, TimeoutException) as e:
@@ -3639,6 +3712,23 @@ def get_match_links_from_day(driver: webdriver.Chrome, date: str, sports: List[s
             # 🍪 Akceptuj consent banner (może blokować lazy-load!)
             _accept_cookies_on_page(driver)
             
+            # 🔥 Wykryj stronę błędu/blokady LiveSport także na liście dnia.
+            # Jeśli LiveSport zwróci stronę-zaślepkę, ponów z backoffem zanim
+            # uznamy, że "nie ma meczów".
+            _list_attempts = 0
+            while is_livesport_error_page(_safe_page_source(driver)) and _list_attempts < 3:
+                _list_attempts += 1
+                _delay = exponential_backoff_with_jitter(_list_attempts)
+                print(f"   🚫 Lista {sport}: strona błędu/blokady LiveSport "
+                      f"(próba {_list_attempts}/3) — czekam {_delay:.1f}s...")
+                time.sleep(_delay)
+                try:
+                    driver.get(date_url)
+                    time.sleep(3.0)
+                    _accept_cookies_on_page(driver)
+                except WebDriverException as _e:
+                    logger.debug(f"Retry listy {sport} nie powiódł się: {_e}")
+
             # 📊 DEBUG CI: Sprawdź co jest na stronie PRZED scrollowaniem
             initial_link_count = _count_match_links_in_page(driver)
             page_title = driver.title or 'N/A'

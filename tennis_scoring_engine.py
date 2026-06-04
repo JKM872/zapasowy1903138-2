@@ -143,6 +143,98 @@ def _streak_len(form: List[str], char: str = 'W') -> int:
     return n
 
 
+# ---------------------------------------------------------------------------
+# NEW (v6): Hierarchical serve/point match model
+# ---------------------------------------------------------------------------
+
+def _prob_win_game(p: float) -> float:
+    """Probability the server holds a game given per-point win prob ``p``.
+
+    Closed-form solution of the standard tennis game Markov chain (first to 4
+    points, win by 2, including deuce). Returns the probability the *server*
+    wins the game.
+    """
+    p = max(0.01, min(0.99, p))
+    q = 1.0 - p
+    # Win to love/15/30 (reach 4 points before opponent gets 3, no deuce):
+    #   P(40-0) + P(40-15) + P(40-30)
+    p_no_deuce = (
+        p ** 4                                  # 4-0
+        + 4 * p ** 4 * q                        # 4-1
+        + 10 * p ** 4 * q ** 2                   # 4-2
+    )
+    # Deuce reached at 3-3 (each won 3 of 6 points): C(6,3)=20
+    p_deuce = 20 * p ** 3 * q ** 3
+    denom = (p ** 2 + q ** 2)
+    p_win_from_deuce = (p ** 2 / denom) if denom > 0 else 0.5
+    return p_no_deuce + p_deuce * p_win_from_deuce
+
+
+def _prob_win_set(pg_serve: float, pg_return: float) -> float:
+    """Probability a player wins a set.
+
+    ``pg_serve`` is the player's hold probability (win own service game),
+    ``pg_return`` is the probability of breaking (winning a return game).
+    Computes a 6-game, win-by-2 set with a tie-break at 6-6, assuming the
+    player serves first (averaged out across game pairs).
+    """
+    pg_serve = max(0.01, min(0.99, pg_serve))
+    pg_return = max(0.01, min(0.99, pg_return))
+
+    # Per game-pair (one serve + one return) the player wins g of the two.
+    # Approximate the set as a race to 6 games using the average per-game
+    # win probability, with win-by-2 and a tie-break modelled at 6-6.
+    from math import comb
+
+    # Probability of winning a single game averaged over serve/return.
+    pg = 0.5 * pg_serve + 0.5 * pg_return
+
+    pg = max(0.01, min(0.99, pg))
+    qg = 1.0 - pg
+
+    # Win set 6-0..6-4 (reach 6 before opponent reaches 5):
+    p_clean = 0.0
+    for opp in range(0, 5):  # opponent games 0..4
+        # last game is a win: arrange (5 wins among first 5+opp games) * win
+        p_clean += comb(5 + opp, opp) * (pg ** 6) * (qg ** opp)
+    # 7-5: reach 5-5 then win two straight game-pairs (simplified)
+    p_5_5 = comb(10, 5) * (pg ** 5) * (qg ** 5)
+    p_7_5 = p_5_5 * (pg ** 2)
+    # 6-6 tie-break: model as per-point race; approximate with pg.
+    p_tb = p_5_5 * (2 * pg * qg) * pg  # reach 6-6 then win TB (~pg)
+    return min(0.999, p_clean + p_7_5 + p_tb)
+
+
+def _prob_win_match_bo3(p_set: float) -> float:
+    """Probability of winning a best-of-3 match given per-set win prob."""
+    p_set = max(0.01, min(0.99, p_set))
+    # Win in straight sets + win after splitting the first two.
+    return p_set ** 2 + 2 * p_set ** 2 * (1 - p_set)
+
+
+def _serve_model_prob_a(serve_adv_a: float) -> float:
+    """Match win probability for A from a per-point serve advantage.
+
+    ``serve_adv_a`` in [-1, 1] expresses A's overall point-level edge. We map
+    it to per-point serve/return win probabilities around a 0.64 baseline
+    (typical ATP service-point win rate), run the game→set→match hierarchy
+    for both players, and normalise.
+    """
+    base = 0.64
+    spread = 0.10 * serve_adv_a  # shift point-win rates by the edge
+    # A serving / B serving point-win probabilities
+    a_serve_pt = max(0.5, min(0.8, base + spread))
+    b_serve_pt = max(0.5, min(0.8, base - spread))
+
+    a_hold = _prob_win_game(a_serve_pt)
+    b_hold = _prob_win_game(b_serve_pt)
+    a_break = 1.0 - b_hold   # A wins a return game when B fails to hold
+    a_set = _prob_win_set(a_hold, a_break)
+    a_match = _prob_win_match_bo3(a_set)
+    # symmetry guard
+    return max(0.02, min(0.98, a_match))
+
+
 def _recency_h2h(h2h_list: List[Dict[str, Any]], player_a: str, player_b: str) -> Tuple[float, int]:
     """
     Recency-weighted H2H win-rate for player A.
@@ -403,14 +495,15 @@ class TennisFeatureExtractor:
 # ---------------------------------------------------------------------------
 
 DEFAULT_WEIGHTS = {
-    'h2h':          0.22,
-    'form':         0.18,
-    'surface_form': 0.13,
-    'ranking':      0.12,
+    'h2h':          0.20,
+    'form':         0.16,
+    'surface_form': 0.12,
+    'ranking':      0.11,
     'odds':         0.12,
-    'fatigue':      0.08,
-    'sofascore':    0.10,
+    'fatigue':      0.07,
+    'sofascore':    0.09,
     'availability': 0.05,
+    'serve_model':  0.08,
 }
 
 
@@ -503,6 +596,19 @@ class TennisScoringEngine:
         elif ret_b and not ret_a:
             avail_p = min(avail_p + 0.15, 0.95)
         estimates['availability'] = max(0.05, min(0.95, avail_p))
+
+        # Serve/point hierarchical model (v6) — converts an aggregate
+        # point-level edge into a best-of-3 match win probability via the
+        # game→set→match Markov hierarchy. This captures tennis's structural
+        # amplification: a small per-point edge yields a large match edge.
+        # The point edge is sourced from ranking gap, surface form and overall
+        # form — the factors most predictive of who wins points.
+        serve_adv = (
+            feats.get('ranking_advantage', 0.0) * 0.5
+            + feats.get('surface_advantage', 0.0) * 0.3
+            + feats.get('form_advantage', 0.0) * 0.2
+        )
+        estimates['serve_model'] = _serve_model_prob_a(max(-1.0, min(1.0, serve_adv)))
 
         # --- Weighted average ---
         prob_a = sum(estimates.get(k, 0.5) * w[k] for k in w)
