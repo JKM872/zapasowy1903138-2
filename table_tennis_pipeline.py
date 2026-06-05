@@ -6,16 +6,27 @@
 Why a separate pipeline?
 ------------------------
 LiveSport lists too few table-tennis matches (especially amateur / lower-tier
-events). SofaScore covers virtually all of them, so for table tennis we source
-the match list directly from SofaScore's ``scheduled-events`` endpoint instead
-of scraping LiveSport.
+events like TT Elite Series). SofaScore covers virtually all of them, so for
+table tennis we source the match list directly from SofaScore's
+``scheduled-events`` endpoint instead of scraping LiveSport.
 
-What it does (mirrors scrape_and_notify's phases, minus LiveSport):
+Qualification priorities (per requirements):
+  • H2H        — used when available (head-to-head record between the two)
+  • Odds       — REQUIRED: favourite must be >= 1.35 (value filter)
+  • Form       — general recent form (previous matches), home/away irrelevant
+  • Fan vote   — OPTIONAL bonus signal (amateur matches often have 0 votes,
+                 and those are exactly the events we still want)
+
+To avoid hammering the SofaScore API (which 403s after ~700 calls), we filter
+by ODDS FIRST (one cheap call per event), drop events without a clear
+favourite, and only then fetch H2H + form (+ optional votes) for survivors.
+
+Phases:
   FAZA 1  — list all table-tennis events for the date from SofaScore.
-  FAZA 2  — enrich each event: fan vote (mandatory), odds, H2H.
-  FAZA 2.1— hard skip events without a SofaScore fan vote.
-  FAZA 2.5— score every event with TennisScoringEngine (2-way, no draw).
-  FAZA 2.9— unified qualification gate (odds + fan vote + future-only).
+  FAZA 2a — odds gate: keep only events whose favourite >= 1.35.
+  FAZA 2b — enrich survivors: H2H, form, (optional) fan vote.
+  FAZA 2.5— score survivors with TennisScoringEngine (2-way, no draw).
+  FAZA 2.9— unified qualification gate (odds + future-only).
   OUTPUT  — CSV + JSON, optional Telegram summary.
 
 Everything reuses the existing battle-tested SofaScore HTTP stack
@@ -42,22 +53,26 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 SPORT = "table_tennis"
 SPORT_LABEL = "Table Tennis"
 
+# Minimum decimal odds the favourite must have to be considered a value pick.
+TT_MIN_FAVOURITE_ODDS = 1.35
+
 # ---------------------------------------------------------------------------
 # Table-tennis scoring profile
 # ---------------------------------------------------------------------------
-# Table tennis on SofaScore exposes fan vote + odds + H2H, but almost never
-# rankings, surface or recent-form lists (unlike ATP/WTA tennis). The default
-# TennisScoringEngine weights/threshold assume that rich data, so they would
-# disqualify every table-tennis match. We therefore use a profile that
-# concentrates weight on the three signals that ARE available, and a lower
-# advanced_score threshold calibrated so that clear favourites (with positive
-# EV) qualify while coin-flips do not.
+# Table tennis on SofaScore exposes odds + H2H + recent form (and sometimes a
+# fan vote), but almost never rankings or surface (unlike ATP/WTA tennis). The
+# default TennisScoringEngine weights/threshold assume that rich data, so they
+# would disqualify every table-tennis match. We use a profile that concentrates
+# weight on the signals that ARE available, with a lower advanced_score
+# threshold calibrated so clear favourites (positive EV) qualify while
+# coin-flips do not. Fan vote keeps weight but contributes neutral 0.5 when
+# absent, so vote-less amateur matches are NOT penalised.
 TT_WEIGHTS: Dict[str, float] = {
-    "h2h":          0.30,
-    "odds":         0.32,
-    "sofascore":    0.28,
-    "serve_model":  0.05,
-    "form":         0.05,
+    "odds":         0.34,
+    "h2h":          0.26,
+    "form":         0.20,
+    "sofascore":    0.12,
+    "serve_model":  0.08,
     "surface_form": 0.0,
     "ranking":      0.0,
     "fatigue":      0.0,
@@ -76,12 +91,16 @@ try:
         get_votes_via_api,
         get_odds_via_api,
         get_event_h2h,
+        get_team_recent_form,
+        is_sofascore_unreachable,
     )
     _SOFASCORE_OK = True
 except Exception as e:  # pragma: no cover - import guard
     _SOFASCORE_OK = False
     _SOFASCORE_IMPORT_ERROR = str(e)
     print(f"⚠️ sofascore_scraper niedostępny: {e}")
+    def is_sofascore_unreachable() -> bool:  # type: ignore
+        return False
 
 
 # ---------------------------------------------------------------------------
@@ -140,6 +159,8 @@ def _build_row(event: Dict[str, Any]) -> Dict[str, Any]:
     event_id = event.get("event_id")
     return {
         "event_id": event_id,
+        "home_id": event.get("home_id"),
+        "away_id": event.get("away_id"),
         "match_url": f"https://www.sofascore.com/event/{event_id}" if event_id else "",
         "home_team": home,
         "away_team": away,
@@ -187,30 +208,28 @@ def _build_row(event: Dict[str, Any]) -> Dict[str, Any]:
 # Enrichment
 # ---------------------------------------------------------------------------
 
-def enrich_row(row: Dict[str, Any]) -> Dict[str, Any]:
-    """Fetch fan vote, odds and H2H for a single event row (in place)."""
+def _favourite_odds(row: Dict[str, Any]) -> Optional[float]:
+    """Return the lower (favourite) of home/away odds, or None if unavailable."""
+    ho = row.get("home_odds")
+    ao = row.get("away_odds")
+    try:
+        ho = float(ho) if ho else None
+        ao = float(ao) if ao else None
+    except (ValueError, TypeError):
+        return None
+    candidates = [o for o in (ho, ao) if o and o > 1.0]
+    return min(candidates) if candidates else None
+
+
+def fetch_odds(row: Dict[str, Any]) -> bool:
+    """Fetch SofaScore odds for a row (in place). Returns True if odds found.
+
+    This is the CHEAP first-pass gate: one API call, used to drop events
+    without a clear favourite before spending calls on H2H/form/votes.
+    """
     event_id = row.get("event_id")
     if not event_id:
-        row["sofascore_skip_reason"] = "no_event_id"
-        return row
-
-    # --- Fan vote (mandatory signal) ---
-    try:
-        votes = get_votes_via_api(event_id)
-    except Exception as e:  # network/parse safety
-        votes = None
-        row["sofascore_skip_reason"] = f"votes_error:{type(e).__name__}"
-    probs = _vote_probs_two_way(votes)
-    if probs:
-        row["sofascore_home_win_prob"] = probs["home"]
-        row["sofascore_away_win_prob"] = probs["away"]
-        row["sofascore_total_votes"] = probs["total_votes"]
-        row["sofascore_found"] = True
-    else:
-        row["sofascore_found"] = False
-        row.setdefault("sofascore_skip_reason", "no_fan_vote")
-
-    # --- Odds ---
+        return False
     try:
         odds = get_odds_via_api(event_id)
     except Exception:
@@ -219,8 +238,23 @@ def enrich_row(row: Dict[str, Any]) -> Dict[str, Any]:
         row["home_odds"] = odds.get("home_odds")
         row["away_odds"] = odds.get("away_odds")
         row["odds_bookmaker"] = odds.get("bookmaker")
+        return True
+    return False
 
-    # --- H2H ---
+
+def enrich_row(row: Dict[str, Any], with_votes: bool = True) -> Dict[str, Any]:
+    """Fetch H2H, recent form and (optional) fan vote for a survivor row.
+
+    Called only for events that already passed the odds gate, to minimise
+    SofaScore API calls. Fan vote is a BONUS signal — its absence does not
+    disqualify the event (amateur matches commonly have 0 votes).
+    """
+    event_id = row.get("event_id")
+    if not event_id:
+        row["tt_skip_reason"] = "no_event_id"
+        return row
+
+    # --- H2H (used when available) ---
     try:
         h2h = get_event_h2h(event_id)
     except Exception:
@@ -232,6 +266,32 @@ def enrich_row(row: Dict[str, Any]) -> Dict[str, Any]:
         total = h2h.get("total", 0)
         if total > 0:
             row["win_rate"] = round(h2h.get("home_wins", 0) / total, 3)
+
+    # --- General recent form (previous matches; venue irrelevant) ---
+    try:
+        row["form_a"] = get_team_recent_form(row.get("home_id"), row.get("home_team", ""))
+    except Exception:
+        row["form_a"] = []
+    try:
+        row["form_b"] = get_team_recent_form(row.get("away_id"), row.get("away_team", ""))
+    except Exception:
+        row["form_b"] = []
+
+    # --- Fan vote (OPTIONAL bonus) ---
+    if with_votes:
+        try:
+            votes = get_votes_via_api(event_id)
+        except Exception:
+            votes = None
+        probs = _vote_probs_two_way(votes)
+        if probs:
+            row["sofascore_home_win_prob"] = probs["home"]
+            row["sofascore_away_win_prob"] = probs["away"]
+            row["sofascore_total_votes"] = probs["total_votes"]
+            row["sofascore_found"] = True
+        else:
+            row["sofascore_found"] = False
+            row["sofascore_skip_reason"] = "no_fan_vote"
 
     return row
 
@@ -291,26 +351,27 @@ def score_rows(rows: List[Dict[str, Any]]) -> int:
 # Qualification
 # ---------------------------------------------------------------------------
 
-def _has_fan_vote(row: Dict[str, Any]) -> bool:
-    return (
-        row.get("sofascore_home_win_prob") is not None
-        and row.get("sofascore_away_win_prob") is not None
-    )
+def apply_odds_gate(rows: List[Dict[str, Any]], min_fav_odds: float = TT_MIN_FAVOURITE_ODDS) -> int:
+    """Keep only events whose favourite odds are >= ``min_fav_odds``.
 
-
-def apply_mandatory_fan_vote_gate(rows: List[Dict[str, Any]]) -> int:
-    """Mirror of scrape_and_notify FAZA 2.1: table-tennis events MUST have a
-    SofaScore fan vote, otherwise they are disqualified. Returns dropped count.
+    Per requirements, odds are REQUIRED and the favourite must clear 1.35
+    (a value filter that drops both no-odds events and prohibitive favourites
+    where there is no betting value). Sets ``qualifies`` in place; returns the
+    number of rows that PASS.
     """
-    dropped = 0
+    passed = 0
     for row in rows:
-        if not row.get("qualifies"):
-            continue
-        if not _has_fan_vote(row):
+        fav = _favourite_odds(row)
+        if fav is not None and fav >= min_fav_odds:
+            row["qualifies"] = True
+            passed += 1
+        else:
             row["qualifies"] = False
-            row["tt_skip_reason"] = row.get("tt_skip_reason") or "Brak obowiązkowego SofaScore fan vote"
-            dropped += 1
-    return dropped
+            if fav is None:
+                row["tt_skip_reason"] = "no_odds"
+            else:
+                row["tt_skip_reason"] = f"favourite_odds {fav:.2f} < {min_fav_odds:.2f}"
+    return passed
 
 
 # ---------------------------------------------------------------------------
@@ -344,6 +405,10 @@ def _to_frontend_json(row: Dict[str, Any]) -> Dict[str, Any]:
             "home": row.get("home_wins_in_h2h_last5"),
             "away": row.get("away_wins_in_h2h_last5"),
             "total": row.get("h2h_count"),
+        },
+        "form": {
+            "home": row.get("form_a"),
+            "away": row.get("form_b"),
         },
         "scoring": {
             "pick": row.get("scoring_pick"),
@@ -400,7 +465,8 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str) -> Dict[str, str]:
 # ---------------------------------------------------------------------------
 
 def run(date_str: str, max_matches: Optional[int] = None,
-        send_telegram: bool = True, verbose: bool = True) -> Dict[str, Any]:
+        send_telegram: bool = True, verbose: bool = True,
+        with_votes: bool = True) -> Dict[str, Any]:
     """Run the full table-tennis pipeline for a date.
 
     Returns a summary dict with counts and output paths.
@@ -429,31 +495,46 @@ def run(date_str: str, max_matches: Optional[int] = None,
 
     rows = [_build_row(e) for e in upcoming]
 
-    # ── FAZA 2: enrichment (fan vote + odds + H2H) ──
-    print(f"\n[FAZA 2] Wzbogacam {len(rows)} meczów (fan vote + odds + H2H)...")
-    found_votes = 0
+    # ── FAZA 2a: ODDS GATE (cheap first pass to minimise API calls) ──
+    # Fetch odds for every event (1 call each), then keep only those with a
+    # favourite >= 1.35. This drops the bulk of events BEFORE we spend calls on
+    # H2H/form/votes, which is what prevents the Cloudflare 403 storm.
+    print(f"\n[FAZA 2a] Odds gate ({len(rows)} meczów, favourite ≥ {TT_MIN_FAVOURITE_ODDS})...")
+    odds_found = 0
     for i, row in enumerate(rows, 1):
-        enrich_row(row)
+        if is_sofascore_unreachable():
+            print(f"   🛑 SofaScore niedostępne (circuit breaker) — przerywam odds gate na {i}/{len(rows)}")
+            break
+        if fetch_odds(row):
+            odds_found += 1
+        if verbose and (i % 50 == 0 or i == len(rows)):
+            print(f"   [{i}/{len(rows)}] odds: {odds_found} znalezionych")
+    passed_odds = apply_odds_gate(rows)
+    survivors = [r for r in rows if r.get("qualifies")]
+    print(f"   💰 Odds: {odds_found}/{len(rows)} | po filtrze 1.35: {passed_odds} kandydatów")
+
+    # ── FAZA 2b: enrich survivors only (H2H + form + optional votes) ──
+    print(f"\n[FAZA 2b] Wzbogacam {len(survivors)} kandydatów (H2H + forma{' + fan vote' if with_votes else ''})...")
+    found_votes = 0
+    for i, row in enumerate(survivors, 1):
+        if is_sofascore_unreachable():
+            print(f"   🛑 SofaScore niedostępne — przerywam wzbogacanie na {i}/{len(survivors)}")
+            break
+        enrich_row(row, with_votes=with_votes)
         if row.get("sofascore_found"):
             found_votes += 1
-        # Provisional qualify: has fan vote → candidate (scoring decides final).
-        row["qualifies"] = _has_fan_vote(row)
-        if verbose and (i % 25 == 0 or i == len(rows)):
-            print(f"   [{i}/{len(rows)}] fan vote: {found_votes} znalezionych")
-    print(f"   👥 Fan vote znaleziony dla {found_votes}/{len(rows)} meczów")
+        if verbose and (i % 25 == 0 or i == len(survivors)):
+            print(f"   [{i}/{len(survivors)}] wzbogacono (fan vote: {found_votes})")
+    if with_votes:
+        print(f"   👥 Fan vote (bonus): {found_votes}/{len(survivors)}")
 
-    # ── FAZA 2.1: mandatory fan-vote gate ──
-    dropped = apply_mandatory_fan_vote_gate(rows)
-    if dropped:
-        print(f"   ❌ {dropped} meczów odrzuconych (brak SofaScore fan vote)")
-
-    # ── FAZA 2.5: scoring ──
-    print("\n[FAZA 2.5] Scoring (TennisScoringEngine)...")
+    # ── FAZA 2.5: scoring (only survivors are scored) ──
+    print("\n[FAZA 2.5] Scoring (TennisScoringEngine, profil table tennis)...")
     scored = score_rows(rows)
     qualified = sum(1 for r in rows if r.get("qualifies"))
-    print(f"   🧠 {scored} ocenionych, {qualified} kwalifikujących się (advanced_score ≥ próg)")
+    print(f"   🧠 {scored} ocenionych, {qualified} kwalifikujących się (advanced_score ≥ {TT_THRESHOLD:.0f})")
 
-    # ── FAZA 2.9: qualification gate (odds + fan vote + future-only) ──
+    # ── FAZA 2.9: qualification gate (odds + future-only) ──
     try:
         from qualification_gate import apply_qualification_gate
         channel_q = apply_qualification_gate(rows, date_str)
@@ -481,6 +562,7 @@ def run(date_str: str, max_matches: Optional[int] = None,
         "date": date_str,
         "total_events": len(events),
         "processed": len(rows),
+        "odds_candidates": passed_odds,
         "fan_vote_found": found_votes,
         "scored": scored,
         "qualified": sum(1 for r in rows if r.get("qualifies")),
@@ -500,9 +582,12 @@ def main() -> None:
     ap.add_argument("--max-matches", type=int, default=None,
                     help="Cap number of matches processed (testing)")
     ap.add_argument("--no-telegram", action="store_true", help="Skip Telegram notification")
+    ap.add_argument("--no-votes", action="store_true",
+                    help="Skip the optional fan-vote fetch (saves API calls)")
     args = ap.parse_args()
 
-    run(args.date, max_matches=args.max_matches, send_telegram=not args.no_telegram)
+    run(args.date, max_matches=args.max_matches,
+        send_telegram=not args.no_telegram, with_votes=not args.no_votes)
 
 
 if __name__ == "__main__":

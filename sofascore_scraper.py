@@ -373,6 +373,16 @@ _SOFASCORE_UNREACHABLE_THRESHOLD: int = 5
 _sofascore_unreachable_for_run: bool = False
 
 
+def is_sofascore_unreachable() -> bool:
+    """True when SofaScore has been disabled for the rest of this run.
+
+    Lets long batch pipelines (e.g. table tennis, hundreds of events) stop
+    issuing API calls once the circuit breaker / unreachable detector has
+    tripped, instead of looping uselessly through every remaining event.
+    """
+    return bool(_sofascore_unreachable_for_run or _api_circuit_breaker_tripped)
+
+
 def _should_attempt_cookie_warming() -> bool:
     """Czy warto teraz próbować cookie warming z FlareSolverr?
 
@@ -1828,6 +1838,8 @@ def list_scheduled_events(sport: str, date_str: str) -> List[Dict[str, Any]]:
                 'event_id': event.get('id'),
                 'home_team': home,
                 'away_team': away,
+                'home_id': (event.get('homeTeam') or {}).get('id'),
+                'away_id': (event.get('awayTeam') or {}).get('id'),
                 'tournament': tournament,
                 'category': category,
                 'start_timestamp': event.get('startTimestamp'),
@@ -1876,6 +1888,51 @@ def get_event_h2h(event_id: int) -> Optional[Dict[str, Any]]:
         'draws': dr,
         'total': hw + aw + dr,
     }
+
+
+def get_team_recent_form(team_id: int, team_name: str, limit: int = 5) -> List[str]:
+    """Recent W/L form for a team/player from SofaScore.
+
+    Endpoint: ``/api/v1/team/{id}/events/last/0`` → finished events. For each
+    event we determine whether *team_id* won, producing a newest-first list of
+    'W'/'L' (table tennis has no draws). Used as the "forma ogólna" signal.
+
+    Returns up to ``limit`` results, or [] on failure.
+    """
+    if not team_id:
+        return []
+    url = f"https://api.sofascore.com/api/v1/team/{team_id}/events/last/0"
+    data = _api_get_json(url, timeout=10)
+    if not isinstance(data, dict):
+        return []
+    events = data.get('events', []) or []
+    # API returns oldest-first; reverse to newest-first.
+    form: List[str] = []
+    for event in reversed(events):
+        try:
+            status_type = ((event.get('status') or {}).get('type') or '').lower()
+            if status_type != 'finished':
+                continue
+            home = (event.get('homeTeam') or {})
+            away = (event.get('awayTeam') or {})
+            hs = (event.get('homeScore') or {}).get('current')
+            as_ = (event.get('awayScore') or {}).get('current')
+            if hs is None or as_ is None:
+                continue
+            team_is_home = home.get('id') == team_id
+            team_is_away = away.get('id') == team_id
+            if not team_is_home and not team_is_away:
+                continue
+            if hs == as_:
+                continue  # no draws in table tennis; skip ambiguous
+            home_won = hs > as_
+            won = (team_is_home and home_won) or (team_is_away and not home_won)
+            form.append('W' if won else 'L')
+            if len(form) >= limit:
+                break
+        except (AttributeError, TypeError):
+            continue
+    return form
 
 
 def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, search_date: str, debug: bool = False) -> Optional[int]:

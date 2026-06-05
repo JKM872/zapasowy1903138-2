@@ -181,25 +181,55 @@ class TestEnrichAndGate:
                                          "away_odds": 2.3, "bookmaker": "SofaScore"})
         monkeypatch.setattr(tt, "get_event_h2h",
                             lambda eid: {"home_wins": 3, "away_wins": 1, "draws": 0, "total": 4})
+        monkeypatch.setattr(tt, "get_team_recent_form",
+                            lambda tid, name, limit=5: ['W', 'W', 'L'] if tid == 10 else ['L', 'L', 'W'])
         row = tt._build_row({"event_id": 1, "home_team": "A", "away_team": "B",
+                             "home_id": 10, "away_id": 20,
                              "start_timestamp": 1780000000, "status": "notstarted"})
         tt.enrich_row(row)
         assert row["sofascore_found"] is True
         assert row["sofascore_home_win_prob"] == 70.0
-        assert row["home_odds"] == 1.6
         assert row["home_wins_in_h2h_last5"] == 3
         assert row["h2h_count"] == 4
+        assert row["form_a"] == ['W', 'W', 'L']
+        assert row["form_b"] == ['L', 'L', 'W']
 
-    def test_mandatory_gate_drops_no_vote(self):
+    def test_enrich_without_votes_skips_vote_call(self, monkeypatch):
+        called = {"votes": False}
+        def _votes(eid):
+            called["votes"] = True
+            return None
+        monkeypatch.setattr(tt, "get_votes_via_api", _votes)
+        monkeypatch.setattr(tt, "get_event_h2h", lambda eid: None)
+        monkeypatch.setattr(tt, "get_team_recent_form", lambda tid, name, limit=5: [])
+        row = tt._build_row({"event_id": 1, "home_team": "A", "away_team": "B",
+                             "home_id": 10, "away_id": 20, "start_timestamp": 1780000000})
+        tt.enrich_row(row, with_votes=False)
+        assert called["votes"] is False  # vote call skipped to save API budget
+
+    def test_odds_gate_keeps_favourite_and_drops_rest(self):
         rows = [
-            {"qualifies": True, "sofascore_home_win_prob": 70, "sofascore_away_win_prob": 30},
-            {"qualifies": True, "sofascore_home_win_prob": None, "sofascore_away_win_prob": None},
+            {"home_odds": 1.55, "away_odds": 2.45},   # favourite 1.55 → pass
+            {"home_odds": 1.20, "away_odds": 4.50},   # favourite 1.20 < 1.35 → drop
+            {"home_odds": 1.90, "away_odds": 1.90},   # favourite 1.90 → pass
+            {"home_odds": None, "away_odds": None},    # no odds → drop
         ]
-        dropped = tt.apply_mandatory_fan_vote_gate(rows)
-        assert dropped == 1
+        passed = tt.apply_odds_gate(rows)
+        assert passed == 2
         assert rows[0]["qualifies"] is True
         assert rows[1]["qualifies"] is False
-        assert rows[1]["tt_skip_reason"]
+        assert rows[2]["qualifies"] is True
+        assert rows[3]["qualifies"] is False
+        assert rows[3]["tt_skip_reason"] == "no_odds"
+
+    def test_fetch_odds_populates_row(self, monkeypatch):
+        monkeypatch.setattr(tt, "get_odds_via_api",
+                            lambda eid: {"odds_found": True, "home_odds": 1.7,
+                                         "away_odds": 2.1, "bookmaker": "SofaScore"})
+        row = {"event_id": 5}
+        assert tt.fetch_odds(row) is True
+        assert row["home_odds"] == 1.7
+        assert row["away_odds"] == 2.1
 
 
 # ---------------------------------------------------------------------------
@@ -228,10 +258,70 @@ class TestScoring:
         tt.score_rows(rows)
         assert rows[0]["qualifies"] is False
 
+    def test_favourite_without_fan_vote_still_qualifies(self):
+        # KEY requirement: amateur matches with NO fan vote must still qualify
+        # when odds + H2H + form make a clear favourite.
+        row = {
+            "home_team": "Jadam D.", "away_team": "Kuzmicz J.", "sport": "table_tennis",
+            "qualifies": True,
+            "sofascore_home_win_prob": None, "sofascore_away_win_prob": None,
+            "sofascore_total_votes": 0,
+            "home_odds": 1.50, "away_odds": 2.55,
+            "home_wins_in_h2h_last5": 3, "away_wins_in_h2h_last5": 1, "h2h_count": 4,
+            "form_a": ["W", "W", "W", "L", "W"], "form_b": ["L", "L", "W", "L", "L"],
+        }
+        tt.score_rows([row])
+        assert row["qualifies"] is True
+        assert row["scoring_pick"] == "A"
+
+
+# ---------------------------------------------------------------------------
+# 8. Recent form fetch (general form, venue-agnostic)
+# ---------------------------------------------------------------------------
+class TestRecentForm:
+    def test_parses_wins_losses(self, monkeypatch):
+        import sofascore_scraper as ss
+        fake = {"events": [
+            # oldest-first; helper reverses to newest-first
+            {"status": {"type": "finished"}, "homeTeam": {"id": 1}, "awayTeam": {"id": 2},
+             "homeScore": {"current": 3}, "awayScore": {"current": 1}},   # team 1 win
+            {"status": {"type": "finished"}, "homeTeam": {"id": 3}, "awayTeam": {"id": 1},
+             "homeScore": {"current": 3}, "awayScore": {"current": 0}},   # team 1 loss
+        ]}
+        monkeypatch.setattr(ss, "_api_get_json", lambda url, timeout=10: fake)
+        form = ss.get_team_recent_form(1, "Team1")
+        # newest-first: last event (team1 loss) first
+        assert form == ['L', 'W']
+
+    def test_skips_unfinished(self, monkeypatch):
+        import sofascore_scraper as ss
+        fake = {"events": [
+            {"status": {"type": "notstarted"}, "homeTeam": {"id": 1}, "awayTeam": {"id": 2},
+             "homeScore": {"current": None}, "awayScore": {"current": None}},
+        ]}
+        monkeypatch.setattr(ss, "_api_get_json", lambda url, timeout=10: fake)
+        assert ss.get_team_recent_form(1, "Team1") == []
+
+    def test_zero_team_id(self):
+        import sofascore_scraper as ss
+        assert ss.get_team_recent_form(0, "x") == []
+
+
+# ---------------------------------------------------------------------------
+# 9. Profile independence
+# ---------------------------------------------------------------------------
+class TestProfileIndependence:
     def test_profile_weights_independent_of_calibration(self):
         # score_rows must force the TT profile regardless of any tennis
         # calibration file. Verify a scored row carries advanced_score.
-        rows = [self._row(70, 30, 1.6, 2.3, 3, 1)]
+        rows = [{
+            "home_team": "A", "away_team": "B", "sport": "table_tennis",
+            "qualifies": True,
+            "sofascore_home_win_prob": 70, "sofascore_away_win_prob": 30,
+            "sofascore_total_votes": 600,
+            "home_odds": 1.6, "away_odds": 2.3,
+            "home_wins_in_h2h_last5": 3, "away_wins_in_h2h_last5": 1, "h2h_count": 4,
+        }]
         tt.score_rows(rows)
         assert "advanced_score" in rows[0]
 

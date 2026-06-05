@@ -10,23 +10,36 @@ lower-tier events. SofaScore covers virtually all of them. So for table tennis
 we pull the day's slate directly from SofaScore's `scheduled-events` API and
 enrich each event with the same fan-vote / odds / H2H signals used elsewhere.
 
+## Qualification priorities
+
+Per requirements, the signals that matter (home/away is irrelevant for table tennis):
+
+| Signal | Role |
+|--------|------|
+| **Odds** | REQUIRED — favourite must be ≥ 1.35 (value filter) |
+| **H2H** | used when available (head-to-head record) |
+| **Form** | general recent form (previous matches) |
+| **Fan vote** | OPTIONAL bonus — amateur matches often have 0 votes and are still kept |
+
 ## How it works
 
-`table_tennis_pipeline.py` mirrors the phases of `scrape_and_notify.py`, minus
-the LiveSport scraping:
+`table_tennis_pipeline.py` sources the day's slate from SofaScore and runs:
 
 | Phase | What happens |
 |-------|--------------|
 | FAZA 1 | `list_scheduled_events("table_tennis", date)` → all events for the day |
-| FAZA 2 | per-event enrichment: fan vote (`/event/{id}/votes`), odds (`/event/{id}/odds`), H2H (`/event/{id}/h2h`) |
-| FAZA 2.1 | mandatory fan-vote gate — events without a SofaScore fan vote are dropped |
-| FAZA 2.5 | scoring with `TennisScoringEngine` using a **table-tennis profile** |
-| FAZA 2.9 | unified `qualification_gate` (odds + fan vote + future-only) |
+| FAZA 2a | **odds gate** — fetch odds (1 cheap call/event), keep only favourite ≥ 1.35 |
+| FAZA 2b | enrich survivors ONLY: H2H, recent form, (optional) fan vote |
+| FAZA 2.5 | score survivors with `TennisScoringEngine` (table-tennis profile) |
+| FAZA 2.9 | unified `qualification_gate` (odds + future-only) |
 | OUTPUT | `outputs/table_tennis_{date}.csv` + `results/matches_{date}_table_tennis.json`, optional Telegram |
 
-Everything reuses the existing, battle-tested SofaScore HTTP stack
-(`_api_get_json` → curl_cffi / FlareSolverr / Cloudflare WARP), so it inherits
-all the Cloudflare-bypass machinery for free.
+**Why odds-first?** SofaScore's API 403s after ~700 calls. Listing a day can
+return ~2000 table-tennis events. Fetching odds first (one call each) and
+dropping everything without a clear favourite means H2H/form/votes are fetched
+for only a handful of survivors — which avoids the Cloudflare 403 storm. A
+circuit-breaker check (`is_sofascore_unreachable()`) also stops both loops
+early if SofaScore goes down mid-run.
 
 ## Table-tennis scoring profile
 
@@ -37,12 +50,14 @@ disqualify every table-tennis match. So the pipeline applies a dedicated
 profile (`TT_WEIGHTS`, `TT_THRESHOLD` in `table_tennis_pipeline.py`):
 
 ```
-h2h 0.30 | odds 0.32 | sofascore 0.28 | serve_model 0.05 | form 0.05
+odds 0.34 | h2h 0.26 | form 0.20 | sofascore 0.12 | serve_model 0.08
 threshold = 25   (vs 45 for ATP/WTA tennis)
 ```
 
 This is re-asserted **after** engine construction so a future tennis
-calibration file can never silently override the table-tennis profile.
+calibration file can never silently override the table-tennis profile. Fan
+vote keeps weight but contributes a neutral 0.5 when absent, so vote-less
+amateur matches are **not** penalised.
 
 Calibrated so clear favourites with positive EV qualify while coin-flips do
 not (verified in `test_table_tennis_pipeline.py`):
