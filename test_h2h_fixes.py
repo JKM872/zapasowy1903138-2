@@ -524,5 +524,89 @@ class TestWaitForH2HRows:
         assert d.implicit == 10
 
 
+# ---------------------------------------------------------------------------
+# 11. 2026 DOM redesign — parse_h2h_from_soup + form badges
+# ---------------------------------------------------------------------------
+class TestLiveSport2026Redesign:
+    """LiveSport renamed H2H classes (wclH2h__date, wcl-name_*, wcl-tableScore,
+    wcl-badgeform_*, data-testid). The parser must handle the new DOM."""
+
+    def _fixture(self, name):
+        from bs4 import BeautifulSoup
+        path = os.path.join(os.path.dirname(__file__), 'tests', 'fixtures', name)
+        if not os.path.exists(path):
+            pytest.skip(f"fixture missing: {name}")
+        with open(path, encoding='utf-8') as fh:
+            return BeautifulSoup(fh.read(), 'html.parser')
+
+    def test_parses_h2h_rows_new_dom(self):
+        from livesport_h2h_scraper import parse_h2h_from_soup
+        soup = self._fixture('livesport_h2h_2026_redesign.html')
+        rows = parse_h2h_from_soup(soup, 'Khenchela')
+        assert len(rows) == 2
+        assert rows[0]['date'] == '09.01.26'
+        assert rows[0]['home'] == 'Rouisset'
+        assert rows[0]['away'] == 'Khenchela'
+        assert rows[0]['score'] == '2-0'
+        assert rows[0]['winner'] == 'home'
+
+    def test_parses_rows_without_section_wrapper(self):
+        from livesport_h2h_scraper import parse_h2h_from_soup
+        soup = self._fixture('livesport_form_2026_redesign.html')
+        rows = parse_h2h_from_soup(soup, 'Khenchela')
+        assert len(rows) == 5
+        # Second row is a draw (2-2).
+        draw_rows = [r for r in rows if r['winner'] == 'draw']
+        assert len(draw_rows) == 1
+
+    def test_form_badges_new_dom(self):
+        from livesport_h2h_scraper import _extract_form_badges
+        soup = self._fixture('livesport_form_2026_redesign.html')
+        form = _extract_form_badges(soup)
+        assert form == ['W', 'D', 'W', 'L', 'L']
+
+    def test_badge_to_result_variants(self):
+        from livesport_h2h_scraper import _badge_to_result
+        from bs4 import BeautifulSoup
+        win = BeautifulSoup('<div data-testid="wcl-badgeForm-win" class="wcl-win_x">Z</div>', 'html.parser').div
+        draw = BeautifulSoup('<div class="wcl-draw_y" title="Remis">R</div>', 'html.parser').div
+        lose = BeautifulSoup('<div class="wcl-lose_z">P</div>', 'html.parser').div
+        legacy = BeautifulSoup('<div class="h2h__badgeform" title="Zwycięstwo">W</div>', 'html.parser').div
+        assert _badge_to_result(win) == 'W'
+        assert _badge_to_result(draw) == 'D'
+        assert _badge_to_result(lose) == 'L'
+        assert _badge_to_result(legacy) == 'W'
+
+    def test_row_score_new_testid(self):
+        from livesport_h2h_scraper import _h2h_row_score
+        from bs4 import BeautifulSoup
+        row = BeautifulSoup(
+            '<a class="h2h__row"><span data-testid="wcl-tableScore">3</span>'
+            '<span data-testid="wcl-tableScore">1</span></a>', 'html.parser').a
+        score, winner = _h2h_row_score(row)
+        assert score == '3-1'
+        assert winner == 'home'
+
+    def test_legacy_dom_still_parses(self):
+        """Old markup (h2h__date / participantInner / h2h__result span) must
+        still work so the fix is backward compatible."""
+        from livesport_h2h_scraper import parse_h2h_from_soup
+        from bs4 import BeautifulSoup
+        legacy = """
+        <div class="h2h__section"><div>Pojedynki bezpośrednie</div>
+        <a class="h2h__row">
+          <span class="h2h__date">01.02.25</span>
+          <span class="h2h__homeParticipant"><span class="h2h__participantInner">Alpha</span></span>
+          <span class="h2h__awayParticipant"><span class="h2h__participantInner">Beta</span></span>
+          <span class="h2h__result"><span>2</span><span>1</span></span>
+        </a></div>
+        """
+        rows = parse_h2h_from_soup(BeautifulSoup(legacy, 'html.parser'), 'Alpha')
+        assert len(rows) == 1
+        assert rows[0]['home'] == 'Alpha'
+        assert rows[0]['score'] == '2-1'
+        assert rows[0]['winner'] == 'home'
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

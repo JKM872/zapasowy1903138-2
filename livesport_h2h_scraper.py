@@ -595,7 +595,7 @@ def parse_h2h_from_soup(soup: BeautifulSoup, home_team: str) -> List[Dict]:
         logger.warning("parse_h2h_from_soup: soup jest None - nie można parsować H2H")
         return results
 
-    # NOWA STRUKTURA LIVESPORT (2025)
+    # NOWA STRUKTURA LIVESPORT (2025/2026)
     # Szukaj sekcji "Pojedynki bezpośrednie"
     try:
         h2h_sections = soup.find_all('div', class_='h2h__section')
@@ -617,55 +617,31 @@ def parse_h2h_from_soup(soup: BeautifulSoup, home_team: str) -> List[Dict]:
         # Fallback: weź pierwszą sekcję h2h__section
         if h2h_sections:
             pojedynki_section = h2h_sections[0]
-    
-    if not pojedynki_section:
-        logger.debug(f"parse_h2h_from_soup: Nie znaleziono sekcji H2H dla {home_team}")
-        return results
-    
-    # Znajdź wiersze z meczami: a.h2h__row
+
+    # Wyszukaj wiersze meczów. Najpierw w sekcji "pojedynki" (jeśli wykryta),
+    # a gdy nowy layout nie ma już wrappera 'h2h__section' — przeszukaj całą
+    # stronę po 'a.h2h__row'. To czyni parser odpornym na redesign DOM.
     try:
-        match_rows = pojedynki_section.select('a.h2h__row')
+        if pojedynki_section is not None:
+            match_rows = pojedynki_section.select('a.h2h__row')
+        else:
+            match_rows = []
+        if not match_rows:
+            match_rows = soup.select('a.h2h__row')
     except Exception as e:
         logger.warning(f"parse_h2h_from_soup: Błąd przy wyszukiwaniu wierszy H2H: {e}")
+        return results
+
+    if not match_rows:
+        logger.debug(f"parse_h2h_from_soup: Nie znaleziono wierszy H2H dla {home_team}")
         return results
     
     for row in match_rows[:5]:  # Maksymalnie 5 ostatnich
         try:
-            # Data
-            date_el = row.select_one('span.h2h__date')
-            date = safe_get_text(date_el, '')
-            
-            # Gospodarz
-            home_el = row.select_one('span.h2h__homeParticipant span.h2h__participantInner')
-            home = safe_get_text(home_el, '')
-            
-            # Gość
-            away_el = row.select_one('span.h2h__awayParticipant span.h2h__participantInner')
-            away = safe_get_text(away_el, '')
-            
-            # Wynik
-            score = ''
-            winner = 'unknown'
-            result_spans = row.select('span.h2h__result span')
-            
-            if len(result_spans) >= 2:
-                goals_home = safe_get_text(result_spans[0], '0')
-                goals_away = safe_get_text(result_spans[1], '0')
-                score = f"{goals_home}-{goals_away}"
-                
-                # Determine winner
-                try:
-                    gh = int(goals_home)
-                    ga = int(goals_away)
-                    if gh > ga:
-                        winner = 'home'
-                    elif ga > gh:
-                        winner = 'away'
-                    else:
-                        winner = 'draw'
-                except (ValueError, TypeError) as e:
-                    logger.debug(f"parse_h2h_from_soup: Nie można sparsować wyniku '{goals_home}-{goals_away}': {e}")
-                    winner = 'unknown'
+            date = _h2h_row_date(row)
+            home = _h2h_row_participant(row, 'home')
+            away = _h2h_row_participant(row, 'away')
+            score, winner = _h2h_row_score(row)
 
             if home and away and score:
                 results.append({
@@ -685,6 +661,159 @@ def parse_h2h_from_soup(soup: BeautifulSoup, home_team: str) -> List[Dict]:
             continue
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# H2H row field extractors — resilient to LiveSport DOM redesigns
+# ---------------------------------------------------------------------------
+# LiveSport (late-2025/2026 redesign) renamed the H2H markup classes:
+#   span.h2h__date            → span.wclH2h__date  (data-testid="wcl-stageTime")
+#   span.h2h__homeParticipant → div.h2h__homeParticipant
+#   span.h2h__participantInner→ (gone) name now in span.wcl-name_*
+#                               (data-testid="wcl-scores-simple-text-01")
+#   span.h2h__result span     → span[data-testid="wcl-tableScore"]
+# These helpers try the NEW selectors first, then fall back to the OLD ones,
+# so the parser works across both layouts.
+
+def _h2h_row_date(row) -> str:
+    """Extract the match date from an a.h2h__row element."""
+    for sel in (
+        'span.wclH2h__date',
+        'span[data-testid="wcl-stageTime"]',
+        'span.h2h__date',
+    ):
+        el = row.select_one(sel)
+        if el:
+            txt = safe_get_text(el, '')
+            if txt:
+                return txt
+    return ''
+
+
+def _h2h_row_participant(row, side: str) -> str:
+    """Extract home/away participant name from an a.h2h__row element.
+
+    ``side`` is 'home' or 'away'. Tries the new wcl-name markup, then the
+    legacy participantInner span.
+    """
+    part_cls = 'h2h__homeParticipant' if side == 'home' else 'h2h__awayParticipant'
+    # New layout: participant is a div.<cls> containing span.wcl-name_*
+    container = row.select_one(f'.{part_cls}')
+    if container is not None:
+        for sel in (
+            'span[data-testid="wcl-scores-simple-text-01"]',
+            'span[class*="wcl-name"]',
+            'span.h2h__participantInner',
+        ):
+            el = container.select_one(sel)
+            if el:
+                txt = safe_get_text(el, '')
+                if txt:
+                    return txt
+        # Last resort: the container's own text.
+        txt = safe_get_text(container, '')
+        if txt:
+            return txt
+    # Legacy fallback: span.h2h__homeParticipant span.h2h__participantInner
+    el = row.select_one(f'span.{part_cls} span.h2h__participantInner')
+    return safe_get_text(el, '')
+
+
+def _h2h_row_score(row):
+    """Extract (score_str, winner) from an a.h2h__row element.
+
+    Returns ('2-0', 'home'|'away'|'draw'|'unknown'). Empty score → ('', 'unknown').
+    """
+    # New layout: result spans carry data-testid="wcl-tableScore".
+    score_spans = row.select('span[data-testid="wcl-tableScore"]')
+    if len(score_spans) < 2:
+        # Legacy layout fallback.
+        score_spans = row.select('span.h2h__result span')
+    if len(score_spans) < 2:
+        return '', 'unknown'
+
+    goals_home = safe_get_text(score_spans[0], '')
+    goals_away = safe_get_text(score_spans[1], '')
+    # Guard against non-numeric placeholder spans ('-', '', etc.).
+    if not goals_home.strip().isdigit() or not goals_away.strip().isdigit():
+        # Try to find the first two numeric spans among the result group.
+        nums = [safe_get_text(s, '') for s in score_spans
+                if safe_get_text(s, '').strip().isdigit()]
+        if len(nums) >= 2:
+            goals_home, goals_away = nums[0], nums[1]
+        else:
+            return '', 'unknown'
+
+    score = f"{goals_home}-{goals_away}"
+    try:
+        gh, ga = int(goals_home), int(goals_away)
+        if gh > ga:
+            winner = 'home'
+        elif ga > gh:
+            winner = 'away'
+        else:
+            winner = 'draw'
+    except (ValueError, TypeError):
+        winner = 'unknown'
+    return score, winner
+
+
+def _badge_to_result(badge) -> Optional[str]:
+    """Map a single form badge element to 'W'/'D'/'L' (or None).
+
+    Handles the 2026 redesign (data-testid="wcl-badgeForm-win", classes
+    wcl-win_*/wcl-draw_*/wcl-lose_*) AND the legacy markup (title
+    'Zwycięstwo'/'Remis'/'Porażka', text 'Z'/'R'/'P' or 'W'/'D'/'L').
+    """
+    # New: data-testid is the most stable signal.
+    testid = (badge.get('data-testid') or '').lower()
+    if 'badgeform-win' in testid:
+        return 'W'
+    if 'badgeform-draw' in testid:
+        return 'D'
+    if 'badgeform-lose' in testid or 'badgeform-loss' in testid:
+        return 'L'
+    # New: class-based (wcl-win_/wcl-draw_/wcl-lose_).
+    cls = ' '.join(badge.get('class') or []).lower()
+    if 'wcl-win' in cls:
+        return 'W'
+    if 'wcl-draw' in cls:
+        return 'D'
+    if 'wcl-lose' in cls or 'wcl-loss' in cls:
+        return 'L'
+    # Legacy: title / text.
+    title = (badge.get('title') or '')
+    text = badge.get_text().strip()
+    if 'Zwyci' in title or text in ('Z', 'W'):
+        return 'W'
+    if 'Remis' in title or text in ('R', 'D'):
+        return 'D'
+    if 'Pora' in title or text in ('P', 'L'):
+        return 'L'
+    return None
+
+
+def _extract_form_badges(scope) -> List[str]:
+    """Extract up to 5 W/D/L form results from a scope (section or soup).
+
+    Resilient to LiveSport's DOM redesign — finds badges by the new
+    data-testid / wcl-* classes first, then legacy 'badgeform' classes.
+    """
+    if scope is None:
+        return []
+    badges = scope.select('[data-testid^="wcl-badgeForm"]')
+    if not badges:
+        badges = scope.find_all(
+            ['div', 'span'],
+            class_=lambda c: bool(c) and 'badgeform' in ' '.join(c).lower()
+            if isinstance(c, list) else (bool(c) and 'badgeform' in str(c).lower()),
+        )
+    out: List[str] = []
+    for badge in badges[:5]:
+        r = _badge_to_result(badge)
+        if r:
+            out.append(r)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -1756,28 +1885,9 @@ def _extract_form_from_h2h_page(url: str, driver: webdriver.Chrome, context: str
         # NOWA METODA 1: Ekstraktuj formy z sekcji h2h__section
         # Livesport organizuje dane w sekcje: pierwsza sekcja = home, druga = away
         h2h_sections = soup.find_all('div', class_='h2h__section')
-        
+
         for idx, section in enumerate(h2h_sections[:2]):  # Pierwsze 2 sekcje (home, away)
-            # METODA 1A: Szukaj form badges z różnymi klasami (LiveSport zmienia je)
-            badges = section.find_all('div', class_=lambda c: c and 'badgeform' in c.lower() if c else False)
-            
-            # METODA 1B: Alternatywne selektory
-            if not badges:
-                badges = section.select('div[class*="form"], span[class*="form"]')
-            
-            temp_form = []
-            for badge in badges[:5]:  # Max 5 wyników
-                text = badge.get_text().strip()
-                title = badge.get('title', '')
-                
-                # Konwersja: Z->W, R->D, P->L (polskie oznaczenia)
-                if 'Zwyci' in title or text == 'Z' or text == 'W':
-                    temp_form.append('W')
-                elif 'Remis' in title or text == 'R' or text == 'D':
-                    temp_form.append('D')
-                elif 'Pora' in title or text == 'P' or text == 'L':
-                    temp_form.append('L')
-            
+            temp_form = _extract_form_badges(section)
             # Przypisz do home (idx=0) lub away (idx=1)
             if idx == 0:
                 home_form = temp_form
@@ -1786,38 +1896,29 @@ def _extract_form_from_h2h_page(url: str, driver: webdriver.Chrome, context: str
         
         # FALLBACK METODA 2: Jeśli badges nie zadziałały, analizuj wiersze z wynikami
         if (not home_form and not away_form) or (len(home_form) == 0 and len(away_form) == 0):
-            # Szukaj wierszy z meczami w sekcjach H2H
-            for idx, section in enumerate(h2h_sections[:2]):
+            # Szukaj wierszy z meczami w sekcjach H2H (z fallbackiem na całą stronę)
+            sections_to_scan = h2h_sections[:2] if h2h_sections else [soup]
+            for idx, section in enumerate(sections_to_scan):
                 match_rows = section.select('a.h2h__row')
-                
+
                 temp_form = []
                 for row in match_rows[:5]:
                     try:
-                        # Pobierz wynik
-                        result_spans = row.select('span.h2h__result span')
-                        if len(result_spans) >= 2:
-                            score_home = int(result_spans[0].get_text(strip=True))
-                            score_away = int(result_spans[1].get_text(strip=True))
-                            
-                            # idx=0 to forma gospodarzy, idx=1 to forma gości
-                            if idx == 0:  # Sekcja gospodarzy
-                                if score_home > score_away:
-                                    temp_form.append('W')
-                                elif score_away > score_home:
-                                    temp_form.append('L')
-                                else:
-                                    temp_form.append('D')
-                            else:  # Sekcja gości
-                                if score_away > score_home:
-                                    temp_form.append('W')
-                                elif score_home > score_away:
-                                    temp_form.append('L')
-                                else:
-                                    temp_form.append('D')
+                        # Użyj odpornego ekstraktora wyniku (nowy + stary DOM)
+                        _score, winner = _h2h_row_score(row)
+                        if winner == 'unknown':
+                            continue
+                        # idx=0 to forma gospodarzy, idx=1 to forma gości
+                        if idx == 0:  # Sekcja gospodarzy
+                            temp_form.append('W' if winner == 'home'
+                                             else ('L' if winner == 'away' else 'D'))
+                        else:  # Sekcja gości
+                            temp_form.append('W' if winner == 'away'
+                                             else ('L' if winner == 'home' else 'D'))
                     except (ValueError, AttributeError, TypeError) as e:
                         logger.debug(f"Błąd przy parsowaniu wyniku formy: {e}")
                         continue
-                
+
                 if idx == 0:
                     home_form = temp_form
                 elif idx == 1:
