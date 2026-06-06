@@ -131,8 +131,12 @@ def main() -> int:
     parser.add_argument(
         "--days",
         type=int,
-        default=3,
-        help="How many days to include in the report (default: 3).",
+        default=1,
+        help=(
+            "How many days to include in the report (default: 1 — today only). "
+            "Telegram pokazuje top 10 picków danego dnia, więc licznik liczy "
+            "od dziś. Zwiększ, jeśli chcesz scalić starsze manifesty."
+        ),
     )
     parser.add_argument(
         "--grades",
@@ -170,15 +174,19 @@ def main() -> int:
     manifest_matches_raw, dates_used = _load_telegram_manifests(window_dates)
     manifest_matches = _dedupe_matches(manifest_matches_raw)
 
-    used_fallback = False
     if not manifest_matches:
+        # Brak manifestu = nic nie wysłano na Telegram w tym oknie.
+        # Licznik MUSI wtedy wynosić zero — NIE rekonstruujemy z Supabase
+        # (qualifies=true zawiera dużo więcej zdarzeń niż top 10 wysłane
+        # na kanał, co zawyżało licznik o mecze, których nigdy nie było
+        # na Telegramie).
         print(
             f"ℹ️  Brak manifestów Telegrama w oknie {start_date} → {end_date}. "
-            f"Próbuję fallback: rekonstrukcja z Supabase (qualifies=true)…"
+            f"Nic nie wysłano na Telegram → licznik = 0. Pomijam raport."
         )
-        used_fallback = True
-    else:
-        print(f"📦 Łącznie {len(manifest_matches)} unikalnych meczów w manifestach.")
+        return 0
+
+    print(f"📦 Łącznie {len(manifest_matches)} unikalnych meczów w manifestach.")
 
     # ── 2. Fetch stats from Supabase ──────────────────────────────
     try:
@@ -194,24 +202,11 @@ def main() -> int:
         return 1
 
     print(f"📊 Liczę statystyki…")
-    if used_fallback:
-        print(
-            "⚠️  Tryb fallback: brak manifestów Telegrama, używam Supabase "
-            "(qualifies=true). Filtr Grade A pomijany — baza nie ma kolumny "
-            "prediction_grade."
-        )
-        stats = db.get_telegram_daily_stats(
-            hours=args.hours,
-            manifest_matches=None,
-            grade_filter=grade_filter,
-            match_dates=window_dates,
-        )
-    else:
-        stats = db.get_telegram_daily_stats(
-            hours=args.hours,
-            manifest_matches=manifest_matches,
-            grade_filter=grade_filter,
-        )
+    stats = db.get_telegram_daily_stats(
+        hours=args.hours,
+        manifest_matches=manifest_matches,
+        grade_filter=grade_filter,
+    )
 
     g = stats.get("global", {})
     print(

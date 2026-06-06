@@ -102,13 +102,19 @@ class TestBuildSummary:
         assert "FormRadar" in text
         assert "14.03.2026" in text
 
-    def test_groups_by_sport(self):
+    def test_ranks_globally_not_per_sport(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "FOOTBALL" in text
-        assert "TENNIS" in text
-        # non-qualifying basketball should not appear
-        assert "BASKETBALL" not in text
+        # Picks form a single global Top-10 leaderboard — no per-sport section
+        # headers. Both the Grade A football and Grade A tennis pick appear.
+        assert "<b>Liverpool</b> vs <b>Arsenal</b>" in text   # football, Grade A
+        assert "<b>Djokovic</b> vs <b>Nadal</b>" in text      # tennis, Grade A
+        # Grade B (Barcelona) is hidden; non-qualifying basketball never appears
+        assert "Barcelona" not in text
+        assert "TeamA" not in text
+        # No sport-grouping section headers
+        assert "FOOTBALL" not in text
+        assert "TENNIS" not in text
 
     def test_match_details_present(self):
         mod = _load_module()
@@ -124,7 +130,7 @@ class TestBuildSummary:
     def test_model_confidence_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "Model confidence: 75%" in text  # Liverpool's composite confidence
+        assert "Model confidence: 72%" in text  # Liverpool's scoring_confidence
 
     def test_bet_line_shown(self):
         mod = _load_module()
@@ -135,7 +141,7 @@ class TestBuildSummary:
     def test_pick_odds_shown(self):
         mod = _load_module()
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
-        assert "💰 Odds (this line):" in text
+        assert "💰 Odds:" in text
 
     def test_signal_count(self):
         mod = _load_module()
@@ -147,7 +153,7 @@ class TestBuildSummary:
         text = mod._build_summary(_ROWS, 3, "2026-03-14")
         assert "Bet responsibly" in text
 
-    def test_respects_max_per_sport(self):
+    def test_respects_global_top_n(self):
         mod = _load_module()
         big_rows = [
             {
@@ -164,15 +170,16 @@ class TestBuildSummary:
             for i in range(200)
         ]
         text = mod._build_summary(big_rows, 200, "2026-03-14")
-        # Only 10 matches should appear (cap per sport)
-        assert text.count("🏠 <b>Home") == 10
+        # Only 10 matches should appear (single global Top-10 cap, not per-sport)
+        assert text.count("</b> vs <b>") == 10
+        assert "Top signals today: 10/10" in text
 
     def test_empty_qualifying(self):
         mod = _load_module()
         rows = [{"home_team": "A", "away_team": "B", "sport": "football", "qualifies": False}]
         text = mod._build_summary(rows, 0, "2026-03-14")
-        # No special "no qualifying" text — just 0 signals
-        assert "Top signals today: 0" in text
+        # No Grade A picks → explicit empty-state line
+        assert "No Grade A picks today." in text
 
 
 # ---------------------------------------------------------------------------
@@ -317,7 +324,7 @@ class TestFiltersInBuildSummary:
         ]
         text = mod._build_summary(rows, 1, "2026-03-14")
         assert "A vs B" not in text
-        assert "Top signals today: 0" in text
+        assert "No Grade A picks today." in text
 
     def test_low_fanvote_excluded(self):
         mod = _load_module()

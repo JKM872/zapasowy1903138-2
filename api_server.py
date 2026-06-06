@@ -732,6 +732,115 @@ def health_check():
 
 
 # =============================================================================
+# 🏆 WORLD CUP — broad analytical package (Pinnacle full markets)
+# =============================================================================
+def _worldcup_files():
+    """Return World Cup result files sorted newest-first."""
+    pattern = os.path.join(RESULTS_DIR, 'worldcup_*.json')
+    return sorted(glob.glob(pattern), reverse=True)
+
+
+def _load_worldcup_payload(date_str=None):
+    """Load a World Cup payload dict for a date (or latest). Returns dict or None."""
+    import re
+    files = _worldcup_files()
+    if not files:
+        return None
+    target = None
+    if date_str:
+        for f in files:
+            if date_str in os.path.basename(f):
+                target = f
+                break
+    else:
+        target = files[0]
+    if not target:
+        return None
+    try:
+        with open(target, 'r', encoding='utf-8-sig') as fh:
+            return json.load(fh)
+    except Exception as e:  # noqa: BLE001
+        logger.error('Error loading World Cup file %s: %s', target, e)
+        return None
+
+
+@app.route('/api/worldcup', methods=['GET'])
+def get_worldcup():
+    """
+    Get the full World Cup analytical package for a date (or latest available).
+
+    Query params:
+      - date: YYYY-MM-DD (optional; defaults to latest generated day)
+      - value: 'true' to return only matches with detected value bets
+      - search: filter by team/league substring
+    """
+    date_str = request.args.get('date')
+    only_value = request.args.get('value', 'false').lower() == 'true'
+    search = request.args.get('search', '').strip().lower()
+
+    payload = _load_worldcup_payload(date_str)
+    if not payload:
+        return jsonify({
+            'tournament': 'FIFA World Cup 2026',
+            'date': date_str,
+            'count': 0,
+            'matches': [],
+            'message': 'No World Cup analysis available yet',
+        })
+
+    matches = payload.get('matches', [])
+
+    if only_value:
+        matches = [m for m in matches if (m.get('worldcup') or {}).get('value_bets')]
+    if search:
+        matches = [
+            m for m in matches
+            if search in f"{m.get('homeTeam', '')} {m.get('awayTeam', '')} "
+                         f"{m.get('league', '')}".lower()
+        ]
+
+    # Lightweight aggregate stats for the dashboard
+    all_matches = payload.get('matches', [])
+    value_count = sum(1 for m in all_matches
+                      if (m.get('worldcup') or {}).get('value_bets'))
+    signal_count = sum(1 for m in all_matches
+                       if (m.get('worldcup') or {}).get('signals'))
+    kelly_count = sum(1 for m in all_matches
+                      if ((m.get('worldcup') or {}).get('kelly') or {}).get('best_value'))
+    extras_count = sum(1 for m in all_matches
+                       if (m.get('worldcup') or {}).get('forebet_extras'))
+
+    return jsonify({
+        'tournament': payload.get('tournament', 'FIFA World Cup 2026'),
+        'date': payload.get('date', date_str),
+        'generatedAt': payload.get('generatedAt'),
+        'bookmaker': payload.get('bookmaker', 'Pinnacle'),
+        'count': len(matches),
+        'matches': matches,
+        'stats': {
+            'total': len(all_matches),
+            'withValueBets': value_count,
+            'withMarketSignals': signal_count,
+            'withKellyValue': kelly_count,
+            'withForebetExtras': extras_count,
+        },
+    })
+
+
+@app.route('/api/worldcup/dates', methods=['GET'])
+def get_worldcup_dates():
+    """List dates for which a World Cup analytical package exists."""
+    import re
+    date_pattern = re.compile(r'worldcup_(\d{4}-\d{2}-\d{2})\.json$')
+    dates = []
+    for f in _worldcup_files():
+        m = date_pattern.search(os.path.basename(f))
+        if m:
+            dates.append(m.group(1))
+    return jsonify({'dates': sorted(set(dates), reverse=True)})
+
+
+# =============================================================================
 # USER BETS ENDPOINTS
 # =============================================================================
 
