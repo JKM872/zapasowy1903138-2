@@ -1425,8 +1425,15 @@ def send_email_notification(
     print(f"   🔧 Wyczyszczono dane z 'nan' stringów")
     
     # Filtruj kwalifikujące się mecze — use centralized qualification gate if available
-    _gate_used = 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any()
-    if _gate_used:
+    # EMAIL channel ignores the fan-vote filter (uses email_qualifies); Telegram
+    # keeps the stricter channel_qualifies. Fall back gracefully if older rows
+    # lack the email_qualifies column.
+    _email_gate = 'email_qualifies' in df.columns and df['email_qualifies'].notna().any()
+    _gate_used = _email_gate or ('channel_qualifies' in df.columns and df['channel_qualifies'].notna().any())
+    if _email_gate:
+        qualified = df[df['email_qualifies'] == True]
+        print(f"   🚦 Email qualification gate (fan-vote off): {len(qualified)} matches")
+    elif _gate_used:
         qualified = df[df['channel_qualifies'] == True]
         print(f"   🚦 Unified qualification gate: {len(qualified)} matches")
     else:
@@ -1798,8 +1805,13 @@ def send_split_emails_by_sport(
         df['sofascore_found'] = df['sofascore_found'].apply(_norm_found_split)
 
     # --- filtruj kwalifikujące ---
-    _gate_used = 'channel_qualifies' in df.columns and df['channel_qualifies'].notna().any()
-    if _gate_used:
+    # EMAIL ignores fan-vote (email_qualifies); Telegram keeps channel_qualifies.
+    _email_gate = 'email_qualifies' in df.columns and df['email_qualifies'].notna().any()
+    _gate_used = _email_gate or ('channel_qualifies' in df.columns and df['channel_qualifies'].notna().any())
+    if _email_gate:
+        qualified = df[df['email_qualifies'] == True].copy()
+        print(f"   🚦 Email qualification gate (fan-vote off): {len(qualified)} matches")
+    elif _gate_used:
         qualified = df[df['channel_qualifies'] == True].copy()
         print(f"   🚦 Unified qualification gate: {len(qualified)} matches")
     else:

@@ -211,6 +211,17 @@ def qualify_match(match: Dict[str, Any], now_warsaw: Optional[datetime] = None) 
     match["channel_skip_reasons_warnings"] = warnings
     qualifies = len(reasons) == 0
     match["channel_qualifies"] = qualifies
+
+    # Email channel: same gate but WITHOUT the fan-vote requirement. The user
+    # wants every odds-valid, future, base-qualifying match in the email, while
+    # Telegram keeps the stricter fan-vote filter. We therefore expose a second
+    # flag that ignores fan_vote_* rejections.
+    non_fanvote_reasons = [
+        r for r in reasons
+        if not (isinstance(r, str) and r.startswith("fan_vote"))
+    ]
+    match["email_qualifies"] = len(non_fanvote_reasons) == 0
+
     return qualifies
 
 
@@ -225,6 +236,7 @@ def apply_qualification_gate(
         now_warsaw = datetime.now(_WARSAW_TZ).replace(tzinfo=None)
 
     count = 0
+    email_count = 0
     sport_stats: Dict[str, Dict[str, int]] = {}
     reason_counts: Dict[str, int] = {}
     warning_counts: Dict[str, int] = {}
@@ -245,6 +257,9 @@ def apply_qualification_gate(
                 key = reason.split(":", 1)[0] if isinstance(reason, str) else str(reason)
                 reason_counts[key] = reason_counts.get(key, 0) + 1
 
+        if row.get("email_qualifies"):
+            email_count += 1
+
         for warn in row.get("channel_skip_reasons_warnings", []) or []:
             key = warn.split(":", 1)[0] if isinstance(warn, str) else str(warn)
             warning_counts[key] = warning_counts.get(key, 0) + 1
@@ -263,5 +278,8 @@ def apply_qualification_gate(
     if warning_counts:
         parts = [f"{r}={c}" for r, c in sorted(warning_counts.items())]
         print(f"   ⚠️  Soft warnings (non-blocking): {', '.join(parts)}")
+
+    print(f"   📧 Email-qualified (fan-vote off): {email_count} | "
+          f"📣 Telegram-qualified (fan-vote on): {count}")
 
     return count

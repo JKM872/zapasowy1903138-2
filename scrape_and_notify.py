@@ -929,6 +929,7 @@ def scrape_and_send_email(
             # Fallback: channel_qualifies = qualifies
             for row in rows:
                 row['channel_qualifies'] = row.get('qualifies', False)
+                row['email_qualifies'] = row.get('qualifies', False)
 
         # ── Grade tier breakdown ──
         _cq = [r for r in rows if r.get('channel_qualifies')]
