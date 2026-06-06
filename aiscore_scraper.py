@@ -470,28 +470,40 @@ def scrape_match_page(driver: Any, url: str,
     html = _safe_page_source(driver) or ""
     matches = parse_aiscore_matches(html)
 
-    # Participants: prefer the page header (player links).
-    home = away = None
-    header = parse_h2h_header(html)
-    if header:
-        home, away = header
-
+    # Identify the page's dominant H2H pair (the two subjects). On a /h2h page
+    # the direct meetings repeat, so the most common participant pair is the
+    # reliable subject set.
+    dominant_pair = None  # normalized frozenset
     match_date = None
-    # Fallback: derive participants from the most common pair in the lists.
-    if home is None and matches:
+    if matches:
         from collections import Counter
         pairs = Counter()
         for m in matches:
-            key = tuple(sorted([normalize_name(m.get("home")), normalize_name(m.get("away"))]))
-            pairs[key] += 1
+            key = frozenset([normalize_name(m.get("home")), normalize_name(m.get("away"))])
+            if len(key) == 2:
+                pairs[key] += 1
         if pairs:
-            top_norm = pairs.most_common(1)[0][0]
-            for m in matches:
-                k = tuple(sorted([normalize_name(m.get("home")), normalize_name(m.get("away"))]))
-                if k == top_norm:
-                    home, away = m.get("home"), m.get("away")
-                    match_date = m.get("date")
-                    break
+            dominant_pair = pairs.most_common(1)[0][0]
+
+    home = away = None
+    header = parse_h2h_header(html)
+    if header:
+        h_home, h_away = header
+        header_pair = frozenset([normalize_name(h_home), normalize_name(h_away)])
+        # Trust the header ONLY when it matches the dominant H2H pair (guards
+        # against doubles/featured-match headers pointing at a different game).
+        if dominant_pair is None or header_pair == dominant_pair:
+            home, away = h_home, h_away
+
+    # Fallback / correction: derive participants (and home/away order) from the
+    # first direct meeting of the dominant pair.
+    if home is None and dominant_pair is not None:
+        for m in matches:
+            k = frozenset([normalize_name(m.get("home")), normalize_name(m.get("away"))])
+            if k == dominant_pair:
+                home, away = m.get("home"), m.get("away")
+                match_date = m.get("date")
+                break
 
     return {"url": target, "all_matches": matches, "home": home, "away": away,
             "match_date": match_date}

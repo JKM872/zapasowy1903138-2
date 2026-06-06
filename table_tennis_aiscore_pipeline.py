@@ -203,7 +203,12 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
         return None
 
     match_time = ai.iso_to_match_time(page.get("match_date")) or ""
-    row = _build_row(home, away, focus, url, match_time)
+    # Store the clean match-overview URL (without the /h2h sub-page suffix) so
+    # downstream links point at the match page, not the H2H tab.
+    clean_url = url.split("#")[0].split("?")[0].rstrip("/")
+    if clean_url.endswith("/h2h"):
+        clean_url = clean_url[: -len("/h2h")]
+    row = _build_row(home, away, focus, clean_url, match_time)
 
     # --- which side do we pick? (focus = home/away) ---
     if focus == "away":
