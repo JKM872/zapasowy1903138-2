@@ -235,3 +235,27 @@ def test_process_match_uses_header_for_participants(monkeypatch, h2h_page_html):
     assert row["h2h_fav_win_rate"] == pytest.approx(0.6667, abs=1e-3)
     # Form must be populated (the user's "brak formy" complaint).
     assert len(row["form_a"]) >= 1
+
+
+# ---------------------------------------------------------------------------
+# SofaScore infrastructure fallback (whole-run Cloudflare block)
+# ---------------------------------------------------------------------------
+
+def test_rescue_requalifies_only_fanvote_failures():
+    import table_tennis_aiscore_pipeline as pipe
+
+    rows = [
+        # H2H passed but no fan vote -> should be rescued.
+        {"qualifies": False, "tt_skip_reason": "sofascore_fan_vote_required"},
+        # Failed H2H -> must NOT be rescued.
+        {"qualifies": False, "tt_skip_reason": "h2h_fav_win_rate 0.50 < 0.60"},
+        # Already qualifying -> untouched.
+        {"qualifies": True, "tt_skip_reason": None},
+    ]
+    rescued = pipe._rescue_when_sofascore_unreachable(rows)
+    assert rescued == 1
+    assert rows[0]["qualifies"] is True
+    assert rows[0]["sofascore_unavailable"] is True
+    assert rows[0]["tt_skip_reason"] is None
+    assert rows[1]["qualifies"] is False          # H2H failure stays rejected
+    assert rows[2]["qualifies"] is True

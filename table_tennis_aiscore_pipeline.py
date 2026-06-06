@@ -86,13 +86,24 @@ except Exception as e:  # pragma: no cover
     _AI_ERR = str(e)
 
 try:
-    from sofascore_scraper import get_sofascore_prediction
+    from sofascore_scraper import get_sofascore_prediction, is_sofascore_unreachable
     _SOFA_OK = True
 except Exception as e:  # pragma: no cover
     _SOFA_OK = False
     _SOFA_ERR = str(e)
     def get_sofascore_prediction(*a, **k):  # type: ignore
         return {"found": False}
+    def is_sofascore_unreachable() -> bool:  # type: ignore
+        return False
+
+
+# When SofaScore's anti-bot (Cloudflare) blocks the ENTIRE CI shard, every
+# fan-vote lookup 403s and the circuit breaker trips. Treating that
+# infrastructure failure as a per-match "no fan vote" would zero out every pick.
+# So when SofaScore is globally unreachable for the run we fall back to the H2H
+# gate alone (fan vote flagged as unavailable). Set TT_SOFASCORE_STRICT=1 to
+# keep the fan vote strictly mandatory even then (will yield 0 picks if blocked).
+TT_SOFASCORE_STRICT = os.getenv("TT_SOFASCORE_STRICT", "").strip().lower() in ("1", "true", "yes")
 
 
 # ---------------------------------------------------------------------------
@@ -154,6 +165,7 @@ def _build_row(home: str, away: str, focus: str, match_url: str,
         "sofascore_away_win_prob": None,
         "sofascore_total_votes": 0,
         "sofascore_found": False,
+        "sofascore_unavailable": False,
 
         # Odds (best-effort)
         "home_odds": None,
@@ -313,6 +325,29 @@ def score_rows(rows: List[Dict[str, Any]]) -> int:
 
 
 # ---------------------------------------------------------------------------
+# SofaScore infrastructure fallback
+# ---------------------------------------------------------------------------
+
+def _rescue_when_sofascore_unreachable(rows: List[Dict[str, Any]]) -> int:
+    """Re-qualify H2H-passing picks that only failed on a missing fan vote.
+
+    Used ONLY when SofaScore is globally unreachable for the run (Cloudflare
+    blocked the whole CI shard). Returns the number of rows rescued. Fan vote
+    stays mandatory whenever SofaScore is reachable — this just prevents a
+    runner-IP block from zeroing out every pick.
+    """
+    rescued = 0
+    for row in rows:
+        if (not row.get("qualifies")
+                and row.get("tt_skip_reason") == "sofascore_fan_vote_required"):
+            row["qualifies"] = True
+            row["sofascore_unavailable"] = True
+            row["tt_skip_reason"] = None
+            rescued += 1
+    return rescued
+
+
+# ---------------------------------------------------------------------------
 # Output
 # ---------------------------------------------------------------------------
 
@@ -365,6 +400,7 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str, focus: str) -> Dict
                 "sofascore": {
                     "found": r.get("sofascore_found"),
                     "votes": r.get("sofascore_total_votes"),
+                    "unavailable": r.get("sofascore_unavailable", False),
                 },
                 "odds": {
                     "home": r.get("home_odds"),
@@ -440,6 +476,19 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
             driver.quit()
         except Exception:
             pass
+
+    # ── FAZA 2.4: SofaScore infrastructure fallback ──
+    # If SofaScore was blocked for the WHOLE run (Cloudflare 403 on every method
+    # → circuit breaker tripped), rescue picks that passed the H2H ≥60% gate and
+    # only failed because no fan vote could be fetched. This prevents a runner-IP
+    # block from zeroing out every pick. Fan vote stays mandatory whenever
+    # SofaScore is actually reachable (per-match "not found" still disqualifies).
+    if not TT_SOFASCORE_STRICT and is_sofascore_unreachable():
+        rescued = _rescue_when_sofascore_unreachable(rows)
+        if rescued:
+            print(f"   ⚠️ SofaScore niedostępny dla całego runu (Cloudflare zablokował shard) "
+                  f"— kwalifikuję {rescued} meczów na podstawie samego H2H ≥{int(H2H_MIN_WIN_RATE*100)}% "
+                  f"(Fan Vote oznaczony jako niedostępny)")
 
     # ── FAZA 2.5: scoring ──
     print("\n[FAZA 2.5] Scoring (TennisScoringEngine, profil table tennis)...")
