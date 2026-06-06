@@ -1091,9 +1091,10 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         _ai_tc = _ai_tier_colors.get(ai_tier, ('#9e9e9e', '#333'))
         
         # TENNIS-SPECIFIC: Wykryj czy to tenis (po polu sport lub URL)
-        is_tennis = (match.get('sport') == 'tennis' or 
+        is_tennis = (match.get('sport') in ('tennis', 'table_tennis') or
                      '/tenis/' in str(match.get('match_url', '')).lower() or
-                     '/tennis/' in str(match.get('match_url', '')).lower())
+                     '/tennis/' in str(match.get('match_url', '')).lower() or
+                     '/table-tennis/' in str(match.get('match_url', '')).lower())
         
         # Tennis: Pobierz ranking i advanced score
         ranking_a = match.get('ranking_a')

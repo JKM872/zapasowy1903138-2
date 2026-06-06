@@ -235,6 +235,10 @@ def test_process_match_uses_header_for_participants(monkeypatch, h2h_page_html):
     assert row["h2h_fav_win_rate"] == pytest.approx(0.6667, abs=1e-3)
     # Form must be populated (the user's "brak formy" complaint).
     assert len(row["form_a"]) >= 1
+    # Email-facing form fields must be set (general + venue), per actual home/away.
+    assert len(row["home_form_overall"]) >= 1
+    assert len(row["away_form_overall"]) >= 1
+    assert row["home_form"] == row["home_form_overall"]
 
 
 # ---------------------------------------------------------------------------

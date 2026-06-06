@@ -291,6 +291,12 @@ def _build_row(home: str, away: str, focus: str, match_url: str,
         # Form
         "form_a": [],
         "form_b": [],
+        "home_form_overall": [],
+        "away_form_overall": [],
+        "home_form": [],
+        "away_form": [],
+        "home_form_home": [],
+        "away_form_away": [],
         "ranking_a": None,
         "ranking_b": None,
         "surface": "",
@@ -362,11 +368,24 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
             )
         return row
 
-    # --- FORM (general + venue split for the focus side) ---
-    venue = "away" if focus == "away" else "home"
-    row["form_a"] = ai.recent_form(all_matches, favourite, venue=venue, limit=5) \
-        or ai.recent_form(all_matches, favourite, limit=5)
-    row["form_b"] = ai.recent_form(all_matches, rival, limit=5)
+    # --- FORM (general + venue split, per ACTUAL home/away player) ---
+    # Engine convention: player A = home_team, player B = away_team. Email reads
+    # home_form_overall / away_form_overall (general) and home_form_home /
+    # away_form_away (venue). Compute all from the AiScore /h2h form sections.
+    home_form_overall = ai.recent_form(all_matches, home, limit=5)
+    away_form_overall = ai.recent_form(all_matches, away, limit=5)
+    home_form_home = ai.recent_form(all_matches, home, venue="home", limit=5)
+    away_form_away = ai.recent_form(all_matches, away, venue="away", limit=5)
+
+    row["form_a"] = home_form_overall
+    row["form_b"] = away_form_overall
+    # Fields the e-mail template renders ("forma ogólna" + venue splits).
+    row["home_form_overall"] = home_form_overall
+    row["away_form_overall"] = away_form_overall
+    row["home_form"] = home_form_overall
+    row["away_form"] = away_form_overall
+    row["home_form_home"] = home_form_home
+    row["away_form_away"] = away_form_away
 
     # --- ODDS: fetched in a dedicated phase in run() (needs Livesport index) ---
 
@@ -466,7 +485,9 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str, focus: str) -> Dict
     try:
         import pandas as pd
         df = pd.DataFrame(rows)
-        for col in ("h2h_last5", "form_a", "form_b", "surface_form_a", "surface_form_b"):
+        for col in ("h2h_last5", "form_a", "form_b", "surface_form_a", "surface_form_b",
+                    "home_form_overall", "away_form_overall", "home_form", "away_form",
+                    "home_form_home", "away_form_away"):
             if col in df.columns:
                 df[col] = df[col].apply(lambda x: str(x) if isinstance(x, (list, dict)) else x)
         df.to_csv(csv_path, index=False, encoding="utf-8-sig")
@@ -500,6 +521,14 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str, focus: str) -> Dict
                 "h2h": {
                     "favWinRate": r.get("h2h_fav_win_rate"),
                     "total": r.get("h2h_count"),
+                    "homeWins": r.get("home_wins_in_h2h_last5"),
+                    "awayWins": r.get("away_wins_in_h2h_last5"),
+                },
+                "form": {
+                    "home": r.get("home_form_overall"),
+                    "away": r.get("away_form_overall"),
+                    "homeAtHome": r.get("home_form_home"),
+                    "awayAtAway": r.get("away_form_away"),
                 },
                 "sofascore": {
                     "found": r.get("sofascore_found"),
