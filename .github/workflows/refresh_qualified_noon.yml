@@ -153,6 +153,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Download noon artifacts
         uses: actions/download-artifact@v8
@@ -179,6 +181,21 @@ jobs:
           else
             TODAY=$(date +%Y-%m-%d)
             git commit -m "data: noon refresh for $TODAY [skip ci]"
-            git push
-            echo "✅ Noon results committed"
+            pushed=false
+            for attempt in 1 2 3 4 5 6; do
+              if git push origin HEAD:main; then
+                echo "✅ Noon results committed (attempt $attempt)"
+                pushed=true
+                break
+              fi
+              echo "⚠️ Push rejected (attempt $attempt) — rebasing onto origin/main..."
+              git fetch origin main || true
+              if ! git rebase origin/main; then
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::warning::Could not push noon results after retries — leaving for next run"
+            fi
           fi

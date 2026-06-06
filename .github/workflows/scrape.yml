@@ -240,6 +240,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Download all artifacts
         uses: actions/download-artifact@v8
@@ -286,8 +288,26 @@ jobs:
           else
             TODAY=$(date +%Y-%m-%d)
             git commit -m "data: scraped results for $TODAY [skip ci]"
-            git push
-            echo "✅ Results committed and pushed"
+            # Race-safe push: several sport workflows push to main in parallel,
+            # so the first push wins and the rest get rejected ("fetch first").
+            # Rebase onto the latest main and retry instead of failing the job.
+            pushed=false
+            for attempt in 1 2 3 4 5 6; do
+              if git push origin HEAD:main; then
+                echo "✅ Results committed and pushed (attempt $attempt)"
+                pushed=true
+                break
+              fi
+              echo "⚠️ Push rejected (attempt $attempt) — rebasing onto origin/main..."
+              git fetch origin main || true
+              if ! git rebase origin/main; then
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::warning::Could not push results after retries — leaving for next run"
+            fi
           fi
 
       - name: Deploy to Heroku

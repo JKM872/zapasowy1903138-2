@@ -26,6 +26,8 @@ jobs:
       # 1. Checkout repository (includes committed manifests)
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       # 2. Setup Python
       - name: Setup Python 3.11
@@ -112,8 +114,23 @@ jobs:
             echo "ℹ️ No new summaries to commit"
           else
             git commit -m "data: results summary for $TARGET_DATE [skip ci]"
-            git push
-            echo "✅ Summary committed and pushed"
+            pushed=false
+            for attempt in 1 2 3 4 5 6; do
+              if git push origin HEAD:main; then
+                echo "✅ Summary committed and pushed (attempt $attempt)"
+                pushed=true
+                break
+              fi
+              echo "⚠️ Push rejected (attempt $attempt) — rebasing onto origin/main..."
+              git fetch origin main || true
+              if ! git rebase origin/main; then
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::warning::Could not push summary after retries — leaving for next run"
+            fi
           fi
 
       # 8. Upload summary as artifact
