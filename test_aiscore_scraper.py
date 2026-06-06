@@ -259,3 +259,30 @@ def test_rescue_requalifies_only_fanvote_failures():
     assert rows[0]["tt_skip_reason"] is None
     assert rows[1]["qualifies"] is False          # H2H failure stays rejected
     assert rows[2]["qualifies"] is True
+
+
+# ---------------------------------------------------------------------------
+# Pinnacle odds: AiScore -> Livesport fuzzy URL match
+# ---------------------------------------------------------------------------
+
+def test_match_livesport_url_by_surnames():
+    import table_tennis_aiscore_pipeline as pipe
+
+    index = [
+        {"url": "https://www.livesport.com/pl/mecz/tenis-stolowy/szostak-komorowicz/AbCd12ef/",
+         "tokens": {"szostak", "komorowicz"}},
+        {"url": "https://www.livesport.com/pl/mecz/tenis-stolowy/cizek-kindl/Zz99Yy88/",
+         "tokens": {"cizek", "kindl"}},
+    ]
+    url = pipe._match_livesport_url("Michal Szostak", "Komorowicz, Jakub", index)
+    assert url is not None and "szostak-komorowicz" in url
+
+    # Only one surname overlaps -> below the 2-token threshold -> no match.
+    none_url = pipe._match_livesport_url("Michal Szostak", "Nieznany Gracz", index)
+    assert none_url is None
+
+
+def test_resolve_odds_no_url_returns_empty():
+    import table_tennis_aiscore_pipeline as pipe
+    out = pipe.resolve_odds("A", "B", None)
+    assert out == {"home_odds": None, "away_odds": None, "bookmaker": None}

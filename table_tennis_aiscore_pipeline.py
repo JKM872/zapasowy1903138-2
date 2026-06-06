@@ -45,6 +45,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
@@ -110,29 +111,125 @@ TT_SOFASCORE_STRICT = os.getenv("TT_SOFASCORE_STRICT", "").strip().lower() in ("
 # Odds (Pinnacle best-effort; another source as fallback)
 # ---------------------------------------------------------------------------
 
-def resolve_odds(home: str, away: str, date_str: str,
-                 match_url: Optional[str] = None) -> Dict[str, Any]:
-    """Best-effort odds resolution for a table-tennis match.
+# ---------------------------------------------------------------------------
+# Odds (Pinnacle via Livesport match index; best-effort)
+# ---------------------------------------------------------------------------
 
-    AiScore exposes no table-tennis odds, so we try Pinnacle (via the shared
-    ``pinnacle_full_odds`` client) and fall back to "no odds". Pinnacle is keyed
-    on a Livesport event id, so it only succeeds when a matching Livesport
-    event URL is supplied. Returns {home_odds, away_odds, bookmaker} (values may
-    be None). Missing odds are NON-blocking for qualification.
+# Livesport table-tennis day page (slug 'tenis-stolowy'). AiScore has no odds,
+# so we map each AiScore match to its Livesport event by player surnames and
+# pull Pinnacle's full markets. Pinnacle prices most TT Cup / Liga Pro / pro
+# events; truly amateur ones may be absent (then odds stay empty, non-blocking).
+LIVESPORT_TT_DAY_URL = "https://www.livesport.com/pl/tenis-stolowy/"
+
+
+def build_livesport_tt_index(driver: Any, date_str: str,
+                             max_scrolls: int = 12) -> List[Dict[str, Any]]:
+    """Scrape the Livesport table-tennis day page once → list of match links.
+
+    Returns a list of {"url": <livesport match url>, "tokens": set(surnames)}
+    used to fuzzy-match AiScore matches. Reuses livesport_h2h_scraper helpers
+    without modifying that module. Best-effort: returns [] on any failure.
     """
+    import time
+
+    try:
+        from bs4 import BeautifulSoup
+        from livesport_h2h_scraper import (
+            _accept_cookies_on_page,
+            _extract_match_links_from_soup,
+            _count_match_links_in_page,
+            is_livesport_error_page,
+            _safe_page_source,
+        )
+    except Exception as e:  # pragma: no cover
+        print(f"   ⚠️ Livesport helpers niedostępne dla kursów: {e}")
+        return []
+
+    url = f"{LIVESPORT_TT_DAY_URL}?date={date_str}"
+    try:
+        driver.get(url)
+        time.sleep(2.5)
+        _accept_cookies_on_page(driver)
+        attempts = 0
+        while is_livesport_error_page(_safe_page_source(driver)) and attempts < 3:
+            attempts += 1
+            time.sleep(3.0 * attempts)
+            try:
+                driver.get(url)
+                time.sleep(3.0)
+                _accept_cookies_on_page(driver)
+            except Exception:
+                pass
+        prev = _count_match_links_in_page(driver)
+        stale = 0
+        for _ in range(max_scrolls):
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(0.6)
+            cur = _count_match_links_in_page(driver)
+            if cur <= prev:
+                stale += 1
+                if stale >= 3:
+                    break
+            else:
+                stale = 0
+            prev = cur
+        driver.execute_script("window.scrollTo(0, 0);")
+        time.sleep(0.3)
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        links, _dbg = _extract_match_links_from_soup(soup, LIVESPORT_TT_DAY_URL, set(), leagues=None)
+    except Exception as e:
+        print(f"   ⚠️ Livesport TT index błąd: {e}")
+        return []
+
+    index: List[Dict[str, Any]] = []
+    for link in links:
+        # Tokens = alphabetic words >3 chars from the URL slug (player surnames).
+        slug = link.lower()
+        toks = set(re.findall(r"[a-ząćęłńóśźż]{4,}", slug))
+        # Drop generic path words.
+        toks -= {"mecz", "match", "tenis", "stolowy", "table", "tennis",
+                 "www", "livesport", "https", "http", "com", "pilka"}
+        if toks:
+            index.append({"url": link, "tokens": toks})
+    print(f"   📇 Livesport TT index: {len(index)} meczów (do dopasowania kursów Pinnacle)")
+    return index
+
+
+def _match_livesport_url(home: str, away: str,
+                         index: List[Dict[str, Any]]) -> Optional[str]:
+    """Fuzzy-match an AiScore (home, away) to a Livesport match URL by surnames."""
+    from aiscore_scraper import normalize_name
+    want = set()
+    for nm in (home, away):
+        want |= {t for t in normalize_name(nm).split() if len(t) >= 4}
+    if not want:
+        return None
+    best_url, best_score = None, 0
+    for entry in index:
+        score = len(want & entry["tokens"])
+        if score > best_score:
+            best_score, best_url = score, entry["url"]
+    # Require at least 2 surname tokens to match (one from each side ideally).
+    return best_url if best_score >= 2 else None
+
+
+def resolve_odds(home: str, away: str, livesport_url: Optional[str]) -> Dict[str, Any]:
+    """Fetch Pinnacle home/away odds for a matched Livesport URL (best-effort)."""
     out: Dict[str, Any] = {"home_odds": None, "away_odds": None, "bookmaker": None}
-    if not match_url or "livesport" not in match_url:
+    if not livesport_url:
         return out
     try:
         from pinnacle_full_odds import PinnacleFullOdds
-        pkg = PinnacleFullOdds().get_full_odds_for_match(match_url)
+        pkg = PinnacleFullOdds().get_full_odds_for_match(
+            livesport_url, markets=["HOME_DRAW_AWAY"])
         market = (pkg.get("markets") or {}).get("HOME_DRAW_AWAY")
         if market:
             h = (market.get("home") or {}).get("value")
             a = (market.get("away") or {}).get("value")
-            out["home_odds"] = h
-            out["away_odds"] = a
-            out["bookmaker"] = "Pinnacle"
+            if h or a:
+                out["home_odds"] = h
+                out["away_odds"] = a
+                out["bookmaker"] = "Pinnacle"
     except Exception:
         pass
     return out
@@ -260,11 +357,7 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
         or ai.recent_form(all_matches, favourite, limit=5)
     row["form_b"] = ai.recent_form(all_matches, rival, limit=5)
 
-    # --- ODDS (best-effort, non-blocking) ---
-    odds = resolve_odds(home, away, date_str, match_url=url)
-    row["home_odds"] = odds.get("home_odds")
-    row["away_odds"] = odds.get("away_odds")
-    row["odds_bookmaker"] = odds.get("bookmaker")
+    # --- ODDS: fetched in a dedicated phase in run() (needs Livesport index) ---
 
     # --- FAN VOTE (MANDATORY) ---
     try:
@@ -471,24 +564,48 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
             if verbose and (i % 10 == 0 or i == len(urls)):
                 q = sum(1 for r in rows if r.get("qualifies"))
                 print(f"   [{i}/{len(urls)}] kwalifikujących się dotąd: {q}")
+
+        # ── FAZA 2.4: SofaScore infrastructure fallback ──
+        # If SofaScore was blocked for the WHOLE run (Cloudflare 403 on every
+        # method → circuit breaker tripped), rescue picks that passed the H2H
+        # ≥60% gate and only failed because no fan vote could be fetched. This
+        # prevents a runner-IP block from zeroing out every pick. Fan vote stays
+        # mandatory whenever SofaScore is reachable (per-match "not found" still
+        # disqualifies).
+        if not TT_SOFASCORE_STRICT and is_sofascore_unreachable():
+            rescued = _rescue_when_sofascore_unreachable(rows)
+            if rescued:
+                print(f"   ⚠️ SofaScore niedostępny dla całego runu (Cloudflare zablokował shard) "
+                      f"— kwalifikuję {rescued} meczów na podstawie samego H2H "
+                      f"≥{int(H2H_MIN_WIN_RATE*100)}% (Fan Vote oznaczony jako niedostępny)")
+
+        # ── FAZA 2.45: Pinnacle odds (map AiScore → Livesport, best-effort) ──
+        # Done while the driver is still open. Only qualifying rows get a lookup
+        # to limit Pinnacle calls. Missing odds stay None (non-blocking).
+        qual_rows = [r for r in rows if r.get("qualifies")]
+        if qual_rows:
+            print(f"\n[FAZA 2.45] Kursy Pinnacle dla {len(qual_rows)} kwalifikujących się "
+                  f"(mapowanie AiScore → Livesport)...")
+            try:
+                ls_index = build_livesport_tt_index(driver, date_str)
+            except Exception as e:
+                print(f"   ⚠️ Nie zbudowano indeksu Livesport: {e}")
+                ls_index = []
+            odds_found = 0
+            for r in qual_rows:
+                ls_url = _match_livesport_url(r.get("home_team", ""), r.get("away_team", ""), ls_index)
+                odds = resolve_odds(r.get("home_team", ""), r.get("away_team", ""), ls_url)
+                if odds.get("home_odds") or odds.get("away_odds"):
+                    r["home_odds"] = odds["home_odds"]
+                    r["away_odds"] = odds["away_odds"]
+                    r["odds_bookmaker"] = odds["bookmaker"]
+                    odds_found += 1
+            print(f"   💰 Kursy Pinnacle znalezione dla {odds_found}/{len(qual_rows)} meczów")
     finally:
         try:
             driver.quit()
         except Exception:
             pass
-
-    # ── FAZA 2.4: SofaScore infrastructure fallback ──
-    # If SofaScore was blocked for the WHOLE run (Cloudflare 403 on every method
-    # → circuit breaker tripped), rescue picks that passed the H2H ≥60% gate and
-    # only failed because no fan vote could be fetched. This prevents a runner-IP
-    # block from zeroing out every pick. Fan vote stays mandatory whenever
-    # SofaScore is actually reachable (per-match "not found" still disqualifies).
-    if not TT_SOFASCORE_STRICT and is_sofascore_unreachable():
-        rescued = _rescue_when_sofascore_unreachable(rows)
-        if rescued:
-            print(f"   ⚠️ SofaScore niedostępny dla całego runu (Cloudflare zablokował shard) "
-                  f"— kwalifikuję {rescued} meczów na podstawie samego H2H ≥{int(H2H_MIN_WIN_RATE*100)}% "
-                  f"(Fan Vote oznaczony jako niedostępny)")
 
     # ── FAZA 2.5: scoring ──
     print("\n[FAZA 2.5] Scoring (TennisScoringEngine, profil table tennis)...")

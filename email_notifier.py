@@ -838,7 +838,10 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         # Sortuj po godzinie meczu
         def get_time_key(match: Dict[str, Any]) -> str:
             match_time = match.get('match_time', '')
-            if not match_time:
+            # NaN (float) slips past `not match_time` because float('nan') is
+            # truthy; coerce any non-string (NaN from an all-empty CSV column,
+            # numbers, None) to the "no time" sentinel so re.search never crashes.
+            if not match_time or not isinstance(match_time, str):
                 return '99:99'  # Mecze bez czasu na końcu
             
             # Wyciągnij godzinę z różnych formatów
@@ -955,7 +958,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         match_url = match.get('match_url', '#')
         
         time_badge = ''
-        if match_time and match_time != 'Brak danych':
+        if isinstance(match_time, str) and match_time and match_time != 'Brak danych':
             time_match = re.search(r'(\d{1,2}:\d{2})', match_time)
             if time_match:
                 time_badge = time_match.group(1)
