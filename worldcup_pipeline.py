@@ -292,11 +292,17 @@ def run_pipeline(date: str, headless: bool = True, max_matches: Optional[int] = 
                 extras = fetch_forebet_extras(row.get("home_team"), row.get("away_team"))
                 if extras.get("available"):
                     analysis["forebet_extras"] = extras
-                    print(f"   📊 Forebet extras: "
-                          f"{'rożne ' if extras.get('corners') else ''}"
-                          f"{'kartki ' if extras.get('cards') else ''}"
-                          f"{'1.gol ' if extras.get('who_scores_first') else ''}"
-                          f"{f'+{len(extras['trends'])} trendów' if extras.get('trends') else ''}")
+                    _parts = []
+                    if extras.get("corners"):
+                        _parts.append("rożne")
+                    if extras.get("cards"):
+                        _parts.append("kartki")
+                    if extras.get("who_scores_first"):
+                        _parts.append("1.gol")
+                    _trends = extras.get("trends")
+                    if _trends:
+                        _parts.append(f"+{len(_trends)} trendów")
+                    print(f"   📊 Forebet extras: {' '.join(_parts)}")
             except Exception as e:  # noqa: BLE001
                 print(f"   ⚠️ Forebet extras skip: {e}")
 
