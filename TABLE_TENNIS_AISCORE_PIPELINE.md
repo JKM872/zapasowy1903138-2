@@ -18,7 +18,7 @@ tu **wyłącznie** do (obowiązkowego) Fan Vote.
 |---|---|---|
 | Źródło meczów + H2H + forma | `aiscore_scraper.py` | **nowe** |
 | Fan Vote (OBOWIĄZKOWY) | `sofascore_scraper.get_sofascore_prediction` | reuse |
-| Kursy (best-effort) | `pinnacle_full_odds.PinnacleFullOdds` | reuse |
+| Kursy (best-effort, multi-bukmacher) | `livesport_odds_api.LivesportOddsAPI` | reuse |
 | Scoring (2-way, bez remisu) | `tennis_scoring_engine.TennisScoringEngine` | reuse |
 | Bramka kwalifikacji | `qualification_gate.apply_qualification_gate` | reuse |
 | E-mail (jak tenis) | `email_notifier.send_email_notification` | reuse |
@@ -31,9 +31,11 @@ tu **wyłącznie** do (obowiązkowego) Fan Vote.
    w bezpośrednich meczach z rywalem (min. 3 mecze H2H). *Twardy warunek.*
 2. **Fan Vote** — SofaScore Fan Vote musi zostać znaleziony. *Twardy warunek.*
 3. **Tylko przyszłe** — mecz nie może być rozpoczęty. *Twardy warunek.*
-4. **Kursy** — Pinnacle jeśli dostępne, inaczej inne źródło; wzbogacają scoring
-   (EV). Brak kursów **nie** dyskwalifikuje (AiScore nie ma kursów TT, a wiele
-   meczów amatorskich ich nie posiada).
+4. **Kursy** — pobierane z **wielu bukmacherów** przez Livesport (pinnacle,
+   bet365, 1xbet, unibet, bwin, betway, william_hill, betfair, nordicbet),
+   pierwszy który wycenia mecz (rynek HOME_AWAY). Wzbogacają scoring (EV).
+   Brak kursów **nie** dyskwalifikuje (AiScore nie ma kursów TT, a części
+   meczów amatorskich nie wycenia żaden bukmacher).
 
 > Faworyt liczenia H2H wyznacza `--focus`: `home` → gospodarz, `away` → gość.
 > To samo rozróżnienie co `scrape.yml` (home) / `scrape_away.yml` (away).

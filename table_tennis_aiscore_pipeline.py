@@ -13,7 +13,7 @@ are left untouched). It only REUSES existing, battle-tested building blocks:
 
   • aiscore_scraper          — match list + H2H + form (the new source)
   • sofascore_scraper        — MANDATORY Fan Vote (get_sofascore_prediction)
-  • pinnacle_full_odds       — odds (best-effort; AiScore exposes no TT odds)
+  • livesport_odds_api      — odds (best-effort, multi-bookmaker; AiScore has none)
   • tennis_scoring_engine    — 2-way (no-draw) scoring with a table-tennis profile
   • qualification_gate       — channel_qualifies / email_qualifies
   • email_notifier           — e-mail (same gate/template as tennis)
@@ -24,9 +24,9 @@ Qualification rules (per requirements):
                    of head-to-head meetings vs the rival.            (HARD GATE)
   2. Fan Vote    — SofaScore Fan Vote is MANDATORY (must be found).  (HARD GATE)
   3. Future-only — match must not have started yet.                  (HARD GATE)
-  4. Odds        — Pinnacle if available, otherwise another source; used to
-                   enrich scoring / EV. Absence does NOT disqualify (AiScore
-                   has no table-tennis odds, and many amateur events have none).
+  4. Odds        — multi-bookmaker via Livesport (pinnacle, bet365, 1xbet, …);
+                   first that prices the match. Used to enrich scoring / EV.
+                   Absence does NOT disqualify (some amateur events are unpriced).
 
 HOME vs AWAY:
   Two workflows run this file with ``--focus home`` and ``--focus away``.
@@ -108,18 +108,23 @@ TT_SOFASCORE_STRICT = os.getenv("TT_SOFASCORE_STRICT", "").strip().lower() in ("
 
 
 # ---------------------------------------------------------------------------
-# Odds (Pinnacle best-effort; another source as fallback)
-# ---------------------------------------------------------------------------
-
-# ---------------------------------------------------------------------------
-# Odds (Pinnacle via Livesport match index; best-effort)
+# Odds (multi-bookmaker via Livesport match index; best-effort)
 # ---------------------------------------------------------------------------
 
 # Livesport table-tennis day page (slug 'tenis-stolowy'). AiScore has no odds,
 # so we map each AiScore match to its Livesport event by player surnames and
-# pull Pinnacle's full markets. Pinnacle prices most TT Cup / Liga Pro / pro
-# events; truly amateur ones may be absent (then odds stay empty, non-blocking).
+# query many bookmakers via the Livesport odds API (HOME_AWAY market). Covers
+# far more amateur events (TT Cup / Liga Pro / Setka) than Pinnacle alone;
+# truly unpriced events stay empty (non-blocking).
 LIVESPORT_TT_DAY_URL = "https://www.livesport.com/pl/tenis-stolowy/"
+
+# Bookmakers to query for table-tennis odds, in sharp→popular priority order.
+# The Livesport odds API returns the first that prices the match (HOME_AWAY).
+# Covers far more amateur events than Pinnacle alone (TT Cup, Liga Pro, Setka).
+TT_BOOKMAKERS = [
+    "pinnacle", "bet365", "1xbet", "unibet", "bwin",
+    "betway", "william_hill", "betfair", "nordicbet",
+]
 
 
 def build_livesport_tt_index(driver: Any, date_str: str,
@@ -191,7 +196,7 @@ def build_livesport_tt_index(driver: Any, date_str: str,
                  "www", "livesport", "https", "http", "com", "pilka"}
         if toks:
             index.append({"url": link, "tokens": toks})
-    print(f"   📇 Livesport TT index: {len(index)} meczów (do dopasowania kursów Pinnacle)")
+    print(f"   📇 Livesport TT index: {len(index)} meczów (do dopasowania kursów)")
     return index
 
 
@@ -214,22 +219,28 @@ def _match_livesport_url(home: str, away: str,
 
 
 def resolve_odds(home: str, away: str, livesport_url: Optional[str]) -> Dict[str, Any]:
-    """Fetch Pinnacle home/away odds for a matched Livesport URL (best-effort)."""
+    """Fetch table-tennis home/away odds for a matched Livesport URL.
+
+    Pinnacle rarely prices amateur table tennis, so we query MANY bookmakers
+    via the Livesport odds API (HOME_AWAY market) and take the first that has
+    odds, in a sharp→popular priority order. This maximises coverage so most
+    matches get odds. Best-effort: returns Nones if no bookmaker priced it.
+    """
     out: Dict[str, Any] = {"home_odds": None, "away_odds": None, "bookmaker": None}
     if not livesport_url:
         return out
     try:
-        from pinnacle_full_odds import PinnacleFullOdds
-        pkg = PinnacleFullOdds().get_full_odds_for_match(
-            livesport_url, markets=["HOME_DRAW_AWAY"])
-        market = (pkg.get("markets") or {}).get("HOME_DRAW_AWAY")
-        if market:
-            h = (market.get("home") or {}).get("value")
-            a = (market.get("away") or {}).get("value")
-            if h or a:
-                out["home_odds"] = h
-                out["away_odds"] = a
-                out["bookmaker"] = "Pinnacle"
+        from livesport_odds_api import LivesportOddsAPI
+        api = LivesportOddsAPI()
+        event_id = api.extract_event_id_from_url(livesport_url)
+        if not event_id:
+            return out
+        odds = api.get_odds_from_multiple_bookmakers(
+            event_id, sport="table_tennis", bookmakers=TT_BOOKMAKERS)
+        if odds and odds.get("success") and (odds.get("home_odds") or odds.get("away_odds")):
+            out["home_odds"] = odds.get("home_odds")
+            out["away_odds"] = odds.get("away_odds")
+            out["bookmaker"] = odds.get("bookmaker")
     except Exception:
         pass
     return out
@@ -579,12 +590,12 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                       f"— kwalifikuję {rescued} meczów na podstawie samego H2H "
                       f"≥{int(H2H_MIN_WIN_RATE*100)}% (Fan Vote oznaczony jako niedostępny)")
 
-        # ── FAZA 2.45: Pinnacle odds (map AiScore → Livesport, best-effort) ──
+        # ── FAZA 2.45: Odds (multi-bookmaker via Livesport, best-effort) ──
         # Done while the driver is still open. Only qualifying rows get a lookup
-        # to limit Pinnacle calls. Missing odds stay None (non-blocking).
+        # to limit API calls. Missing odds stay None (non-blocking).
         qual_rows = [r for r in rows if r.get("qualifies")]
         if qual_rows:
-            print(f"\n[FAZA 2.45] Kursy Pinnacle dla {len(qual_rows)} kwalifikujących się "
+            print(f"\n[FAZA 2.45] Kursy (multi-bukmacher) dla {len(qual_rows)} kwalifikujących się "
                   f"(mapowanie AiScore → Livesport)...")
             try:
                 ls_index = build_livesport_tt_index(driver, date_str)
@@ -600,7 +611,7 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                     r["away_odds"] = odds["away_odds"]
                     r["odds_bookmaker"] = odds["bookmaker"]
                     odds_found += 1
-            print(f"   💰 Kursy Pinnacle znalezione dla {odds_found}/{len(qual_rows)} meczów")
+            print(f"   💰 Kursy znalezione dla {odds_found}/{len(qual_rows)} meczów")
     finally:
         try:
             driver.quit()

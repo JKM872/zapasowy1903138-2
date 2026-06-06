@@ -286,3 +286,28 @@ def test_resolve_odds_no_url_returns_empty():
     import table_tennis_aiscore_pipeline as pipe
     out = pipe.resolve_odds("A", "B", None)
     assert out == {"home_odds": None, "away_odds": None, "bookmaker": None}
+
+
+def test_resolve_odds_multi_bookmaker(monkeypatch):
+    import table_tennis_aiscore_pipeline as pipe
+    import livesport_odds_api as lo
+
+    class _FakeAPI:
+        def __init__(self, *a, **k):
+            self.bookmaker_id = "3"
+            self.calls = []
+        def extract_event_id_from_url(self, url):
+            return "AbCd12ef"
+        def get_odds_from_multiple_bookmakers(self, event_id, sport="football", bookmakers=None):
+            # Pinnacle (first) has no TT price; a later bookmaker does.
+            assert sport == "table_tennis"
+            assert bookmakers == pipe.TT_BOOKMAKERS
+            return {"home_odds": 1.45, "away_odds": 2.65,
+                    "bookmaker": "Bet365", "success": True}
+
+    monkeypatch.setattr(lo, "LivesportOddsAPI", _FakeAPI)
+    out = pipe.resolve_odds("Michal Szostak", "Komorowicz, Jakub",
+                            "https://www.livesport.com/pl/mecz/tenis-stolowy/szostak-komorowicz/AbCd12ef/")
+    assert out["home_odds"] == 1.45
+    assert out["away_odds"] == 2.65
+    assert out["bookmaker"] == "Bet365"
