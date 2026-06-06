@@ -641,6 +641,20 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                     r["odds_bookmaker"] = odds["bookmaker"]
                     odds_found += 1
             print(f"   💰 Kursy znalezione dla {odds_found}/{len(qual_rows)} meczów")
+
+            # ── FAZA 2.46: OddsPortal/Betexplorer DIAGNOSTICS (opt-in) ──
+            # Dump raw rendered HTML of OddsPortal+Betexplorer TT pages so we can
+            # build a precise odds parser next. Enable with TT_ODDS_DIAGNOSTIC=1.
+            if os.getenv("TT_ODDS_DIAGNOSTIC", "").strip().lower() in ("1", "true", "yes"):
+                try:
+                    from oddsportal_tt_odds import dump_diagnostics
+                    players = []
+                    for r in qual_rows[:3]:
+                        players.append(r.get("home_team", ""))
+                        players.append(r.get("away_team", ""))
+                    dump_diagnostics([p for p in players if p], date_str)
+                except Exception as e:
+                    print(f"   ⚠️ OddsPortal diagnostyka błąd: {e}")
     finally:
         try:
             driver.quit()

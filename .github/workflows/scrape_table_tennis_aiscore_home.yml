@@ -124,6 +124,7 @@ jobs:
           TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           SOFASCORE_PROXY: "socks5://localhost:1080"
+          TT_ODDS_DIAGNOSTIC: "1"
         run: |
           echo "🏓 Scraping table tennis (AiScore HOME focus)..."
           DATE_INPUT="${{ github.event.inputs.date }}"
@@ -150,6 +151,8 @@ jobs:
             results/matches_*_table_tennis_aiscore_home.json
             outputs/table_tennis_aiscore_home_*.csv
             outputs/mailed_manifest_*.json
+            debug_html/oddsportal_*.html
+            debug_html/betexplorer_*.html
           retention-days: 7
 
   commit-results:
@@ -183,6 +186,13 @@ jobs:
           find artifacts -name 'mailed_manifest_*.json' | while read f; do
             cp "$f" "outputs/$(basename "$f")"
           done
+          mkdir -p debug_html
+          find artifacts -name 'oddsportal_*.html' | while read f; do
+            cp "$f" "debug_html/$(basename "$f")"
+          done
+          find artifacts -name 'betexplorer_*.html' | while read f; do
+            cp "$f" "debug_html/$(basename "$f")"
+          done
           ls -la results/ || echo "No results found"
 
       - name: Commit and push results
@@ -192,6 +202,7 @@ jobs:
           git add results/matches_*_table_tennis_aiscore_home.json 2>/dev/null || true
           git add outputs/table_tennis_aiscore_home_*.csv 2>/dev/null || true
           git add outputs/mailed_manifest_*.json 2>/dev/null || true
+          git add debug_html/oddsportal_*.html debug_html/betexplorer_*.html 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ No new table tennis (home) results to commit"
           else
