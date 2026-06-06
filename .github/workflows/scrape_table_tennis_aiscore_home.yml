@@ -1,0 +1,217 @@
+name: Table Tennis (AiScore) - HOME FOCUS
+
+on:
+  # 05:30 UTC — offset from the away run (06:30) to reduce push races on main.
+  schedule:
+    - cron: '30 5 * * *'
+
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to scrape (YYYY-MM-DD, blank = today UTC)'
+        required: false
+        default: ''
+        type: string
+      max_matches:
+        description: 'Cap matches processed (blank = no cap)'
+        required: false
+        default: ''
+        type: string
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  table-tennis-home:
+    runs-on: ubuntu-latest
+
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # Chrome is required by aiscore_scraper (Selenium via webdriver-manager).
+      - name: Setup Chrome (pre-installed)
+        run: |
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || echo "")
+          if [ -z "$CHROME_PATH" ]; then
+            echo "::error::Chrome not found on runner"
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_PATH" >> $GITHUB_ENV
+          echo "✅ Chrome: $($CHROME_PATH --version)"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi cloudscraper httpx[http2]
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
+          python -c "from curl_cffi import requests; print('curl_cffi OK')"
+
+      - name: Wait for FlareSolverr
+        run: |
+          echo "⏳ Waiting for FlareSolverr to be ready..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "✅ FlareSolverr health endpoint responding!"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+
+      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        run: |
+          echo "🌐 Starting Cloudflare WARP proxy container..."
+          docker run -d --name warp \
+            --restart=always \
+            --device-cgroup-rule='c 10:200 rwm' \
+            -p 1080:1080 \
+            -e WARP_SLEEP=2 \
+            --cap-add NET_ADMIN \
+            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
+            -v /lib/modules:/lib/modules \
+            caomingjun/warp:latest
+
+          echo "⏳ Waiting for WARP to register and establish tunnel..."
+          WARP_READY=false
+          for i in {1..40}; do
+            sleep 3
+            CURRENT_IP=$(curl -s --max-time 10 --socks5 localhost:1080 https://api.ipify.org 2>/dev/null || echo "")
+            if [ -n "$CURRENT_IP" ]; then
+              WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
+              echo "WARP test ($i/40): IP=$CURRENT_IP, warp=$WARP_STATUS"
+              if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
+                echo "✅ WARP active - SofaScore via clean Cloudflare IP $CURRENT_IP"
+                WARP_READY=true
+                break
+              fi
+            else
+              echo "WARP not responding yet ($i/40)..."
+            fi
+          done
+          if [ "$WARP_READY" != "true" ]; then
+            echo "::warning::WARP not ready after 120s - continuing anyway..."
+            docker logs warp 2>&1 | tail -50
+          fi
+        continue-on-error: true
+
+      - name: Run table tennis pipeline (AiScore, HOME focus)
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          SOFASCORE_PROXY: "socks5://localhost:1080"
+        run: |
+          echo "🏓 Scraping table tennis (AiScore HOME focus)..."
+          DATE_INPUT="${{ github.event.inputs.date }}"
+          TARGET_DATE="${DATE_INPUT:-$(date +%Y-%m-%d)}"
+          MAX_INPUT="${{ github.event.inputs.max_matches }}"
+          MAX_ARG=""
+          if [ -n "$MAX_INPUT" ]; then
+            MAX_ARG="--max-matches $MAX_INPUT"
+          fi
+          python table_tennis_aiscore_pipeline.py \
+            --focus home \
+            --date "$TARGET_DATE" $MAX_ARG \
+            --to "${{ secrets.EMAIL_RECIPIENT }}" \
+            --from-email "${{ secrets.EMAIL_SENDER }}" \
+            --password "${{ secrets.EMAIL_PASSWORD }}" \
+            --provider gmail
+
+      - name: Upload results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: results-tt-aiscore-home-${{ github.run_id }}
+          path: |
+            results/matches_*_table_tennis_aiscore_home.json
+            outputs/table_tennis_aiscore_home_*.csv
+            outputs/mailed_manifest_*.json
+          retention-days: 7
+
+  commit-results:
+    needs: table-tennis-home
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Collect results
+        run: |
+          mkdir -p results outputs
+          find artifacts -name 'matches_*_table_tennis_aiscore_home.json' | while read f; do
+            cp "$f" "results/$(basename "$f")"
+          done
+          find artifacts -name 'table_tennis_aiscore_home_*.csv' | while read f; do
+            cp "$f" "outputs/$(basename "$f")"
+          done
+          find artifacts -name 'mailed_manifest_*.json' | while read f; do
+            cp "$f" "outputs/$(basename "$f")"
+          done
+          ls -la results/ || echo "No results found"
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/matches_*_table_tennis_aiscore_home.json 2>/dev/null || true
+          git add outputs/table_tennis_aiscore_home_*.csv 2>/dev/null || true
+          git add outputs/mailed_manifest_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ No new table tennis (home) results to commit"
+          else
+            TODAY=$(date +%Y-%m-%d)
+            git commit -m "data: table tennis (AiScore home) results for $TODAY [skip ci]"
+            pushed=false
+            for attempt in 1 2 3 4 5 6; do
+              if git push origin HEAD:main; then
+                echo "✅ Results committed and pushed (attempt $attempt)"
+                pushed=true
+                break
+              fi
+              echo "⚠️ Push rejected (attempt $attempt) — rebasing onto origin/main..."
+              git fetch origin main || true
+              if ! git rebase origin/main; then
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::warning::Could not push table tennis (home) results after retries"
+            fi
+          fi
