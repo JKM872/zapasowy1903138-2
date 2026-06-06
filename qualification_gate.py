@@ -44,11 +44,22 @@ SPORT_MIN_ODDS_FALLBACK = 1.35
 # dedicated SofaScore check already runs in scrape_and_notify.py (FAZA 2.1),
 # so the secondary channel gate uses a much softer threshold to avoid
 # silently dropping all tennis matches.
+#
+# IMPORTANT: every actively-scraped sport MUST have an explicit threshold.
+# Sports left out fall through to FAN_VOTE_DEFAULT_THRESHOLD (80%), which is
+# far too strict for team sports and silently killed value picks — e.g. a
+# volleyball match with 79% fan vote + good odds was dropped for missing 80%
+# by one point. 2-way / no-draw sports (volleyball, basketball) mirror tennis
+# (55); draw-capable sports (handball, hockey) mirror football (65).
 FAN_VOTE_THRESHOLDS: Dict[str, float] = {
     "football": 65.0,
     "tennis": 55.0,
     "table_tennis": 55.0,
     "table-tennis": 55.0,
+    "volleyball": 55.0,
+    "basketball": 55.0,
+    "handball": 65.0,
+    "hockey": 65.0,
 }
 FAN_VOTE_DEFAULT_THRESHOLD = 80.0
 

@@ -58,6 +58,10 @@ _FAN_VOTE_THRESHOLDS: Dict[str, float] = {
     "football": 65.0,
     "table_tennis": 55.0,
     "table-tennis": 55.0,
+    "volleyball": 55.0,
+    "basketball": 55.0,
+    "handball": 65.0,
+    "hockey": 65.0,
 }
 _FAN_VOTE_DEFAULT_THRESHOLD = 80.0
 
