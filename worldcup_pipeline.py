@@ -46,6 +46,15 @@ WORLD_CUP_LEAGUE_SLUGS = [
     "world-cup",
 ]
 
+# Kanoniczne strony turnieju MŚ na Livesport. Zbieramy linki meczów wprost z
+# tych zakładek (terminarz = nadchodzące, wyniki = rozegrane), zamiast skanować
+# ogólną stronę dnia i filtrować po slugu — linki meczów (/mecz/team1/team2/)
+# nie zawierają sluga ligi, więc filtr po lidze dawał 0 trafień.
+WORLD_CUP_TOURNAMENT_URLS = [
+    "https://www.livesport.com/pl/pilka-nozna/swiat/mistrzostwa-swiata/terminarz/",
+    "https://www.livesport.com/pl/pilka-nozna/swiat/mistrzostwa-swiata/wyniki/",
+]
+
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
 
 
@@ -54,6 +63,87 @@ RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results"
 # --------------------------------------------------------------------------- #
 def _is_ci() -> bool:
     return os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+
+
+def collect_worldcup_match_links(driver, tournament_urls: Optional[List[str]] = None,
+                                 max_scrolls: int = 12) -> List[str]:
+    """Zbiera linki meczów wprost ze stron turnieju MŚ (terminarz + wyniki).
+
+    Wchodzi na każdą kanoniczną stronę turnieju, akceptuje consent, ponawia przy
+    stronie-blokadzie LiveSport, scrolluje dla lazy-load i wyciąga linki
+    ``/mecz/...``. Strony są już zawężone do turnieju, więc NIE filtrujemy po
+    slugu ligi (to właśnie filtr powodował 0 trafień przy skanie strony dnia).
+
+    Reużywa pomocników z ``livesport_h2h_scraper`` bez ich modyfikacji.
+    Zwraca unikalne URL-e w kolejności odkrycia.
+    """
+    import time
+
+    try:
+        from bs4 import BeautifulSoup
+        from livesport_h2h_scraper import (
+            _accept_cookies_on_page,
+            _extract_match_links_from_soup,
+            _count_match_links_in_page,
+            is_livesport_error_page,
+            _safe_page_source,
+        )
+    except Exception as e:  # pragma: no cover - import guard
+        print(f"   ⚠️ Nie można zaimportować pomocników LiveSport: {e}")
+        return []
+
+    urls_to_visit = tournament_urls or WORLD_CUP_TOURNAMENT_URLS
+    found: List[str] = []
+    seen: set = set()
+
+    for page_url in urls_to_visit:
+        print(f"   🌍 Strona turnieju: {page_url}")
+        try:
+            driver.get(page_url)
+            time.sleep(2.5)
+            _accept_cookies_on_page(driver)
+
+            # Retry przy stronie-blokadzie LiveSport.
+            attempts = 0
+            while is_livesport_error_page(_safe_page_source(driver)) and attempts < 3:
+                attempts += 1
+                print(f"      🚫 Strona błędu/blokady (próba {attempts}/3) — czekam...")
+                time.sleep(3.0 * attempts)
+                try:
+                    driver.get(page_url)
+                    time.sleep(3.0)
+                    _accept_cookies_on_page(driver)
+                except Exception:
+                    pass
+
+            # Smart scroll dla lazy-load.
+            prev = _count_match_links_in_page(driver)
+            stale = 0
+            for _ in range(max_scrolls):
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(0.6)
+                cur = _count_match_links_in_page(driver)
+                if cur <= prev:
+                    stale += 1
+                    if stale >= 3:
+                        break
+                else:
+                    stale = 0
+                prev = cur
+            driver.execute_script("window.scrollTo(0, 0);")
+            time.sleep(0.3)
+
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            # leagues=None: strona już zawężona do turnieju.
+            page_links, _dbg = _extract_match_links_from_soup(soup, page_url, seen, leagues=None)
+            print(f"      ✓ {len(page_links)} linków meczów")
+            found.extend(page_links)
+        except Exception as e:
+            print(f"      ✗ Błąd przy {page_url}: {e}")
+            continue
+
+    print(f"   📊 Łącznie {len(found)} unikalnych linków meczów MŚ ze stron turnieju")
+    return found
 
 
 def _build_frontend_record(row: Dict[str, Any], analysis: Dict[str, Any],
@@ -247,9 +337,15 @@ def run_pipeline(date: str, headless: bool = True, max_matches: Optional[int] = 
 
     try:
         print("\n🔍 KROK 1/4: Zbieranie meczów MŚ...")
-        urls = get_match_links_from_day(
-            driver, date, sports=["football"], leagues=WORLD_CUP_LEAGUE_SLUGS
-        )
+        # Zbieramy linki wprost ze stron turnieju MŚ (terminarz + wyniki).
+        urls = collect_worldcup_match_links(driver)
+        # Fallback: gdyby strona turnieju nic nie zwróciła, spróbuj starej metody
+        # (skan strony dnia z filtrem po slugu ligi).
+        if not urls:
+            print("   ↩️ Brak linków ze stron turnieju — fallback do skanu dnia...")
+            urls = get_match_links_from_day(
+                driver, date, sports=["football"], leagues=WORLD_CUP_LEAGUE_SLUGS
+            )
         # Deduplikacja zachowując kolejność
         seen = set()
         urls = [u for u in urls if not (u in seen or seen.add(u))]
