@@ -469,6 +469,12 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 provider=email_cfg.get("provider", "gmail"),
                 subject=f"🏓 Table Tennis ({focus}) — {date_str}",
                 date=date_str,
+                # AiScore exposes no table-tennis odds, so DON'T drop no-odds
+                # matches — otherwise every qualifying pick is filtered out and
+                # no e-mail is sent. Qualification already happened upstream
+                # (H2H ≥60% + mandatory Fan Vote).
+                skip_no_odds=False,
+                min_odds_threshold=0.0,
             )
             print("   ✅ Email wysłany (jeśli były kwalifikujące się)")
         except Exception as e:

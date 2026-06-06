@@ -235,13 +235,37 @@ def _involves(match: Dict[str, Any], player: str) -> bool:
     return normalize_name(match.get("home")) == p or normalize_name(match.get("away")) == p
 
 
+def _dedupe_by_url(matches: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Drop duplicate matches (same URL) keeping first occurrence/order.
+
+    On a /h2h page the same meeting can appear in the direct-H2H section AND in
+    a player's recent-form section. Counting it twice would inflate both the
+    head-to-head record and form, so we de-duplicate by match URL (falling back
+    to a date+participants key when a URL is missing).
+    """
+    seen = set()
+    out: List[Dict[str, Any]] = []
+    for m in matches:
+        key = m.get("url")
+        if not key:
+            key = (m.get("date"),
+                   normalize_name(m.get("home")),
+                   normalize_name(m.get("away")),
+                   m.get("home_score"), m.get("away_score"))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(m)
+    return out
+
+
 def filter_h2h(matches: List[Dict[str, Any]], player_a: str,
                player_b: str) -> List[Dict[str, Any]]:
-    """Return only the direct head-to-head matches between A and B."""
+    """Return only the direct head-to-head matches between A and B (deduped)."""
     a, b = normalize_name(player_a), normalize_name(player_b)
     pair = {a, b}
     res = []
-    for m in matches:
+    for m in _dedupe_by_url(matches):
         if {normalize_name(m.get("home")), normalize_name(m.get("away"))} == pair:
             res.append(m)
     return res
@@ -286,7 +310,7 @@ def recent_form(matches: List[Dict[str, Any]], player: str,
     """
     p = normalize_name(player)
     form: List[str] = []
-    for m in matches:
+    for m in _dedupe_by_url(matches):
         if not m.get("winner"):
             continue
         is_home = normalize_name(m.get("home")) == p
@@ -365,63 +389,111 @@ def list_match_urls(driver: Any, date_str: Optional[str] = None,
     return sorted(hrefs)
 
 
+def parse_h2h_header(html_or_soup: Union[str, "BeautifulSoup"]) -> Optional[Tuple[str, str]]:
+    """Return (home, away) participant names from an AiScore /h2h page header.
+
+    The match's two participants are the first two distinct player-profile links
+    at the top of the page (``a[href*='/player-']``). The first is the HOME
+    (left) side, the second the AWAY (right) side. Returns None if fewer than
+    two distinct player links are found.
+    """
+    soup = _soup(html_or_soup)
+    seen_href = []
+    names: List[str] = []
+    for a in soup.find_all("a", href=True):
+        if "/player-" not in a["href"]:
+            continue
+        href = a["href"].split("?")[0].rstrip("/")
+        if href in seen_href:
+            continue
+        name = a.get_text(strip=True)
+        if not name:
+            continue
+        seen_href.append(href)
+        names.append(name)
+        if len(names) >= 2:
+            break
+    if len(names) >= 2:
+        return names[0], names[1]
+    return None
+
+
+def h2h_url_for(match_url: str) -> str:
+    """Return the /h2h sub-page URL for an AiScore match URL.
+
+    AiScore match pages (``/table-tennis/match-<slug>/<id>``) show only the
+    single-match overview; the head-to-head + recent-form lists live on the
+    ``/h2h`` sub-page. Idempotent (won't append twice) and strips query/hash.
+    """
+    if not match_url:
+        return match_url
+    base = match_url.split("#")[0].split("?")[0].rstrip("/")
+    if base.endswith("/h2h"):
+        return base
+    return base + "/h2h"
+
+
 def scrape_match_page(driver: Any, url: str,
                       settle_seconds: float = 3.0) -> Dict[str, Any]:
-    """Open a match-detail page and parse its H2H + form sections.
+    """Open a match's /h2h sub-page and parse its H2H + form sections.
 
     Returns a dict:
         {
-          "url": url,
-          "all_matches": [...],          # every <li> on the page
-          "home": <home player or None>, # the upcoming match's participants
+          "url": <h2h url loaded>,
+          "all_matches": [...],          # every <li> across all three sections
+          "home": <home player or None>, # upcoming match participants (from header)
           "away": <away player or None>,
+          "match_date": <iso/text or None>,
         }
 
-    The upcoming match's participants are taken from the FIRST parsed row that
-    has no decided score (the fixture/teaser at the top), falling back to the
-    most frequent pair across the page.
+    Participants come from the page HEADER (first two player links), which is
+    the reliable source for the upcoming match. ``all_matches`` contains the
+    direct H2H section plus each player's recent-form section, so the caller can
+    derive both the head-to-head record and general/venue form.
     """
     import time
 
+    target = h2h_url_for(url)
     try:
-        driver.get(url)
+        driver.get(target)
     except Exception:
-        return {"url": url, "all_matches": [], "home": None, "away": None}
+        return {"url": target, "all_matches": [], "home": None, "away": None,
+                "match_date": None}
     time.sleep(settle_seconds)
     try:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(1.0)
+        driver.execute_script("window.scrollTo(0, 0);")
     except Exception:
         pass
 
     html = _safe_page_source(driver) or ""
     matches = parse_aiscore_matches(html)
 
+    # Participants: prefer the page header (player links).
     home = away = None
+    header = parse_h2h_header(html)
+    if header:
+        home, away = header
+
     match_date = None
-    # Prefer an explicit, not-yet-played fixture row.
-    for m in matches:
-        if not m.get("finished"):
-            home, away = m.get("home"), m.get("away")
-            match_date = m.get("date")
-            break
+    # Fallback: derive participants from the most common pair in the lists.
     if home is None and matches:
-        # Fallback: most common participant pair (the H2H subjects).
         from collections import Counter
         pairs = Counter()
         for m in matches:
             key = tuple(sorted([normalize_name(m.get("home")), normalize_name(m.get("away"))]))
             pairs[key] += 1
         if pairs:
-            # Map the winning normalized pair back to display names.
             top_norm = pairs.most_common(1)[0][0]
             for m in matches:
                 k = tuple(sorted([normalize_name(m.get("home")), normalize_name(m.get("away"))]))
                 if k == top_norm:
                     home, away = m.get("home"), m.get("away")
+                    match_date = m.get("date")
                     break
 
-    return {"url": url, "all_matches": matches, "home": home, "away": away,
+    return {"url": target, "all_matches": matches, "home": home, "away": away,
             "match_date": match_date}
 
 
@@ -431,6 +503,8 @@ __all__ = [
     "normalize_name",
     "iso_to_match_time",
     "parse_aiscore_matches",
+    "parse_h2h_header",
+    "h2h_url_for",
     "filter_h2h",
     "h2h_record",
     "recent_form",

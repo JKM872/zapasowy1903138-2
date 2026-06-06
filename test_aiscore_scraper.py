@@ -7,6 +7,8 @@ import pytest
 
 from aiscore_scraper import (
     parse_aiscore_matches,
+    parse_h2h_header,
+    h2h_url_for,
     filter_h2h,
     h2h_record,
     recent_form,
@@ -15,11 +17,18 @@ from aiscore_scraper import (
 )
 
 FIXTURE = os.path.join(os.path.dirname(__file__), "tests", "fixtures", "aiscore_tt_h2h.html")
+PAGE_FIXTURE = os.path.join(os.path.dirname(__file__), "tests", "fixtures", "aiscore_tt_h2h_page.html")
 
 
 @pytest.fixture(scope="module")
 def h2h_html():
     with open(FIXTURE, "r", encoding="utf-8") as fh:
+        return fh.read()
+
+
+@pytest.fixture(scope="module")
+def h2h_page_html():
+    with open(PAGE_FIXTURE, "r", encoding="utf-8") as fh:
         return fh.read()
 
 
@@ -167,3 +176,62 @@ def test_process_match_away_focus_blocked_by_h2h(monkeypatch, h2h_html):
     assert row is not None
     assert row["qualifies"] is False
     assert "h2h_fav_win_rate" in row["tt_skip_reason"]
+
+
+# ---------------------------------------------------------------------------
+# /h2h sub-page: header parsing, URL building, dedupe across sections
+# ---------------------------------------------------------------------------
+
+def test_h2h_url_for_appends_and_is_idempotent():
+    base = "https://www.aiscore.com/table-tennis/match-a-b/527rxsr5xw0c47e"
+    assert h2h_url_for(base) == base + "/h2h"
+    assert h2h_url_for(base + "/h2h") == base + "/h2h"
+    assert h2h_url_for(base + "/?x=1#frag") == base + "/h2h"
+
+
+def test_parse_h2h_header_returns_home_then_away(h2h_page_html):
+    header = parse_h2h_header(h2h_page_html)
+    assert header is not None
+    home, away = header
+    assert normalize_name(home) == normalize_name("Michal Szostak")
+    assert normalize_name(away) == normalize_name("Komorowicz, Jakub")
+
+
+def test_full_page_h2h_record_dedupes_to_four_of_six(h2h_page_html):
+    # The page has direct H2H + two form sections; the direct meeting must be
+    # counted once even if it also appears in a form section.
+    matches = parse_aiscore_matches(h2h_page_html)
+    rec = h2h_record(matches, "Michal Szostak", "Komorowicz, Jakub")
+    assert rec["total"] == 6
+    assert rec["a_wins"] == 4
+    assert rec["b_wins"] == 2
+    assert rec["a_win_rate"] == pytest.approx(0.6667, abs=1e-3)
+
+
+def test_full_page_form_sections_populate(h2h_page_html):
+    matches = parse_aiscore_matches(h2h_page_html)
+    # Szostak appears in direct (6) + his form section (4) -> recent_form has data.
+    szostak_form = recent_form(matches, "Michal Szostak", limit=10)
+    assert "W" in szostak_form and len(szostak_form) >= 5
+    komo_form = recent_form(matches, "Komorowicz, Jakub", limit=10)
+    assert len(komo_form) >= 5
+
+
+def test_process_match_uses_header_for_participants(monkeypatch, h2h_page_html):
+    import table_tennis_aiscore_pipeline as pipe
+
+    monkeypatch.setattr(
+        pipe, "get_sofascore_prediction",
+        lambda *a, **k: {"found": True, "home_win_prob": 60.0,
+                         "away_win_prob": 40.0, "total_votes": 30},
+    )
+    driver = _FakeDriver(h2h_page_html)
+    row = pipe.process_match(driver, "https://www.aiscore.com/table-tennis/match-a-b/527",
+                             focus="home", date_str="2026-06-06", verbose=False)
+    assert row is not None
+    assert normalize_name(row["home_team"]) == normalize_name("Michal Szostak")
+    assert normalize_name(row["away_team"]) == normalize_name("Komorowicz, Jakub")
+    assert row["qualifies"] is True
+    assert row["h2h_fav_win_rate"] == pytest.approx(0.6667, abs=1e-3)
+    # Form must be populated (the user's "brak formy" complaint).
+    assert len(row["form_a"]) >= 1
