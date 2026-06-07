@@ -344,6 +344,7 @@ def test_process_match_uses_sofascore_odds(monkeypatch, h2h_page_html):
         pipe, "sofascore_odds",
         lambda ev: {"home_odds": 1.40, "away_odds": 2.80, "bookmaker": "SofaScore"},
     )
+    monkeypatch.setattr(pipe, "sofascore_start_time", lambda ev: "06.06.2026 18:30")
     driver = _FakeDriver(h2h_page_html)
     row = pipe.process_match(driver, "https://www.aiscore.com/table-tennis/match-a-b/527",
                              focus="home", date_str="2026-06-06", verbose=False)
@@ -353,6 +354,9 @@ def test_process_match_uses_sofascore_odds(monkeypatch, h2h_page_html):
     assert row["away_odds"] == 2.80
     assert row["odds_bookmaker"] == "SofaScore"
     assert row["sofascore_event_id"] == 14250733
+    # Match time (from SofaScore) and last H2H result must be populated.
+    assert row["match_time"] == "06.06.2026 18:30"
+    assert row["last_h2h_score"] == "3:1"   # most recent direct meeting in fixture
 
 
 def test_sofascore_odds_parses_full_time_case_insensitive(monkeypatch):

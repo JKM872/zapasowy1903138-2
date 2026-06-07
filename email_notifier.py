@@ -1172,6 +1172,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                                 {(home if favorite == 'player_a' else (away if favorite == 'player_b' else 'Równi')) if is_tennis else (f'{last_meeting_date} — {last_h2h_score}' if last_h2h_score else (last_meeting_date if last_meeting_date else '—'))}
                             </div>
                             {f'<div style="font-size: 10px; color: #888; margin-top: 2px;">🏠 {last_h2h_home} vs {last_h2h_away} ✈️</div>' if last_h2h_score and last_h2h_home and not is_tennis else ''}
+                            {f'<div style="font-size: 10px; color: #888; margin-top: 4px;">📅 Ostatni mecz: {last_meeting_date}{f" ({last_h2h_score})" if last_h2h_score else ""}</div>' if is_tennis and (last_meeting_date or last_h2h_score) else ''}
                         </div>
                     </div>
                     

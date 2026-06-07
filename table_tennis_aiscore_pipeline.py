@@ -291,6 +291,10 @@ def _build_row(home: str, away: str, focus: str, match_url: str,
         "h2h_count": 0,
         "win_rate": 0.0,
         "h2h_fav_win_rate": 0.0,
+        "last_h2h_score": "",
+        "last_h2h_home": "",
+        "last_h2h_away": "",
+        "last_meeting_date": "",
 
         # Form
         "form_a": [],
@@ -396,6 +400,38 @@ def sofascore_odds(event_id: int) -> Dict[str, Any]:
             return out
     return out
 
+
+def sofascore_start_time(event_id: int) -> str:
+    """Return the match start time as 'DD.MM.YYYY HH:MM' (Europe/Warsaw).
+
+    SofaScore carries the scheduled start timestamp for these events; we already
+    resolved the event for the fan vote, so one more call gives us the time the
+    AiScore /h2h page lacks. Returns '' on failure. Reuses the working stack.
+    """
+    if not event_id:
+        return ""
+    try:
+        data = _api_get_json(f"https://api.sofascore.com/api/v1/event/{event_id}", timeout=8)
+    except Exception:
+        data = None
+    if not isinstance(data, dict):
+        return ""
+    ev = data.get("event") or data
+    ts = ev.get("startTimestamp")
+    if not ts:
+        return ""
+    from datetime import datetime, timezone
+    try:
+        dt = datetime.fromtimestamp(int(ts), tz=timezone.utc)
+        try:
+            from zoneinfo import ZoneInfo
+            dt = dt.astimezone(ZoneInfo("Europe/Warsaw"))
+        except Exception:
+            pass
+        return dt.strftime("%d.%m.%Y %H:%M")
+    except (ValueError, OverflowError, OSError):
+        return ""
+
 def process_match(driver: Any, url: str, focus: str, date_str: str,
                   verbose: bool = True) -> Optional[Dict[str, Any]]:
     """Scrape one AiScore match page and build a scored, gated row.
@@ -441,6 +477,18 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
         row["home_wins_in_h2h_last5"] = rec["fav_wins"]
         row["away_wins_in_h2h_last5"] = rec["total"] - rec["fav_wins"]
     row["win_rate"] = round(rec["fav_win_rate"], 3)
+
+    # --- LAST H2H MEETING (most recent direct match) ---
+    direct = rec.get("matches") or []
+    if direct:
+        last = direct[0]  # AiScore /h2h lists most recent first
+        hs, as_ = last.get("home_score"), last.get("away_score")
+        if hs is not None and as_ is not None:
+            row["last_h2h_score"] = f"{hs}:{as_}"
+            row["last_h2h_home"] = last.get("home")
+            row["last_h2h_away"] = last.get("away")
+            row["last_meeting_date"] = ai.iso_to_match_time(last.get("date")) or \
+                (str(last.get("date")) if last.get("date") else "")
 
     if not passes:
         row["qualifies"] = False
@@ -490,6 +538,12 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
         # from the SAME working API stack. Best-effort, non-blocking.
         ev_id = _sofascore_event_id(pred.get("url") or pred.get("sofascore_url"))
         if ev_id:
+            row["sofascore_event_id"] = ev_id
+            # Match start time (the AiScore /h2h page lacks it) from SofaScore.
+            if not row.get("match_time"):
+                st = sofascore_start_time(ev_id)
+                if st:
+                    row["match_time"] = st
             try:
                 so = sofascore_odds(ev_id)
             except Exception:
@@ -498,7 +552,6 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
                 row["home_odds"] = so.get("home_odds")
                 row["away_odds"] = so.get("away_odds")
                 row["odds_bookmaker"] = so.get("bookmaker") or "SofaScore"
-                row["sofascore_event_id"] = ev_id
     else:
         row["sofascore_found"] = False
         row["qualifies"] = False
@@ -621,6 +674,8 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str, focus: str) -> Dict
                     "total": r.get("h2h_count"),
                     "homeWins": r.get("home_wins_in_h2h_last5"),
                     "awayWins": r.get("away_wins_in_h2h_last5"),
+                    "lastDate": r.get("last_meeting_date"),
+                    "lastScore": r.get("last_h2h_score"),
                 },
                 "form": {
                     "home": r.get("home_form_overall"),
