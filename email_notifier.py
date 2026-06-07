@@ -1099,6 +1099,13 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         # Tennis: Pobierz ranking i advanced score
         ranking_a = match.get('ranking_a')
         ranking_b = match.get('ranking_b')
+        # Table tennis has no rankings — after the CSV round-trip these come back
+        # as NaN (float, truthy) and rendered as "#nan". Coerce missing/NaN to
+        # None so the ranking section is hidden when there is no real ranking.
+        if is_nan_or_none(ranking_a):
+            ranking_a = None
+        if is_nan_or_none(ranking_b):
+            ranking_b = None
         advanced_score = safe_float(match.get('advanced_score', 0))
         favorite = match.get('favorite', 'unknown')
         ranking_info = match.get('ranking_info', '')
