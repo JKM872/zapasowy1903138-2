@@ -315,3 +315,65 @@ def test_resolve_odds_multi_bookmaker(monkeypatch):
     assert out["home_odds"] == 1.45
     assert out["away_odds"] == 2.65
     assert out["bookmaker"] == "Bet365"
+
+
+# ---------------------------------------------------------------------------
+# SofaScore odds (LV Bet etc.) reused from the fan-vote event
+# ---------------------------------------------------------------------------
+
+def test_sofascore_event_id_parsing():
+    import table_tennis_aiscore_pipeline as pipe
+    assert pipe._sofascore_event_id("https://www.sofascore.com/table-tennis/match/14250733") == 14250733
+    assert pipe._sofascore_event_id("https://www.sofascore.com/x/y#id:987654") == 987654
+    assert pipe._sofascore_event_id("https://www.sofascore.com/table-tennis/match/a-b/13982032") == 13982032
+    assert pipe._sofascore_event_id(None) is None
+    assert pipe._sofascore_event_id("https://www.sofascore.com/table-tennis/") is None
+
+
+def test_process_match_uses_sofascore_odds(monkeypatch, h2h_page_html):
+    import table_tennis_aiscore_pipeline as pipe
+
+    monkeypatch.setattr(
+        pipe, "get_sofascore_prediction",
+        lambda *a, **k: {"found": True, "home_win_prob": 60.0, "away_win_prob": 40.0,
+                         "total_votes": 30,
+                         "url": "https://www.sofascore.com/table-tennis/match/14250733"},
+    )
+    # SofaScore odds endpoint returns LV Bet-sourced home/away odds.
+    monkeypatch.setattr(
+        pipe, "sofascore_odds",
+        lambda ev: {"home_odds": 1.40, "away_odds": 2.80, "bookmaker": "SofaScore"},
+    )
+    driver = _FakeDriver(h2h_page_html)
+    row = pipe.process_match(driver, "https://www.aiscore.com/table-tennis/match-a-b/527",
+                             focus="home", date_str="2026-06-06", verbose=False)
+    assert row is not None
+    assert row["qualifies"] is True
+    assert row["home_odds"] == 1.40
+    assert row["away_odds"] == 2.80
+    assert row["odds_bookmaker"] == "SofaScore"
+    assert row["sofascore_event_id"] == 14250733
+
+
+def test_sofascore_odds_parses_full_time_case_insensitive(monkeypatch):
+    import table_tennis_aiscore_pipeline as pipe
+
+    # Real SofaScore shape: market 'Full time' (lowercase t), fractional values.
+    payload = {"markets": [
+        {"marketName": "Full time", "choices": [
+            {"name": "1", "fractionalValue": "13/8"},
+            {"name": "2", "fractionalValue": "4/9"},
+        ]}
+    ]}
+    monkeypatch.setattr(pipe, "_api_get_json", lambda *a, **k: payload)
+    out = pipe.sofascore_odds(16281666)
+    assert out["bookmaker"] == "SofaScore"
+    assert out["home_odds"] == pytest.approx(2.62, abs=0.01)   # 13/8 + 1
+    assert out["away_odds"] == pytest.approx(1.44, abs=0.01)   # 4/9 + 1
+
+
+def test_sofascore_odds_empty_on_no_event(monkeypatch):
+    import table_tennis_aiscore_pipeline as pipe
+    monkeypatch.setattr(pipe, "_api_get_json", lambda *a, **k: None)
+    assert pipe.sofascore_odds(0) == {"home_odds": None, "away_odds": None, "bookmaker": None}
+    assert pipe.sofascore_odds(123) == {"home_odds": None, "away_odds": None, "bookmaker": None}

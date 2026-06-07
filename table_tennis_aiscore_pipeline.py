@@ -87,7 +87,9 @@ except Exception as e:  # pragma: no cover
     _AI_ERR = str(e)
 
 try:
-    from sofascore_scraper import get_sofascore_prediction, is_sofascore_unreachable
+    from sofascore_scraper import (
+        get_sofascore_prediction, is_sofascore_unreachable, _api_get_json,
+    )
     _SOFA_OK = True
 except Exception as e:  # pragma: no cover
     _SOFA_OK = False
@@ -96,6 +98,8 @@ except Exception as e:  # pragma: no cover
         return {"found": False}
     def is_sofascore_unreachable() -> bool:  # type: ignore
         return False
+    def _api_get_json(*a, **k):  # type: ignore
+        return None
 
 
 # When SofaScore's anti-bot (Cloudflare) blocks the ENTIRE CI shard, every
@@ -312,6 +316,86 @@ def _build_row(home: str, away: str, focus: str, match_url: str,
 # Per-match processing
 # ---------------------------------------------------------------------------
 
+def _sofascore_event_id(url: Optional[str]) -> Optional[int]:
+    """Extract the numeric SofaScore event id from a match URL.
+
+    Handles both formats the scraper emits:
+      • https://www.sofascore.com/<slug>/match/<event_id>
+      • https://www.sofascore.com/...#id:<event_id>
+    """
+    if not url:
+        return None
+    m = re.search(r"#id:(\d+)", url)
+    if m:
+        return int(m.group(1))
+    m = re.search(r"/match/(\d+)", url)
+    if m:
+        return int(m.group(1))
+    # Last resort: trailing numeric path segment.
+    m = re.search(r"/(\d{5,})/?$", url)
+    return int(m.group(1)) if m else None
+
+
+def _frac_to_decimal(val: Any) -> Optional[float]:
+    """Convert a SofaScore odds value to decimal. Accepts '13/8' or '2.62'."""
+    if val is None:
+        return None
+    s = str(val).strip()
+    if "/" in s:
+        a, _, b = s.partition("/")
+        try:
+            return round(float(a) / float(b) + 1.0, 2)
+        except (ValueError, ZeroDivisionError):
+            return None
+    try:
+        d = float(s)
+        return round(d, 2) if d > 1.0 else None
+    except ValueError:
+        return None
+
+
+def sofascore_odds(event_id: int) -> Dict[str, Any]:
+    """Fetch home/away odds from SofaScore's odds endpoint for an event.
+
+    SofaScore aggregates bookmaker odds (e.g. LV Bet) even for amateur table
+    tennis. Reuses the SAME working API stack as the fan vote (``_api_get_json``
+    → curl_cffi / FlareSolverr fallback). Parses the 2-way "Full time" market
+    CASE-INSENSITIVELY (SofaScore returns 'Full time', not 'Full Time' — the
+    legacy get_odds_via_api missed it). Returns {home_odds, away_odds, bookmaker}.
+    """
+    out: Dict[str, Any] = {"home_odds": None, "away_odds": None, "bookmaker": None}
+    if not event_id:
+        return out
+    try:
+        data = _api_get_json(
+            f"https://api.sofascore.com/api/v1/event/{event_id}/odds/1/all", timeout=8)
+    except Exception:
+        data = None
+    if not isinstance(data, dict):
+        return out
+    wanted = {"full time", "1x2", "match winner", "full time result",
+              "match", "winner", "fulltime"}
+    for market in data.get("markets", []) or []:
+        if str(market.get("marketName", "")).strip().lower() not in wanted:
+            continue
+        for choice in market.get("choices", []) or []:
+            name = str(choice.get("name", "")).strip().lower()
+            dec = _frac_to_decimal(choice.get("fractionalValue"))
+            if dec is None:
+                src = choice.get("sourceOdds") or []
+                if src:
+                    dec = _frac_to_decimal(src[0].get("odds"))
+            if dec is None:
+                continue
+            if name in ("1", "home"):
+                out["home_odds"] = dec
+            elif name in ("2", "away"):
+                out["away_odds"] = dec
+        if out["home_odds"] and out["away_odds"]:
+            out["bookmaker"] = "SofaScore"
+            return out
+    return out
+
 def process_match(driver: Any, url: str, focus: str, date_str: str,
                   verbose: bool = True) -> Optional[Dict[str, Any]]:
     """Scrape one AiScore match page and build a scored, gated row.
@@ -401,6 +485,20 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
         row["sofascore_home_win_prob"] = pred.get("home_win_prob")
         row["sofascore_away_win_prob"] = pred.get("away_win_prob")
         row["sofascore_total_votes"] = pred.get("total_votes", 0) or 0
+        # SofaScore also carries odds (e.g. LV Bet) for these amateur events,
+        # and we already resolved the event for the fan vote — so fetch them
+        # from the SAME working API stack. Best-effort, non-blocking.
+        ev_id = _sofascore_event_id(pred.get("url") or pred.get("sofascore_url"))
+        if ev_id:
+            try:
+                so = sofascore_odds(ev_id)
+            except Exception:
+                so = None
+            if so and (so.get("home_odds") or so.get("away_odds")):
+                row["home_odds"] = so.get("home_odds")
+                row["away_odds"] = so.get("away_odds")
+                row["odds_bookmaker"] = so.get("bookmaker") or "SofaScore"
+                row["sofascore_event_id"] = ev_id
     else:
         row["sofascore_found"] = False
         row["qualifies"] = False
@@ -619,20 +717,25 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                       f"— kwalifikuję {rescued} meczów na podstawie samego H2H "
                       f"≥{int(H2H_MIN_WIN_RATE*100)}% (Fan Vote oznaczony jako niedostępny)")
 
-        # ── FAZA 2.45: Odds (multi-bookmaker via Livesport, best-effort) ──
-        # Done while the driver is still open. Only qualifying rows get a lookup
-        # to limit API calls. Missing odds stay None (non-blocking).
+        # ── FAZA 2.45: Odds fallback (Livesport multi-bookmaker) ──
+        # SofaScore odds (LV Bet etc.) were already fetched per-match during the
+        # fan-vote step. Here we only try Livesport for the rows that STILL have
+        # no odds. Best-effort, non-blocking.
         qual_rows = [r for r in rows if r.get("qualifies")]
+        sofa_odds = sum(1 for r in qual_rows if r.get("home_odds") or r.get("away_odds"))
+        need_odds = [r for r in qual_rows if not (r.get("home_odds") or r.get("away_odds"))]
         if qual_rows:
-            print(f"\n[FAZA 2.45] Kursy (multi-bukmacher) dla {len(qual_rows)} kwalifikujących się "
-                  f"(mapowanie AiScore → Livesport)...")
-            try:
-                ls_index = build_livesport_tt_index(driver, date_str)
-            except Exception as e:
-                print(f"   ⚠️ Nie zbudowano indeksu Livesport: {e}")
-                ls_index = []
-            odds_found = 0
-            for r in qual_rows:
+            print(f"\n[FAZA 2.45] Kursy: {sofa_odds}/{len(qual_rows)} z SofaScore (LV Bet itd.); "
+                  f"{len(need_odds)} bez — próbuję Livesport...")
+            ls_index = []
+            if need_odds:
+                try:
+                    ls_index = build_livesport_tt_index(driver, date_str)
+                except Exception as e:
+                    print(f"   ⚠️ Nie zbudowano indeksu Livesport: {e}")
+                    ls_index = []
+            odds_found = sofa_odds
+            for r in need_odds:
                 ls_url = _match_livesport_url(r.get("home_team", ""), r.get("away_team", ""), ls_index)
                 odds = resolve_odds(r.get("home_team", ""), r.get("away_team", ""), ls_url)
                 if odds.get("home_odds") or odds.get("away_odds"):
@@ -640,21 +743,8 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                     r["away_odds"] = odds["away_odds"]
                     r["odds_bookmaker"] = odds["bookmaker"]
                     odds_found += 1
-            print(f"   💰 Kursy znalezione dla {odds_found}/{len(qual_rows)} meczów")
-
-            # ── FAZA 2.46: OddsPortal/Betexplorer DIAGNOSTICS (opt-in) ──
-            # Dump raw rendered HTML of OddsPortal+Betexplorer TT pages so we can
-            # build a precise odds parser next. Enable with TT_ODDS_DIAGNOSTIC=1.
-            if os.getenv("TT_ODDS_DIAGNOSTIC", "").strip().lower() in ("1", "true", "yes"):
-                try:
-                    from oddsportal_tt_odds import dump_diagnostics
-                    players = []
-                    for r in qual_rows[:3]:
-                        players.append(r.get("home_team", ""))
-                        players.append(r.get("away_team", ""))
-                    dump_diagnostics([p for p in players if p], date_str)
-                except Exception as e:
-                    print(f"   ⚠️ OddsPortal diagnostyka błąd: {e}")
+            print(f"   💰 Kursy łącznie dla {odds_found}/{len(qual_rows)} meczów "
+                  f"(SofaScore: {sofa_odds}, Livesport: {odds_found - sofa_odds})")
     finally:
         try:
             driver.quit()
