@@ -852,6 +852,16 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
             return '99:99'
         
         sorted_matches = sorted(sorted_matches, key=get_time_key)
+
+        # Grupuj po lidze (alfabetycznie), zachowując kolejność czasową w obrębie
+        # ligi — łatwiej znaleźć zdarzenia z tej samej ligi (np. Setka Cup).
+        # Mecze bez ligi trafiają na koniec.
+        def get_league_key(match: Dict[str, Any]) -> str:
+            lg = match.get('league', '')
+            if not lg or not isinstance(lg, str) or lg.strip().lower() in ('', 'nan', 'none'):
+                return 'zzzzzz'
+            return lg.strip().lower()
+        sorted_matches = sorted(sorted_matches, key=get_league_key)
     
     elif sort_by == 'wins':
         # Sortuj po liczbie wygranych (malejąco) - uwzględnij tryb away_team_focus
@@ -1109,6 +1119,9 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         advanced_score = safe_float(match.get('advanced_score', 0))
         favorite = match.get('favorite', 'unknown')
         ranking_info = match.get('ranking_info', '')
+        league = safe_value(match.get('league', ''), '')
+        if is_nan_or_none(league):
+            league = ''
         
         html += f"""
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
@@ -1117,6 +1130,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     <div style="color: white; font-size: 12px;">
                         <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 {time_badge.replace('<span class="time-badge">', '').replace('</span>', '') if time_badge else 'TBD'}</span>
                     </div>
+                    {f'<div style="color: white; font-size: 12px; font-weight: bold; text-align: center; flex: 1;"><span style="background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 15px;">🏓 {league}</span></div>' if league else ''}
                     <div style="color: white; font-size: 11px; opacity: 0.8;">
                         #{i}
                     </div>

@@ -101,6 +101,10 @@ except Exception as e:  # pragma: no cover
     def _api_get_json(*a, **k):  # type: ignore
         return None
 
+# Leagues to ALSO source directly from SofaScore (not listed on AiScore), matched
+# as case-insensitive substrings against the SofaScore tournament/category name.
+SOFASCORE_EXTRA_LEAGUES = ["setka"]  # Setka Cup, Setka Cup (K), …
+
 
 # When SofaScore's anti-bot (Cloudflare) blocks the ENTIRE CI shard, every
 # fan-vote lookup 403s and the circuit breaker trips. Treating that
@@ -129,6 +133,141 @@ TT_BOOKMAKERS = [
     "pinnacle", "bet365", "1xbet", "unibet", "bwin",
     "betway", "william_hill", "betfair", "nordicbet",
 ]
+
+
+def collect_sofascore_league_matches(date_str: str, focus: str,
+                                     league_filters: Optional[List[str]] = None,
+                                     existing_pairs: Optional[set] = None) -> List[Dict[str, Any]]:
+    """Source qualifying matches for SofaScore-only leagues (e.g. Setka Cup).
+
+    AiScore does not list Setka Cup / Setka Cup (K), but SofaScore does — and we
+    already reach SofaScore. List the day's table-tennis events, keep those whose
+    tournament/category matches ``league_filters``, and apply the SAME gates as
+    the AiScore path: H2H ≥60% for the focus side (≥3 meetings) + mandatory Fan
+    Vote. Enriches with form, odds (LV Bet etc.) and time/league — all from
+    SofaScore. Returns fully-built, qualifying rows. Best-effort.
+    """
+    league_filters = [f.lower() for f in (league_filters or SOFASCORE_EXTRA_LEAGUES)]
+    existing_pairs = existing_pairs or set()
+    try:
+        from sofascore_scraper import (
+            list_scheduled_events, get_event_h2h, get_team_recent_form, get_votes_via_api,
+        )
+        from aiscore_scraper import normalize_name
+    except Exception as e:
+        print(f"   ⚠️ SofaScore source niedostępne: {e}")
+        return []
+    try:
+        events = list_scheduled_events("table_tennis", date_str)
+    except Exception as e:
+        print(f"   ⚠️ list_scheduled_events błąd: {e}")
+        return []
+
+    def _matches_league(e: Dict[str, Any]) -> bool:
+        hay = f"{e.get('tournament','')} {e.get('category','')}".lower()
+        return any(f in hay for f in league_filters)
+
+    matched = [e for e in events if _matches_league(e)
+               and (e.get("status") or "").lower() != "finished"]
+    print(f"   🎯 SofaScore: {len(matched)} meczów w ligach {league_filters} (z {len(events)} wszystkich)")
+
+    from datetime import datetime, timezone
+    rows: List[Dict[str, Any]] = []
+    for e in matched:
+        if is_sofascore_unreachable():
+            print("   🛑 SofaScore niedostępne — przerywam dobieranie lig")
+            break
+        eid = e.get("event_id")
+        home, away = e.get("home_team", ""), e.get("away_team", "")
+        if not eid or not home or not away:
+            continue
+        pair = frozenset([normalize_name(home), normalize_name(away)])
+        if pair in existing_pairs:
+            continue  # already covered by AiScore
+
+        # --- H2H GATE (favourite = focus side) ---
+        try:
+            h2h = get_event_h2h(eid) or {}
+        except Exception:
+            h2h = {}
+        total = h2h.get("total", 0)
+        hw, aw = h2h.get("home_wins", 0), h2h.get("away_wins", 0)
+        fav_wins = aw if focus == "away" else hw
+        fav_rate = (fav_wins / total) if total else 0.0
+        if total < H2H_MIN_MATCHES or fav_rate < H2H_MIN_WIN_RATE:
+            continue
+
+        # --- FAN VOTE (mandatory) ---
+        try:
+            votes = get_votes_via_api(eid)
+        except Exception:
+            votes = None
+        if not votes or votes.get("sofascore_home_win_prob") is None:
+            continue
+
+        # --- build the row ---
+        mt = ""
+        ts = e.get("start_timestamp")
+        if ts:
+            try:
+                dt = datetime.fromtimestamp(int(ts), tz=timezone.utc)
+                try:
+                    from zoneinfo import ZoneInfo
+                    dt = dt.astimezone(ZoneInfo("Europe/Warsaw"))
+                except Exception:
+                    pass
+                mt = dt.strftime("%d.%m.%Y %H:%M")
+            except (ValueError, OverflowError, OSError):
+                pass
+        league = e.get("tournament", "") or e.get("category", "")
+        cat = e.get("category", "")
+        if league and cat and cat.lower() not in league.lower():
+            league = f"{cat} — {league}"
+        row = _build_row(home, away, focus,
+                         f"https://www.sofascore.com/table-tennis/match/{eid}", mt, league)
+        row["source"] = "sofascore"
+        row["sofascore_event_id"] = eid
+        row["h2h_count"] = total
+        row["h2h_fav_win_rate"] = round(fav_rate, 4)
+        row["win_rate"] = round(fav_rate, 3)
+        row["home_wins_in_h2h_last5"] = hw
+        row["away_wins_in_h2h_last5"] = aw
+
+        try:
+            hf = get_team_recent_form(e.get("home_id"), home)
+        except Exception:
+            hf = []
+        try:
+            af = get_team_recent_form(e.get("away_id"), away)
+        except Exception:
+            af = []
+        row["form_a"] = hf
+        row["form_b"] = af
+        row["home_form_overall"] = hf
+        row["away_form_overall"] = af
+        row["home_form"] = hf
+        row["away_form"] = af
+
+        row["sofascore_found"] = True
+        row["sofascore_home_win_prob"] = votes.get("sofascore_home_win_prob")
+        row["sofascore_away_win_prob"] = votes.get("sofascore_away_win_prob")
+        row["sofascore_total_votes"] = votes.get("sofascore_total_votes", 0) or 0
+
+        try:
+            so = sofascore_odds(eid)
+        except Exception:
+            so = None
+        if so and (so.get("home_odds") or so.get("away_odds")):
+            row["home_odds"] = so.get("home_odds")
+            row["away_odds"] = so.get("away_odds")
+            row["odds_bookmaker"] = so.get("bookmaker") or "SofaScore"
+
+        row["qualifies"] = True
+        rows.append(row)
+
+    print(f"   ✅ SofaScore: {len(rows)} kwalifikujących się z lig dobranych "
+          f"(H2H ≥{int(H2H_MIN_WIN_RATE*100)}% + Fan Vote)")
+    return rows
 
 
 def build_livesport_tt_index(driver: Any, date_str: str,
@@ -270,6 +409,7 @@ def _build_row(home: str, away: str, focus: str, match_url: str,
         "match_time": match_time,
         "sport": SPORT,
         "league": league,
+        "source": "aiscore",
 
         # SofaScore fan vote (mandatory, filled later)
         "sofascore_home_win_prob": None,
@@ -401,36 +541,47 @@ def sofascore_odds(event_id: int) -> Dict[str, Any]:
     return out
 
 
-def sofascore_start_time(event_id: int) -> str:
-    """Return the match start time as 'DD.MM.YYYY HH:MM' (Europe/Warsaw).
+def sofascore_event_meta(event_id: int) -> Dict[str, str]:
+    """Return {'start_time': 'DD.MM.YYYY HH:MM' (Europe/Warsaw), 'league': name}.
 
-    SofaScore carries the scheduled start timestamp for these events; we already
-    resolved the event for the fan vote, so one more call gives us the time the
-    AiScore /h2h page lacks. Returns '' on failure. Reuses the working stack.
+    One SofaScore event-detail call gives us BOTH the scheduled start time (the
+    AiScore /h2h page lacks it) and the tournament/league name (so the league is
+    visible per match, e.g. 'TT Cup', 'Setka Cup'). Best-effort: empty strings
+    on failure. Reuses the working API stack.
     """
+    out = {"start_time": "", "league": ""}
     if not event_id:
-        return ""
+        return out
     try:
         data = _api_get_json(f"https://api.sofascore.com/api/v1/event/{event_id}", timeout=8)
     except Exception:
         data = None
     if not isinstance(data, dict):
-        return ""
+        return out
     ev = data.get("event") or data
+    # League / tournament name.
+    tour = ev.get("tournament") or {}
+    league = tour.get("name") or (tour.get("uniqueTournament") or {}).get("name") or ""
+    cat = (tour.get("category") or {}).get("name") or ""
+    if league and cat and cat.lower() not in league.lower():
+        out["league"] = f"{cat} — {league}"
+    else:
+        out["league"] = league or cat
+    # Start time.
     ts = ev.get("startTimestamp")
-    if not ts:
-        return ""
-    from datetime import datetime, timezone
-    try:
-        dt = datetime.fromtimestamp(int(ts), tz=timezone.utc)
+    if ts:
+        from datetime import datetime, timezone
         try:
-            from zoneinfo import ZoneInfo
-            dt = dt.astimezone(ZoneInfo("Europe/Warsaw"))
-        except Exception:
+            dt = datetime.fromtimestamp(int(ts), tz=timezone.utc)
+            try:
+                from zoneinfo import ZoneInfo
+                dt = dt.astimezone(ZoneInfo("Europe/Warsaw"))
+            except Exception:
+                pass
+            out["start_time"] = dt.strftime("%d.%m.%Y %H:%M")
+        except (ValueError, OverflowError, OSError):
             pass
-        return dt.strftime("%d.%m.%Y %H:%M")
-    except (ValueError, OverflowError, OSError):
-        return ""
+    return out
 
 def process_match(driver: Any, url: str, focus: str, date_str: str,
                   verbose: bool = True) -> Optional[Dict[str, Any]]:
@@ -539,11 +690,12 @@ def process_match(driver: Any, url: str, focus: str, date_str: str,
         ev_id = _sofascore_event_id(pred.get("url") or pred.get("sofascore_url"))
         if ev_id:
             row["sofascore_event_id"] = ev_id
-            # Match start time (the AiScore /h2h page lacks it) from SofaScore.
-            if not row.get("match_time"):
-                st = sofascore_start_time(ev_id)
-                if st:
-                    row["match_time"] = st
+            # Match start time + league (the AiScore /h2h page lacks both).
+            meta = sofascore_event_meta(ev_id)
+            if meta.get("start_time") and not row.get("match_time"):
+                row["match_time"] = meta["start_time"]
+            if meta.get("league") and not row.get("league"):
+                row["league"] = meta["league"]
             try:
                 so = sofascore_odds(ev_id)
             except Exception:
@@ -665,6 +817,8 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str, focus: str) -> Dict
                 "awayTeam": r.get("away_team"),
                 "time": r.get("match_time"),
                 "focus": r.get("focus"),
+                "league": r.get("league"),
+                "source": r.get("source"),
                 "matchUrl": r.get("match_url"),
                 "qualifies": bool(r.get("qualifies")),
                 "channelQualifies": bool(r.get("channel_qualifies")),
@@ -771,6 +925,21 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 print(f"   ⚠️ SofaScore niedostępny dla całego runu (Cloudflare zablokował shard) "
                       f"— kwalifikuję {rescued} meczów na podstawie samego H2H "
                       f"≥{int(H2H_MIN_WIN_RATE*100)}% (Fan Vote oznaczony jako niedostępny)")
+
+        # ── FAZA 2.42: supplement with SofaScore-only leagues (Setka Cup) ──
+        # AiScore doesn't list Setka Cup / Setka Cup (K); SofaScore does. Add
+        # those qualifying matches (same H2H ≥60% + Fan Vote gates), deduped
+        # against the AiScore picks.
+        try:
+            from aiscore_scraper import normalize_name as _nn
+            existing = {frozenset([_nn(r.get("home_team", "")), _nn(r.get("away_team", ""))])
+                        for r in rows}
+            extra = collect_sofascore_league_matches(date_str, focus, existing_pairs=existing)
+            if extra:
+                rows.extend(extra)
+                print(f"   ➕ Dodano {len(extra)} meczów z lig SofaScore (Setka Cup itd.)")
+        except Exception as e:
+            print(f"   ⚠️ SofaScore leagues supplement błąd: {e}")
 
         # ── FAZA 2.45: Odds fallback (Livesport multi-bookmaker) ──
         # SofaScore odds (LV Bet etc.) were already fetched per-match during the

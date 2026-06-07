@@ -344,7 +344,8 @@ def test_process_match_uses_sofascore_odds(monkeypatch, h2h_page_html):
         pipe, "sofascore_odds",
         lambda ev: {"home_odds": 1.40, "away_odds": 2.80, "bookmaker": "SofaScore"},
     )
-    monkeypatch.setattr(pipe, "sofascore_start_time", lambda ev: "06.06.2026 18:30")
+    monkeypatch.setattr(pipe, "sofascore_event_meta",
+                        lambda ev: {"start_time": "06.06.2026 18:30", "league": "Setka Cup"})
     driver = _FakeDriver(h2h_page_html)
     row = pipe.process_match(driver, "https://www.aiscore.com/table-tennis/match-a-b/527",
                              focus="home", date_str="2026-06-06", verbose=False)
@@ -354,8 +355,9 @@ def test_process_match_uses_sofascore_odds(monkeypatch, h2h_page_html):
     assert row["away_odds"] == 2.80
     assert row["odds_bookmaker"] == "SofaScore"
     assert row["sofascore_event_id"] == 14250733
-    # Match time (from SofaScore) and last H2H result must be populated.
+    # Match time + league (from SofaScore) and last H2H result must be populated.
     assert row["match_time"] == "06.06.2026 18:30"
+    assert row["league"] == "Setka Cup"
     assert row["last_h2h_score"] == "3:1"   # most recent direct meeting in fixture
 
 
@@ -381,3 +383,67 @@ def test_sofascore_odds_empty_on_no_event(monkeypatch):
     monkeypatch.setattr(pipe, "_api_get_json", lambda *a, **k: None)
     assert pipe.sofascore_odds(0) == {"home_odds": None, "away_odds": None, "bookmaker": None}
     assert pipe.sofascore_odds(123) == {"home_odds": None, "away_odds": None, "bookmaker": None}
+
+
+# ---------------------------------------------------------------------------
+# Setka Cup (and other SofaScore-only leagues) sourced from SofaScore
+# ---------------------------------------------------------------------------
+
+def test_collect_sofascore_league_matches_setka(monkeypatch):
+    import table_tennis_aiscore_pipeline as pipe
+    import sofascore_scraper as ss
+
+    events = [
+        {"event_id": 111, "home_team": "Player A", "away_team": "Player B",
+         "home_id": 1, "away_id": 2, "tournament": "Setka Cup", "category": "Russia",
+         "start_timestamp": 1780000000, "status": "notstarted"},
+        # Different league -> must be ignored.
+        {"event_id": 222, "home_team": "X", "away_team": "Y", "home_id": 3, "away_id": 4,
+         "tournament": "TT Cup", "category": "Czech", "start_timestamp": 1780000000,
+         "status": "notstarted"},
+        # Setka but favourite (home) only 1/4 -> below 60% -> dropped.
+        {"event_id": 333, "home_team": "Weak", "away_team": "Strong", "home_id": 5,
+         "away_id": 6, "tournament": "Setka Cup (K)", "category": "Russia",
+         "start_timestamp": 1780000000, "status": "notstarted"},
+    ]
+    monkeypatch.setattr(ss, "list_scheduled_events", lambda sport, date: events)
+    monkeypatch.setattr(ss, "get_event_h2h", lambda eid: (
+        {"home_wins": 5, "away_wins": 1, "draws": 0, "total": 6} if eid == 111 else
+        {"home_wins": 1, "away_wins": 3, "draws": 0, "total": 4}))
+    monkeypatch.setattr(ss, "get_votes_via_api", lambda eid: {
+        "sofascore_home_win_prob": 80, "sofascore_away_win_prob": 20, "sofascore_total_votes": 40})
+    monkeypatch.setattr(ss, "get_team_recent_form", lambda tid, name, limit=5: ["W", "W", "L"])
+    monkeypatch.setattr(pipe, "sofascore_odds",
+                        lambda eid: {"home_odds": 1.5, "away_odds": 2.5, "bookmaker": "SofaScore"})
+    monkeypatch.setattr(pipe, "is_sofascore_unreachable", lambda: False)
+
+    out = pipe.collect_sofascore_league_matches("2026-06-06", "home")
+    assert len(out) == 1                      # only event 111 (Setka + home 5/6 >= 60%)
+    r = out[0]
+    assert r["home_team"] == "Player A"
+    assert "Setka Cup" in r["league"]
+    assert r["source"] == "sofascore"
+    assert r["qualifies"] is True
+    assert r["h2h_fav_win_rate"] == pytest.approx(0.8333, abs=1e-3)
+    assert r["sofascore_found"] is True
+    assert r["home_odds"] == 1.5
+
+
+def test_collect_sofascore_dedupes_existing(monkeypatch):
+    import table_tennis_aiscore_pipeline as pipe
+    import sofascore_scraper as ss
+    from aiscore_scraper import normalize_name
+
+    events = [{"event_id": 111, "home_team": "Player A", "away_team": "Player B",
+               "home_id": 1, "away_id": 2, "tournament": "Setka Cup", "category": "Russia",
+               "start_timestamp": 1780000000, "status": "notstarted"}]
+    monkeypatch.setattr(ss, "list_scheduled_events", lambda sport, date: events)
+    monkeypatch.setattr(ss, "get_event_h2h", lambda eid: {"home_wins": 5, "away_wins": 1, "draws": 0, "total": 6})
+    monkeypatch.setattr(ss, "get_votes_via_api", lambda eid: {"sofascore_home_win_prob": 80, "sofascore_away_win_prob": 20, "sofascore_total_votes": 40})
+    monkeypatch.setattr(ss, "get_team_recent_form", lambda tid, name, limit=5: [])
+    monkeypatch.setattr(pipe, "sofascore_odds", lambda eid: {"home_odds": None, "away_odds": None, "bookmaker": None})
+    monkeypatch.setattr(pipe, "is_sofascore_unreachable", lambda: False)
+
+    existing = {frozenset([normalize_name("Player A"), normalize_name("Player B")])}
+    out = pipe.collect_sofascore_league_matches("2026-06-06", "home", existing_pairs=existing)
+    assert out == []   # already covered by AiScore -> skipped
