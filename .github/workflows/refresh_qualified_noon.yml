@@ -68,6 +68,8 @@ jobs:
           pip install -r requirements.txt
           sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
           pip install curl-cffi cloudscraper httpx[http2]
+          # v10.1: SOCKS5 proxy support for WARP via SOFASCORE_PROXY env
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
 
       - name: Install Node.js dependencies
         run: npm ci || npm install
@@ -83,6 +85,14 @@ jobs:
             echo "Waiting... ($i/30)"
             sleep 2
           done
+
+      # v10.1: Setup Cloudflare WARP (SofaScore CF bypass). Bez tego noon
+      # refresh leci po SofaScore z golego IP datacenter GHA -> 403 na kazdym
+      # meczu. setup_warp.sh stawia WARP, sonduje SofaScore przez to IP i
+      # rotuje IP gdy spalone. Spojne ze scrape.yml.
+      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+        continue-on-error: true
+        run: bash tools/setup_warp.sh
 
       - name: Determine date
         id: date
@@ -116,6 +126,10 @@ jobs:
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # v10.1: SofaScore via Cloudflare WARP (clean IP). Pod WARP scraper
+          # idzie czystym requestem (bez cf_clearance) — patrz _cookies_for_curl.
+          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           TODAY="${{ steps.date.outputs.today }}"
           SKIP_EMAIL="${{ github.event.inputs.skip_email }}"

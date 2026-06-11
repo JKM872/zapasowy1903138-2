@@ -214,6 +214,26 @@ def _get_sofascore_proxies() -> Optional[Dict[str, str]]:
     }
 
 
+def _cookies_for_curl() -> Optional[Dict[str, str]]:
+    """Cookies do wstrzykniecia do curl_cffi — z uwzglednieniem strategii WARP.
+
+    v10.1 — SPOJNA STRATEGIA (opcja A): gdy WARP proxy jest aktywny, wysylamy
+    CZYSTY request bez cf_clearance. Powod: cf_clearance (z SOFASCORE_COOKIES
+    lub FlareSolverr/DrissionPage) jest zwiazany z IP, ktore rozwiazalo CF
+    challenge. Przez IP WARP taki cookie jest NIEWAZNY -> Cloudflare robi
+    re-challenge -> 403, mimo ze samo IP WARP jest czyste.
+
+    tools/setup_warp.sh udowadnia, ze czyste IP WARP + Chrome TLS impersonation
+    zwraca 200 BEZ zadnych cookies. Realny request scrapera musi replikowac
+    dokladnie te zwalidowana sonde, inaczej dostaje 403 mimo przepuszczonej
+    sondy. Gdy WARP NIE jest aktywny (lokalnie), zachowujemy stara sciezke
+    cookie-based (FlareSolverr/DrissionPage/manual cookies).
+    """
+    if _get_sofascore_proxies() is not None:
+        return None
+    return _get_active_flaresolverr_cookies()
+
+
 def _build_warmed_requests_session():
     """Create a one-off requests session for curl_cffi 403 fallback."""
     if 'requests' not in globals():
@@ -338,6 +358,19 @@ def _load_manual_sofascore_cookies() -> None:
     if not raw:
         return
 
+    # v10.0: gdy WARP proxy aktywny (SOFASCORE_PROXY), NIE uzywaj manualnych
+    # cookies. cf_clearance jest zwiazany z IP+User-Agent — cookie pobrany z
+    # domowej przegladarki nie zwaliduje sie zza IP WARP i powoduje 403.
+    # Przy WARP polegamy na czystym IP Cloudflare (curl_cffi dostaje 200 bez
+    # cookies). Mieszanie obu strategii bylo cicha przyczyna blokad.
+    if _SOFASCORE_PROXY_URL:
+        if os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true':
+            print(
+                "   ℹ️ SofaScore: SOFASCORE_COOKIES pominiete — WARP proxy aktywny "
+                "(cf_clearance z innego IP psulby request przez WARP)"
+            )
+        return
+
     parsed = _parse_cookie_header(raw)
     if not parsed:
         # IS_CI moze nie byc jeszcze zdefiniowane gdy ta funkcja sie ladowala
@@ -393,6 +426,12 @@ def _should_attempt_cookie_warming() -> bool:
     - Cooldown nie minął
     """
     if not _FLARESOLVERR_AVAILABLE or _flaresolverr_disabled_for_run:
+        return False
+    # v10.1: pod WARP nie warmujemy cookies przez FlareSolverr — FlareSolverr
+    # Docker laczy sie przez gole IP datacenter (nie przez SOCKS WARP), wiec
+    # i tak padnie, a cookies i tak nie sa uzywane przez WARP (_cookies_for_curl
+    # zwraca None gdy proxy aktywny).
+    if _SOFASCORE_PROXY_URL:
         return False
     if _cookie_warming_disabled_for_run:
         return False
@@ -1178,10 +1217,11 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 # v5.2: rotacja profili TLS — każdy request próbuje inny
                 # fingerprint, zwiększając szansę przejścia przez WAF.
                 profile = _next_impersonate_profile()
-                # v7.7: użyj cookies z FlareSolverr jeśli są świeże —
-                # dają curl_cffi clearance Cloudflare bez powtarzania CF
-                # challenge dla każdego requestu.
-                cf_cookies = _get_active_flaresolverr_cookies()
+                # v10.1: cookies tylko gdy WARP NIE jest aktywny. Przez WARP
+                # idziemy czysto (clean IP + Chrome TLS), dokladnie jak sonda
+                # w tools/setup_warp.sh — stale cf_clearance przez IP WARP =
+                # re-challenge = 403.
+                cf_cookies = _cookies_for_curl()
                 curl_kwargs = dict(
                     impersonate=profile,
                     headers=API_HEADERS,
@@ -1357,8 +1397,13 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
             # przechodzi CF challenge, oddaje cookies (cf_clearance,
             # __cf_bm). Te cookies wstrzykujemy do curl_cffi przez TTL
             # 25 min — nastepne setki requestow ida szybka sciezka.
+            # v10.1: SKIP gdy WARP aktywny — DrissionPage/Chromium laczy sie
+            # przez gole IP datacenter GHA (nie przez SOCKS WARP), wiec CF
+            # challenge i tak padnie, a spawn Chromium kosztuje 5-15s. Pod
+            # WARP polegamy wylacznie na czystym IP (Fallback A/B ida przez WARP).
             if (
                 IS_CI
+                and not _SOFASCORE_PROXY_URL
                 and not _drissionpage_warmup_attempted
                 and _get_active_flaresolverr_cookies() is None
             ):
@@ -1400,7 +1445,9 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
             if alt_url and CURL_CFFI_AVAILABLE:
                 try:
                     # v7.7: dodaj FlareSolverr cookies jeśli świeże
-                    alt_cf_cookies = _get_active_flaresolverr_cookies()
+                    # v10.1: ...ale nie przez WARP (clean request — patrz
+                    # _cookies_for_curl).
+                    alt_cf_cookies = _cookies_for_curl()
                     alt_curl_kwargs = dict(
                         impersonate='chrome124',
                         headers={**API_HEADERS, 'Referer': 'https://www.sofascore.com/'},
@@ -1448,7 +1495,10 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
                 return None
 
             # ── Fallback C: FlareSolverr ──
-            if _FLARESOLVERR_AVAILABLE:
+            # v10.1: SKIP gdy WARP aktywny — FlareSolverr Docker laczy sie przez
+            # gole IP datacenter GHA (nie przez SOCKS WARP), wiec CF i tak
+            # zablokuje. Pod WARP czysta sciezka to clean IP (Fallback A/B).
+            if _FLARESOLVERR_AVAILABLE and not _SOFASCORE_PROXY_URL:
                 if IS_CI:
                     print("   🐳 SofaScore: 403 z curl/requests, próba FlareSolverr...")
                 # Próbuj FlareSolverr na alt URL jeśli dostępny
@@ -1458,7 +1508,7 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
                     _api_cb_record_success()
                     return data
         return None
-    if _FLARESOLVERR_AVAILABLE and not _api_circuit_breaker_tripped:
+    if _FLARESOLVERR_AVAILABLE and not _api_circuit_breaker_tripped and not _SOFASCORE_PROXY_URL:
         if IS_CI:
             print("   🐳 SofaScore: brak odpowiedzi curl/requests, próba FlareSolverr...")
         data = _try_flaresolverr_json(url, timeout=max(timeout, 25))

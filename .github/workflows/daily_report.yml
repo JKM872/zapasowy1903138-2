@@ -210,35 +210,11 @@ jobs:
         continue-on-error: true
 
       # Cloudflare WARP proxy jako SOCKS5 :1080 — kierujemy ruch do SofaScore
-      # przez czysty IP CF. Identycznie jak w scrape.yml.
+      # przez czysty IP CF. v10.1: setup_warp.sh sonduje SofaScore i rotuje
+      # spalone IP. Identycznie jak w scrape.yml.
       - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
-        run: |
-          echo "🌐 Starting Cloudflare WARP proxy container..."
-          docker run -d --name warp \
-            --restart=always \
-            --device-cgroup-rule='c 10:200 rwm' \
-            -p 1080:1080 \
-            -e WARP_SLEEP=2 \
-            --cap-add NET_ADMIN \
-            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
-            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
-            -v /lib/modules:/lib/modules \
-            caomingjun/warp:latest
-
-          echo "⏳ Waiting for WARP to register and establish tunnel..."
-          for i in {1..40}; do
-            sleep 3
-            CURRENT_IP=$(curl -s --max-time 10 --socks5 localhost:1080 https://api.ipify.org 2>/dev/null || echo "")
-            if [ -n "$CURRENT_IP" ]; then
-              WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
-              echo "WARP test ($i/40): IP=$CURRENT_IP, warp=$WARP_STATUS"
-              if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
-                echo "✅ WARP active - SofaScore via clean Cloudflare IP $CURRENT_IP"
-                break
-              fi
-            fi
-          done
         continue-on-error: true
+        run: bash tools/setup_warp.sh
 
       - name: Update match results in Supabase
         env:

@@ -76,42 +76,10 @@ jobs:
             sleep 2
           done
 
+      # v10.1: setup_warp.sh — WARP + sonda SofaScore z rotacja IP. Spojne ze scrape.yml.
       - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
-        run: |
-          echo "🌐 Starting Cloudflare WARP proxy container..."
-          docker run -d --name warp \
-            --restart=always \
-            --device-cgroup-rule='c 10:200 rwm' \
-            -p 1080:1080 \
-            -e WARP_SLEEP=2 \
-            --cap-add NET_ADMIN \
-            --sysctl net.ipv6.conf.all.disable_ipv6=0 \
-            --sysctl net.ipv4.conf.all.src_valid_mark=1 \
-            -v /lib/modules:/lib/modules \
-            caomingjun/warp:latest
-
-          echo "⏳ Waiting for WARP to register and establish tunnel..."
-          WARP_READY=false
-          for i in {1..40}; do
-            sleep 3
-            CURRENT_IP=$(curl -s --max-time 10 --socks5 localhost:1080 https://api.ipify.org 2>/dev/null || echo "")
-            if [ -n "$CURRENT_IP" ]; then
-              WARP_STATUS=$(curl -s --max-time 10 --socks5 localhost:1080 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | grep -E '^warp=' | cut -d= -f2 || echo "off")
-              echo "WARP test ($i/40): IP=$CURRENT_IP, warp=$WARP_STATUS"
-              if [ "$WARP_STATUS" = "on" ] || [ "$WARP_STATUS" = "plus" ]; then
-                echo "✅ WARP active - SofaScore via clean Cloudflare IP $CURRENT_IP"
-                WARP_READY=true
-                break
-              fi
-            else
-              echo "WARP not responding yet ($i/40)..."
-            fi
-          done
-          if [ "$WARP_READY" != "true" ]; then
-            echo "::warning::WARP not ready after 120s - continuing anyway..."
-            docker logs warp 2>&1 | tail -50
-          fi
         continue-on-error: true
+        run: bash tools/setup_warp.sh
 
       - name: Run table tennis pipeline (AiScore, AWAY focus)
         env:
