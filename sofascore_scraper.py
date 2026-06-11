@@ -405,6 +405,15 @@ _sofascore_consecutive_failures: int = 0
 _SOFASCORE_UNREACHABLE_THRESHOLD: int = 5
 _sofascore_unreachable_for_run: bool = False
 
+# v10.2 — flaga osiagalnosci. Ustawiana na True gdy KTORYKOLWIEK request API
+# zwroci 200 w tym runie (przez _api_cb_record_success). Sluzy do odroznienia
+# "SofaScore niedostepny (same 403/timeout)" od "mecz legalnie nie ma Fan Vote
+# (API odpowiada 200, ale dany event nie istnieje / brak glosowania)". Bez tego
+# obskurne ligi bez Fan Vote (np. Frayles de Guasave, Deportivo Amambay) liczyly
+# sie jako "porazki nieosiagalnosci" i po 5 wylaczaly SofaScore dla calego runu,
+# zabijajac Fan Vote dla pozniejszych meczow ktore JE maja (np. WNBA).
+_sofascore_api_reachable: bool = False
+
 
 def is_sofascore_unreachable() -> bool:
     """True when SofaScore has been disabled for the rest of this run.
@@ -467,6 +476,14 @@ def _record_sofascore_match_outcome(found: bool) -> None:
     wyłącz SofaScore na resztę runu (oszczędność czasu CI)."""
     global _sofascore_consecutive_failures, _sofascore_unreachable_for_run
     if found:
+        _sofascore_consecutive_failures = 0
+        return
+    # v10.2: jesli API jest osiagalne (widzielismy 200 w tym runie), to
+    # not-found oznacza "ten mecz nie ma Fan Vote", a NIE "SofaScore zablokowany".
+    # Nie liczymy tego do breakera nieosiagalnosci — inaczej obskurne ligi bez
+    # Fan Vote wylaczyly by SofaScore dla meczow ktore Fan Vote maja.
+    # Ochrona przed petla 403 zostaje w _api_circuit_breaker (consecutive 403).
+    if _sofascore_api_reachable:
         _sofascore_consecutive_failures = 0
         return
     _sofascore_consecutive_failures += 1
@@ -1173,8 +1190,11 @@ _api_circuit_breaker_tripped: bool = False
 
 def _api_cb_record_success() -> None:
     """Reset circuit breaker po udanym requeście."""
-    global _api_consecutive_403
+    global _api_consecutive_403, _sofascore_api_reachable
     _api_consecutive_403 = 0
+    # v10.2: zanotuj ze API jest osiagalne (dostalismy 200). Od teraz
+    # not-found liczymy jako legalny brak Fan Vote, nie jako nieosiagalnosc.
+    _sofascore_api_reachable = True
 
 
 def _api_cb_record_403() -> None:
