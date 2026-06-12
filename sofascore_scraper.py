@@ -218,6 +218,14 @@ def _get_api_session():
 # Tylko SofaScore requesty ida przez WARP — Telegram/Email/Supabase uzywaja
 # normalnego GHA IP, nic dla nich sie nie zmienia.
 _SOFASCORE_PROXY_URL: str = os.getenv('SOFASCORE_PROXY', '').strip()
+# v10.6 — tryb proxy-primary. Domyslnie (False) idziemy direct-first a proxy
+# (WARP) tylko jako fallback. Gdy SOFASCORE_PROXY wskazuje na proxy
+# REZYDENCJALNE / scraper-API (a NIE WARP), ustaw SOFASCORE_PROXY_PRIMARY=1 —
+# wtedy proxy jest pierwsza proba, bo direct (IP datacenter GHA) i tak jest
+# blokowane przez SofaScore. Eliminuje zmarnowany 403 na kazdym requeście.
+_SOFASCORE_PROXY_PRIMARY: bool = (
+    os.getenv('SOFASCORE_PROXY_PRIMARY', '').strip().lower() in ('1', 'true', 'yes')
+)
 _proxy_config_logged: bool = False  # v9.0 — log proxy raz na run
 
 
@@ -1267,11 +1275,15 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 )
                 if cf_cookies:
                     curl_kwargs['cookies'] = cf_cookies
-                # v10.4: DIRECT-FIRST. Token X-Requested-With wystarcza z IP
-                # GHA/rezydencjalnego — to byl prawdziwy brakujacy element.
-                # WARP proxy NIE jest tu dolaczany; uzywamy go tylko jako
-                # fallback po 403 (nizej), bo SofaScore blokuje IP WARP mimo
-                # poprawnego tokenu (proxy-first dawalo 403 na kazdym requeście).
+                # v10.4/10.6: domyslnie DIRECT-FIRST (token X-Requested-With
+                # wystarcza z IP rezydencjalnego). Ale gdy mamy proxy
+                # rezydencjalne i SOFASCORE_PROXY_PRIMARY=1 — uzywamy proxy od
+                # razu, bo direct (IP datacenter GHA) jest blokowane przez
+                # SofaScore. WARP zostaje fallbackiem (proxy-primary OFF).
+                _proxies_main = _get_sofascore_proxies()
+                if _proxies_main and _SOFASCORE_PROXY_PRIMARY:
+                    curl_kwargs['proxies'] = _proxies_main
+                    tried_proxy = True  # nie powtarzaj proxy w fallbacku
                 response = curl_requests.get(url, **curl_kwargs)
             else:
                 response = session.get(url, timeout=timeout, **kwargs)
