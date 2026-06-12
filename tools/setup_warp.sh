@@ -79,8 +79,14 @@ except Exception as e:
 port = os.environ.get("WARP_PROXY_PORT", "1080")
 url = os.environ.get("WARP_PROBE_URL")
 proxies = {"http": f"socks5://localhost:{port}", "https": f"socks5://localhost:{port}"}
+# v10.3: SofaScore wymaga naglowka X-Requested-With (token builda frontendu),
+# inaczej zwraca 403 "challenge" NIEZALEZNIE od IP. Sonda musi go wysylac,
+# zeby poprawnie ocenic czy IP WARP jest czyste (a nie rotowac w kolko na
+# falszywym 403). Wartosc nadpisywalna przez SOFASCORE_XRW.
+xrw = os.environ.get("SOFASCORE_XRW", "").strip() or "61544a"
 try:
-    r = cr.get(url, impersonate="chrome124", proxies=proxies, timeout=15)
+    r = cr.get(url, impersonate="chrome124", proxies=proxies, timeout=15,
+               headers={"X-Requested-With": xrw, "Referer": "https://www.sofascore.com/"})
     print(f"probe: SofaScore via WARP -> HTTP {r.status_code}")
     sys.exit(0 if r.status_code == 200 else 1)
 except Exception as e:

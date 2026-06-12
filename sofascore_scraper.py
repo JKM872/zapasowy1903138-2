@@ -105,11 +105,28 @@ SOFASCORE_SPORT_SLUGS = {
 }
 
 # Headers dla requests API - v5.0: Zaktualizowane do Chrome 136
+#
+# v10.3 — KLUCZOWE: SofaScore wymaga teraz naglowka `X-Requested-With` z
+# tokenem builda frontendu. Bez niego KAZDY endpoint danych zwraca
+# 403 {"error":{"code":403,"reason":"challenge"}} — niezaleznie od IP, proxy
+# (WARP), cookies czy profilu TLS. To byla przyczyna calej serii 403:
+# SofaScore dodal ten check, a scraper go nie wysylal.
+#
+# Token (`61544a`) pochodzi z JS aplikacji i moze sie zmienic przy ich
+# kolejnym deployu frontendu. Gdy znow pojawi sie 403 "challenge":
+#   1. Otworz https://www.sofascore.com, F12 -> Network -> klik dowolny
+#      request do /api/v1/ -> skopiuj wartosc naglowka `X-Requested-With`.
+#   2. Ustaw GitHub Secret SOFASCORE_XRW na ta wartosc (albo podmien default
+#      ponizej). Nie trzeba zmieniac nic wiecej.
+_SOFASCORE_XRW: str = os.getenv('SOFASCORE_XRW', '').strip() or '61544a'
+_xrw_challenge_warned: bool = False  # v10.3 — jednorazowy log gdy token wygasl
+
 API_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
     'Accept': '*/*',
     'Accept-Language': 'en-US,en;q=0.9,pl;q=0.8',
     'Accept-Encoding': 'gzip, deflate, br',
+    'X-Requested-With': _SOFASCORE_XRW,
     'Origin': 'https://www.sofascore.com',
     'Referer': 'https://www.sofascore.com/',
     'Sec-Ch-Ua': '"Google Chrome";v="136", "Chromium";v="136", "Not_A Brand";v="99"',
@@ -1280,6 +1297,22 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 logger.debug(f"SofaScore API: 403 Forbidden - prawdopodobnie brak cookies lub rate limit")
                 if IS_CI:
                     print(f"   ⚠️ SofaScore API: 403 Forbidden ({client_label})")
+                # v10.3: wykryj "challenge" = wygasly/zmieniony token X-Requested-With.
+                # SofaScore zmienil token builda -> trzeba zaktualizowac SOFASCORE_XRW.
+                global _xrw_challenge_warned
+                if not _xrw_challenge_warned:
+                    try:
+                        body_preview = (response.text or '')[:120]
+                    except Exception:
+                        body_preview = ''
+                    if 'challenge' in body_preview:
+                        _xrw_challenge_warned = True
+                        print(
+                            "   🔑 SofaScore: 403 'challenge' — token X-Requested-With "
+                            f"({_SOFASCORE_XRW!r}) prawdopodobnie wygasl po deployu SofaScore. "
+                            "Pobierz nowy: F12 -> Network -> request /api/v1/ -> naglowek "
+                            "'X-Requested-With' i ustaw GitHub Secret SOFASCORE_XRW."
+                        )
                 if use_curl and not tried_requests_fallback:
                     tried_requests_fallback = True
                     fallback_session = _build_warmed_requests_session()
