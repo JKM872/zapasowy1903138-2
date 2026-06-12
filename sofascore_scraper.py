@@ -1247,6 +1247,7 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     
     last_exception = None
     tried_requests_fallback = False
+    tried_proxy = False  # v10.4 — czy probowalismy juz WARP proxy jako fallback
     
     for attempt in range(MAX_RETRIES):
         try:
@@ -1266,10 +1267,11 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 )
                 if cf_cookies:
                     curl_kwargs['cookies'] = cf_cookies
-                # v9.0: WARP proxy (Cloudflare clean IP)
-                proxies = _get_sofascore_proxies()
-                if proxies:
-                    curl_kwargs['proxies'] = proxies
+                # v10.4: DIRECT-FIRST. Token X-Requested-With wystarcza z IP
+                # GHA/rezydencjalnego — to byl prawdziwy brakujacy element.
+                # WARP proxy NIE jest tu dolaczany; uzywamy go tylko jako
+                # fallback po 403 (nizej), bo SofaScore blokuje IP WARP mimo
+                # poprawnego tokenu (proxy-first dawalo 403 na kazdym requeście).
                 response = curl_requests.get(url, **curl_kwargs)
             else:
                 response = session.get(url, timeout=timeout, **kwargs)
@@ -1297,8 +1299,9 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 logger.debug(f"SofaScore API: 403 Forbidden - prawdopodobnie brak cookies lub rate limit")
                 if IS_CI:
                     print(f"   ⚠️ SofaScore API: 403 Forbidden ({client_label})")
-                # v10.3: wykryj "challenge" = wygasly/zmieniony token X-Requested-With.
-                # SofaScore zmienil token builda -> trzeba zaktualizowac SOFASCORE_XRW.
+                # v10.4: direct dostal 403. Jesli body to "challenge", token
+                # X-Requested-With jest zly/wygasly (direct+token=200 gdy token
+                # OK). Komunikat odpala sie tylko w tym realnym przypadku.
                 global _xrw_challenge_warned
                 if not _xrw_challenge_warned:
                     try:
@@ -1313,6 +1316,25 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                             "Pobierz nowy: F12 -> Network -> request /api/v1/ -> naglowek "
                             "'X-Requested-With' i ustaw GitHub Secret SOFASCORE_XRW."
                         )
+                # v10.4: fallback przez WARP proxy — siatka bezpieczenstwa gdyby
+                # IP GHA bylo odfiltrowane. Zwykle niepotrzebne (token wystarcza).
+                proxies = _get_sofascore_proxies()
+                if use_curl and not tried_proxy and proxies is not None:
+                    tried_proxy = True
+                    try:
+                        proxied = curl_requests.get(
+                            url, impersonate=profile, headers=API_HEADERS,
+                            proxies=proxies, timeout=timeout
+                        )
+                        if proxied.status_code == 200 and proxied.content and len(proxied.content) > 2:
+                            _record_http_outcome('curl_cffi', 'ok_proxy')
+                            if IS_CI:
+                                print("   ✅ SofaScore: 200 przez WARP proxy (direct byl 403)")
+                            return proxied
+                        _record_http_outcome('curl_cffi', f'{proxied.status_code}_proxy')
+                    except Exception as e:
+                        last_exception = e
+                        _record_http_outcome('curl_cffi', 'error_proxy')
                 if use_curl and not tried_requests_fallback:
                     tried_requests_fallback = True
                     fallback_session = _build_warmed_requests_session()
@@ -1407,7 +1429,7 @@ def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
                 # Maskuj credentials w logu
                 proxy_url = _SOFASCORE_PROXY_URL
                 masked = re.sub(r'://([^:]+):([^@]+)@', '://***:***@', proxy_url)
-                print(f"   🌐 SofaScore: proxy aktywne ({masked}) — ruch przez Cloudflare WARP")
+                print(f"   🌐 SofaScore: direct-first (token X-Requested-With); WARP fallback dostepny ({masked})")
             else:
                 print("   ⚠️ SofaScore: proxy NIE ustawione (SOFASCORE_PROXY env puste) — ruch przez datacenter IP GHA (CF zablokuje)")
 
