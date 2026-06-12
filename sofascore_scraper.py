@@ -1299,17 +1299,24 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                 logger.debug(f"SofaScore API: 403 Forbidden - prawdopodobnie brak cookies lub rate limit")
                 if IS_CI:
                     print(f"   ⚠️ SofaScore API: 403 Forbidden ({client_label})")
-                # v10.4: direct dostal 403. Jesli body to "challenge", token
-                # X-Requested-With jest zly/wygasly (direct+token=200 gdy token
-                # OK). Komunikat odpala sie tylko w tym realnym przypadku.
+                # v10.5: jednorazowo zaloguj TRESC 403 w CI — rozstrzyga czy to
+                # token ("challenge") czy blokada IP datacenter (inna tresc /
+                # strona Cloudflare). Bez tego diagnoza to zgadywanie.
                 global _xrw_challenge_warned
                 if not _xrw_challenge_warned:
+                    _xrw_challenge_warned = True
                     try:
-                        body_preview = (response.text or '')[:120]
+                        body_preview = (response.text or '')[:200]
                     except Exception:
                         body_preview = ''
+                    srv = ''
+                    try:
+                        srv = f" server={response.headers.get('server')!r} cf-ray={response.headers.get('cf-ray')!r}"
+                    except Exception:
+                        pass
+                    if IS_CI:
+                        print(f"   🔎 SofaScore 403 body: {body_preview!r}{srv}")
                     if 'challenge' in body_preview:
-                        _xrw_challenge_warned = True
                         print(
                             "   🔑 SofaScore: 403 'challenge' — token X-Requested-With "
                             f"({_SOFASCORE_XRW!r}) prawdopodobnie wygasl po deployu SofaScore. "
