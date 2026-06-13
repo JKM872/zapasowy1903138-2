@@ -129,6 +129,29 @@ def iso_to_match_time(iso: Optional[str]) -> str:
     return dt.strftime("%d.%m.%Y %H:%M")
 
 
+# v10.7 — wyciaga czas STARTU nadchodzacego meczu z meta itemprop="startDate".
+# AiScore renderuje go zarowno na stronie przegladu meczu, jak i na /h2h
+# (pierwszy startDate = nadchodzacy mecz; kolejne to przeszle spotkania H2H).
+# Dzieki temu czas meczu pochodzi z AiScore (dziala z GitHub Actions) i nie
+# zalezy juz od SofaScore (blokowany z IP datacenter).
+_START_DATE_RE = re.compile(
+    r'<meta[^>]*itemprop=["\']startDate["\'][^>]*content=["\']([^"\']+)["\']'
+    r'|<meta[^>]*content=["\']([^"\']+)["\'][^>]*itemprop=["\']startDate["\']',
+    re.IGNORECASE,
+)
+
+
+def first_start_date(html: str) -> Optional[str]:
+    """Return the first itemprop="startDate" meta content (the upcoming match's
+    scheduled ISO time on an AiScore match / h2h page), or None if absent."""
+    if not html:
+        return None
+    m = _START_DATE_RE.search(html)
+    if not m:
+        return None
+    return (m.group(1) or m.group(2) or "").strip() or None
+
+
 # ---------------------------------------------------------------------------
 # PURE PARSERS
 # ---------------------------------------------------------------------------
@@ -469,6 +492,9 @@ def scrape_match_page(driver: Any, url: str,
 
     html = _safe_page_source(driver) or ""
     matches = parse_aiscore_matches(html)
+    # v10.7: czas nadchodzacego meczu z AiScore (meta startDate) — niezalezny
+    # od SofaScore. Pierwszy startDate na stronie = nadchodzacy mecz.
+    upcoming_start = first_start_date(html)
 
     # Identify the page's dominant H2H pair (the two subjects). On a /h2h page
     # the direct meetings repeat, so the most common participant pair is the
@@ -506,7 +532,7 @@ def scrape_match_page(driver: Any, url: str,
                 break
 
     return {"url": target, "all_matches": matches, "home": home, "away": away,
-            "match_date": match_date}
+            "match_date": upcoming_start or match_date}
 
 
 __all__ = [
