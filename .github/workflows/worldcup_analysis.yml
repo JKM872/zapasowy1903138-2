@@ -92,9 +92,9 @@ jobs:
 
       # 6. Setup Cloudflare WARP (SofaScore clean IP)
       # v10.1: setup_warp.sh — WARP + sonda SofaScore z rotacja IP. Spojne ze scrape.yml.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
 
       # 7. Run the World Cup analytical pipeline
       - name: Run World Cup analysis
@@ -106,7 +106,8 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
           # 📰 News intel breadth (worldcup_news_intel). Puste inputy (np. przy
           # schedule) -> wartości domyślne, żeby CI łapało komplet informacji.
           WC_NEWS_LOCALES: ${{ github.event.inputs.news_locales || 'en-US,en-GB,pl-PL' }}

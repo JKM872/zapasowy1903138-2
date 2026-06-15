@@ -77,9 +77,9 @@ jobs:
           done
 
       # v10.1: setup_warp.sh — WARP + sonda SofaScore z rotacja IP. Spojne ze scrape.yml.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
 
       - name: Run table tennis pipeline (AiScore, AWAY focus)
         env:
@@ -91,7 +91,8 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "🏓 Scraping table tennis (AiScore AWAY focus)..."
           DATE_INPUT="${{ github.event.inputs.date }}"

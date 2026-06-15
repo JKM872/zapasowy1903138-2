@@ -86,13 +86,12 @@ jobs:
             sleep 2
           done
 
-      # v10.1: Setup Cloudflare WARP (SofaScore CF bypass). Bez tego noon
-      # refresh leci po SofaScore z golego IP datacenter GHA -> 403 na kazdym
-      # meczu. setup_warp.sh stawia WARP, sonduje SofaScore przez to IP i
-      # rotuje IP gdy spalone. Spojne ze scrape.yml.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      # v10.9: Tor (SOCKS5 :9050) — czyste IP exit omija blokade datacenter
+      # SofaScore (Azure GHA + WARP blokowane mimo tokenu). Sonda + rotacja
+      # exitu w tools/setup_tor.sh.
+      - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
 
       - name: Determine date
         id: date
@@ -126,9 +125,10 @@ jobs:
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # v10.1: SofaScore via Cloudflare WARP (clean IP). Pod WARP scraper
-          # idzie czystym requestem (bez cf_clearance) — patrz _cookies_for_curl.
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          # v10.9: SofaScore przez Tor (socks5h = DNS przez Tor). proxy-primary,
+          # bo direct (IP datacenter GHA) jest blokowane.
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           TODAY="${{ steps.date.outputs.today }}"

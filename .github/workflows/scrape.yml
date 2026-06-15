@@ -131,9 +131,9 @@ jobs:
       # v10.0: WARP + aktywna sonda SofaScore z rotacja IP (tools/setup_warp.sh).
       # Skrypt nie tylko czeka na warp=on, ale sprawdza czy SofaScore API
       # zwraca 200 przez to IP WARP (curl_cffi/Chrome TLS) i rotuje IP gdy 403.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
       
       # 8. Run the scraper for this sport
       - name: Run scraper - ${{ matrix.sport }}
@@ -157,7 +157,8 @@ jobs:
           # v9.0: SofaScore via Cloudflare WARP (Docker service "warp" na 1080).
           # Daje czyste IP Cloudflare - SofaScore nie blokuje wlasnych IP CF.
           # Tylko SofaScore requesty ida przez WARP, reszta scraperow normalnie.
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "🏃 Scraping ${{ matrix.sport }}..."
           TODAY=$(date +%Y-%m-%d)

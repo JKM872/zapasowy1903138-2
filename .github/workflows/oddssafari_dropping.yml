@@ -156,10 +156,10 @@ jobs:
             sleep 2
           done
 
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      - name: Setup Tor (SOCKS5 on :9050)
         if: steps.skip-check.outputs.skip != 'true'
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
 
       - name: Resolve target date
         if: steps.skip-check.outputs.skip != 'true'
@@ -178,7 +178,8 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           TARGET_DATE="${{ steps.resolve-date.outputs.target }}"

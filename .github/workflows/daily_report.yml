@@ -212,9 +212,9 @@ jobs:
       # Cloudflare WARP proxy jako SOCKS5 :1080 — kierujemy ruch do SofaScore
       # przez czysty IP CF. v10.1: setup_warp.sh sonduje SofaScore i rotuje
       # spalone IP. Identycznie jak w scrape.yml.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
 
       - name: Update match results in Supabase
         env:
@@ -223,7 +223,8 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           # SofaScore Cloudflare bypass — te same wartości co w scrape.yml.
           # WARP daje czyste CF IP, FlareSolverr to fallback gdy WARP padnie.
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           # Opcjonalny manualny cookie cf_clearance (jeśli kiedyś dodasz).
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}

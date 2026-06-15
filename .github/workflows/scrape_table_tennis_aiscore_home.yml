@@ -76,32 +76,12 @@ jobs:
             sleep 2
           done
 
-      # v10.1: setup_warp.sh — WARP + sonda SofaScore z rotacja IP. Spojne ze scrape.yml.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
-        continue-on-error: true
-        run: bash tools/setup_warp.sh
-
-      # v10.8 — EKSPERYMENT: Tor jako SOCKS5 :9050. SofaScore blokuje IP
-      # datacenter (Azure GHA) i WARP mimo poprawnego tokenu X-Requested-With.
-      # Tor daje IP wyjsciowe spoza tych pul — bez konta i bez zewnetrznych
-      # uslug. Jesli exit node przejdzie, Fan Vote wraca. Jesli nie (anty-bot
-      # blokuje Tor) — log pokaze 403 i wracamy do proxy rezydencjalnego.
+      # v10.9: Tor jako SOCKS5 :9050 — czyste IP exit omija blokade datacenter
+      # SofaScore (Azure GHA + WARP sa blokowane mimo tokenu). Sonda + rotacja
+      # exitu w tools/setup_tor.sh. Token X-Requested-With juz w API_HEADERS.
       - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: |
-          echo "🧅 Instaluję Tor..."
-          sudo apt-get update && sudo apt-get install -y tor
-          sudo service tor start || sudo /etc/init.d/tor start || true
-          echo "⏳ Czekam na bootstrap Tor..."
-          for i in {1..30}; do
-            IP=$(curl -s --max-time 12 --socks5-hostname localhost:9050 https://api.ipify.org 2>/dev/null || echo "")
-            if [ -n "$IP" ]; then
-              echo "✅ Tor gotowy — exit IP $IP"
-              break
-            fi
-            echo "Tor bootstrap... ($i/30)"
-            sleep 3
-          done
+        run: bash tools/setup_tor.sh
 
       - name: Run table tennis pipeline (AiScore, HOME focus)
         env:

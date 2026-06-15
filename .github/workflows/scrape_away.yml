@@ -126,9 +126,9 @@ jobs:
       # 7b. Setup Cloudflare WARP proxy (v10.1 — SofaScore CF bypass).
       # setup_warp.sh: stawia WARP, sonduje SofaScore przez to IP i rotuje
       # IP gdy spalone (curl_cffi/Chrome TLS). Spojne ze scrape.yml.
-      - name: Setup Cloudflare WARP proxy (SOCKS5 on :1080)
+      - name: Setup Tor (SOCKS5 on :9050)
         continue-on-error: true
-        run: bash tools/setup_warp.sh
+        run: bash tools/setup_tor.sh
       
       # 8. Run the scraper for this sport — AWAY TEAM FOCUS + REQUIRE FORM
       - name: Run scraper (AWAY) - ${{ matrix.sport }}
@@ -145,7 +145,8 @@ jobs:
           # v8.1: SofaScore CF bypass via manual cookies
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           # v9.0: SofaScore via Cloudflare WARP proxy
-          SOFASCORE_PROXY: "socks5://localhost:1080"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "🏃 Scraping ${{ matrix.sport }} (AWAY FOCUS)..."
           TODAY=$(date +%Y-%m-%d)
