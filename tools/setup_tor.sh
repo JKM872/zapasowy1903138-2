@@ -24,12 +24,37 @@
 set -u
 
 TOR_PORT="${TOR_SOCKS_PORT:-9050}"
+TOR_CONTROL_PORT="${TOR_CONTROL_PORT:-9051}"
 TOR_MAX_ATTEMPTS="${TOR_MAX_ATTEMPTS:-4}"
 XRW="${SOFASCORE_XRW:-61544a}"
 PROBE_URL="${SOFASCORE_PROBE_URL:-https://api.sofascore.com/api/v1/sport/football/scheduled-events/$(date +%Y-%m-%d)}"
 
 echo "🧅 Instaluje Tor..."
 sudo apt-get update -qq && sudo apt-get install -y -qq tor || true
+
+# v11.0 — dopisz konfiguracje do /etc/tor/torrc (idempotentnie):
+#  - ControlPort 9051 bez auth (tylko localhost, efemeryczny runner GHA) — pozwala
+#    scraperowi wyslac SIGNAL NEWNYM i rotowac exit gdy zaczyna dostawac 403,
+#    zamiast trwale wylaczac SofaScore po 5 porazkach.
+#  - MaxCircuitDirtiness 3600 — trzymaj zwalidowany (czysty) exit do ~1h zamiast
+#    domyslnych 10 min. Bez tego Tor w trakcie dlugiego scrapa przeskakuje na
+#    losowy (czesto zablokowany) exit -> "raz dziala, raz nie".
+configure_torrc() {
+  local torrc="/etc/tor/torrc"
+  if ! sudo grep -q "# SOFASCORE_TOR_CONFIG" "$torrc" 2>/dev/null; then
+    echo "  Dopisuje konfiguracje do ${torrc}"
+    sudo tee -a "$torrc" >/dev/null <<EOF
+
+# SOFASCORE_TOR_CONFIG (v11.0) — nie edytowac recznie
+SocksPort ${TOR_PORT}
+ControlPort ${TOR_CONTROL_PORT}
+CookieAuthentication 0
+MaxCircuitDirtiness 3600
+EOF
+  else
+    echo "  Konfiguracja torrc juz obecna — pomijam"
+  fi
+}
 
 start_tor() {
   # restart => nowy obwod/exit przy kolejnych probach
@@ -76,6 +101,8 @@ except Exception as e:
     sys.exit(2)
 PY
 }
+
+configure_torrc
 
 OK=false
 for ((attempt = 1; attempt <= TOR_MAX_ATTEMPTS; attempt++)); do

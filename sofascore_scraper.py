@@ -228,6 +228,42 @@ _SOFASCORE_PROXY_PRIMARY: bool = (
 )
 _proxy_config_logged: bool = False  # v9.0 — log proxy raz na run
 
+# v11.0 — Tor circuit rotation. Gdy SofaScore leci przez Tor (SOFASCORE_PROXY na
+# socks5 :9050) i zaczynamy dostawac serie 403, zamiast TRWALE wylaczac SofaScore
+# po 5 porazkach (stary _api_circuit_breaker), wysylamy do Tora SIGNAL NEWNYM
+# przez ControlPort — Tor buduje nowy obwod z (prawdopodobnie) innym, czystym
+# exit nodem. To bezposrednio atakuje przyczyne intermitentnych 403: zly exit.
+# setup_tor.sh wystawia ControlPort 9051 bez auth (localhost, efemeryczny runner).
+_TOR_CONTROL_PORT: int = int(os.getenv('TOR_CONTROL_PORT', '9051') or '9051')
+_tor_rotations: int = 0
+_TOR_MAX_ROTATIONS: int = int(os.getenv('SOFASCORE_TOR_MAX_ROTATIONS', '4') or '4')
+
+
+def _proxy_is_tor() -> bool:
+    """True gdy SofaScore idzie przez Tor SOCKS (port 9050) — wtedy mozemy
+    rotowac exit przez ControlPort zamiast trwale wylaczac SofaScore."""
+    return bool(_SOFASCORE_PROXY_URL) and '9050' in _SOFASCORE_PROXY_URL
+
+
+def _rotate_tor_circuit() -> bool:
+    """Wyslij SIGNAL NEWNYM do Tora przez ControlPort (nowy obwod/exit).
+
+    Zwraca True gdy Tor potwierdzil (250 OK). Tor rate-limituje NEWNYM
+    (~10s miedzy realnie nowymi obwodami), wiec caller powinien odczekac.
+    """
+    import socket
+    try:
+        with socket.create_connection(('127.0.0.1', _TOR_CONTROL_PORT), timeout=5) as sock:
+            sock.settimeout(5)
+            sock.sendall(b'AUTHENTICATE ""\r\n')
+            if b'250' not in sock.recv(1024):
+                return False
+            sock.sendall(b'SIGNAL NEWNYM\r\n')
+            return b'250' in sock.recv(1024)
+    except Exception as e:
+        logger.debug(f"Tor NEWNYM rotation failed: {type(e).__name__}: {e}")
+        return False
+
 
 def _get_sofascore_proxies() -> Optional[Dict[str, str]]:
     """Zwroc proxies dict dla curl_cffi/requests gdy SOFASCORE_PROXY ustawiony."""
@@ -1223,10 +1259,32 @@ def _api_cb_record_success() -> None:
 
 
 def _api_cb_record_403() -> None:
-    """Inkrementuj licznik 403 i trip jeśli przekroczono próg."""
-    global _api_consecutive_403, _api_circuit_breaker_tripped
+    """Inkrementuj licznik 403 i trip jeśli przekroczono próg.
+
+    v11.0 — gdy leci przez Tor, przed trwalym tripem probujemy rotowac exit
+    (SIGNAL NEWNYM). Zablokowany exit node to najczestsza przyczyna serii 403
+    w GHA; nowy obwod czesto daje czysty exit i SofaScore wraca do zycia bez
+    wylaczania na caly run.
+    """
+    global _api_consecutive_403, _api_circuit_breaker_tripped, _tor_rotations
     _api_consecutive_403 += 1
     if _api_consecutive_403 >= _API_403_CIRCUIT_BREAKER_THRESHOLD and not _api_circuit_breaker_tripped:
+        # Tor: sprobuj rotowac obwod zamiast poddawac sie.
+        if _proxy_is_tor() and _tor_rotations < _TOR_MAX_ROTATIONS:
+            _tor_rotations += 1
+            if _rotate_tor_circuit():
+                print(
+                    f"   🔁 SofaScore: {_api_consecutive_403} kolejnych 403 przez Tor — "
+                    f"rotuje exit (NEWNYM {_tor_rotations}/{_TOR_MAX_ROTATIONS}), czekam 10s..."
+                )
+                time.sleep(10)  # Tor rate-limituje NEWNYM; daj czas na nowy obwod
+                _api_consecutive_403 = 0
+                return
+            else:
+                print(
+                    f"   ⚠️ SofaScore: NEWNYM nieudany (ControlPort {_TOR_CONTROL_PORT} "
+                    f"niedostepny?) — kontynuuje do trip breakera"
+                )
         _api_circuit_breaker_tripped = True
         print(
             f"   🛑 SofaScore API CIRCUIT BREAKER: {_api_consecutive_403} kolejnych 403 — "
