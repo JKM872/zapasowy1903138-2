@@ -1,15 +1,15 @@
 {
   "date": "2026-07-13",
   "sport": "football",
-  "generatedAt": "2026-07-13T03:29:14.761616",
+  "generatedAt": "2026-07-13T06:13:34.430850",
   "stats": {
     "total": 75,
-    "qualifying": 35,
-    "formAdvantage": 23
+    "qualifying": 6,
+    "formAdvantage": 6
   },
   "matches": [
     {
-      "id": -8872486960279515234,
+      "id": -6245453773070303882,
       "homeTeam": "9 de Julio Rafaela",
       "awayTeam": "Defensores Belgrano VR",
       "time": "13.07.2026 21:30",
@@ -43,7 +43,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -55,7 +55,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5848315897037794416,
+      "id": 1820948233344284990,
       "homeTeam": "Claypole",
       "awayTeam": "Leones de Rosario",
       "time": "13.07.2026 18:00",
@@ -64,135 +64,98 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/claypole-xbGtn7BG/leones-de-rosario-rDeLvwS1/?mid=vHMhSdlU",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "fan_vote_below_threshold:44/65"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
         "home": 0,
         "draw": 0,
         "away": 1,
         "total": 1,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -4492851520262130058,
-      "homeTeam": "Fenix",
-      "awayTeam": "Sportivo Barracas",
-      "time": "13.07.2026 18:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/fenix-bFx5u1LC/sportivo-barracas-2qmvus66/?mid=r38IrIYA",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "fan_vote_below_threshold:38/65"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 60
+        "winRate": 100
       },
       "homeForm": [
         "L",
+        "L",
         "W",
         "L",
-        "D",
-        "L"
+        "D"
       ],
       "awayForm": [
         "L",
+        "D",
         "W",
         "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "D",
         "L",
         "W"
       ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
       "awayFormAway": [
         "W",
-        "L",
-        "L",
+        "D",
+        "W",
         "L",
         "L"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 3.4,
-        "draw": 2.8,
-        "away": 2.1,
+        "home": 2.8,
+        "draw": 2.7,
+        "away": 2.5,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 56.0,
+        "exactScore": "0 - 1",
+        "overUnder": "Under 2.5",
+        "btts": "No",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": {
-        "home": 34,
-        "draw": 28,
-        "away": 38,
-        "votes": 387
+        "home": 20,
+        "draw": 36,
+        "away": 44,
+        "votes": 599
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 35.1,
-        "ev": 0.193,
-        "edge": 5.7,
-        "kelly": 2.0,
-        "confidence": 31.0,
-        "dataQuality": 0.73
+        "pick": "2",
+        "prob": 43.6,
+        "ev": 0.089,
+        "edge": 3.6,
+        "kelly": 1.5,
+        "confidence": 51.0,
+        "dataQuality": 0.91
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 31.0,
+      "confidence": 78,
       "value_bet": true,
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 5.688,
+        "h2h_count": 1,
+        "consensus_strength": "strong",
+        "market_model_gap": 3.6,
         "skip_reason": null
       },
       "availability": {
@@ -211,29 +174,29 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.19"
+          "Source consensus: strong (3/4)",
+          "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
+        "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 5.7,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 3.6,
+        "consensus_note": "strong (3 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "B"
     },
     {
-      "id": -1972961100163715331,
-      "homeTeam": "Estudiantes Rio Cuarto 2",
-      "awayTeam": "Defensa y Justicia 2",
-      "time": "13.07.2026 13:00",
+      "id": -8034235362611165424,
+      "homeTeam": "Fenix",
+      "awayTeam": "Sportivo Barracas",
+      "time": "13.07.2026 18:00",
       "date": "2026-07-13",
       "league": null,
       "country": "",
       "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/defensa-y-justicia-lhCl7Aam/estudiantes-rio-cuarto-fTvpDxf2/?mid=dYP8Jxy8",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/fenix-bFx5u1LC/sportivo-barracas-2qmvus66/?mid=r38IrIYA",
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -243,11 +206,11 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 3,
         "draw": 0,
         "away": 1,
-        "total": 1,
-        "winRate": 0
+        "total": 5,
+        "winRate": 20
       },
       "homeForm": [],
       "awayForm": [],
@@ -259,7 +222,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -271,7 +234,140 @@
       "predictionGrade": null
     },
     {
-      "id": -110231990483074620,
+      "id": -3675203464842592910,
+      "homeTeam": "Estudiantes Rio Cuarto 2",
+      "awayTeam": "Defensa y Justicia 2",
+      "time": "13.07.2026 13:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/defensa-y-justicia-lhCl7Aam/estudiantes-rio-cuarto-fTvpDxf2/?mid=dYP8Jxy8",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "fan_vote_below_threshold:60/65"
+      ],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 1,
+        "total": 1,
+        "winRate": 100
+      },
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "D",
+        "W",
+        "L",
+        "D",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "D"
+      ],
+      "awayFormAway": [
+        "D",
+        "L",
+        "L",
+        "D",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 4.0,
+        "draw": 3.5,
+        "away": 1.78,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 56.0,
+        "exactScore": "0 - 2",
+        "overUnder": "Under 2.5",
+        "btts": "No",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 60,
+        "draw": 26,
+        "away": 14,
+        "votes": 35
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "2",
+        "prob": 55.9,
+        "ev": -0.005,
+        "edge": -0.3,
+        "kelly": 0.0,
+        "confidence": 38.0,
+        "dataQuality": 0.82
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 38.0,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 1,
+        "consensus_strength": "weak",
+        "market_model_gap": -0.28,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0,
+        "home_key_absences": 0,
+        "away_key_absences": 0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 100%)",
+        "availability_note": "",
+        "expected_edge": -0.3,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": 799268804821802931,
       "homeTeam": "Ferro 2",
       "awayTeam": "Lanus 2",
       "time": "13.07.2026 13:00",
@@ -305,7 +401,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -317,7 +413,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3245182220638422516,
+      "id": -2158146518348913190,
       "homeTeam": "Gimnasia Mendoza 2",
       "awayTeam": "Sarmiento Junin 2",
       "time": "13.07.2026 13:00",
@@ -351,7 +447,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -363,7 +459,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3128819805088220868,
+      "id": -1084457166483792619,
       "homeTeam": "Quilmes 2",
       "awayTeam": "Central Cordoba 2",
       "time": "13.07.2026 13:00",
@@ -372,118 +468,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/central-cordoba-santiago-del-estero-WCGa5aSh/quilmes-jyBYK9H7/?mid=lSCfstTE",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 1,
         "draw": 0,
         "away": 0,
         "total": 1,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.63,
-        "draw": 3.65,
-        "away": 4.8,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 72,
-        "draw": 15,
-        "away": 14,
-        "votes": 74
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 60.3,
-        "ev": -0.016,
-        "edge": -1.0,
-        "kelly": 0.0,
-        "confidence": 40.0,
-        "dataQuality": 0.82
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 65,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.05,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 80%)",
-        "availability_note": "",
-        "expected_edge": -1.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -6554308639083261392,
+      "id": 6438224036775169697,
       "homeTeam": "River Plate K",
       "awayTeam": "Social Atletico Television K",
       "time": "13.07.2026 14:00",
@@ -492,123 +514,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/river-plate-KCm3Ukdo/social-atletico-television-82bURYxU/?mid=rZ6TvY8O",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:38/65"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 4,
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "D",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "W",
-        "D",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.75,
-        "draw": 3.25,
-        "away": 4.6,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 38,
-        "draw": 26,
-        "away": 36,
-        "votes": 80
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 64.7,
-        "ev": 0.132,
-        "edge": 7.6,
-        "kelly": 4.4,
-        "confidence": 66.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 66.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 7.557,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.13",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 7.6,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 865872395195140725,
+      "id": 6262797569603651300,
       "homeTeam": "Ferro K",
       "awayTeam": "Boca Juniors K",
       "time": "13.07.2026 17:00",
@@ -642,7 +585,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -654,7 +597,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2550622272875319437,
+      "id": 2456521243419225208,
       "homeTeam": "Banfield K",
       "awayTeam": "Belgrano K",
       "time": "13.07.2026 18:00",
@@ -676,6 +619,52 @@
         "draw": 0,
         "away": 2,
         "total": 5,
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -7926867611019324403,
+      "homeTeam": "Gimnasia L.P. K",
+      "awayTeam": "Huracan K",
+      "time": "13.07.2026 18:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/gimnasia-l-p-IVEZmcN8/huracan-Ygmko1FC/?mid=fDzncFOh",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -688,7 +677,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -700,131 +689,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4992092086502712330,
-      "homeTeam": "Gimnasia L.P. K",
-      "awayTeam": "Huracan K",
-      "time": "13.07.2026 18:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/gimnasia-l-p-IVEZmcN8/huracan-Ygmko1FC/?mid=fDzncFOh",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "fan_vote_below_threshold:50/65"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "L",
-        "W",
-        "D",
-        "D",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "W",
-        "L",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.93,
-        "draw": 3.15,
-        "away": 3.9,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": {
-        "home": 27,
-        "draw": 23,
-        "away": 50,
-        "votes": 6608
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 53.0,
-        "ev": 0.023,
-        "edge": 1.2,
-        "kelly": 0.6,
-        "confidence": 48.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 48.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 1.187,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 1.2,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": -7720154584928046822,
+      "id": 6147896568536670139,
       "homeTeam": "Racing Club K",
       "awayTeam": "Union Santa Fe K",
       "time": "13.07.2026 18:00",
@@ -833,123 +698,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/racing-club-G83MVCu9/union-santa-fe-dhw8TNn9/?mid=OhS2gXNH",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold",
-        "fan_vote_below_threshold:63/65"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 4,
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "D",
-        "W",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.09,
-        "draw": 8.0,
-        "away": 20.0,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 63,
-        "draw": 15,
-        "away": 23,
-        "votes": 16305
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 5.0,
-        "ev": -0.005,
-        "edge": -0.0,
-        "kelly": 0.0,
-        "confidence": 18.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 18.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -86.743,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": -0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 7996820573096884151,
+      "id": 5040690069957965094,
       "homeTeam": "San Lorenzo K",
       "awayTeam": "San Luis K",
       "time": "13.07.2026 18:00",
@@ -958,10 +744,10 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/san-lorenzo-CKQ6l2L1/san-luis-KWmhpJYO/?mid=A9QAiBhU",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -971,116 +757,31 @@
         "draw": 0,
         "away": 0,
         "total": 3,
-        "winRate": 66
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "D",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "D",
-        "D",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "D",
-        "D",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.4,
-        "draw": 3.8,
-        "away": 7.75,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 49.0,
-        "exactScore": "3 - 1",
-        "overUnder": "Over 2.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 72.3,
-        "ev": 0.012,
-        "edge": 0.9,
-        "kelly": 0.7,
-        "confidence": 64.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 64.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": 0.871,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 72%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 0.9,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -2152118378966470018,
+      "id": -7580599137943237268,
       "homeTeam": "Blue Eagles",
       "awayTeam": "Modbury",
       "time": "13.07.2026 10:00",
@@ -1089,123 +790,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/blue-eagles-E519PO0K/modbury-EHZCJVrU/?mid=67Sw4PlS",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:52/65"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 4,
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "L",
-        "D",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "D",
-        "D",
-        "W",
-        "D",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "D",
-        "L",
-        "D",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 2.55,
-        "draw": 3.5,
-        "away": 2.3,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 52,
-        "draw": 23,
-        "away": 25,
-        "votes": 463
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 47.7,
-        "ev": 0.216,
-        "edge": 8.5,
-        "kelly": 3.5,
-        "confidence": 44.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 44.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 8.484,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.22",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 8.5,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5630079047193650657,
+      "id": -9113537605828245479,
       "homeTeam": "Bulleen",
       "awayTeam": "Brunswick City",
       "time": "13.07.2026 10:30",
@@ -1239,7 +861,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1251,7 +873,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3875502837524247811,
+      "id": -5248124465734797569,
       "homeTeam": "Tahiti U16",
       "awayTeam": "Vanuatu U16",
       "time": "13.07.2026 00:00",
@@ -1270,11 +892,11 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 2,
+        "home": 1,
         "draw": 0,
         "away": 0,
-        "total": 4,
-        "winRate": 50
+        "total": 1,
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -1286,7 +908,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1298,7 +920,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5299726787534399808,
+      "id": -3330703433396627644,
       "homeTeam": "Nowa Zelandia U16",
       "awayTeam": "Wyspy Salomona U16",
       "time": "13.07.2026 06:00",
@@ -1310,7 +932,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -1332,7 +955,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1344,7 +967,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2109310002398297197,
+      "id": -323344689326608036,
       "homeTeam": "Kambodża K",
       "awayTeam": "Timor Wschodni K",
       "time": "13.07.2026 08:45",
@@ -1353,122 +976,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/kambodza-St8WbxQB/timor-leste-IFWhTOw7/?mid=IVQzY5Us",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 3,
         "draw": 0,
         "away": 0,
         "total": 3,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "D",
-        "W",
-        "D",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.02,
-        "draw": 10.0,
-        "away": 50.0,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 84,
-        "draw": 9,
-        "away": 6,
-        "votes": 1458
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 5.1,
-        "ev": 1.569,
-        "edge": 3.1,
-        "kelly": 0.8,
-        "confidence": 28.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 28.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -92.939,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 1.57"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 3.1,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -5498727566697039415,
+      "id": 6382979316580253468,
       "homeTeam": "Singapur K",
       "awayTeam": "Laos K",
       "time": "13.07.2026 12:45",
@@ -1477,120 +1022,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/laos-Qe4gcfLQ/singapur-0zdBt2jg/?mid=zDOyGX8d",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 3,
         "draw": 0,
         "away": 1,
         "total": 4,
-        "winRate": 75
+        "winRate": 25
       },
-      "homeForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "D",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.75,
-        "draw": 2.9,
-        "away": 3.45,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 74,
-        "draw": 18,
-        "away": 8,
-        "votes": 1087
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 62.2,
-        "ev": 0.089,
-        "edge": 5.1,
-        "kelly": 3.0,
-        "confidence": 58.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 58.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": 5.057,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 5.1,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -4851287413951291436,
+      "id": 7524992031302814304,
       "homeTeam": "Ugyen Academy",
       "awayTeam": "Transport United",
       "time": "13.07.2026 12:00",
@@ -1624,7 +1093,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1636,7 +1105,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3625519308391162138,
+      "id": 4238574446867234438,
       "homeTeam": "America MG",
       "awayTeam": "Londrina",
       "time": "13.07.2026 22:00",
@@ -1645,120 +1114,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/america-mineiro-xUT0Bp8o/londrina-xdhbBEVA/?mid=A5srkUa6",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:51/65"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 4,
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "D",
-        "W",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.88,
-        "draw": 3.2,
-        "away": 3.95,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 51,
-        "draw": 17,
-        "away": 32,
-        "votes": 2829
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 54.5,
-        "ev": 0.024,
-        "edge": 1.3,
-        "kelly": 0.7,
-        "confidence": 45.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 45.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 1.309,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 1.3,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -3844204524547085846,
+      "id": 3701453071400758358,
       "homeTeam": "Ceara",
       "awayTeam": "Athletic Club",
       "time": "13.07.2026 23:30",
@@ -1780,7 +1173,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 20
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -1792,7 +1185,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1804,7 +1197,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4359750498057885658,
+      "id": -2261650885530505702,
       "homeTeam": "Itabaiana",
       "awayTeam": "Brusque",
       "time": "13.07.2026 22:30",
@@ -1838,7 +1231,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1850,7 +1243,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5486563280457533820,
+      "id": 123292875477464532,
       "homeTeam": "Figueirense",
       "awayTeam": "Volta Redonda",
       "time": "13.07.2026 23:30",
@@ -1872,6 +1265,76 @@
         "draw": 0,
         "away": 2,
         "total": 3,
+        "winRate": 66
+      },
+      "homeForm": [
+        "L",
+        "D",
+        "D",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -4928659956538543934,
+      "homeTeam": "America-RN",
+      "awayTeam": "Trem",
+      "time": "13.07.2026 23:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/america-rn-IoDnSKcq/trem-GGpeNM7q/?mid=4CK9EWpI",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 0,
+        "total": 1,
         "winRate": 0
       },
       "homeForm": [],
@@ -1884,7 +1347,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1896,131 +1359,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2958676991048420055,
-      "homeTeam": "America-RN",
-      "awayTeam": "Trem",
-      "time": "13.07.2026 23:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/america-rn-IoDnSKcq/trem-GGpeNM7q/?mid=4CK9EWpI",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 1,
-        "winRate": 100
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.15,
-        "draw": 6.0,
-        "away": 13.0,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": {
-        "home": 78,
-        "draw": 13,
-        "away": 10,
-        "votes": 467
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 8.2,
-        "ev": 0.072,
-        "edge": 0.6,
-        "kelly": 0.1,
-        "confidence": 26.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 26.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -78.757,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 80%)",
-        "availability_note": "",
-        "expected_edge": 0.6,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": 3377656074352805436,
+      "id": 8901453168610644248,
       "homeTeam": "CSA",
       "awayTeam": "Betim",
       "time": "13.07.2026 23:00",
@@ -2042,19 +1381,43 @@
         "draw": 0,
         "away": 1,
         "total": 1,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "D",
+        "W",
+        "D"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "D",
+        "D",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2066,7 +1429,7 @@
       "predictionGrade": null
     },
     {
-      "id": -610904648540958707,
+      "id": -6352042573374349703,
       "homeTeam": "AE Altos U20",
       "awayTeam": "Tiradentes-PI U20",
       "time": "13.07.2026 19:00",
@@ -2088,7 +1451,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 20
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -2100,7 +1463,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2112,7 +1475,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4685634020620747837,
+      "id": -6324533165877448236,
       "homeTeam": "River-PI U20",
       "awayTeam": "Fluminense Piaui U20",
       "time": "13.07.2026 21:00",
@@ -2121,6 +1484,133 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/fluminense-piaui-jsy6PuSi/river-pi-Kzaxl81d/?mid=n1gGrJZj",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "fan_vote_below_threshold:55/65"
+      ],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 1,
+        "total": 1,
+        "winRate": 100
+      },
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "D",
+        "L",
+        "D",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "D",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "D",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 49.0,
+        "exactScore": "1 - 3",
+        "overUnder": "Over 2.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 28,
+        "draw": 17,
+        "away": 55,
+        "votes": 65
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "1",
+        "prob": 30.9,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 12.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 12.0,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 0.75,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 1,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0,
+        "home_key_absences": 0,
+        "away_key_absences": 0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Source consensus: moderate (2/4)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 75%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "D"
+    },
+    {
+      "id": -538379821886835346,
+      "homeTeam": "Barra FC U20",
+      "awayTeam": "Carlos Renaux U20",
+      "time": "13.07.2026 18:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/barra-fc-fV05cJTc/carlos-renaux-6HZXeqSh/?mid=vkcJoYtg",
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -2130,9 +1620,9 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 1,
         "draw": 0,
-        "away": 1,
+        "away": 0,
         "total": 1,
         "winRate": 0
       },
@@ -2146,7 +1636,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2158,249 +1648,53 @@
       "predictionGrade": null
     },
     {
-      "id": 7703568480352435299,
-      "homeTeam": "Barra FC U20",
-      "awayTeam": "Carlos Renaux U20",
-      "time": "13.07.2026 18:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/barra-fc-fV05cJTc/carlos-renaux-6HZXeqSh/?mid=vkcJoYtg",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 1,
-        "winRate": 100
-      },
-      "homeForm": [
-        "L",
-        "W",
-        "L",
-        "D",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.28,
-        "draw": 5.0,
-        "away": 7.5,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": {
-        "home": 82,
-        "draw": 13,
-        "away": 5,
-        "votes": 207
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 13.6,
-        "ev": 0.017,
-        "edge": 0.2,
-        "kelly": 0.1,
-        "confidence": 21.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 21.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -64.525,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 80%)",
-        "availability_note": "",
-        "expected_edge": 0.2,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": 7703568480352435299,
-      "homeTeam": "Barra FC U20",
-      "awayTeam": "Carlos Renaux U20",
+      "id": 5378342391000571326,
+      "homeTeam": "Piracicaba U20",
+      "awayTeam": "Desportivo U20",
       "time": "13.07.2026 18:00",
       "date": "2026-07-13",
       "league": null,
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/desportivo-tnJEvn3R/piracicaba-2kyHO6y2/?mid=nNI6XgcS",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 1,
         "draw": 0,
         "away": 0,
         "total": 1,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "D",
-        "D",
-        "L",
-        "D",
-        "D"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 2.55,
-        "draw": 3.25,
-        "away": 2.35,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 82,
-        "draw": 13,
-        "away": 5,
-        "votes": 207
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 13.6,
-        "ev": 0.017,
-        "edge": 0.2,
-        "kelly": 0.1,
-        "confidence": 21.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 21.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -25.616,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 80%)",
-        "availability_note": "",
-        "expected_edge": 0.2,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 8698118332017437485,
+      "id": 6127020587390618362,
       "homeTeam": "O'Higgins",
       "awayTeam": "Nublense",
       "time": "13.07.2026 00:00",
@@ -2409,121 +1703,45 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/nublense-vVvwgdNn/o-higgins-hYrshGxg/?mid=GQOONwDL",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
+        "base_qualification_failed",
         "match_already_started"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 3,
         "draw": 0,
         "away": 1,
         "total": 4,
-        "winRate": 75
+        "winRate": 25
       },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "D",
-        "D",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "W",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.8,
-        "draw": 3.4,
-        "away": 3.85,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 69,
-        "draw": 6,
-        "away": 25,
-        "votes": 16
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 61.4,
-        "ev": 0.106,
-        "edge": 5.9,
-        "kelly": 3.3,
-        "confidence": 59.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 59.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": 5.844,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.11"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 5.9,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -1395301150188371857,
+      "id": -4449697754925214273,
       "homeTeam": "Ningbo Professional",
       "awayTeam": "Foshan Nanshi",
       "time": "13.07.2026 11:00",
@@ -2532,121 +1750,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/foshan-nanshi-nVRu1xI0/ningbo-professional-Of5vFHsI/?mid=tERxFgnl",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 3,
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 60
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "D",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "D",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.63,
-        "draw": 3.45,
-        "away": 4.6,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 79,
-        "draw": 17,
-        "away": 4,
-        "votes": 784
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 68.3,
-        "ev": 0.113,
-        "edge": 7.0,
-        "kelly": 4.5,
-        "confidence": 67.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 67.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 6.95,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.11",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 7.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5211784161044095173,
+      "id": -8393485608096483128,
       "homeTeam": "Maardu",
       "awayTeam": "Tartu Welco",
       "time": "13.07.2026 16:00",
@@ -2655,59 +1796,148 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/maardu-linnameeskond-2JBESAb4/tartu-jk-welco-d0Ll6LfA/?mid=bZPrhdqn",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold",
-        "fan_vote_below_threshold:59/65"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 3,
         "draw": 0,
         "away": 2,
         "total": 5,
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -7636920242269207811,
+      "homeTeam": "Honka",
+      "awayTeam": "HJS",
+      "time": "13.07.2026 15:30",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/hjs-z90bQJl7/honka-WxHfCw7j/?mid=6R79kRJl",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 0,
+        "total": 5,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -1325731493519313322,
+      "homeTeam": "JyPK K",
+      "awayTeam": "Honka K",
+      "time": "13.07.2026 15:30",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/honka-A5BvUfi6/jypk-dEiGsCXA/?mid=UymOeZdS",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 3,
+        "total": 5,
         "winRate": 60
       },
       "homeForm": [
         "W",
-        "D",
-        "W",
-        "W",
-        "L"
+        "L",
+        "L",
+        "L",
+        "W"
       ],
       "awayForm": [
         "D",
-        "W",
+        "L",
         "W",
         "W",
         "W"
       ],
       "homeFormHome": [
-        "W",
-        "W",
-        "W",
         "L",
-        "W"
+        "W",
+        "W",
+        "W",
+        "L"
       ],
       "awayFormAway": [
         "D",
         "L",
-        "W",
         "L",
+        "W",
         "W"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 5.5,
-        "draw": 4.9,
-        "away": 1.35,
+        "home": 3.5,
+        "draw": 3.6,
+        "away": 1.78,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
         "prediction": "1",
-        "probability": null,
-        "exactScore": null,
+        "probability": 47.0,
+        "exactScore": "3 - 1",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -2715,26 +1945,26 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 24,
-        "draw": 17,
-        "away": 59,
-        "votes": 725
+        "home": 12,
+        "draw": 14,
+        "away": 74,
+        "votes": 562
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
         "pick": "1",
-        "prob": 26.5,
-        "ev": 0.46,
-        "edge": 8.4,
-        "kelly": 2.6,
-        "confidence": 28.0,
-        "dataQuality": 0.73
+        "prob": 28.6,
+        "ev": 0.001,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 25.0,
+        "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 28.0,
+      "confidence": 25.0,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -2747,7 +1977,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 8.318,
+        "market_model_gap": -27.58,
         "skip_reason": null
       },
       "availability": {
@@ -2766,7 +1996,7 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.46"
+          "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high",
@@ -2774,184 +2004,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 8.4,
+        "expected_edge": 0.0,
         "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -5014755797359422033,
-      "homeTeam": "Honka",
-      "awayTeam": "HJS",
-      "time": "13.07.2026 15:30",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/hjs-z90bQJl7/honka-WxHfCw7j/?mid=6R79kRJl",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "D",
-        "L",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "D",
-        "W",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.16,
-        "draw": 6.5,
-        "away": 10.0,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": {
-        "home": 79,
-        "draw": 15,
-        "away": 7,
-        "votes": 860
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 84.9,
-        "ev": -0.016,
-        "edge": -1.4,
-        "kelly": 0.0,
-        "confidence": 61.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 61.0,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.307,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 85%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": -1.4,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": -5798560874798896726,
-      "homeTeam": "JyPK K",
-      "awayTeam": "Honka K",
-      "time": "13.07.2026 15:30",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/honka-A5BvUfi6/jypk-dEiGsCXA/?mid=UymOeZdS",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 0,
-        "draw": 0,
-        "away": 3,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 8198785711422202499,
+      "id": -4224905893137349263,
       "homeTeam": "Breidablik",
       "awayTeam": "Keflavik",
       "time": "13.07.2026 19:15",
@@ -2973,7 +2032,7 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 40
+        "winRate": 20
       },
       "homeForm": [],
       "awayForm": [],
@@ -2985,7 +2044,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2997,7 +2056,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5805465200475091834,
+      "id": -6076098198133184232,
       "homeTeam": "Vestri",
       "awayTeam": "Fylkir",
       "time": "13.07.2026 20:15",
@@ -3006,129 +2065,99 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/fylkir-rLyZtJ9P/vestri-Y9PMInnH/?mid=zaWD8IMa",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "fan_vote_below_threshold:59/65"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
         "home": 0,
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 2774186622650533572,
-      "homeTeam": "Atyrau K",
-      "awayTeam": "Kaspij Aktau K",
-      "time": "13.07.2026 13:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/atyrau-67N8mYDA/kaspij-aktau-ddDZKVfA/?mid=0MAdF3A5",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 1,
-        "winRate": 100
+        "winRate": 80
       },
       "homeForm": [
         "L",
-        "W",
+        "D",
         "D",
         "W",
-        "L"
+        "W"
       ],
       "awayForm": [
+        "W",
         "L",
-        "L",
-        "L",
-        "L",
-        "L"
+        "W",
+        "W",
+        "D"
       ],
       "homeFormHome": [
-        "L",
-        "D",
-        "D",
         "W",
+        "W",
+        "W",
+        "L",
         "L"
       ],
       "awayFormAway": [
-        "L",
+        "W",
         "W",
         "W",
         "W",
         "L"
       ],
       "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 3.2,
+        "draw": 3.7,
+        "away": 1.93,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 49.0,
+        "exactScore": "1 - 3",
+        "overUnder": "Over 2.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": {
-        "home": 12,
-        "draw": 10,
-        "away": 78,
-        "votes": 156
+        "home": 20,
+        "draw": 21,
+        "away": 59,
+        "votes": 1188
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 50.0,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 23.0,
-        "dataQuality": 0.64
+        "pick": "2",
+        "prob": 58.2,
+        "ev": 0.123,
+        "edge": 6.4,
+        "kelly": 3.3,
+        "confidence": 50.0,
+        "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 23.0,
-      "value_bet": false,
+      "confidence": 50.0,
+      "value_bet": true,
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.55,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": true,
         "gemini_available": true,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 6.387,
+        "skip_reason": null
       },
       "availability": {
         "home_days_since_last": null,
@@ -3146,21 +2175,68 @@
       },
       "explanation": {
         "primary_factors": [
+          "Positive expected value: 0.12",
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "3/4 sources available (quality: 55%)",
+        "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 6.4,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "B"
     },
     {
-      "id": -2860655563893036315,
+      "id": 8465805183588822736,
+      "homeTeam": "Atyrau K",
+      "awayTeam": "Kaspij Aktau K",
+      "time": "13.07.2026 13:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/atyrau-67N8mYDA/kaspij-aktau-ddDZKVfA/?mid=0MAdF3A5",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 0,
+        "total": 1,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -1263508219975645363,
       "homeTeam": "Ordabasy K",
       "awayTeam": "Zhetysu K",
       "time": "13.07.2026 13:00",
@@ -3194,7 +2270,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3206,7 +2282,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1573117251825427755,
+      "id": 1629816351345217415,
       "homeTeam": "Tomiris-Turan K",
       "awayTeam": "Shymkent K",
       "time": "13.07.2026 14:00",
@@ -3228,6 +2304,122 @@
         "draw": 0,
         "away": 4,
         "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 5839224654777558212,
+      "homeTeam": "Kaisar K",
+      "awayTeam": "Ulytau K",
+      "time": "13.07.2026 15:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/kaisar-bTTqCJAE/ulytau-IXjclGI7/?mid=nw94DsuI",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 1,
+        "total": 3,
+        "winRate": 33
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -1979704443124277581,
+      "homeTeam": "Zhenis Astana K",
+      "awayTeam": "Szachtar K. K",
+      "time": "13.07.2026 15:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/shakhtar-k-xv2cT3Se/zhenis-astana-6LxWTsw2/?mid=G6Q2VF03",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 0,
+        "total": 1,
         "winRate": 0
       },
       "homeForm": [],
@@ -3240,7 +2432,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3252,241 +2444,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2544386321349745526,
-      "homeTeam": "Kaisar K",
-      "awayTeam": "Ulytau K",
-      "time": "13.07.2026 15:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/kaisar-bTTqCJAE/ulytau-IXjclGI7/?mid=nw94DsuI",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 1,
-        "total": 3,
-        "winRate": 66
-      },
-      "homeForm": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
-      "sofascore": {
-        "home": 76,
-        "draw": 13,
-        "away": 11,
-        "votes": 38
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 62.4,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 45.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 45.0,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.6,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 60%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": -1257264087592737498,
-      "homeTeam": "Zhenis Astana K",
-      "awayTeam": "Szachtar K. K",
-      "time": "13.07.2026 15:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/shakhtar-k-xv2cT3Se/zhenis-astana-6LxWTsw2/?mid=G6Q2VF03",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 1,
-        "winRate": 100
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
-      "sofascore": {
-        "home": 79,
-        "draw": 15,
-        "away": 6,
-        "votes": 150
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 63.6,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 44.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 44.0,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 55%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": 7252885785656790504,
+      "id": -3301811887945893021,
       "homeTeam": "Al Riyadi Abbasiyah",
       "awayTeam": "Racing",
       "time": "13.07.2026 13:00",
@@ -3495,124 +2453,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/al-riyadi-abbasiyah-bFEJzUd3/racing-EgPzlxzo/?mid=dncgXFjo",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold",
-        "fan_vote_below_threshold:57/65"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 3,
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "D",
-        "D"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.16,
-        "draw": 5.5,
-        "away": 12.0,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 57,
-        "draw": 8,
-        "away": 36,
-        "votes": 53
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 11.3,
-        "ev": 0.352,
-        "edge": 2.9,
-        "kelly": 0.8,
-        "confidence": 28.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 28.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -74.907,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.35",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 2.9,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 7263179853716225306,
+      "id": 1294760209467067768,
       "homeTeam": "Independiente F.B.C.",
       "awayTeam": "Tacuary",
       "time": "13.07.2026 20:00",
@@ -3634,19 +2512,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "D",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "D"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "D",
+        "D"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3658,7 +2560,7 @@
       "predictionGrade": null
     },
     {
-      "id": -668654927683877800,
+      "id": -1966017003592103201,
       "homeTeam": "Dep. Capiata",
       "awayTeam": "Atl. Tembetary",
       "time": "13.07.2026 22:30",
@@ -3680,19 +2582,43 @@
         "draw": 0,
         "away": 1,
         "total": 1,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "D",
+        "W",
+        "D",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "D",
+        "L",
+        "D",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "D",
+        "L",
+        "D",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3704,7 +2630,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2879373459140228736,
+      "id": -559913179324465555,
       "homeTeam": "Chelyabinsk",
       "awayTeam": "SKA Chabarowsk",
       "time": "13.07.2026 14:00",
@@ -3738,7 +2664,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3750,7 +2676,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2748662960471950376,
+      "id": -1659092922190425996,
       "homeTeam": "Ural",
       "awayTeam": "Torpedo Moskwa",
       "time": "13.07.2026 14:00",
@@ -3772,7 +2698,7 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 40
+        "winRate": 20
       },
       "homeForm": [],
       "awayForm": [],
@@ -3784,7 +2710,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3796,7 +2722,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7293465597421107517,
+      "id": 3013015115121726660,
       "homeTeam": "Arsienał Tuła",
       "awayTeam": "Tekstilshtik",
       "time": "13.07.2026 16:30",
@@ -3818,7 +2744,7 @@
         "draw": 0,
         "away": 2,
         "total": 4,
-        "winRate": 0
+        "winRate": 50
       },
       "homeForm": [],
       "awayForm": [],
@@ -3830,7 +2756,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3842,7 +2768,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5505445096706294356,
+      "id": -3801729051539081751,
       "homeTeam": "Gaadiidka",
       "awayTeam": "Jeenyo",
       "time": "13.07.2026 12:30",
@@ -3851,115 +2777,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/gaadiidka-nFn7nhoa/jeenyo-hhm3mYVh/?mid=lfiLGwEb",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 4,
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "W",
-        "D",
-        "D",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "D",
-        "D",
-        "L",
-        "D"
-      ],
-      "homeFormHome": [
-        "D",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "D",
-        "L",
-        "D"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 84,
-        "draw": 11,
-        "away": 5,
-        "votes": 62
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 65.5,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 46.0,
-        "dataQuality": 0.64
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 46.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.6,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 60%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 4717680006007393755,
+      "id": 4630009289840499933,
       "homeTeam": "Djurgarden",
       "awayTeam": "Halmstad",
       "time": "13.07.2026 17:00",
@@ -3993,7 +2848,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -4005,124 +2860,54 @@
       "predictionGrade": null
     },
     {
-      "id": -5244844778113027750,
+      "id": 2358738882183921910,
       "homeTeam": "Wietnam",
       "awayTeam": "Gangwon",
-      "time": "13.07.2026 08:00",
+      "time": "13.07.2026 07:00",
       "date": "2026-07-13",
       "league": null,
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/gangwon-A144gewT/vietnam-xAcurtwO/?mid=ITc93WsH",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 5,
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "W",
-        "L",
-        "L",
-        "D"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 80,
-        "draw": 10,
-        "away": 9,
-        "votes": 230
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 69.3,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 38.0,
-        "dataQuality": 0.64
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 38.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.6,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 60%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -2548448634207009286,
+      "id": 275248924408147558,
       "homeTeam": "Gorica (CRO)",
       "awayTeam": "Goztepe (TUR)",
       "time": "13.07.2026 12:00",
@@ -4131,9 +2916,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/goztepe-0MJlDkrA/hnk-gorica-WnmFp9Kg/?mid=nFhCAkFt",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4142,107 +2929,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 60
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "D",
-        "W",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "D",
-        "L",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 3.1,
-        "draw": 3.45,
-        "away": 2.0,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 41.2,
-        "ev": 0.278,
-        "edge": 9.0,
-        "kelly": 3.3,
-        "confidence": 34.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 34.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 8.942,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.28",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": 9.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -5114700093337090398,
+      "id": 6804206008819796901,
       "homeTeam": "Hradec Kralove (CZE)",
       "awayTeam": "Karlsruher (GER)",
       "time": "13.07.2026 12:00",
@@ -4251,9 +2962,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/hradec-kralove-vFXjbHms/karlsruher-EB3q7jbk/?mid=MuVUjKMr",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4262,110 +2975,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "L",
-        "D",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "W",
-        "D",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
-      "forebet": {
-        "prediction": "2",
-        "probability": 49.0,
-        "exactScore": "1 - 3",
-        "overUnder": "Over 2.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 49.3,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 38.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 38.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -841492242903970528,
+      "id": -8822787061037860033,
       "homeTeam": "Värnamo (SWE)",
       "awayTeam": "Naestved (DEN)",
       "time": "13.07.2026 13:00",
@@ -4399,7 +3033,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -4411,7 +3045,7 @@
       "predictionGrade": null
     },
     {
-      "id": 359369419136251106,
+      "id": -5637397324989419919,
       "homeTeam": "Innsbruck (AUT)",
       "awayTeam": "Teplice (CZE)",
       "time": "13.07.2026 13:30",
@@ -4420,9 +3054,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/innsbruck-lpgpkEdJ/teplice-r9XWmtLq/?mid=CSUBUlYA",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4431,102 +3067,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "D",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "L",
-        "W",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 65.3,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 43.0,
-        "dataQuality": 0.55
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 43.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 2455524568181694415,
+      "id": 3242553628673261387,
       "homeTeam": "Zenit (RUS)",
       "awayTeam": "Dynamo Machaczkała (RUS)",
       "time": "13.07.2026 14:00",
@@ -4535,124 +3100,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/dynamo-machaczkala-6T0lbAmI/zenit-st-petersburg-vsXou9m7/?mid=QNroar5K",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 5,
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.38,
-        "draw": 4.3,
-        "away": 7.5,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 79,
-        "draw": 16,
-        "away": 5,
-        "votes": 24137
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 82.2,
-        "ev": 0.134,
-        "edge": 9.7,
-        "kelly": 5.0,
-        "confidence": 76.0,
-        "dataQuality": 0.73
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 76.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 9.736,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 82%",
-          "Positive expected value: 0.13",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 9.7,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "B"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 8417430854171752293,
+      "id": -6349673836382055108,
       "homeTeam": "Wolfsberger (AUT)",
       "awayTeam": "Hradec Kralove (CZE)",
       "time": "13.07.2026 15:30",
@@ -4661,9 +3146,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/hradec-kralove-vFXjbHms/wolfsberger-xKbLXKij/?mid=tnqBSEte",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4672,107 +3159,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "D",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "D",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 2.45,
-        "draw": 3.55,
-        "away": 2.45,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 49.4,
-        "ev": 0.21,
-        "edge": 8.6,
-        "kelly": 3.6,
-        "confidence": 41.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 41.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 8.584,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.21",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": 8.6,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -8313216531913273065,
+      "id": -2259000487947533050,
       "homeTeam": "Lok. Zagrzeb (CRO)",
       "awayTeam": "Epitsentr (UKR)",
       "time": "13.07.2026 16:00",
@@ -4781,9 +3192,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/epitsentr-fsn6KO1s/lok-zagreb-CWwBJ6PA/?mid=2T1evi0N",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4792,100 +3205,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 60
+        "winRate": 0
       },
-      "homeForm": [
-        "D",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "D",
-        "D"
-      ],
-      "homeFormHome": [
-        "D",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "D",
-        "D"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 45.2,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 23.0,
-        "dataQuality": 0.55
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 23.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 970188594890687743,
+      "id": 8462039250887233078,
       "homeTeam": "Neftci Baku (AZE)",
       "awayTeam": "Osijek (CRO)",
       "time": "13.07.2026 16:00",
@@ -4894,9 +3238,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/neftci-baku-d0eNnarc/osijek-448T3rTI/?mid=K2mASc7r",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4905,102 +3251,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 60
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 52.9,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 27.0,
-        "dataQuality": 0.55
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 27.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 3625494790488592832,
+      "id": -3792111549987196169,
       "homeTeam": "Sigma Ołomuniec (CZE)",
       "awayTeam": "Al-Ahli Dubai (UAE)",
       "time": "13.07.2026 16:00",
@@ -5009,9 +3284,11 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/shabab-al-ahli-dubai-EiQ5g3JL/sigma-olomouc-drA4fSL4/?mid=MVmZGz9r",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -5020,107 +3297,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "D",
-        "W",
-        "D",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "D",
-        "L",
-        "D",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 2.05,
-        "draw": 3.55,
-        "away": 2.8,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 61.7,
-        "ev": 0.265,
-        "edge": 12.9,
-        "kelly": 5.0,
-        "confidence": 61.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 61.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 12.92,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.27",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": 12.9,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 2192148884982429388,
+      "id": 1052697857634760006,
       "homeTeam": "Breitenrain (SUI)",
       "awayTeam": "Besa Biel/Bienne (SUI)",
       "time": "13.07.2026 16:30",
@@ -5142,6 +3343,76 @@
         "draw": 0,
         "away": 1,
         "total": 1,
+        "winRate": 100
+      },
+      "homeForm": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 8252152307599559347,
+      "homeTeam": "Gloggnitz (AUT)",
+      "awayTeam": "Wiener Neustadt (AUT)",
+      "time": "13.07.2026 17:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/gloggnitz-zHQodIQP/wiener-neustadt-4bTx6ybm/?mid=YehVELG6",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 0,
+        "total": 2,
         "winRate": 0
       },
       "homeForm": [],
@@ -5154,7 +3425,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5166,133 +3437,7 @@
       "predictionGrade": null
     },
     {
-      "id": 216348895158283533,
-      "homeTeam": "Gloggnitz (AUT)",
-      "awayTeam": "Wiener Neustadt (AUT)",
-      "time": "13.07.2026 17:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/gloggnitz-zHQodIQP/wiener-neustadt-4bTx6ybm/?mid=YehVELG6",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 0,
-        "total": 2,
-        "winRate": 100
-      },
-      "homeForm": [
-        "D",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "D"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.58,
-        "draw": 4.2,
-        "away": 4.2,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": null,
-        "exactScore": null,
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 63.9,
-        "ev": 0.009,
-        "edge": 0.6,
-        "kelly": 0.4,
-        "confidence": 44.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 44.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": 0.609,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
-        "availability_note": "",
-        "expected_edge": 0.6,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": 3782864391492497108,
+      "id": -1391372379271008348,
       "homeTeam": "Bradford PA (ENG)",
       "awayTeam": "Sheffield (ENG)",
       "time": "13.07.2026 18:30",
@@ -5301,115 +3446,44 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/bradford-pa-0SCEaC65/sheffield-OAwCqUz2/?mid=jqJ0HTWQ",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 2,
         "draw": 0,
         "away": 0,
         "total": 2,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "D",
-        "D",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "D",
-        "W",
-        "W",
-        "D",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
-      "sofascore": {
-        "home": 67,
-        "draw": null,
-        "away": 33,
-        "votes": 3
-      },
-      "sofascoreFound": true,
+      "sofascore": null,
+      "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 57.3,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 38.0,
-        "dataQuality": 0.64
-      },
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 38.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 55%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5954172377910809461,
+      "id": -5043488288884961656,
       "homeTeam": "Solothurn (SUI)",
       "awayTeam": "Prishtina Bern (SUI)",
       "time": "13.07.2026 18:30",
@@ -5431,7 +3505,7 @@
         "draw": 0,
         "away": 0,
         "total": 2,
-        "winRate": 50
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -5443,7 +3517,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5455,7 +3529,7 @@
       "predictionGrade": null
     },
     {
-      "id": -249003399515262810,
+      "id": 4069533491208227799,
       "homeTeam": "Boldmere (ENG)",
       "awayTeam": "Alvechurch (ENG)",
       "time": "13.07.2026 18:45",
@@ -5477,19 +3551,43 @@
         "draw": 0,
         "away": 2,
         "total": 2,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "L",
+        "D",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "D",
+        "D",
+        "L",
+        "W",
+        "D"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "D",
+        "D",
+        "L",
+        "L",
+        "D"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5501,7 +3599,7 @@
       "predictionGrade": null
     },
     {
-      "id": -498565131216601790,
+      "id": -3947571883979264379,
       "homeTeam": "USA U20 K",
       "awayTeam": "Kolumbia U20 K",
       "time": "13.07.2026 00:00",
@@ -5510,85 +3608,137 @@
       "country": "",
       "sport": "football",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/kolumbia-xMRNIDop/usa-00zdNgwT/?mid=Kv9QrD1c",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
+        "base_qualification_failed",
         "match_already_started"
       ],
-      "channelSkipWarnings": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
       "h2h": {
         "home": 2,
         "draw": 0,
         "away": 1,
         "total": 3,
-        "winRate": 66
+        "winRate": 33
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -4688080103413836136,
+      "homeTeam": "Bochum K (GER)",
+      "awayTeam": "Kolonia K (GER)",
+      "time": "13.07.2026 15:30",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/bochum-K8TgIZLj/kolonia-OAHe2v6S/?mid=dp4bqse3",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold"
+      ],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 3,
+        "total": 3,
+        "winRate": 100
       },
       "homeForm": [
         "L",
-        "D",
-        "W",
-        "W",
-        "D"
+        "L",
+        "L",
+        "L",
+        "L"
       ],
       "awayForm": [
         "W",
-        "L",
         "W",
-        "D",
+        "W",
+        "L",
         "L"
       ],
       "homeFormHome": [
         "L",
-        "D",
-        "W",
-        "D",
-        "W"
+        "L",
+        "L",
+        "L",
+        "D"
       ],
       "awayFormAway": [
         "W",
-        "W",
-        "W",
-        "D",
+        "L",
+        "L",
+        "L",
         "W"
       ],
-      "formAdvantage": false,
-      "odds": null,
+      "formAdvantage": true,
+      "odds": {
+        "home": 8.0,
+        "draw": 5.0,
+        "away": 1.25,
+        "bookmaker": "Pinnacle"
+      },
       "forebet": null,
       "sofascore": {
-        "home": 93,
-        "draw": 5,
-        "away": 2,
-        "votes": 56
+        "home": 28,
+        "draw": null,
+        "away": 72,
+        "votes": 394
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 49.4,
-        "ev": -999.0,
-        "edge": 0.0,
+        "pick": "2",
+        "prob": 78.3,
+        "ev": -0.021,
+        "edge": -1.7,
         "kelly": 0.0,
-        "confidence": 23.0,
-        "dataQuality": 0.64
+        "confidence": 45.0,
+        "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 23.0,
+      "confidence": 90,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 3,
-        "quality_score": 0.6,
+        "quality_score": 0.85,
         "h2h_available": true,
         "forebet_available": false,
         "sofascore_available": true,
         "gemini_available": true,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "consensus_strength": "moderate",
+        "market_model_gap": -1.7,
+        "skip_reason": null
       },
       "availability": {
         "home_days_since_last": null,
@@ -5605,66 +3755,23 @@
         "away_key_absences": 0
       },
       "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+        "primary_factors": [
+          "Model probability: 78%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
         ],
-        "data_quality_note": "3/4 sources available (quality: 60%)",
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 85%)",
         "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
+        "expected_edge": -1.7,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "B"
     },
     {
-      "id": 1393478877901083420,
-      "homeTeam": "Bochum K (GER)",
-      "awayTeam": "Kolonia K (GER)",
-      "time": "13.07.2026 15:30",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/bochum-K8TgIZLj/kolonia-OAHe2v6S/?mid=dp4bqse3",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 0,
-        "draw": 0,
-        "away": 3,
-        "total": 3,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 5285423106019066690,
+      "id": -6814343084748822642,
       "homeTeam": "Cerro Largo",
       "awayTeam": "Defensor Sp.",
       "time": "13.07.2026 22:00",
@@ -5698,7 +3805,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5710,7 +3817,7 @@
       "predictionGrade": null
     },
     {
-      "id": -632213234618679788,
+      "id": 6374670094684998966,
       "homeTeam": "La Luz",
       "awayTeam": "Tacuarembo",
       "time": "13.07.2026 18:00",
@@ -5744,7 +3851,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5756,7 +3863,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1649127922011334057,
+      "id": -2717630972333997413,
       "homeTeam": "Paysandu FC",
       "awayTeam": "Fenix",
       "time": "13.07.2026 22:00",
@@ -5790,7 +3897,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5802,7 +3909,7 @@
       "predictionGrade": null
     },
     {
-      "id": 447452743863803231,
+      "id": 5422270378565516929,
       "homeTeam": "San Jose Earthquakes II",
       "awayTeam": "Tacoma Defiance",
       "time": "13.07.2026 00:00",
@@ -5825,19 +3932,42 @@
         "draw": 0,
         "away": 3,
         "total": 3,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "D",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5849,7 +3979,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2526192645811695321,
+      "id": 4229648497442546551,
       "homeTeam": "Austin FC II",
       "awayTeam": "Minnesota 2",
       "time": "13.07.2026 00:30",
@@ -5872,19 +4002,42 @@
         "draw": 0,
         "away": 3,
         "total": 4,
-        "winRate": 25
+        "winRate": 75
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "D",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5896,7 +4049,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6637932501854794017,
+      "id": -1763142953362660731,
       "homeTeam": "Ballard",
       "awayTeam": "Snohomish United",
       "time": "13.07.2026 00:00",
@@ -5931,7 +4084,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5943,7 +4096,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2820652318395687943,
+      "id": -1227328277140554470,
       "homeTeam": "Academica SC",
       "awayTeam": "Glens SC",
       "time": "13.07.2026 01:00",
@@ -5962,10 +4115,81 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 1,
         "draw": 0,
-        "away": 5,
+        "away": 4,
         "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "D",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "D",
+        "L",
+        "W"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -8583214898558468788,
+      "homeTeam": "San Juan",
+      "awayTeam": "Marin",
+      "time": "13.07.2026 02:00",
+      "date": "2026-07-13",
+      "league": null,
+      "country": "",
+      "sport": "football",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/marin-pIsHWAem/san-juan-O49kQeiB/?mid=2DqRrnA6",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 0,
+        "total": 4,
         "winRate": 0
       },
       "homeForm": [],
@@ -5978,7 +4202,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5988,138 +4212,6 @@
       "availability": null,
       "explanation": null,
       "predictionGrade": null
-    },
-    {
-      "id": -1896475081120922525,
-      "homeTeam": "San Juan",
-      "awayTeam": "Marin",
-      "time": "13.07.2026 02:00",
-      "date": "2026-07-13",
-      "league": null,
-      "country": "",
-      "sport": "football",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/marin-pIsHWAem/san-juan-O49kQeiB/?mid=2DqRrnA6",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "fan_vote_below_threshold:62/65",
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 0,
-        "total": 3,
-        "winRate": 66
-      },
-      "homeForm": [
-        "W",
-        "L",
-        "D",
-        "D",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "D"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "L",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "W",
-        "L",
-        "D"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 2.0,
-        "draw": 4.1,
-        "away": 2.6,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 49.0,
-        "exactScore": "3 - 1",
-        "overUnder": "Over 2.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": {
-        "home": 25,
-        "draw": 12,
-        "away": 62,
-        "votes": 8
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 54.1,
-        "ev": 0.083,
-        "edge": 4.1,
-        "kelly": 2.1,
-        "confidence": 46.0,
-        "dataQuality": 0.82
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 46.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": 4.1,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0,
-        "home_key_absences": 0,
-        "away_key_absences": 0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "4/4 sources available (quality: 100%)",
-        "availability_note": "",
-        "expected_edge": 4.1,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
     }
   ]
 }
