@@ -32,7 +32,12 @@ on:
         default: '180'
         type: string
       optimise:
-        description: 'Search for better source weights'
+        description: 'Search for better source weights (shared across sports)'
+        required: false
+        default: false
+        type: boolean
+      optimise_per_sport:
+        description: 'Calibrate a separate weight set per sport (needs enough settled rows)'
         required: false
         default: false
         type: boolean
@@ -113,6 +118,9 @@ jobs:
           EXTRA=""
           if [ "${{ github.event.inputs.optimise }}" = "true" ]; then
             EXTRA="--optimise --iterations 40"
+          fi
+          if [ "${{ github.event.inputs.optimise_per_sport }}" = "true" ]; then
+            EXTRA="$EXTRA --optimise-per-sport --iterations 40"
           fi
           if [ "${{ github.event.inputs.save_weights }}" = "true" ]; then
             EXTRA="$EXTRA --save"

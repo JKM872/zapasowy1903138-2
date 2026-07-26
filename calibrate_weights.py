@@ -475,6 +475,9 @@ def main() -> int:
                     help='Persist optimised weights to outputs/scoring_calibration.json')
     ap.add_argument('--per-sport', action='store_true',
                     help='Report every sport separately instead of one blend')
+    ap.add_argument('--optimise-per-sport', action='store_true',
+                    help='Calibrate a separate weight set for each sport that '
+                         'has enough settled rows')
     ap.add_argument('--min-rows', type=int, default=30,
                     help='Below this row count a sport is flagged as unreliable')
     ap.add_argument('--json', action='store_true', help='Emit JSON only')
@@ -555,9 +558,119 @@ def main() -> int:
                     weights, tuned_test['model'])
                 print(f"\n  Saved to {FootballScoringEngine.CALIBRATION_PATH}")
 
+    if args.optimise_per_sport:
+        per_sport_weights, report = optimise_per_sport(
+            rows, iterations=args.iterations, seed=args.seed,
+            test_frac=args.test_frac, min_rows=args.min_rows,
+            simulated=bool(args.simulate),
+        )
+        result['per_sport_weights'] = per_sport_weights
+        result['per_sport_optimisation'] = report
+
+        if args.save and per_sport_weights:
+            if args.simulate:
+                print("\n  Refusing to save weights tuned on SIMULATED data.")
+            else:
+                _save_per_sport(per_sport_weights, report)
+
     if args.json:
         print(json.dumps(result, indent=2))
     return 0
+
+
+def optimise_per_sport(rows: List[Dict[str, Any]], *, iterations: int,
+                       seed: int, test_frac: float, min_rows: int,
+                       simulated: bool = False,
+                       ) -> Tuple[Dict[str, Dict[str, float]], Dict[str, Any]]:
+    """Calibrate one weight set per sport, keeping only those that generalise.
+
+    Each sport is split into train/test independently. A tuned set is accepted
+    only when it improves BOTH log-loss and Brier on that sport's held-out
+    rows; otherwise the sport keeps the shared defaults. Sports with fewer than
+    *min_rows* settled matches are skipped outright — tuning ten weights on a
+    handful of games fits noise, not football.
+    """
+    by_sport: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        by_sport.setdefault((row.get('sport') or 'football').lower(), []).append(row)
+
+    accepted: Dict[str, Dict[str, float]] = {}
+    report: Dict[str, Any] = {}
+
+    print(f"\n{'=' * 72}")
+    print("  PER-SPORT WEIGHT CALIBRATION")
+    print(f"{'=' * 72}")
+
+    for sport, sport_rows in sorted(by_sport.items(), key=lambda kv: -len(kv[1])):
+        if len(sport_rows) < min_rows:
+            print(f"  {sport:<13} {len(sport_rows):>5} rows — skipped (need {min_rows})")
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'too_few_rows'}
+            continue
+
+        rng = random.Random(seed)
+        shuffled = list(sport_rows)
+        rng.shuffle(shuffled)
+        cut = int(len(shuffled) * (1.0 - test_frac))
+        train, test = shuffled[:cut], shuffled[cut:]
+        if not train or not test:
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'split_too_small'}
+            continue
+
+        print(f"\n  {sport} — {len(train)} train / {len(test)} test")
+        weights, _train_loss = optimise_weights(
+            train, iterations=iterations, seed=seed, verbose=False)
+
+        before = evaluate_dataset(test)
+        after = evaluate_dataset(test, weights=weights)
+        improved = (after['model']['log_loss'] < before['model']['log_loss']
+                    and after['model']['brier'] <= before['model']['brier'])
+
+        print(f"    default : brier {before['model']['brier']:.4f}  "
+              f"ll {before['model']['log_loss']:.4f}")
+        print(f"    tuned   : brier {after['model']['brier']:.4f}  "
+              f"ll {after['model']['log_loss']:.4f}"
+              f"   -> {'ACCEPTED' if improved else 'rejected'}")
+
+        report[sport] = {
+            'n_rows': len(sport_rows),
+            'status': 'accepted' if improved else 'rejected',
+            'test_default': before['model'],
+            'test_tuned': after['model'],
+        }
+        if improved:
+            accepted[sport] = weights
+
+    if accepted:
+        print(f"\n  Accepted per-sport weights for: {', '.join(sorted(accepted))}")
+    else:
+        print("\n  No sport gained a reliable improvement — keeping shared weights.")
+    print(f"{'=' * 72}\n")
+
+    return accepted, report
+
+
+def _save_per_sport(per_sport: Dict[str, Dict[str, float]],
+                    report: Dict[str, Any]) -> None:
+    """Merge per-sport weights into the calibration file, keeping globals."""
+    path = FootballScoringEngine.CALIBRATION_PATH
+    existing: Dict[str, Any] = {}
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                existing = json.load(fh)
+        except Exception:
+            existing = {}
+
+    existing.setdefault('weights', dict(FootballScoringEngine.DEFAULT_WEIGHTS))
+    existing['per_sport'] = {**existing.get('per_sport', {}), **per_sport}
+    existing['per_sport_metrics'] = report
+    from datetime import datetime
+    existing['calibrated_at'] = datetime.now().isoformat()
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as fh:
+        json.dump(existing, fh, indent=2)
+    print(f"  Saved per-sport weights to {path}")
 
 
 if __name__ == '__main__':

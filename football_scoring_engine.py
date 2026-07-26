@@ -998,6 +998,14 @@ class FootballScoringEngine:
         'poisson':      0.08,
     }
 
+    # Per-sport weight overrides, filled by calibration on settled results.
+    # Empty by default: every sport uses DEFAULT_WEIGHTS until there is
+    # evidence that a different mix scores better for it. Sports differ in
+    # which sources even exist (baseball has no odds, tennis rarely has H2H),
+    # so one shared mix cannot be right everywhere — but guessing a per-sport
+    # mix without measurement would be worse than the shared one.
+    SPORT_WEIGHT_OVERRIDES: Dict[str, Dict[str, float]] = {}
+
     CALIBRATION_PATH = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         'outputs', 'scoring_calibration.json',
@@ -1005,21 +1013,60 @@ class FootballScoringEngine:
 
     def __init__(self, calibration_path: str | None = None):
         self.weights = self.DEFAULT_WEIGHTS.copy()
+        self.sport_weights: Dict[str, Dict[str, float]] = {
+            sport: dict(w) for sport, w in self.SPORT_WEIGHT_OVERRIDES.items()
+        }
         self.extractor = FeatureExtractor()
         self._load_calibration(calibration_path or self.CALIBRATION_PATH)
 
     # ------------------------------------------------------------------
     def _load_calibration(self, path: str):
-        if os.path.isfile(path):
-            try:
-                with open(path, 'r') as fh:
-                    data = json.load(fh)
-                saved_w = data.get('weights', {})
-                for k in self.weights:
-                    if k in saved_w:
+        """Load global and per-sport weights from the calibration file.
+
+        Expected shape::
+
+            {"weights": {...},
+             "per_sport": {"football": {...}, "basketball": {...}}}
+
+        Unknown keys are ignored and any malformed entry is skipped, so a bad
+        calibration file can never break scoring.
+        """
+        if not os.path.isfile(path):
+            return
+        try:
+            with open(path, 'r') as fh:
+                data = json.load(fh)
+        except Exception:
+            return
+
+        saved_w = data.get('weights', {})
+        if isinstance(saved_w, dict):
+            for k in self.weights:
+                if k in saved_w:
+                    try:
                         self.weights[k] = float(saved_w[k])
-            except Exception:
-                pass
+                    except (TypeError, ValueError):
+                        pass
+
+        per_sport = data.get('per_sport', {})
+        if isinstance(per_sport, dict):
+            for sport, weights in per_sport.items():
+                if not isinstance(weights, dict):
+                    continue
+                merged = self.weights.copy()
+                for k in merged:
+                    if k in weights:
+                        try:
+                            merged[k] = float(weights[k])
+                        except (TypeError, ValueError):
+                            pass
+                self.sport_weights[str(sport).lower()] = merged
+
+    # ------------------------------------------------------------------
+    def weights_for_sport(self, sport: Optional[str]) -> Dict[str, float]:
+        """Return the weight set to use for *sport* (falls back to global)."""
+        key = (sport or 'football').lower()
+        return self.sport_weights.get(key, self.weights)
 
     # ------------------------------------------------------------------
     def score_match(self, match: Dict) -> ScoredMatch:
@@ -1031,7 +1078,8 @@ class FootballScoringEngine:
         sources_draw: List[Tuple[float, float]] = []
         sources_away: List[Tuple[float, float]] = []
 
-        w = self.weights
+        # Weights may be sport-specific once calibration has evidence for it.
+        w = self.weights_for_sport(match.get('sport'))
 
         # H2H — now boosted by goal differential (margin of victory) and
         # using outcome-resolved draw rates (v3) instead of a flat heuristic.
