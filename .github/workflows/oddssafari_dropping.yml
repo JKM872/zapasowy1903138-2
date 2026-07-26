@@ -1,17 +1,22 @@
 name: OddsSafari Dropping Odds Pipeline
 
-# Independent of other scrapers. Runs daily at 10:00 UTC which equals
-# 12:00 Europe/Warsaw in CEST (summer). During CET (winter) the same cron
-# fires at 11:00 local time; GitHub Actions cron does not support timezones
-# natively. Trigger manually via workflow_dispatch to adjust when needed.
+# Independent of other scrapers. Runs daily at 12:00 Europe/Warsaw all year.
+# GitHub cron has no timezone support, so we fire at both 10:00 UTC (= 12:00
+# CEST, summer) and 11:00 UTC (= 12:00 CET, winter) and the "Skip off-schedule
+# run" step below drops whichever fire is not local noon.
 #
-# Per-sport matrix split (6 jobs running in parallel) — football, basketball,
-# tennis, hockey, handball, volleyball — each producing its own JSON
-# artifact and email. Cuts runtime ~6x vs a single sequential job.
+# Per-sport matrix split (9 jobs running in parallel) — football, basketball,
+# tennis, hockey, handball, volleyball, esports, baseball, rugby — each
+# producing its own JSON artifact and email. Cuts runtime vs a sequential job.
+#
+# Qualifying odds are per-sport (see SPORT_ODDS_RANGE in
+# oddssafari_dropping_scraper.py): football 1.80–2.50, handball and hockey
+# 1.60–2.50, every other sport 1.35–2.50. Outside its range = skipped.
 
 on:
   schedule:
     - cron: '0 10 * * *'
+    - cron: '0 11 * * *'
   workflow_dispatch:
     inputs:
       date:
@@ -20,14 +25,19 @@ on:
         default: ''
         type: string
       min_odds:
-        description: 'Lower bound of qualifying current odds (inclusive)'
+        description: 'Override min current odds (empty = per-sport: football 1.80, handball/hockey 1.60, others 1.35)'
         required: false
-        default: '1.35'
+        default: ''
         type: string
       max_odds:
-        description: 'Upper bound of qualifying current odds (inclusive)'
+        description: 'Override max current odds (empty = per-sport: 2.50)'
         required: false
-        default: '2.20'
+        default: ''
+        type: string
+      max_enrich:
+        description: 'Max events enriched with form/H2H (biggest drops first, 0 = all)'
+        required: false
+        default: '0'
         type: string
       sport:
         description: 'Run only one sport (all = run every sport in matrix)'
@@ -42,6 +52,9 @@ on:
           - hockey
           - handball
           - volleyball
+          - esports
+          - baseball
+          - rugby
       dry_run:
         description: 'Skip Livesport enrichment (scrape OddsSafari only)'
         required: false
@@ -66,7 +79,7 @@ jobs:
       fail-fast: false
       max-parallel: 6
       matrix:
-        sport: [football, basketball, tennis, hockey, handball, volleyball]
+        sport: [football, basketball, tennis, hockey, handball, volleyball, esports, baseball, rugby]
 
     services:
       flaresolverr:
@@ -78,16 +91,28 @@ jobs:
           CAPTCHA_SOLVER: none
 
     steps:
-      - name: Skip non-selected sports
+      - name: Skip non-selected sports / off-schedule run
         id: skip-check
         run: |
+          SKIP=false
+
+          # Two crons cover both DST offsets; keep only the one that is
+          # actually 12:00 in Europe/Warsaw. Manual runs always proceed.
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            LOCAL_HOUR=$(TZ='Europe/Warsaw' date +%H)
+            if [ "$LOCAL_HOUR" != "12" ]; then
+              echo "Skipping: local Europe/Warsaw hour is $LOCAL_HOUR, not 12"
+              SKIP=true
+            fi
+          fi
+
           REQUESTED="${{ github.event.inputs.sport || 'all' }}"
           if [ "$REQUESTED" != "all" ] && [ "$REQUESTED" != "${{ matrix.sport }}" ]; then
-            echo "skip=true" >> $GITHUB_OUTPUT
             echo "Skipping ${{ matrix.sport }} (user requested $REQUESTED)"
-          else
-            echo "skip=false" >> $GITHUB_OUTPUT
+            SKIP=true
           fi
+
+          echo "skip=$SKIP" >> $GITHUB_OUTPUT
 
       - name: Checkout code
         if: steps.skip-check.outputs.skip != 'true'
@@ -183,18 +208,22 @@ jobs:
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
         run: |
           TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
-          MIN_ODDS="${{ github.event.inputs.min_odds || '1.35' }}"
-          MAX_ODDS="${{ github.event.inputs.max_odds || '2.20' }}"
+          MIN_ODDS="${{ github.event.inputs.min_odds }}"
+          MAX_ODDS="${{ github.event.inputs.max_odds }}"
+          MAX_ENRICH="${{ github.event.inputs.max_enrich || '0' }}"
+
+          # Empty bounds => the pipeline applies its per-sport ranges.
           EXTRA=""
+          if [ -n "$MIN_ODDS" ]; then EXTRA="$EXTRA --min-odds $MIN_ODDS"; fi
+          if [ -n "$MAX_ODDS" ]; then EXTRA="$EXTRA --max-odds $MAX_ODDS"; fi
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            EXTRA="--dry-run"
+            EXTRA="$EXTRA --dry-run"
           fi
-          echo "Running ${{ matrix.sport }} pipeline for $TARGET_DATE (odds ${MIN_ODDS}-${MAX_ODDS})"
+          echo "Running ${{ matrix.sport }} pipeline for $TARGET_DATE (odds: ${MIN_ODDS:-per-sport}-${MAX_ODDS:-per-sport})"
           python oddssafari_dropping_pipeline.py \
             --date "$TARGET_DATE" \
             --sport "${{ matrix.sport }}" \
-            --min-odds "$MIN_ODDS" \
-            --max-odds "$MAX_ODDS" \
+            --max-enrich "$MAX_ENRICH" \
             --headless \
             $EXTRA
 
@@ -220,7 +249,8 @@ jobs:
             --from-email "$EMAIL_SENDER" \
             --password "$EMAIL_PASSWORD" \
             --provider gmail \
-            --sport "${{ matrix.sport }}"
+            --sport "${{ matrix.sport }}" \
+            --min-recent-wins 0
 
       - name: Summary (${{ matrix.sport }})
         if: steps.skip-check.outputs.skip != 'true' && always()
