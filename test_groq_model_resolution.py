@@ -209,3 +209,62 @@ class TestCallRetriesOnDecommissionedModel:
 
         assert seen['model'] == 'llama-3.3-70b-versatile'
 
+
+
+class TestPinnedRetiredModel:
+    """A pin must not be able to lock the client onto a dead model."""
+
+    def test_pinned_retired_model_is_ignored(self, monkeypatch):
+        monkeypatch.setenv('GROQ_MODEL', 'mixtral-8x7b-32768')
+        with patch('requests.get', return_value=_models_response(
+                ['llama-3.3-70b-versatile'])):
+            assert gc.resolve_model('key') == 'llama-3.3-70b-versatile'
+
+    def test_force_overrides_a_valid_pin(self, monkeypatch):
+        # After a decommission response the caller re-resolves with force=True;
+        # returning the pin again would retry the same dead ID forever.
+        monkeypatch.setenv('GROQ_MODEL', 'some-model-that-just-died')
+        with patch('requests.get', return_value=_models_response(
+                ['llama-3.1-8b-instant'])):
+            assert gc.resolve_model('key', force=True) == 'llama-3.1-8b-instant'
+
+    def test_valid_pin_still_respected_normally(self, monkeypatch):
+        monkeypatch.setenv('GROQ_MODEL', 'llama-3.1-8b-instant')
+        with patch('requests.get', return_value=_models_response(['x'])):
+            assert gc.resolve_model('key') == 'llama-3.1-8b-instant'
+
+    def test_retired_ids_are_filtered_from_discovery(self):
+        # Even if the API were to list a retired model, never select it.
+        with patch('requests.get', return_value=_models_response(
+                ['mixtral-8x7b-32768', 'llama-3.1-8b-instant'])):
+            assert gc.resolve_model('key') == 'llama-3.1-8b-instant'
+
+
+class TestLiveContract:
+    """Documents the exact API behaviour verified against the real endpoint.
+
+    Checked with a live key on 2026-07-27:
+      * GET /openai/v1/models returned 15 models; mixtral-8x7b-32768 absent.
+      * A chat call with the retired ID returned HTTP 400 and the message
+        "The model `mixtral-8x7b-32768` has been decommissioned and is no
+        longer supported."
+    """
+
+    def test_real_decommission_message_is_recognised(self):
+        body = ('{"error":{"message":"The model `mixtral-8x7b-32768` has been '
+                'decommissioned and is no longer supported. Please refer to '
+                'https://console.groq.com/docs/deprecations for a '
+                'recommendation on which model to use instead.","type":'
+                '"invalid_request_error"}}')
+        assert gc.is_decommissioned_error(400, body) is True
+
+    def test_rate_limit_is_not_treated_as_decommission(self):
+        assert gc.is_decommissioned_error(429, 'Rate limit reached') is False
+
+    def test_server_error_is_not_treated_as_decommission(self):
+        assert gc.is_decommissioned_error(500, 'internal error') is False
+
+    def test_models_seen_live_are_in_the_preference_list(self):
+        # llama-3.3-70b-versatile was live and is our first preference, so the
+        # happy path needs no fallback.
+        assert gc.MODEL_PREFERENCES[0] == 'llama-3.3-70b-versatile'

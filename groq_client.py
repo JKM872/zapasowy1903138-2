@@ -70,8 +70,13 @@ def api_key() -> Optional[str]:
 
 
 def list_available_models(key: Optional[str] = None, timeout: int = 10) -> List[str]:
-    """Return model IDs usable by *key*, or [] when the lookup fails."""
-    key = key or api_key()
+    """Return model IDs usable by *key*, or [] when the lookup fails.
+
+    ``None`` means "find a key yourself"; an empty string means "there is no
+    key" and must NOT silently fall back to the environment.
+    """
+    if key is None:
+        key = api_key()
     if not key:
         return []
     try:
@@ -101,7 +106,10 @@ def resolve_model(key: Optional[str] = None, force: bool = False) -> str:
     global _resolved_model
 
     pinned = os.environ.get('GROQ_MODEL')
-    if pinned:
+    # An explicit pin wins — except on a forced re-resolution, which only
+    # happens after the API rejected that very model as decommissioned.
+    # Honouring the pin there would retry the same dead ID forever.
+    if pinned and not force and pinned not in RETIRED_MODELS:
         return pinned
 
     if _resolved_model and not force:
