@@ -1178,8 +1178,9 @@ def scrape_and_send_email(
             print(f"\n📧 KROK 3/4: Wysyłanie powiadomienia email...")
             print("="*70)
             
-            # --- 1 mail per sport (all grades A-F) ---
+            # --- 1 mail per sport, tylko tier premium (Grade A/B) ---
             send_split_emails_by_sport(
+                grade_filter={'A', 'B'},
                 csv_file=outfn,
                 to_email=to_email,
                 from_email=from_email,

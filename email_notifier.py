@@ -1777,18 +1777,21 @@ def send_split_emails_by_sport(
     include_sorted_odds: bool = True,
     odds_limit: int = 15,
     min_odds_threshold: float = 0.0,
+    grade_filter: Optional[set] = None,
     date: Optional[str] = None,
 ):
     """
-    Wysyła 1 mail dla każdego sportu ze wszystkimi kwalifikującymi
-    się meczami (Grade A-F) w jednej wiadomości.
+    Wysyła 1 mail dla każdego sportu z kwalifikującymi się meczami.
 
     Filtry:
       - brak kursów → pominięty
       - per-sport progi kursowe (AND — oba kursy >= progu sportu)
+      - grade_filter: zbiór dozwolonych `prediction_grade` (np. {'A','B'}).
+        None = wszystkie grade'y (legacy).
     """
+    _grade_label = '/'.join(sorted(grade_filter)) if grade_filter else 'all grades'
     print("=" * 70)
-    print("📧 TRYB: 1 mail na każdy sport (all grades)")
+    print(f"📧 TRYB: 1 mail na każdy sport ({_grade_label})")
     print("   Progi kursowe per sport (AND)")
     print("=" * 70)
 
@@ -1873,6 +1876,20 @@ def send_split_emails_by_sport(
         qualified = qualified[qualified.apply(_above, axis=1)]
         print(f"   Pominięto {before - len(qualified)} meczów poniżej progu kursowego per sport")
 
+    # --- filtr: grade (np. tylko A/B) ---
+    if grade_filter is not None:
+        before = len(qualified)
+        if 'prediction_grade' in qualified.columns:
+            qualified = qualified[qualified['prediction_grade'].apply(
+                lambda g: (g if isinstance(g, str) else 'F').strip().upper() in grade_filter
+            )]
+        else:
+            # Brak kolumny grade — nie da się potwierdzić tieru, więc nic nie wysyłamy
+            qualified = qualified.iloc[0:0]
+            print("   ⚠️ Brak kolumny 'prediction_grade' — nie mogę potwierdzić Grade A/B")
+        print(f"   🏅 Grade filter [{'/'.join(sorted(grade_filter))}]: "
+              f"{len(qualified)} meczów (pominięto {before - len(qualified)})")
+
     # Data dla nazewnictwa manifestu MUSI być spójna z `--date` użytym przy
     # scrapowaniu — `Check Results` szuka plików po tej dacie. Wcześniej brana
     # była z `datetime.now()`, co przy uruchomieniach o północy / w innej
@@ -1941,7 +1958,8 @@ def send_split_emails_by_sport(
             for sport, matches_list in sport_payloads.items():
                 emoji = SPORT_EMOJI.get(sport, '🏆')
                 label = SPORT_LABEL.get(sport, sport.capitalize())
-                subj = f"{emoji} {label}: {len(matches_list)} meczów — {date}"
+                _tier = f" [Grade {'/'.join(sorted(grade_filter))}]" if grade_filter else ''
+                subj = f"{emoji} {label}{_tier}: {len(matches_list)} meczów — {date}"
                 html = create_html_email(matches_list, date, sort_by=sort_by,
                                          include_sorted_odds=include_sorted_odds,
                                          odds_limit=odds_limit)
@@ -1983,8 +2001,16 @@ def main():
                        help='📉 Minimalny kurs — mecze z kursem poniżej są pomijane (np. 1.19)')
     parser.add_argument('--split-emails', action='store_true',
                        help='📧 Wyślij 2 osobne maile na każdy sport (forma vs zwykłe)')
+    parser.add_argument('--grades', default='A,B',
+                       help="🏅 Które grade'y wysyłać, np. 'A,B' (domyślnie) lub 'all'")
     
     args = parser.parse_args()
+
+    _grades_raw = (args.grades or '').strip().lower()
+    if _grades_raw in ('', 'all', 'none'):
+        grade_filter = None
+    else:
+        grade_filter = {g.strip().upper() for g in args.grades.split(',') if g.strip()}
     
     if args.split_emails:
         send_split_emails_by_sport(
@@ -1995,6 +2021,7 @@ def main():
             provider=args.provider,
             sort_by=args.sort,
             min_odds_threshold=args.min_odds if args.min_odds > 0 else 1.19,
+            grade_filter=grade_filter,
         )
     else:
         send_email_notification(
@@ -2008,6 +2035,7 @@ def main():
             only_form_advantage=args.only_form_advantage,
             skip_no_odds=args.skip_no_odds,
             min_odds_threshold=args.min_odds,
+            grade_filter=grade_filter,
         )
 
 
