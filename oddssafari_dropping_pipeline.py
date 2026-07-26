@@ -45,7 +45,10 @@ from zoneinfo import ZoneInfo
 from oddssafari_dropping_scraper import (
     DroppingOddsRow,
     collect_dropping_odds_rows,
+    collect_rows_via_http,
     is_qualifying_row,
+    odds_range_for_sport,
+    uses_sofascore_only_enrichment,
 )
 
 
@@ -189,6 +192,111 @@ def _focus_team_from_outcome(outcome: str) -> Tuple[Optional[str], bool]:
     if outcome == "X":
         return "draw", False
     return None, False
+
+
+def _enrich_row_via_sofascore(row: DroppingOddsRow) -> Dict[str, Any]:
+    """Enrich a row using the SofaScore API only (no Livesport, no browser).
+
+    Used for sports Livesport does not cover — currently e-sports. SofaScore
+    does not list e-sports in ``/sport/{slug}/scheduled-events``, so we locate
+    the event by walking a team's schedule, then pull H2H and recent form.
+    """
+    result: Dict[str, Any] = {
+        "status": "resolve_failed",
+        "livesport_url": None,
+        "livesport_confidence": 0.0,
+        "focus_team": None,
+        "away_team_focus": False,
+        "enrichment": None,
+        "error": None,
+    }
+
+    focus_team, away_focus = _focus_team_from_outcome(row.outcome)
+    result["focus_team"] = focus_team
+    result["away_team_focus"] = away_focus
+
+    try:
+        from sofascore_scraper import (
+            find_event_via_team_schedule,
+            get_event_h2h,
+            get_team_recent_form,
+            SOFASCORE_SPORT_SLUGS,
+        )
+    except ImportError as exc:
+        result["error"] = f"sofascore unavailable: {exc}"
+        return result
+
+    sport = row.sport or "esports"
+    slug = SOFASCORE_SPORT_SLUGS.get(sport, sport)
+
+    try:
+        found = find_event_via_team_schedule(row.home_team, row.away_team, slug)
+    except Exception as exc:
+        result["status"] = "process_match_error"
+        result["error"] = f"{type(exc).__name__}: {exc}"
+        return result
+
+    if not found:
+        result["error"] = "sofascore_event_not_found"
+        return result
+
+    enrichment: Dict[str, Any] = {
+        "home_team": found.get("home_name") or row.home_team,
+        "away_team": found.get("away_name") or row.away_team,
+        "sport": sport,
+        "league": found.get("tournament") or row.league,
+        "match_time": row.event_time,
+        "home_odds": row.current_odds if row.outcome == "1" else None,
+        "away_odds": row.current_odds if row.outcome == "2" else None,
+        "sofascore_event_id": found.get("event_id"),
+        "form_source": "sofascore_api",
+    }
+
+    # Recent form for both sides (newest first).
+    for side, key in (("home", "home_team_id"), ("away", "away_team_id")):
+        team_id = found.get(key)
+        if not team_id:
+            continue
+        try:
+            form = get_team_recent_form(
+                team_id, enrichment.get(f"{side}_team", ""), limit=5,
+                allow_draws=_sport_has_draws(sport),
+            )
+        except Exception:
+            form = []
+        if form:
+            enrichment[f"{side}_form"] = form
+            enrichment[f"{side}_form_overall"] = form
+
+    # Head-to-head record.
+    try:
+        h2h = get_event_h2h(found.get("event_id"))
+    except Exception:
+        h2h = None
+    if h2h:
+        total = h2h.get("total") or 0
+        enrichment["h2h_count"] = total
+        enrichment["home_wins_in_h2h_last5"] = h2h.get("home_wins")
+        enrichment["away_wins_in_h2h_last5"] = h2h.get("away_wins")
+        if total:
+            focus_wins = (
+                h2h.get("away_wins") if focus_team == "away" else h2h.get("home_wins")
+            )
+            enrichment["win_rate"] = round((focus_wins or 0) / total * 100, 1)
+
+    home_f = enrichment.get("home_form") or []
+    away_f = enrichment.get("away_form") or []
+    if home_f and away_f:
+        enrichment["form_advantage"] = (
+            home_f.count("W") > away_f.count("W")
+            if focus_team != "away"
+            else away_f.count("W") > home_f.count("W")
+        )
+
+    result["status"] = "enriched"
+    result["enrichment"] = enrichment
+    print(f"   🎮 SofaScore: H={home_f} | A={away_f} | H2H={enrichment.get('h2h_count', 0)}")
+    return result
 
 
 def _enrich_row(
@@ -351,12 +459,118 @@ def _enrich_row(
             if home_form_h2h or away_form_h2h:
                 print(f"   📊 Strategy 3 (H2H-derived): H={home_form_h2h} | A={away_form_h2h}")
     
+    # Strategy 4: SofaScore API — independent of Livesport's DOM, so it also
+    # covers the cases where Livesport renders no form badges at all. Fills
+    # missing sides only, and adds H2H when Livesport gave none.
     final_home = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
     final_away = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
+    if not (final_home and final_away):
+        filled = _fill_form_from_sofascore(
+            enrichment,
+            home_team=enrichment.get("home_team") or row.home_team,
+            away_team=enrichment.get("away_team") or row.away_team,
+            sport=sport,
+        )
+        if filled:
+            final_home = enrichment.get("home_form") or final_home
+            final_away = enrichment.get("away_form") or final_away
+            print(f"   ✅ Strategy 4 (SofaScore): H={final_home} | A={final_away}")
+
     if not (final_home or final_away):
-        print(f"   ⚠️ Wszystkie 3 strategie zawiodły — brak formy")
-    
+        print(f"   ⚠️ Wszystkie 4 strategie zawiodły — brak formy")
+
     return result
+
+
+def _sport_has_draws(sport: Optional[str]) -> bool:
+    """True for sports where a draw is a possible result.
+
+    Matters for form strings: in draw-capable sports a tie must be recorded as
+    'D' rather than dropped, otherwise the "last 5" window silently reaches
+    further back than it claims.
+    """
+    return (sport or "").lower() in {"football", "handball", "hockey"}
+
+
+def _fill_form_from_sofascore(
+    enrichment: Dict[str, Any],
+    *,
+    home_team: str,
+    away_team: str,
+    sport: str,
+) -> bool:
+    """Fill missing form (and H2H) in *enrichment* from the SofaScore API.
+
+    Mutates *enrichment* in place. Returns True when anything was added.
+    """
+    try:
+        from sofascore_scraper import (
+            SOFASCORE_SPORT_SLUGS,
+            find_event_via_team_schedule,
+            get_event_h2h,
+            get_team_recent_form,
+            search_event_via_api,
+        )
+    except ImportError as exc:
+        logger.debug("SofaScore form fallback unavailable: %s", exc)
+        return False
+
+    slug = SOFASCORE_SPORT_SLUGS.get(sport, sport)
+
+    # The schedule walk also gives us both team IDs, which the plain event
+    # search does not — and team IDs are what the form endpoint needs.
+    try:
+        found = find_event_via_team_schedule(home_team, away_team, slug)
+    except Exception as exc:
+        logger.debug("SofaScore schedule lookup failed: %s", exc)
+        found = None
+
+    if not found:
+        # Last resort: resolve just the event ID for the H2H numbers.
+        try:
+            event_id = search_event_via_api(home_team, away_team, sport)
+        except Exception:
+            event_id = None
+        if not event_id:
+            return False
+        found = {"event_id": event_id, "home_team_id": None, "away_team_id": None}
+
+    changed = False
+
+    for side, id_key in (("home", "home_team_id"), ("away", "away_team_id")):
+        if enrichment.get(f"{side}_form") or enrichment.get(f"{side}_form_overall"):
+            continue
+        team_id = found.get(id_key)
+        if not team_id:
+            continue
+        try:
+            form = get_team_recent_form(
+                team_id, "", limit=5, allow_draws=_sport_has_draws(sport)
+            )
+        except Exception:
+            form = []
+        if form:
+            enrichment[f"{side}_form"] = form
+            enrichment[f"{side}_form_overall"] = form
+            enrichment["form_source"] = "sofascore_api"
+            changed = True
+
+    if not enrichment.get("h2h_count"):
+        try:
+            h2h = get_event_h2h(found.get("event_id"))
+        except Exception:
+            h2h = None
+        if h2h and h2h.get("total"):
+            enrichment["h2h_count"] = h2h["total"]
+            enrichment["home_wins_in_h2h_last5"] = h2h.get("home_wins")
+            enrichment["away_wins_in_h2h_last5"] = h2h.get("away_wins")
+            enrichment["h2h_source"] = "sofascore_api"
+            changed = True
+
+    if found.get("event_id"):
+        enrichment.setdefault("sofascore_event_id", found["event_id"])
+
+    return changed
 
 
 def _derive_form_from_h2h(
@@ -504,10 +718,18 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                         help="Run Chrome headless (default).")
     parser.add_argument("--no-headless", dest="headless", action="store_false",
                         help="Show the browser window (for debugging).")
-    parser.add_argument("--min-odds", type=float, default=1.35,
-                        help="Lower bound of qualifying current odds (inclusive).")
-    parser.add_argument("--max-odds", type=float, default=2.20,
-                        help="Upper bound of qualifying current odds (inclusive).")
+    parser.add_argument("--min-odds", type=float, default=None,
+                        help="Override the lower bound of qualifying current odds. "
+                             "Omit to use the per-sport range (football 1.80, "
+                             "handball/hockey 1.60, others 1.35).")
+    parser.add_argument("--max-odds", type=float, default=None,
+                        help="Override the upper bound of qualifying current odds. "
+                             "Omit to use the per-sport range (2.50 everywhere).")
+    parser.add_argument("--max-enrich", type=int, default=0,
+                        help="Cap on how many events get the costly form/H2H "
+                             "enrichment. Events are enriched biggest-drop-first; "
+                             "the rest still appear in the report without form. "
+                             "0 = enrich everything.")
     parser.add_argument("--max-rows", type=int, default=0,
                         help="Optional cap on rows processed end-to-end (0 = no cap).")
     parser.add_argument("--max-pages", type=int, default=20,
@@ -521,6 +743,13 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                              "filters rows to that sport. Empty = all sports.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Skip the Livesport enrichment phase entirely.")
+    parser.add_argument("--selenium-fallback", dest="selenium_fallback",
+                        action="store_true", default=True,
+                        help="Retry OddsSafari collection with Selenium when "
+                             "the HTTP path returns no rows (default).")
+    parser.add_argument("--no-selenium-fallback", dest="selenium_fallback",
+                        action="store_false",
+                        help="Never fall back to Selenium for OddsSafari.")
     parser.add_argument("--no-forebet", dest="use_forebet", action="store_false",
                         help="Disable Forebet enrichment inside process_match.")
     parser.add_argument("--no-sofascore", dest="use_sofascore", action="store_false",
@@ -555,37 +784,56 @@ def main(argv: Optional[List[str]] = None) -> int:
     print("OddsSafari Dropping Odds Pipeline")
     print("=" * 70)
     print(f"  Date (Livesport):   {target_date}")
-    print(f"  Qualifying range:   [{args.min_odds:.2f}, {args.max_odds:.2f}]")
+    if args.min_odds is None and args.max_odds is None:
+        _rng = odds_range_for_sport(sport_filter) if sport_filter else None
+        range_label = (
+            f"[{_rng[0]:.2f}, {_rng[1]:.2f}] (per-sport)" if _rng
+            else "per-sport ranges"
+        )
+    else:
+        _lo = f"{args.min_odds:.2f}" if args.min_odds is not None else "per-sport"
+        _hi = f"{args.max_odds:.2f}" if args.max_odds is not None else "per-sport"
+        range_label = f"[{_lo}, {_hi}] (override)"
+    print(f"  Qualifying range:   {range_label}")
+    print(f"  Enrichment cap:     {args.max_enrich or 'none (all qualifying)'}")
     print(f"  Sport filter:       {sport_filter or 'ALL'}")
     print(f"  Output:             {output_path}")
     print(f"  Mode:               {'DRY-RUN' if args.dry_run else 'FULL'}")
     print("=" * 70)
 
-    from livesport_h2h_scraper import start_driver
-
-    driver = start_driver(headless=args.headless)
     run_started = time.time()
+
+    # The browser is expensive and only the Livesport enrichment needs it, so
+    # it is started lazily on first use. OddsSafari itself is server-rendered
+    # and scraped over plain HTTP.
+    driver_holder: Dict[str, Any] = {"driver": None}
+
+    def _get_driver():
+        if driver_holder["driver"] is None:
+            from livesport_h2h_scraper import start_driver
+            print("🌐 Startuję przeglądarkę (Livesport enrichment)...")
+            driver_holder["driver"] = start_driver(headless=args.headless)
+        return driver_holder["driver"]
 
     try:
         sport_ids = [s.strip() for s in args.sport_ids.split(",") if s.strip()]
-        # If --sport was provided and --sport-ids was not, auto-select
-        # the matching OddsSafari page IDs to avoid scraping every sport.
-        if sport_filter and not sport_ids:
-            try:
-                from oddssafari_dropping_scraper import SPORT_TO_PAGE_IDS
-                sport_ids = list(SPORT_TO_PAGE_IDS.get(sport_filter, ()))
-                if sport_ids:
-                    logger.info(
-                        "Sport filter '%s' → OddsSafari page IDs %s",
-                        sport_filter, sport_ids,
-                    )
-            except ImportError:
-                pass
-        rows = collect_dropping_odds_rows(
-            driver,
+
+        # OddsSafari renumbered its sport tabs (they are multiples of 10 now),
+        # so a stale hardcoded ID silently returned zero rows. Collection over
+        # HTTP discovers the right page ID by content when --sport is given.
+        rows = collect_rows_via_http(
+            sport=sport_filter,
             sport_page_ids=sport_ids or None,
             max_pages_per_sport=args.max_pages,
         )
+
+        if not rows and args.selenium_fallback:
+            logger.warning("HTTP collection returned 0 rows — trying Selenium")
+            rows = collect_dropping_odds_rows(
+                _get_driver(),
+                sport_page_ids=sport_ids or None,
+                max_pages_per_sport=args.max_pages,
+            )
 
         # Post-filter rows by sport when --sport is provided. The OddsSafari
         # page IDs sometimes contain other sports (especially "all"), and
@@ -612,6 +860,15 @@ def main(argv: Optional[List[str]] = None) -> int:
             rows = rows[: args.max_rows]
         logger.info("OddsSafari returned %d rows in total", len(rows))
 
+        # Enrich biggest drops first so that, when --max-enrich caps the work,
+        # the events that carry the most signal are the ones with form data.
+        rows.sort(key=lambda r: (r.drop_pct or 0.0), reverse=True)
+        enrich_budget = args.max_enrich if args.max_enrich and args.max_enrich > 0 else None
+        enriched_so_far = 0
+        # Set to an error string once the browser proves unusable, so we stop
+        # retrying it for every remaining row.
+        browser_unavailable: Optional[str] = None
+
         events: List[Dict[str, Any]] = []
         qualified: List[Dict[str, Any]] = []
         reason_counts: Dict[str, int] = {}
@@ -625,18 +882,63 @@ def main(argv: Optional[List[str]] = None) -> int:
             )
             enrichment: Optional[Dict[str, Any]] = None
 
-            if qualifies and not args.dry_run:
+            budget_left = enrich_budget is None or enriched_so_far < enrich_budget
+
+            if qualifies and not args.dry_run and not budget_left:
+                # Still reported, just without form/H2H.
+                enrichment = {
+                    "status": "skipped_enrich_budget",
+                    "livesport_url": None,
+                    "livesport_confidence": 0.0,
+                    "enrichment": None,
+                    "error": None,
+                }
+                enrichment_counts["skipped_enrich_budget"] = (
+                    enrichment_counts.get("skipped_enrich_budget", 0) + 1
+                )
+            elif qualifies and not args.dry_run:
+                enriched_so_far += 1
                 print(
                     f"[{idx}/{len(rows)}] enrich {row.home_team} vs "
                     f"{row.away_team} ({row.sport_slug}, outcome={row.outcome}, "
                     f"current={row.current_odds})"
                 )
-                enrichment = _enrich_row(
-                    driver, row,
-                    date=target_date,
-                    use_forebet=args.use_forebet,
-                    use_sofascore=args.use_sofascore,
-                )
+                if uses_sofascore_only_enrichment(row.sport):
+                    # e-sports: Livesport has no section for it, so form and
+                    # H2H come straight from the SofaScore API.
+                    enrichment = _enrich_row_via_sofascore(row)
+                elif browser_unavailable:
+                    enrichment = {
+                        "status": "browser_unavailable",
+                        "livesport_url": None,
+                        "livesport_confidence": 0.0,
+                        "enrichment": None,
+                        "error": browser_unavailable,
+                    }
+                else:
+                    # A browser failure must not sink the whole run: the
+                    # OddsSafari rows are already collected and still worth
+                    # reporting without form data.
+                    try:
+                        enrichment = _enrich_row(
+                            _get_driver(), row,
+                            date=target_date,
+                            use_forebet=args.use_forebet,
+                            use_sofascore=args.use_sofascore,
+                        )
+                    except Exception as exc:
+                        browser_unavailable = f"{type(exc).__name__}: {exc}"
+                        logger.error(
+                            "Browser/enrichment unavailable, continuing without "
+                            "form data: %s", browser_unavailable,
+                        )
+                        enrichment = {
+                            "status": "browser_unavailable",
+                            "livesport_url": None,
+                            "livesport_confidence": 0.0,
+                            "enrichment": None,
+                            "error": browser_unavailable,
+                        }
                 status = enrichment.get("status") or "resolve_failed"
                 enrichment_counts[status] = enrichment_counts.get(status, 0) + 1
 
@@ -660,8 +962,17 @@ def main(argv: Optional[List[str]] = None) -> int:
                 "generated_at": datetime.now(WARSAW_TZ).isoformat(),
                 "target_date": target_date,
                 "filter": {
-                    "min_odds": args.min_odds,
-                    "max_odds": args.max_odds,
+                    # Report the range that was actually applied so the email
+                    # header matches reality (per-sport unless overridden).
+                    "min_odds": (
+                        args.min_odds if args.min_odds is not None
+                        else odds_range_for_sport(sport_filter)[0]
+                    ),
+                    "max_odds": (
+                        args.max_odds if args.max_odds is not None
+                        else odds_range_for_sport(sport_filter)[1]
+                    ),
+                    "per_sport_range": args.min_odds is None and args.max_odds is None,
                 },
                 "totals": {
                     "events": len(events),
@@ -688,10 +999,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("=" * 70)
         return 0
     finally:
-        try:
-            driver.quit()
-        except Exception:  # pragma: no cover
-            pass
+        if driver_holder["driver"] is not None:
+            try:
+                driver_holder["driver"].quit()
+            except Exception:  # pragma: no cover
+                pass
 
 
 if __name__ == "__main__":

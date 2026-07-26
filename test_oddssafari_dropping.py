@@ -15,6 +15,8 @@ import os
 import sys
 from unittest.mock import patch
 
+import pytest
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
@@ -24,6 +26,7 @@ from oddssafari_dropping_scraper import (
     is_qualifying_row,
     is_livesport_supported_sport,
     map_slug_to_internal,
+    odds_range_for_sport,
     parse_dropping_odds_table,
 )
 from oddssafari_dropping_pipeline import (
@@ -82,7 +85,41 @@ class TestParseDroppingOddsTable:
         first = rows[0]
         assert first.open_odds == 2.98
         assert first.current_odds == 1.85
-        assert first.drop_pct == -38.0
+        # drop_pct is the positive magnitude of the drop, matching the "↓ X%"
+        # presentation and the colour thresholds used by the email.
+        assert first.drop_pct == 38.0
+
+    def test_parses_percent_split_by_html_comments(self):
+        """Live markup renders the % cell as ``-<!-- -->21<!-- -->%``.
+
+        A plain float() parse fails on the resulting "- 21 %" text, which used
+        to leave drop_pct empty and shift the bookmaker's best odds into it.
+        """
+        html = """
+        <table><tbody>
+          <tr><td class="droppingOdds_leagueCnt" colSpan="5">Test League</td></tr>
+          <tr>
+            <td class="droppingOdds_dateAndEventCnt">
+              <div><div>26/07</div><div>18:00</div></div>
+              <a class="droppingOdds_eventName" href="/matches/soccer/x/y/club-lujan-vs-central-ballester/2276151?MarketTypeID=101">
+                <span>Club Lujan</span><span class="droppingOdds_dash">-</span><span>Central Ballester</span>
+              </a>
+            </td>
+            <td>1</td><td>1.95</td><td>1.55</td>
+            <td class="droppingOdds_red">-<!-- -->21<!-- -->%</td>
+            <td class="droppingOdds_colMaxOdd"><div><a href="#"><strong>1.57</strong></a></div></td>
+          </tr>
+        </tbody></table>
+        """
+        rows = parse_dropping_odds_table(html)
+        assert len(rows) == 1
+        row = rows[0]
+        assert row.open_odds == 1.95
+        assert row.current_odds == 1.55
+        assert row.drop_pct == 21.0
+        assert row.max_odds == 1.57
+        assert row.home_team == "Club Lujan"
+        assert row.away_team == "Central Ballester"
 
     def test_extracts_sport_from_match_url(self):
         rows = parse_dropping_odds_table(_load_fixture())
@@ -162,28 +199,70 @@ def _row(
 
 
 class TestIsQualifyingRow:
+    """Bounds come from SPORT_ODDS_RANGE; _row() defaults to soccer (1.80-2.50)."""
+
     def test_in_range_qualifies(self):
-        ok, reason = is_qualifying_row(_row(current=1.60))
+        ok, reason = is_qualifying_row(_row(current=2.00))
         assert ok is True
         assert reason is None
 
     def test_below_min_does_not_qualify(self):
-        ok, reason = is_qualifying_row(_row(current=1.34))
+        ok, reason = is_qualifying_row(_row(current=1.79))
         assert ok is False
         assert reason == "odds_out_of_range"
 
     def test_above_max_does_not_qualify(self):
-        ok, reason = is_qualifying_row(_row(current=2.01))
+        ok, reason = is_qualifying_row(_row(current=2.51))
         assert ok is False
         assert reason == "odds_out_of_range"
 
     def test_inclusive_lower_bound(self):
-        ok, _ = is_qualifying_row(_row(current=1.35))
+        ok, _ = is_qualifying_row(_row(current=1.80))
         assert ok is True
 
     def test_inclusive_upper_bound(self):
-        ok, _ = is_qualifying_row(_row(current=2.00))
+        ok, _ = is_qualifying_row(_row(current=2.50))
         assert ok is True
+
+    def test_explicit_bounds_override_per_sport_range(self):
+        # 1.50 is below football's 1.80 floor, but an explicit override wins.
+        ok, _ = is_qualifying_row(_row(current=1.50), min_odds=1.35, max_odds=2.50)
+        assert ok is True
+
+
+class TestPerSportOddsRanges:
+    def test_football_floor_is_higher_than_other_sports(self):
+        assert odds_range_for_sport("football") == (1.80, 2.50)
+
+    @pytest.mark.parametrize("sport", ["handball", "hockey"])
+    def test_mid_floor_sports(self, sport):
+        assert odds_range_for_sport(sport) == (1.60, 2.50)
+
+    @pytest.mark.parametrize(
+        "sport",
+        ["basketball", "volleyball", "esports", "baseball", "tennis", "rugby"],
+    )
+    def test_default_floor_sports(self, sport):
+        assert odds_range_for_sport(sport) == (1.35, 2.50)
+
+    def test_slug_is_accepted_too(self):
+        assert odds_range_for_sport("soccer") == (1.80, 2.50)
+        assert odds_range_for_sport("e-sports") == (1.35, 2.50)
+
+    def test_football_1_50_skipped_but_basketball_1_50_kept(self):
+        assert is_qualifying_row(_row(current=1.50, slug="soccer"))[0] is False
+        assert is_qualifying_row(_row(current=1.50, slug="basketball"))[0] is True
+
+    @pytest.mark.parametrize("slug", ["handball", "ice-hockey"])
+    def test_mid_floor_1_50_skipped_1_60_kept(self, slug):
+        assert is_qualifying_row(_row(current=1.50, slug=slug))[0] is False
+        assert is_qualifying_row(_row(current=1.60, slug=slug))[0] is True
+
+    def test_2_60_skipped_for_every_sport(self):
+        for slug in ("soccer", "basketball", "handball", "e-sports", "baseball"):
+            ok, reason = is_qualifying_row(_row(current=2.60, slug=slug))
+            assert ok is False
+            assert reason == "odds_out_of_range"
 
     def test_unsupported_sport_rejected(self):
         ok, reason = is_qualifying_row(_row(slug="mma"))

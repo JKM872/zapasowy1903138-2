@@ -40,6 +40,7 @@ import base64
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Any, List
 from difflib import SequenceMatcher
+from urllib.parse import quote
 
 # Logging setup
 logger = logging.getLogger(__name__)
@@ -102,6 +103,10 @@ SOFASCORE_SPORT_SLUGS = {
     'table-tennis': 'table-tennis',
     'baseball': 'baseball',
     'cricket': 'cricket',
+    # SofaScore serves e-sports teams through /search/teams but NOT through
+    # /sport/{slug}/scheduled-events — use find_event_via_team_schedule().
+    'esports': 'esports',
+    'e-sports': 'esports',
 }
 
 # Headers dla requests API - v5.0: Zaktualizowane do Chrome 136
@@ -2092,12 +2097,20 @@ def get_event_h2h(event_id: int) -> Optional[Dict[str, Any]]:
     }
 
 
-def get_team_recent_form(team_id: int, team_name: str, limit: int = 5) -> List[str]:
-    """Recent W/L form for a team/player from SofaScore.
+def get_team_recent_form(team_id: int, team_name: str, limit: int = 5,
+                         allow_draws: bool = False) -> List[str]:
+    """Recent form for a team/player from SofaScore.
 
     Endpoint: ``/api/v1/team/{id}/events/last/0`` → finished events. For each
-    event we determine whether *team_id* won, producing a newest-first list of
-    'W'/'L' (table tennis has no draws). Used as the "forma ogólna" signal.
+    event we determine whether *team_id* won, producing a newest-first list.
+
+    ``allow_draws`` controls what happens on an equal score:
+
+    * False (default) — the event is skipped. Correct for table tennis and
+      e-sports, where a draw is not a possible outcome.
+    * True — the event is recorded as ``'D'``. Required for football and other
+      draw-capable sports; skipping draws would silently shift older matches
+      into the window and misrepresent the form.
 
     Returns up to ``limit`` results, or [] on failure.
     """
@@ -2126,7 +2139,12 @@ def get_team_recent_form(team_id: int, team_name: str, limit: int = 5) -> List[s
             if not team_is_home and not team_is_away:
                 continue
             if hs == as_:
-                continue  # no draws in table tennis; skip ambiguous
+                if not allow_draws:
+                    continue  # no draws in table tennis / e-sports
+                form.append('D')
+                if len(form) >= limit:
+                    break
+                continue
             home_won = hs > as_
             won = (team_is_home and home_won) or (team_is_away and not home_won)
             form.append('W' if won else 'L')
@@ -2135,6 +2153,96 @@ def get_team_recent_form(team_id: int, team_name: str, limit: int = 5) -> List[s
         except (AttributeError, TypeError):
             continue
     return form
+
+
+def find_team_by_name(team_name: str, sport_slug: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    """Resolve a team/player name to a SofaScore team via the search API.
+
+    Endpoint: ``/api/v1/search/teams/{query}``. When *sport_slug* is given,
+    only teams from that sport are considered — important for e-sports, where
+    names like "Gen.G" would otherwise collide with football clubs ("Genoa").
+
+    Returns ``{'id': int, 'name': str, 'sport': str}`` or None.
+    """
+    if not team_name:
+        return None
+    query = quote(str(team_name).strip())
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/search/teams/{query}", timeout=10
+    )
+    if not isinstance(data, dict):
+        return None
+    for team in data.get('teams') or []:
+        team_sport = ((team.get('sport') or {}).get('slug') or '').lower()
+        if sport_slug and team_sport != sport_slug.lower():
+            continue
+        if team.get('id'):
+            return {
+                'id': team['id'],
+                'name': team.get('name') or '',
+                'sport': team_sport,
+            }
+    return None
+
+
+def find_event_via_team_schedule(
+    home_team: str,
+    away_team: str,
+    sport_slug: Optional[str] = None,
+    min_similarity: float = 0.45,
+) -> Optional[Dict[str, Any]]:
+    """Find an upcoming event by walking one team's schedule.
+
+    Needed for sports that ``/sport/{slug}/scheduled-events`` does not serve
+    (e-sports returns nothing there), but whose teams are searchable. Looks at
+    both teams' ``events/next`` and ``events/last`` feeds and matches the
+    opponent by name similarity.
+
+    Returns ``{'event_id', 'home_team_id', 'away_team_id', 'home_name',
+    'away_name', 'tournament'}`` or None.
+    """
+    for primary, opponent, primary_is_home in (
+        (home_team, away_team, True),
+        (away_team, home_team, False),
+    ):
+        team = find_team_by_name(primary, sport_slug)
+        if not team:
+            continue
+        for endpoint in ('next', 'last'):
+            data = _api_get_json(
+                f"https://api.sofascore.com/api/v1/team/{team['id']}/events/{endpoint}/0",
+                timeout=10,
+            )
+            if not isinstance(data, dict):
+                continue
+            for event in data.get('events') or []:
+                ev_home = (event.get('homeTeam') or {})
+                ev_away = (event.get('awayTeam') or {})
+
+                # Anchor on team IDs: the resolved team must actually play in
+                # this event. Without this check a name-similarity fluke could
+                # attach a completely different fixture to the row.
+                if team['id'] == ev_home.get('id'):
+                    other_name = ev_away.get('name', '')
+                elif team['id'] == ev_away.get('id'):
+                    other_name = ev_home.get('name', '')
+                else:
+                    continue
+
+                sim = similarity_score(opponent, other_name)
+                if sim < min_similarity:
+                    continue
+                return {
+                    'event_id': event.get('id'),
+                    'home_team_id': ev_home.get('id'),
+                    'away_team_id': ev_away.get('id'),
+                    'home_name': ev_home.get('name', ''),
+                    'away_name': ev_away.get('name', ''),
+                    'tournament': (event.get('tournament') or {}).get('name', ''),
+                    'opponent_similarity': round(sim, 3),
+                    'matched_opponent': other_name,
+                }
+    return None
 
 
 def _search_event_for_date(home_team: str, away_team: str, sport_slug: str, search_date: str, debug: bool = False) -> Optional[int]:

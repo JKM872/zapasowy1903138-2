@@ -506,7 +506,7 @@ def build_dropping_odds_email_html(
     sport_emoji = {
         "football": "⚽", "basketball": "🏀", "tennis": "🎾",
         "hockey": "🏒", "handball": "🤾", "volleyball": "🏐",
-        "baseball": "⚾", "rugby": "🏉",
+        "baseball": "⚾", "rugby": "🏉", "esports": "🎮",
     }
     sport_label = ""
     if sport:
@@ -527,10 +527,10 @@ def build_dropping_odds_email_html(
         cards_html = '''
         <div style="background: #fff3e0; border-radius: 12px; padding: 24px; text-align: center; margin: 16px 0;">
             <div style="font-size: 40px; margin-bottom: 12px;">😴</div>
-            <div style="font-size: 16px; font-weight: 700; color: #e65100;">Brak okazji w tym sporcie dziś</div>
+            <div style="font-size: 16px; font-weight: 700; color: #e65100;">Brak zdarzeń w tym sporcie dziś</div>
             <div style="font-size: 12px; color: #888; margin-top: 8px;">
-                Pipeline przeszedł, ale żaden mecz nie spełnił wszystkich kryteriów
-                (zakres kursów + min. 1 wygrana w ostatnich 3 meczach focus drużyny).
+                Pipeline przeszedł poprawnie, ale OddsSafari nie wystawiło dziś
+                żadnego spadku kursu dla tego sportu (poza sezonem lub brak meczów).
             </div>
         </div>
         '''
@@ -635,7 +635,7 @@ def send_dropping_odds_email(
     run_scoring: bool = True,
     sport: Optional[str] = None,
     send_empty: bool = True,
-    min_recent_wins: int = 1,
+    min_recent_wins: int = 0,
     recent_window: int = 3,
 ) -> bool:
     """Load the pipeline JSON output and send the dropping odds email.
@@ -661,17 +661,24 @@ def send_dropping_odds_email(
     # Otherwise we still keep the event in the email but mark it as skipped.
     qualified: List[Dict[str, Any]] = []
     skipped_no_recent_win: List[Dict[str, Any]] = []
-    for event in qualified_raw:
-        passes, reason = _passes_recent_form_filter(event, min_recent_wins, recent_window)
-        if passes:
-            qualified.append(event)
-        else:
-            event["recent_form_skip_reason"] = reason
-            skipped_no_recent_win.append(event)
-    
-    print(f"📊 Wynik filtru formy ({min_recent_wins}+ W w ostatnich {recent_window}):")
-    print(f"   ✅ Przechodzą: {len(qualified)}")
-    print(f"   ⏭️  Odrzucone (brak ostatniej wygranej): {len(skipped_no_recent_win)}")
+
+    if min_recent_wins <= 0:
+        # Form filter disabled: the report is meant to show every event, with
+        # its form and scoring, and let the reader judge.
+        qualified = list(qualified_raw)
+        print(f"📊 Filtr formy: wyłączony — pokazuję wszystkie {len(qualified)} zdarzeń")
+    else:
+        for event in qualified_raw:
+            passes, reason = _passes_recent_form_filter(event, min_recent_wins, recent_window)
+            if passes:
+                qualified.append(event)
+            else:
+                event["recent_form_skip_reason"] = reason
+                skipped_no_recent_win.append(event)
+
+        print(f"📊 Wynik filtru formy ({min_recent_wins}+ W w ostatnich {recent_window}):")
+        print(f"   ✅ Przechodzą: {len(qualified)}")
+        print(f"   ⏭️  Odrzucone (brak ostatniej wygranej): {len(skipped_no_recent_win)}")
     
     if not qualified and not skipped_no_recent_win:
         print("⚠️ Brak kwalifikujących się meczów dla tego sportu/dnia")
@@ -752,8 +759,10 @@ def main():
                         help="Send a status email even when there are no qualifying matches (default)")
     parser.add_argument("--no-send-empty", dest="send_empty", action="store_false",
                         help="Skip sending email when there are no qualifying matches")
-    parser.add_argument("--min-recent-wins", type=int, default=1,
-                        help="Min wins in the last 3 form matches required for the focus team to qualify (default: 1).")
+    parser.add_argument("--min-recent-wins", type=int, default=0,
+                        help="Min wins in the recent form window required for the "
+                             "focus team. 0 (default) disables the filter so the "
+                             "email lists every event.")
     parser.add_argument("--recent-window", type=int, default=3,
                         help="How many recent form matches to inspect for --min-recent-wins (default: 3).")
     

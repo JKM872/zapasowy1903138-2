@@ -5,10 +5,11 @@ every row of the dropping-odds table, produce a single structured dictionary
 with both the raw OddsSafari fields and a ``qualifies`` flag based on the
 current odds range configured by the pipeline (default 1.35 to 2.00).
 
-The page is rendered client-side, so we use Selenium (the same stack and
-driver bootstrap as the existing Livesport scraper in
-``livesport_h2h_scraper.py``). We never rely on Cloudflare bypass for
-OddsSafari — the site is not behind CF at the moment; Selenium alone works.
+The dropping-odds table is server-side rendered (Next.js SSR), so a plain
+``requests`` GET returns the full markup. That is the primary transport
+(:func:`fetch_dropping_odds_html`); Selenium is kept only as a fallback for
+the case where the site starts gating the HTML behind JS. OddsSafari is not
+behind Cloudflare at the moment.
 
 This module exposes:
 
@@ -35,6 +36,7 @@ from datetime import datetime
 from typing import Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urljoin
 
+import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
@@ -62,15 +64,26 @@ SPORT_SLUG_TO_INTERNAL: Dict[str, Optional[str]] = {
     "rugby-union": "rugby",
     "rugby-league": "rugby",
     "rugby": "rugby",
+    "e-sports": "esports",
+    "esports": "esports",
     "american-football": None,
     "am.-football": None,
     "darts": None,
     "snooker": None,
-    "e-sports": None,
     "cricket": None,
     "mma": None,
     "boxing": None,
 }
+
+# Sports enriched through Livesport (H2H + form + Forebet + SofaScore).
+_LIVESPORT_SPORTS = {
+    "football", "basketball", "volleyball", "handball",
+    "hockey", "tennis", "baseball", "rugby",
+}
+
+# Sports with no Livesport counterpart that we still enrich, using the
+# SofaScore API directly (search event -> H2H + recent form).
+_SOFASCORE_ONLY_SPORTS = {"esports"}
 
 
 def map_slug_to_internal(slug: str) -> Optional[str]:
@@ -83,17 +96,32 @@ def map_slug_to_internal(slug: str) -> Optional[str]:
     return SPORT_SLUG_TO_INTERNAL.get(slug.strip().lower())
 
 
-def is_livesport_supported_sport(slug_or_internal: Optional[str]) -> bool:
-    """Return True when enrichment can be attempted for the given sport.
-
-    Accepts either the OddsSafari URL slug or an already-internal name.
-    """
+def _internal_name(slug_or_internal: Optional[str]) -> Optional[str]:
+    """Normalize either an OddsSafari slug or an internal name to internal."""
     if not slug_or_internal:
-        return False
+        return None
     value = slug_or_internal.strip().lower()
-    internal = SPORT_SLUG_TO_INTERNAL.get(value, value)
-    return internal in {"football", "basketball", "volleyball", "handball",
-                         "hockey", "tennis", "baseball", "rugby"}
+    return SPORT_SLUG_TO_INTERNAL.get(value, value)
+
+
+def is_livesport_supported_sport(slug_or_internal: Optional[str]) -> bool:
+    """Return True when Livesport enrichment can be attempted."""
+    return _internal_name(slug_or_internal) in _LIVESPORT_SPORTS
+
+
+def is_enrichable_sport(slug_or_internal: Optional[str]) -> bool:
+    """Return True when *any* enrichment path exists for the sport.
+
+    e-sports has no Livesport section, but SofaScore covers it — so it must
+    not be dropped by the qualification gate.
+    """
+    internal = _internal_name(slug_or_internal)
+    return internal in _LIVESPORT_SPORTS or internal in _SOFASCORE_ONLY_SPORTS
+
+
+def uses_sofascore_only_enrichment(slug_or_internal: Optional[str]) -> bool:
+    """True for sports enriched exclusively via the SofaScore API."""
+    return _internal_name(slug_or_internal) in _SOFASCORE_ONLY_SPORTS
 
 
 # ---------------------------------------------------------------------------
@@ -121,6 +149,7 @@ class DroppingOddsRow:
     open_odds: Optional[float]
     current_odds: Optional[float]
     drop_pct: Optional[float]
+    max_odds: Optional[float] = None
     sport_page_id: Optional[str] = None
     notes: List[str] = field(default_factory=list)
 
@@ -139,6 +168,7 @@ class DroppingOddsRow:
             "open_odds": self.open_odds,
             "current_odds": self.current_odds,
             "drop_pct": self.drop_pct,
+            "max_odds": self.max_odds,
             "sport_page_id": self.sport_page_id,
             "notes": list(self.notes),
         }
@@ -166,6 +196,23 @@ def _parse_float(text: Optional[str]) -> Optional[float]:
         return None
 
 
+def _parse_percent(text: Optional[str]) -> Optional[float]:
+    """Parse the drop-percentage cell, e.g. ``- 21 %`` -> ``21.0``.
+
+    The value is returned as a positive magnitude ("how much the price
+    dropped"), matching the ``↓%`` legend used in the email.
+    """
+    if not text:
+        return None
+    digits = re.search(r"(\d+(?:[.,]\d+)?)", text.replace(" ", ""))
+    if not digits:
+        return None
+    try:
+        return abs(float(digits.group(1).replace(",", ".")))
+    except ValueError:
+        return None
+
+
 def _extract_teams_from_link(link_text: str) -> Tuple[str, str]:
     """OddsSafari link text is ``Home-Away`` (hyphen-joined).
 
@@ -185,6 +232,24 @@ def _extract_teams_from_link(link_text: str) -> Tuple[str, str]:
         left, right = text.rsplit("-", 1)
         return left.strip(), right.strip()
     return text, ""
+
+
+def _extract_teams_from_anchor(link: Tag) -> Tuple[str, str]:
+    """Prefer the anchor's ``<span>`` structure over hyphen splitting.
+
+    OddsSafari renders ``<span>Home</span><span class="dash">-</span>
+    <span>Away</span>``, so reading the spans avoids mangling team names that
+    themselves contain a hyphen. Falls back to text splitting.
+    """
+    spans = [s for s in link.find_all("span", recursive=False)]
+    named = [
+        s.get_text(" ", strip=True) for s in spans
+        if "dash" not in " ".join(s.get("class") or [])
+    ]
+    named = [n for n in named if n and n != "-"]
+    if len(named) >= 2:
+        return named[0], named[-1]
+    return _extract_teams_from_link(link.get_text(" ", strip=True))
 
 
 def _parse_match_url(href: str) -> Tuple[str, Optional[str]]:
@@ -232,34 +297,58 @@ def parse_dropping_odds_table(
         # [date+time, link (with outcome token inside the same cell or the
         # next one), open, current, drop%]. We read robustly by looking for
         # the outcome token and the three numeric cells around it.
-        texts = [c.get_text(" ", strip=True) for c in cells]
-
+        # Cell layout: [date+event(link), outcome, open, current, drop%, best]
+        # The drop% cell renders as ``-<!-- -->21<!-- -->%`` so ``get_text``
+        # yields "- 21 %" — a plain float() parse fails on it, which used to
+        # push the bookmaker's best odds into ``drop_pct``. We therefore
+        # classify each cell explicitly instead of taking "the Nth number".
         outcome = ""
         numeric_values: List[float] = []
-        for raw in texts:
+        drop_pct: Optional[float] = None
+        max_odds: Optional[float] = None
+
+        for cell in cells:
+            classes = " ".join(cell.get("class") or [])
+            raw = cell.get_text(" ", strip=True)
             stripped = raw.strip()
+
+            # Best current odds column (contains bookmaker link) — not an
+            # odds-movement value, keep it separately.
+            if "colMaxOdd" in classes:
+                max_odds = _parse_float(stripped)
+                continue
+
+            if "%" in stripped:
+                drop_pct = _parse_percent(stripped)
+                continue
+
             if stripped in OUTCOME_LABELS and not outcome:
                 outcome = stripped
                 continue
+
             value = _parse_float(stripped)
             if value is not None:
                 numeric_values.append(value)
 
         if not outcome:
-            for raw in texts:
-                token = raw.strip().upper()
+            for cell in cells:
+                token = cell.get_text(" ", strip=True).upper()
                 if token in OUTCOME_LABELS:
                     outcome = token
                     break
 
         open_odds = numeric_values[0] if len(numeric_values) >= 1 else None
         current_odds = numeric_values[1] if len(numeric_values) >= 2 else None
-        drop_pct = numeric_values[2] if len(numeric_values) >= 3 else None
+
+        # Fallback: derive the drop from the two odds when the % cell is
+        # missing or unparsable, so sorting never silently degrades.
+        if drop_pct is None and open_odds and current_odds and open_odds > 0:
+            drop_pct = round(abs(current_odds - open_odds) / open_odds * 100, 1)
 
         href = link.get("href", "")
         match_url = urljoin(base_url, href)
         slug, match_id = _parse_match_url(href)
-        home, away = _extract_teams_from_link(link.get_text(" ", strip=True))
+        home, away = _extract_teams_from_anchor(link)
 
         event_date, event_time = _extract_event_datetime(tr)
 
@@ -278,6 +367,7 @@ def parse_dropping_odds_table(
                 open_odds=open_odds,
                 current_odds=current_odds,
                 drop_pct=drop_pct,
+                max_odds=max_odds,
                 sport_page_id=sport_page_id,
             )
         )
@@ -303,21 +393,56 @@ def _extract_event_datetime(row: Tag) -> Tuple[Optional[str], Optional[str]]:
     return date_val, time_val
 
 
+# ---------------------------------------------------------------------------
+# Per-sport qualifying odds ranges
+# ---------------------------------------------------------------------------
+
+# Closed ranges applied to the *current* (dropped) odds. Football demands a
+# higher floor because its dropping-odds feed is dominated by heavy favourites.
+SPORT_ODDS_RANGE: Dict[str, Tuple[float, float]] = {
+    "football": (1.80, 2.50),
+    "handball": (1.60, 2.50),
+    "hockey": (1.60, 2.50),
+    "basketball": (1.35, 2.50),
+    "volleyball": (1.35, 2.50),
+    "esports": (1.35, 2.50),
+    "baseball": (1.35, 2.50),
+    "tennis": (1.35, 2.50),
+    "rugby": (1.35, 2.50),
+}
+
+# Used for any sport without an explicit entry above.
+DEFAULT_ODDS_RANGE: Tuple[float, float] = (1.35, 2.50)
+
+
+def odds_range_for_sport(sport: Optional[str]) -> Tuple[float, float]:
+    """Return the (min, max) qualifying odds range for *sport*."""
+    internal = _internal_name(sport)
+    return SPORT_ODDS_RANGE.get(internal or "", DEFAULT_ODDS_RANGE)
+
+
 def is_qualifying_row(
     row: DroppingOddsRow,
     *,
-    min_odds: float = 1.35,
-    max_odds: float = 2.00,
+    min_odds: Optional[float] = None,
+    max_odds: Optional[float] = None,
 ) -> Tuple[bool, Optional[str]]:
     """Return (qualifies, skip_reason).
 
-    Closed range: ``min_odds <= current_odds <= max_odds``.
+    Closed range: ``min_odds <= current_odds <= max_odds``. When the bounds are
+    omitted, the per-sport range from :data:`SPORT_ODDS_RANGE` applies, so a
+    single run can mix football's 1.80–2.50 with handball's 1.60–2.50.
     """
     if row.current_odds is None:
         return False, "missing_current_odds"
-    if row.current_odds < min_odds or row.current_odds > max_odds:
+
+    sport_min, sport_max = odds_range_for_sport(row.sport or row.sport_slug)
+    low = sport_min if min_odds is None else min_odds
+    high = sport_max if max_odds is None else max_odds
+
+    if row.current_odds < low or row.current_odds > high:
         return False, "odds_out_of_range"
-    if not is_livesport_supported_sport(row.sport_slug):
+    if not is_enrichable_sport(row.sport_slug):
         return False, "unsupported_sport"
     if not row.home_team or not row.away_team:
         return False, "missing_teams"
@@ -336,22 +461,19 @@ DROPPING_ODDS_ROOT = f"{ODDSSAFARI_ROOT}/dropping-odds"
 # Numbers reflect what the site currently serves; :func:`_discover_sport_ids`
 # is used first and falls back to this list only if discovery fails.
 FALLBACK_SPORT_PAGE_IDS: Tuple[str, ...] = (
-    "1",   # Soccer
-    "20",  # Basketball
-    "5",   # Tennis
-    "18",  # Ice Hockey
-    "11",  # American Football
-    "6",   # Handball
-    "23",  # Volleyball
-    "3",   # Baseball
-    "22",  # Darts
-    "19",  # Snooker
-    "28",  # E-sports
-    "24",  # Rugby Union
-    "25",  # Rugby League
-    "21",  # Cricket
-    "26",  # MMA
-    "10",  # Boxing
+    "10",   # Soccer
+    "20",   # Basketball
+    "30",   # Tennis
+    "40",   # Ice Hockey
+    "50",   # Am. Football
+    "60",   # Handball
+    "70",   # Volleyball
+    "90",   # Baseball
+    "120",  # E-sports
+    "130",  # Rugby Union
+    "140",  # Rugby League
+    "170",  # MMA
+    "180",  # Boxing
 )
 
 # Mapping of internal sport name → list of OddsSafari sport page IDs.
@@ -359,18 +481,241 @@ FALLBACK_SPORT_PAGE_IDS: Tuple[str, ...] = (
 # instead of all sports. When discovery yields different IDs, the scraper
 # still falls back to FALLBACK_SPORT_PAGE_IDS.
 SPORT_TO_PAGE_IDS: Dict[str, Tuple[str, ...]] = {
-    "football": ("1",),
+    "football": ("10",),
     "basketball": ("20",),
-    "tennis": ("5",),
-    "hockey": ("18",),
-    "handball": ("6",),
-    "volleyball": ("23",),
-    "baseball": ("3",),
-    "rugby": ("24", "25"),
+    "tennis": ("30",),
+    "hockey": ("40",),
+    "handball": ("60",),
+    "volleyball": ("70",),
+    "baseball": ("90",),
+    "esports": ("120",),
+    "rugby": ("130", "140"),
 }
+
+# Candidate IDs probed by :func:`discover_sport_page_ids`. The site numbers
+# sport tabs in steps of 10; IDs without current events return a 404 page, so
+# the hardcoded map above cannot be verified for quiet sports (e.g. handball
+# out of season). Content-based discovery keeps us correct when IDs shift.
+_ID_PROBE_CANDIDATES: Tuple[str, ...] = tuple(
+    str(n) for n in range(10, 200, 10)
+)
 
 _DEFAULT_PAGE_WAIT_S = 4.0
 _MAX_PAGES_PER_SPORT = 20
+
+_REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/125.0 Safari/537.36"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+_HTTP_TIMEOUT_S = 30
+
+
+def fetch_dropping_odds_html(
+    url: str,
+    *,
+    session: Optional["requests.Session"] = None,
+    timeout: int = _HTTP_TIMEOUT_S,
+) -> str:
+    """GET *url* and return the HTML, or an empty string on failure.
+
+    The dropping-odds table is server-rendered, so no browser is needed.
+    """
+    getter = session or requests
+    try:
+        resp = getter.get(url, headers=_REQUEST_HEADERS, timeout=timeout)
+    except Exception as exc:
+        logger.warning("HTTP GET failed for %s: %s", url, exc)
+        return ""
+    if resp.status_code != 200:
+        logger.info("HTTP %s for %s", resp.status_code, url)
+        return ""
+    return resp.text or ""
+
+
+_NEXT_DATA_RE = re.compile(
+    r'id="__NEXT_DATA__"[^>]*>(.*?)</script>', re.DOTALL
+)
+
+# OddsSafari sport names (as shown in sportsMenu) → internal sport name.
+_MENU_NAME_TO_INTERNAL: Dict[str, str] = {
+    "soccer": "football",
+    "basketball": "basketball",
+    "tennis": "tennis",
+    "ice hockey": "hockey",
+    "handball": "handball",
+    "volleyball": "volleyball",
+    "baseball": "baseball",
+    "rugby union": "rugby",
+    "rugby league": "rugby",
+    "e-sports": "esports",
+    "esports": "esports",
+}
+
+
+def fetch_sport_menu(
+    *, session: Optional["requests.Session"] = None
+) -> Dict[str, List[str]]:
+    """Read the authoritative sport-ID list from the page's ``__NEXT_DATA__``.
+
+    OddsSafari embeds ``props.pageProps.global.sportsMenu`` with entries like
+    ``{"SportID": 10, "SportName": "Soccer"}``. Using it means one request
+    instead of probing IDs, and it stays correct when the site renumbers tabs.
+
+    Returns ``{internal_sport: [page_id, ...]}`` (empty dict on failure).
+    """
+    html = fetch_dropping_odds_html(DROPPING_ODDS_ROOT, session=session)
+    if not html:
+        return {}
+    match = _NEXT_DATA_RE.search(html)
+    if not match:
+        logger.info("__NEXT_DATA__ not present — cannot read sportsMenu")
+        return {}
+    try:
+        import json
+
+        data = json.loads(match.group(1))
+        menu = (
+            data.get("props", {})
+            .get("pageProps", {})
+            .get("global", {})
+            .get("sportsMenu", [])
+        )
+    except Exception as exc:
+        logger.warning("failed to parse __NEXT_DATA__: %s", exc)
+        return {}
+
+    mapping: Dict[str, List[str]] = {}
+    for entry in menu or []:
+        sid = entry.get("SportID")
+        name = (entry.get("SportName") or "").strip().lower()
+        internal = _MENU_NAME_TO_INTERNAL.get(name)
+        if sid is None or not internal:
+            continue
+        mapping.setdefault(internal, []).append(str(sid))
+    return mapping
+
+
+def _is_missing_sport_page(html: str) -> bool:
+    """True when OddsSafari served its 404 page (sport has no events now)."""
+    return "404 | OddsSafari" in html[:4000]
+
+
+def discover_sport_page_ids(
+    sport: str,
+    *,
+    session: Optional["requests.Session"] = None,
+    candidates: Iterable[str] = _ID_PROBE_CANDIDATES,
+) -> List[str]:
+    """Return the OddsSafari page IDs whose rows actually match *sport*.
+
+    Probes the hardcoded mapping first (cheap, one request in the happy path)
+    and only falls back to scanning the candidate grid when that yields
+    nothing. Returns an empty list when the sport has no events today.
+    """
+    internal = _internal_name(sport) or (sport or "").lower()
+    session = session or requests.Session()
+
+    # Preferred: the site's own sport menu (one request, always current).
+    menu = fetch_sport_menu(session=session)
+    if menu.get(internal):
+        logger.info("sportsMenu: '%s' → IDs %s", internal, menu[internal])
+        return menu[internal]
+    if menu:
+        logger.info(
+            "sportsMenu has no entry for '%s' — no events for it right now",
+            internal,
+        )
+        return []
+
+    def _matching_ids(ids: Iterable[str]) -> List[str]:
+        found: List[str] = []
+        for sid in ids:
+            html = fetch_dropping_odds_html(
+                f"{DROPPING_ODDS_ROOT}/sports/{sid}", session=session
+            )
+            if not html or _is_missing_sport_page(html):
+                continue
+            rows = parse_dropping_odds_table(html, sport_page_id=sid)
+            if any((r.sport or "") == internal for r in rows):
+                found.append(sid)
+        return found
+
+    preferred = list(SPORT_TO_PAGE_IDS.get(internal, ()))
+    ids = _matching_ids(preferred) if preferred else []
+    if ids:
+        return ids
+
+    logger.info(
+        "Sport '%s': hardcoded IDs %s gave no rows — scanning candidates",
+        internal, preferred or "(none)",
+    )
+    remaining = [c for c in candidates if c not in preferred]
+    return _matching_ids(remaining)
+
+
+def collect_rows_via_http(
+    *,
+    sport: Optional[str] = None,
+    sport_page_ids: Optional[Iterable[str]] = None,
+    max_pages_per_sport: int = _MAX_PAGES_PER_SPORT,
+    session: Optional["requests.Session"] = None,
+) -> List[DroppingOddsRow]:
+    """Collect dropping-odds rows over plain HTTP (no browser).
+
+    When *sport* is given and *sport_page_ids* is not, the correct page IDs
+    are discovered by content so a stale hardcoded ID cannot silently yield
+    zero rows.
+    """
+    session = session or requests.Session()
+
+    ids = list(sport_page_ids or [])
+    if not ids and sport:
+        ids = discover_sport_page_ids(sport, session=session)
+        if not ids:
+            logger.warning(
+                "No OddsSafari page currently lists sport '%s' "
+                "(likely no events today)", sport,
+            )
+            return []
+    if not ids:
+        ids = list(FALLBACK_SPORT_PAGE_IDS)
+
+    all_rows: List[DroppingOddsRow] = []
+    seen: set = set()
+
+    for sid in ids:
+        page_signatures: set = set()
+        for page in range(1, max_pages_per_sport + 1):
+            suffix = "" if page == 1 else f"?page={page}"
+            url = f"{DROPPING_ODDS_ROOT}/sports/{sid}{suffix}"
+            html = fetch_dropping_odds_html(url, session=session)
+            if not html or _is_missing_sport_page(html):
+                break
+            rows = parse_dropping_odds_table(html, sport_page_id=sid)
+            if not rows:
+                break
+            signature = hash(tuple(
+                (r.match_url, r.outcome, r.current_odds) for r in rows
+            ))
+            if signature in page_signatures:
+                # Pagination exhausted: the site re-serves the same page.
+                break
+            page_signatures.add(signature)
+
+            for row in rows:
+                key = (row.match_url, row.outcome)
+                if key in seen:
+                    continue
+                seen.add(key)
+                all_rows.append(row)
+
+        logger.info("sport_page_id=%s — total rows so far: %d", sid, len(all_rows))
+
+    return all_rows
 
 
 def _wait_for_table(driver, timeout: float = _DEFAULT_PAGE_WAIT_S) -> None:
@@ -506,9 +851,18 @@ __all__ = [
     "DROPPING_ODDS_ROOT",
     "FALLBACK_SPORT_PAGE_IDS",
     "SPORT_TO_PAGE_IDS",
+    "SPORT_ODDS_RANGE",
+    "DEFAULT_ODDS_RANGE",
+    "odds_range_for_sport",
     "DroppingOddsRow",
     "map_slug_to_internal",
     "is_livesport_supported_sport",
+    "is_enrichable_sport",
+    "uses_sofascore_only_enrichment",
+    "fetch_dropping_odds_html",
+    "fetch_sport_menu",
+    "discover_sport_page_ids",
+    "collect_rows_via_http",
     "parse_dropping_odds_table",
     "is_qualifying_row",
     "collect_dropping_odds_rows",
