@@ -41,10 +41,24 @@ venv.bak/
 Thumbs.db
 
 # Project specific
-outputs/
+# NOTE: must be `outputs/*`, not `outputs/`. Git cannot re-include a file
+# once its parent directory is excluded, so with `outputs/` every `!` rule
+# below was silently dead — which is why no results_summary_*.json ever
+# reached the repo despite the exception.
+outputs/*
 !outputs/mailed_manifest_*.json
 !outputs/results_summary_*.json
 !outputs/telegram_manifest_*.json
+# Accumulated match outcomes — the only durable record of settled results.
+# Without this exception it stayed on the CI runner and was lost every run,
+# which made the real-data backtest impossible.
+!outputs/result_store.json
+!outputs/settled_*.json
+!outputs/scoring_calibration.json
+!outputs/tennis_calibration.json
+# The Dropping Odds workflow commits these; without the exception its
+# `git add` was a silent no-op.
+!outputs/oddssafari_dropping_*.json
 *.log
 scraper_log.txt
 email_config.py

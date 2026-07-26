@@ -104,12 +104,16 @@ jobs:
             echo "ℹ️ No telegram manifest for $TARGET_DATE — skipping Telegram subset check"
           fi
 
-      # 7. Commit result summary
+      # 7. Commit result summary + the accumulated result store.
+      # The store is what makes backtesting possible: it is the only place
+      # final scores survive between runs. Previously it lived only on the
+      # runner and vanished with it.
       - name: Commit result summary
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add outputs/results_summary_*.json 2>/dev/null || true
+          git add outputs/result_store.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ No new summaries to commit"
           else
@@ -139,5 +143,7 @@ jobs:
         if: always()
         with:
           name: results-summary-${{ steps.set-date.outputs.date }}-${{ github.run_id }}
-          path: outputs/results_summary_*.json
+          path: |
+            outputs/results_summary_*.json
+            outputs/result_store.json
           retention-days: 30

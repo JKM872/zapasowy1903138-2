@@ -1,0 +1,163 @@
+name: "Backtest & Calibration"
+
+# Measures whether the scoring model actually beats the bookmaker on settled
+# matches, and optionally recalibrates the source weights.
+#
+# Two data sources, tried in order:
+#   1. Supabase `predictions` rows that already carry `actual_result`
+#      (needs SUPABASE_SERVICE_ROLE_KEY / SUPABASE_KEY).
+#   2. Local join of results/*.json (features) with outputs/result_store.json
+#      (outcomes accumulated by the Check Results workflow).
+#
+# Runs weekly so the sample grows before each measurement; the numbers are
+# meaningless on a handful of matches.
+
+on:
+  schedule:
+    # Mondays 06:00 UTC — after a full weekend of settled fixtures.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: 'Sport to backtest'
+        required: false
+        default: 'football'
+        type: choice
+        options:
+          - football
+          - all
+      days:
+        description: 'Lookback window in days (Supabase source)'
+        required: false
+        default: '180'
+        type: string
+      optimise:
+        description: 'Search for better source weights'
+        required: false
+        default: false
+        type: boolean
+      save_weights:
+        description: 'Commit new weights when they beat defaults on held-out data'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Export settled matches
+        id: export
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          SPORT="${{ github.event.inputs.sport || 'football' }}"
+          DAYS="${{ github.event.inputs.days || '180' }}"
+          OUT="outputs/settled_${SPORT}.json"
+
+          echo "## Backtest — ${SPORT}" >> "$GITHUB_STEP_SUMMARY"
+
+          # Prefer Supabase (richer history), fall back to the local join.
+          if python export_settled.py --source supabase --sport "$SPORT" --days "$DAYS"; then
+            echo "source=supabase" >> $GITHUB_OUTPUT
+          elif python export_settled.py --source local --sport "$SPORT"; then
+            echo "source=local" >> $GITHUB_OUTPUT
+          else
+            echo "source=none" >> $GITHUB_OUTPUT
+            {
+              echo ""
+              echo "No settled matches available yet."
+              echo ""
+              echo "Outcomes come from the Check Results workflow"
+              echo "(\`outputs/result_store.json\`) or from Supabase"
+              echo "\`predictions.actual_result\`. Let a few days of results"
+              echo "accumulate and re-run."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          echo "settled=$OUT" >> $GITHUB_OUTPUT
+          python -c "
+          import json, sys
+          rows = json.load(open('$OUT', encoding='utf-8'))
+          print(f'Exported {len(rows)} settled rows')
+          " >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Benchmark against the market
+        if: steps.export.outputs.source != 'none'
+        run: |
+          EXTRA=""
+          if [ "${{ github.event.inputs.optimise }}" = "true" ]; then
+            EXTRA="--optimise --iterations 40"
+          fi
+          if [ "${{ github.event.inputs.save_weights }}" = "true" ]; then
+            EXTRA="$EXTRA --save"
+          fi
+
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python calibrate_weights.py \
+            --real "${{ steps.export.outputs.settled }}" \
+            $EXTRA 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Simulation sanity check
+        if: steps.export.outputs.source == 'none'
+        run: |
+          # No real data yet — at least verify the maths still holds. The
+          # numbers describe the simulator, not real fixtures.
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python backtest_engine.py --simulate 2000 --seed 42 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit calibration and export
+        if: steps.export.outputs.source != 'none'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/settled_*.json outputs/scoring_calibration.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No calibration changes to commit"
+          else
+            git commit -m "data: backtest export + calibration [skip ci]"
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then break; fi
+              git fetch origin main || true
+              git rebase origin/main || git rebase --abort || true
+              sleep $(( (RANDOM % 5) + 2 ))
+            done
+          fi
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: backtest-${{ github.run_id }}
+          path: |
+            outputs/settled_*.json
+            outputs/scoring_calibration.json
+          retention-days: 30
+          if-no-files-found: ignore
