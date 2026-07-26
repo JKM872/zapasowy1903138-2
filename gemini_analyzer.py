@@ -149,38 +149,7 @@ def analyze_match(
         }
     """
     
-    # Sprawdź dostępność
-    if not GEMINI_AVAILABLE:
-        return {
-            'prediction': 'Gemini AI niedostępne',
-            'confidence': 0,
-            'reasoning': 'Zainstaluj: pip install google-generativeai',
-            'recommendation': 'SKIP',
-            'error': 'Gemini SDK not installed'
-        }
-    
-    if not GEMINI_API_KEY:
-        return {
-            'prediction': 'Brak API key',
-            'confidence': 0,
-            'reasoning': 'Ustaw GEMINI_API_KEY w gemini_config.py lub jako zmienną środowiskową',
-            'recommendation': 'SKIP',
-            'error': 'No API key configured'
-        }
-    
-    # Skonfiguruj API
-    try:
-        genai.configure(api_key=GEMINI_API_KEY)
-    except Exception as e:
-        return {
-            'prediction': 'Błąd konfiguracji API',
-            'confidence': 0,
-            'reasoning': str(e),
-            'recommendation': 'SKIP',
-            'error': f'API configuration error: {e}'
-        }
-
-    # Przygotuj prompt dla AI
+    # Przygotuj prompt dla AI (wspólny dla wszystkich backendów)
     prompt = _build_analysis_prompt(
         home_team=home_team,
         away_team=away_team,
@@ -196,6 +165,35 @@ def analyze_match(
         draw_odds=draw_odds,
         additional_info=additional_info
     )
+
+    # ------------------------------------------------------------------
+    # Backend selection.
+    # Gemini is tried first only when it is genuinely usable. When the SDK or
+    # key is missing — the state this repo has been in for its whole history,
+    # 0 predictions across 160k matches — we go straight to Groq instead of
+    # returning a SKIP placeholder.
+    # ------------------------------------------------------------------
+    gemini_usable = GEMINI_AVAILABLE and bool(GEMINI_API_KEY)
+
+    if gemini_usable:
+        try:
+            genai.configure(api_key=GEMINI_API_KEY)
+        except Exception as e:
+            print(f"   ⚠️ Gemini config error ({e}) — próbuję Groq")
+            gemini_usable = False
+
+    if not gemini_usable:
+        groq_result = _analyze_with_groq(prompt)
+        if groq_result is not None:
+            return groq_result
+        return {
+            'prediction': 'Brak dostępnego backendu AI',
+            'confidence': 0,
+            'reasoning': ('Gemini: brak SDK lub klucza; Groq: brak GROQ_API_KEY '
+                          'lub błąd API'),
+            'recommendation': 'SKIP',
+            'error': 'No AI backend available',
+        }
 
     # v7.3 — rotacja modeli z chain. Pierwszy działający → cache.
     global _GEMINI_ACTIVE_MODEL
@@ -247,7 +245,13 @@ def analyze_match(
         if not (_is_quota_or_rate_error(last_err) or _is_model_unavailable_error(last_err)):
             break
 
-    # Wyczerpaliśmy chain albo jeden model padł na transient
+    # Gemini chain exhausted — fall back to Groq before giving up, so a
+    # quota-exhausted Gemini key does not silently disable AI analysis.
+    print(f"   ↻ Gemini wyczerpany ({len(chain)} modeli) — przechodzę na Groq")
+    groq_result = _analyze_with_groq(prompt)
+    if groq_result is not None:
+        return groq_result
+
     return {
         'prediction': f'Błąd API (po {len(chain)} modelach)',
         'confidence': 0,
@@ -255,6 +259,80 @@ def analyze_match(
         'recommendation': 'SKIP',
         'error': f'API error: {type(last_err).__name__ if last_err else "?"}'
     }
+
+
+def _analyze_with_groq(prompt: str) -> Optional[Dict[str, Any]]:
+    """Run the analysis prompt through Groq. Returns None when unavailable.
+
+    Uses the same prompt and the same response parser as Gemini, so the output
+    shape (prediction/confidence/reasoning/recommendation) is identical and
+    downstream consumers need no changes. ``ai_provider`` records which backend
+    actually answered.
+    """
+    try:
+        import groq_client
+        import requests
+    except ImportError:
+        return None
+
+    key = groq_client.api_key()
+    if not key:
+        return None
+
+    model = groq_client.resolve_model(key)
+
+    def _post(model_id: str):
+        return requests.post(
+            groq_client.CHAT_ENDPOINT,
+            headers={'Authorization': f'Bearer {key}',
+                     'Content-Type': 'application/json'},
+            json={
+                'model': model_id,
+                'messages': [{'role': 'user', 'content': prompt}],
+                'temperature': 0.2,
+                'max_tokens': 700,
+            },
+            timeout=groq_client.REQUEST_TIMEOUT,
+        )
+
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            resp = _post(model)
+        except Exception as e:
+            if attempt < MAX_RETRIES:
+                time.sleep(2)
+                continue
+            print(f"   ⚠️ Groq AI error: {type(e).__name__}: {str(e)[:80]}")
+            return None
+
+        # Retired model → re-resolve once and retry.
+        if groq_client.is_decommissioned_error(resp.status_code, resp.text):
+            groq_client.reset_resolved_model()
+            new_model = groq_client.resolve_model(key, force=True)
+            if new_model != model:
+                print(f"   ↻ Groq: model '{model}' wycofany → '{new_model}'")
+                model = new_model
+                continue
+
+        if resp.status_code == 200:
+            try:
+                text = resp.json()['choices'][0]['message']['content']
+            except (KeyError, IndexError, ValueError) as e:
+                print(f"   ⚠️ Groq: nieczytelna odpowiedź ({e})")
+                return None
+            result = _parse_gemini_response(text)
+            result['ai_provider'] = f'groq:{model}'
+            return result
+
+        # 429 / 5xx are worth one retry; anything else is terminal.
+        if resp.status_code == 429 or resp.status_code >= 500:
+            if attempt < MAX_RETRIES:
+                time.sleep(2)
+                continue
+        print(f"   ⚠️ Groq API {resp.status_code}: {resp.text[:100]}")
+        return None
+
+    return None
 
 
 # ============================================
@@ -343,6 +421,7 @@ Sport: {sport}
 ## TASK
 Analyze ALL available data above and respond **in English** using EXACTLY this format:
 
+PICK: [exactly one of: 1 | X | 2 — where 1 = home win, X = draw, 2 = away win. Use X only in sports that can end level.]
 PREDICTION: [1-2 sentence prediction with key reasoning]
 CONFIDENCE: [0-100 integer]
 REASONING: [4-6 sentences covering: H2H patterns, form trends, home/away advantage, odds analysis, and overall risk assessment. Mention specific numbers.]
@@ -367,6 +446,11 @@ def _parse_gemini_response(response_text: str) -> Dict[str, Any]:
 
     result: Dict[str, Any] = {
         'prediction': '',
+        # Machine-readable outcome. The scoring engine maps the prediction to a
+        # side via its FIRST CHARACTER, so a prose sentence ("Wisla is likely…")
+        # silently read as a draw signal. The model is now asked for an explicit
+        # 1/X/2 token, and empty means "no usable pick" so the engine abstains.
+        'pick': '',
         'confidence': 0,
         'reasoning': '',
         'recommendation': 'SKIP',
@@ -381,7 +465,15 @@ def _parse_gemini_response(response_text: str) -> Dict[str, Any]:
         for line in lines:
             line = line.strip()
 
-            if line.startswith('PREDICTION:'):
+            if line.startswith('PICK:'):
+                token = line.replace('PICK:', '').strip().upper()
+                # Tolerate decorations like "**1**" or "1 (home win)".
+                for candidate in ('1', 'X', '2'):
+                    if candidate in token:
+                        result['pick'] = candidate
+                        break
+
+            elif line.startswith('PREDICTION:'):
                 result['prediction'] = line.replace('PREDICTION:', '').strip()
 
             elif line.startswith('CONFIDENCE:'):

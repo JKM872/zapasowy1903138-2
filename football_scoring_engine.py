@@ -878,16 +878,27 @@ class FeatureExtractor:
             f['market_efficiency'] = 0.0
             f['odds_available'] = 0.0
 
-        # 7. Gemini AI confidence + prediction
+        # 7. AI confidence + pick (Gemini or Groq — same output contract).
+        # The pick MUST come from an explicit 1/X/2 field. The old code derived
+        # it from the first character of the prose prediction, so any sentence
+        # ("Wisla is likely to win…") resolved to 0.5 and was fed into the
+        # engine as a DRAW signal at full AI weight.
         gem_conf = _safe_float(m.get('gemini_confidence'))
-        gem_pred = m.get('gemini_prediction', '')
+        gem_pick = str(m.get('gemini_pick') or m.get('ai_pick') or '').strip().upper()
         gem_rec = m.get('gemini_recommendation', '')
-        if gem_conf > 0 and gem_pred:
+        if gem_pick not in ('1', 'X', '2'):
+            # Legacy rows stored a bare token in gemini_prediction; accept it
+            # only when it really is just that token.
+            legacy = str(m.get('gemini_prediction') or '').strip().upper()
+            gem_pick = legacy if legacy in ('1', 'X', '2') else ''
+        if gem_conf > 0 and gem_pick:
             f['gemini_conf'] = gem_conf / 100.0
-            f['gemini_pred'] = {'1': 1.0, 'X': 0.5, '2': 0.0}.get(str(gem_pred)[:1], 0.5)
+            f['gemini_pred'] = {'1': 1.0, 'X': 0.5, '2': 0.0}[gem_pick]
             f['gemini_high'] = 1.0 if gem_rec == 'HIGH' else 0.0
             available += 1
         else:
+            # No machine-readable pick -> abstain (0.5 conf makes the source
+            # skip itself in score_match).
             f['gemini_conf'] = 0.5
             f['gemini_pred'] = 0.5
             f['gemini_high'] = 0.0

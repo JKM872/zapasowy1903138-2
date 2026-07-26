@@ -681,6 +681,11 @@ def scrape_and_send_email(
                         )
                         if gemini_result:
                             row['gemini_prediction'] = gemini_result.get('prediction')
+                            # Machine-readable 1/X/2 pick — this is what the
+                            # scoring engine consumes; the prose prediction is
+                            # for humans only.
+                            row['gemini_pick'] = gemini_result.get('pick', '')
+                            row['ai_provider'] = gemini_result.get('ai_provider', 'gemini')
                             row['gemini_confidence'] = gemini_result.get('confidence')
                             row['gemini_reasoning'] = gemini_result.get('reasoning')
                             row['gemini_recommendation'] = gemini_result.get('recommendation')
@@ -1345,8 +1350,12 @@ WAŻNE dla Gmail:
                        help='🗳️ Wyłącz pobieranie Fan Vote z SofaScore.com')
     parser.add_argument('--use-odds', action='store_true',
                        help='💰 Pobieraj kursy z FlashScore.com')
-    parser.add_argument('--use-gemini', action='store_true',
-                       help='🤖 Analizuj mecze z Gemini AI')
+    # --use-ai is the accurate name: the backend is Gemini when a Gemini key
+    # works, otherwise Groq. --use-gemini stays as an alias so existing
+    # workflows keep working.
+    parser.add_argument('--use-ai', '--use-gemini', dest='use_gemini',
+                       action='store_true',
+                       help='🤖 Analiza AI (Gemini jeśli dostępny, w przeciwnym razie Groq)')
     parser.add_argument('--app-url', default=None,
                        help='URL aplikacji UI do wysyłania danych (np. http://localhost:3000)')
     parser.add_argument('--app-api-key', default=None,
