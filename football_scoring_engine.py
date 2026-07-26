@@ -648,7 +648,14 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
         'home_advantage': 0.46,
         'draw_rate': 0.26,
         'away_rate': 0.28,
-        'temperature': 1.15,  # how much to soften model probs
+        # Softening factor for model probabilities. Raised from 1.15 to 1.50
+        # after calibration measurement (calibrate_weights.py): at 1.15 the
+        # engine was systematically over-confident — buckets claiming 83%
+        # landed 67%, and 72% landed 62%. A sweep over 1.15-2.40 put the
+        # optimum at 1.5-1.7, confirmed on three independent seeds where 1.50
+        # improved both log-loss and Brier every time without costing
+        # accuracy. Values above ~2.0 start washing out real signal.
+        'temperature': 1.50,
         'min_draw_prob': 0.18,  # never go below this
         'avg_total_goals': 2.7,  # long-run avg goals/match (Poisson tier-3)
     },
