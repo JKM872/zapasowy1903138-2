@@ -349,3 +349,80 @@ class TestPickWithoutOdds:
         assert scored.ev > -900          # a real EV was computed
         # The away EV must beat the home EV, which is what drove the choice.
         assert scored.cal_away * 1.4 - 1 > scored.cal_home * 3.5 - 1
+
+
+class TestOddsSourceAbstains:
+    """With no market, the odds source must abstain rather than invent a price.
+
+    The odds weight (0.21) is the single largest source. When odds were absent
+    the extractor still supplied a placeholder distribution and the model spent
+    the full weight on it, so an invented 'market' drove up to ~44% of the
+    prediction. Baseball has no odds at all in the real data, meaning every
+    baseball pick was shaped by this placeholder.
+    """
+
+    def _row(self, **kw):
+        m = {
+            'home_team': 'A', 'away_team': 'B', 'sport': 'football',
+            'home_form': ['W', 'W', 'W'], 'away_form': ['L', 'L', 'L'],
+            'h2h_last5': [{'home': 'A', 'away': 'B', 'score': '3:0'}],
+        }
+        m.update(kw)
+        return m
+
+    def test_flag_is_false_without_odds(self):
+        feats = FootballScoringEngine().extractor.extract(self._row())
+        assert feats['odds_available'] == 0.0
+
+    def test_flag_is_true_with_odds(self):
+        feats = FootballScoringEngine().extractor.extract(
+            self._row(home_odds=1.9, draw_odds=3.5, away_odds=4.0))
+        assert feats['odds_available'] == 1.0
+
+    def test_incomplete_odds_count_as_missing(self):
+        # A lone home price cannot imply a distribution.
+        feats = FootballScoringEngine().extractor.extract(self._row(home_odds=1.9))
+        assert feats['odds_available'] == 0.0
+
+    def test_probabilities_still_valid_without_odds(self):
+        scored = FootballScoringEngine().score_match(self._row())
+        total = scored.cal_home + scored.cal_draw + scored.cal_away
+        assert total == pytest.approx(1.0, abs=1e-6)
+
+    def test_evidence_drives_prediction_without_odds(self):
+        # Home is dominant on both form and H2H, so it must be favoured on
+        # evidence alone — not diluted by a neutral fake market.
+        scored = FootballScoringEngine().score_match(self._row())
+        assert scored.cal_home > scored.cal_away
+
+    def test_no_data_lands_near_the_sport_prior(self):
+        scored = FootballScoringEngine().score_match(
+            {'home_team': 'A', 'away_team': 'B', 'sport': 'football'})
+        # Football prior is roughly 0.46 / 0.26 / 0.28.
+        assert 0.32 < scored.cal_home < 0.52
+        assert 0.18 < scored.cal_draw < 0.34
+        assert 0.20 < scored.cal_away < 0.42
+
+    def test_baseball_without_odds_follows_the_evidence(self):
+        engine = FootballScoringEngine()
+        home_strong = engine.score_match(self._row(
+            sport='baseball',
+            home_wins_in_h2h_last5=5, away_wins_in_h2h_last5=0, h2h_count=5))
+        away_strong = engine.score_match(self._row(
+            sport='baseball', home_form=['L', 'L', 'L'], away_form=['W', 'W', 'W'],
+            h2h_last5=[{'home': 'A', 'away': 'B', 'score': '0:3'}],
+            home_wins_in_h2h_last5=0, away_wins_in_h2h_last5=5, h2h_count=5,
+            focus_team='away'))
+        assert home_strong.cal_home > 0.5
+        assert away_strong.cal_away > 0.5
+        assert home_strong.best_pick == '1'
+        assert away_strong.best_pick == '2'
+
+    def test_market_present_still_anchors_the_model(self):
+        # Sanity guard: the market must keep its influence when it exists.
+        engine = FootballScoringEngine()
+        no_market = engine.score_match(self._row())
+        against_market = engine.score_match(
+            self._row(home_odds=6.0, draw_odds=4.0, away_odds=1.3))
+        # A strong market for the away side must pull the home probability down.
+        assert against_market.cal_home < no_market.cal_home

@@ -863,12 +863,20 @@ class FeatureExtractor:
             f['odds_away'] = imp_a / margin
             # NEW: Market efficiency (sharper book = stronger signal)
             f['market_efficiency'] = _market_efficiency_score(odds_h, odds_d, odds_a)
+            f['odds_available'] = 1.0
             available += 1
         else:
+            # No market. The values below are a neutral fallback kept for any
+            # consumer that reads them directly — but `odds_available` marks
+            # them as NOT real market data, so the scoring model abstains
+            # instead of spending the odds weight (0.21, the largest single
+            # source) on an invented price. Baseball has no odds at all, so
+            # every baseball row used to be driven by this placeholder.
             f['odds_home'] = 0.40 if sport_allows_draw else 0.55
             f['odds_draw'] = 0.27 if sport_allows_draw else 0.0
             f['odds_away'] = 0.33 if sport_allows_draw else 0.45
             f['market_efficiency'] = 0.0
+            f['odds_available'] = 0.0
 
         # 7. Gemini AI confidence + prediction
         gem_conf = _safe_float(m.get('gemini_confidence'))
@@ -1086,12 +1094,17 @@ class FootballScoringEngine:
         sources_draw.append((feats['ss_draw'], ss_w))
         sources_away.append((feats['ss_away'], ss_w))
 
-        # Odds-implied (strongest signal) — boost when market is efficient
-        market_eff = feats.get('market_efficiency', 0.5)
-        odds_w = w['odds'] * (0.7 + 0.3 * market_eff)  # 70-100% based on efficiency
-        sources_home.append((feats['odds_home'], odds_w))
-        sources_draw.append((feats['odds_draw'], odds_w))
-        sources_away.append((feats['odds_away'], odds_w))
+        # Odds-implied (strongest signal) — boost when market is efficient.
+        # Abstain entirely when there is no market, the same way H2H, Forebet
+        # and Gemini abstain; _wavg then redistributes the weight across the
+        # sources that do carry information.
+        has_market_data = feats.get('odds_available', 0.0) > 0
+        if has_market_data:
+            market_eff = feats.get('market_efficiency', 0.5)
+            odds_w = w['odds'] * (0.7 + 0.3 * market_eff)  # 70-100% by efficiency
+            sources_home.append((feats['odds_home'], odds_w))
+            sources_draw.append((feats['odds_draw'], odds_w))
+            sources_away.append((feats['odds_away'], odds_w))
 
         # Poisson goal model (v3) — principled draw estimator from expected
         # goals. Only contributes when goal-level data is available. The
@@ -1199,8 +1212,10 @@ class FootballScoringEngine:
         # 15% when we have strong data + loose market
         prior_weight = max(0.10, min(0.55, 0.30 + 0.25 * market_eff - 0.20 * dq))
         
-        # Only blend if we actually have market odds
-        if market_prior[0] > 0.05 and market_prior[2] > 0.05:
+        # Only blend against a REAL market. The old check (`> 0.05`) passed
+        # for the placeholder too, so odds-less matches were anchored to a
+        # made-up prior.
+        if has_market_data:
             blended = _bayesian_blend(
                 market_prior, [raw_h, raw_d, raw_a], prior_weight=prior_weight
             )
@@ -1237,7 +1252,7 @@ class FootballScoringEngine:
         reg_strength = max(0.0, min(0.4,
             0.15 * disagreement + 0.10 * (1.0 - dq)
         ))
-        if reg_strength > 0 and market_prior[0] > 0.05:
+        if reg_strength > 0 and has_market_data:
             cal_h = cal_h * (1 - reg_strength) + market_prior[0] * reg_strength
             cal_d = cal_d * (1 - reg_strength) + market_prior[1] * reg_strength
             cal_a = cal_a * (1 - reg_strength) + market_prior[2] * reg_strength
@@ -1320,9 +1335,11 @@ class FootballScoringEngine:
         # KL divergence from market: how far did our model move from the
         # market prior? Used to flag outlier picks (potential value or risk).
         market_dist = [feats['odds_home'], feats['odds_draw'], feats['odds_away']]
-        if market_dist[0] > 0.05 and market_dist[2] > 0.05:
+        if has_market_data:
             kl_market = _kl_divergence([cal_h, cal_d, cal_a], market_dist)
         else:
+            # Without a market there is nothing to diverge from, so the outlier
+            # penalty must not fire on a placeholder comparison.
             kl_market = 0.0
         
         # Outlier flag: model strongly disagrees with market.
