@@ -21,8 +21,12 @@ import os
 # Get it from: https://console.groq.com/keys
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', 'your-api-key-here')
 
-# Model selection (Groq's fastest and most capable model)
-GROQ_MODEL = "llama-3.3-70b-versatile"
+# Model selection is NOT configured here any more.
+# `groq_client.resolve_model()` asks the API which models your key can use and
+# picks the best available one, because Groq retires model IDs periodically
+# (mixtral-8x7b-32768 was removed in March 2025) and a retired ID makes every
+# call fail with HTTP 400.
+# To pin a specific model anyway, set the GROQ_MODEL environment variable.
 
 # Rate limiting (seconds between requests)
 RATE_LIMIT_DELAY = 0.5

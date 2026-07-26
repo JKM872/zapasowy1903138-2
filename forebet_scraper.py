@@ -627,34 +627,18 @@ def _call_groq_api(prompt: str) -> Optional[str]:
     returns HTTP 400 and used to make this function fail silently forever; now
     a decommissioned model triggers one re-resolution and retry.
     """
-    import os
     import requests
 
-    # Try config file first, then environment variable
-    api_key = None
-    groq_cfg = None
-    try:
-        import groq_config as groq_cfg  # type: ignore[no-redef]
-        if groq_cfg.GROQ_ENABLED:
-            api_key = groq_cfg.GROQ_API_KEY
-    except ImportError:
-        pass
+    import groq_client
 
-    if not api_key:
-        api_key = os.environ.get('GROQ_API_KEY')
-
+    api_key = groq_client.api_key()
     if not api_key:
         print(f"      [!] Groq: Brak GROQ_API_KEY (ustaw w groq_config.py lub zmiennej srodowiskowej)")
         return None
 
-    if groq_cfg is not None:
-        model = groq_cfg.resolve_model(api_key)
-        endpoint = groq_cfg.CHAT_ENDPOINT
-        timeout = groq_cfg.REQUEST_TIMEOUT
-    else:
-        model = os.environ.get('GROQ_MODEL') or 'llama-3.3-70b-versatile'
-        endpoint = 'https://api.groq.com/openai/v1/chat/completions'
-        timeout = 30
+    model = groq_client.resolve_model(api_key)
+    endpoint = groq_client.CHAT_ENDPOINT
+    timeout = groq_client.REQUEST_TIMEOUT
 
     def _post(model_id: str):
         return requests.post(
@@ -677,15 +661,13 @@ def _call_groq_api(prompt: str) -> Optional[str]:
 
         # A retired model ID reports 400 with 'decommissioned'/'does not exist'.
         # Re-resolve against the live model list and retry once.
-        if response.status_code == 400 and groq_cfg is not None:
-            body = (response.text or '').lower()
-            if 'decommission' in body or 'does not exist' in body or 'not found' in body:
-                print(f"      ⚠️ Groq: model '{model}' niedostępny — szukam zamiennika")
-                groq_cfg.reset_resolved_model()
-                new_model = groq_cfg.resolve_model(api_key, force=True)
-                if new_model != model:
-                    print(f"      ↻ Groq: przechodzę na '{new_model}'")
-                    response = _post(new_model)
+        if groq_client.is_decommissioned_error(response.status_code, response.text):
+            print(f"      ⚠️ Groq: model '{model}' niedostępny — szukam zamiennika")
+            groq_client.reset_resolved_model()
+            new_model = groq_client.resolve_model(api_key, force=True)
+            if new_model != model:
+                print(f"      ↻ Groq: przechodzę na '{new_model}'")
+                response = _post(new_model)
 
         if response.status_code == 200:
             data = response.json()

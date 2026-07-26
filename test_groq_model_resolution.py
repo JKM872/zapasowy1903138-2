@@ -18,7 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
-import groq_config as gc  # noqa: E402
+import groq_client as gc  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
@@ -38,13 +38,13 @@ def _models_response(ids, status=200):
 
 class TestRetiredModelIsGone:
     def test_retired_mixtral_is_not_a_preference(self):
-        assert 'mixtral-8x7b-32768' not in gc.GROQ_MODEL_PREFERENCES
+        assert 'mixtral-8x7b-32768' not in gc.MODEL_PREFERENCES
 
     def test_default_model_is_not_the_retired_one(self):
-        assert gc.GROQ_MODEL != 'mixtral-8x7b-32768'
+        assert gc.MODEL_PREFERENCES[0] != 'mixtral-8x7b-32768'
 
     def test_preferences_are_not_empty(self):
-        assert len(gc.GROQ_MODEL_PREFERENCES) >= 2
+        assert len(gc.MODEL_PREFERENCES) >= 2
 
 
 class TestListAvailableModels:
@@ -94,7 +94,7 @@ class TestResolveModel:
 
     def test_falls_back_when_discovery_fails(self):
         with patch('requests.get', side_effect=OSError('offline')):
-            assert gc.resolve_model('key') == gc.GROQ_MODEL_PREFERENCES[0]
+            assert gc.resolve_model('key') == gc.MODEL_PREFERENCES[0]
 
     def test_result_is_cached(self):
         with patch('requests.get', return_value=_models_response(
@@ -188,7 +188,7 @@ class TestCallRetriesOnDecommissionedModel:
 
     def test_returns_none_without_api_key(self, monkeypatch):
         monkeypatch.delenv('GROQ_API_KEY', raising=False)
-        monkeypatch.setattr(gc, 'GROQ_API_KEY', None)
+        monkeypatch.setattr(gc, 'api_key', lambda: None)
         _call_groq_api = _load_call_groq_api()
         assert _call_groq_api('prompt') is None
 
@@ -208,3 +208,4 @@ class TestCallRetriesOnDecommissionedModel:
             _call_groq_api('prompt')
 
         assert seen['model'] == 'llama-3.3-70b-versatile'
+
