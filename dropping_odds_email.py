@@ -248,8 +248,11 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
     # Scoring engine
     scoring = event.get("scoring")
     
-    # Event time
+    # Event date + time. OddsSafari gives the date as DD/MM; showing it matters
+    # because late fixtures roll past midnight into the next day.
     event_time = event.get("event_time", "")
+    event_date = event.get("event_date", "")
+    when = " ".join(p for p in (event_date, event_time) if p)
     
     # Drop badge
     drop_color = _drop_badge_color(drop_pct)
@@ -264,7 +267,7 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
                     <div style="font-size: 18px; font-weight: 700; margin-top: 4px;">{home} vs {away}</div>
                 </div>
                 <div style="text-align: right;">
-                    <div style="font-size: 11px; color: rgba(255,255,255,0.7);">{event_time or ""}</div>
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.7);">{when}</div>
                     <div style="background: {drop_color}; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-top: 4px;">
                         ↓ {drop_pct:.1f}%
                     </div>
@@ -412,7 +415,15 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
         prob_x = _safe_float(scoring.get("prob_X")) * 100
         prob_2 = _safe_float(scoring.get("prob_2")) * 100
         
-        ev_color = "#4caf50" if ev > 0 else "#f44336"
+        # The engine returns a sentinel (-999) when the pick has no usable
+        # odds; printing it as "EV: -999.000" reads like a real valuation.
+        ev_block = (
+            '<div style="font-size: 12px; color: rgba(255,255,255,0.75);">'
+            'EV: brak kursu</div>'
+            if ev <= -900 else
+            f'<div style="font-size: 14px; font-weight: 700; '
+            f'color: {"#ffd740" if ev > 0 else "#ff8a80"};">EV: {ev:+.3f}</div>'
+        )
         html += f'''
             <div style="margin-bottom: 14px; padding: 10px; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); border-radius: 8px; color: white;">
                 <div style="font-size: 11px; color: rgba(255,255,255,0.7);">🧠 Algorytm (Scoring Engine)</div>
@@ -422,7 +433,7 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
                         <div style="font-size: 11px; color: rgba(255,255,255,0.8);">P: {prob_1:.0f}% / {prob_x:.0f}% / {prob_2:.0f}%</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 14px; font-weight: 700; color: {"#ffd740" if ev > 0 else "#ff8a80"};">EV: {ev:+.3f}</div>
+                        {ev_block}
                         <div style="font-size: 11px; color: rgba(255,255,255,0.8);">Edge: {edge:+.1f}% | Conf: {confidence:.0f}</div>
                     </div>
                 </div>

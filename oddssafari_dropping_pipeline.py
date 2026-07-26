@@ -282,7 +282,9 @@ def _enrich_row_via_sofascore(row: DroppingOddsRow) -> Dict[str, Any]:
             focus_wins = (
                 h2h.get("away_wins") if focus_team == "away" else h2h.get("home_wins")
             )
-            enrichment["win_rate"] = round((focus_wins or 0) / total * 100, 1)
+            # Stored as a 0-1 fraction: the email renders it as `win_rate*100`,
+            # matching what Livesport writes. Percent here showed "9000%".
+            enrichment["win_rate"] = round((focus_wins or 0) / total, 3)
 
     home_f = enrichment.get("home_form") or []
     away_f = enrichment.get("away_form") or []
@@ -341,6 +343,28 @@ def _enrich_row(
     result["livesport_confidence"] = round(confidence, 3)
 
     if not url:
+        # Livesport could not match the fixture (common for South American and
+        # Australian leagues). Fall back to SofaScore rather than reporting the
+        # event with no form at all.
+        fallback: Dict[str, Any] = {}
+        if _fill_form_from_sofascore(
+            fallback,
+            home_team=row.home_team,
+            away_team=row.away_team,
+            sport=sport,
+            focus_team=focus_team,
+        ):
+            fallback.setdefault("home_team", row.home_team)
+            fallback.setdefault("away_team", row.away_team)
+            fallback.setdefault("sport", sport)
+            fallback.setdefault("league", row.league)
+            fallback.setdefault("match_time", row.event_time)
+            result["status"] = "enriched_sofascore_only"
+            result["enrichment"] = fallback
+            print(
+                f"   🔁 Livesport nie znalazł meczu — SofaScore: "
+                f"H={fallback.get('home_form')} | A={fallback.get('away_form')}"
+            )
         return result
 
     try:
@@ -470,6 +494,7 @@ def _enrich_row(
             home_team=enrichment.get("home_team") or row.home_team,
             away_team=enrichment.get("away_team") or row.away_team,
             sport=sport,
+            focus_team=focus_team,
         )
         if filled:
             final_home = enrichment.get("home_form") or final_home
@@ -489,7 +514,7 @@ def _sport_has_draws(sport: Optional[str]) -> bool:
     'D' rather than dropped, otherwise the "last 5" window silently reaches
     further back than it claims.
     """
-    return (sport or "").lower() in {"football", "handball", "hockey"}
+    return (sport or "").lower() in {"football", "handball", "hockey", "rugby"}
 
 
 def _fill_form_from_sofascore(
@@ -498,6 +523,7 @@ def _fill_form_from_sofascore(
     home_team: str,
     away_team: str,
     sport: str,
+    focus_team: Optional[str] = None,
 ) -> bool:
     """Fill missing form (and H2H) in *enrichment* from the SofaScore API.
 
@@ -561,10 +587,18 @@ def _fill_form_from_sofascore(
         except Exception:
             h2h = None
         if h2h and h2h.get("total"):
-            enrichment["h2h_count"] = h2h["total"]
+            total = h2h["total"]
+            enrichment["h2h_count"] = total
             enrichment["home_wins_in_h2h_last5"] = h2h.get("home_wins")
             enrichment["away_wins_in_h2h_last5"] = h2h.get("away_wins")
             enrichment["h2h_source"] = "sofascore_api"
+            if not enrichment.get("win_rate"):
+                focus_wins = (
+                    h2h.get("away_wins") if focus_team == "away"
+                    else h2h.get("home_wins")
+                )
+                # 0-1 fraction; the email multiplies by 100.
+                enrichment["win_rate"] = round((focus_wins or 0) / total, 3)
             changed = True
 
     if found.get("event_id"):
