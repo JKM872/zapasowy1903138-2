@@ -44,7 +44,7 @@ import json
 import logging
 import random
 from datetime import datetime
-from typing import List, Dict, Optional
+from typing import Any, List, Dict, Optional, Tuple
 
 # Fix Unicode encoding issues on Windows
 if sys.platform == 'win32':
@@ -3144,9 +3144,10 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
     # 2. SURFACE
     out['surface'] = detect_tennis_surface(soup, url)
     
-    # 3. FORM — REAL form badges only (no fake defaults)
-    out['form_a'] = _extract_real_form_badges(soup, player_a)
-    out['form_b'] = _extract_real_form_badges(soup, player_b)
+    # 3. FORM — REAL form badges only (no fake defaults), resolved so that the
+    #    two players can never be handed the same section.
+    out['form_a'], out['form_b'] = _extract_form_badges_for_both(
+        soup, player_a, player_b)
 
     # 4. ODDS — already extracted from match-page soup (more reliable);
     #    try H2H page only if match page had nothing
@@ -3734,6 +3735,88 @@ def _check_tennis_data_completeness(out: Dict) -> tuple:
     return None, warnings  # No hard failure
 
 
+def _find_player_form_section(soup: BeautifulSoup, player_name: str,
+                              exclude: Optional[Any] = None) -> Optional[Any]:
+    """Locate the "Ostatnie mecze: <player>" section for *player_name*.
+
+    ``exclude`` lets the caller rule out a section already assigned to the
+    other player, so a fuzzy name match cannot claim the same block twice.
+    Returns the section element or None when it cannot be identified.
+    """
+    if not player_name:
+        return None
+
+    surname_parts = [p.strip('.').lower() for p in player_name.split()
+                     if len(p.strip('.')) > 2]
+
+    exact_hit = None
+    fuzzy_hit = None
+
+    for sec in soup.find_all('div', class_='h2h__section'):
+        if exclude is not None and sec is exclude:
+            continue
+        header = sec.select_one(
+            '[data-testid="wcl-headerSection-text"], '
+            '[class*="headerSection"], '
+            'div.h2h__sectionHeader, div.section__title'
+        )
+        if not header:
+            continue
+        header_text = header.get_text(strip=True).lower()
+
+        # Skip the direct head-to-head block — it is not a form section.
+        if any(kw in header_text for kw in
+               ('pojedynki', 'bezpośrednie', 'head-to-head', 'h2h')):
+            continue
+
+        if player_name.lower() in header_text:
+            exact_hit = sec
+            break
+        if fuzzy_hit is None and any(p in header_text for p in surname_parts):
+            fuzzy_hit = sec
+
+    return exact_hit or fuzzy_hit
+
+
+def _badges_from_section(section: Any) -> List[str]:
+    """Read up to five W/L form badges from an already-resolved section."""
+    form: List[str] = []
+    badges = section.select('[class*="badgeform"]') or section.select('[class*="badge"]')
+    for badge in badges:
+        classes = ' '.join(badge.get('class', [])).lower()
+        text = badge.get_text(strip=True).upper()
+        if 'win' in classes or text in ('Z', 'W'):
+            form.append('W')
+        elif 'lose' in classes or text in ('P', 'L'):
+            form.append('L')
+        if len(form) >= 5:
+            break
+    return form[:5]
+
+
+def _extract_form_badges_for_both(soup: BeautifulSoup, player_a: str,
+                                  player_b: str) -> Tuple[List[str], List[str]]:
+    """Resolve both players' form, guaranteeing disjoint sections.
+
+    Extracting each player independently allowed a fuzzy header match to point
+    both at the same block, producing two identical form lists that silently
+    neutralised the form factor. Assigning A first and excluding its section
+    when resolving B makes that impossible.
+    """
+    try:
+        sec_a = _find_player_form_section(soup, player_a)
+        sec_b = _find_player_form_section(soup, player_b, exclude=sec_a)
+        form_a = _badges_from_section(sec_a) if sec_a is not None else []
+        form_b = _badges_from_section(sec_b) if sec_b is not None else []
+        # Belt and braces: identical non-empty lists mean the resolution was
+        # ambiguous, so report no form rather than a fabricated tie.
+        if form_a and form_a == form_b:
+            return [], []
+        return form_a, form_b
+    except Exception:
+        return [], []
+
+
 def _extract_real_form_badges(soup: BeautifulSoup, player_name: str) -> List[str]:
     """Extract REAL form W/L badges from Livesport H2H page.
 
@@ -3785,8 +3868,17 @@ def _extract_real_form_badges(soup: BeautifulSoup, player_name: str) -> List[str
                 player_section = sec
                 break
 
-        # Strategy 2: Extract badges from the player's section
-        target = player_section if player_section else soup
+        # Strategy 2: Extract badges from the player's section.
+        # If we could not identify the player's own section we must give up.
+        # Falling back to the whole document returned the FIRST five badges on
+        # the page for whoever asked, so both players ended up with an
+        # identical form list — measured at 14.5% of tennis rows with form
+        # (vs 0.8% in football). A wrong form is worse than a missing one:
+        # the engine treats equal forms as a 50/50 signal, silently killing
+        # the form factor, while an empty list makes it abstain honestly.
+        if player_section is None:
+            return []
+        target = player_section
 
         # Livesport badge classes: wcl-badgeform_* with wcl-win_* or wcl-lose_*
         badges = target.select('[class*="badgeform"]')
