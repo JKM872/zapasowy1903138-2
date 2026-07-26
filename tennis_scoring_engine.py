@@ -585,9 +585,14 @@ class TennisScoringEngine:
         # SofaScore fan vote
         estimates['sofascore'] = feats.get('sofascore_prob_a', 0.5)
 
-        # Availability / injury impact
-        avail_impact = feats.get('avail_impact', 0.0)  # [-1,+1], >0 favours A
-        avail_p = 0.5 + avail_impact * 0.3  # maps to [0.2, 0.8]
+        # Availability / injury impact.
+        # `availability_impact` from prediction_data_contract is an unsigned
+        # MAGNITUDE (0 = clean, 1 = severe) describing how unreliable the
+        # prediction is — it carries no direction. Treating it as a signed
+        # value favoured player A the more uncertain the data was. A neutral
+        # 0.5 is the correct starting point; only the retirement flags below
+        # carry actual directional information.
+        avail_p = 0.5
         # Retirement flag penalty
         ret_a = feats.get('retirement_a', 0)
         ret_b = feats.get('retirement_b', 0)
@@ -611,8 +616,19 @@ class TennisScoringEngine:
         estimates['serve_model'] = _serve_model_prob_a(max(-1.0, min(1.0, serve_adv)))
 
         # --- Weighted average ---
-        prob_a = sum(estimates.get(k, 0.5) * w[k] for k in w)
+        # Normalise by the weight sum so a calibration file whose weights do
+        # not total 1.0 cannot systematically bias the result toward B.
+        w_total = sum(w.values()) or 1.0
+        prob_a = sum(estimates.get(k, 0.5) * w[k] for k in w) / w_total
         prob_a = max(0.02, min(0.98, prob_a))
+
+        # Availability uncertainty shrinks the prediction toward 50/50: the
+        # less we trust the squad/fitness picture, the less we should commit.
+        avail_impact = feats.get('avail_impact', 0.0)
+        if avail_impact > 0:
+            shrink = max(0.0, min(0.30, avail_impact * 0.30))
+            prob_a = prob_a * (1 - shrink) + 0.5 * shrink
+
         prob_b = 1.0 - prob_a
 
         # --- Temperature-scaled softmax calibration ---

@@ -839,7 +839,11 @@ def scrape_and_send_email(
                 _tscored = 0
                 for row in tennis_rows:
                     sm = tengine.score_match(row)
-                    row['scoring_pick'] = sm.best_pick
+                    # Normalise A/B to the 1/2 vocabulary used by every other
+                    # sport, so `scoring_pick` has one meaning across the API,
+                    # emails and Supabase. Raw A/B is kept alongside it.
+                    row['scoring_pick'] = '1' if sm.best_pick == 'A' else '2'
+                    row['scoring_pick_raw'] = sm.best_pick
                     row['scoring_prob'] = round(sm.best_prob * 100, 1)
                     row['scoring_ev'] = round(sm.ev, 3)
                     row['scoring_edge'] = round(sm.edge, 1)

@@ -434,6 +434,41 @@ def _h2h_outcome_rates(h2h: List[Dict], team_name: str,
     return w_win / w_total, w_draw / w_total, w_loss / w_total, counted
 
 
+def _h2h_from_aggregates(m: Dict, focus: str) -> Tuple[float, int]:
+    """Derive (win_rate, count) for the focus team from aggregate H2H fields.
+
+    Used when no ``h2h_last5`` list is available but win/loss totals are —
+    e.g. rows enriched through the SofaScore API, which reports only totals.
+    Falls back to a pre-computed ``win_rate`` when the counts are absent.
+
+    Returns ``(0.5, 0)`` when nothing usable is present.
+    """
+    home_wins = _safe_float(m.get('home_wins_in_h2h_last5',
+                                  m.get('home_wins_in_h2h')), -1.0)
+    away_wins = _safe_float(m.get('away_wins_in_h2h_last5',
+                                  m.get('away_wins_in_h2h')), -1.0)
+    total = _safe_float(m.get('h2h_count'), 0.0)
+
+    if home_wins >= 0 and away_wins >= 0 and (home_wins + away_wins) > 0:
+        decided = home_wins + away_wins
+        focus_wins = away_wins if focus == 'away' else home_wins
+        # Draws are the remainder of the sample and count as half, matching
+        # _h2h_win_rate_weighted's convention.
+        draws = max(0.0, total - decided)
+        denom = decided + draws
+        rate = (focus_wins + 0.5 * draws) / denom if denom > 0 else 0.5
+        return max(0.0, min(1.0, rate)), int(max(total, decided))
+
+    # `win_rate` is stored as a 0-1 fraction by the pipelines.
+    wr = _safe_float(m.get('win_rate'), -1.0)
+    if wr >= 0 and total > 0:
+        if wr > 1.0:          # tolerate a percentage slipping through
+            wr = wr / 100.0
+        return max(0.0, min(1.0, wr)), int(total)
+
+    return 0.5, 0
+
+
 def _poisson_pmf(lmbda: float, k: int) -> float:
     """Poisson probability mass P(X = k) for rate lmbda."""
     if lmbda <= 0:
@@ -619,10 +654,10 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
     },
     'basketball': {
         'home_advantage': 0.60,  # higher home advantage in basketball
-        'draw_rate': 0.0,        # almost never draws
+        'draw_rate': 0.0,        # overtime resolves ties — no draw exists
         'away_rate': 0.40,
         'temperature': 1.05,
-        'min_draw_prob': 0.01,
+        'min_draw_prob': 0.0,
     },
     'tennis': {
         'home_advantage': 0.52,
@@ -633,10 +668,10 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
     },
     'volleyball': {
         'home_advantage': 0.58,
-        'draw_rate': 0.0,
+        'draw_rate': 0.0,        # sets always produce a winner
         'away_rate': 0.42,
         'temperature': 1.05,
-        'min_draw_prob': 0.01,
+        'min_draw_prob': 0.0,
     },
     'handball': {
         'home_advantage': 0.55,
@@ -661,7 +696,40 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
         'temperature': 1.10,
         'min_draw_prob': 0.0,
     },
+    # e-sports (LoL, CS2, Dota): a match always resolves to a winner, so any
+    # draw probability is phantom. Without this entry the engine fell back to
+    # the football profile and assigned ~22% to a draw that cannot happen.
+    'esports': {
+        'home_advantage': 0.52,
+        'draw_rate': 0.0,
+        'away_rate': 0.48,
+        'temperature': 1.10,
+        'min_draw_prob': 0.0,
+    },
+    # Rugby union/league: draws exist but are rare (~1-2% of fixtures).
+    'rugby': {
+        'home_advantage': 0.55,
+        'draw_rate': 0.02,
+        'away_rate': 0.43,
+        'temperature': 1.10,
+        'min_draw_prob': 0.02,
+    },
 }
+
+
+# Sports whose scoring must never produce a draw probability. Used to route
+# picks and to keep the '1'/'X'/'2' triplet honest for two-outcome sports.
+NO_DRAW_SPORTS = frozenset({
+    sport for sport, prof in SPORT_PROFILES.items()
+    if prof.get('min_draw_prob', 0.0) <= 0.0
+})
+
+
+def sport_has_draw(sport: Optional[str]) -> bool:
+    """True when *sport* can end in a draw (per SPORT_PROFILES)."""
+    key = (sport or 'football').lower()
+    profile = SPORT_PROFILES.get(key, SPORT_PROFILES['football'])
+    return profile.get('min_draw_prob', 0.0) > 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -686,6 +754,12 @@ class FeatureExtractor:
         team = m.get('away_team', '') if focus == 'away' else m.get('home_team', '')
         h2h_list = m.get('h2h_last5', [])
         h2h_wr, h2h_cnt = _h2h_win_rate_weighted(h2h_list, team)
+        if h2h_cnt == 0:
+            # Fall back to aggregate H2H counts. Sources such as the SofaScore
+            # API return only totals (home_wins/away_wins/total) rather than a
+            # match list, and without this the H2H factor stayed neutral for
+            # every such row despite carrying real information.
+            h2h_wr, h2h_cnt = _h2h_from_aggregates(m, focus)
         f['h2h_win_rate'] = h2h_wr
         f['h2h_count'] = min(h2h_cnt / 5.0, 1.0)
         if h2h_cnt > 0:
@@ -1094,16 +1168,19 @@ class FootballScoringEngine:
         raw_d = _wavg(sources_draw)
         raw_a = _wavg(sources_away)
 
-        # Clip & normalise
-        raw_h = max(0.02, raw_h)
-        raw_d = max(0.05, raw_d)
-        raw_a = max(0.02, raw_a)
-        total = raw_h + raw_d + raw_a
-        raw_h, raw_d, raw_a = raw_h / total, raw_d / total, raw_a / total
-
         # ---- Sport-specific profile ------------------------------------
         sport = match.get('sport', 'football').lower()
         profile = SPORT_PROFILES.get(sport, SPORT_PROFILES['football'])
+        has_draw = profile.get('min_draw_prob', 0.0) > 0.0
+
+        # Clip & normalise. The draw floor must respect the sport: applying a
+        # blanket 0.05 here used to inject a phantom draw into tennis,
+        # basketball, baseball and e-sports before the profile was consulted.
+        raw_h = max(0.02, raw_h)
+        raw_d = max(0.05, raw_d) if has_draw else 0.0
+        raw_a = max(0.02, raw_a)
+        total = raw_h + raw_d + raw_a
+        raw_h, raw_d, raw_a = raw_h / total, raw_d / total, raw_a / total
         
         # ---- Bayesian blending with market prior -----------------------
         # When market is sharp and our data is thin, anchor to market.
@@ -1161,6 +1238,15 @@ class FootballScoringEngine:
             total = cal_h + cal_d + cal_a
             cal_h, cal_d, cal_a = cal_h / total, cal_d / total, cal_a / total
 
+        # Two-outcome sports: the softmax calibration can leave a residual
+        # draw mass. Zero it out and renormalise so the reported triplet is
+        # honest (e.g. LoL showed "51% / 23% / 25%" for a draw-less game).
+        if not has_draw and cal_d > 0:
+            cal_d = 0.0
+            total = cal_h + cal_a
+            if total > 0:
+                cal_h, cal_a = cal_h / total, cal_a / total
+
         # ---- EV / edge / Kelly for each outcome -----------------------
         odds_h = _safe_float(match.get('home_odds'))
         odds_d = _safe_float(match.get('draw_odds'))
@@ -1168,9 +1254,10 @@ class FootballScoringEngine:
 
         outcomes = [
             ('1', cal_h, odds_h),
-            ('X', cal_d, odds_d),
             ('2', cal_a, odds_a),
         ]
+        if has_draw:
+            outcomes.insert(1, ('X', cal_d, odds_d))
 
         best_pick = '1'
         best_ev = -999.0
@@ -1200,7 +1287,7 @@ class FootballScoringEngine:
 
         # Source consensus boost — when home_form, odds, forebet, sofascore
         # all point to the same outcome, confidence should be much higher.
-        consensus_boost = self._compute_source_consensus(feats, best_pick)
+        consensus_boost = self._compute_source_consensus(feats, best_pick, focus)
         
         # Disagreement penalty (already computed above as part of regularization)
         disagreement_pen = disagreement  # from earlier scope
@@ -1330,7 +1417,8 @@ class FootballScoringEngine:
     
     # ------------------------------------------------------------------
     @staticmethod
-    def _compute_source_consensus(feats: Dict[str, float], pick: str) -> float:
+    def _compute_source_consensus(feats: Dict[str, float], pick: str,
+                                  focus: str = 'home') -> float:
         """Compute how strongly all sources agree with the model's pick.
         
         Returns value in [0, 1] where 1.0 = all sources point to same outcome,
@@ -1391,7 +1479,10 @@ class FootballScoringEngine:
         h2h_wr = feats.get('h2h_win_rate', 0.5)
         h2h_cnt = feats.get('h2h_count', 0)
         if h2h_cnt > 0.4:  # at least 2 H2H
-            focus_is_home = True  # default; we don't have direct access here
+            # h2h_win_rate is computed for the *focus* team, so the vote must
+            # be flipped when the focus is the away side. This used to be
+            # hardcoded to home, inverting the H2H vote for away-focus rows.
+            focus_is_home = focus != 'away'
             if h2h_wr > 0.65:
                 votes.append('1' if focus_is_home else '2')
             elif h2h_wr < 0.35:

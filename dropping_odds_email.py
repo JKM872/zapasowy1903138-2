@@ -163,34 +163,98 @@ def _drop_badge_color(drop_pct: float) -> str:
 # Scoring engine integration
 # ---------------------------------------------------------------------------
 
+def _build_scoring_input(event: Dict[str, Any]) -> Dict[str, Any]:
+    """Assemble the match dict the scoring engines expect.
+
+    Note on H2H: the engines read the raw ``h2h_last5`` list, not the
+    pre-aggregated ``win_rate``/``h2h_count`` pair. Passing only the latter
+    left the H2H factor (weight 0.16) permanently neutral.
+    """
+    enrichment = event.get("enrichment") or {}
+    return {
+        "home_team": event.get("home_team", ""),
+        "away_team": event.get("away_team", ""),
+        "sport": event.get("sport", "football"),
+        "focus_team": event.get("focus_team", "home"),
+        # Form — both the plain and *_overall keys the extractors look for.
+        "home_form": enrichment.get("home_form", []),
+        "away_form": enrichment.get("away_form", []),
+        "home_form_overall": enrichment.get("home_form_overall", []),
+        "away_form_overall": enrichment.get("away_form_overall", []),
+        "home_form_home": enrichment.get("home_form_home", []),
+        "away_form_away": enrichment.get("away_form_away", []),
+        "form_advantage": enrichment.get("form_advantage"),
+        # Odds
+        "home_odds": enrichment.get("home_odds"),
+        "draw_odds": enrichment.get("draw_odds"),
+        "away_odds": enrichment.get("away_odds"),
+        # Forebet
+        "forebet_prediction": enrichment.get("forebet_prediction"),
+        "forebet_probability": enrichment.get("forebet_probability"),
+        "forebet_exact_score": enrichment.get("forebet_exact_score"),
+        # SofaScore
+        "sofascore_home_win_prob": enrichment.get("sofascore_home_win_prob"),
+        "sofascore_draw_prob": enrichment.get("sofascore_draw_prob"),
+        "sofascore_away_win_prob": enrichment.get("sofascore_away_win_prob"),
+        "sofascore_total_votes": enrichment.get("sofascore_total_votes"),
+        # H2H — raw list is what the engines actually consume.
+        "h2h_last5": enrichment.get("h2h_last5", []),
+        "h2h_count": enrichment.get("h2h_count", 0),
+        "win_rate": enrichment.get("win_rate", 0),
+        "home_wins_in_h2h_last5": enrichment.get("home_wins_in_h2h_last5"),
+        "away_wins_in_h2h_last5": enrichment.get("away_wins_in_h2h_last5"),
+        # Tennis-specific inputs (ignored by the football engine)
+        "surface": enrichment.get("surface", ""),
+        "ranking_a": enrichment.get("ranking_a"),
+        "ranking_b": enrichment.get("ranking_b"),
+        "surface_form_a": enrichment.get("surface_form_a", []),
+        "surface_form_b": enrichment.get("surface_form_b", []),
+        "last_match_a_date": enrichment.get("last_match_a_date"),
+        "last_match_a_result": enrichment.get("last_match_a_result"),
+        "last_match_b_date": enrichment.get("last_match_b_date"),
+        "last_match_b_result": enrichment.get("last_match_b_result"),
+        "availability": enrichment.get("availability", {}),
+        "data_quality": enrichment.get("data_quality", {}),
+    }
+
+
 def _run_scoring_engine(event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """Run FootballScoringEngine on enriched event data. Returns scored dict or None."""
+    """Score an enriched event with the engine matching its sport.
+
+    Tennis has its own two-outcome engine (no draw, no home advantage); using
+    the football engine there produced a phantom draw probability and framed
+    the match in home/away terms that do not apply.
+    """
+    match_data = _build_scoring_input(event)
+    sport = (event.get("sport") or "football").lower()
+
     try:
+        if sport == "tennis":
+            from tennis_scoring_engine import TennisScoringEngine
+
+            scored_t = TennisScoringEngine().score_match(match_data)
+            # Normalise to the same 1/X/2 shape the email/API expect.
+            return {
+                "best_pick": "1" if scored_t.best_pick == "A" else "2",
+                "prob_1": round(scored_t.cal_a, 4),
+                "prob_X": 0.0,
+                "prob_2": round(scored_t.cal_b, 4),
+                "best_prob": round(scored_t.best_prob, 4),
+                "best_odds": scored_t.best_odds,
+                "ev": round(scored_t.ev, 4),
+                "edge": round(scored_t.edge, 2),
+                "kelly": round(scored_t.kelly, 2),
+                "confidence": round(scored_t.confidence, 1),
+                "data_quality": round(scored_t.data_quality, 2),
+                "engine": "tennis",
+            }
+
         from football_scoring_engine import FootballScoringEngine
-        engine = FootballScoringEngine()
-        
-        enrichment = event.get("enrichment") or {}
-        match_data = {
-            "home_team": event.get("home_team", ""),
-            "away_team": event.get("away_team", ""),
-            "sport": event.get("sport", "football"),
-            "focus_team": event.get("focus_team", "home"),
-            "home_form": enrichment.get("home_form", []),
-            "away_form": enrichment.get("away_form", []),
-            "home_odds": enrichment.get("home_odds"),
-            "draw_odds": enrichment.get("draw_odds"),
-            "away_odds": enrichment.get("away_odds"),
-            "forebet_prediction": enrichment.get("forebet_prediction"),
-            "forebet_probability": enrichment.get("forebet_probability"),
-            "sofascore_home_win_prob": enrichment.get("sofascore_home_win_prob"),
-            "sofascore_draw_prob": enrichment.get("sofascore_draw_prob"),
-            "sofascore_away_win_prob": enrichment.get("sofascore_away_win_prob"),
-            "h2h_count": enrichment.get("h2h_count", 0),
-            "win_rate": enrichment.get("win_rate", 0),
-        }
-        
-        scored = engine.score_match(match_data)
-        return scored.to_dict()
+
+        scored = FootballScoringEngine().score_match(match_data)
+        out = scored.to_dict()
+        out["engine"] = "football"
+        return out
     except Exception:
         return None
 
