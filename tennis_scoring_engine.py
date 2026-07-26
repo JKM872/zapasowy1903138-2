@@ -540,10 +540,21 @@ class TennisScoringEngine:
         w = self.weights
 
         # --- Per-source probability estimate for A winning ---
+        # `estimates` holds every source's view; `active` lists the sources that
+        # actually have data. A source without data must ABSTAIN (be dropped
+        # from the weighted average) rather than contribute 0.5 at full weight:
+        # the latter drags the prediction toward an even split and makes a
+        # data-poor match look deliberately balanced. Tennis is the sport with
+        # the thinnest coverage (H2H 33%, form 28%, Forebet/SofaScore 4%), so
+        # this used to affect most matches.
         estimates: Dict[str, float] = {}
+        active: set = set()
+
         # H2H
         wr = feats['h2h_win_rate_a']
         estimates['h2h'] = wr
+        if feats.get('h2h_count', 0) > 0:
+            active.add('h2h')
 
         # Form
         fa, fb = feats['form_a'], feats['form_b']
@@ -555,6 +566,10 @@ class TennisScoringEngine:
         form_p += (feats['streak_a'] - feats['streak_b']) * 0.05
         form_p = max(0.05, min(0.95, form_p))
         estimates['form'] = form_p
+        form_a_raw = _parse_form_list(match.get('form_a', match.get('home_form', [])))
+        form_b_raw = _parse_form_list(match.get('form_b', match.get('away_form', [])))
+        if form_a_raw and form_b_raw:
+            active.add('form')
 
         # Surface form
         sa = feats['surface_wr_a']
@@ -564,14 +579,27 @@ class TennisScoringEngine:
         else:
             surf_p = 0.5
         estimates['surface_form'] = max(0.05, min(0.95, surf_p))
+        # Surface form only counts as its own source when it differs from the
+        # overall form. Livesport does not expose per-match tournament info, so
+        # the scraper used to copy the overall form here — measured identical in
+        # 80% of rows. Counting it again would give one signal 0.16 + 0.12 of
+        # the model.
+        _surf_a = _parse_form_list(match.get('surface_form_a', []))
+        _surf_b = _parse_form_list(match.get('surface_form_b', []))
+        if (_surf_a or _surf_b) and not (_surf_a == form_a_raw and _surf_b == form_b_raw):
+            active.add('surface_form')
 
         # Ranking
         rank_adv = feats['ranking_advantage']  # [-1,+1], >0 = A better
         rank_p = 0.5 + rank_adv * 0.35         # maps roughly to [0.15, 0.85]
         estimates['ranking'] = max(0.05, min(0.95, rank_p))
+        if match.get('ranking_a') and match.get('ranking_b'):
+            active.add('ranking')
 
         # Odds
         estimates['odds'] = feats['odds_prob_a']
+        if feats.get('odds_a', 0) > 1 and feats.get('odds_b', 0) > 1:
+            active.add('odds')
 
         # Fatigue / freshness
         fat_a = feats.get('fatigue_a', 0.5)
@@ -581,9 +609,14 @@ class TennisScoringEngine:
         else:
             fatigue_p = 0.5
         estimates['fatigue'] = max(0.05, min(0.95, fatigue_p))
+        if match.get('last_match_a_date') and match.get('last_match_b_date'):
+            active.add('fatigue')
 
         # SofaScore fan vote
         estimates['sofascore'] = feats.get('sofascore_prob_a', 0.5)
+        if _sf(match.get('sofascore_home_win_prob')) > 0 and \
+                _sf(match.get('sofascore_away_win_prob')) > 0:
+            active.add('sofascore')
 
         # Availability / injury impact.
         # `availability_impact` from prediction_data_contract is an unsigned
@@ -601,6 +634,10 @@ class TennisScoringEngine:
         elif ret_b and not ret_a:
             avail_p = min(avail_p + 0.15, 0.95)
         estimates['availability'] = max(0.05, min(0.95, avail_p))
+        # Only a retirement/walkover flag carries direction here; the impact
+        # magnitude alone is handled later by shrinking toward 50/50.
+        if ret_a or ret_b:
+            active.add('availability')
 
         # Serve/point hierarchical model (v6) — converts an aggregate
         # point-level edge into a best-of-3 match win probability via the
@@ -608,18 +645,33 @@ class TennisScoringEngine:
         # amplification: a small per-point edge yields a large match edge.
         # The point edge is sourced from ranking gap, surface form and overall
         # form — the factors most predictive of who wins points.
+        # The surface term is only included when surface form is a real,
+        # independent signal. Otherwise the duplicated overall form would leak
+        # back in here and inflate the serve edge a second time.
+        _surface_term = (feats.get('surface_advantage', 0.0)
+                         if 'surface_form' in active else 0.0)
         serve_adv = (
             feats.get('ranking_advantage', 0.0) * 0.5
-            + feats.get('surface_advantage', 0.0) * 0.3
+            + _surface_term * 0.3
             + feats.get('form_advantage', 0.0) * 0.2
         )
         estimates['serve_model'] = _serve_model_prob_a(max(-1.0, min(1.0, serve_adv)))
+        # The serve model is derived from ranking/surface/form, so it only has
+        # standing when at least one of those is real.
+        if serve_adv != 0.0 and (active & {'ranking', 'surface_form', 'form'}):
+            active.add('serve_model')
 
-        # --- Weighted average ---
-        # Normalise by the weight sum so a calibration file whose weights do
-        # not total 1.0 cannot systematically bias the result toward B.
-        w_total = sum(w.values()) or 1.0
-        prob_a = sum(estimates.get(k, 0.5) * w[k] for k in w) / w_total
+        # --- Weighted average over the sources that actually have data ---
+        # Normalise by the weight sum of ACTIVE sources only. Dividing by the
+        # full weight total would leave abstaining sources implicitly voting
+        # for 0.5 and bias every data-poor match toward an even split.
+        active_weights = {k: w[k] for k in w if k in active}
+        if active_weights:
+            w_total = sum(active_weights.values()) or 1.0
+            prob_a = sum(estimates[k] * wt for k, wt in active_weights.items()) / w_total
+        else:
+            # Nothing known at all — an honest coin flip.
+            prob_a = 0.5
         prob_a = max(0.02, min(0.98, prob_a))
 
         # Availability uncertainty shrinks the prediction toward 50/50: the
@@ -704,9 +756,17 @@ class TennisScoringEngine:
         # --- Build breakdown ---
         breakdown: Dict[str, Any] = {}
         for k in w:
+            is_active = k in active
             breakdown[f'{k}_estimate'] = round(estimates[k], 3)
             breakdown[f'{k}_weight'] = w[k]
-            breakdown[f'{k}_contribution'] = round(estimates[k] * w[k], 3)
+            # Effective weight after abstentions, so the breakdown shows what
+            # really drove the number rather than the nominal configuration.
+            eff = (active_weights.get(k, 0.0) / sum(active_weights.values())
+                   if active_weights and is_active else 0.0)
+            breakdown[f'{k}_active'] = is_active
+            breakdown[f'{k}_effective_weight'] = round(eff, 3)
+            breakdown[f'{k}_contribution'] = round(estimates[k] * eff, 3)
+        breakdown['active_sources'] = sorted(active)
 
         return ScoredTennisMatch(
             player_a=match.get('home_team', ''),

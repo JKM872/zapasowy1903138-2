@@ -3605,6 +3605,13 @@ def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
 
     out['surface_form_a'] = surface_form_a
     out['surface_form_b'] = surface_form_b
+    # Honesty flag: Livesport's H2H rows carry no tournament/event info, so
+    # `_row_matches_surface` accepts every row. These lists are therefore the
+    # player's RECENT form used as a surface proxy, not form filtered by court
+    # type — measured identical to the overall form in 80% of rows. The scoring
+    # engine checks for that duplication and abstains instead of counting the
+    # same evidence twice (form 0.16 + surface_form 0.12).
+    out['surface_form_is_proxy'] = True
 
     # Build surface_stats dict for scoring engine
     if surface_form_a:
