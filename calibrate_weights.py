@@ -223,6 +223,25 @@ def build_simulated_rows(n: int, seed: int = 42) -> List[Dict[str, Any]]:
 # Evaluation over a dataset
 # ---------------------------------------------------------------------------
 
+def _score_row(row: Dict[str, Any], engine: FootballScoringEngine,
+               ) -> Tuple[List[float], float, float]:
+    """Score one row with the engine matching its sport.
+
+    Tennis has its own two-outcome engine; scoring it with the football one
+    would inject a draw that cannot happen. Returns
+    ``([p1, pX, p2], ev, best_odds)``.
+    """
+    sport = (row.get('sport') or 'football').lower()
+    if sport == 'tennis':
+        from tennis_scoring_engine import TennisScoringEngine
+
+        st = TennisScoringEngine().score_match(row)
+        return [st.cal_a, 0.0, st.cal_b], st.ev, st.best_odds
+
+    sm = engine.score_match(row)
+    return [sm.cal_home, sm.cal_draw, sm.cal_away], sm.ev, sm.best_odds
+
+
 def evaluate_dataset(rows: List[Dict[str, Any]],
                      weights: Optional[Dict[str, float]] = None,
                      ) -> Dict[str, Any]:
@@ -238,9 +257,8 @@ def evaluate_dataset(rows: List[Dict[str, Any]],
 
     for row in rows:
         actual = row['actual_result']
-        sm = engine.score_match(row)
-        model.add([sm.cal_home, sm.cal_draw, sm.cal_away], actual,
-                  ev=sm.ev, odds=sm.best_odds)
+        probs, ev, odds = _score_row(row, engine)
+        model.add(probs, actual, ev=ev, odds=odds)
 
         mp = market_probs(row)
         if mp:
@@ -255,6 +273,29 @@ def evaluate_dataset(rows: List[Dict[str, Any]],
         'uniform': uniform.summary(),
         'reliability': model.reliability(),
     }
+
+
+def evaluate_per_sport(rows: List[Dict[str, Any]],
+                       min_rows: int = 30) -> Dict[str, Any]:
+    """Evaluate each sport separately.
+
+    A single blended number hides the fact that the engine may beat the market
+    in one sport and trail it badly in another — which is exactly what a
+    per-sport weight set would have to fix. Sports below *min_rows* are
+    reported but flagged, because their metrics are noise.
+    """
+    by_sport: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        sport = (row.get('sport') or 'football').lower()
+        by_sport.setdefault(sport, []).append(row)
+
+    out: Dict[str, Any] = {}
+    for sport, sport_rows in sorted(by_sport.items(), key=lambda kv: -len(kv[1])):
+        res = evaluate_dataset(sport_rows)
+        res['n_rows'] = len(sport_rows)
+        res['reliable'] = len(sport_rows) >= min_rows
+        out[sport] = res
+    return out
 
 
 def _log_loss_of(rows: List[Dict[str, Any]], weights: Dict[str, float]) -> float:
@@ -330,6 +371,42 @@ def optimise_weights(train: List[Dict[str, Any]],
 # Reporting
 # ---------------------------------------------------------------------------
 
+def print_per_sport(per_sport: Dict[str, Any], min_rows: int = 30) -> None:
+    """One line per sport: does the model add anything over the market there?"""
+    print(f"\n{'=' * 78}")
+    print("  PER-SPORT BREAKDOWN — model vs bookmaker")
+    print(f"{'=' * 78}")
+    print(f"  {'sport':<13}{'n':>6}{'acc':>7}{'brier':>9}{'mkt brier':>11}"
+          f"{'d.brier':>9}{'d.ll':>8}  verdict")
+    print(f"  {'-' * 74}")
+
+    for sport, res in per_sport.items():
+        m, mk = res['model'], res['market']
+        n = res['n_rows']
+        if mk['n'] == 0:
+            verdict = 'no odds -> cannot compare'
+            d_b = d_l = float('nan')
+        else:
+            d_b = m['brier'] - mk['brier']
+            d_l = m['log_loss'] - mk['log_loss']
+            if d_b < 0 and d_l < 0:
+                verdict = 'beats market'
+            elif d_b > 0 and d_l > 0:
+                verdict = 'WORSE than market'
+            else:
+                verdict = 'mixed'
+        if not res['reliable']:
+            verdict += f' (n<{min_rows}: noise)'
+        d_b_s = f'{d_b:+.4f}' if d_b == d_b else '     -'
+        d_l_s = f'{d_l:+.4f}' if d_l == d_l else '     -'
+        print(f"  {sport:<13}{n:>6}{m['accuracy']:>7.3f}{m['brier']:>9.4f}"
+              f"{mk['brier'] if mk['n'] else 0:>11.4f}{d_b_s:>9}{d_l_s:>8}  {verdict}")
+
+    print("\n  A sport that trails the market is the case for its own weight set;\n"
+          "  one that beats it should be left alone.")
+    print(f"{'=' * 78}\n")
+
+
 def print_report(title: str, res: Dict[str, Any]) -> None:
     print(f"\n{'=' * 72}")
     print(f"  {title}")
@@ -396,6 +473,10 @@ def main() -> int:
                     help='Held-out fraction used to validate new weights')
     ap.add_argument('--save', action='store_true',
                     help='Persist optimised weights to outputs/scoring_calibration.json')
+    ap.add_argument('--per-sport', action='store_true',
+                    help='Report every sport separately instead of one blend')
+    ap.add_argument('--min-rows', type=int, default=30,
+                    help='Below this row count a sport is flagged as unreliable')
     ap.add_argument('--json', action='store_true', help='Emit JSON only')
     args = ap.parse_args()
 
@@ -419,6 +500,11 @@ def main() -> int:
     print_report(f'CURRENT WEIGHTS — {source_label}', baseline)
 
     result: Dict[str, Any] = {'source': source_label, 'baseline': baseline}
+
+    if args.per_sport:
+        per_sport = evaluate_per_sport(rows, min_rows=args.min_rows)
+        print_per_sport(per_sport, min_rows=args.min_rows)
+        result['per_sport'] = per_sport
 
     if args.optimise:
         rng = random.Random(args.seed)

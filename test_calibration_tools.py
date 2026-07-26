@@ -262,3 +262,94 @@ class TestRealRowLoading:
             {'matches': [{'home_team': 'A', 'actual_result': '2'}]}),
             encoding='utf-8')
         assert len(cw.load_real_rows(str(path))) == 1
+
+
+class TestPerSportRouting:
+    """Each sport must be judged with the engine that fits it."""
+
+    def _row(self, sport, **kw):
+        m = {
+            'home_team': 'A', 'away_team': 'B', 'sport': sport,
+            'actual_result': '1',
+            'home_form': ['W', 'W', 'L'], 'away_form': ['L', 'L', 'W'],
+        }
+        m.update(kw)
+        return m
+
+    def test_tennis_goes_to_the_tennis_engine(self):
+        from football_scoring_engine import FootballScoringEngine
+        probs, _ev, _odds = cw._score_row(
+            self._row('tennis', home_odds=1.6, away_odds=2.4),
+            FootballScoringEngine())
+        assert probs[1] == 0.0, 'tennis must never carry draw mass'
+        assert sum(probs) == pytest.approx(1.0, abs=1e-6)
+
+    def test_football_keeps_its_draw(self):
+        from football_scoring_engine import FootballScoringEngine
+        probs, _ev, _odds = cw._score_row(
+            self._row('football', home_odds=1.9, draw_odds=3.4, away_odds=4.0),
+            FootballScoringEngine())
+        assert probs[1] > 0.0
+        assert sum(probs) == pytest.approx(1.0, abs=1e-6)
+
+    def test_draw_less_team_sports_have_no_draw(self):
+        from football_scoring_engine import FootballScoringEngine
+        engine = FootballScoringEngine()
+        for sport in ('basketball', 'volleyball', 'baseball', 'esports'):
+            probs, _ev, _odds = cw._score_row(
+                self._row(sport, home_odds=1.8, away_odds=2.1), engine)
+            assert probs[1] == 0.0, sport
+            assert sum(probs) == pytest.approx(1.0, abs=1e-6)
+
+
+class TestPerSportEvaluation:
+    def _rows(self, sport, n, outcome='1'):
+        return [{
+            'home_team': f'A{i}', 'away_team': f'B{i}', 'sport': sport,
+            'actual_result': outcome,
+            'home_odds': 1.8, 'draw_odds': 3.4, 'away_odds': 2.2,
+            'home_form': ['W', 'W'], 'away_form': ['L', 'L'],
+        } for i in range(n)]
+
+    def test_groups_by_sport(self):
+        rows = self._rows('football', 5) + self._rows('basketball', 3)
+        res = cw.evaluate_per_sport(rows)
+        assert set(res) == {'football', 'basketball'}
+        assert res['football']['n_rows'] == 5
+        assert res['basketball']['n_rows'] == 3
+
+    def test_small_samples_are_flagged_unreliable(self):
+        res = cw.evaluate_per_sport(self._rows('football', 4), min_rows=30)
+        assert res['football']['reliable'] is False
+
+    def test_large_samples_are_reliable(self):
+        res = cw.evaluate_per_sport(self._rows('football', 40), min_rows=30)
+        assert res['football']['reliable'] is True
+
+    def test_each_sport_gets_its_own_baselines(self):
+        res = cw.evaluate_per_sport(self._rows('football', 5))
+        f = res['football']
+        for key in ('model', 'market', 'prior', 'uniform'):
+            assert f[key]['n'] > 0
+
+    def test_missing_sport_defaults_to_football(self):
+        rows = [{'home_team': 'A', 'away_team': 'B', 'actual_result': '1',
+                 'home_odds': 1.8, 'away_odds': 2.2}]
+        assert set(cw.evaluate_per_sport(rows)) == {'football'}
+
+    def test_sport_without_odds_reports_no_market(self):
+        rows = [{'home_team': 'A', 'away_team': 'B', 'sport': 'baseball',
+                 'actual_result': '1', 'home_form': ['W'], 'away_form': ['L']}
+                for _ in range(3)]
+        res = cw.evaluate_per_sport(rows)
+        assert res['baseball']['market']['n'] == 0
+        assert res['baseball']['model']['n'] == 3
+
+    def test_report_prints_without_error(self, capsys):
+        res = cw.evaluate_per_sport(
+            self._rows('football', 3) + self._rows('tennis', 2))
+        cw.print_per_sport(res, min_rows=30)
+        out = capsys.readouterr().out
+        assert 'PER-SPORT BREAKDOWN' in out
+        assert 'football' in out and 'tennis' in out
+        assert 'noise' in out          # both samples are below min_rows

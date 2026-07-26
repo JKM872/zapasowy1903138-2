@@ -119,8 +119,11 @@ jobs:
           fi
 
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+          # --per-sport shows where the model trails the market; a blended
+          # number can hide one sport being badly miscalibrated.
           python calibrate_weights.py \
             --real "${{ steps.export.outputs.settled }}" \
+            --per-sport \
             $EXTRA 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
