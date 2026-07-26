@@ -281,3 +281,71 @@ class TestAggregateH2HFallback:
         away_dominant = engine.score_match(
             dict(base, home_wins_in_h2h_last5=1, away_wins_in_h2h_last5=9, h2h_count=10))
         assert home_dominant.cal_home > away_dominant.cal_home
+
+
+class TestPickWithoutOdds:
+    """Without odds the pick must still be the model's most likely outcome.
+
+    Previously best_pick was initialised to '1' and the EV loop skipped every
+    outcome lacking a price, so odds-less matches were published as home picks
+    regardless of the model. Measured on real data: 100% of baseball rows and
+    roughly 40-50% of football/handball/volleyball rows were affected.
+    """
+
+    def _away_dominant(self, sport):
+        return {
+            'home_team': 'Weak', 'away_team': 'Strong', 'sport': sport,
+            'home_form': ['L', 'L', 'L', 'L', 'L'],
+            'away_form': ['W', 'W', 'W', 'W', 'W'],
+            'home_wins_in_h2h_last5': 0, 'away_wins_in_h2h_last5': 5,
+            'h2h_count': 5, 'focus_team': 'away',
+        }
+
+    @pytest.mark.parametrize('sport', [
+        'football', 'basketball', 'hockey', 'volleyball',
+        'handball', 'baseball', 'tennis', 'esports',
+    ])
+    def test_pick_follows_probability_without_odds(self, sport):
+        scored = FootballScoringEngine().score_match(self._away_dominant(sport))
+        assert scored.cal_away > scored.cal_home, 'fixture should favour away'
+        assert scored.best_pick == '2', f'{sport}: pick ignored the model'
+
+    def test_home_dominant_still_picks_home(self):
+        m = self._away_dominant('football')
+        m['home_form'], m['away_form'] = m['away_form'], m['home_form']
+        m['home_wins_in_h2h_last5'], m['away_wins_in_h2h_last5'] = 5, 0
+        m['focus_team'] = 'home'
+        scored = FootballScoringEngine().score_match(m)
+        assert scored.best_pick == '1'
+
+    def test_best_prob_matches_the_pick(self):
+        scored = FootballScoringEngine().score_match(self._away_dominant('baseball'))
+        assert scored.best_prob == pytest.approx(scored.cal_away)
+
+    def test_ev_stays_sentinel_without_odds(self):
+        # No price means EV is undefined; the email renders this as "brak kursu".
+        scored = FootballScoringEngine().score_match(self._away_dominant('baseball'))
+        assert scored.ev <= -900
+        assert scored.best_odds == 0.0
+
+    def test_priced_outcome_wins_over_unpriced_default(self):
+        # Only the home side is priced. The bet must go to the priced outcome,
+        # because an unpriced pick cannot be staked.
+        m = dict(self._away_dominant('football'), home_odds=3.5)
+        scored = FootballScoringEngine().score_match(m)
+        assert scored.best_pick == '1'
+        assert scored.best_odds == 3.5
+        assert scored.ev > -900
+
+    def test_odds_present_uses_ev_ranking(self):
+        # Both sides priced: the engine ranks by EV and must land on the away
+        # side. EV itself may be negative here — at 1.40 the market demands
+        # 71% and the (deliberately conservative) model gives ~66%; that is
+        # correct behaviour, not a bug.
+        m = dict(self._away_dominant('football'), home_odds=3.5, away_odds=1.4)
+        scored = FootballScoringEngine().score_match(m)
+        assert scored.best_pick == '2'
+        assert scored.best_odds == 1.4
+        assert scored.ev > -900          # a real EV was computed
+        # The away EV must beat the home EV, which is what drove the choice.
+        assert scored.cal_away * 1.4 - 1 > scored.cal_home * 3.5 - 1

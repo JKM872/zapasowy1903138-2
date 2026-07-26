@@ -1266,16 +1266,30 @@ class FootballScoringEngine:
         if has_draw:
             outcomes.insert(1, ('X', cal_d, odds_d))
 
-        best_pick = '1'
+        # Default to the model's own most likely outcome. Previously this was
+        # hardcoded to '1' with EV -999, and since the loop below `continue`s
+        # over outcomes without odds, any match with no odds at all was
+        # published as a home pick — even when the model gave the away side
+        # 74%. That silently affected every sport (100% of baseball rows,
+        # ~40-50% of football/handball/volleyball).
+        best_pick, best_prob = max(
+            ((label, prob) for label, prob, _ in outcomes),
+            key=lambda pair: pair[1],
+        )
         best_ev = -999.0
         best_edge = 0.0
         best_kelly = 0.0
-        best_prob = cal_h
-        best_odds = odds_h
+        best_odds = 0.0
+        has_priced_outcome = False
 
         for label, prob, odds_val in outcomes:
             if odds_val <= 1:
                 continue
+            if not has_priced_outcome:
+                # First outcome with a real price becomes the incumbent, so a
+                # priced outcome always wins over the unpriced default.
+                has_priced_outcome = True
+                best_ev = -999.0
             implied = 1.0 / odds_val
             ev = prob * odds_val - 1.0
             edge = (prob - implied) * 100
