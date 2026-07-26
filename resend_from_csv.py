@@ -46,8 +46,16 @@ Przykłady użycia:
                        help='📉 Minimalny kurs — mecze z kursem poniżej są pomijane (np. 1.19)')
     parser.add_argument('--split-emails', action='store_true',
                        help='📧 Wyślij 2 osobne maile na każdy sport (forma vs zwykłe)')
+    parser.add_argument('--grades', default='A,B',
+                       help="🏅 Które grade'y wysyłać, np. 'A,B' (domyślnie) lub 'all'")
     
     args = parser.parse_args()
+
+    _grades_raw = (args.grades or '').strip().lower()
+    if _grades_raw in ('', 'all', 'none'):
+        grade_filter = None
+    else:
+        grade_filter = {g.strip().upper() for g in args.grades.split(',') if g.strip()}
     
     print("="*70)
     print("📧 WYSYŁANIE EMAILA Z ISTNIEJĄCEGO PLIKU CSV")
@@ -65,6 +73,7 @@ Przykłady użycia:
         print(f"📉 Filtr: Minimalny kurs {args.min_odds}")
     if args.split_emails:
         print("📧 Tryb: 2 maile na każdy sport")
+    print(f"🏅 Grade: {','.join(sorted(grade_filter)) if grade_filter else 'ALL'}")
     print("="*70)
     
     # Wyślij email
@@ -77,6 +86,7 @@ Przykłady użycia:
             provider=args.provider,
             sort_by=args.sort,
             min_odds_threshold=args.min_odds if args.min_odds > 0 else 1.19,
+            grade_filter=grade_filter,
         )
     else:
         send_email_notification(
@@ -90,6 +100,7 @@ Przykłady użycia:
             only_form_advantage=args.only_form_advantage,
             skip_no_odds=args.skip_no_odds,
             min_odds_threshold=args.min_odds,
+            grade_filter=grade_filter,
         )
     
     print("\n✅ Email wysłany pomyślnie!")
