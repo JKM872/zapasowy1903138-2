@@ -620,44 +620,73 @@ def find_best_match(target_team: str, available_teams: list) -> Tuple[Optional[s
 
 def _call_groq_api(prompt: str) -> Optional[str]:
     """
-    🚀 Groq API - ultra-szybki fallback dla Gemini.
-    Używa llama-3.3-70b-versatile.
+    🚀 Groq API — fast AI fallback.
+
+    The model is resolved at runtime (``groq_config.resolve_model``) instead of
+    being hardcoded, because Groq retires model IDs periodically. A retired ID
+    returns HTTP 400 and used to make this function fail silently forever; now
+    a decommissioned model triggers one re-resolution and retry.
     """
     import os
     import requests
-    
+
     # Try config file first, then environment variable
     api_key = None
+    groq_cfg = None
     try:
-        from groq_config import GROQ_API_KEY, GROQ_ENABLED
-        if GROQ_ENABLED:
-            api_key = GROQ_API_KEY
+        import groq_config as groq_cfg  # type: ignore[no-redef]
+        if groq_cfg.GROQ_ENABLED:
+            api_key = groq_cfg.GROQ_API_KEY
     except ImportError:
         pass
-    
+
     if not api_key:
         api_key = os.environ.get('GROQ_API_KEY')
-    
+
     if not api_key:
         print(f"      [!] Groq: Brak GROQ_API_KEY (ustaw w groq_config.py lub zmiennej srodowiskowej)")
         return None
-    
-    try:
-        response = requests.post(
-            'https://api.groq.com/openai/v1/chat/completions',
+
+    if groq_cfg is not None:
+        model = groq_cfg.resolve_model(api_key)
+        endpoint = groq_cfg.CHAT_ENDPOINT
+        timeout = groq_cfg.REQUEST_TIMEOUT
+    else:
+        model = os.environ.get('GROQ_MODEL') or 'llama-3.3-70b-versatile'
+        endpoint = 'https://api.groq.com/openai/v1/chat/completions'
+        timeout = 30
+
+    def _post(model_id: str):
+        return requests.post(
+            endpoint,
             headers={
                 'Authorization': f'Bearer {api_key}',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             json={
-                'model': 'llama-3.3-70b-versatile',  # Najlepszy model Groq dla matchingu
+                'model': model_id,
                 'messages': [{'role': 'user', 'content': prompt}],
                 'temperature': 0.1,
-                'max_tokens': 200
+                'max_tokens': 200,
             },
-            timeout=30
+            timeout=timeout,
         )
-        
+
+    try:
+        response = _post(model)
+
+        # A retired model ID reports 400 with 'decommissioned'/'does not exist'.
+        # Re-resolve against the live model list and retry once.
+        if response.status_code == 400 and groq_cfg is not None:
+            body = (response.text or '').lower()
+            if 'decommission' in body or 'does not exist' in body or 'not found' in body:
+                print(f"      ⚠️ Groq: model '{model}' niedostępny — szukam zamiennika")
+                groq_cfg.reset_resolved_model()
+                new_model = groq_cfg.resolve_model(api_key, force=True)
+                if new_model != model:
+                    print(f"      ↻ Groq: przechodzę na '{new_model}'")
+                    response = _post(new_model)
+
         if response.status_code == 200:
             data = response.json()
             answer = data['choices'][0]['message']['content'].strip()
@@ -666,7 +695,7 @@ def _call_groq_api(prompt: str) -> Optional[str]:
         else:
             print(f"      ⚠️ Groq API error: {response.status_code} - {response.text[:100]}")
             return None
-            
+
     except Exception as e:
         print(f"      ⚠️ Groq API error: {e}")
         return None
