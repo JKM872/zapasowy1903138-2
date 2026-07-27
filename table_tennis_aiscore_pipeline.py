@@ -744,6 +744,13 @@ def score_rows(rows: List[Dict[str, Any]]) -> int:
             row["scoring_confidence"] = round(sm.confidence, 0)
             row["advanced_score"] = round(sm.advanced_score, 1)
             row["favorite"] = sm.favorite
+            # Record the threshold verdict. Nothing used to compare
+            # advanced_score against anything, so rows scoring 6/100 shipped
+            # alongside 64/100 with no distinction. Qualification itself stays
+            # driven by H2H + fan vote (unchanged); this only labels the row so
+            # the gate below and the email can act on it.
+            row["advanced_score_threshold"] = engine.threshold
+            row["advanced_score_passes"] = sm.advanced_score >= engine.threshold
             scored += 1
         except Exception as e:
             print(f"   ⚠️ Scoring error {row.get('home_team')} vs {row.get('away_team')}: {e}")
@@ -980,6 +987,28 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
     scored = score_rows(rows)
     qualified = sum(1 for r in rows if r.get("qualifies"))
     print(f"   🧠 {scored} ocenionych, {qualified} kwalifikujących się")
+
+    # ── Data contract + prediction grade ──
+    # This pipeline never called enrich_match_with_contract, so table-tennis
+    # rows carried no prediction_grade at all. The Grade A/B email filter
+    # therefore silently dropped every table-tennis pick, and the "B" visible
+    # in the mail was the raw scoring_pick (player B), not a grade.
+    try:
+        from prediction_data_contract import enrich_match_with_contract
+        graded = 0
+        for row in rows:
+            if row.get("qualifies"):
+                enrich_match_with_contract(row)
+                graded += 1
+        dist: Dict[str, int] = {}
+        for row in rows:
+            g = row.get("prediction_grade")
+            if g:
+                dist[g] = dist.get(g, 0) + 1
+        print(f"\n[FAZA 2.85] Data contract: {graded} wzbogaconych"
+              + (f" | grades: {dist}" if dist else ""))
+    except Exception as e:
+        print(f"\n⚠️ Data contract error: {e}")
 
     # ── FAZA 2.9: qualification gate (channel + email) ──
     try:

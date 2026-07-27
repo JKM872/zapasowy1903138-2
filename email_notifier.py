@@ -1001,6 +1001,13 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
             wins = int(safe_float(match.get('away_wins_in_h2h_last5', 0)))
         else:
             wins = int(safe_float(match.get('home_wins_in_h2h_last5', 0)))
+        # Whose record is this? `win_rate`/`wins` are always framed on the FOCUS
+        # side, while the engine's `favorite` is framed on player A/B. Showing
+        # "4/6 67%" next to the opponent's name (because he is the model's
+        # favourite) read as a contradiction, so the H2H box now names its own
+        # subject explicitly.
+        h2h_subject = (match.get('away_team') or '') if focus_team == 'away' \
+            else (match.get('home_team') or '')
         
         # SofaScore - jednolita ekstrakcja z płaskich pól lub zagnieżdżonego dict
         ss_home, ss_draw, ss_away, ss_votes = _sofascore_from_match(match)
@@ -1068,7 +1075,24 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         # dziury w miejsce promowanej rekomendacji.
         has_scoring = sc_pick is not None or sc_prob is not None
         sc_prob_str = f"{sc_prob:.0f}%" if sc_prob is not None else "—"
-        sc_pick_str = sc_pick if sc_pick is not None else "—"
+        # A raw 'A'/'B' (tennis/table-tennis engine) or '1'/'2' tells the reader
+        # nothing and looked like a Grade letter. Show who the model actually
+        # picked. The A/B frame is player_a = home, player_b = away.
+        _pick_names = {
+            'A': match.get('home_team'), '1': match.get('home_team'),
+            'B': match.get('away_team'), '2': match.get('away_team'),
+        }
+        if sc_pick is None:
+            sc_pick_str = "—"
+        else:
+            _token = str(sc_pick).strip().upper()
+            _named = _pick_names.get(_token)
+            if _token == 'X':
+                sc_pick_str = 'Remis'
+            elif _named:
+                sc_pick_str = str(_named)
+            else:
+                sc_pick_str = str(sc_pick)
         
         # AI PREDICTION PRO - bezpieczne pobieranie
         ai_pred = ensure_ai_prediction_dict(match.get('ai_prediction'))
@@ -1186,6 +1210,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                                 {f'{wins}/{h2h_count}' if h2h_count > 0 else '—'}
                             </div>
                             <div style="font-size: 12px; color: #888;">{f'{win_rate*100:.0f}%' if h2h_count > 0 else ''}</div>
+                            {f'<div style="font-size: 10px; color: #999; margin-top: 2px;">dla: {h2h_subject}</div>' if h2h_count > 0 and h2h_subject else ''}
                         </div>
                         <div style="flex: 1; text-align: center;">
                             <div style="font-size: 11px; color: #666;">{'🎾 Faworytem' if is_tennis else '📅 Ostatni mecz'}</div>
@@ -1234,7 +1259,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                         <div style="font-size: 11px; color: rgba(255,255,255,0.8); margin-bottom: 8px;">{"🎾 Tennis Engine (5-factor)" if is_tennis else "🧠 Scoring Engine (7-source model)"}</div>
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
                             <div style="text-align: center; min-width: 60px;">
-                                <div style="font-size: 20px; font-weight: bold; color: #ffd740;">{sc_pick_str}</div>
+                                <div style="font-size: {'14px' if len(sc_pick_str) > 6 else '20px'}; font-weight: bold; color: #ffd740;">{sc_pick_str}</div>
                                 <div style="font-size: 9px; color: rgba(255,255,255,0.6);">TYP</div>
                             </div>
                             <div style="text-align: center; min-width: 60px;">
