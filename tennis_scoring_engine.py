@@ -586,7 +586,14 @@ class TennisScoringEngine:
         # the model.
         _surf_a = _parse_form_list(match.get('surface_form_a', []))
         _surf_b = _parse_form_list(match.get('surface_form_b', []))
-        if (_surf_a or _surf_b) and not (_surf_a == form_a_raw and _surf_b == form_b_raw):
+        # `surface_form_is_proxy is False` means the lists were genuinely
+        # filtered by court type (SofaScore groundType). Such a measurement
+        # counts as its own source even if it happens to equal the overall
+        # form. A proxy that merely echoes the overall form does not.
+        _surface_is_real = match.get('surface_form_is_proxy') is False
+        if (_surf_a or _surf_b) and (
+                _surface_is_real
+                or not (_surf_a == form_a_raw and _surf_b == form_b_raw)):
             active.add('surface_form')
 
         # Ranking

@@ -2155,6 +2155,112 @@ def get_team_recent_form(team_id: int, team_name: str, limit: int = 5,
     return form
 
 
+# SofaScore reports court types as free text ('Red clay', 'Hardcourt outdoor',
+# 'Grass', 'Carpet indoor'…). Normalise to the buckets the tennis engine uses.
+_SURFACE_ALIASES = (
+    ('clay', 'clay'),
+    ('grass', 'grass'),
+    ('hard', 'hard'),
+    ('carpet', 'carpet'),
+)
+
+
+def normalize_surface(raw: Optional[str]) -> Optional[str]:
+    """Map a SofaScore ground type to 'clay' / 'grass' / 'hard' / 'carpet'."""
+    if not raw:
+        return None
+    text = str(raw).strip().lower()
+    for needle, bucket in _SURFACE_ALIASES:
+        if needle in text:
+            return bucket
+    return None
+
+
+def _event_surface(event: Dict[str, Any]) -> Optional[str]:
+    """Extract the normalised surface for one event payload."""
+    tournament = event.get('tournament') or {}
+    unique = tournament.get('uniqueTournament') or {}
+    raw = (tournament.get('groundType')
+           or unique.get('groundType')
+           or event.get('groundType'))
+    return normalize_surface(raw)
+
+
+def get_team_surface_form(team_id: int, surface: Optional[str],
+                          limit: int = 5,
+                          allow_draws: bool = False) -> List[str]:
+    """Recent W/L form for a player restricted to matches on *surface*.
+
+    This is what "surface form" was always meant to be. Livesport exposes no
+    tournament/court info on its H2H rows, so the scraper there fell back to
+    copying the overall form — identical in 80% of rows, which made the engine
+    count one signal twice. SofaScore does report a ground type per event, so
+    we can filter properly.
+
+    Returns newest-first results, or [] when the surface is unknown or the
+    player has no finished matches on it.
+    """
+    target = normalize_surface(surface) or (surface or '').strip().lower() or None
+    if not team_id or target not in ('clay', 'grass', 'hard', 'carpet'):
+        return []
+
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/team/{team_id}/events/last/0",
+        timeout=10,
+    )
+    if not isinstance(data, dict):
+        return []
+
+    form: List[str] = []
+    # events/last is oldest-first; walk backwards for newest-first output.
+    for event in reversed(data.get('events') or []):
+        if _event_surface(event) != target:
+            continue
+        home = (event.get('homeTeam') or {})
+        away = (event.get('awayTeam') or {})
+        hs = (event.get('homeScore') or {}).get('current')
+        as_ = (event.get('awayScore') or {}).get('current')
+        if hs is None or as_ is None:
+            continue
+        try:
+            hs, as_ = int(hs), int(as_)
+        except (TypeError, ValueError):
+            continue
+
+        if home.get('id') == team_id:
+            is_home = True
+        elif away.get('id') == team_id:
+            is_home = False
+        else:
+            continue
+
+        if hs == as_:
+            if not allow_draws:
+                continue
+            form.append('D')
+        else:
+            home_won = hs > as_
+            won = home_won if is_home else not home_won
+            form.append('W' if won else 'L')
+
+        if len(form) >= limit:
+            break
+
+    return form
+
+
+def get_event_surface(event_id: int) -> Optional[str]:
+    """Normalised court type for a single event, or None."""
+    if not event_id:
+        return None
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/event/{event_id}", timeout=10)
+    if not isinstance(data, dict):
+        return None
+    event = data.get('event') or {}
+    return _event_surface(event)
+
+
 def find_team_by_name(team_name: str, sport_slug: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """Resolve a team/player name to a SofaScore team via the search API.
 

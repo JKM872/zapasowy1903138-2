@@ -3204,6 +3204,9 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
     else:
         _extract_last_matches_for_players(soup, driver, url, out, player_a, player_b)
         _compute_surface_form(soup, driver, url, out, player_a, player_b)
+        # Upgrade the proxy surface form to REAL court-filtered form when
+        # SofaScore can supply it (it reports a ground type per event).
+        _apply_real_surface_form(out, player_a, player_b)
 
     # ===================================================================
     # DATA COMPLETENESS: hard fails vs soft warnings
@@ -3475,6 +3478,59 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
                     out['last_match_b_score'] = s
                     out['last_match_b_opponent'] = o
                     out['last_match_b_result'] = r
+
+
+def _apply_real_surface_form(out: Dict, player_a: str, player_b: str) -> None:
+    """Replace the proxy surface form with court-filtered form from SofaScore.
+
+    Livesport's H2H rows carry no tournament info, so ``_compute_surface_form``
+    can only reuse a player's recent matches as an approximation — identical to
+    the overall form in 80% of rows, which made the scoring engine count one
+    signal twice. SofaScore exposes ``groundType`` per event, so genuine
+    per-surface records are available there.
+
+    On success sets ``surface_form_a``/``surface_form_b``, refreshes
+    ``surface_stats_*`` and clears ``surface_form_is_proxy``. Leaves the proxy
+    untouched when SofaScore has nothing for this surface.
+    """
+    surface = out.get('surface')
+    if not surface or not player_a or not player_b:
+        return
+
+    try:
+        from sofascore_scraper import find_team_by_name, get_team_surface_form
+    except ImportError:
+        return
+
+    resolved: Dict[str, List[str]] = {}
+    for key, player in (('a', player_a), ('b', player_b)):
+        try:
+            team = find_team_by_name(player, 'tennis')
+            if not team:
+                continue
+            form = get_team_surface_form(team['id'], surface, limit=5)
+        except Exception as exc:
+            logger.debug("surface form lookup failed for %s: %s", player, exc)
+            continue
+        if form:
+            resolved[key] = form
+
+    if not resolved:
+        return
+
+    for key in ('a', 'b'):
+        if key in resolved:
+            out[f'surface_form_{key}'] = resolved[key]
+            wins = resolved[key].count('W')
+            out[f'surface_stats_{key}'] = {surface: wins / len(resolved[key])}
+
+    # Only claim real data when BOTH sides are court-filtered; a mixed pair
+    # would compare a real record against a proxy one.
+    if 'a' in resolved and 'b' in resolved:
+        out['surface_form_is_proxy'] = False
+        out['surface_form_source'] = 'sofascore'
+        print(f"   🎾 Surface form ({surface}): "
+              f"A={resolved['a']} | B={resolved['b']}")
 
 
 def _compute_surface_form(soup: BeautifulSoup, driver: webdriver.Chrome,
