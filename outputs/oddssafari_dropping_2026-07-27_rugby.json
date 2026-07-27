@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "generated_at": "2026-07-27T10:49:18.741057+02:00",
+    "target_date": "2026-07-27",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 3,
+      "qualified": 2
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 2
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 155.2,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/melbourne-storm-vs-canterbury-bankstown-bulldogs/2281087?MarketTypeID=1401",
+      "match_id": "2281087",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Melbourne Storm",
+      "away_team": "Canterbury-Bankstown Bulldogs",
+      "event_date": "31/07",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 2.45,
+      "current_odds": 1.76,
+      "drop_pct": 28.0,
+      "max_odds": 1.85,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 7,
+        "away_wins_in_h2h_last5": 3,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 15105948,
+        "home_team": "Melbourne Storm",
+        "away_team": "Canterbury-Bankstown Bulldogs",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "10:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/wests-tigers-vs-parramatta-eels/2283288?MarketTypeID=1401",
+      "match_id": "2283288",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Wests Tigers",
+      "away_team": "Parramatta Eels",
+      "event_date": "02/08",
+      "event_time": "06:05",
+      "outcome": "2",
+      "open_odds": 1.91,
+      "current_odds": 1.39,
+      "drop_pct": 27.0,
+      "max_odds": 1.42,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 5,
+        "away_wins_in_h2h_last5": 5,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15105953,
+        "home_team": "Wests Tigers",
+        "away_team": "Parramatta Eels",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "06:05"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL (W)",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl-w/canterbury-bankstown-bulldogs-vs-brisbane-broncos/2286743?MarketTypeID=1401",
+      "match_id": "2286743",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Canterbury-Bankstown Bulldogs",
+      "away_team": "Brisbane Broncos",
+      "event_date": "02/08",
+      "event_time": "01:35",
+      "outcome": "1",
+      "open_odds": 8.7,
+      "current_odds": 7.5,
+      "drop_pct": 14.0,
+      "max_odds": 7.5,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/melbourne-storm-vs-canterbury-bankstown-bulldogs/2281087?MarketTypeID=1401",
+      "match_id": "2281087",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Melbourne Storm",
+      "away_team": "Canterbury-Bankstown Bulldogs",
+      "event_date": "31/07",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 2.45,
+      "current_odds": 1.76,
+      "drop_pct": 28.0,
+      "max_odds": 1.85,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 7,
+        "away_wins_in_h2h_last5": 3,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 15105948,
+        "home_team": "Melbourne Storm",
+        "away_team": "Canterbury-Bankstown Bulldogs",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "10:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/wests-tigers-vs-parramatta-eels/2283288?MarketTypeID=1401",
+      "match_id": "2283288",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Wests Tigers",
+      "away_team": "Parramatta Eels",
+      "event_date": "02/08",
+      "event_time": "06:05",
+      "outcome": "2",
+      "open_odds": 1.91,
+      "current_odds": 1.39,
+      "drop_pct": 27.0,
+      "max_odds": 1.42,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 5,
+        "away_wins_in_h2h_last5": 5,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15105953,
+        "home_team": "Wests Tigers",
+        "away_team": "Parramatta Eels",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "06:05"
+      },
+      "enrichment_error": null
+    }
+  ]
+}
