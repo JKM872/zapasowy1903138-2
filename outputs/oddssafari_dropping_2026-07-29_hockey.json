@@ -1,0 +1,191 @@
+{
+  "meta": {
+    "generated_at": "2026-07-29T10:00:10.371709+02:00",
+    "target_date": "2026-07-29",
+    "filter": {
+      "min_odds": 1.6,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 17.8,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Australia - AIHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/australia/aihl/sydney-bears-vs-perth-thunder/2288104?MarketTypeID=401",
+      "match_id": "2288104",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Sydney Bears",
+      "away_team": "Perth Thunder",
+      "event_date": "01/08",
+      "event_time": "07:00",
+      "outcome": "1",
+      "open_odds": 5.65,
+      "current_odds": 4.95,
+      "drop_pct": 12.0,
+      "max_odds": 5.25,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Russia - KHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/russia/khl/ak-bars-kazan-vs-sibir-novosibirsk/2267924?MarketTypeID=401",
+      "match_id": "2267924",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "AK Bars Kazan",
+      "away_team": "Sibir Novosibirsk",
+      "event_date": "05/09",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 2.14,
+      "current_odds": 1.9,
+      "drop_pct": 11.0,
+      "max_odds": 1.91,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 5,
+        "away_wins_in_h2h_last5": 5,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16347477,
+        "home_team": "AK Bars Kazan",
+        "away_team": "Sibir Novosibirsk",
+        "sport": "hockey",
+        "league": "Russia - KHL",
+        "match_time": "13:00"
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Russia - KHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/russia/khl/ak-bars-kazan-vs-sibir-novosibirsk/2267924?MarketTypeID=401",
+      "match_id": "2267924",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "AK Bars Kazan",
+      "away_team": "Sibir Novosibirsk",
+      "event_date": "05/09",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 2.14,
+      "current_odds": 1.9,
+      "drop_pct": 11.0,
+      "max_odds": 1.91,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 5,
+        "away_wins_in_h2h_last5": 5,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16347477,
+        "home_team": "AK Bars Kazan",
+        "away_team": "Sibir Novosibirsk",
+        "sport": "hockey",
+        "league": "Russia - KHL",
+        "match_time": "13:00"
+      },
+      "enrichment_error": null
+    }
+  ]
+}
