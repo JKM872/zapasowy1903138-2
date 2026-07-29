@@ -1043,8 +1043,14 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 # (H2H ≥60% + mandatory Fan Vote).
                 skip_no_odds=False,
                 min_odds_threshold=0.0,
+                # Only the top two grades go out. This is only safe now that the
+                # grade is scored against what is knowable for table tennis:
+                # while the scale demanded odds and three consensus sources that
+                # AiScore does not have, no table-tennis pick could exceed 60 of
+                # 100 and an A/B filter would have sent an empty mail every day.
+                grade_filter={'A', 'B'},
             )
-            print("   ✅ Email wysłany (jeśli były kwalifikujące się)")
+            print("   ✅ Email wysłany (jeśli były kwalifikujące się, Grade A/B)")
         except Exception as e:
             print(f"   ⚠️ Email error: {e}")
     elif send_email:

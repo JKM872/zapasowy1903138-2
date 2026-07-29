@@ -363,18 +363,32 @@ def _sofascore_from_match(match: Dict[str, Any]) -> tuple:
     return home, draw, away, votes
 
 
-def _canonical_pick_code(raw: Any) -> Optional[str]:
+def _canonical_pick_code(raw: Any, is_tennis: bool = False) -> Optional[str]:
     """
     Normalizuj surowy typ modelu/Forebet do kodu '1' / 'X' / '2'.
 
-    Akceptuje warianty używane w różnych silnikach: '1'/'H'/'1X' → '1',
-    '2'/'A'/'X2' → '2', 'X' → 'X'. Zwraca None gdy wartość jest pusta
-    lub nieznana, żeby wywołujący mógł pominąć linię „Typ modelu".
+    Dwa silniki mówią różnymi językami i litera 'A' znaczy w nich co innego:
+    w 1X2 (Forebet, piłka) 'A' to *Away*, a w silniku tenisowym 'A' to
+    *gracz A*, czyli GOSPODARZ. Bez rozróżnienia typ tenisowy 'A' był
+    tłumaczony na '2' i ten sam mecz pokazywał w jednym mailu dwóch
+    przeciwnych zawodników: blok „Tennis Engine" pisał „Ivo Taichman"
+    (poprawnie, A → gospodarz), a linia „Typ modelu" — „Gracz 2 — Marek
+    Blejchar", razem z kursem złej strony. Litera 'B' nie była obsługiwana
+    wcale, więc typ na gracza B po prostu znikał.
+
+    Dlatego *is_tennis* jest obowiązkową częścią kontraktu: dla tenisa i
+    tenisa stołowego 'A' → '1', 'B' → '2'.
     """
     if raw is None:
         return None
     s = str(raw).strip().upper()
     if not s or s in ('NONE', 'NAN'):
+        return None
+    if is_tennis:
+        if s in ('1', 'A', 'H'):
+            return '1'
+        if s in ('2', 'B'):
+            return '2'
         return None
     if s in ('1', 'H', '1X'):
         return '1'
@@ -410,9 +424,10 @@ def _render_model_pick_section(match: Dict[str, Any],
     widzi jasną rekomendację zamiast domyślać się jej z kolorowania sekcji
     kursów (gdzie zielony = najniższy kurs, a nie typ modelu).
     """
-    pick = _canonical_pick_code(match.get('scoring_pick'))
+    pick = _canonical_pick_code(match.get('scoring_pick'), is_tennis=is_tennis)
     source = 'Scoring'
     if pick is None:
+        # Forebet always speaks 1X2, whatever the sport.
         pick = _canonical_pick_code(match.get('forebet_prediction'))
         source = 'Forebet'
     if pick is None:

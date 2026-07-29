@@ -40,6 +40,7 @@ class DataQualityReport:
 
     # Consensus
     sources_agree: int = 0            # How many sources agree on winner
+    consensus_sources: int = 0        # How many could vote at all (0-3)
     consensus_strength: str = 'none'  # 'strong', 'moderate', 'weak', 'none'
     market_model_gap: Optional[float] = None  # Diff between model prob and implied prob
 
@@ -327,6 +328,7 @@ def compute_data_quality(row: Dict[str, Any]) -> DataQualityReport:
             agreements += 1
 
     dq.sources_agree = agreements
+    dq.consensus_sources = total_sources
     if total_sources >= 3 and agreements >= 3:
         dq.consensus_strength = 'strong'
     elif total_sources >= 2 and agreements >= 2:
@@ -509,58 +511,147 @@ def enrich_match_with_contract(row: Dict[str, Any]) -> Dict[str, Any]:
     row['availability'] = avail.to_dict()
     row['explanation'] = expl.to_dict()
 
-    # Overall prediction grade
+    # Overall prediction grade, graded against what is knowable for this sport.
     scoring_prob = _safe_float(row.get('scoring_prob'))
-    grade = _compute_grade(dq, avail, scoring_prob)
+    grade = _compute_grade(dq, avail, scoring_prob, sport)
     row['prediction_grade'] = grade
 
     return row
 
 
+# Which sources a sport can have at all. A grade must not punish a row for a
+# feed that does not exist for its sport: AiScore publishes no table-tennis
+# odds and no Forebet predictions, so a table-tennis pick could reach at most
+# 60 of 100 points — B (65) and A (80) were unreachable no matter how good the
+# prediction was, and the grade quietly became a proxy for "has odds". On
+# 2026-07-29, 184 of 202 qualifying table-tennis rows had no market.
+#
+# Sports absent from this map are graded against every source, which keeps
+# football and the other Livesport feeds exactly as they were.
+SPORT_SOURCES: Dict[str, set] = {
+    'table_tennis': {'h2h', 'sofascore', 'form'},
+}
+
+_QUALITY_WEIGHTS = {
+    'h2h': 0.25,          # 0.2 + 0.05 for a deep sample
+    'forebet': 0.2,
+    'sofascore': 0.15,
+    'odds': 0.25,
+    'form': 0.1,
+    'gemini': 0.1,
+}
+
+
+def _attainable_quality(sport: Optional[str]) -> float:
+    """The best quality_score a row of this sport could possibly reach."""
+    sources = SPORT_SOURCES.get((sport or '').lower())
+    if not sources:
+        return 1.0
+    return min(1.0, sum(_QUALITY_WEIGHTS.get(s, 0.0) for s in sources))
+
+
+# Consensus is only measured over these three; H2H and form do not vote.
+_CONSENSUS_SOURCES = ('forebet', 'sofascore', 'gemini')
+
+# Deducted when every source that could vote votes against the pick. Zero
+# points alone did not express this: a table-tennis pick contradicted by the
+# only cross-check it has still graded A, because with one voter the consensus
+# component is worth just 5 of 25 points.
+_CONTRADICTION_PENALTY = 10.0
+
+
+def _attainable_consensus(sources_present: int) -> float:
+    """Best consensus score reachable given how many sources can vote.
+
+    Keyed on the row, not on the sport. Keying it on the sport punished a
+    football row twice for the same gap: once through the completeness ceiling
+    and again through a consensus maximum it had no way to reach, which pushed
+    a solid 90%-with-edge pick from B down to C.
+    """
+    if sources_present >= 3:
+        return 20.0
+    if sources_present == 2:
+        return 12.0
+    if sources_present == 1:
+        return 5.0
+    return 0.0
+
+
 def _compute_grade(dq: DataQualityReport, avail: AvailabilityReport,
-                   scoring_prob: Optional[float]) -> str:
-    """Compute A-F prediction grade."""
-    score = 0.0
+                   scoring_prob: Optional[float],
+                   sport: Optional[str] = None) -> str:
+    """Compute the A-F prediction grade.
 
-    # Data quality contribution (0-40 points)
-    score += dq.quality_score * 40
+    Graded on a curve against what is *knowable* for this row rather than
+    against an absolute 100, so the letter says "how good is this pick given
+    the sources that exist here" instead of "does this sport have a market".
+    Sports with every feed are unaffected: their attainable total is still 100.
+    """
+    # --- Discriminating signals: what separates a good pick from a poor one.
+    earned = 0.0
+    attainable = 0.0
 
-    # Consensus contribution (0-20 points)
+    # Consensus (0-20). Measured across Forebet, SofaScore and the AI only —
+    # H2H does not vote — so a sport carrying one of the three can never be
+    # rated better than 'weak'. Table tennis has SofaScore alone, which capped
+    # it at 5 of 20 and was the second reason its grade could not reach B.
     consensus_map = {'strong': 20, 'moderate': 12, 'weak': 5, 'none': 0}
-    score += consensus_map.get(dq.consensus_strength, 0)
+    earned += consensus_map.get(dq.consensus_strength, 0)
+    attainable += _attainable_consensus(dq.consensus_sources)
+    if dq.consensus_sources > 0 and dq.sources_agree == 0:
+        earned -= _CONTRADICTION_PENALTY
 
-    # Availability (penalty)
-    score -= avail.availability_impact * 15
-
-    # Model probability contribution (0-20 points)
+    # Model probability (0-20)
     if scoring_prob is not None:
         if scoring_prob >= 75:
-            score += 20
+            earned += 20
         elif scoring_prob >= 65:
-            score += 15
+            earned += 15
         elif scoring_prob >= 55:
-            score += 10
+            earned += 10
         else:
-            score += 5
+            earned += 5
+        attainable += 20
 
-    # Edge contribution (0-20 points)
+    # Edge over the market (0-20). Counts towards the maximum only when there
+    # is a market to beat, so a no-odds sport does not forfeit a fifth of the
+    # scale for a reason unrelated to prediction quality.
     if dq.market_model_gap is not None:
         if dq.market_model_gap > 15:
-            score += 20
+            earned += 20
         elif dq.market_model_gap > 10:
-            score += 15
+            earned += 15
         elif dq.market_model_gap > 5:
-            score += 10
+            earned += 10
         elif dq.market_model_gap > 0:
-            score += 5
+            earned += 5
+        attainable += 20
 
-    if score >= 80:
+    # Availability (penalty on the earned side only)
+    earned -= avail.availability_impact * 15
+
+    # --- Data completeness acts as a ceiling, not as free points.
+    # Adding it to the score made it a giveaway: for table tennis, H2H,
+    # SofaScore and form are all present by the time a row qualifies, so 20 of
+    # its 45 points were guaranteed and a coin-flip pick still graded B. As a
+    # multiplier it does what it should — a row missing sources it could have
+    # had cannot reach the top grades, and a complete row is judged purely on
+    # the strength of its signals.
+    quality_ratio = 1.0
+    max_quality = _attainable_quality(sport)
+    if max_quality > 0:
+        quality_ratio = min(1.0, dq.quality_score / max_quality)
+
+    ratio = (max(0.0, earned) / attainable) if attainable > 0 else 0.0
+    pct = ratio * quality_ratio * 100
+
+    if pct >= 80:
         return 'A'
-    elif score >= 65:
+    elif pct >= 65:
         return 'B'
-    elif score >= 50:
+    elif pct >= 50:
         return 'C'
-    elif score >= 35:
+    elif pct >= 35:
         return 'D'
     else:
         return 'F'
