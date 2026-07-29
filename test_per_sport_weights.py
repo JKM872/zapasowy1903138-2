@@ -27,20 +27,53 @@ def _write_calibration(tmp_path, payload):
 
 
 class TestDefaultsUnchanged:
+    """The code alone must not hardcode any per-sport mix.
+
+    These build the engine against a path that does not exist, so they describe
+    the code's own defaults rather than whatever `outputs/scoring_calibration.json`
+    currently holds. That file is a measured artifact committed by the Backtest
+    workflow — asserting it is empty would make the tests fail the moment a real
+    calibration lands, which is the opposite of what we want to guard.
+    """
+
+    @staticmethod
+    def _uncalibrated(tmp_path):
+        return FootballScoringEngine(
+            calibration_path=str(tmp_path / 'no-calibration.json'))
+
     def test_no_overrides_by_default(self):
         assert FootballScoringEngine.SPORT_WEIGHT_OVERRIDES == {}
 
-    def test_engine_starts_with_no_sport_weights(self):
-        assert FootballScoringEngine().sport_weights == {}
+    def test_engine_starts_with_no_sport_weights(self, tmp_path):
+        assert self._uncalibrated(tmp_path).sport_weights == {}
 
-    def test_every_sport_uses_the_global_mix(self):
-        engine = FootballScoringEngine()
+    def test_every_sport_uses_the_global_mix(self, tmp_path):
+        engine = self._uncalibrated(tmp_path)
         for sport in ('football', 'tennis', 'baseball', 'esports', 'curling'):
             assert engine.weights_for_sport(sport) is engine.weights
 
-    def test_none_sport_defaults_to_global(self):
-        engine = FootballScoringEngine()
+    def test_none_sport_defaults_to_global(self, tmp_path):
+        engine = self._uncalibrated(tmp_path)
         assert engine.weights_for_sport(None) is engine.weights
+
+
+class TestShippedCalibration:
+    """Whatever is committed must be loadable and sane.
+
+    A malformed or lopsided calibration file would silently distort every
+    prediction, so the shipped artifact is checked like any other input.
+    """
+
+    def test_shipped_file_if_present_is_usable(self):
+        path = FootballScoringEngine.CALIBRATION_PATH
+        if not os.path.isfile(path):
+            pytest.skip('no calibration committed yet')
+
+        engine = FootballScoringEngine()
+        for sport, weights in engine.sport_weights.items():
+            assert set(weights) == set(engine.DEFAULT_WEIGHTS), sport
+            assert sum(weights.values()) == pytest.approx(1.0, abs=0.01), sport
+            assert all(0.0 <= v <= 1.0 for v in weights.values()), sport
 
 
 class TestCalibrationLoading:
