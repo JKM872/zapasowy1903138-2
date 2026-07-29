@@ -31,6 +31,16 @@ try:
 except ImportError:
     _result_store_ok = False
 
+# Name-based settlement over the SofaScore API. Preferred over the browser
+# path: it needs no Chrome (the whole report then fits a couple of CI minutes),
+# it covers AiScore fixtures the Livesport parser cannot read at all, and it
+# settles by who won rather than by table position.
+try:
+    from result_resolver import resolve_result, settle_from_result
+    _resolver_ok = True
+except ImportError:
+    _resolver_ok = False
+
 # Selenium — optional; results can also come from API
 try:
     from selenium import webdriver
@@ -423,6 +433,7 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
         'lost': 0,
         'draw': 0,
         'pending': 0,
+        'void': 0,
         'errors': 0,
         'details': [],
         'by_sport': {},
@@ -435,7 +446,8 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
 
         # Ensure per-sport bucket
         if sport not in stats['by_sport']:
-            stats['by_sport'][sport] = {'total': 0, 'won': 0, 'lost': 0, 'draw': 0, 'pending': 0, 'errors': 0}
+            stats['by_sport'][sport] = {'total': 0, 'won': 0, 'lost': 0, 'draw': 0,
+                                        'pending': 0, 'void': 0, 'errors': 0}
         sp = stats['by_sport'][sport]
         sp['total'] += 1
 
@@ -451,6 +463,24 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
             'away_odds': m.get('away_odds'),
             'match_url': url,
         }
+
+        # Name-resolved results settle by *who won*, never by position: the
+        # manifest's home/away order does not always agree with the source's,
+        # so comparing 'home' to 'home' can credit the wrong side.
+        if _resolver_ok and res.get('source'):
+            settled = settle_from_result(m, res)
+            detail.update({k: v for k, v in settled.items() if v is not None})
+            outcome = settled['outcome']
+            if outcome != 'pending':
+                if outcome in ('won', 'lost', 'draw'):
+                    stats['finished'] += 1
+                stats[outcome] = stats.get(outcome, 0) + 1
+                sp[outcome] = sp.get(outcome, 0) + 1
+            else:
+                stats['pending'] += 1
+                sp['pending'] += 1
+            stats['details'].append(detail)
+            continue
 
         if res['status'] == 'finished':
             stats['finished'] += 1
@@ -532,6 +562,7 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
     lost = stats['lost']
     draw = stats['draw']
     pending = stats['pending']
+    void = stats.get('void', 0)
     _errors = stats['errors']
     accuracy = stats['accuracy']
     roi_pln = stats['roi_pln']
@@ -571,11 +602,19 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
         elif d['outcome'] == 'pending':
             color = '#95a5a6'
             icon = '⏳'
+        elif d['outcome'] == 'void':
+            color = '#8b949e'
+            icon = '🚫'
         else:
             color = '#95a5a6'
             icon = '⚠️'
 
-        pred_label = '1 (Home)' if d['predicted'] == 'home' else '2 (Away)'
+        # Name the pick outright. '1 (Home)' is unreadable when the manifest's
+        # orientation disagrees with the source's, which happens often enough
+        # that a positional label was actively misleading.
+        picked = d.get('picked_name') or (
+            d['home_team'] if d['predicted'] == 'home' else d['away_team'])
+        pred_label = picked
         detail_rows += f"""
         <tr>
             <td>{emoji}</td>
@@ -615,7 +654,7 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
     <div style="flex:1;min-width:130px;background:#0d1117;border-radius:10px;padding:16px;text-align:center;border:1px solid #30363d">
       <div style="font-size:11px;color:#8b949e;text-transform:uppercase">Łącznie</div>
       <div style="font-size:32px;font-weight:800;color:#e6edf3">{total}</div>
-      <div style="font-size:11px;color:#8b949e">✅{won} ❌{lost} 🟡{draw} ⏳{pending}</div>
+      <div style="font-size:11px;color:#8b949e">✅{won} ❌{lost} 🟡{draw} ⏳{pending} 🚫{void}</div>
     </div>
   </div>
 
@@ -749,6 +788,8 @@ def main():
     parser.add_argument('--date', help='Data do sprawdzenia (YYYY-MM-DD)')
     parser.add_argument('--yesterday', action='store_true', help='Sprawdź wczorajsze mecze')
     parser.add_argument('--headless', action='store_true', help='Uruchom przeglądarkę w trybie headless')
+    parser.add_argument('--no-browser', action='store_true',
+                        help='Tylko API — pomiń zapasową ścieżkę przez przeglądarkę')
     parser.add_argument('--send-email', action='store_true', help='Wyślij raport mailem')
     parser.add_argument('--to', help='Email odbiorcy raportu')
     parser.add_argument('--from-email', help='Email nadawcy')
@@ -822,36 +863,85 @@ def main():
         save_diagnostic_summary(target_date, diagnosis, source)
         return
 
-    # 2. Scrape results
+    # 2. Resolve results — API first, browser only for what is left over
     print(f"\n🔎 Sprawdzam wyniki {len(matches)} meczów...")
-    driver = _init_driver(headless=args.headless)
     results: Dict[str, Dict[str, Any]] = {}
+    unresolved: List[Dict[str, Any]] = []
 
-    try:
+    if _resolver_ok:
+        print("   🌐 Etap 1: SofaScore API (bez przeglądarki)")
         for i, m in enumerate(matches, 1):
             url = m.get('match_url', '')
             home = m.get('home_team', '?')
             away = m.get('away_team', '?')
-            print(f"  [{i}/{len(matches)}] {home} vs {away}")
-
             if not url:
                 results[url] = {'status': 'error', 'error': 'no URL'}
                 continue
 
-            res = scrape_match_result(driver, url)
-            results[url] = res
+            # Rows whose match_date never reached the manifest fall back to the
+            # report's date. Without a date the resolver refuses to settle,
+            # because name-only matching demonstrably picks the wrong fixture.
+            try:
+                res = resolve_result(home, away,
+                                     (m.get('sport') or 'football').lower(),
+                                     (m.get('match_date') or '') or target_date)
+            except Exception as e:
+                print(f"  [{i}/{len(matches)}] {home} vs {away} → ⚠️ API: {str(e)[:60]}")
+                res = None
 
-            status = res['status']
-            if status == 'finished':
-                print(f"    → {res['score_home']}-{res['score_away']}")
-            elif status == 'not_finished':
-                print(f"    → ⏳ mecz jeszcze trwa")
+            if res:
+                results[url] = res
+                if res.get('status') == 'void':
+                    print(f"  [{i}/{len(matches)}] {home} vs {away} "
+                          f"→ 🚫 {res.get('event_status')}")
+                else:
+                    print(f"  [{i}/{len(matches)}] {home} vs {away} "
+                          f"→ {res.get('score_home')}-{res.get('score_away')}")
             else:
-                print(f"    → ⚠️ {status}")
+                unresolved.append(m)
+            time_module.sleep(0.2)
 
-            time_module.sleep(0.5)
-    finally:
-        driver.quit()
+        print(f"   ✅ API rozstrzygnęło {len(results)}/{len(matches)}, "
+              f"zostało {len(unresolved)}")
+    else:
+        unresolved = list(matches)
+
+    # Browser fallback: only started when something actually needs it, so a
+    # fully-resolved card costs no Chrome startup in CI.
+    if unresolved and _selenium_ok and not args.no_browser:
+        print(f"   🌐 Etap 2: przeglądarka dla {len(unresolved)} meczów")
+        try:
+            driver = _init_driver(headless=args.headless)
+        except Exception as e:
+            print(f"   ⚠️ Nie udało się uruchomić przeglądarki: {str(e)[:100]}")
+            driver = None
+
+        if driver is not None:
+            try:
+                for i, m in enumerate(unresolved, 1):
+                    url = m.get('match_url', '')
+                    home = m.get('home_team', '?')
+                    away = m.get('away_team', '?')
+                    print(f"  [{i}/{len(unresolved)}] {home} vs {away}")
+
+                    res = scrape_match_result(driver, url)
+                    results[url] = res
+
+                    status = res['status']
+                    if status == 'finished':
+                        print(f"    → {res['score_home']}-{res['score_away']}")
+                    elif status == 'not_finished':
+                        print(f"    → ⏳ mecz jeszcze trwa")
+                    else:
+                        print(f"    → ⚠️ {status}")
+
+                    time_module.sleep(0.5)
+            finally:
+                driver.quit()
+    elif unresolved:
+        for m in unresolved:
+            results.setdefault(m.get('match_url', ''),
+                               {'status': 'not_finished'})
 
     # 3. Evaluate
     stats = evaluate(matches, results)

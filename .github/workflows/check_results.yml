@@ -75,6 +75,11 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           echo "📊 Checking results for $TARGET_DATE..."
+          # Settlement goes through the SofaScore API first (no browser), and
+          # only falls back to Chrome for fixtures it could not resolve. On
+          # 2026-07-28 the API settled 119 of 136 where the browser path had
+          # settled none, because three quarters of the card were AiScore URLs
+          # the Livesport parser cannot read.
           python check_results.py \
             --date $TARGET_DATE \
             --headless \
