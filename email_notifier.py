@@ -11,7 +11,7 @@ import os
 import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from typing import List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 from datetime import datetime
 
@@ -1417,6 +1417,7 @@ def send_email_notification(
     odds_limit: int = 15,
     min_odds_threshold: float = 0.0,
     grade_filter: Optional[set] = None,
+    fallback_grades: Optional[set] = None,
     date: Optional[str] = None,
 ):
     """
@@ -1548,16 +1549,19 @@ def send_email_notification(
     if grade_filter is not None:
         before_count = len(qualified)
         if 'prediction_grade' in qualified.columns:
-            qualified = qualified[qualified['prediction_grade'].apply(
-                lambda g: (g if isinstance(g, str) else 'F') in grade_filter
-            )]
+            qualified, grade_label = _select_grade_tier(
+                qualified, grade_filter, fallback_grades)
+            if not grade_label:
+                grade_label = '/'.join(sorted(grade_filter))
         else:
             # No grade column — if filtering for premium only, skip all
             if grade_filter == {'A', 'B'}:
                 qualified = qualified.iloc[0:0]
+            grade_label = '/'.join(sorted(grade_filter))
         skipped = before_count - len(qualified)
-        grade_label = '/'.join(sorted(grade_filter))
         print(f"🏅 Grade filter [{grade_label}]: {len(qualified)} matches (pominięto {skipped})")
+        if subject and grade_label:
+            subject = f"{subject} [Grade {grade_label}]"
 
     if len(qualified) == 0:
         messages: List[str] = []
@@ -1814,6 +1818,33 @@ def _passes_sport_odds_threshold(sport: str, home_odds: Any, away_odds: Any,
     return ho_ok and ao_ok
 
 
+def _select_grade_tier(sport_df: 'pd.DataFrame', primary: set,
+                       fallback: Optional[set]) -> Tuple['pd.DataFrame', str]:
+    """Pick the best available tier for one sport's rows.
+
+    Returns the selected rows and a label naming the tier that was used, so the
+    subject can say which one it is. A sport with nothing in the primary tier
+    drops to *fallback* rather than sending nothing: football had zero A/B picks
+    out of 26 qualifying rows on 2026-07-29, and silence hides the day's card
+    instead of showing it as second rate.
+    """
+    def _grades(allowed: set) -> 'pd.DataFrame':
+        return sport_df[sport_df['prediction_grade'].apply(
+            lambda g: (g if isinstance(g, str) else 'F').strip().upper() in allowed
+        )]
+
+    top = _grades(set(primary))
+    if len(top) > 0:
+        return top, '/'.join(sorted(primary))
+
+    if fallback:
+        lower = _grades(set(fallback))
+        if len(lower) > 0:
+            return lower, '/'.join(sorted(fallback))
+
+    return sport_df.iloc[0:0], ''
+
+
 def send_split_emails_by_sport(
     csv_file: str,
     to_email: str,
@@ -1825,6 +1856,7 @@ def send_split_emails_by_sport(
     odds_limit: int = 15,
     min_odds_threshold: float = 0.0,
     grade_filter: Optional[set] = None,
+    fallback_grades: Optional[set] = None,
     date: Optional[str] = None,
 ):
     """
@@ -1835,8 +1867,14 @@ def send_split_emails_by_sport(
       - per-sport progi kursowe (AND — oba kursy >= progu sportu)
       - grade_filter: zbiór dozwolonych `prediction_grade` (np. {'A','B'}).
         None = wszystkie grade'y (legacy).
+      - fallback_grades: tier zapasowy używany TYLKO dla sportu, który nie ma
+        ani jednego meczu w `grade_filter` (np. {'C','D'}). Temat maila nazywa
+        tier, który faktycznie poszedł, żeby gorsze mecze nie wyglądały jak
+        premium.
     """
     _grade_label = '/'.join(sorted(grade_filter)) if grade_filter else 'all grades'
+    if fallback_grades:
+        _grade_label += f" → {'/'.join(sorted(fallback_grades))}"
     print("=" * 70)
     print(f"📧 TRYB: 1 mail na każdy sport ({_grade_label})")
     print("   Progi kursowe per sport (AND)")
@@ -1924,18 +1962,26 @@ def send_split_emails_by_sport(
         print(f"   Pominięto {before - len(qualified)} meczów poniżej progu kursowego per sport")
 
     # --- filtr: grade (np. tylko A/B) ---
+    # Stosowany PER SPORT niżej, nie globalnie: sport bez żadnego meczu w
+    # górnym tierze ma dostać maila z tierem zapasowym, a nie ciszę. Piłka
+    # nożna miała 29.07 zero meczów w A/B na 26 kwalifikujących się (C 11,
+    # D 10, F 5), więc globalny filtr po prostu nie wysyłał nic.
     if grade_filter is not None:
-        before = len(qualified)
-        if 'prediction_grade' in qualified.columns:
-            qualified = qualified[qualified['prediction_grade'].apply(
-                lambda g: (g if isinstance(g, str) else 'F').strip().upper() in grade_filter
-            )]
-        else:
+        if 'prediction_grade' not in qualified.columns:
             # Brak kolumny grade — nie da się potwierdzić tieru, więc nic nie wysyłamy
             qualified = qualified.iloc[0:0]
-            print("   ⚠️ Brak kolumny 'prediction_grade' — nie mogę potwierdzić Grade A/B")
-        print(f"   🏅 Grade filter [{'/'.join(sorted(grade_filter))}]: "
-              f"{len(qualified)} meczów (pominięto {before - len(qualified)})")
+            print("   ⚠️ Brak kolumny 'prediction_grade' — nie mogę potwierdzić tieru")
+        else:
+            allowed = set(grade_filter) | set(fallback_grades or set())
+            before = len(qualified)
+            qualified = qualified[qualified['prediction_grade'].apply(
+                lambda g: (g if isinstance(g, str) else 'F').strip().upper() in allowed
+            )]
+            print(f"   🏅 Grade filter [{'/'.join(sorted(grade_filter))}"
+                  + (f" → fallback {'/'.join(sorted(fallback_grades))}"
+                     if fallback_grades else '')
+                  + f"]: {len(qualified)} meczów w grze "
+                    f"(odrzucono {before - len(qualified)})")
 
     # Data dla nazewnictwa manifestu MUSI być spójna z `--date` użytym przy
     # scrapowaniu — `Check Results` szuka plików po tej dacie. Wcześniej brana
@@ -1968,10 +2014,22 @@ def send_split_emails_by_sport(
     # było *zakwalifikowane* do wysłania, a nie co dotarło do skrzynki — to
     # jest oczekiwana semantyka dla raportu accuracy.
     sport_payloads: Dict[str, List[Dict[str, Any]]] = {}
+    sport_tiers: Dict[str, str] = {}
     for sport in sorted(sports):
         sport_df: pd.DataFrame = qualified[qualified['sport'] == sport]  # type: ignore[assignment]
         if len(sport_df) == 0:  # type: ignore[arg-type]
             continue
+
+        tier_label = ''
+        if grade_filter is not None and 'prediction_grade' in sport_df.columns:
+            sport_df, tier_label = _select_grade_tier(
+                sport_df, grade_filter, fallback_grades)
+            if len(sport_df) == 0:
+                print(f"   ⏭️ {sport}: brak meczów w żadnym dopuszczonym tierze")
+                continue
+            print(f"   🏅 {sport}: tier {tier_label} — {len(sport_df)} meczów")
+        sport_tiers[sport] = tier_label
+
         matches_list: List[Dict[str, Any]] = sport_df.to_dict('records')  # type: ignore[assignment]
         for m in matches_list:
             m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
@@ -2005,7 +2063,10 @@ def send_split_emails_by_sport(
             for sport, matches_list in sport_payloads.items():
                 emoji = SPORT_EMOJI.get(sport, '🏆')
                 label = SPORT_LABEL.get(sport, sport.capitalize())
-                _tier = f" [Grade {'/'.join(sorted(grade_filter))}]" if grade_filter else ''
+                # Nazwij tier, który faktycznie poszedł — inaczej mail z tierem
+                # zapasowym wyglądałby jak mail premium.
+                _t = sport_tiers.get(sport) or ''
+                _tier = f" [Grade {_t}]" if _t else ''
                 subj = f"{emoji} {label}{_tier}: {len(matches_list)} meczów — {date}"
                 html = create_html_email(matches_list, date, sort_by=sort_by,
                                          include_sorted_odds=include_sorted_odds,

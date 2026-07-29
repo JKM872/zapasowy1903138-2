@@ -1242,6 +1242,12 @@ def scrape_and_send_email(
             # --- 1 mail per sport, tylko tier premium (Grade A/B) ---
             send_split_emails_by_sport(
                 grade_filter={'A', 'B'},
+                # A sport with nothing in the top tier still gets a mail, marked
+                # as the lower one. Football had zero A/B out of 26 qualifying
+                # rows on 2026-07-29, so the premium-only filter sent nothing at
+                # all for it — the day's card was hidden rather than shown as
+                # second rate.
+                fallback_grades={'C', 'D'},
                 csv_file=outfn,
                 to_email=to_email,
                 from_email=from_email,

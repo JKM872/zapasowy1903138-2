@@ -1049,8 +1049,12 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 # AiScore does not have, no table-tennis pick could exceed 60 of
                 # 100 and an A/B filter would have sent an empty mail every day.
                 grade_filter={'A', 'B'},
+                # Nothing in the top tier on a given day still gets a mail,
+                # labelled as the lower one — better a weaker card, shown as
+                # weaker, than a silent day.
+                fallback_grades={'C', 'D'},
             )
-            print("   ✅ Email wysłany (jeśli były kwalifikujące się, Grade A/B)")
+            print("   ✅ Email wysłany (jeśli były kwalifikujące się, Grade A/B → C/D)")
         except Exception as e:
             print(f"   ⚠️ Email error: {e}")
     elif send_email:
