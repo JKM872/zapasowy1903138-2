@@ -170,6 +170,51 @@ class TestConsensusScaleIsKeyedOnTheRow:
         assert dq.consensus_sources == 1
         assert dq.sources_agree == 1
 
+    def test_full_feed_sports_keep_the_absolute_scale(self):
+        """Guards the blast radius of the table-tennis curve.
+
+        Measured on 2026-07-29, applying the curve everywhere moved tennis from
+        41 A/B out of 42 down to 26, and football from C11/D10/F5 to C1/D3/F22.
+        Those grades were never the reported problem and the main e-mail filters
+        on them, so they must stay on the original scale.
+        """
+        dq = pdc.DataQualityReport()
+        dq.h2h_available = True
+        dq.h2h_count = 6
+        dq.sofascore_available = True
+        dq.odds_available = True
+        dq.form_available = True
+        dq.consensus_strength = 'moderate'
+        dq.consensus_sources = 3
+        dq.sources_agree = 2
+        dq.market_model_gap = 19.0
+
+        class _NoAbsences:
+            availability_impact = 0.0
+
+        for sport in ('tennis', 'football', 'basketball', 'hockey'):
+            assert (pdc._compute_grade(dq, _NoAbsences(), 84.4, sport)
+                    == pdc._compute_grade_absolute(dq, _NoAbsences(), 84.4)), sport
+
+    def test_restricted_sports_use_the_curve(self):
+        dq = pdc.DataQualityReport()
+        dq.h2h_available = True
+        dq.h2h_count = 6
+        dq.sofascore_available = True
+        dq.form_available = True
+        dq.consensus_strength = 'weak'
+        dq.consensus_sources = 1
+        dq.sources_agree = 1
+
+        class _NoAbsences:
+            availability_impact = 0.0
+
+        curved = pdc._compute_grade(dq, _NoAbsences(), 94.0, 'table_tennis')
+        absolute = pdc._compute_grade_absolute(dq, _NoAbsences(), 94.0)
+
+        assert curved == 'A'
+        assert absolute == 'D', 'the fault being fixed'
+
     def test_football_with_a_market_and_one_voter_still_grades_well(self):
         """Keying the maximum on the sport punished this row twice, B -> C."""
         row = pdc.enrich_match_with_contract({

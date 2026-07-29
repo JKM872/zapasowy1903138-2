@@ -577,6 +577,51 @@ def _attainable_consensus(sources_present: int) -> float:
     return 0.0
 
 
+def _compute_grade_absolute(dq: DataQualityReport, avail: AvailabilityReport,
+                            scoring_prob: Optional[float]) -> str:
+    """The original scale: components summed towards an absolute 100.
+
+    Correct for sports that can fill every component. Used unchanged for
+    football, tennis, basketball and the rest.
+    """
+    score = dq.quality_score * 40
+
+    consensus_map = {'strong': 20, 'moderate': 12, 'weak': 5, 'none': 0}
+    score += consensus_map.get(dq.consensus_strength, 0)
+
+    score -= avail.availability_impact * 15
+
+    if scoring_prob is not None:
+        if scoring_prob >= 75:
+            score += 20
+        elif scoring_prob >= 65:
+            score += 15
+        elif scoring_prob >= 55:
+            score += 10
+        else:
+            score += 5
+
+    if dq.market_model_gap is not None:
+        if dq.market_model_gap > 15:
+            score += 20
+        elif dq.market_model_gap > 10:
+            score += 15
+        elif dq.market_model_gap > 5:
+            score += 10
+        elif dq.market_model_gap > 0:
+            score += 5
+
+    if score >= 80:
+        return 'A'
+    elif score >= 65:
+        return 'B'
+    elif score >= 50:
+        return 'C'
+    elif score >= 35:
+        return 'D'
+    return 'F'
+
+
 def _compute_grade(dq: DataQualityReport, avail: AvailabilityReport,
                    scoring_prob: Optional[float],
                    sport: Optional[str] = None) -> str:
@@ -587,6 +632,16 @@ def _compute_grade(dq: DataQualityReport, avail: AvailabilityReport,
     the sources that exist here" instead of "does this sport have a market".
     Sports with every feed are unaffected: their attainable total is still 100.
     """
+    # Sports with the full set of feeds keep the original absolute scale. The
+    # curve below was built for a sport that could not reach B at all, and
+    # measuring it against real rows showed it is a far bigger change than
+    # that: on 2026-07-29 it moved tennis from 41 A/B out of 42 down to 26, and
+    # football from C11/D10/F5 to C1/D3/F22. Those grades were not the reported
+    # problem, and the main e-mail filters on them, so they stay as they were
+    # until there is a measurement saying the stricter scale predicts better.
+    if (sport or '').lower() not in SPORT_SOURCES:
+        return _compute_grade_absolute(dq, avail, scoring_prob)
+
     # --- Discriminating signals: what separates a good pick from a poor one.
     earned = 0.0
     attainable = 0.0
