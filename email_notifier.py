@@ -833,8 +833,13 @@ SMTP_CONFIG: Dict[str, Dict[str, Any]] = {
     }
 }
 
+_CARDS_START = '<!--MATCH-CARDS-START-->'
+_CARDS_END = '<!--MATCH-CARDS-END-->'
+
+
 def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = 'time', 
-                      include_sorted_odds: bool = False, odds_limit: int = 15) -> str:
+                      include_sorted_odds: bool = False, odds_limit: int = 15,
+                      cards_only: bool = False) -> str:
     """
     Tworzy ładny HTML email z listą meczów
     
@@ -972,7 +977,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
     # ========================================================================
     html += f"""
             <p style="margin-top: 30px;">Znaleziono <strong>{len(sorted_matches)}</strong> kwalifikujących się meczów:</p>
-    """
+    {_CARDS_START}"""
     
     for i, match in enumerate(sorted_matches, 1):
         home = match.get('home_team', 'N/A')
@@ -1184,6 +1189,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     {f'<div style="margin-top: 5px;"><span style="background: #FFD700; color: #333; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">🔥 Przewaga { "gości" if focus_team == "away" else "gospodarzy" }!</span></div>' if form_advantage and not is_tennis else ''}
                     {f'<div style="margin-top: 8px;"><span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Advanced Score: {advanced_score:.0f}/100</span></div>' if is_tennis and advanced_score > 0 else ''}
                     {f'<div style="margin-top: 5px; font-size: 12px; color: #666;">{ranking_info}</div>' if is_tennis and ranking_info else ''}
+                    {_render_drop_badge(match)}
                 </div>
                 
                 <!-- DANE MECZU - GRID -->
@@ -1379,6 +1385,18 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
             </div>
         """
     
+    html += f"""
+    {_CARDS_END}"""
+
+    if cards_only:
+        # Just the per-match cards, for a mail that wraps them in its own
+        # header — see dropping_odds_email, which used to keep a second copy of
+        # this card and drifted away from it.
+        start = html.find(_CARDS_START)
+        end = html.find(_CARDS_END)
+        if start >= 0 and end > start:
+            return html[start + len(_CARDS_START):end]
+
     html += """
         </div>
         
@@ -1816,6 +1834,41 @@ def _passes_sport_odds_threshold(sport: str, home_odds: Any, away_odds: Any,
     except (ValueError, TypeError):
         pass
     return ho_ok and ao_ok
+
+
+def _render_drop_badge(match: Dict[str, Any]) -> str:
+    """Render the odds-drop banner, when the row carries one.
+
+    Lets the dropping-odds mail reuse this template instead of maintaining its
+    own copy of a match card. The two had drifted: the dropping-odds card showed
+    no grade, no advanced score, no value-bet badge and no match link, so the
+    same fixture looked different depending on which mail it arrived in.
+
+    Expects ``match['dropping_odds']`` as
+    ``{'drop_pct': 37.0, 'side': '2', 'open': 3.70, 'current': 2.34}``.
+    """
+    info = match.get('dropping_odds')
+    if not isinstance(info, dict):
+        return ''
+
+    pct = safe_float(info.get('drop_pct'))
+    if pct <= 0:
+        return ''
+
+    side = str(info.get('side') or '').strip().upper()
+    side_label = {'1': 'Gospodarze (1)', '2': 'Goście (2)', 'X': 'Remis (X)'}.get(
+        side, side or '?')
+    colour = '#c62828' if pct >= 25 else '#e65100' if pct >= 15 else '#ef6c00'
+    opened, current = safe_float(info.get('open')), safe_float(info.get('current'))
+    movement = (f'{opened:.2f} → {current:.2f}'
+                if opened > 0 and current > 0 else '')
+
+    return f"""
+                    <div style="margin-top: 10px; padding: 8px 12px; background: {colour}; border-radius: 10px; display: inline-block;">
+                        <span style="color: #fff; font-size: 13px; font-weight: bold;">↓ {pct:.1f}%</span>
+                        <span style="color: rgba(255,255,255,0.9); font-size: 11px; margin-left: 8px;">na: {side_label}</span>
+                        {f'<span style="color: #fff; font-size: 12px; margin-left: 8px; font-weight: bold;">{movement}</span>' if movement else ''}
+                    </div>"""
 
 
 def _select_grade_tier(sport_df: 'pd.DataFrame', primary: set,

@@ -263,6 +263,76 @@ def _run_scoring_engine(event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 # HTML email builder
 # ---------------------------------------------------------------------------
 
+def event_to_match_row(event: Dict[str, Any]) -> Dict[str, Any]:
+    """Turn a dropping-odds event into a row the main e-mail template renders.
+
+    The two mails had drifted apart because this module kept its own match card:
+    the dropping-odds version carried no grade, no advanced score, no value-bet
+    badge and no link to the fixture, so the same match looked different
+    depending on which mail it arrived in. Reusing the main renderer makes the
+    per-event content identical by construction, and keeps it identical as the
+    main template changes.
+    """
+    row = _build_scoring_input(event)
+    enrichment = event.get("enrichment") or {}
+
+    row.update({
+        "sport": event.get("sport", "football"),
+        "league": event.get("league") or enrichment.get("league") or "",
+        # OddsSafari names these event_date/event_time; the main template reads
+        # match_time. Without the mapping every card showed "TBD".
+        "match_time": (event.get("match_time") or enrichment.get("match_time")
+                       or event.get("event_time") or event.get("start_time") or ""),
+        "match_date": (event.get("match_date") or enrichment.get("match_date")
+                       or event.get("event_date")),
+        "match_url": (event.get("match_url") or enrichment.get("match_url")
+                      or event.get("livesport_url") or ""),
+        "qualifies": True,
+        # What makes this mail different from the main one: the price movement.
+        "dropping_odds": {
+            "drop_pct": _safe_float(event.get("drop_pct")),
+            "side": event.get("outcome") or event.get("drop_outcome") or "",
+            "open": _safe_float(event.get("opening_odds")
+                                or event.get("open_odds")),
+            "current": _safe_float(event.get("current_odds")
+                                   or event.get("max_odds")),
+        },
+        # Odds shown in the card: prefer the enriched book, fall back to the
+        # OddsSafari price that triggered the drop so the card is never blank.
+        "odds_bookmaker": enrichment.get("odds_bookmaker") or "OddsSafari",
+    })
+
+    scored = _run_scoring_engine(event)
+    if scored:
+        # The engines return -999 for "no market to price against". Passing that
+        # through printed an EV of -999.000 in the card; the template shows a
+        # dash for None.
+        ev = scored.get("ev")
+        if ev is None or _safe_float(ev, -999.0) <= -900:
+            ev = None
+
+        row.update({
+            "scoring_pick": scored.get("best_pick"),
+            "scoring_prob": round(_safe_float(scored.get("best_prob")) * 100, 1),
+            "scoring_ev": ev,
+            "scoring_edge": scored.get("edge"),
+            "scoring_confidence": scored.get("confidence"),
+            "scoring_prob_1": scored.get("prob_1"),
+            "scoring_prob_x": scored.get("prob_X"),
+            "scoring_prob_2": scored.get("prob_2"),
+        })
+
+    # Grade and the data-quality block, exactly as the main pipeline computes
+    # them — otherwise the card would show an empty grade for every event.
+    try:
+        from prediction_data_contract import enrich_match_with_contract
+        enrich_match_with_contract(row)
+    except Exception:
+        pass
+
+    return row
+
+
 def _build_match_card(event: Dict[str, Any], index: int) -> str:
     """Build one match card HTML block."""
     home = event.get("home_team", "?")
@@ -592,10 +662,23 @@ def build_dropping_odds_email_html(
     events_sorted = sorted(events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
     skipped_sorted = sorted(skipped_events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
     
-    # Build qualifying match cards
+    # Build qualifying match cards with the MAIN pipeline's renderer, so every
+    # event carries the same information as in the scraper mail. Falls back to
+    # the local card only if that import fails, so a broken import degrades to
+    # the old look instead of an empty mail.
     cards_html = ""
-    for i, event in enumerate(events_sorted, 1):
-        cards_html += _build_match_card(event, i)
+    if events_sorted:
+        try:
+            from email_notifier import create_html_email
+
+            rows = [event_to_match_row(e) for e in events_sorted]
+            cards_html = create_html_email(rows, date, sort_by='none',
+                                           include_sorted_odds=False,
+                                           cards_only=True)
+        except Exception as e:
+            print(f"   ⚠️ Główny renderer niedostępny ({e}) — używam lokalnych kart")
+            for i, event in enumerate(events_sorted, 1):
+                cards_html += _build_match_card(event, i)
     
     # If empty, show a friendly placeholder
     if not events_sorted:
