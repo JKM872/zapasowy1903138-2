@@ -717,7 +717,18 @@ def scrape_and_send_email(
                             draw_odds=row.get('draw_odds'),
                         )
                         if gemini_result:
-                            row['gemini_prediction'] = gemini_result.get('prediction')
+                            # A failed call must not look like an analysis. The
+                            # error text used to be stored as the prediction, so
+                            # 67 of 100 "AI-analysed" rows on 2026-07-28 read
+                            # 'Błąd API (po 5 modelach)' — counted as coverage,
+                            # shown to a human as a verdict.
+                            if gemini_result.get('error'):
+                                row['gemini_prediction'] = None
+                                row['gemini_error'] = gemini_result.get('error')
+                                print(f"   ⚠️ AI niedostępne: "
+                                      f"{str(gemini_result.get('error'))[:70]}")
+                            else:
+                                row['gemini_prediction'] = gemini_result.get('prediction')
                             # Machine-readable 1/X/2 pick — this is what the
                             # scoring engine consumes; the prose prediction is
                             # for humans only.
@@ -728,7 +739,11 @@ def scrape_and_send_email(
                             row['gemini_recommendation'] = gemini_result.get('recommendation')
                             row['gemini_key_factors'] = gemini_result.get('key_factors', [])
                             row['gemini_risk_factors'] = gemini_result.get('risk_factors', [])
-                            print(f"   ✅ Gemini: {row['gemini_recommendation']} ({row['gemini_confidence']}%)")
+                            if row.get('gemini_prediction'):
+                                print(f"   ✅ AI [{row.get('ai_provider') or '?'}]: "
+                                      f"{row['gemini_recommendation']} "
+                                      f"({row['gemini_confidence']}%) "
+                                      f"pick={row.get('gemini_pick') or '—'}")
                     except Exception as e:
                         print(f"   ❌ Gemini błąd: {str(e)[:50]}")
                 

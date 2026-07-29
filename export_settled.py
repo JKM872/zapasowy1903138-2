@@ -104,13 +104,19 @@ def normalise_row(raw: Dict[str, Any]) -> Dict[str, Any]:
         'sofascore_total_votes': _first(raw, 'sofascore_total_votes',
                                         default=sofa.get('votes')),
 
-        # Gemini
+        # AI analysis. The pick token is what the engine reads; without it the
+        # calibrator saw zero AI coverage even on rows the AI had answered,
+        # because prose alone cannot be turned into a 1/X/2 probability.
         'gemini_prediction': _first(raw, 'gemini_prediction',
                                     default=gemini.get('prediction')),
+        'gemini_pick': _first(raw, 'gemini_pick', 'ai_pick',
+                              default=gemini.get('pick')),
         'gemini_confidence': _first(raw, 'gemini_confidence',
                                     default=gemini.get('confidence')),
         'gemini_recommendation': _first(raw, 'gemini_recommendation',
                                         default=gemini.get('recommendation')),
+        'ai_provider': _first(raw, 'ai_provider',
+                              default=gemini.get('ai_provider')),
 
         # H2H aggregates (the raw match list is not kept in results/*.json)
         'h2h_last5': _first(raw, 'h2h_last5', default=[]),

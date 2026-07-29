@@ -105,14 +105,37 @@ class TestScoringConsumesPickOnly:
         f = self._feats(gemini_pick='1', gemini_confidence=0)
         assert f['gemini_conf'] == 0.5
 
-    def test_ai_pick_moves_the_prediction(self):
-        engine = FootballScoringEngine()
+    def test_ai_pick_moves_the_prediction(self, tmp_path):
+        """The mechanism must work, judged on the code's own weights.
+
+        Built against a nonexistent calibration path on purpose. The committed
+        calibration currently carries ``gemini=0.0`` for football, because the
+        AI pick never reached the settled data — the very transit bug fixed in
+        this change — and measuring the mechanism against that artifact would
+        assert the bug instead of the behaviour.
+        """
+        engine = FootballScoringEngine(
+            calibration_path=str(tmp_path / 'no-calibration.json'))
         base = {'home_team': 'A', 'away_team': 'B', 'sport': 'football',
                 'home_odds': 2.5, 'draw_odds': 3.3, 'away_odds': 2.5,
                 'gemini_confidence': 90, 'gemini_recommendation': 'HIGH'}
         home = engine.score_match(dict(base, gemini_pick='1'))
         away = engine.score_match(dict(base, gemini_pick='2'))
         assert home.cal_home > away.cal_home, 'AI pick must influence the model'
+
+    def test_calibrated_football_currently_ignores_the_ai(self):
+        """Documents a live consequence, so it is not mistaken for a fault.
+
+        Football and basketball were calibrated on rows where AI coverage was
+        zero, so the optimiser pinned that weight to zero. The next weekly
+        calibration is the thing that can revive it — now that the pick
+        survives into the export, there is finally data to earn a weight with.
+        """
+        engine = FootballScoringEngine()
+        football = engine.sport_weights.get('football')
+        if not football:
+            pytest.skip('no calibration committed yet')
+        assert football['gemini'] == 0.0
 
     def test_high_recommendation_flag(self):
         f = self._feats(gemini_pick='1', gemini_confidence=80,

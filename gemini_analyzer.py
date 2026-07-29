@@ -261,6 +261,21 @@ def analyze_match(
     }
 
 
+_GROQ_WARNED: set = set()
+
+
+def _warn_groq_unavailable(reason: str) -> None:
+    """Say once per reason why the AI fallback is not answering.
+
+    Per-match logging would bury the run in identical lines; saying nothing at
+    all is how a dead AI backend went unnoticed across 1000 settled matches.
+    """
+    if reason in _GROQ_WARNED:
+        return
+    _GROQ_WARNED.add(reason)
+    print(f"   ⚠️ Groq niedostępny: {reason} — analiza AI wyłączona")
+
+
 def _analyze_with_groq(prompt: str) -> Optional[Dict[str, Any]]:
     """Run the analysis prompt through Groq. Returns None when unavailable.
 
@@ -272,11 +287,17 @@ def _analyze_with_groq(prompt: str) -> Optional[Dict[str, Any]]:
     try:
         import groq_client
         import requests
-    except ImportError:
+    except ImportError as e:
+        _warn_groq_unavailable(f'brak modułu ({e})')
         return None
 
     key = groq_client.api_key()
     if not key:
+        # Silence here is what hid the outage: with Gemini's quota gone and no
+        # Groq key, every match recorded 'Błąd API' and nothing said why. In CI
+        # this is the difference between a five-second fix and a week of
+        # AI-free predictions.
+        _warn_groq_unavailable('GROQ_API_KEY nie ustawiony')
         return None
 
     model = groq_client.resolve_model(key)

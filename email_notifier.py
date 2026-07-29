@@ -1673,6 +1673,13 @@ _MANIFEST_FIELDS = [
     'win_rate', 'h2h_count', 'home_wins_in_h2h_last5', 'away_wins_in_h2h_last5',
     'form_advantage', 'forebet_prediction', 'forebet_probability',
     'gemini_prediction', 'gemini_recommendation', 'gemini_confidence',
+    # `gemini_pick` is the machine-readable 1/X/2 token — the only AI field the
+    # scoring engine can consume. Its absence here is why the AI signal never
+    # survived into the manifest or the backtest export: the calibrator
+    # measured 0 AI coverage across 1000 settled matches while the pipeline was
+    # in fact producing picks. `ai_provider` records which backend answered, so
+    # a dead Gemini is visible rather than merely absent.
+    'gemini_pick', 'ai_provider',
     'scoring_pick', 'scoring_prob', 'scoring_ev', 'scoring_edge',
     'qualifies', 'focus_team',
 ]

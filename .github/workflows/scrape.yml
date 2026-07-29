@@ -136,6 +136,16 @@ jobs:
         run: bash tools/setup_tor.sh
       
       # 8. Run the scraper for this sport
+      # AI preflight: says outright which backend will answer. The AI signal
+      # was silently dead - Gemini out of quota, Groq returning None without a
+      # word - and every affected row stored 'Blad API' as if it were a verdict.
+      - name: AI backend preflight
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python tools/check_ai_backend.py
+
       - name: Run scraper - ${{ matrix.sport }}
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
