@@ -22,6 +22,18 @@ jobs:
     permissions:
       contents: write
 
+    services:
+      # Cloudflare bypass for the SofaScore API. Without it settlement gets a
+      # flat 403 from GitHub's datacenter IPs: the first CI run of the new
+      # resolver settled 0 of 136 here while settling 119 locally.
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
     steps:
       # 1. Checkout repository (includes committed manifests)
       - name: Checkout code
@@ -54,6 +66,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # 4b. SofaScore reaches us through Cloudflare, which refuses GitHub's
+      # datacenter ranges outright. Tor gives the resolver an exit IP that is
+      # not on that list; FlareSolverr above is the second line when it is.
+      - name: Setup Tor (SOCKS5 on :9050)
+        continue-on-error: true
+        run: bash tools/setup_tor.sh
+
       # 5. Determine target date
       - name: Set target date
         id: set-date
@@ -73,6 +92,11 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # Same bypass chain the scrapers use, in the same order.
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "📊 Checking results for $TARGET_DATE..."
           # Settlement goes through the SofaScore API first (no browser), and
@@ -98,6 +122,10 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           if [ -f "outputs/telegram_manifest_${TARGET_DATE}.json" ]; then
             echo "📨 Telegram manifest found — checking results for picks sent to Telegram..."
