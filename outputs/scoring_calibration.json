@@ -14,39 +14,27 @@
   "per_sport": {
     "football": {
       "availability": 0.0,
-      "consensus": 0.01123142443595858,
-      "forebet": 0.018917862740578262,
-      "form": 0.00907765846963295,
-      "gemini": 0.10436087118085982,
-      "h2h": 0.12446493304476511,
-      "odds": 0.1492134889764075,
-      "poisson": 0.003130934152676373,
-      "sofascore": 0.13964889125823193,
-      "venue_form": 0.43995393574088953
+      "consensus": 0.0,
+      "forebet": 0.02139,
+      "form": 0.010264,
+      "gemini": 0.0,
+      "h2h": 0.140733,
+      "odds": 0.168716,
+      "poisson": 0.00354,
+      "sofascore": 0.157901,
+      "venue_form": 0.497456
     },
     "basketball": {
-      "availability": 0.015134635936748898,
-      "consensus": 0.011881285819264776,
-      "forebet": 0.09089797728152971,
-      "form": 0.013080907852478011,
-      "gemini": 0.07160560472078144,
-      "h2h": 0.00012071192830195442,
-      "odds": 0.49952858559578894,
-      "poisson": 0.034058683383543384,
-      "sofascore": 0.09726363245522852,
-      "venue_form": 0.16642797502633444
-    },
-    "baseball": {
-      "availability": 0.1251634523036855,
-      "consensus": 0.05754259661059457,
-      "forebet": 0.0007495430964138807,
-      "form": 0.049948831767815546,
-      "gemini": 0.07889801290334356,
-      "h2h": 0.0,
-      "odds": 0.1910838060956668,
-      "poisson": 0.13674310938015394,
-      "sofascore": 0.05255380706652386,
-      "venue_form": 0.3073168407758024
+      "availability": 0.0,
+      "consensus": 0.0,
+      "forebet": 0.104803,
+      "form": 0.015082,
+      "gemini": 0.0,
+      "h2h": 0.000139,
+      "odds": 0.575945,
+      "poisson": 0.0,
+      "sofascore": 0.112143,
+      "venue_form": 0.191888
     }
   },
   "per_sport_metrics": {
@@ -148,27 +136,8 @@
     },
     "baseball": {
       "n_rows": 40,
-      "status": "accepted",
-      "test_default": {
-        "label": "model",
-        "n": 12,
-        "accuracy": 0.4167,
-        "brier": 0.5274,
-        "log_loss": 0.7058,
-        "value_bets": 0,
-        "roi": 0.0,
-        "net_units": 0.0
-      },
-      "test_tuned": {
-        "label": "model",
-        "n": 12,
-        "accuracy": 1.0,
-        "brier": 0.1949,
-        "log_loss": 0.3412,
-        "value_bets": 0,
-        "roi": 0.0,
-        "net_units": 0.0
-      }
+      "status": "withdrawn",
+      "reason": "tuned on 28 train / 12 test rows, none carrying odds; baseball prices only exist from 2026-07-29 onward"
     },
     "hockey": {
       "n_rows": 27,

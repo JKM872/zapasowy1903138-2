@@ -58,6 +58,74 @@ from football_scoring_engine import (  # noqa: E402
 
 OUTCOMES = ('1', 'X', '2')
 
+# A sport needs this many settled matches before it may get its own weights.
+# Higher than the reporting threshold on purpose: ten weights tuned on ~30 rows
+# fit noise. The first real run accepted baseball off 28 train / 12 test rows.
+MIN_CALIBRATION_ROWS = 60
+
+
+# ---------------------------------------------------------------------------
+# Source coverage
+# ---------------------------------------------------------------------------
+
+# Sources the engine abstains from when the underlying data is missing, and the
+# feature that tells us whether it contributed. Weights for sources that never
+# appear in a sport's data are meaningless — tuning them fits nothing — so they
+# are pinned to zero before the weights are stored.
+#
+# form, venue_form and sofascore are deliberately absent from this map: the
+# engine always feeds them, so they always have coverage.
+_ABSTAINING_SOURCES: Dict[str, Any] = {
+    'h2h': lambda f: f.get('h2h_count', 0.0) > 0,
+    'forebet': lambda f: f.get('forebet_prob', 0.5) != 0.5,
+    'odds': lambda f: f.get('odds_available', 0.0) > 0,
+    'poisson': lambda f: f.get('poisson_available', 0.0) > 0,
+    'gemini': lambda f: f.get('gemini_conf', 0.5) != 0.5,
+    'consensus': lambda f: f.get('consensus', 0.0) > 0,
+    'availability': lambda f: (f.get('availability_impact', 0.0) > 0
+                               or f.get('home_key_absences', 0.0) > 0
+                               or f.get('away_key_absences', 0.0) > 0),
+}
+
+
+def source_coverage(rows: List[Dict[str, Any]]) -> Dict[str, int]:
+    """Count, per source, how many rows actually carry it.
+
+    Uses the engine's own feature extractor and the same predicates the engine
+    uses to decide whether a source contributes, so coverage cannot drift from
+    scoring behaviour.
+    """
+    extractor = FootballScoringEngine().extractor
+    counts = {name: 0 for name in _ABSTAINING_SOURCES}
+    for row in rows:
+        try:
+            feats = extractor.extract(row)
+        except Exception:
+            continue
+        for name, present in _ABSTAINING_SOURCES.items():
+            try:
+                if present(feats):
+                    counts[name] += 1
+            except Exception:
+                pass
+    return counts
+
+
+def pin_absent_sources(weights: Dict[str, float],
+                       absent: Any) -> Dict[str, float]:
+    """Zero the weights of sources with no data and renormalise the rest.
+
+    Behaviour-neutral: the engine averages over contributing sources only, so
+    rescaling the survivors changes no prediction. What it buys is an honest
+    artifact — nobody reads ``odds=0.191`` for a sport that has no odds and
+    concludes the market matters there.
+    """
+    pinned = {k: (0.0 if k in absent else float(v)) for k, v in weights.items()}
+    total = sum(pinned.values())
+    if total <= 0:
+        return dict(weights)
+    return {k: v / total for k, v in pinned.items()}
+
 
 # ---------------------------------------------------------------------------
 # Scoring metrics
@@ -242,13 +310,29 @@ def _score_row(row: Dict[str, Any], engine: FootballScoringEngine,
     return [sm.cal_home, sm.cal_draw, sm.cal_away], sm.ev, sm.best_odds
 
 
+def _engine_with(weights: Optional[Dict[str, float]]) -> FootballScoringEngine:
+    """Engine that really uses *weights*, ignoring any committed calibration.
+
+    ``weights_for_sport`` prefers a per-sport entry from
+    ``outputs/scoring_calibration.json`` over the global mix. Once a sport has
+    been calibrated once, leaving those entries in place would make every later
+    candidate a silent no-op: the tuned weights would be set and then bypassed,
+    so the sport could never improve again and every run would report
+    'rejected' with numbers identical to the default. Clearing them is what
+    makes the comparison mean what it says.
+    """
+    engine = FootballScoringEngine()
+    if weights:
+        engine.weights = dict(weights)
+        engine.sport_weights = {}
+    return engine
+
+
 def evaluate_dataset(rows: List[Dict[str, Any]],
                      weights: Optional[Dict[str, float]] = None,
                      ) -> Dict[str, Any]:
     """Evaluate the engine and all baselines over *rows*."""
-    engine = FootballScoringEngine()
-    if weights:
-        engine.weights = dict(weights)
+    engine = _engine_with(weights)
 
     model = Evaluation('model')
     market = Evaluation('market (bookmaker)')
@@ -300,8 +384,7 @@ def evaluate_per_sport(rows: List[Dict[str, Any]],
 
 def _log_loss_of(rows: List[Dict[str, Any]], weights: Dict[str, float]) -> float:
     """Mean log-loss of the engine with *weights* over *rows*."""
-    engine = FootballScoringEngine()
-    engine.weights = dict(weights)
+    engine = _engine_with(weights)
     total = 0.0
     for row in rows:
         sm = engine.score_match(row)
@@ -480,6 +563,11 @@ def main() -> int:
                          'has enough settled rows')
     ap.add_argument('--min-rows', type=int, default=30,
                     help='Below this row count a sport is flagged as unreliable')
+    ap.add_argument('--min-calibration-rows', type=int,
+                    default=MIN_CALIBRATION_ROWS,
+                    help='A sport needs at least this many settled rows before '
+                         'it may get its own weight set (stricter than '
+                         '--min-rows, which only affects reporting)')
     ap.add_argument('--json', action='store_true', help='Emit JSON only')
     args = ap.parse_args()
 
@@ -561,7 +649,8 @@ def main() -> int:
     if args.optimise_per_sport:
         per_sport_weights, report = optimise_per_sport(
             rows, iterations=args.iterations, seed=args.seed,
-            test_frac=args.test_frac, min_rows=args.min_rows,
+            test_frac=args.test_frac,
+            min_rows=max(args.min_rows, args.min_calibration_rows),
             simulated=bool(args.simulate),
         )
         result['per_sport_weights'] = per_sport_weights
@@ -586,9 +675,20 @@ def optimise_per_sport(rows: List[Dict[str, Any]], *, iterations: int,
 
     Each sport is split into train/test independently. A tuned set is accepted
     only when it improves BOTH log-loss and Brier on that sport's held-out
-    rows; otherwise the sport keeps the shared defaults. Sports with fewer than
-    *min_rows* settled matches are skipped outright — tuning ten weights on a
-    handful of games fits noise, not football.
+    rows; otherwise the sport keeps the shared defaults.
+
+    Two guards decide whether a sport may be calibrated at all:
+
+    *min_rows* — tuning ten weights needs more than a handful of games. The
+    first real run accepted baseball off 28 train / 12 test rows, which is an
+    anecdote, not evidence; hence MIN_CALIBRATION_ROWS above the reporting
+    threshold.
+
+    Source coverage — a weight is only meaningful if that source appears in the
+    data. The same run handed baseball ``odds=0.191`` while not a single
+    baseball row carried a price, so the number described nothing. Sources that
+    are absent from a sport's rows are pinned to zero and the remaining mass is
+    renormalised.
     """
     by_sport: Dict[str, List[Dict[str, Any]]] = {}
     for row in rows:
@@ -617,8 +717,16 @@ def optimise_per_sport(rows: List[Dict[str, Any]], *, iterations: int,
             continue
 
         print(f"\n  {sport} — {len(train)} train / {len(test)} test")
+
+        coverage = source_coverage(sport_rows)
+        absent = {name for name, n in coverage.items() if n == 0}
+        if absent:
+            print(f"    no data for: {', '.join(sorted(absent))}"
+                  f" — pinned to zero")
+
         weights, _train_loss = optimise_weights(
             train, iterations=iterations, seed=seed, verbose=False)
+        weights = pin_absent_sources(weights, absent)
 
         before = evaluate_dataset(test)
         after = evaluate_dataset(test, weights=weights)
@@ -636,6 +744,8 @@ def optimise_per_sport(rows: List[Dict[str, Any]], *, iterations: int,
             'status': 'accepted' if improved else 'rejected',
             'test_default': before['model'],
             'test_tuned': after['model'],
+            'source_coverage': coverage,
+            'sources_without_data': sorted(absent),
         }
         if improved:
             accepted[sport] = weights

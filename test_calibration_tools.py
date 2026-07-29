@@ -353,3 +353,142 @@ class TestPerSportEvaluation:
         assert 'PER-SPORT BREAKDOWN' in out
         assert 'football' in out and 'tennis' in out
         assert 'noise' in out          # both samples are below min_rows
+
+
+# ---------------------------------------------------------------------------
+# Source coverage and the guards it feeds
+# ---------------------------------------------------------------------------
+
+def _settled(sport='football', **extra):
+    """A settled row carrying nothing but H2H, so every optional source is absent."""
+    row = {
+        'sport': sport,
+        'home_team': 'Alpha', 'away_team': 'Beta',
+        'actual_result': '1',
+        'home_wins_in_h2h_last5': 4, 'away_wins_in_h2h_last5': 1,
+        'h2h_matches_count': 5,
+    }
+    row.update(extra)
+    return row
+
+
+class TestSourceCoverage:
+    def test_absent_sources_are_reported_as_zero(self):
+        cov = cw.source_coverage([_settled(), _settled()])
+
+        assert cov['odds'] == 0
+        assert cov['gemini'] == 0
+        assert cov['availability'] == 0
+
+    def test_present_source_is_counted(self):
+        cov = cw.source_coverage([
+            _settled(home_odds=1.9, draw_odds=3.4, away_odds=4.2),
+            _settled(),
+        ])
+
+        assert cov['odds'] == 1
+
+    def test_h2h_is_detected(self):
+        assert cw.source_coverage([_settled()])['h2h'] == 1
+
+    def test_empty_input(self):
+        cov = cw.source_coverage([])
+        assert set(cov) == set(cw._ABSTAINING_SOURCES)
+        assert all(v == 0 for v in cov.values())
+
+    def test_malformed_rows_do_not_raise(self):
+        cov = cw.source_coverage([{}, None, {'sport': 'football'}])
+        assert isinstance(cov, dict)
+
+
+class TestPinAbsentSources:
+    def test_absent_source_is_zeroed_and_rest_renormalised(self):
+        pinned = cw.pin_absent_sources({'odds': 0.5, 'h2h': 0.25, 'form': 0.25},
+                                       {'odds'})
+
+        assert pinned['odds'] == 0.0
+        assert sum(pinned.values()) == pytest.approx(1.0)
+        # The survivors keep their ratio to each other.
+        assert pinned['h2h'] == pytest.approx(pinned['form'])
+
+    def test_nothing_absent_is_a_plain_renormalisation(self):
+        pinned = cw.pin_absent_sources({'odds': 0.6, 'h2h': 0.6}, set())
+
+        assert pinned['odds'] == pytest.approx(0.5)
+        assert pinned['h2h'] == pytest.approx(0.5)
+
+    def test_pinning_everything_falls_back_to_the_input(self):
+        """Zeroing every source would leave no model at all."""
+        original = {'odds': 0.5, 'h2h': 0.5}
+        assert cw.pin_absent_sources(original, {'odds', 'h2h'}) == original
+
+    def test_pinning_does_not_change_predictions(self):
+        """The engine averages over contributing sources, so rescaling is inert.
+
+        This is what makes the honest artifact free: it only removes numbers
+        that describe nothing.
+        """
+        from football_scoring_engine import FootballScoringEngine
+
+        row = _settled()
+        raw = dict(FootballScoringEngine.DEFAULT_WEIGHTS)
+        absent = {k for k, n in cw.source_coverage([row]).items() if n == 0}
+
+        before = cw._engine_with(raw).score_match(row)
+        after = cw._engine_with(cw.pin_absent_sources(raw, absent)).score_match(row)
+
+        assert after.cal_home == pytest.approx(before.cal_home, abs=1e-9)
+        assert after.cal_away == pytest.approx(before.cal_away, abs=1e-9)
+
+
+class TestEngineWith:
+    def test_explicit_weights_override_a_committed_per_sport_set(self, tmp_path):
+        """Otherwise every candidate after the first calibration is a no-op.
+
+        `weights_for_sport` prefers the per-sport entry loaded from disk, so
+        without clearing it the tuned weights would be set and then bypassed —
+        and the sport could never be improved again.
+        """
+        engine = cw._engine_with({'odds': 1.0})
+
+        assert engine.sport_weights == {}
+        assert engine.weights_for_sport('football')['odds'] == 1.0
+
+    def test_no_weights_keeps_the_committed_calibration(self):
+        from football_scoring_engine import FootballScoringEngine
+
+        engine = cw._engine_with(None)
+        reference = FootballScoringEngine()
+        assert engine.sport_weights == reference.sport_weights
+
+    def test_evaluation_actually_responds_to_weights(self):
+        """A guard against the metrics being blind to the thing being tuned."""
+        from football_scoring_engine import FootballScoringEngine
+
+        def only(source):
+            w = {k: 0.0 for k in FootballScoringEngine.DEFAULT_WEIGHTS}
+            w[source] = 1.0
+            return w
+
+        rows = [_settled(home_odds=1.2, draw_odds=6.0, away_odds=12.0,
+                         actual_result='2')]
+
+        all_odds = cw.evaluate_dataset(rows, weights=only('odds'))
+        all_h2h = cw.evaluate_dataset(rows, weights=only('h2h'))
+
+        assert all_odds['model']['brier'] != all_h2h['model']['brier']
+
+
+class TestCalibrationRowFloor:
+    def test_floor_is_stricter_than_the_reporting_threshold(self):
+        assert cw.MIN_CALIBRATION_ROWS > 30
+
+    def test_sport_below_the_floor_is_skipped(self):
+        rows = [_settled() for _ in range(40)]
+
+        accepted, report = cw.optimise_per_sport(
+            rows, iterations=2, seed=1, test_frac=0.3,
+            min_rows=cw.MIN_CALIBRATION_ROWS)
+
+        assert accepted == {}
+        assert report['football']['status'] == 'too_few_rows'
