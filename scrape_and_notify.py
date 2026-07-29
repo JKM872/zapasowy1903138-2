@@ -16,7 +16,7 @@ import json
 import math
 import re
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 from livesport_h2h_scraper import start_driver, get_match_links_from_day, process_match, process_match_tennis, detect_sport_from_url
 from email_notifier import send_email_notification, send_split_emails_by_sport
 from telegram_notifier import send_telegram_summary
@@ -487,7 +487,44 @@ def scrape_and_send_email(
             print(f"      With odds: {len(bball_with_odds)}")
         
         print("="*70)
-        
+
+        # ========================================================================
+        # UZUPEŁNIENIE KURSÓW: dzienny kupon OddsSafari
+        # ------------------------------------------------------------------
+        # Baseball nie miał ŻADNYCH kursów (0% z 5 978 meczów): SofaScore nie
+        # wystawia rynku MLB, a strona dropping-odds pokazuje tylko *spadki*,
+        # nie pełną kartę. Bez kursów EV/edge nie da się policzyć. Kupon jest
+        # renderowany po stronie serwera, więc to jedno żądanie HTTP na sport.
+        # Wypełniamy WYŁĄCZNIE luki — cena z dedykowanego scrapera zostaje.
+        # ========================================================================
+        try:
+            from oddssafari_coupons import attach_odds_to_rows
+
+            need_odds: Dict[str, List[Dict[str, Any]]] = {}
+            for row in rows:
+                if not row.get('qualifies'):
+                    continue
+                if row.get('home_odds') and row.get('away_odds'):
+                    continue
+                sport_name = (row.get('sport') or '').lower()
+                if sport_name:
+                    need_odds.setdefault(sport_name, []).append(row)
+
+            if need_odds:
+                print(f"\n💰 UZUPEŁNIENIE KURSÓW (kupon OddsSafari)")
+                for sport_name, sport_rows in need_odds.items():
+                    try:
+                        filled = attach_odds_to_rows(sport_rows, sport_name, date)
+                        icon = "✅" if filled else "⚠️"
+                        print(f"   {icon} {sport_name}: {filled}/{len(sport_rows)} meczów uzupełniono")
+                    except Exception as e:
+                        print(f"   ⚠️ {sport_name}: kupon niedostępny ({str(e)[:80]})")
+                print("="*70)
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"   ⚠️ Uzupełnianie kursów pominięte: {str(e)[:100]}")
+
         # ========================================================================
         # FAZA 2: WZBOGACENIE DANYCH (tylko kwalifikujące się mecze)
         # ========================================================================

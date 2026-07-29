@@ -285,13 +285,14 @@ class TestSplitEmailsBySport:
             password='x',
         )
 
-        # Expected after per-sport filter (Bayern 1.10/1.20 dropped, Dortmund no odds dropped,
-        #   Djokovic 1.19/5.00 dropped — AND requires both >= threshold):
-        #   football: form_adv=[Barcelona] → 1 email, normal=[Arsenal] → 1 email = 2
-        #   basketball: form_adv=[Lakers] → 1, normal=[Warriors] → 1 = 2
-        # Total = 4
-        assert count == 4
-        assert mock_server.send_message.call_count == 4
+        # One email per sport (form-advantage matches are no longer split into
+        # their own message). After the per-sport odds filter — Bayern 1.10/1.20
+        # dropped, Dortmund has no odds, Djokovic 1.19/5.00 dropped because both
+        # prices must clear the threshold — two sports remain:
+        #   football:   [Barcelona, Arsenal] → 1 email
+        #   basketball: [Lakers, Warriors]   → 1 email
+        assert count == 2
+        assert mock_server.send_message.call_count == 2
 
     @patch('email_notifier.smtplib.SMTP')
     def test_subjects_contain_sport_and_type(self, mock_smtp: Any, tmp_path: Any) -> None:
@@ -312,9 +313,9 @@ class TestSplitEmailsBySport:
             msg = c[0][0]
             subjects.append(str(msg['Subject']))
 
-        # Check basketball form email exists
-        bball_form = [s for s in subjects if 'Koszykówka' in s and 'PRZEWAGĄ FORMY' in s]
-        assert len(bball_form) == 1
+        # One basketball email covering both its matches
+        bball = [s for s in subjects if 'Koszykówka' in s]
+        assert len(bball) == 1
         # Djokovic tennis (1.19/5.00) should be filtered out by AND logic
         tennis_normal = [s for s in subjects if 'Tenis' in s]
         assert len(tennis_normal) == 0, "Tennis should be absent (Djokovic 1.19 < 1.35)"

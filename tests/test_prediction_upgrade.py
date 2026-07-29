@@ -184,9 +184,16 @@ class TestOddsFilter:
         m = _team_match(home_odds=1.20, away_odds=1.30)
         assert not _passes_odds_filter("football", m)
 
-    def test_missing_odds_fail(self):
+    def test_missing_odds_pass(self):
+        """Absent odds are not a rejection here.
+
+        This filter judges the *price*, not the scraper. A fixture with no
+        quote yet can still be priced later (the OddsSafari coupon backfills
+        after qualification), and the email layer drops anything still
+        unpriced at send time.
+        """
         m = _team_match(home_odds=None, away_odds=None)
-        assert not _passes_odds_filter("football", m)
+        assert _passes_odds_filter("football", m)
 
     def test_tennis_threshold(self):
         m = _tennis_match(home_odds=1.40, away_odds=1.40)
@@ -247,11 +254,13 @@ class TestQualifyMatch:
         assert not qualify_match(m, now)
         assert "base_qualification_failed" in m["channel_skip_reasons"]
 
-    def test_missing_odds_fails(self):
+    def test_missing_odds_is_not_a_skip_reason(self):
+        """Missing odds no longer disqualify — the recorded reason is the real one."""
         m = _team_match(home_odds=None, away_odds=None)
         now = datetime(2025, 6, 15, 10, 0)
         assert not qualify_match(m, now)
-        assert "missing_odds" in m["channel_skip_reasons"]
+        assert "missing_odds" not in m["channel_skip_reasons"]
+        assert any("fan_vote" in r for r in m["channel_skip_reasons"])
 
 
 class TestApplyGate:
