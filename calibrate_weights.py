@@ -300,7 +300,11 @@ def _score_row(row: Dict[str, Any], engine: FootballScoringEngine,
     ``([p1, pX, p2], ev, best_odds)``.
     """
     sport = (row.get('sport') or 'football').lower()
-    if sport == 'tennis':
+    # Both racket sports are two-outcome. Table tennis used to fall through to
+    # the football engine, which gave it a ~19% draw probability that no
+    # table-tennis match can produce — inflating its Brier and log-loss and
+    # poisoning any weight calibrated on it.
+    if sport in ('tennis', 'table_tennis'):
         from tennis_scoring_engine import TennisScoringEngine
 
         st = TennisScoringEngine().score_match(row)

@@ -673,6 +673,17 @@ SPORT_PROFILES: Dict[str, Dict[str, float]] = {
         'temperature': 1.10,
         'min_draw_prob': 0.0,
     },
+    # Table tennis had no profile at all, so it fell through to the football
+    # default and was handed a ~19-24% draw probability for a sport that cannot
+    # draw. That reached the calibration data (calibrate_weights routed only
+    # 'tennis' to the two-outcome engine) and the dropping-odds mail.
+    'table_tennis': {
+        'home_advantage': 0.52,
+        'draw_rate': 0.0,
+        'away_rate': 0.48,
+        'temperature': 1.10,
+        'min_draw_prob': 0.0,
+    },
     'volleyball': {
         'home_advantage': 0.58,
         'draw_rate': 0.0,        # sets always produce a winner

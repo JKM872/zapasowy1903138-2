@@ -229,7 +229,10 @@ def _run_scoring_engine(event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     sport = (event.get("sport") or "football").lower()
 
     try:
-        if sport == "tennis":
+        # Table tennis belongs here too: routed to the football engine it was
+        # given a ~19% draw probability, which then appeared in the mail for a
+        # sport that cannot draw.
+        if sport in ("tennis", "table_tennis"):
             from tennis_scoring_engine import TennisScoringEngine
 
             scored_t = TennisScoringEngine().score_match(match_data)
