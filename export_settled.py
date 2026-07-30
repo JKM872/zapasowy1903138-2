@@ -38,7 +38,7 @@ import glob
 import json
 import os
 import sys
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -145,6 +145,34 @@ def outcome_from_scores(home: Any, away: Any) -> Optional[str]:
     if h < a:
         return '2'
     return 'X'
+
+
+def labels_are_usable(rows: List[Dict[str, Any]],
+                      min_share: float = 0.02) -> Tuple[bool, str]:
+    """Whether the exported outcomes carry a real spread.
+
+    Same bar the calibrator applies, enforced at the source so a corrupt table
+    never becomes a training set. Kept here rather than imported so the export
+    stays runnable on its own.
+    """
+    dist: Dict[str, int] = {}
+    for row in rows:
+        key = str(row.get('actual_result') or '').strip().upper()
+        if key in OUTCOMES:
+            dist[key] = dist.get(key, 0) + 1
+
+    total = sum(dist.values())
+    if total == 0:
+        return False, 'brak poprawnych etykiet wyników'
+    if len(dist) < 2:
+        only = next(iter(dist))
+        return False, (f"tylko jedna klasa wyników: '{only}' w {total} "
+                       f'wierszach')
+    top = max(dist.values()) / total
+    if top > 1.0 - min_share:
+        return False, (f'rozkład zdegenerowany: {dist} '
+                       f'(dominująca klasa {100 * top:.1f}%)')
+    return True, f'rozkład wyników: {dist}'
 
 
 def outcome_from_winner(winner: Any) -> Optional[str]:
@@ -295,6 +323,20 @@ def main() -> int:
         print('\nNothing exported — no settled matches found.')
         print('Reminder: results/*.json holds pre-match predictions only;')
         print('outcomes come from check_results.py (result_store) or Supabase.')
+        return 1
+
+    # Refuse to hand on a label set that carries no information. Supabase
+    # returned 1000 rows whose actual_result was '1' for every match across
+    # seven sports; the split was printed and went unnoticed, and the model was
+    # calibrated against a constant. Failing here lets the backtest fall through
+    # to --source local, which is built from freshly scraped outcomes.
+    ok, reason = labels_are_usable(rows)
+    if not ok:
+        print(f'\nOdmawiam eksportu — {reason}')
+        print('  Etykiety wynikowe z tego źródła są niewiarygodne, a model')
+        print('  dopasowany do nich wygląda dobrze i nie przewiduje niczego.')
+        if args.source == 'supabase':
+            print('  Spróbuj --source local (wyniki z check_results).')
         return 1
 
     out_path = args.output or DEFAULT_OUT.format(sport=args.sport)

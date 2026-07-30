@@ -66,6 +66,11 @@ OUTCOMES = ('1', 'X', '2')
 # calibration path now refuses such data instead of learning a constant.
 MIN_CLASS_SHARE = 0.02
 
+# A reliability curve needs enough steps to be a curve. Two bins describe a
+# threshold and a ceiling, which changes every prediction in a sport on the
+# strength of one cut point.
+MIN_CURVE_BINS = 3
+
 # A sport needs this many settled matches before it may get its own weights.
 # Higher than the reporting threshold on purpose: ten weights tuned on ~30 rows
 # fit noise. The first real run accepted baseball off 28 train / 12 test rows.
@@ -1142,6 +1147,18 @@ def optimise_isotonic(rows: List[Dict[str, Any]], *, seed: int,
         if not curve:
             print(f'  {sport:<13} zbyt mało danych na krzywą')
             report[sport] = {'n_rows': len(sport_rows), 'status': 'no_curve'}
+            continue
+
+        # A two-bin curve is a threshold and a ceiling, not a calibration. The
+        # first fit on real data produced exactly that for football — "below
+        # 0.41 say 0.42, above it say 0.50" — which caps every football pick at
+        # even money on the strength of 192 rows. It may well be true, but it is
+        # too blunt an instrument to ship as a measurement.
+        if len(curve) < MIN_CURVE_BINS:
+            print(f'  {sport:<13} krzywa ma {len(curve)} przedział(y) — '
+                  f'potrzeba {MIN_CURVE_BINS}, to byłby zwykły sufit')
+            report[sport] = {'n_rows': len(sport_rows), 'bins': len(curve),
+                             'status': 'too_coarse'}
             continue
 
         before = _metrics_with_curve(test, sport, None)

@@ -211,3 +211,65 @@ class TestShippedCalibrationIsClean:
         assert engine.sport_weights == {}
         assert engine.sport_temperatures == {}
         assert engine.sport_isotonic == {}
+
+
+class TestExportRefusesDegenerateLabels:
+    """The corrupt table must not become a training set at the source either."""
+
+    def test_single_class_export_is_refused(self):
+        import export_settled as es
+
+        ok, reason = es.labels_are_usable([{'actual_result': '1'}] * 100)
+        assert ok is False
+        assert 'jedna klasa' in reason
+
+    def test_real_spread_passes(self):
+        import export_settled as es
+
+        rows = ([{'actual_result': '1'}] * 45 + [{'actual_result': 'X'}] * 25
+                + [{'actual_result': '2'}] * 30)
+        ok, _ = es.labels_are_usable(rows)
+        assert ok is True
+
+    def test_two_outcome_sports_pass(self):
+        """Table tennis and tennis never produce a draw."""
+        import export_settled as es
+
+        rows = [{'actual_result': '1'}] * 109 + [{'actual_result': '2'}] * 133
+        ok, _ = es.labels_are_usable(rows)
+        assert ok is True
+
+    def test_cli_refuses_and_signals_failure(self, tmp_path, monkeypatch, capsys):
+        """Exit 1 is what makes the backtest fall through to the local source."""
+        import export_settled as es
+
+        monkeypatch.chdir(tmp_path)
+        monkeypatch.setattr(es, 'export_local',
+                            lambda sport: [{'actual_result': '1',
+                                            'home_team': 'A', 'away_team': 'B'}] * 50)
+        monkeypatch.setattr(sys, 'argv',
+                            ['export_settled.py', '--source', 'local'])
+
+        assert es.main() == 1
+        assert 'Odmawiam eksportu' in capsys.readouterr().out
+
+
+class TestCurveMustBeACurve:
+    def test_two_bins_are_rejected_as_a_ceiling(self):
+        """The first real fit produced 'below 0.41 say 0.42, above say 0.50'."""
+        assert cw.MIN_CURVE_BINS >= 3
+
+    def test_coarse_curve_is_not_accepted(self, monkeypatch):
+        monkeypatch.setattr('probability_calibration.fit_isotonic',
+                            lambda pairs, **kw: [(0.41, 0.42), (1.0, 0.50)])
+        rows = [{'sport': 'football', 'home_team': f'H{i}', 'away_team': f'A{i}',
+                 'actual_result': '1' if i % 2 else '2',
+                 'home_odds': 2.0, 'draw_odds': 3.3, 'away_odds': 3.0,
+                 'h2h_count': 4, 'home_wins_in_h2h_last5': 3,
+                 'away_wins_in_h2h_last5': 1} for i in range(120)]
+
+        accepted, report = cw.optimise_isotonic(
+            rows, seed=1, test_frac=0.3, min_rows=60)
+
+        assert accepted == {}
+        assert report['football']['status'] == 'too_coarse'

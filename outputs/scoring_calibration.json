@@ -49,7 +49,14 @@
       "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     }
   },
-  "calibrated_at": "2026-07-29T08:18:30.406944",
+  "calibrated_at": "2026-07-30T10:45:32.837962",
   "withdrawn_at": "2026-07-29",
-  "withdrawn_reason": "Supabase export carried a single outcome class; every metric derived from it was meaningless. Re-calibrate once the result writer is fixed."
+  "withdrawn_reason": "Supabase export carried a single outcome class; every metric derived from it was meaningless. Re-calibrate once the result writer is fixed.",
+  "isotonic": {},
+  "isotonic_metrics": {
+    "football": {
+      "status": "withdrawn",
+      "reason": "2-bin curve capped every football pick at 0.50 on 192 rows; too coarse to ship"
+    }
+  }
 }
