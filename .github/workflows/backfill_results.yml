@@ -71,7 +71,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
-          pip install curl-cffi requests
+          # selenium is not used here, but sofascore_scraper is imported for its
+          # Cloudflare handling and pulls it in. The tool now falls back to a
+          # plain request if that import fails at all; installing it keeps the
+          # better path available.
+          pip install curl-cffi requests selenium beautifulsoup4
 
       # The orientation check earns its keep here: taking the Livesport feed
       # as-is agreed 24/24 against independently resolved matches, while

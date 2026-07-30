@@ -178,15 +178,39 @@ def fetch_livesport(mid: str, sport: str) -> Optional[Dict[str, Any]]:
             'source': 'livesport_feed'}
 
 
-def fetch_sofascore(event_id: str) -> Optional[Dict[str, Any]]:
-    """Final score for a SofaScore event id, with its own team names."""
+def _sofascore_json(url: str) -> Optional[Dict[str, Any]]:
+    """Fetch JSON from SofaScore, with or without the scraper module.
+
+    ``sofascore_scraper`` brings the Cloudflare handling, but it is a heavy
+    module: on a runner without selenium it failed at import time on a type
+    annotation, and a NameError is not an ImportError, so the first backfill run
+    died on its first SofaScore link. Catching every exception and falling back
+    to a plain request keeps a 63k-match job alive for the sake of the 2k rows
+    that need this source.
+    """
     try:
         from sofascore_scraper import _api_get_json
-    except ImportError:
-        return None
+        return _api_get_json(url, timeout=20)
+    except Exception:
+        pass
 
-    data = _api_get_json(
-        f'https://api.sofascore.com/api/v1/event/{event_id}', timeout=20)
+    try:
+        resp = _get(url, {
+            'User-Agent': FEED_HEADERS['User-Agent'],
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        })
+        if getattr(resp, 'status_code', 0) == 200:
+            return resp.json()
+    except Exception:
+        return None
+    return None
+
+
+def fetch_sofascore(event_id: str) -> Optional[Dict[str, Any]]:
+    """Final score for a SofaScore event id, with its own team names."""
+    data = _sofascore_json(
+        f'https://api.sofascore.com/api/v1/event/{event_id}')
     event = (data or {}).get('event') or {}
     if ((event.get('status') or {}).get('type') or '') != 'finished':
         return None
@@ -445,7 +469,13 @@ def main() -> int:
     stats = {'ok': 0, 'brak': 0, 'flip': 0}
     started = time.time()
     for i, row in enumerate(todo, 1):
-        got = resolve(row)
+        # One bad fixture must never end a job that has hours of work banked.
+        try:
+            got = resolve(row)
+        except Exception as e:
+            print(f'  ⚠️ {row["home"][:24]} vs {row["away"][:24]}: '
+                  f'{type(e).__name__}: {str(e)[:70]}')
+            got = None
         if got:
             stats['ok'] += 1
             if got.get('orientation_flipped'):

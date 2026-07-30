@@ -2558,7 +2558,7 @@ def extract_event_id_from_url(url: str) -> Optional[int]:
     return None
 
 
-def extract_votes_from_page(driver: webdriver.Chrome, sport: str = 'football') -> Dict:
+def extract_votes_from_page(driver: 'webdriver.Chrome', sport: str = 'football') -> Dict:
     """
     Wyciąga dane głosowania "Who will win?" ze strony meczu SofaScore
     """
@@ -2631,7 +2631,7 @@ def extract_votes_from_page(driver: webdriver.Chrome, sport: str = 'football') -
 
 
 def find_match_on_main_page(
-    driver: webdriver.Chrome,
+    driver: 'webdriver.Chrome',
     home_team: str,
     away_team: str,
     sport: str = 'football'
@@ -2737,7 +2737,7 @@ def find_match_on_main_page(
 
 
 def search_and_get_votes(
-    driver: webdriver.Chrome,
+    driver: 'webdriver.Chrome',
     home_team: str,
     away_team: str,
     sport: str = 'football',
@@ -5265,7 +5265,7 @@ def extract_fan_vote_via_ai_vision(
 
 
 def scrape_sofascore_full(
-    driver: webdriver.Chrome = None,
+    driver: 'webdriver.Chrome' = None,
     home_team: str = None,
     away_team: str = None,
     sport: str = 'football',
@@ -5355,7 +5355,7 @@ def scrape_sofascore_full(
 
 
 def _scrape_sofascore_full_inner(
-    driver: webdriver.Chrome = None,
+    driver: 'webdriver.Chrome' = None,
     home_team: str = None,
     away_team: str = None,
     sport: str = 'football',

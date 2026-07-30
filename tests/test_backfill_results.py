@@ -251,3 +251,90 @@ class TestShardsAndMerge:
             json.dump({'https://a': {}}, fh)
 
         assert bf._known_urls('', store_path='outputs/result_store.json') == {'https://a'}
+
+
+class TestSurvivesAHostileEnvironment:
+    """The first CI run died on its first SofaScore link after 173 matches.
+
+    ``sofascore_scraper`` failed at import time on a runner without selenium,
+    because a type annotation referenced ``webdriver.Chrome`` unquoted. A
+    NameError is not an ImportError, so the guard around the import did not
+    catch it and the whole 63k-match job ended with exit code 1.
+    """
+
+    def test_sofascore_falls_back_when_the_scraper_module_explodes(self, monkeypatch):
+        import builtins
+
+        real_import = builtins.__import__
+
+        def hostile(name, *args, **kwargs):
+            if name == 'sofascore_scraper':
+                raise NameError("name 'webdriver' is not defined")
+            return real_import(name, *args, **kwargs)
+
+        monkeypatch.setattr(builtins, '__import__', hostile)
+
+        class Resp:
+            status_code = 200
+
+            @staticmethod
+            def json():
+                return {'event': {'status': {'type': 'finished'},
+                                  'homeTeam': {'name': 'Alpha'},
+                                  'awayTeam': {'name': 'Beta'},
+                                  'homeScore': {'current': 2},
+                                  'awayScore': {'current': 1}}}
+
+        monkeypatch.setattr(bf, '_get', lambda url, headers, timeout=20: Resp())
+
+        got = bf.fetch_sofascore('123456')
+
+        assert got is not None, 'a heavy optional module must not be a hard dependency'
+        assert (got['first'], got['second']) == (2, 1)
+
+    def test_a_failing_fixture_does_not_end_the_run(self, monkeypatch, tmp_path,
+                                                   capsys):
+        """Hours of banked work must not be lost to one bad row."""
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs')
+
+        calls = {'n': 0}
+
+        def flaky(row):
+            calls['n'] += 1
+            if calls['n'] == 1:
+                raise RuntimeError('boom')
+            return {'status': 'finished', 'score_home': 1, 'score_away': 0,
+                    'winner': 'home', 'source': 'test',
+                    'orientation_flipped': False}
+
+        monkeypatch.setattr(bf, 'resolve', flaky)
+        monkeypatch.setattr(bf, 'iter_history', lambda month, sport: [
+            {'url': f'https://x/{i}', 'sport': 'football', 'date': '2026-03-01',
+             'home': 'A', 'away': 'B'} for i in range(3)])
+        monkeypatch.setattr(sys, 'argv', [
+            'backfill_results.py', '--delay', '0',
+            '--store', 'outputs/shard.json'])
+        # Isolate from the committed store, which is what the tool consults to
+        # avoid re-fetching. An earlier version of this test wrote its fake URL
+        # into the real one.
+        monkeypatch.setattr(bf, '_known_urls', lambda *a, **kw: set())
+
+        assert bf.main() == 0
+        out = capsys.readouterr().out
+        assert 'RuntimeError' in out
+        assert 'ok=2' in out, 'the run continued past the failure'
+
+    def test_no_unquoted_webdriver_annotations_remain(self):
+        """The landmine any importer of the scraper would step on.
+
+        Only parameter annotations matter — an annotation is evaluated when the
+        function is defined, so it breaks the import itself. Prose mentioning
+        webdriver in a comment is fine.
+        """
+        import re
+
+        source = open(os.path.join(HERE, 'sofascore_scraper.py'),
+                      encoding='utf-8').read()
+        assert not re.search(r'^\s*\w+:\s*webdriver\.', source, re.MULTILINE)
+        assert not re.search(r'\(\s*\w+:\s*webdriver\.', source)
