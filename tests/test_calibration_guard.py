@@ -204,13 +204,34 @@ class TestEngineIntegration:
 
 class TestShippedCalibrationIsClean:
     def test_no_weights_survive_from_the_degenerate_export(self):
-        """Those sets were tuned to predict a constant."""
+        """Those sets were tuned to predict a constant.
+
+        Reliability curves are a different matter: they were fitted on the 70k
+        outcomes recovered from the scraped history, where the label split is
+        real per sport (football 45.4% home, 22.5% draws).
+        """
         from football_scoring_engine import FootballScoringEngine
 
         engine = FootballScoringEngine()
         assert engine.sport_weights == {}
         assert engine.sport_temperatures == {}
-        assert engine.sport_isotonic == {}
+
+    def test_shipped_curves_are_monotone_and_substantial(self):
+        """A curve must be a curve, and it must not invert confidence."""
+        from football_scoring_engine import FootballScoringEngine
+
+        engine = FootballScoringEngine()
+        if not engine.sport_isotonic:
+            pytest.skip('no curves committed yet')
+
+        for sport, curve in engine.sport_isotonic.items():
+            assert len(curve) >= cw.MIN_CURVE_BINS, sport
+            xs = [x for x, _ in curve]
+            ys = [y for _, y in curve]
+            assert xs == sorted(xs), f'{sport}: bins out of order'
+            assert ys == sorted(ys), f'{sport}: more confident must not mean worse'
+            assert all(0.0 <= y <= 1.0 for y in ys), sport
+            assert xs[-1] == 1.0, f'{sport}: last bin must reach certainty'
 
 
 class TestExportRefusesDegenerateLabels:
