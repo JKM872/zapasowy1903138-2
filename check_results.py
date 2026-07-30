@@ -462,6 +462,16 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
             'home_odds': m.get('home_odds'),
             'away_odds': m.get('away_odds'),
             'match_url': url,
+            'match_date': m.get('match_date'),
+            # Carried through from the manifest so the outcome can be judged
+            # against what the model claimed, not just counted.
+            'scoring_pick': m.get('scoring_pick'),
+            'scoring_prob': m.get('scoring_prob'),
+            'scoring_ev': m.get('scoring_ev'),
+            'scoring_edge': m.get('scoring_edge'),
+            'scoring_confidence': m.get('scoring_confidence'),
+            'advanced_score': m.get('advanced_score'),
+            'prediction_grade': m.get('prediction_grade'),
         }
 
         # Name-resolved results settle by *who won*, never by position: the
@@ -754,18 +764,41 @@ def save_summary(stats: Dict[str, Any], date: str, tag: str = '') -> str:
     summary['generated_at'] = datetime.now().isoformat()
     summary['match_count'] = len(stats.get('details', []))
 
-    # Compact detail list
+    # Detail list. This is the only place an outcome sits next to what the model
+    # claimed *before* the match, so it is the audit trail for every question
+    # that matters: does Grade A beat Grade C, do positive-EV picks pay, is the
+    # stated probability honest. It used to keep only the pick and the odds, so
+    # none of that could be measured — a segmentation by model probability came
+    # back empty on 255 settled picks, and match_url was dropped too, which left
+    # no key to join anything back on.
     summary['matches'] = [
         {
             'home': d['home_team'],
             'away': d['away_team'],
+            # Kept under both names: 'home'/'away' for readers, '*_team' so the
+            # row joins against manifests and results/*.json without mapping.
+            'home_team': d['home_team'],
+            'away_team': d['away_team'],
+            'match_url': d.get('match_url'),
+            'match_date': d.get('match_date') or date,
             'sport': d['sport'],
             'predicted': d['predicted'],
+            'picked_name': d.get('picked_name'),
             'focus_team': d.get('focus_team', 'home'),
             'home_odds': d.get('home_odds'),
             'away_odds': d.get('away_odds'),
             'score': d.get('score', '—'),
             'outcome': d['outcome'],
+            'winner_name': d.get('winner_name'),
+            'resolved_by': d.get('resolved_by'),
+            # What the model claimed beforehand.
+            'scoring_pick': d.get('scoring_pick'),
+            'scoring_prob': d.get('scoring_prob'),
+            'scoring_ev': d.get('scoring_ev'),
+            'scoring_edge': d.get('scoring_edge'),
+            'scoring_confidence': d.get('scoring_confidence'),
+            'advanced_score': d.get('advanced_score'),
+            'prediction_grade': d.get('prediction_grade'),
         }
         for d in stats.get('details', [])
     ]

@@ -1718,6 +1718,11 @@ _MANIFEST_FIELDS = [
     # a dead Gemini is visible rather than merely absent.
     'gemini_pick', 'ai_provider',
     'scoring_pick', 'scoring_prob', 'scoring_ev', 'scoring_edge',
+    'scoring_confidence',
+    # The grade decides what gets mailed, so it has to travel with the pick.
+    # Without it the accuracy report could not answer whether Grade A actually
+    # beats Grade C — the filter was steering the mail on an untested claim.
+    'prediction_grade', 'advanced_score',
     'qualifies', 'focus_team',
 ]
 

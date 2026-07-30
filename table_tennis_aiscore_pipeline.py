@@ -858,8 +858,17 @@ def write_outputs(rows: List[Dict[str, Any]], date_str: str, focus: str) -> Dict
                     "pick": r.get("scoring_pick"),
                     "prob": r.get("scoring_prob"),
                     "ev": r.get("scoring_ev"),
+                    "edge": r.get("scoring_edge"),
+                    "confidence": r.get("scoring_confidence"),
+                    "advancedScore": r.get("advanced_score"),
                     "favorite": r.get("favorite"),
                 },
+                # The pipeline computes these but never wrote them out, so the
+                # dashboard's grade badge had nothing to show and any later
+                # analysis of this file could not see the model's own verdict.
+                "predictionGrade": r.get("prediction_grade"),
+                "dataQuality": r.get("data_quality"),
+                "advancedScorePasses": r.get("advanced_score_passes"),
             }
             for r in rows
         ],

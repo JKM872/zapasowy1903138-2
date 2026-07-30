@@ -137,6 +137,17 @@ jobs:
             echo "ℹ️ No telegram manifest for $TARGET_DATE — skipping Telegram subset check"
           fi
 
+      # 6c. Which kinds of picks actually pay. The filters steering the mail
+      # (grade A/B, the odds floor) were never measured against outcomes; this
+      # puts the numbers in the run summary after every settlement.
+      - name: Segment performance
+        if: always()
+        run: |
+          echo "## Skuteczność po segmentach" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python tools/segment_performance.py 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
       # 7. Commit result summary + the accumulated result store.
       # The store is what makes backtesting possible: it is the only place
       # final scores survive between runs. Previously it lived only on the
