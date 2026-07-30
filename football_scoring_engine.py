@@ -1027,6 +1027,14 @@ class FootballScoringEngine:
         self.sport_weights: Dict[str, Dict[str, float]] = {
             sport: dict(w) for sport, w in self.SPORT_WEIGHT_OVERRIDES.items()
         }
+        # Measured temperature overrides, filled from the calibration file. The
+        # profile values are informed guesses; these are fitted on settled
+        # results, which is what makes a stated probability mean what it says.
+        self.sport_temperatures: Dict[str, float] = {}
+        # Monotone reliability curves, per sport. Temperature shifts the whole
+        # distribution; these fit its shape, which is what the observed data
+        # actually needed — stated 42% won 83%, stated 91% won 83%.
+        self.sport_isotonic: Dict[str, list] = {}
         self.extractor = FeatureExtractor()
         self._load_calibration(calibration_path or self.CALIBRATION_PATH)
 
@@ -1073,11 +1081,43 @@ class FootballScoringEngine:
                             pass
                 self.sport_weights[str(sport).lower()] = merged
 
+        try:
+            from probability_calibration import load_curves
+            self.sport_isotonic.update(load_curves(data))
+        except ImportError:
+            pass
+
+        temps = data.get('temperatures', {})
+        if isinstance(temps, dict):
+            for sport, value in temps.items():
+                try:
+                    t = float(value)
+                except (TypeError, ValueError):
+                    continue
+                # A temperature at or below zero would invert the distribution;
+                # anything beyond 5 flattens every pick to the prior.
+                if 0.2 <= t <= 5.0:
+                    self.sport_temperatures[str(sport).lower()] = t
+
     # ------------------------------------------------------------------
     def weights_for_sport(self, sport: Optional[str]) -> Dict[str, float]:
         """Return the weight set to use for *sport* (falls back to global)."""
         key = (sport or 'football').lower()
         return self.sport_weights.get(key, self.weights)
+
+    # ------------------------------------------------------------------
+    def temperature_for_sport(self, sport: Optional[str]) -> float:
+        """Softmax temperature for *sport*: measured value if we have one.
+
+        Above 1 the distribution softens, below 1 it sharpens. The fitted value
+        is what corrects the overconfidence the reliability table exposed — the
+        model said 90% and won 78%.
+        """
+        key = (sport or 'football').lower()
+        if key in self.sport_temperatures:
+            return self.sport_temperatures[key]
+        profile = SPORT_PROFILES.get(key, SPORT_PROFILES['football'])
+        return float(profile.get('temperature', 1.15))
 
     # ------------------------------------------------------------------
     def score_match(self, match: Dict) -> ScoredMatch:
@@ -1310,9 +1350,10 @@ class FootballScoringEngine:
 
         # ---- Calibration pass (sport-specific temperature) -------------
         cal_h, cal_d, cal_a = self._calibrate(
-            raw_h, raw_d, raw_a, temperature=profile['temperature']
+            raw_h, raw_d, raw_a,
+            temperature=self.temperature_for_sport(sport),
         )
-        
+
         # ---- Anti-overconfidence regularization ------------------------
         # When data quality is low or sources strongly disagree, pull
         # extreme probabilities back toward the market prior.
@@ -1338,6 +1379,22 @@ class FootballScoringEngine:
             total = cal_h + cal_a
             if total > 0:
                 cal_h, cal_a = cal_h / total, cal_a / total
+
+        # ---- Reliability curve, applied last ---------------------------
+        # Deliberately after the regularisation and the draw-mass cleanup: the
+        # curve is fitted on the engine's *final* output, so applying it any
+        # earlier would train on one distribution and correct another. Placed
+        # before the regulariser it was partly undone — a mapped 0.95 came out
+        # as 0.877 after shrinking toward the market prior.
+        curve = self.sport_isotonic.get(sport)
+        if curve:
+            from probability_calibration import calibrate_triplet
+            cal_h, cal_d, cal_a = calibrate_triplet(curve, [cal_h, cal_d, cal_a])
+            if not has_draw:
+                cal_d = 0.0
+                total = cal_h + cal_a
+                if total > 0:
+                    cal_h, cal_a = cal_h / total, cal_a / total
 
         # ---- EV / edge / Kelly for each outcome -----------------------
         odds_h = _safe_float(match.get('home_odds'))

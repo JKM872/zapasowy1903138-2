@@ -11,142 +11,45 @@
     "consensus": 0.05,
     "poisson": 0.08
   },
-  "per_sport": {
-    "football": {
-      "availability": 0.0,
-      "consensus": 0.0,
-      "forebet": 0.02139,
-      "form": 0.010264,
-      "gemini": 0.0,
-      "h2h": 0.140733,
-      "odds": 0.168716,
-      "poisson": 0.00354,
-      "sofascore": 0.157901,
-      "venue_form": 0.497456
-    },
-    "basketball": {
-      "availability": 0.0,
-      "consensus": 0.0,
-      "forebet": 0.104803,
-      "form": 0.015082,
-      "gemini": 0.0,
-      "h2h": 0.000139,
-      "odds": 0.575945,
-      "poisson": 0.0,
-      "sofascore": 0.112143,
-      "venue_form": 0.191888
-    }
-  },
+  "per_sport": {},
   "per_sport_metrics": {
     "football": {
       "n_rows": 447,
-      "status": "accepted",
-      "test_default": {
-        "label": "model",
-        "n": 135,
-        "accuracy": 0.6444,
-        "brier": 0.5495,
-        "log_loss": 0.9149,
-        "value_bets": 14,
-        "roi": 5.2521,
-        "net_units": 73.53
-      },
-      "test_tuned": {
-        "label": "model",
-        "n": 135,
-        "accuracy": 0.7926,
-        "brier": 0.4996,
-        "log_loss": 0.8513,
-        "value_bets": 13,
-        "roi": 4.4731,
-        "net_units": 58.15
-      }
+      "status": "withdrawn",
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     },
     "tennis": {
       "n_rows": 290,
-      "status": "rejected",
-      "test_default": {
-        "label": "model",
-        "n": 87,
-        "accuracy": 0.7816,
-        "brier": 0.5007,
-        "log_loss": 0.835,
-        "value_bets": 51,
-        "roi": -0.1918,
-        "net_units": -9.78
-      },
-      "test_tuned": {
-        "label": "model",
-        "n": 87,
-        "accuracy": 0.7816,
-        "brier": 0.5007,
-        "log_loss": 0.835,
-        "value_bets": 51,
-        "roi": -0.1918,
-        "net_units": -9.78
-      }
+      "status": "withdrawn",
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     },
     "basketball": {
       "n_rows": 155,
-      "status": "accepted",
-      "test_default": {
-        "label": "model",
-        "n": 47,
-        "accuracy": 0.6596,
-        "brier": 0.4063,
-        "log_loss": 0.596,
-        "value_bets": 15,
-        "roi": 0.1653,
-        "net_units": 2.48
-      },
-      "test_tuned": {
-        "label": "model",
-        "n": 47,
-        "accuracy": 0.9362,
-        "brier": 0.2307,
-        "log_loss": 0.3901,
-        "value_bets": 16,
-        "roi": 0.1894,
-        "net_units": 3.03
-      }
+      "status": "withdrawn",
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     },
     "handball": {
       "n_rows": 40,
-      "status": "rejected",
-      "test_default": {
-        "label": "model",
-        "n": 12,
-        "accuracy": 0.5,
-        "brier": 0.6219,
-        "log_loss": 0.9519,
-        "value_bets": 1,
-        "roi": 0.12,
-        "net_units": 0.12
-      },
-      "test_tuned": {
-        "label": "model",
-        "n": 12,
-        "accuracy": 0.5,
-        "brier": 0.7245,
-        "log_loss": 1.1186,
-        "value_bets": 2,
-        "roi": 0.325,
-        "net_units": 0.65
-      }
+      "status": "withdrawn",
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     },
     "baseball": {
       "n_rows": 40,
       "status": "withdrawn",
-      "reason": "tuned on 28 train / 12 test rows, none carrying odds; baseball prices only exist from 2026-07-29 onward"
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     },
     "hockey": {
       "n_rows": 27,
-      "status": "too_few_rows"
+      "status": "withdrawn",
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     },
     "volleyball": {
       "n_rows": 1,
-      "status": "too_few_rows"
+      "status": "withdrawn",
+      "reason": "fitted on outputs/settled_all.json, where actual_result was '1' for all 1000 rows across seven sports \u2014 the optimiser was rewarded for predicting a constant"
     }
   },
-  "calibrated_at": "2026-07-29T08:18:30.406944"
+  "calibrated_at": "2026-07-29T08:18:30.406944",
+  "withdrawn_at": "2026-07-29",
+  "withdrawn_reason": "Supabase export carried a single outcome class; every metric derived from it was meaningless. Re-calibrate once the result writer is fixed."
 }

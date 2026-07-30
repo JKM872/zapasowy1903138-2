@@ -58,6 +58,14 @@ from football_scoring_engine import (  # noqa: E402
 
 OUTCOMES = ('1', 'X', '2')
 
+# A settled set whose outcomes are nearly all one class teaches nothing except
+# that class. The Supabase export handed us 1000 rows in which `actual_result`
+# was '1' for every single match across seven sports — no draw, no away win
+# anywhere. Fitted against it the model looked excellent (football "accuracy"
+# 81%, basketball 94%) while the real settled picks were running at 44.7%. Every
+# calibration path now refuses such data instead of learning a constant.
+MIN_CLASS_SHARE = 0.02
+
 # A sport needs this many settled matches before it may get its own weights.
 # Higher than the reporting threshold on purpose: ten weights tuned on ~30 rows
 # fit noise. The first real run accepted baseball off 28 train / 12 test rows.
@@ -86,6 +94,46 @@ _ABSTAINING_SOURCES: Dict[str, Any] = {
                                or f.get('home_key_absences', 0.0) > 0
                                or f.get('away_key_absences', 0.0) > 0),
 }
+
+
+def outcome_distribution(rows: List[Dict[str, Any]]) -> Dict[str, int]:
+    """Count how many settled rows carry each outcome."""
+    dist: Dict[str, int] = {}
+    for row in rows:
+        key = str(row.get('actual_result') or '').strip().upper()
+        dist[key] = dist.get(key, 0) + 1
+    return dist
+
+
+def labels_are_usable(rows: List[Dict[str, Any]],
+                      min_share: float = MIN_CLASS_SHARE,
+                      ) -> Tuple[bool, str]:
+    """Whether *rows* carry a real spread of outcomes.
+
+    Returns ``(ok, reason)``. Anything a model is tuned on must contain the
+    outcomes it is meant to distinguish; a single-class label set makes every
+    metric meaningless while looking like an improvement.
+    """
+    if not rows:
+        return False, 'brak wierszy'
+
+    dist = outcome_distribution(rows)
+    present = {k: v for k, v in dist.items() if k in OUTCOMES}
+    total = sum(present.values())
+    if total == 0:
+        return False, f'brak poprawnych etykiet (rozkład: {dist})'
+
+    if len(present) < 2:
+        only = next(iter(present))
+        return False, (f"tylko jedna klasa wyników: '{only}' w {total} wierszach "
+                       f'— dane nie nadają się do kalibracji')
+
+    top_share = max(present.values()) / total
+    if top_share > 1.0 - min_share:
+        return False, (f'rozkład zdegenerowany: {present} '
+                       f'(dominująca klasa {100 * top_share:.1f}%)')
+
+    return True, f'rozkład wyników: {present}'
 
 
 def source_coverage(rows: List[Dict[str, Any]]) -> Dict[str, int]:
@@ -567,6 +615,12 @@ def main() -> int:
                          'has enough settled rows')
     ap.add_argument('--min-rows', type=int, default=30,
                     help='Below this row count a sport is flagged as unreliable')
+    ap.add_argument('--optimise-isotonic', action='store_true',
+                    help='Fit a monotone reliability curve per sport so a '
+                         'stated probability matches the observed hit rate')
+    ap.add_argument('--optimise-temperature', action='store_true',
+                    help='Fit the softmax temperature per sport so a stated '
+                         'probability matches the observed hit rate')
     ap.add_argument('--min-calibration-rows', type=int,
                     default=MIN_CALIBRATION_ROWS,
                     help='A sport needs at least this many settled rows before '
@@ -590,6 +644,22 @@ def main() -> int:
     if args.simulate:
         print("NOTE: simulated rows come from a Poisson generator, not real\n"
               "      fixtures. Weights tuned here describe the simulator.")
+
+    # One gate for every calibration path. Tuning on a label set that holds a
+    # single outcome produces numbers that look like success and mean nothing.
+    labels_ok, labels_reason = labels_are_usable(rows)
+    print(f"Etykiety: {labels_reason}")
+    tuning_requested = (args.optimise or args.optimise_per_sport
+                        or args.optimise_temperature or args.optimise_isotonic)
+    if not labels_ok and tuning_requested:
+        print('\n' + '=' * 72)
+        print('  KALIBRACJA WSTRZYMANA — dane wynikowe są niewiarygodne')
+        print('=' * 72)
+        print(f'  {labels_reason}')
+        print('  Model dopasowany do takiego zbioru wygląda świetnie i nie')
+        print('  przewiduje niczego. Napraw źródło wyników i uruchom ponownie.')
+        print('=' * 72)
+        return 2
 
     baseline = evaluate_dataset(rows)
     print_report(f'CURRENT WEIGHTS — {source_label}', baseline)
@@ -665,6 +735,35 @@ def main() -> int:
                 print("\n  Refusing to save weights tuned on SIMULATED data.")
             else:
                 _save_per_sport(per_sport_weights, report)
+
+    if args.optimise_temperature:
+        temps, temp_report = optimise_temperature(
+            rows, seed=args.seed, test_frac=args.test_frac,
+            min_rows=max(args.min_rows, args.min_calibration_rows),
+            simulated=bool(args.simulate),
+        )
+        result['temperatures'] = temps
+        result['temperature_metrics'] = temp_report
+
+        # Reliability is the point of this exercise: it says whether a stated
+        # probability can be believed, which no accuracy number can.
+        if temps:
+            _print_reliability_shift(rows, temps)
+
+        if args.save and temps:
+            _save_temperatures(temps, temp_report)
+
+    if args.optimise_isotonic:
+        curves, iso_report = optimise_isotonic(
+            rows, seed=args.seed, test_frac=args.test_frac,
+            min_rows=max(args.min_rows, args.min_calibration_rows),
+            simulated=bool(args.simulate),
+        )
+        result['isotonic'] = curves
+        result['isotonic_metrics'] = iso_report
+
+        if args.save and curves:
+            _save_isotonic(curves, iso_report)
 
     if args.json:
         print(json.dumps(result, indent=2))
@@ -761,6 +860,364 @@ def optimise_per_sport(rows: List[Dict[str, Any]], *, iterations: int,
     print(f"{'=' * 72}\n")
 
     return accepted, report
+
+
+def _engine_with_temperature(sport: str, temperature: float
+                             ) -> FootballScoringEngine:
+    engine = FootballScoringEngine()
+    engine.sport_temperatures = {sport: temperature}
+    return engine
+
+
+def _loss_at_temperature(rows: List[Dict[str, Any]], sport: str,
+                         temperature: float) -> Tuple[float, float]:
+    """Mean log-loss and Brier for *sport* at this temperature."""
+    engine = _engine_with_temperature(sport, temperature)
+    ll = br = 0.0
+    n = 0
+    for row in rows:
+        probs, _ev, _odds = _score_row(row, engine)
+        actual = row['actual_result']
+        ll += log_loss(probs, actual)
+        br += brier(probs, actual)
+        n += 1
+    if not n:
+        return float('inf'), float('inf')
+    return ll / n, br / n
+
+
+def fit_temperature(train: List[Dict[str, Any]], sport: str,
+                    grid: Optional[List[float]] = None) -> Tuple[float, float]:
+    """Find the temperature minimising log-loss on *train*.
+
+    A single parameter per sport, fitted by scanning a grid — the standard
+    temperature-scaling recipe. One parameter cannot overfit the way ten weights
+    can, which is why this is the safer half of calibration.
+
+    Returns ``(temperature, train_log_loss)``.
+    """
+    if grid is None:
+        # Wide enough that the optimum is interior rather than at an edge. The
+        # first run settled on 0.60 for football and basketball, which was the
+        # old lower bound — a boundary answer means the search was cut short,
+        # not that the data preferred the edge.
+        grid = [round(0.30 + 0.05 * i, 2)
+                for i in range(int((3.0 - 0.30) / 0.05) + 1)]
+
+    best_t, best_ll = 1.0, float('inf')
+    for t in grid:
+        ll, _brier = _loss_at_temperature(train, sport, t)
+        if ll < best_ll:
+            best_t, best_ll = t, ll
+    return best_t, best_ll
+
+
+def optimise_temperature(rows: List[Dict[str, Any]], *, seed: int,
+                         test_frac: float, min_rows: int,
+                         simulated: bool = False,
+                         ) -> Tuple[Dict[str, float], Dict[str, Any]]:
+    """Fit one temperature per sport, keeping only those that generalise.
+
+    Accepted only when BOTH log-loss and Brier improve on that sport's held-out
+    rows, the same bar the weight calibration has to clear. Sports scored by a
+    different engine (tennis, table tennis) are skipped: their probabilities do
+    not pass through this temperature.
+    """
+    by_sport: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        sport = (row.get('sport') or 'football').lower()
+        if sport in ('tennis', 'table_tennis'):
+            continue
+        by_sport.setdefault(sport, []).append(row)
+
+    accepted: Dict[str, float] = {}
+    report: Dict[str, Any] = {}
+
+    print(f"\n{'=' * 72}")
+    print('  PROBABILITY CALIBRATION (temperature per sport)')
+    print(f"{'=' * 72}")
+
+    if simulated:
+        print('  Refusing to fit on SIMULATED data.')
+        return {}, {'status': 'simulated'}
+
+    for sport, sport_rows in sorted(by_sport.items(), key=lambda kv: -len(kv[1])):
+        if len(sport_rows) < min_rows:
+            print(f'  {sport:<13} {len(sport_rows):>5} rows — skipped '
+                  f'(need {min_rows})')
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'too_few_rows'}
+            continue
+
+        rng = random.Random(seed)
+        shuffled = list(sport_rows)
+        rng.shuffle(shuffled)
+        cut = int(len(shuffled) * (1.0 - test_frac))
+        train, test = shuffled[:cut], shuffled[cut:]
+        if not train or not test:
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'split_too_small'}
+            continue
+
+        current = FootballScoringEngine().temperature_for_sport(sport)
+        fitted, _train_ll = fit_temperature(train, sport)
+
+        before_ll, before_br = _loss_at_temperature(test, sport, current)
+        after_ll, after_br = _loss_at_temperature(test, sport, fitted)
+        improved = after_ll < before_ll and after_br <= before_br
+
+        print(f'\n  {sport} — {len(train)} train / {len(test)} test')
+        print(f'    obecna T={current:<5} : ll {before_ll:.4f}  brier {before_br:.4f}')
+        print(f'    dopasowana T={fitted:<5}: ll {after_ll:.4f}  brier {after_br:.4f}'
+              f'   -> {"ACCEPTED" if improved else "rejected"}')
+
+        report[sport] = {
+            'n_rows': len(sport_rows),
+            'status': 'accepted' if improved else 'rejected',
+            'temperature_current': current,
+            'temperature_fitted': fitted,
+            'test_log_loss_before': round(before_ll, 5),
+            'test_log_loss_after': round(after_ll, 5),
+            'test_brier_before': round(before_br, 5),
+            'test_brier_after': round(after_br, 5),
+        }
+        if improved:
+            accepted[sport] = fitted
+
+    if accepted:
+        print('\n  Accepted temperatures: '
+              + ', '.join(f'{s}={t}' for s, t in sorted(accepted.items())))
+    else:
+        print('\n  No sport improved — keeping the profile temperatures.')
+    print(f"{'=' * 72}\n")
+    return accepted, report
+
+
+def _reliability_with(rows: List[Dict[str, Any]],
+                      temperatures: Optional[Dict[str, float]] = None,
+                      ) -> Dict[str, Any]:
+    """Evaluate *rows*, optionally forcing fitted temperatures.
+
+    Without the override the 'after' table is built by an engine reading the
+    calibration file, which has not been written yet — so it silently reports
+    the 'before' numbers under an 'after' heading.
+    """
+    engine = FootballScoringEngine()
+    if temperatures:
+        engine.sport_temperatures = dict(temperatures)
+
+    model = Evaluation('model')
+    value_bets = 0
+    for row in rows:
+        probs, ev, odds = _score_row(row, engine)
+        model.add(probs, row['actual_result'], ev=ev, odds=odds)
+        if ev is not None and ev > 0 and odds:
+            value_bets += 1
+    summary = model.summary()
+    return {'reliability': model.reliability(), 'model': summary,
+            'value_bets': value_bets}
+
+
+def _print_reliability_shift(rows: List[Dict[str, Any]],
+                             temperatures: Dict[str, float]) -> None:
+    """Show whether a stated probability became more believable."""
+    before = _reliability_with(rows, None)
+    after = _reliability_with(rows, temperatures)
+
+    print('  RZETELNOŚĆ — czy obiecane % odpowiada zaobserwowanym')
+    print(f"    {'przedział':<12} {'n':>5}  {'obiecane':>9} "
+          f"{'obserw.':>8} {'luka przed':>11} {'luka po':>9}")
+    b_by_range = {b['range']: b for b in before['reliability']}
+    for band in after['reliability']:
+        b = b_by_range.get(band['range'])
+        gap_after = band['observed'] - band['predicted']
+        gap_before = (b['observed'] - b['predicted']) if b else float('nan')
+        print(f"    {band['range']:<12} {band['n']:>5}  "
+              f"{band['predicted']:>9.3f} {band['observed']:>8.3f} "
+              f"{gap_before:>+11.3f} {gap_after:>+9.3f}")
+
+    mae_before = _mean_abs_gap(before['reliability'])
+    mae_after = _mean_abs_gap(after['reliability'])
+    print(f"    średnia |luka|: {mae_before:.3f} -> {mae_after:.3f}")
+    print(f"    brier: {before['model']['brier']:.4f} -> "
+          f"{after['model']['brier']:.4f}")
+    print(f"    log-loss: {before['model']['log_loss']:.4f} -> "
+          f"{after['model']['log_loss']:.4f}")
+    # A value screen that fires on almost everything is not a screen. Before
+    # calibration it flagged 244 of 293 priced games.
+    print(f"    typy z EV>0: {before['value_bets']} -> {after['value_bets']}"
+          f" (z {sum(1 for r in rows if market_probs(r))} wycenionych)")
+
+
+def _mean_abs_gap(bands: List[Dict[str, Any]]) -> float:
+    gaps = [abs(b['observed'] - b['predicted']) * b['n'] for b in bands]
+    total = sum(b['n'] for b in bands)
+    return (sum(gaps) / total) if total else float('nan')
+
+
+def _engine_with_curve(sport: str, curve) -> FootballScoringEngine:
+    engine = FootballScoringEngine()
+    engine.sport_isotonic = {sport: curve} if curve else {}
+    return engine
+
+
+def _metrics_with_curve(rows: List[Dict[str, Any]], sport: str, curve,
+                        ) -> Dict[str, float]:
+    """Log-loss, Brier, mean reliability gap and positive-EV count."""
+    engine = _engine_with_curve(sport, curve)
+    model = Evaluation('model')
+    value_bets = priced = 0
+    for row in rows:
+        probs, ev, odds = _score_row(row, engine)
+        model.add(probs, row['actual_result'], ev=ev, odds=odds)
+        if odds:
+            priced += 1
+            if ev is not None and ev > 0:
+                value_bets += 1
+    summary = model.summary()
+    return {
+        'log_loss': summary['log_loss'],
+        'brier': summary['brier'],
+        'gap': _mean_abs_gap(model.reliability()),
+        'value_bets': value_bets,
+        'priced': priced,
+    }
+
+
+def optimise_isotonic(rows: List[Dict[str, Any]], *, seed: int,
+                      test_frac: float, min_rows: int,
+                      simulated: bool = False,
+                      ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Fit a reliability curve per sport, keeping only those that generalise.
+
+    Accepted only when log-loss, Brier AND the mean reliability gap all improve
+    on held-out rows. The gap is the one that matters for betting: it says
+    whether a stated 70% really wins 70% of the time, which is the number the
+    EV calculation is built on.
+    """
+    from probability_calibration import fit_isotonic
+
+    by_sport: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        sport = (row.get('sport') or 'football').lower()
+        if sport in ('tennis', 'table_tennis'):
+            continue                      # scored by the two-outcome engine
+        by_sport.setdefault(sport, []).append(row)
+
+    accepted: Dict[str, Any] = {}
+    report: Dict[str, Any] = {}
+
+    print(f"\n{'=' * 72}")
+    print('  RELIABILITY CURVES (isotonic, per sport)')
+    print(f"{'=' * 72}")
+
+    if simulated:
+        print('  Refusing to fit on SIMULATED data.')
+        return {}, {'status': 'simulated'}
+
+    for sport, sport_rows in sorted(by_sport.items(), key=lambda kv: -len(kv[1])):
+        if len(sport_rows) < min_rows:
+            print(f'  {sport:<13} {len(sport_rows):>5} rows — skipped '
+                  f'(need {min_rows})')
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'too_few_rows'}
+            continue
+
+        rng = random.Random(seed)
+        shuffled = list(sport_rows)
+        rng.shuffle(shuffled)
+        cut = int(len(shuffled) * (1.0 - test_frac))
+        train, test = shuffled[:cut], shuffled[cut:]
+        if not train or not test:
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'split_too_small'}
+            continue
+
+        # Learn from what the engine claims on the training rows.
+        engine = FootballScoringEngine()
+        pairs = []
+        for row in train:
+            probs, _ev, _odds = _score_row(row, engine)
+            lead = max(range(len(probs)), key=lambda i: probs[i])
+            won = OUTCOMES[lead] == row['actual_result']
+            pairs.append((probs[lead], 1.0 if won else 0.0))
+
+        curve = fit_isotonic(pairs)
+        if not curve:
+            print(f'  {sport:<13} zbyt mało danych na krzywą')
+            report[sport] = {'n_rows': len(sport_rows), 'status': 'no_curve'}
+            continue
+
+        before = _metrics_with_curve(test, sport, None)
+        after = _metrics_with_curve(test, sport, curve)
+        improved = (after['log_loss'] < before['log_loss']
+                    and after['brier'] <= before['brier']
+                    and after['gap'] <= before['gap'])
+
+        print(f'\n  {sport} — {len(train)} train / {len(test)} test, '
+              f'{len(curve)} przedziałów')
+        print(f"    przed : ll {before['log_loss']:.4f}  brier {before['brier']:.4f}"
+              f"  luka {before['gap']:.3f}  EV>0 {before['value_bets']}/{before['priced']}")
+        print(f"    po    : ll {after['log_loss']:.4f}  brier {after['brier']:.4f}"
+              f"  luka {after['gap']:.3f}  EV>0 {after['value_bets']}/{after['priced']}"
+              f"   -> {'ACCEPTED' if improved else 'rejected'}")
+
+        report[sport] = {
+            'n_rows': len(sport_rows),
+            'status': 'accepted' if improved else 'rejected',
+            'bins': len(curve),
+            'test_before': before,
+            'test_after': after,
+        }
+        if improved:
+            accepted[sport] = [[x, y] for x, y in curve]
+
+    if accepted:
+        print('\n  Accepted curves: ' + ', '.join(sorted(accepted)))
+    else:
+        print('\n  No sport improved on held-out data — nothing saved.')
+    print(f"{'=' * 72}\n")
+    return accepted, report
+
+
+def _save_isotonic(curves: Dict[str, Any], report: Dict[str, Any]) -> None:
+    path = FootballScoringEngine.CALIBRATION_PATH
+    existing: Dict[str, Any] = {}
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                existing = json.load(fh)
+        except Exception:
+            existing = {}
+
+    existing['isotonic'] = {**existing.get('isotonic', {}), **curves}
+    existing['isotonic_metrics'] = report
+    from datetime import datetime
+    existing['calibrated_at'] = datetime.now().isoformat()
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as fh:
+        json.dump(existing, fh, indent=2)
+    print(f'  Saved reliability curves to {path}')
+
+
+def _save_temperatures(temperatures: Dict[str, float],
+                       report: Dict[str, Any]) -> None:
+    """Merge fitted temperatures into the calibration file."""
+    path = FootballScoringEngine.CALIBRATION_PATH
+    existing: Dict[str, Any] = {}
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                existing = json.load(fh)
+        except Exception:
+            existing = {}
+
+    existing['temperatures'] = {**existing.get('temperatures', {}), **temperatures}
+    existing['temperature_metrics'] = report
+    from datetime import datetime
+    existing['calibrated_at'] = datetime.now().isoformat()
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as fh:
+        json.dump(existing, fh, indent=2)
+    print(f'  Saved temperatures to {path}')
 
 
 def _save_per_sport(per_sport: Dict[str, Dict[str, float]],

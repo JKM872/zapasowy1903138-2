@@ -122,6 +122,11 @@ jobs:
           if [ "${{ github.event.inputs.optimise_per_sport }}" = "true" ]; then
             EXTRA="$EXTRA --optimise-per-sport --iterations 40"
           fi
+          # Temperature scaling always runs: it is one parameter per sport, it
+          # cannot overfit the way ten weights can, and it is what makes a
+          # stated probability mean what it says. The model claimed 90% and won
+          # 78%, which is also why its value bets fired on 83% of priced games.
+          EXTRA="$EXTRA --optimise-temperature"
           if [ "${{ github.event.inputs.save_weights }}" = "true" ]; then
             EXTRA="$EXTRA --save"
           fi
