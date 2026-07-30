@@ -53,7 +53,10 @@ outputs/*
 # Without this exception it stayed on the CI runner and was lost every run,
 # which made the real-data backtest impossible.
 !outputs/result_store.json
-!outputs/settled_*.json
+# settled_*.json is NOT tracked: it is derived from result_store.json by
+# export_settled.py and regenerates in seconds. Committed once at 79 MB, which
+# GitHub warns about and which buys nothing — result_store.json is the durable
+# record, this is a view of it.
 !outputs/scoring_calibration.json
 !outputs/tennis_calibration.json
 # The Dropping Odds workflow commits these; without the exception its
