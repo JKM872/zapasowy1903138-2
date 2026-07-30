@@ -1,0 +1,177 @@
+name: "Backfill Historical Results"
+
+# Recovers the outcomes of matches already scraped. 164k fixtures sit in
+# results/ with their pre-match features, 149k carry a match id, and only a few
+# hundred had a known outcome — so there was nothing to calibrate on and nothing
+# to train on. Supabase cannot help: its actual_result is '1' for every row.
+#
+# Split by sport because a GitHub Actions job is killed at 6 hours and football
+# alone is ~70k matches (5.4 h at the measured 3.6/s). Each job also carries its
+# own time budget and stops on its own terms, since the tool is resumable and a
+# killed job loses whatever it had not yet written.
+#
+# Each sport writes its own shard: parallel jobs cannot share one file without
+# fighting over it. One merge job folds them into result_store.json and commits.
+
+on:
+  workflow_dispatch:
+    inputs:
+      month:
+        description: 'Ogranicz do miesiąca (YYYY-MM), puste = cała historia'
+        required: false
+        type: string
+      max_seconds:
+        description: 'Budżet czasu na sport (s). 17000 = ~4.7 h'
+        required: false
+        default: '17000'
+        type: string
+      delay:
+        description: 'Przerwa między żądaniami (s)'
+        required: false
+        default: '0.15'
+        type: string
+
+  schedule:
+    # Nightly, chipping away at whatever is left. Resumable, so repeated runs
+    # converge without any bookkeeping.
+    - cron: '0 2 * * *'
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330          # under the 6 h ceiling, above the 4.7 h budget
+    strategy:
+      fail-fast: false
+      max-parallel: 4             # polite to the source
+      matrix:
+        sport:
+          - football
+          - tennis
+          - basketball
+          - table_tennis
+          - hockey
+          - volleyball
+          - baseball
+          - handball
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi requests
+
+      # The orientation check earns its keep here: taking the Livesport feed
+      # as-is agreed 24/24 against independently resolved matches, while
+      # orienting by the URL slugs was wrong 15 times out of 16. A mirrored
+      # result looks entirely plausible, so a bad run must not be trusted.
+      - name: Validate resolution before writing anything
+        run: python tools/backfill_results.py --validate
+
+      - name: Backfill ${{ matrix.sport }}
+        env:
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+        run: |
+          mkdir -p outputs/result_store_shards
+          python tools/backfill_results.py \
+            --sport "${{ matrix.sport }}" \
+            --store "outputs/result_store_shards/${{ matrix.sport }}.json" \
+            --max-seconds "${{ github.event.inputs.max_seconds || '17000' }}" \
+            --delay "${{ github.event.inputs.delay || '0.15' }}" \
+            ${{ github.event.inputs.month && format('--month {0}', github.event.inputs.month) || '' }}
+
+      - name: Upload shard
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: result-shard-${{ matrix.sport }}
+          path: outputs/result_store_shards/${{ matrix.sport }}.json
+          retention-days: 7
+          if-no-files-found: ignore
+
+  merge:
+    needs: backfill
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Download shards
+        uses: actions/download-artifact@v8
+        with:
+          path: outputs/result_store_shards
+          pattern: result-shard-*
+          merge-multiple: true
+
+      - name: Merge into the result store
+        run: |
+          ls -la outputs/result_store_shards/ || true
+          python tools/backfill_results.py --merge
+
+      # The label spread is the check that matters. A single-class label set is
+      # exactly how the Supabase export fooled the calibrator into "beating the
+      # market" while the real picks ran at 44.7%.
+      - name: Report the label spread
+        run: |
+          echo '## Odzyskane wyniki' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          import json
+          from collections import Counter
+          store = json.load(open('outputs/result_store.json', encoding='utf-8'))
+          done = [v for v in store.values() if v.get('status') == 'finished']
+          print(f'wyników w store: {len(store)} | zakończonych: {len(done)}')
+          print('rozkład:', dict(Counter(v.get('winner') for v in done)))
+          per = {}
+          for v in done:
+              per.setdefault(v.get('sport') or '?', Counter())[v.get('winner')] += 1
+          for sport, c in sorted(per.items(), key=lambda kv: -sum(kv[1].values())):
+              total = sum(c.values())
+              home = 100 * c.get('home', 0) / total
+              print(f'  {sport:<14} n={total:<6} gospodarz={home:>5.1f}%  {dict(c)}')
+          PY
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the recovered results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/result_store.json
+          if git diff --cached --quiet; then
+            echo "ℹ️ Nic nowego do zapisania"
+          else
+            git commit -m "data: backfilled historical results [skip ci]"
+            for attempt in 1 2 3 4 5; do
+              if git push origin HEAD:main; then break; fi
+              git fetch origin main || true
+              git rebase origin/main || git rebase --abort || true
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+          fi

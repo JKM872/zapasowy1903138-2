@@ -1,7 +1,7 @@
-"""Recovering the outcomes of matches we already scraped.
+﻿"""Recovering the outcomes of matches we already scraped.
 
 164k fixtures were scraped with their pre-match features; 149k carry a link
-with a match id, and their outcomes were never stored — result_store held 261
+with a match id, and their outcomes were never stored â€” result_store held 261
 results, 0.2% of the history. Supabase cannot help: its actual_result was '1'
 for every row it returned.
 
@@ -12,6 +12,7 @@ slug-based orientation disagreed 15/16. A mirrored result is perfectly plausible
 and completely wrong, which is why the tool ships with a validation gate.
 """
 
+import json
 import os
 import sys
 
@@ -24,7 +25,7 @@ for path in (HERE, os.path.join(HERE, 'tools')):
 
 import backfill_results as bf  # noqa: E402
 
-# The feed is a flat KEY÷VALUE stream, '¬' between fields and '~' between blocks.
+# The feed is a flat KEYĂ·VALUE stream, 'Â¬' between fields and '~' between blocks.
 FEED = ('AC\xf71st Quarter\xacIG\xf720\xacIH\xf718\xac~'
         'AC\xf72nd Quarter\xacIG\xf715\xacIH\xf719\xac~'
         'AC\xf73rd Quarter\xacIG\xf722\xacIH\xf717\xac~'
@@ -179,3 +180,74 @@ class TestLivesportPathTakesTheFeedAsIs:
         row = {'url': 'https://example.com/whatever', 'sport': 'football',
                'date': '', 'home': 'A', 'away': 'B'}
         assert bf.resolve(row) is None
+
+
+class TestShardsAndMerge:
+    """Parallel jobs cannot share one file, so each writes its own shard."""
+
+    def _shard(self, tmp_path, name, payload):
+        path = tmp_path / name
+        path.write_text(json.dumps(payload), encoding='utf-8')
+        return str(path)
+
+    def test_merge_folds_shards_into_the_store(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs')
+        shard = self._shard(tmp_path, 'football.json', {
+            'https://x/1': {'status': 'finished', 'score_home': 2,
+                            'score_away': 1, 'winner': 'home',
+                            'sport': 'football', 'home_team': 'A',
+                            'away_team': 'B', 'date': '2026-03-01'},
+        })
+
+        assert bf.merge_shards([shard], store_path='outputs/result_store.json') == 0
+
+        store = json.load(open('outputs/result_store.json', encoding='utf-8'))
+        assert store['https://x/1']['winner'] == 'home'
+        assert store['https://x/1']['sport'] == 'football'
+
+    def test_merge_does_not_overwrite_a_settled_result(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs')
+        existing = {'https://x/1': {'status': 'finished', 'winner': 'away',
+                                    'score_home': 0, 'score_away': 3}}
+        with open('outputs/result_store.json', 'w', encoding='utf-8') as fh:
+            json.dump(existing, fh)
+
+        shard = self._shard(tmp_path, 's.json', {
+            'https://x/1': {'status': 'finished', 'winner': 'home',
+                            'score_home': 9, 'score_away': 0},
+        })
+        bf.merge_shards([shard], store_path='outputs/result_store.json')
+
+        store = json.load(open('outputs/result_store.json', encoding='utf-8'))
+        assert store['https://x/1']['winner'] == 'away', 'settled stays settled'
+
+    def test_merge_survives_a_broken_shard(self, tmp_path, monkeypatch, capsys):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs')
+        bad = tmp_path / 'bad.json'
+        bad.write_text('{not json', encoding='utf-8')
+
+        assert bf.merge_shards([str(bad)], store_path='outputs/result_store.json') == 0
+        assert 'pomijam' in capsys.readouterr().out
+
+    def test_known_urls_covers_store_and_shard(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs')
+        with open('outputs/result_store.json', 'w', encoding='utf-8') as fh:
+            json.dump({'https://in-store': {'status': 'finished'}}, fh)
+        shard = self._shard(tmp_path, 'sh.json', {'https://in-shard': {}})
+
+        known = bf._known_urls(shard, store_path='outputs/result_store.json')
+
+        assert 'https://in-store' in known, 'nightly settlement is not re-fetched'
+        assert 'https://in-shard' in known, 'a resumed run skips its own work'
+
+    def test_known_urls_without_a_shard(self, tmp_path, monkeypatch):
+        monkeypatch.chdir(tmp_path)
+        os.makedirs('outputs')
+        with open('outputs/result_store.json', 'w', encoding='utf-8') as fh:
+            json.dump({'https://a': {}}, fh)
+
+        assert bf._known_urls('', store_path='outputs/result_store.json') == {'https://a'}

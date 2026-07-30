@@ -290,6 +290,68 @@ def _shape(got: Dict[str, Any], row: Dict[str, Any], forward: bool
     }
 
 
+def _store(path: str = '') -> ResultStore:
+    """The result store, optionally at an explicit path.
+
+    ResultStore defaults to a path derived from its own module location, so
+    without this the destination cannot be redirected — neither by a test nor by
+    a CI job that wants to write somewhere specific.
+    """
+    return ResultStore(path) if path else ResultStore()
+
+
+def _known_urls(shard_path: str = '', store_path: str = '') -> set:
+    """URLs already settled, in the main store and in this shard.
+
+    Consulting the main store as well means a sport-sharded run never re-fetches
+    what nightly settlement has already recorded.
+    """
+    known = set(_store(store_path)._data)
+    if shard_path and os.path.isfile(shard_path):
+        try:
+            with open(shard_path, encoding='utf-8') as fh:
+                known |= set(json.load(fh))
+        except (OSError, ValueError):
+            pass
+    return known
+
+
+def merge_shards(paths: List[str], store_path: str = '') -> int:
+    """Fold per-sport shards into the main result store.
+
+    Parallel jobs cannot share one file without fighting over it, so each writes
+    its own and this runs once at the end. A finished result already in the main
+    store is never overwritten.
+    """
+    if not paths:
+        paths = sorted(glob.glob('outputs/result_store_shards/*.json'))
+    store = _store(store_path)
+    before = len(store)
+    added = skipped = 0
+
+    for path in paths:
+        try:
+            with open(path, encoding='utf-8') as fh:
+                shard = json.load(fh)
+        except (OSError, ValueError) as e:
+            print(f'  pomijam {path}: {e}')
+            continue
+        for url, res in (shard or {}).items():
+            if store.add_result(match_url=url, result=res,
+                                sport=res.get('sport', ''),
+                                home_team=res.get('home_team', ''),
+                                away_team=res.get('away_team', ''),
+                                date=res.get('date', '')):
+                added += 1
+            else:
+                skipped += 1
+        print(f'  {path}: {len(shard)} wyników')
+
+    store.save()
+    print(f'\nStore: {before} -> {len(store)} (+{added}, pominięte {skipped})')
+    return 0
+
+
 def validate(limit: int = 60, delay: float = 0.2) -> float:
     """Cross-check the backfill against independently resolved outcomes.
 
@@ -346,19 +408,36 @@ def main() -> int:
                     help='Przerwa między żądaniami (s)')
     ap.add_argument('--dry-run', action='store_true',
                     help='Nie zapisuj, tylko pokaż co by wyszło')
+    ap.add_argument('--store', default='',
+                    help='Plik wyników (domyślnie outputs/result_store.json). '
+                         'Równoległe zadania powinny pisać do własnych szardów.')
+    ap.add_argument('--max-seconds', type=int, default=0,
+                    help='Zakończ i zapisz po tym czasie. GitHub Actions ubija '
+                         'zadanie po 6 h, a wtedy tracisz cały postęp.')
+    ap.add_argument('--merge', nargs='*', metavar='SZARD',
+                    help='Scal podane szardy do głównego store i zakończ')
     args = ap.parse_args()
+
+    if args.merge is not None:
+        return merge_shards(args.merge)
 
     if args.validate:
         share = validate(delay=args.delay)
         return 0 if share >= 95.0 else 1
 
     rows = iter_history(args.month, args.sport)
-    store = ResultStore()
-    todo = [r for r in rows if r['url'] not in store]
+    # A shard per sport keeps parallel jobs from fighting over the same file.
+    # They are merged in one step afterwards.
+    store = ResultStore(args.store) if args.store else ResultStore()
+    already = _known_urls(args.store)
+    todo = [r for r in rows if r['url'] not in already]
 
     print(f'Historia: {len(rows)} meczów z linkiem'
           f' | już rozstrzygniętych: {len(rows) - len(todo)}'
           f' | do pobrania: {len(todo)}')
+    if args.max_seconds:
+        print(f'  budżet czasu: {args.max_seconds}s '
+              f'(~{int(args.max_seconds * 3.6)} meczów przy 3.6/s)')
     if args.limit:
         todo = todo[:args.limit]
         print(f'  ograniczam do {len(todo)}')
@@ -384,13 +463,26 @@ def main() -> int:
                   f'odwrócone={stats["flip"]}  {rate:.1f}/s')
             if not args.dry_run:
                 store.save()
+
+        # Stop on our own terms. A job killed at the 6 h ceiling loses whatever
+        # it had not yet written; the tool is resumable, so the next run picks up
+        # exactly where this one stopped.
+        if args.max_seconds and (time.time() - started) >= args.max_seconds:
+            print(f'  ⏱️ budżet czasu wyczerpany po {i} meczach — '
+                  f'zapisuję i kończę, resztę dobierze następny przebieg')
+            break
         time.sleep(args.delay)
 
     if not args.dry_run:
         store.save()
+
+    # Divide by what was actually attempted, not by the whole queue — a run that
+    # stops on its time budget otherwise reports a success rate of a few percent.
+    attempted = stats['ok'] + stats['brak']
     print(f'\nZapisane wyniki w store: {len(store)}')
-    got_share = 100 * stats['ok'] / max(1, len(todo))
-    print(f'Skuteczność pobrania: {got_share:.1f}%')
+    print(f'Przetworzone: {attempted}/{len(todo)}'
+          f' | skuteczność: {100 * stats["ok"] / max(1, attempted):.1f}%'
+          f' | zostało: {len(todo) - attempted}')
     return 0
 
 
