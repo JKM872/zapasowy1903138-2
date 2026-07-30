@@ -146,8 +146,12 @@ class TestEventToMatchRow:
         assert row['prediction_grade'] in ('A', 'B', 'C', 'D', 'F')
 
     def test_no_market_leaves_ev_empty_rather_than_minus_999(self):
-        """The engines' sentinel used to print as an EV of -999.000."""
-        bare = _event()
+        """The engines' sentinel used to print as an EV of -999.000.
+
+        Needs an event with no price anywhere: neither an enriched book nor a
+        dropped quote, since the dropped quote is now handed to the engine.
+        """
+        bare = _event(current_odds=None, max_odds=None)
         bare['enrichment'] = {}
         row = doe.event_to_match_row(bare)
 
@@ -179,3 +183,95 @@ class TestRenderedMail:
 
         assert 'Brak zdarzeń' in html
         assert html.lower().count('<html') == 1
+
+
+class TestCardShowsWhatWasScraped:
+    """Three gaps visible in the 2026-07-30 football mail."""
+
+    def test_last_meeting_date_reaches_the_card(self):
+        """Every card read "Ostatni mecz —" though the date had been scraped.
+
+        The enrichment stores it as last_h2h_date; the template reads
+        last_meeting_date, and nothing mapped between the two.
+        """
+        event = _event()
+        event['enrichment'].update({
+            'last_h2h_date': '12.03.2026', 'last_h2h_score': '1-2',
+            'last_h2h_home': 'Vointa 2024 Crevedia', 'last_h2h_away': 'Urban Titu',
+        })
+
+        row = doe.event_to_match_row(event)
+
+        assert row['last_meeting_date'] == '12.03.2026'
+        assert row['last_h2h_score'] == '1-2'
+
+    def test_date_is_rendered(self):
+        event = _event()
+        event['enrichment'].update({'last_h2h_date': '12.03.2026',
+                                    'last_h2h_score': '1-2'})
+        html = doe.build_dropping_odds_email_html(
+            [event], {'filter': {}}, '2026-07-30', sport='football')
+
+        assert '12.03.2026' in html
+
+    def test_absent_date_does_not_invent_one(self):
+        row = doe.event_to_match_row(_event())
+        assert not row.get('last_meeting_date')
+
+    @pytest.mark.parametrize('side,field', [
+        ('1', 'home_odds'), ('X', 'draw_odds'), ('2', 'away_odds')])
+    def test_dropped_price_is_given_to_the_engine(self, side, field):
+        """Without odds on the row, EV and edge can never be computed."""
+        event = _event(outcome=side, current_odds=2.07)
+        event['enrichment'] = {'home_form': ['W'], 'away_form': ['L']}
+
+        row = doe.event_to_match_row(event)
+
+        assert row[field] == pytest.approx(2.07)
+
+    def test_enriched_odds_are_not_overwritten_by_the_drop(self):
+        """A dedicated book beats the price that merely triggered the alert."""
+        event = _event(outcome='1', current_odds=2.07)
+        event['enrichment']['home_odds'] = 2.34
+
+        row = doe.event_to_match_row(event)
+
+        assert row['home_odds'] == pytest.approx(2.34)
+
+    def test_ev_is_computed_once_a_price_exists(self):
+        event = _event(outcome='1', current_odds=2.07)
+        row = doe.event_to_match_row(event)
+
+        assert row['scoring_ev'] is not None
+        assert row['scoring_edge'] is not None
+
+    def test_implausible_drop_price_is_ignored(self):
+        event = _event(outcome='1', current_odds=0.9)
+        event['enrichment'] = {}
+
+        row = doe.event_to_match_row(event)
+
+        assert not row.get('home_odds')
+
+
+class TestLeagueBadgeMatchesTheSport:
+    """The badge was hardcoded to a table-tennis paddle for every sport."""
+
+    @pytest.mark.parametrize('sport,emoji', [
+        ('football', '⚽'), ('basketball', '🏀'), ('tennis', '🎾'),
+        ('table_tennis', '🏓'), ('hockey', '🏒'), ('baseball', '⚾')])
+    def test_badge_uses_the_row_sport(self, sport, emoji):
+        cards = create_html_email([{
+            'home_team': 'A', 'away_team': 'B', 'qualifies': True,
+            'sport': sport, 'league': 'Some League',
+        }], '2026-07-30', cards_only=True)
+
+        assert f'{emoji} Some League' in cards
+
+    def test_unknown_sport_falls_back_to_a_neutral_badge(self):
+        cards = create_html_email([{
+            'home_team': 'A', 'away_team': 'B', 'qualifies': True,
+            'sport': 'curling', 'league': 'Some League',
+        }], '2026-07-30', cards_only=True)
+
+        assert '🏆 Some League' in cards

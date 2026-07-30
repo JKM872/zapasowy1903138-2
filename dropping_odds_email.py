@@ -218,14 +218,19 @@ def _build_scoring_input(event: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _run_scoring_engine(event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def _run_scoring_engine(event: Dict[str, Any],
+                        match_data: Optional[Dict[str, Any]] = None,
+                        ) -> Optional[Dict[str, Any]]:
     """Score an enriched event with the engine matching its sport.
 
     Tennis has its own two-outcome engine (no draw, no home advantage); using
     the football engine there produced a phantom draw probability and framed
     the match in home/away terms that do not apply.
     """
-    match_data = _build_scoring_input(event)
+    # The caller may pass a row that already carries the dropped price; without
+    # it the engine sees no odds at all and EV/edge stay empty on every card.
+    if match_data is None:
+        match_data = _build_scoring_input(event)
     sport = (event.get("sport") or "football").lower()
 
     try:
@@ -303,9 +308,29 @@ def event_to_match_row(event: Dict[str, Any]) -> Dict[str, Any]:
         # Odds shown in the card: prefer the enriched book, fall back to the
         # OddsSafari price that triggered the drop so the card is never blank.
         "odds_bookmaker": enrichment.get("odds_bookmaker") or "OddsSafari",
+        # The last meeting. The enrichment carries these under *last_h2h_*,
+        # which the main template reads as last_meeting_date — without the
+        # mapping every card showed "Ostatni mecz —" even though the date had
+        # been scraped.
+        "last_meeting_date": (enrichment.get("last_h2h_date")
+                              or enrichment.get("last_meeting_date")),
+        "last_h2h_score": enrichment.get("last_h2h_score"),
+        "last_h2h_home": enrichment.get("last_h2h_home"),
+        "last_h2h_away": enrichment.get("last_h2h_away"),
     })
 
-    scored = _run_scoring_engine(event)
+    # The dropped price is a real quote, so give it to the engine: without any
+    # odds on the row, EV and edge can never be computed and every card showed
+    # a dash. Only the side that moved is known, and the engine simply skips
+    # outcomes it has no price for.
+    dropped_side = str(event.get("outcome") or event.get("drop_outcome") or '').strip()
+    dropped_price = _safe_float(event.get("current_odds") or event.get("max_odds"))
+    side_field = {'1': 'home_odds', 'X': 'draw_odds', '2': 'away_odds'}.get(
+        dropped_side.upper())
+    if side_field and dropped_price > 1.0 and not row.get(side_field):
+        row[side_field] = dropped_price
+
+    scored = _run_scoring_engine(event, match_data=row)
     if scored:
         # The engines return -999 for "no market to price against". Passing that
         # through printed an EV of -999.000 in the card; the template shows a

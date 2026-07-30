@@ -1174,7 +1174,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     <div style="color: white; font-size: 12px;">
                         <span style="background: #FF5722; padding: 5px 12px; border-radius: 15px; font-weight: bold;">🕐 {time_badge.replace('<span class="time-badge">', '').replace('</span>', '') if time_badge else 'TBD'}</span>
                     </div>
-                    {f'<div style="color: white; font-size: 12px; font-weight: bold; text-align: center; flex: 1;"><span style="background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 15px;">🏓 {league}</span></div>' if league else ''}
+                    {f'<div style="color: white; font-size: 12px; font-weight: bold; text-align: center; flex: 1;"><span style="background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 15px;">{SPORT_EMOJI.get(str(match.get("sport") or "").lower(), "🏆")} {league}</span></div>' if league else ''}
                     <div style="color: white; font-size: 11px; opacity: 0.8;">
                         #{i}
                     </div>
@@ -1690,6 +1690,7 @@ def send_email_notification(
 SPORT_EMOJI = {
     'football': '⚽', 'basketball': '🏀', 'handball': '🤾',
     'volleyball': '🏐', 'tennis': '🎾', 'hockey': '🏒', 'rugby': '🏉',
+    'table_tennis': '🏓', 'baseball': '⚾', 'esports': '🎮',
 }
 
 SPORT_LABEL = {
