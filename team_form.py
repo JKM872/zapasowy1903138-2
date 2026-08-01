@@ -178,7 +178,9 @@ class FormProvider:
 
     # ------------------------------------------------------------------
     def attach(self, match: Dict[str, Any], window: int = FORM_WINDOW,
-               overwrite: bool = False) -> Dict[str, Any]:
+               overwrite: bool = False,
+               min_history: int = 0,
+               set_form_fields: bool = True) -> Dict[str, Any]:
         """Fill the form fields the engine and the email already consume.
 
         By default a value the scraper already supplied is left alone: the
@@ -191,6 +193,18 @@ class FormProvider:
         before = match.get('match_date') or match.get('date') or None
         sport = (match.get('sport') or '').lower() or None
 
+        # A competitor we have barely scraped has a store history that is a thin,
+        # unrepresentative slice of what they actually played, and form built
+        # from it is confidently wrong rather than merely absent. Measured on
+        # settled rows that carry real prices: filling gaps without this gate
+        # made basketball worse (Brier 0.3716 -> 0.3767), hockey worse
+        # (0.4661 -> 0.4709) and volleyball worse (0.3088 -> 0.3131).
+        thin = set()
+        if min_history > 0:
+            for team in (home, away):
+                if team and self.played(team, before, sport) < min_history:
+                    thin.add(team)
+
         pairs = (
             ('home_form_overall', home, None),
             ('home_form_home', home, 'home'),
@@ -198,7 +212,15 @@ class FormProvider:
             ('away_form_away', away, 'away'),
         )
         for field_name, team, venue in pairs:
-            if not team:
+            if not set_form_fields:
+                # Display only: the recent-match list below still gets written,
+                # but nothing the scoring engine reads is touched. Measured on
+                # rows carrying real prices, feeding store form to the engine
+                # lowered ROI in both sports with a credible sample — tennis
+                # -6.7% -> -8.2% over 3494 matches, basketball +12.2% -> +8.2%
+                # over 832 — so it earns a place in the card, not in the pick.
+                break
+            if not team or team in thin:
                 continue
             if not overwrite and _has_form(match.get(field_name)):
                 continue

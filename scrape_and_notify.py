@@ -837,20 +837,27 @@ def scrape_and_send_email(
 
         # Zapisz finalne wyniki (plik już istnieje jeśli były checkpointy)
         # ========================================================================
-        # FAZA 2.4: FORMA Z MAGAZYNU WYNIKÓW (ostatnie 10 meczów)
+        # FAZA 2.4: OSTATNIE 10 MECZÓW Z MAGAZYNU WYNIKÓW (do maila)
         # ========================================================================
-        # Scrapery dostarczają około pięciu liter W/D/L, a dla wielu meczów nie
-        # dostarczają nic. Magazyn ma ponad 100 tys. rozstrzygniętych meczów z
-        # wynikami, więc formę — ogólną i osobno u siebie / na wyjeździe — da się
-        # policzyć samemu. Zmierzone na oknie testowym: silnik bez formy vs z
-        # formą 10 to Brier 0.6417 -> 0.6041 w piłce, 0.4913 -> 0.4474 w
-        # koszykówce, 0.5962 -> 0.4992 w piłce ręcznej.
+        # Magazyn ma ponad 100 tys. rozstrzygniętych meczów z wynikami, więc dla
+        # każdej drużyny da się odtworzyć ostatnie dziesięć spotkań — z datą,
+        # przeciwnikiem, wynikiem i informacją czy grała u siebie. To jest w
+        # mailu, żeby dało się ocenić, przeciw komu powstała seria zwycięstw.
         #
-        # Uzupełniamy tylko braki (bez overwrite): scraper widział tabelę formy
-        # rozgrywek, w której mogą być mecze, których nigdy nie scrapowaliśmy.
-        # Baseball pomijamy — tam forma pogarszała Brier (0.5073 -> 0.5259), co
-        # zgadza się z jego K=12: wynik meczu do meczu jest tam blisko losowego.
-        FORM_EXCLUDED_SPORTS = {'baseball'}
+        # Do SCORINGU ta forma NIE trafia. Na danych bez kursów wyglądała
+        # świetnie (Brier w koszykówce 0.4913 -> 0.4440), ale to był pomiar na
+        # silniku pozbawionym najmocniejszego źródła. Na rozliczonych meczach z
+        # prawdziwymi kursami pogarsza ROI w obu sportach z wiarygodną próbą:
+        # tenis -6.7% -> -8.2% (3494 mecze), koszykówka +12.2% -> +8.2% (832).
+        # Prawdopodobna przyczyna: magazyn dostarcza formę właśnie tam, gdzie
+        # jego historia jest najcieńsza, więc bywa pewny i błędny naraz. Bramka
+        # na minimalną historię tego nie ratuje — przy progu 20 siatkówka wraca
+        # dokładnie do wyniku bez formy, czyli bramka po prostu wyłącza funkcję.
+        #
+        # Gdy hokej, siatkówka i piłka ręczna dorobią się próby większej niż
+        # dzisiejsze 82-133 mecze z kursami, warto zmierzyć je ponownie i
+        # dopisać tutaj sport, dla którego forma z magazynu wygrywa na ROI.
+        FORM_SCORING_SPORTS: set = set()
         form_rows = [r for r in rows if r.get('qualifies')]
         if form_rows:
             try:
@@ -858,26 +865,27 @@ def scrape_and_send_email(
 
                 provider = FormProvider.from_store()
                 if provider.by_team:
-                    _form_filled = 0
+                    _with_recent = 0
                     for row in form_rows:
-                        if (row.get('sport') or '').lower() in FORM_EXCLUDED_SPORTS:
-                            continue
                         # Bez daty meczu nie wolno sięgać do historii: przy
                         # backteście pełna historia wciągnęłaby wynik meczu,
                         # który właśnie oceniamy.
                         if not (row.get('match_date') or row.get('date')):
                             continue
-                        before = row.get('home_form_overall')
-                        provider.attach(row, window=FORM_WINDOW)
-                        if row.get('home_form_overall') != before:
-                            _form_filled += 1
-                    print(f"\n📊 Forma z magazynu: uzupełniono {_form_filled}"
-                          f"/{len(form_rows)} meczów (okno {FORM_WINDOW})")
+                        sport = (row.get('sport') or '').lower()
+                        provider.attach(
+                            row, window=FORM_WINDOW,
+                            set_form_fields=sport in FORM_SCORING_SPORTS)
+                        if row.get('home_recent_matches'):
+                            _with_recent += 1
+                    print(f"\n📊 Ostatnie mecze z magazynu: {_with_recent}"
+                          f"/{len(form_rows)} meczów (okno {FORM_WINDOW},"
+                          f" tylko do maila)")
                 else:
-                    print("\n📊 Forma z magazynu: magazyn pusty — pomijam")
+                    print("\n📊 Ostatnie mecze z magazynu: magazyn pusty — pomijam")
             except Exception as e:
-                # Forma jest dodatkiem; jej brak nie może zatrzymać pipeline'u.
-                print(f"\n⚠️  Forma z magazynu nieudana: {e}")
+                # To jest dodatek do maila; jego brak nie może zatrzymać pipeline'u.
+                print(f"\n⚠️  Ostatnie mecze z magazynu nieudane: {e}")
 
         # ========================================================================
         # FAZA 2.5: SCORING ENGINE (tylko piłka nożna)

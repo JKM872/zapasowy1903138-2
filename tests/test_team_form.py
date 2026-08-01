@@ -179,6 +179,76 @@ class TestWindow:
         assert p.form('Team', window=4) == ['W', 'W', 'W', 'W']
 
 
+class TestDisplayOnlyMode:
+    """The pipeline shows store form without letting it score.
+
+    Measured on settled rows carrying real prices, feeding store form to the
+    engine lowered ROI in both sports with a credible sample, so the recent
+    matches belong in the email card and nowhere near the pick.
+    """
+
+    def test_recent_matches_are_still_written(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match, set_form_fields=False)
+        assert match['home_recent_matches']
+        assert match['away_recent_matches']
+
+    def test_no_engine_readable_form_field_is_set(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match, set_form_fields=False)
+        for field in ('home_form_overall', 'home_form_home',
+                      'away_form_overall', 'away_form_away'):
+            assert field not in match
+
+    def test_existing_scraper_form_is_left_intact(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01',
+                 'home_form_overall': ['W', 'W', 'W']}
+        provider.attach(match, set_form_fields=False)
+        assert match['home_form_overall'] == ['W', 'W', 'W']
+
+    def test_default_still_sets_the_form_fields(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match)
+        assert match['home_form_overall']
+
+
+class TestMinHistoryGate:
+    def test_a_thin_history_is_not_used(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match, min_history=99)
+        assert 'home_form_overall' not in match
+
+    def test_a_sufficient_history_is_used(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match, min_history=3)
+        assert match['home_form_overall'] == ['L', 'L', 'D', 'L', 'W']
+
+    def test_gate_counts_history_before_the_match_only(self, provider):
+        early = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-01-06'}
+        provider.attach(early, min_history=3)
+        assert 'home_form_overall' not in early
+
+    def test_zero_gate_disables_the_check(self, provider):
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match, min_history=0)
+        assert match['home_form_overall']
+
+    def test_recent_matches_ignore_the_gate(self, provider):
+        """The list is for reading; a short history is still worth showing."""
+        match = {'home_team': 'Alpha', 'away_team': 'Beta',
+                 'sport': 'football', 'match_date': '2026-02-01'}
+        provider.attach(match, min_history=99)
+        assert match['home_recent_matches']
+
+
 class TestAttach:
     def test_fills_all_four_form_fields(self, provider):
         match = {'home_team': 'Alpha', 'away_team': 'Beta',
