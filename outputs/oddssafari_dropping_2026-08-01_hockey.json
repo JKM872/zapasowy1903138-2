@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "generated_at": "2026-08-01T10:42:13.980408+02:00",
+    "target_date": "2026-08-01",
+    "filter": {
+      "min_odds": 1.6,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 3,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 1,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "elapsed_seconds": 27.4,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Australia - AIHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/australia/aihl/newcastle-northstars-vs-perth-thunder/2290281?MarketTypeID=401",
+      "match_id": "2290281",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Newcastle Northstars",
+      "away_team": "Perth Thunder",
+      "event_date": "02/08",
+      "event_time": "06:00",
+      "outcome": "X",
+      "open_odds": 6.45,
+      "current_odds": 4.62,
+      "drop_pct": 28.0,
+      "max_odds": 4.95,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "X",
+      "focus_team": "draw",
+      "away_team_focus": false
+    },
+    {
+      "league": "New Zealand - NZIHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/new-zealand/nzihl/phoenix-thunder-vs-west-auckland-admirals/2288446?MarketTypeID=401",
+      "match_id": "2288446",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Phoenix Thunder",
+      "away_team": "West Auckland Admirals",
+      "event_date": "07/08",
+      "event_time": "07:00",
+      "outcome": "X",
+      "open_odds": 5.9,
+      "current_odds": 5.03,
+      "drop_pct": 15.0,
+      "max_odds": 5.1,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "X",
+      "focus_team": "draw",
+      "away_team_focus": false
+    },
+    {
+      "league": "Russia - KHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/russia/khl/ak-bars-kazan-vs-sibir-novosibirsk/2267924?MarketTypeID=401",
+      "match_id": "2267924",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "AK Bars Kazan",
+      "away_team": "Sibir Novosibirsk",
+      "event_date": "05/09",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 2.14,
+      "current_odds": 1.9,
+      "drop_pct": 11.0,
+      "max_odds": 1.91,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Russia - KHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/russia/khl/ak-bars-kazan-vs-sibir-novosibirsk/2267924?MarketTypeID=401",
+      "match_id": "2267924",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "AK Bars Kazan",
+      "away_team": "Sibir Novosibirsk",
+      "event_date": "05/09",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 2.14,
+      "current_odds": 1.9,
+      "drop_pct": 11.0,
+      "max_odds": 1.91,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ]
+}
