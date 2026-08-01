@@ -17,9 +17,19 @@ class TestHealth:
         data = client.get('/api/health').get_json()
         assert 'supabaseAvailable' in data
 
-    def test_root_returns_200(self, client):
+    def test_root_serves_the_page_or_says_it_is_not_built(self, client):
+        """Root depends on whether the frontend was built, so assert both arms.
+
+        This used to assert 200 flat out. It passed locally, where
+        sports-dashboard has been built, and would have failed in CI, where the
+        `test` job never builds the frontend — nobody noticed because CI was not
+        running tests/ at all. A built page and a clear "not built" answer are
+        both correct behaviour; silently returning something else is not.
+        """
         resp = client.get('/')
-        assert resp.status_code == 200
+        assert resp.status_code in (200, 404)
+        if resp.status_code == 404:
+            assert 'Frontend not built' in resp.get_json()['error']
 
 
 class TestStandingsLeagues:
