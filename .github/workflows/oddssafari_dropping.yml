@@ -1,9 +1,17 @@
 name: OddsSafari Dropping Odds Pipeline
 
-# Independent of other scrapers. Runs daily at 12:00 Europe/Warsaw all year.
-# GitHub cron has no timezone support, so we fire at both 10:00 UTC (= 12:00
-# CEST, summer) and 11:00 UTC (= 12:00 CET, winter) and the "Skip off-schedule
-# run" step below drops whichever fire is not local noon.
+# Independent of other scrapers. Runs daily at 12:00, 15:00 and 18:00
+# Europe/Warsaw all year — dropping odds move through the day, so one look at
+# noon caught only the earliest drops.
+#
+# GitHub cron has no timezone support, so every local hour is fired twice: once
+# for CEST (UTC+2, summer) and once for CET (UTC+1, winter). The "Skip
+# off-schedule run" step below keeps only the fire that lands on one of the
+# three target hours, so exactly three runs happen per day in either season.
+#
+#   12:00 local -> 10:00 UTC (CEST) / 11:00 UTC (CET)
+#   15:00 local -> 13:00 UTC (CEST) / 14:00 UTC (CET)
+#   18:00 local -> 16:00 UTC (CEST) / 17:00 UTC (CET)
 #
 # Per-sport matrix split (9 jobs running in parallel) — football, basketball,
 # tennis, hockey, handball, volleyball, esports, baseball, rugby — each
@@ -15,8 +23,15 @@ name: OddsSafari Dropping Odds Pipeline
 
 on:
   schedule:
+    # 12:00 Europe/Warsaw
     - cron: '0 10 * * *'
     - cron: '0 11 * * *'
+    # 15:00 Europe/Warsaw
+    - cron: '0 13 * * *'
+    - cron: '0 14 * * *'
+    # 18:00 Europe/Warsaw
+    - cron: '0 16 * * *'
+    - cron: '0 17 * * *'
   workflow_dispatch:
     inputs:
       date:
@@ -96,14 +111,20 @@ jobs:
         run: |
           SKIP=false
 
-          # Two crons cover both DST offsets; keep only the one that is
-          # actually 12:00 in Europe/Warsaw. Manual runs always proceed.
+          # Crons fire at both DST offsets for each target hour; keep only the
+          # fire that lands on 12:00, 15:00 or 18:00 in Europe/Warsaw. Manual
+          # runs always proceed.
           if [ "${{ github.event_name }}" = "schedule" ]; then
             LOCAL_HOUR=$(TZ='Europe/Warsaw' date +%H)
-            if [ "$LOCAL_HOUR" != "12" ]; then
-              echo "Skipping: local Europe/Warsaw hour is $LOCAL_HOUR, not 12"
-              SKIP=true
-            fi
+            case "$LOCAL_HOUR" in
+              12|15|18)
+                echo "Local Europe/Warsaw hour is $LOCAL_HOUR — proceeding"
+                ;;
+              *)
+                echo "Skipping: local Europe/Warsaw hour is $LOCAL_HOUR, not 12/15/18"
+                SKIP=true
+                ;;
+            esac
           fi
 
           REQUESTED="${{ github.event.inputs.sport || 'all' }}"

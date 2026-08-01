@@ -130,21 +130,31 @@ jobs:
           SOFASCORE_PROXY: "socks5h://localhost:9050"
           SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          # Sekrety przez env, nie wklejane do polecenia: haslo aplikacji Gmaila
+          # ma spacje (cztery grupy po cztery znaki), a wczesniej bylo skladane
+          # w zmienna EMAIL_FLAGS i rozwijane bez cudzyslowow. Powloka rozbijala
+          # je na cztery argumenty, wiec trzy ostatnie grupy trafialy do
+          # argparse jako nieznane parametry:
+          #   refresh_qualified_manifest.py: error: unrecognized arguments
+          # Ten workflow padal z exit code 2 przy KAZDYM uruchomieniu.
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
           TODAY="${{ steps.date.outputs.today }}"
           SKIP_EMAIL="${{ github.event.inputs.skip_email }}"
 
-          EMAIL_FLAGS="--to ${{ secrets.EMAIL_RECIPIENT }} --from-email ${{ secrets.EMAIL_SENDER }} --password ${{ secrets.EMAIL_PASSWORD }} --provider gmail"
-
-          EXTRA_FLAGS="--headless"
+          # Tablica, nie string: kazdy argument zostaje jednym argumentem
+          # niezaleznie od tego, czy zawiera spacje.
+          ARGS=(--date "$TODAY" --provider gmail --headless)
+          ARGS+=(--to "$EMAIL_RECIPIENT")
+          ARGS+=(--from-email "$EMAIL_SENDER")
+          ARGS+=(--password "$EMAIL_PASSWORD")
           if [ "$SKIP_EMAIL" = "true" ]; then
-            EXTRA_FLAGS="$EXTRA_FLAGS --skip-email"
+            ARGS+=(--skip-email)
           fi
 
-          python refresh_qualified_manifest.py \
-            --date $TODAY \
-            $EMAIL_FLAGS \
-            $EXTRA_FLAGS
+          python refresh_qualified_manifest.py "${ARGS[@]}"
 
       - name: Upload noon artifacts
         uses: actions/upload-artifact@v7
