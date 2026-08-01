@@ -551,8 +551,64 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
             roi_count += 1
     stats['roi_pln'] = roi_total
     stats['roi_pct'] = (roi_total / (roi_count * stake) * 100) if roi_count > 0 else 0.0
+    stats['by_role'] = _role_breakdown(stats['details'], stake)
 
     return stats
+
+
+def _role_breakdown(details: List[Dict[str, Any]],
+                    stake: int = 100) -> Dict[str, Dict[str, Any]]:
+    """Split the settled picks into market favourites and everything else.
+
+    The mail now goes out as two sends, so the report has to answer them
+    separately — one blended accuracy figure describes two populations that
+    behave nothing alike. Measured over 18 786 settled matches with real prices:
+    72.3% hit rate on favourites against 30.8% on the rest, and the gap held in
+    a later window (73.0% against 36.5%).
+
+    Computed here from the details rather than tallied inside the settling loop:
+    the manifest already carries the pick and both prices, so this needs no new
+    bookkeeping in the branches that decide won/lost/void.
+    """
+    try:
+        from email_notifier import (ROLE_FAVOURITE, ROLE_REST,
+                                    classify_pick_role)
+    except ImportError:
+        return {}
+
+    buckets: Dict[str, Dict[str, Any]] = {
+        role: {'total': 0, 'won': 0, 'lost': 0, 'draw': 0, 'pending': 0,
+               'void': 0, 'errors': 0, 'roi_pln': 0.0, 'staked': 0}
+        for role in (ROLE_FAVOURITE, ROLE_REST)
+    }
+
+    for d in details:
+        role = classify_pick_role(d)
+        b = buckets.get(role)
+        if b is None:
+            continue
+        b['total'] += 1
+        outcome = d.get('outcome', 'pending')
+        if outcome in b:
+            b[outcome] = b[outcome] + 1
+
+        if outcome not in ('won', 'lost'):
+            continue
+        odds_key = 'home_odds' if d.get('predicted') == 'home' else 'away_odds'
+        try:
+            odds_f = float(d.get(odds_key))
+            if math.isnan(odds_f) or odds_f <= 1:
+                continue
+        except (TypeError, ValueError):
+            continue
+        b['roi_pln'] += (odds_f * stake - stake) if outcome == 'won' else -stake
+        b['staked'] += stake
+
+    for b in buckets.values():
+        decided = b['won'] + b['lost']
+        b['accuracy'] = (b['won'] / decided * 100) if decided else 0.0
+        b['roi_pct'] = (b['roi_pln'] / b['staked'] * 100) if b['staked'] else 0.0
+    return buckets
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -595,6 +651,55 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
             <td style="text-align:center;color:#7f8c8d">{sp['pending']}</td>
             <td style="text-align:center;font-weight:700">{sp_acc:.0f}%</td>
         </tr>"""
+
+    # Rozbicie na faworyta rynku i resztę. Mail wychodzi w dwóch wysyłkach,
+    # więc raport musi je rozliczać osobno — jedna wspólna trafność opisywała
+    # dwie grupy, które zachowują się zupełnie inaczej (zmierzone: 72% wobec
+    # 31% trafności na 18 786 rozliczonych meczach).
+    role_rows = ''
+    _roles = stats.get('by_role') or {}
+    _role_names = {'faworyt': '💰 Faworyt rynku (nasz kurs niższy)',
+                   'reszta': '🎲 Wyższy kurs niż przeciwnik'}
+    for role, rb in _roles.items():
+        if not rb.get('total'):
+            continue
+        _roi_color = '#27ae60' if rb['roi_pct'] >= 0 else '#e74c3c'
+        role_rows += f"""
+        <tr>
+            <td>{_role_names.get(role, role)}</td>
+            <td style="text-align:center">{rb['total']}</td>
+            <td style="text-align:center;color:#27ae60;font-weight:700">{rb['won']}</td>
+            <td style="text-align:center;color:#e74c3c;font-weight:700">{rb['lost']}</td>
+            <td style="text-align:center;color:#f39c12">{rb['draw']}</td>
+            <td style="text-align:center;color:#7f8c8d">{rb['pending']}</td>
+            <td style="text-align:center;font-weight:700">{rb['accuracy']:.0f}%</td>
+            <td style="text-align:center;font-weight:700;color:{_roi_color}">{rb['roi_pct']:+.1f}%</td>
+        </tr>"""
+
+    role_section = ''
+    if role_rows:
+        role_section = f"""
+  <div style="padding:0 20px 20px">
+    <div style="font-size:16px;font-weight:700;color:#e6edf3;margin-bottom:4px">🔀 Faworyt rynku vs reszta</div>
+    <div style="font-size:11px;color:#8b949e;margin-bottom:8px">
+      Podział po tym, czy kurs na nasz typ był niższy od kursu na przeciwnika.
+      To segmentacja, nie filtr zysku — w pomiarze historycznym przewaga jednej
+      grupy nad drugą zmieniała znak między okresami.
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;color:#c9d1d9">
+      <tr style="background:#21262d">
+        <th style="padding:8px;text-align:left">Grupa</th>
+        <th style="padding:8px;text-align:center">Total</th>
+        <th style="padding:8px;text-align:center">✅</th>
+        <th style="padding:8px;text-align:center">❌</th>
+        <th style="padding:8px;text-align:center">🟡</th>
+        <th style="padding:8px;text-align:center">⏳</th>
+        <th style="padding:8px;text-align:center">Acc</th>
+        <th style="padding:8px;text-align:center">ROI</th>
+      </tr>
+      {role_rows}
+    </table>
+  </div>"""
 
     # Match detail rows
     detail_rows = ''
@@ -698,6 +803,8 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
       {sport_rows}
     </table>
   </div>
+
+  {role_section}
 
   <!-- MATCH DETAILS TABLE -->
   <div style="padding:0 20px 20px">

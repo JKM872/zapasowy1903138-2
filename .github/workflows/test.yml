@@ -78,6 +78,7 @@ jobs:
           test_h2h_fixes.py \
           test_aiscore_scraper.py \
           test_oddssafari_dropping.py \
+          test_check_results.py \
           -q --timeout=300 --durations=10
 
     - name: Run unit tests (NO FOREBET - CI/CD compatible)

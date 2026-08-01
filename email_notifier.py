@@ -1937,6 +1937,46 @@ def _render_drop_badge(match: Dict[str, Any]) -> str:
                     </div>"""
 
 
+"""Etykiety dwóch grup, na jakie dzielimy wysyłkę."""
+ROLE_FAVOURITE = 'faworyt'
+ROLE_REST = 'reszta'
+
+ROLE_LABEL = {
+    ROLE_FAVOURITE: 'Faworyt rynku',
+    ROLE_REST: 'Wyższy kurs',
+}
+
+
+def classify_pick_role(match: Dict[str, Any]) -> str:
+    """Czy stawiamy na tańszą stronę, czy na droższą?
+
+    Porównuje kurs na nasz typ z kursem na stronę przeciwną, pomijając remis.
+    Niższy kurs = bukmacher się z nami zgadza, wyższy = zajmujemy pozycję
+    przeciw rynkowi.
+
+    Zmierzone na 18 786 rozliczonych meczach z prawdziwymi kursami: te dwie
+    grupy zachowują się zupełnie inaczej i różnica jest stabilna w czasie —
+    trafność 72.3% wobec 30.8% na pełnej próbie i 73.0% wobec 36.5% na ostatnich
+    sześciu tygodniach. Dlatego warto je rozdzielić.
+
+    Czego ten podział NIE robi: nie podnosi ROI sam z siebie. Na pełnej próbie
+    faworyt wychodził −1.1% a underdog −3.4%, ale w oknie odłożonym kolejność
+    się odwraca (−5.7% wobec −4.1%). To segmentacja, nie filtr zysku.
+
+    Typ na remis oraz mecz bez obu kursów trafiają do „reszty" — grupa faworyta
+    ma zawierać wyłącznie przypadki, w których porównanie faktycznie wyszło.
+    """
+    pick = str(match.get('scoring_pick') or '').strip().upper()
+    if pick not in ('1', '2'):
+        return ROLE_REST
+
+    ours = safe_float(match.get('home_odds' if pick == '1' else 'away_odds'))
+    theirs = safe_float(match.get('away_odds' if pick == '1' else 'home_odds'))
+    if ours <= 1 or theirs <= 1:
+        return ROLE_REST
+    return ROLE_FAVOURITE if ours < theirs else ROLE_REST
+
+
 def _select_grade_tier(sport_df: 'pd.DataFrame', primary: set,
                        fallback: Optional[set]) -> Tuple['pd.DataFrame', str]:
     """Pick the best available tier for one sport's rows.
@@ -1977,6 +2017,7 @@ def send_split_emails_by_sport(
     grade_filter: Optional[set] = None,
     fallback_grades: Optional[set] = None,
     date: Optional[str] = None,
+    split_by_role: bool = True,
 ):
     """
     Wysyła 1 mail dla każdego sportu z kwalifikującymi się meczami.
@@ -1990,6 +2031,10 @@ def send_split_emails_by_sport(
         ani jednego meczu w `grade_filter` (np. {'C','D'}). Temat maila nazywa
         tier, który faktycznie poszedł, żeby gorsze mecze nie wyglądały jak
         premium.
+      - split_by_role: rozdziela wysyłkę na typy, gdzie nasz kurs jest niższy
+        od kursu przeciwnika (faworyt rynku), i całą resztę. Te dwie grupy mają
+        trafność 72% wobec 31%, więc mieszanie ich w jednym mailu opisywało
+        jedną średnią dla dwóch niepodobnych rzeczy.
     """
     _grade_label = '/'.join(sorted(grade_filter)) if grade_filter else 'all grades'
     if fallback_grades:
@@ -2132,7 +2177,9 @@ def send_split_emails_by_sport(
     # serwera, hasło, baseballowy workflow z dummy SMTP). Manifest opisuje co
     # było *zakwalifikowane* do wysłania, a nie co dotarło do skrzynki — to
     # jest oczekiwana semantyka dla raportu accuracy.
-    sport_payloads: Dict[str, List[Dict[str, Any]]] = {}
+    # Klucz to (sport, rola). Rola jest '' gdy podział jest wyłączony, więc
+    # zachowanie bez `split_by_role` zostaje dokładnie takie jak wcześniej.
+    sport_payloads: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
     sport_tiers: Dict[str, str] = {}
     for sport in sorted(sports):
         sport_df: pd.DataFrame = qualified[qualified['sport'] == sport]  # type: ignore[assignment]
@@ -2152,9 +2199,28 @@ def send_split_emails_by_sport(
         matches_list: List[Dict[str, Any]] = sport_df.to_dict('records')  # type: ignore[assignment]
         for m in matches_list:
             m['ai_prediction'] = ensure_ai_prediction_dict(m.get('ai_prediction'))
-        _log_sofascore_coverage(matches_list, label=sport)
-        _save_mailed_manifest(matches_list, date, tag=sport)
-        sport_payloads[sport] = matches_list
+
+        # Tier wybieramy na całym sporcie, a dopiero potem dzielimy na role —
+        # inaczej sport z jednym meczem grade A wśród faworytów zsyłałby resztę
+        # do tieru zapasowego i dwa maile opisywałyby różną jakość pod tą samą
+        # nazwą.
+        if split_by_role:
+            groups: Dict[str, List[Dict[str, Any]]] = {}
+            for m in matches_list:
+                groups.setdefault(classify_pick_role(m), []).append(m)
+        else:
+            groups = {'': matches_list}
+
+        for role in (ROLE_FAVOURITE, ROLE_REST, ''):
+            group = groups.get(role)
+            if not group:
+                continue
+            tag = f'{sport}_{role}' if role else sport
+            _log_sofascore_coverage(group, label=tag)
+            _save_mailed_manifest(group, date, tag=tag)
+            sport_payloads[(sport, role)] = group
+            if role:
+                print(f"      ↳ {ROLE_LABEL[role]}: {len(group)} meczów")
 
     smtp_config = SMTP_CONFIG[provider]
 
@@ -2179,14 +2245,18 @@ def send_split_emails_by_sport(
                 server.starttls()
             server.login(from_email, password)
 
-            for sport, matches_list in sport_payloads.items():
+            for (sport, role), matches_list in sport_payloads.items():
                 emoji = SPORT_EMOJI.get(sport, '🏆')
                 label = SPORT_LABEL.get(sport, sport.capitalize())
                 # Nazwij tier, który faktycznie poszedł — inaczej mail z tierem
                 # zapasowym wyglądałby jak mail premium.
                 _t = sport_tiers.get(sport) or ''
                 _tier = f" [Grade {_t}]" if _t else ''
-                subj = f"{emoji} {label}{_tier}: {len(matches_list)} meczów — {date}"
+                # Rola w temacie, bo obie grupy trafiają do tej samej skrzynki
+                # i bez tego nie da się ich rozróżnić przed otwarciem.
+                _role = f" · {ROLE_LABEL[role]}" if role else ''
+                subj = (f"{emoji} {label}{_tier}{_role}: "
+                        f"{len(matches_list)} meczów — {date}")
                 html = create_html_email(matches_list, date, sort_by=sort_by,
                                          include_sorted_odds=include_sorted_odds,
                                          odds_limit=odds_limit)

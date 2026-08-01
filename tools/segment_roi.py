@@ -121,6 +121,31 @@ def _odds_for(row: Dict[str, Any], idx: int) -> float:
     return _f(row.get(('home_odds', 'draw_odds', 'away_odds')[idx]))
 
 
+def pick_role(row: Dict[str, Any]) -> str:
+    """Is the model backing the market's favourite, or opposing it?
+
+    Compares the price on our pick against the price on the opposing side,
+    ignoring the draw: a shorter price means the bookmaker agrees with us, a
+    longer one means we are taking a position against the market. This is a
+    structural property of every fixture rather than a threshold fitted to a
+    sample, which is why it is worth testing after the grade and odds-band
+    filters both failed to replicate out of sample.
+    """
+    idx = row['_pick_index']
+    if idx == 1:
+        return 'remis'
+    opponent_idx = 2 if idx == 0 else 0
+    ours = _odds_for(row, idx)
+    theirs = _odds_for(row, opponent_idx)
+    if ours <= 0 or theirs <= 0:
+        return 'brak ceny'
+    if ours < theirs:
+        return 'faworyt rynku'
+    if ours > theirs:
+        return 'underdog'
+    return 'równe kursy'
+
+
 def _band(value: float, edges: Tuple[float, ...], suffix: str = '') -> str:
     for lo, hi in zip(edges, edges[1:]):
         if lo <= value < hi:
@@ -184,6 +209,8 @@ def main() -> int:
     by_prob: Dict[str, Bucket] = defaultdict(Bucket)
     by_odds: Dict[str, Bucket] = defaultdict(Bucket)
     by_sport_grade: Dict[str, Bucket] = defaultdict(Bucket)
+    by_role: Dict[str, Bucket] = defaultdict(Bucket)
+    by_sport_role: Dict[str, Bucket] = defaultdict(Bucket)
 
     prob_edges = (0.0, 0.5, 0.55, 0.60, 0.65, 0.70, 0.80, 0.90, 1.01)
     odds_edges = (1.0, 1.3, 1.5, 1.8, 2.2, 3.0, 5.0, 100.0)
@@ -197,6 +224,10 @@ def main() -> int:
         by_prob[_band(r['_prob'], prob_edges)].add(won, odds, pos)
         by_odds[_band(odds, odds_edges)].add(won, odds, pos)
         by_sport_grade[f"{r['_sport']} / {grade}"].add(won, odds, pos)
+        role = pick_role(r)
+        r['_role'] = role
+        by_role[role].add(won, odds, pos)
+        by_sport_role[f"{r['_sport']} / {role}"].add(won, odds, pos)
 
     report('ROI PER SPORT', by_sport, args.min_n)
     report('ROI PER GRADE  (czy A naprawdę bije C?)', by_grade, args.min_n,
@@ -205,6 +236,9 @@ def main() -> int:
            order=[_band(e, prob_edges) for e in prob_edges[:-1]])
     report('ROI PER KURS', by_odds, args.min_n,
            order=[_band(e, odds_edges) for e in odds_edges[:-1]])
+    report('ROI: TYP TO FAWORYT RYNKU CZY UNDERDOG?', by_role, args.min_n,
+           order=['faworyt rynku', 'underdog', 'remis', 'równe kursy'])
+    report('ROI PER SPORT I ROLA', by_sport_role, args.min_n)
     report('ROI PER SPORT I GRADE', by_sport_grade, args.min_n)
 
     total = Bucket()
@@ -248,6 +282,12 @@ def report_candidate_filters(scored: List[Dict[str, Any]], min_n: int) -> None:
         ('A/B + kurs<5 + EV>0',
          lambda r: (grade(r) in ('A', 'B') and r['_odds'] < 5.0
                     and r['_ev'] > 0)),
+        ('tylko faworyt rynku', lambda r: r.get('_role') == 'faworyt rynku'),
+        ('tylko underdog', lambda r: r.get('_role') == 'underdog'),
+        ('faworyt + kurs < 5',
+         lambda r: r.get('_role') == 'faworyt rynku' and r['_odds'] < 5.0),
+        ('faworyt + A/B',
+         lambda r: r.get('_role') == 'faworyt rynku' and grade(r) in ('A', 'B')),
         ('bez tenisa/piłki/ręcznej', lambda r: r['_sport'] not in LOSING_SPORTS),
         ('A/B + bez tych sportów',
          lambda r: grade(r) in ('A', 'B') and r['_sport'] not in LOSING_SPORTS),

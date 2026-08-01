@@ -583,8 +583,15 @@ class TestSendSplitEmailsDateContract:
             date='2026-04-27',
         )
         assert sent == 0  # dummy creds → no real send
-        manifest = 'outputs/mailed_manifest_2026-04-27_football.json'
-        assert os.path.exists(manifest), 'manifest must use --date, not datetime.now()'
+        # Ten test pilnuje DATY w nazwie, nie tagu. Wysyłka dzieli się teraz
+        # dodatkowo na faworyta rynku i resztę, więc sufiks to `_football_reszta`
+        # albo `_football_faworyt`; przybicie pełnej nazwy sprawdzałoby podział,
+        # a nie kontrakt `--date`.
+        import glob
+        found = glob.glob('outputs/mailed_manifest_2026-04-27_football*.json')
+        assert found, 'manifest must use --date, not datetime.now()'
+        assert not glob.glob('outputs/mailed_manifest_2026-04-2[89]*.json')
+        manifest = found[0]
         with open(manifest, 'r') as f:
             data = json.load(f)
         assert data[0]['match_url'] == 'http://m1'
