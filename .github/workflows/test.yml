@@ -59,30 +59,35 @@ jobs:
         google-chrome --version
         chromedriver --version
     
+    # Cala regresja z katalogu tests/ — do tej pory NIE byla uruchamiana w CI.
+    # Kolejne kroki wywoluja pojedyncze pliki z korzenia repo, a katalogu tests/
+    # nie wywolywal nikt, wiec kilkaset testow (kalibracja, rozstrzyganie
+    # wynikow, Elo, forma, manifest, API) przechodzilo tylko lokalnie i nic nie
+    # bronilo main przed regresja w tych obszarach.
+    #
+    # Nie mozna tu uzyc golego `python -m pytest`: test_ci_cd.py, test_email.py,
+    # test_compilation.py i test_flashscore.py to skrypty wolajace sys.exit()
+    # podczas zbierania testow, co konczy sie INTERNALERROR. Dlatego katalog i
+    # bezpieczne pliki sa wskazane jawnie.
+    - name: Run regression suite (tests/ + engine unit tests)
+      run: |
+        python -m pytest tests/ \
+          test_scoring_engine.py \
+          test_tennis_scoring_engine.py \
+          test_tennis_fixes.py \
+          test_h2h_fixes.py \
+          test_aiscore_scraper.py \
+          test_oddssafari_dropping.py \
+          -q --timeout=300 --durations=10
+
     - name: Run unit tests (NO FOREBET - CI/CD compatible)
       run: |
         python test_compilation.py
     
-    - name: Test H2H fixes (regression tests)
-      run: |
-        python -m pytest test_h2h_fixes.py -v
-    
-    - name: Test Scoring Engine (regression tests)
-      run: |
-        python -m pytest test_scoring_engine.py -v
-    
-    - name: Test Tennis Scoring Engine (regression tests)
-      run: |
-        python -m pytest test_tennis_scoring_engine.py -v
-    
-    - name: Test Tennis Fixes (field names, no synthetics)
-      run: |
-        python -m pytest test_tennis_fixes.py -v
+    # H2H, Scoring Engine, Tennis Engine, Tennis Fixes i OddsSafari sa juz
+    # objete krokiem "Run regression suite" powyzej — osobne kroki tylko
+    # dublowaly przebieg i pokazywaly te sama awarie dwa razy.
 
-    - name: Test OddsSafari dropping pipeline (unit)
-      run: |
-        python -m pytest test_oddssafari_dropping.py -v
-    
     - name: Test FlashScore Odds Scraper (unit tests)
       run: |
         python test_flashscore.py

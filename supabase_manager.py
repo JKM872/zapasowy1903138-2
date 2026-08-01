@@ -19,13 +19,70 @@ import os
 # NOTE: Use `or` instead of default param — GitHub Actions sets env vars to empty
 # string '' when secrets are missing, which bypasses os.environ.get() defaults.
 # Priority: SERVICE_ROLE_KEY (bypasses RLS) > SUPABASE_KEY > SUPABASE_ANON_KEY > hardcoded
-SUPABASE_URL = os.environ.get('SUPABASE_URL') or 'https://suqysbmuisffeqwgvymp.supabase.co'
-SUPABASE_KEY = (
-    os.environ.get('SUPABASE_SERVICE_ROLE_KEY')
-    or os.environ.get('SUPABASE_KEY')
-    or os.environ.get('SUPABASE_ANON_KEY')
-    or None  # Requires env var — no hardcoded fallback key
-)
+DEFAULT_SUPABASE_URL = 'https://suqysbmuisffeqwgvymp.supabase.co'
+
+
+def resolve_supabase_url() -> str:
+    """Project URL from the environment, read at call time."""
+    return os.environ.get('SUPABASE_URL') or DEFAULT_SUPABASE_URL
+
+
+def resolve_supabase_key() -> Optional[str]:
+    """API key from the environment, read at call time.
+
+    Deliberately a function rather than a module constant. As a constant this
+    was fixed at import time, so anything that imported the module before the
+    environment was ready — dotenv loading late, a test reloading api_server
+    with the keys cleared — pinned the key to None for the rest of the process
+    and every later SupabaseManager() raised, no matter what the environment
+    said by then.
+    """
+    return (
+        os.environ.get('SUPABASE_SERVICE_ROLE_KEY')
+        or os.environ.get('SUPABASE_KEY')
+        or os.environ.get('SUPABASE_ANON_KEY')
+        or None  # Requires env var — no hardcoded fallback key
+    )
+
+
+# Kept as module attributes because other modules import them by name. They are
+# a snapshot of import time; SupabaseManager itself no longer relies on them.
+SUPABASE_URL = resolve_supabase_url()
+SUPABASE_KEY = resolve_supabase_key()
+
+
+# Statuses that grant premium (Grade A) access while the period is still valid
+_ACTIVE_SUB_STATUSES = {'active', 'trialing'}
+
+
+def is_subscription_active(sub: Optional[Dict[str, Any]]) -> bool:
+    """
+    Return True when a subscription row grants premium access right now.
+
+    A subscription is active when its status is active/trialing AND its
+    current_period_end (if present) is in the future.
+    """
+    if not sub:
+        return False
+    status = str(sub.get('status') or '').strip().lower()
+    if status not in _ACTIVE_SUB_STATUSES:
+        return False
+    period_end = sub.get('current_period_end')
+    if not period_end:
+        # No end date recorded — trust the status.
+        return True
+    try:
+        from datetime import timezone
+        if isinstance(period_end, (int, float)):
+            end_dt = datetime.fromtimestamp(float(period_end), tz=timezone.utc)
+        else:
+            # ISO string, tolerate trailing 'Z'
+            end_dt = datetime.fromisoformat(str(period_end).replace('Z', '+00:00'))
+        now = datetime.now(tz=end_dt.tzinfo) if end_dt.tzinfo else datetime.now()
+        return end_dt > now
+    except (ValueError, TypeError):
+        # Unparseable date — fall back to trusting the status
+        return True
 
 
 class SupabaseManager:
@@ -33,10 +90,13 @@ class SupabaseManager:
     
     def __init__(self):
         """Inicjalizuje połączenie z Supabase"""
-        if SUPABASE_KEY is None:
+        url = resolve_supabase_url()
+        key = resolve_supabase_key()
+        if key is None:
             raise RuntimeError('SUPABASE_KEY not configured – set SUPABASE_SERVICE_ROLE_KEY, SUPABASE_KEY, or SUPABASE_ANON_KEY env var')
-        self.client: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-        print(f"[OK] Connected to Supabase: {SUPABASE_URL}")
+        self.url = url
+        self.client: Client = create_client(url, key)
+        print(f"[OK] Connected to Supabase: {url}")
     
     
     def save_prediction(self, match_data: Dict[str, Any]) -> bool:
@@ -138,10 +198,42 @@ class SupabaseManager:
                 'match_url': match_data.get('match_url'),
                 'created_at': datetime.now().isoformat(),
             }
-            
-            # Insert do Supabase
-            self.client.table('predictions').insert(prediction_record).execute()
-            
+
+            # Extra columns added in migration 002 (prediction_grade + scoring engine).
+            # Kept separate so we can retry without them if the migration hasn't
+            # been applied yet — guarantees no pipeline regression.
+            grade_raw = match_data.get('prediction_grade')
+            extra_fields: Dict[str, Any] = {
+                'prediction_grade': (str(grade_raw).strip().upper() or None) if grade_raw else None,
+                'scoring_pick': match_data.get('scoring_pick'),
+                'scoring_prob': match_data.get('scoring_prob'),
+                'scoring_ev': match_data.get('scoring_ev'),
+                'scoring_edge': match_data.get('scoring_edge'),
+                'scoring_kelly': match_data.get('scoring_kelly'),
+                'scoring_confidence': match_data.get('scoring_confidence'),
+                'scoring_data_quality': match_data.get('scoring_data_quality'),
+                'scoring_prob_a': match_data.get('scoring_prob_a'),
+                'scoring_prob_b': match_data.get('scoring_prob_b'),
+                'surface': match_data.get('surface'),
+                'ranking_a': match_data.get('ranking_a'),
+                'ranking_b': match_data.get('ranking_b'),
+            }
+            # Only include keys that actually carry a value, to keep inserts lean
+            extra_fields = {k: v for k, v in extra_fields.items() if v is not None}
+
+            # Insert do Supabase (with grade/scoring columns)
+            try:
+                self.client.table('predictions').insert({**prediction_record, **extra_fields}).execute()
+            except Exception as insert_err:
+                # Most likely cause: migration 002 not applied yet (unknown column).
+                # Fall back to the legacy record so the pipeline keeps working.
+                if extra_fields:
+                    print(f"[WARN] Insert with grade/scoring columns failed ({insert_err}); "
+                          f"retrying without them. Apply migrations/002 to persist grade.")
+                    self.client.table('predictions').insert(prediction_record).execute()
+                else:
+                    raise
+
             print(f"[OK] Saved to Supabase: {match_data.get('home_team')} vs {match_data.get('away_team')}")
             return True
             
@@ -628,6 +720,67 @@ class SupabaseManager:
             }
     
     
+    # ========================================================================
+    # SUBSCRIPTIONS (Stripe weekly $5 premium — Grade A access)
+    # ========================================================================
+
+    def get_subscription(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """Return the subscription row for a user, or None if none exists."""
+        if not user_id or user_id == 'anonymous':
+            return None
+        try:
+            resp = (
+                self.client.table('subscriptions')
+                .select('*')
+                .eq('user_id', user_id)
+                .limit(1)
+                .execute()
+            )
+            rows = cast(List[Dict[str, Any]], resp.data) if resp.data else []
+            return rows[0] if rows else None
+        except Exception as e:
+            print(f"[ERROR] Error fetching subscription: {e}")
+            return None
+
+    def get_subscription_by_customer(self, stripe_customer_id: str) -> Optional[Dict[str, Any]]:
+        """Return the subscription row for a Stripe customer id, or None."""
+        if not stripe_customer_id:
+            return None
+        try:
+            resp = (
+                self.client.table('subscriptions')
+                .select('*')
+                .eq('stripe_customer_id', stripe_customer_id)
+                .limit(1)
+                .execute()
+            )
+            rows = cast(List[Dict[str, Any]], resp.data) if resp.data else []
+            return rows[0] if rows else None
+        except Exception as e:
+            print(f"[ERROR] Error fetching subscription by customer: {e}")
+            return None
+
+    def upsert_subscription(self, user_id: str, **fields: Any) -> bool:
+        """
+        Insert or update a user's subscription row.
+
+        Accepted fields: stripe_customer_id, stripe_subscription_id,
+        status, current_period_end.
+        """
+        if not user_id:
+            print("[WARN] upsert_subscription called without user_id")
+            return False
+        record: Dict[str, Any] = {'user_id': user_id, 'updated_at': datetime.now().isoformat()}
+        for key in ('stripe_customer_id', 'stripe_subscription_id', 'status', 'current_period_end'):
+            if key in fields and fields[key] is not None:
+                record[key] = fields[key]
+        try:
+            self.client.table('subscriptions').upsert(record, on_conflict='user_id').execute()
+            return True
+        except Exception as e:
+            print(f"[ERROR] Error upserting subscription: {e}")
+            return False
+
     def delete_bet(self, bet_id: int) -> bool:
         """
         Usuwa zakład użytkownika

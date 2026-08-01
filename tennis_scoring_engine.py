@@ -114,8 +114,22 @@ def _parse_form_list(raw: Any) -> List[str]:
         return out
     if isinstance(raw, str):
         raw = raw.replace('[', '').replace(']', '').replace("'", '').replace('"', '')
-        tokens = re.split(r'[,\s]+', raw)
-        return [t.strip().upper()[:1] for t in tokens if t.strip().upper()[:1] in ('W', 'L')]
+        out_str: List[str] = []
+        for token in re.split(r'[,\s\-;]+', raw):
+            token = token.strip().upper()
+            if not token:
+                continue
+            # A run like "WLWLW" is one token but five results. Taking only the
+            # first character silently reduced a five-match form to a
+            # one-match form, which reads as present and carries almost nothing.
+            chars = list(token) if len(token) > 1 and all(
+                c in 'WLD' for c in token) else [token[:1]]
+            for c in chars:
+                if c in ('W', 'L'):
+                    out_str.append(c)
+                elif c == 'D':
+                    out_str.append('L')   # no draws in tennis
+        return out_str
     return []
 
 
@@ -130,6 +144,20 @@ def _form_score(form: List[str], decay: float = 0.85) -> float:
         total_w += w
         total_pts += w * pts_map.get(r, 0.5)
     return total_pts / total_w if total_w > 0 else 0.5
+
+
+def _first_form(m: Dict[str, Any], *keys: str) -> List[str]:
+    """First key that actually holds form letters, in preference order.
+
+    ``m.get('form_a', m.get('home_form'))`` looked equivalent but is not: a key
+    present and empty wins over a later key that has data, so one scraper
+    writing ``form_a=[]`` silenced every other source.
+    """
+    for key in keys:
+        parsed = _parse_form_list(m.get(key, []))
+        if parsed:
+            return parsed
+    return []
 
 
 def _streak_len(form: List[str], char: str = 'W') -> int:
@@ -332,13 +360,23 @@ class TennisFeatureExtractor:
                 available += 1
 
         # 2. Current form
-        form_a = _parse_form_list(m.get('form_a', m.get('home_form', [])))
-        form_b = _parse_form_list(m.get('form_b', m.get('away_form', [])))
+        # `home_form_overall` is included because that is the field the rest of
+        # the pipeline fills — the football extractor reads it, the email card
+        # renders it, and team_form.FormProvider writes it. Reading only
+        # `form_a`/`home_form` meant store-derived form never reached this
+        # engine: measured Brier was 0.5000 with and without form, identical to
+        # the base rate, because the numbers were sitting in a key nobody here
+        # looked at.
+        form_a = _first_form(m, 'form_a', 'home_form_overall', 'home_form')
+        form_b = _first_form(m, 'form_b', 'away_form_overall', 'away_form')
         f['form_a'] = _form_score(form_a)
         f['form_b'] = _form_score(form_b)
         f['form_advantage'] = f['form_a'] - f['form_b']  # >0 = A better
-        f['streak_a'] = _streak_len(form_a, 'W') / 5.0
-        f['streak_b'] = _streak_len(form_b, 'W') / 5.0
+        # Clamped: the divisor assumes a five-match form list, so a ten-match
+        # winning run used to leave this at 2.0 and push a feature that is
+        # documented as normalised outside [0, 1].
+        f['streak_a'] = min(1.0, _streak_len(form_a, 'W') / 5.0)
+        f['streak_b'] = min(1.0, _streak_len(form_b, 'W') / 5.0)
         if form_a or form_b:
             available += 1
 
@@ -566,8 +604,14 @@ class TennisScoringEngine:
         form_p += (feats['streak_a'] - feats['streak_b']) * 0.05
         form_p = max(0.05, min(0.95, form_p))
         estimates['form'] = form_p
-        form_a_raw = _parse_form_list(match.get('form_a', match.get('home_form', [])))
-        form_b_raw = _parse_form_list(match.get('form_b', match.get('away_form', [])))
+        # Same key order as the extractor above, and for the same reason. This
+        # gate is what actually decides whether form counts: an inactive source
+        # abstains and is dropped from the weighted average, so while these two
+        # reads disagreed the form estimate was computed and then discarded.
+        # That is why the engine returned exactly 0.5000 on a player with ten
+        # straight wins against one with ten straight losses.
+        form_a_raw = _first_form(match, 'form_a', 'home_form_overall', 'home_form')
+        form_b_raw = _first_form(match, 'form_b', 'away_form_overall', 'away_form')
         if form_a_raw and form_b_raw:
             active.add('form')
 
