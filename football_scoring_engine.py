@@ -1039,6 +1039,40 @@ class FootballScoringEngine:
     # mix without measurement would be worse than the shared one.
     SPORT_WEIGHT_OVERRIDES: Dict[str, Dict[str, float]] = {}
 
+    # How much of the bookmaker's price to fold into the published probability,
+    # per sport: 0.0 keeps the model's own number, 1.0 publishes the market's.
+    #
+    # This exists because filtering could not fix a losing ROI. Grade bands,
+    # odds bands, favourite/underdog and EV thresholds were all measured and all
+    # reversed sign out of sample. That is what happens when the model's
+    # probabilities are worse than the price — in tennis the engine scored Brier
+    # 0.5060 against the market's 0.4157 — because then "the model sees value"
+    # mostly means "the model is wrong here", and filtering harder concentrates
+    # the errors instead of removing them.
+    #
+    # Anchoring attacks the cause. A market-anchored estimate disagrees with the
+    # price far less often, so far fewer picks clear the EV bar, and the ones
+    # that do are genuine disagreements rather than noise. Measured on settled
+    # rows with real prices, trained before 2026-06-15 and judged after it
+    # (tools/market_blend.py):
+    #
+    #   basketball  w=0.75  ROI +5.8% earlier, +25.9% held out (best in BOTH
+    #               windows, which is the bar every earlier candidate failed)
+    #   tennis      w=0.90  no weight turns tennis profitable, but this cuts
+    #               staked volume from 1400 bets to 197 and the held-out loss
+    #               from 137.7 units to 31.4 — a 77% smaller loss, with the
+    #               sport still published rather than hidden
+    #
+    # Sports absent here keep 0.0 on purpose: their held-out samples are 51-95
+    # matches with prices, too few to justify changing what clients receive.
+    # Values are overridable from outputs/scoring_calibration.json, so a sport
+    # can be promoted the moment it has evidence.
+    MARKET_ANCHOR: Dict[str, float] = {
+        'basketball': 0.75,
+        'tennis': 0.90,
+    }
+    MARKET_ANCHOR_DEFAULT: float = 0.0
+
     CALIBRATION_PATH = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         'outputs', 'scoring_calibration.json',
@@ -1057,6 +1091,9 @@ class FootballScoringEngine:
         # distribution; these fit its shape, which is what the observed data
         # actually needed — stated 42% won 83%, stated 91% won 83%.
         self.sport_isotonic: Dict[str, list] = {}
+        # How far each sport's published probability is pulled onto the
+        # bookmaker's price. See MARKET_ANCHOR for why this exists.
+        self.sport_market_anchor: Dict[str, float] = dict(self.MARKET_ANCHOR)
         self.extractor = FeatureExtractor()
         self._load_calibration(calibration_path or self.CALIBRATION_PATH)
 
@@ -1109,6 +1146,16 @@ class FootballScoringEngine:
         except ImportError:
             pass
 
+        anchors = data.get('market_anchor', {})
+        if isinstance(anchors, dict):
+            for sport, value in anchors.items():
+                try:
+                    a = float(value)
+                except (TypeError, ValueError):
+                    continue
+                if 0.0 <= a <= 1.0:
+                    self.sport_market_anchor[str(sport).lower()] = a
+
         temps = data.get('temperatures', {})
         if isinstance(temps, dict):
             for sport, value in temps.items():
@@ -1140,6 +1187,15 @@ class FootballScoringEngine:
             return self.sport_temperatures[key]
         profile = SPORT_PROFILES.get(key, SPORT_PROFILES['football'])
         return float(profile.get('temperature', 1.15))
+
+    # ------------------------------------------------------------------
+    def market_anchor_for_sport(self, sport: Optional[str]) -> float:
+        """How far to pull *sport*'s published probability onto the price."""
+        key = (sport or 'football').lower()
+        value = self.sport_market_anchor.get(key, self.MARKET_ANCHOR_DEFAULT)
+        # Outside [0, 1] the blend stops being a blend: below zero it pushes
+        # away from the price, above one it overshoots past it.
+        return max(0.0, min(1.0, float(value)))
 
     # ------------------------------------------------------------------
     def score_match(self, match: Dict) -> ScoredMatch:
@@ -1417,6 +1473,21 @@ class FootballScoringEngine:
                 total = cal_h + cal_a
                 if total > 0:
                     cal_h, cal_a = cal_h / total, cal_a / total
+
+        # ---- Market anchor, per sport ----------------------------------
+        # Applied after the reliability curve and before EV, because EV has to
+        # be computed from the number we actually publish. Without a price there
+        # is nothing to anchor to, so unpriced matches are untouched.
+        anchor = self.market_anchor_for_sport(sport)
+        if anchor > 0 and has_market_data:
+            cal_h = cal_h * (1 - anchor) + market_prior[0] * anchor
+            cal_d = cal_d * (1 - anchor) + market_prior[1] * anchor
+            cal_a = cal_a * (1 - anchor) + market_prior[2] * anchor
+            if not has_draw:
+                cal_d = 0.0
+            total = cal_h + cal_d + cal_a
+            if total > 0:
+                cal_h, cal_d, cal_a = cal_h / total, cal_d / total, cal_a / total
 
         # ---- EV / edge / Kelly for each outcome -----------------------
         odds_h = _safe_float(match.get('home_odds'))

@@ -738,6 +738,27 @@ class TennisScoringEngine:
         temp = self.calibration.get('temperature', 1.10)
         cal_a, cal_b = self._calibrate(prob_a, prob_b, temp)
 
+        # --- Market anchor -------------------------------------------------
+        # Pull the published probability onto the price before the pick and the
+        # EV are decided, so both follow from the number we actually publish.
+        #
+        # Tennis is the sport this was built for. Its engine scores Brier 0.5060
+        # against the market's 0.4157, so its own "value" signal mostly marks its
+        # own mistakes — which is why every filter tried on it (grade, odds band,
+        # favourite/underdog, EV threshold) reversed sign out of sample. No blend
+        # weight makes tennis profitable, but at 0.90 the held-out staked volume
+        # falls from 1400 bets to 197 and the loss from 137.7 units to 31.4, a
+        # 77% smaller loss with the sport still published rather than hidden.
+        anchor = self.market_anchor()
+        if anchor > 0 and feats.get('odds_a', 0) > 1 and feats.get('odds_b', 0) > 1:
+            mkt_a = feats['odds_prob_a']
+            mkt_b = feats['odds_prob_b']
+            cal_a = cal_a * (1 - anchor) + mkt_a * anchor
+            cal_b = cal_b * (1 - anchor) + mkt_b * anchor
+            total = cal_a + cal_b
+            if total > 0:
+                cal_a, cal_b = cal_a / total, cal_b / total
+
         # --- Best pick ---
         if cal_a >= cal_b:
             best_pick = 'A'
@@ -848,6 +869,23 @@ class TennisScoringEngine:
         results = [self.score_match(m) for m in matches]
         results.sort(key=lambda x: x.ev, reverse=True)
         return results
+
+    # ------------------------------------------------------------------
+    # How much of the bookmaker's price to fold into the published probability.
+    # Measured per sport in tools/market_blend.py, validated on a held-out later
+    # window; see the note at the anchoring step in score_match.
+    MARKET_ANCHOR_DEFAULT: float = 0.90
+
+    def market_anchor(self) -> float:
+        """Anchor strength, overridable from the calibration file."""
+        try:
+            value = float(self.calibration.get('market_anchor',
+                                               self.MARKET_ANCHOR_DEFAULT))
+        except (TypeError, ValueError):
+            return self.MARKET_ANCHOR_DEFAULT
+        # Outside [0, 1] the blend stops being a blend: below zero it pushes
+        # away from the price, above one it overshoots past it.
+        return max(0.0, min(1.0, value))
 
     # ------------------------------------------------------------------
     @staticmethod
