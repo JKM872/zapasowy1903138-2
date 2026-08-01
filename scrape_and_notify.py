@@ -837,6 +837,49 @@ def scrape_and_send_email(
 
         # Zapisz finalne wyniki (plik już istnieje jeśli były checkpointy)
         # ========================================================================
+        # FAZA 2.4: FORMA Z MAGAZYNU WYNIKÓW (ostatnie 10 meczów)
+        # ========================================================================
+        # Scrapery dostarczają około pięciu liter W/D/L, a dla wielu meczów nie
+        # dostarczają nic. Magazyn ma ponad 100 tys. rozstrzygniętych meczów z
+        # wynikami, więc formę — ogólną i osobno u siebie / na wyjeździe — da się
+        # policzyć samemu. Zmierzone na oknie testowym: silnik bez formy vs z
+        # formą 10 to Brier 0.6417 -> 0.6041 w piłce, 0.4913 -> 0.4474 w
+        # koszykówce, 0.5962 -> 0.4992 w piłce ręcznej.
+        #
+        # Uzupełniamy tylko braki (bez overwrite): scraper widział tabelę formy
+        # rozgrywek, w której mogą być mecze, których nigdy nie scrapowaliśmy.
+        # Baseball pomijamy — tam forma pogarszała Brier (0.5073 -> 0.5259), co
+        # zgadza się z jego K=12: wynik meczu do meczu jest tam blisko losowego.
+        FORM_EXCLUDED_SPORTS = {'baseball'}
+        form_rows = [r for r in rows if r.get('qualifies')]
+        if form_rows:
+            try:
+                from team_form import FORM_WINDOW, FormProvider
+
+                provider = FormProvider.from_store()
+                if provider.by_team:
+                    _form_filled = 0
+                    for row in form_rows:
+                        if (row.get('sport') or '').lower() in FORM_EXCLUDED_SPORTS:
+                            continue
+                        # Bez daty meczu nie wolno sięgać do historii: przy
+                        # backteście pełna historia wciągnęłaby wynik meczu,
+                        # który właśnie oceniamy.
+                        if not (row.get('match_date') or row.get('date')):
+                            continue
+                        before = row.get('home_form_overall')
+                        provider.attach(row, window=FORM_WINDOW)
+                        if row.get('home_form_overall') != before:
+                            _form_filled += 1
+                    print(f"\n📊 Forma z magazynu: uzupełniono {_form_filled}"
+                          f"/{len(form_rows)} meczów (okno {FORM_WINDOW})")
+                else:
+                    print("\n📊 Forma z magazynu: magazyn pusty — pomijam")
+            except Exception as e:
+                # Forma jest dodatkiem; jej brak nie może zatrzymać pipeline'u.
+                print(f"\n⚠️  Forma z magazynu nieudana: {e}")
+
+        # ========================================================================
         # FAZA 2.5: SCORING ENGINE (tylko piłka nożna)
         # ========================================================================
         football_qualifying = [

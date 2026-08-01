@@ -127,6 +127,60 @@ def parse_form_list(form_data: Any) -> List[str]:
     return []
 
 
+# Ile ostatnich meczów pokazujemy w kafelku formy. Silnik liczy formę z tego
+# samego okna (football_scoring_engine.FORM_DECAY_WINDOW), więc czytelnik widzi
+# dokładnie te mecze, na których oparta jest predykcja — a nie pierwsze pięć
+# z dłuższej serii, jak było wcześniej.
+FORM_ICONS_SHOWN = 10
+
+# Ile z nich rozpisujemy z datą, wynikiem i przeciwnikiem.
+RECENT_MATCHES_SHOWN = 10
+
+
+def _render_recent_matches(recent: Any, title: str,
+                           limit: int = RECENT_MATCHES_SHOWN) -> str:
+    """Rozpisuje ostatnie mecze: data, wynik, przeciwnik, gdzie grano.
+
+    Same kolorowe kółka mówią tylko tyle, że ktoś przegrał — nie z kim ani jak.
+    Przy formie liczonej z magazynu wyników mamy realne wyniki, więc pokazujemy
+    je wprost; to jedyny sposób, żeby czytelnik mógł ocenić, czy seria zwycięstw
+    to seria nad kimkolwiek.
+    """
+    if not isinstance(recent, list) or not recent:
+        return ''
+
+    colors = {'W': '#4CAF50', 'L': '#F44336', 'D': '#FF9800'}
+    rows: list[str] = []
+    for item in recent[:limit]:
+        if not isinstance(item, dict):
+            continue
+        outcome = str(item.get('outcome', '')).upper()[:1]
+        date = safe_value(item.get('date'), '')
+        score = safe_value(item.get('score'), '')
+        opponent = safe_value(item.get('opponent'), '')
+        venue = '🏠' if item.get('at_home') else '✈️'
+        rows.append(
+            '<div style="display:flex;justify-content:space-between;'
+            'font-size:10px;color:#555;padding:2px 0;'
+            'border-bottom:1px solid #f0f0f0;">'
+            f'<span style="width:14px;color:{colors.get(outcome, "#999")};'
+            f'font-weight:bold;">{outcome or "?"}</span>'
+            f'<span style="width:64px;color:#999;">{date}</span>'
+            f'<span style="width:16px;">{venue}</span>'
+            f'<span style="flex:1;text-align:left;overflow:hidden;">{opponent}</span>'
+            f'<span style="width:40px;text-align:right;font-weight:bold;">{score or "—"}</span>'
+            '</div>'
+        )
+
+    if not rows:
+        return ''
+    return (
+        '<div style="margin-top:6px;padding-top:4px;border-top:1px solid #eee;">'
+        f'<div style="font-size:9px;color:#999;margin-bottom:2px;">{title}</div>'
+        + ''.join(rows) + '</div>'
+    )
+
+
 def format_odds_value(val: Any) -> str:
     """
     Formatuje wartość kursu do wyświetlenia.
@@ -1007,12 +1061,12 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         last_h2h_home = safe_value(match.get('last_h2h_home', ''), '')
         last_h2h_away = safe_value(match.get('last_h2h_away', ''), '')
         
-        def form_to_icons(form_list: List[str]) -> str:
-            """Konwertuje listę wyników na ikony emoji."""
+        def form_to_icons(form_list: List[str], limit: int = FORM_ICONS_SHOWN) -> str:
+            """Konwertuje listę wyników na ikony emoji (najnowsze pierwsze)."""
             icons = {'W': '🟢', 'L': '🔴', 'D': '🟡'}
             if not form_list:
                 return '—'
-            return ''.join([icons.get(str(r).upper(), '⚪') for r in form_list[:5]])
+            return ''.join([icons.get(str(r).upper(), '⚪') for r in form_list[:limit]])
         
         # H2H - bezpieczne pobieranie liczb
         h2h_count = int(safe_float(match.get('h2h_count', 0)))
@@ -1197,15 +1251,17 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     
                     <!-- FORMA DRUŻYN -->
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
-                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
-                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {home} (ogólna)</div>
+                        <div style="flex: 1; text-align: center; border-right: 1px solid #eee; padding-right: 8px;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {home} (ostatnie {len(home_form_overall[:FORM_ICONS_SHOWN]) or '—'})</div>
                             <div style="font-size: 16px;">{form_to_icons(home_form_overall)}</div>
                             {f'<div style="font-size: 10px; color: #888; margin-top: 3px;">🏠 U siebie: {form_to_icons(home_form_home)}</div>' if home_form_home else ''}
+                            {_render_recent_matches(match.get('home_recent_matches'), f'Ostatnie mecze {home}')}
                         </div>
-                        <div style="flex: 1; text-align: center;">
-                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {away} (ogólna)</div>
+                        <div style="flex: 1; text-align: center; padding-left: 8px;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {away} (ostatnie {len(away_form_overall[:FORM_ICONS_SHOWN]) or '—'})</div>
                             <div style="font-size: 16px;">{form_to_icons(away_form_overall)}</div>
                             {f'<div style="font-size: 10px; color: #888; margin-top: 3px;">✈️ Na wyjeździe: {form_to_icons(away_form_away)}</div>' if away_form_away else ''}
+                            {_render_recent_matches(match.get('away_recent_matches'), f'Ostatnie mecze {away}')}
                         </div>
                     </div>
                     
@@ -1710,6 +1766,10 @@ _MANIFEST_FIELDS = [
     'home_team', 'away_team', 'home_odds', 'draw_odds', 'away_odds',
     'win_rate', 'h2h_count', 'home_wins_in_h2h_last5', 'away_wins_in_h2h_last5',
     'form_advantage', 'forebet_prediction', 'forebet_probability',
+    # Forma, na której oparta jest predykcja. Bez niej w manifeście nie da się
+    # potem odpowiedzieć, czy typy oparte na dziesięciu meczach biją te oparte
+    # na trzech — a to jest różnica, przez którą zmieniliśmy okno.
+    'home_form_overall', 'home_form_home', 'away_form_overall', 'away_form_away',
     'gemini_prediction', 'gemini_recommendation', 'gemini_confidence',
     # `gemini_pick` is the machine-readable 1/X/2 token — the only AI field the
     # scoring engine can consume. Its absence here is why the AI signal never

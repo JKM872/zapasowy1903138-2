@@ -121,7 +121,28 @@ def _parse_form(raw) -> List[str]:
     return []
 
 
-def _form_points(form: List[str], decay: float = 0.85) -> float:
+# How many past results the form score may look at. The 0.85 decay already
+# fades old matches out (the tenth carries 0.23 of the newest), so this cap is
+# only about how much history we are willing to consider at all. Module-level so
+# tools/evaluate_form.py can measure one window against another instead of the
+# value being an unexamined literal.
+#
+# Measured at 10 against the previous 6 on a held-out later window (2026-05-22
+# onwards, form rebuilt from settled results only, tools/evaluate_form.py):
+# lower Brier in every sport that reads form, higher in none. 6 -> 10 was
+# football 0.6029 -> 0.6018, basketball 0.4511 -> 0.4440, hockey
+# 0.4994 -> 0.4947, volleyball 0.4158 -> 0.4123, handball 0.4909 -> 0.4889,
+# baseball 0.5371 -> 0.5245. Tennis is unchanged because TennisScoringEngine
+# reads no form field at all — a gap, not a result.
+#
+# Baseball is the one sport where form of any length is worse than none
+# (0.5245 against 0.5073), which is why the pipeline skips it; see
+# FORM_EXCLUDED_SPORTS in scrape_and_notify.py.
+FORM_DECAY_WINDOW = 10
+
+
+def _form_points(form: List[str], decay: float = 0.85,
+                 window: Optional[int] = None) -> float:
     """Time-weighted form score (3 pts W, 1 pt D, 0 pt L), newest first.
     Returns normalized value 0.0 – 1.0."""
     if not form:
@@ -129,7 +150,8 @@ def _form_points(form: List[str], decay: float = 0.85) -> float:
     pts_map = {'W': 3.0, 'D': 1.0, 'L': 0.0}
     weighted_sum = 0.0
     weight_total = 0.0
-    for i, result in enumerate(form[:6]):
+    limit = FORM_DECAY_WINDOW if window is None else window
+    for i, result in enumerate(form[:limit]):
         w = decay ** i
         weighted_sum += pts_map.get(result, 1.0) * w
         weight_total += 3.0 * w  # max possible
