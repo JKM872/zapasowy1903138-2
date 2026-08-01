@@ -207,6 +207,114 @@ def _sofascore_json(url: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+# SofaScore's sport slugs, for resolving by name when there is no id to use.
+SOFA_SLUGS = {
+    'table_tennis': 'table-tennis', 'tennis': 'tennis', 'football': 'football',
+    'basketball': 'basketball', 'baseball': 'baseball', 'handball': 'handball',
+    'volleyball': 'volleyball', 'hockey': 'ice-hockey',
+}
+
+# name -> finished events, cached for the run. A table-tennis regular appears in
+# up to 167 of our fixtures, so one lookup serves dozens of matches.
+_SCHEDULE_CACHE: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
+_SCHEDULE_PAGES = 6          # ~30 events per page; six covers our history
+
+
+def _player_finished_events(name: str, sport: str) -> List[Dict[str, Any]]:
+    """Every finished event on this competitor's recent schedule.
+
+    Needed for AiScore fixtures, which carry no id we can query: the page turns
+    out to be a Nuxt shell that fetches its score client-side, so the HTML holds
+    no result and guessing at their API led nowhere. Walking the opponent's
+    schedule on SofaScore is the reliable route, and it is cheap because the same
+    players recur constantly.
+    """
+    slug = SOFA_SLUGS.get((sport or '').lower())
+    if not name or not slug:
+        return []
+
+    key = (name.strip().lower(), slug)
+    if key in _SCHEDULE_CACHE:
+        return _SCHEDULE_CACHE[key]
+
+    events: List[Dict[str, Any]] = []
+    try:
+        from sofascore_scraper import find_team_by_name
+        team = find_team_by_name(name, slug)
+    except Exception:
+        team = None
+
+    if team and team.get('id'):
+        for page in range(_SCHEDULE_PAGES):
+            data = _sofascore_json(
+                'https://api.sofascore.com/api/v1/team/'
+                f"{team['id']}/events/last/{page}")
+            batch = (data or {}).get('events') or []
+            if not batch:
+                break
+            events.extend(batch)
+
+    _SCHEDULE_CACHE[key] = events
+    return events
+
+
+def resolve_by_names(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Find a fixture on a competitor's schedule, matched by opponent and date.
+
+    The date is mandatory: these players meet each other repeatedly — one pair
+    met 31 times in our history — so an opponent match alone would settle the
+    wrong meeting.
+    """
+    if not row.get('date'):
+        return None
+
+    candidates: List[Dict[str, Any]] = []
+    for primary in (row['home'], row['away']):
+        for event in _player_finished_events(primary, row['sport']):
+            if ((event.get('status') or {}).get('type') or '') != 'finished':
+                continue
+            if _event_date(event) != row['date']:
+                continue
+
+            ev_home = (event.get('homeTeam') or {}).get('name', '')
+            ev_away = (event.get('awayTeam') or {}).get('name', '')
+            # Only the same arrangement is accepted. A reversed pairing on the
+            # same day is a different fixture, not this one told backwards:
+            # these players meet twice in a day with the sides swapped, and
+            # accepting the mirror is what produced eight wrong labels out of 97
+            # — every one of them an exact mirror image.
+            if orient(row['home'], row['away'], ev_home, ev_away) is not True:
+                continue
+
+            home = (event.get('homeScore') or {}).get('current')
+            away = (event.get('awayScore') or {}).get('current')
+            if home is None or away is None:
+                continue
+            if not any(c.get('id') == event.get('id') for c in candidates):
+                candidates.append(event)
+
+    # Two identical pairings on one date cannot be told apart, so neither is
+    # settled. An unlabelled match costs a row; a mirrored one corrupts training.
+    if len(candidates) != 1:
+        return None
+
+    event = candidates[0]
+    return _shape({'first': int((event.get('homeScore') or {}).get('current')),
+                   'second': int((event.get('awayScore') or {}).get('current')),
+                   'source': 'sofascore_schedule'}, row, True)
+
+
+def _event_date(event: Dict[str, Any]) -> Optional[str]:
+    ts = event.get('startTimestamp')
+    if not ts:
+        return None
+    try:
+        from datetime import datetime, timezone
+        return datetime.fromtimestamp(int(ts), tz=timezone.utc).strftime('%Y-%m-%d')
+    except (TypeError, ValueError, OSError):
+        return None
+
+
 def fetch_sofascore(event_id: str) -> Optional[Dict[str, Any]]:
     """Final score for a SofaScore event id, with its own team names."""
     data = _sofascore_json(
@@ -294,7 +402,9 @@ def resolve(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         # same trap that made the manifest look wrong earlier today.
         return _shape(got, row, True)
 
-    return None
+    # AiScore and anything else without a queryable id: match by name and date
+    # on the competitor's SofaScore schedule.
+    return resolve_by_names(row)
 
 
 def _shape(got: Dict[str, Any], row: Dict[str, Any], forward: bool
@@ -386,16 +496,24 @@ def validate(limit: int = 60, delay: float = 0.2) -> float:
     flipped matches.
     """
     store = ResultStore()
-    known = [(url, res) for url, res in store._data.items()
-             if res.get('status') == 'finished'
-             and res.get('winner') in ('home', 'away', 'draw')
-             and 'mid=' in url]
+    settled = [(url, res) for url, res in store._data.items()
+               if res.get('status') == 'finished'
+               and res.get('winner') in ('home', 'away', 'draw')]
+
+    # Validate each resolution path on its own sample. The AiScore rows go
+    # through the name-and-date schedule lookup, which is a different mechanism
+    # from the Livesport feed and can be wrong in different ways.
+    known = [(u, r) for u, r in settled if 'mid=' in u][:limit]
+    by_name = [(u, r) for u, r in settled if 'aiscore.com' in u][:limit]
+    if by_name:
+        print(f'  próbka po nazwach (AiScore): {len(by_name)}')
+        known = known + by_name
     if not known:
         print('Brak niezależnych wyników do walidacji.')
         return 0.0
 
     agree = disagree = unresolved = 0
-    for url, ref in known[:limit]:
+    for url, ref in known:
         row = {'url': url, 'sport': (ref.get('sport') or '').lower(),
                'date': ref.get('date', ''),
                'home': ref.get('home_team', ''),

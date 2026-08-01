@@ -65,6 +65,13 @@ class ResultStore:
             'home_team': home_team,
             'away_team': away_team,
             'date': date,
+            # Which resolver produced this, and whether it had to mirror the
+            # source's home/away to match ours. Dropping these made a bad batch
+            # impossible to tell from a good one: an entry written in the wrong
+            # orientation looks exactly like a correct one, and cleaning up
+            # after the schema fix meant deleting 70k rows instead of 740.
+            'source': result.get('source'),
+            'orientation_flipped': result.get('orientation_flipped'),
         }
 
         self._data[match_url] = entry

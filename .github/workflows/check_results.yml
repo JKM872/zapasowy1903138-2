@@ -3,7 +3,13 @@ name: "Check Results & Accuracy Report"
 on:
   # Run daily at 22:00 UTC (late evening — most matches finished)
   schedule:
+    # Evening pass over today's card.
     - cron: '0 22 * * *'
+    # Morning pass over yesterday's. Baseball starts 17:00-21:00 UTC and runs
+    # about three hours, so the late games are still in progress at 22:00 and
+    # every one of them was reported as pending — 7 of 7 on 2026-07-31. The
+    # store keeps finished results, so this only settles what was left open.
+    - cron: '0 6 * * *'
 
   # Allow manual trigger for any date
   workflow_dispatch:
@@ -78,12 +84,17 @@ jobs:
         id: set-date
         run: |
           if [ -n "${{ github.event.inputs.date }}" ]; then
-            echo "TARGET_DATE=${{ github.event.inputs.date }}" >> $GITHUB_ENV
-            echo "date=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
+            TARGET="${{ github.event.inputs.date }}"
+          elif [ "$(date -u +%H)" -lt 12 ]; then
+            # The morning pass exists to catch what was still being played at
+            # 22:00, so it looks at yesterday.
+            TARGET="$(date -u -d 'yesterday' +%Y-%m-%d)"
+            echo "🌅 Przebieg poranny — sprawdzam wczorajszą datę"
           else
-            echo "TARGET_DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
-            echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+            TARGET="$(date -u +%Y-%m-%d)"
           fi
+          echo "TARGET_DATE=$TARGET" >> $GITHUB_ENV
+          echo "date=$TARGET" >> $GITHUB_OUTPUT
           echo "📅 Checking results for: $TARGET_DATE"
 
       # 6. Run the result checker

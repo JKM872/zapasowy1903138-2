@@ -634,6 +634,19 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
             <td style="text-align:center;color:{color};font-weight:700">{icon} {d['outcome'].upper()}</td>
         </tr>"""
 
+    # Table tennis is ~80% of the settled volume, so the headline accuracy is
+    # effectively a table-tennis statistic. A second line for everything else
+    # keeps the blended number from speaking for sports it barely covers.
+    _core = [d for d in stats['details']
+             if (d.get('sport') or '') != 'table_tennis'
+             and d['outcome'] in ('won', 'lost')]
+    _core_won = sum(1 for d in _core if d['outcome'] == 'won')
+    core_line = ''
+    if _core:
+        _core_acc = 100.0 * _core_won / len(_core)
+        core_line = (f"Bez tenisa stołowego: {_core_acc:.0f}% "
+                     f"({_core_won}/{len(_core)})")
+
     accuracy_color = '#27ae60' if accuracy >= 55 else '#e74c3c' if accuracy < 45 else '#f39c12'
     roi_color = '#27ae60' if roi_pln > 0 else '#e74c3c'
 
@@ -655,6 +668,7 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
       <div style="font-size:11px;color:#8b949e;text-transform:uppercase">Trafność</div>
       <div style="font-size:32px;font-weight:800;color:{accuracy_color}">{accuracy:.0f}%</div>
       <div style="font-size:11px;color:#8b949e">{won}/{won + lost} meczów</div>
+      {f'<div style="font-size:10px;color:#6e7681;margin-top:4px">{core_line}</div>' if core_line else ''}
     </div>
     <div style="flex:1;min-width:130px;background:#0d1117;border-radius:10px;padding:16px;text-align:center;border:1px solid #30363d">
       <div style="font-size:11px;color:#8b949e;text-transform:uppercase">ROI (100 PLN/mecz)</div>
@@ -747,6 +761,39 @@ def send_report_email(
 # ═══════════════════════════════════════════════════════════════════════════
 # 5. SUMMARY PERSISTENCE (idempotent)
 # ═══════════════════════════════════════════════════════════════════════════
+
+def _row_oriented(res: Dict[str, Any], match: Dict[str, Any]) -> Dict[str, Any]:
+    """Re-express a resolved result in the manifest row's home/away order.
+
+    The resolver answers in the source's orientation, which is the honest thing
+    for it to do — but the store keeps our team names beside it, so the two must
+    agree or every consumer reads a mirror image.
+    """
+    out = dict(res)
+    row_home = match.get('home_team') or ''
+    source_home = res.get('home_name') or ''
+    source_away = res.get('away_name') or ''
+
+    flipped = False
+    if row_home and source_away and _resolver_ok:
+        from result_resolver import same_competitor
+        if (same_competitor(row_home, source_away)
+                and not same_competitor(row_home, source_home)):
+            flipped = True
+
+    if flipped:
+        out['score_home'] = res.get('score_away')
+        out['score_away'] = res.get('score_home')
+        out['orientation_flipped'] = True
+
+    home, away = out.get('score_home'), out.get('score_away')
+    try:
+        home, away = int(home), int(away)
+        out['winner'] = 'home' if home > away else 'away' if away > home else 'draw'
+    except (TypeError, ValueError):
+        pass
+    return out
+
 
 def save_summary(stats: Dict[str, Any], date: str, tag: str = '') -> str:
     """Save evaluation summary JSON for auditing. Returns file path.
@@ -1003,9 +1050,15 @@ def main():
             url = m.get('match_url', '')
             res = results.get(url, {})
             if url and res.get('status') == 'finished':
+                # Store the result in THIS row's orientation. The resolver
+                # reports the source's, and the two disagree often enough that
+                # the store ended up with a winner of 'away' next to a
+                # home_team that had actually won: Przewlocki beat Marchlewski
+                # twice on 2026-07-28 and the store recorded a loss. Anything
+                # training on that reads the mirror image of the truth.
                 was_new = store.add_result(
                     match_url=url,
-                    result=res,
+                    result=_row_oriented(res, m),
                     sport=(m.get('sport') or 'football').lower(),
                     home_team=m.get('home_team', ''),
                     away_team=m.get('away_team', ''),
