@@ -199,6 +199,42 @@ class TestTennisAnchor:
         e.calibration = dict(e.calibration, market_anchor=bad)
         assert e.market_anchor() == pytest.approx(expected)
 
+    def test_qualification_score_ignores_the_anchor(self):
+        """The gate measures our conviction, not the bookmaker's.
+
+        Deriving advanced_score from the anchored probability re-pointed the
+        qualification gate at "how lopsided does the market think this is" and
+        eliminated tennis entirely: 138 matches, 0 qualified, median score 5.5
+        against a threshold of 45. The same fixtures scored 70-77 unanchored.
+        """
+        e = TennisScoringEngine()
+        m = tennis_match(home_odds=1.50, away_odds=2.60,
+                         home_wins_in_h2h_last5=4, away_wins_in_h2h_last5=0,
+                         h2h_count=4, ranking_a=40, ranking_b=190)
+
+        e.calibration = dict(e.calibration, market_anchor=0.0)
+        unanchored = e.score_match(m).advanced_score
+        e.calibration = dict(e.calibration, market_anchor=0.9)
+        anchored = e.score_match(m).advanced_score
+
+        assert anchored == pytest.approx(unanchored)
+
+    def test_a_confident_pick_still_clears_the_threshold(self):
+        e = TennisScoringEngine()
+        m = tennis_match(home_odds=1.50, away_odds=2.60,
+                         home_wins_in_h2h_last5=4, away_wins_in_h2h_last5=0,
+                         h2h_count=4, ranking_a=40, ranking_b=190)
+        assert e.score_match(m).advanced_score >= e.threshold
+
+    def test_the_published_probability_is_still_anchored(self):
+        """Only the gate is unanchored; what we claim must stay honest."""
+        e = TennisScoringEngine()
+        m = tennis_match(home_odds=1.50, away_odds=2.60)
+        e.calibration = dict(e.calibration, market_anchor=0.0)
+        loose = e.score_match(m).cal_a
+        e.calibration = dict(e.calibration, market_anchor=0.9)
+        assert e.score_match(m).cal_a < loose
+
     def test_ev_follows_the_anchored_probability(self):
         """EV must be computed from what we publish, not from a discarded number."""
         e = TennisScoringEngine()

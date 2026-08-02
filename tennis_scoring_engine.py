@@ -749,6 +749,14 @@ class TennisScoringEngine:
         # weight makes tennis profitable, but at 0.90 the held-out staked volume
         # falls from 1400 bets to 197 and the loss from 137.7 units to 31.4, a
         # 77% smaller loss with the sport still published rather than hidden.
+        # Zapamiętane PRZED zakotwiczeniem: `advanced_score` (i próg
+        # kwalifikacji) mierzy, jak zdecydowany jest NASZ model, a kotwica
+        # celowo ściska tę różnicę do rynkowej. Liczenie jednego z drugiego
+        # przekierowało bramę kwalifikacyjną na pytanie "jak jednostronnie widzi
+        # to bukmacher" i zabiło tenis w całości: 138 meczów, 0 zakwalifikowanych,
+        # mediana score 5.5 przy progu 45. Ten sam mecz przed kotwicą dawał 75.6.
+        own_a, own_b = cal_a, cal_b
+
         anchor = self.market_anchor()
         if anchor > 0 and feats.get('odds_a', 0) > 1 and feats.get('odds_b', 0) > 1:
             mkt_a = feats['odds_prob_a']
@@ -782,8 +790,10 @@ class TennisScoringEngine:
                 kelly = min(kelly, 25.0)  # cap
 
         # --- Advanced score (0-100) ---
-        # Based on how dominant the prediction is
-        dominance = abs(cal_a - cal_b)  # 0 to ~0.96
+        # Based on how dominant the prediction is — the model's OWN view, taken
+        # before the market anchor. The anchor governs what we publish and what
+        # EV we claim; it must not decide which matches are worth looking at.
+        dominance = abs(own_a - own_b)  # 0 to ~0.96
         advanced_score = dominance * 100  # scale to 0-100
         # Boost for data richness — use weighted data quality that values
         # the most predictive features (odds, h2h, ranking) more than
