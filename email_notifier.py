@@ -2036,6 +2036,19 @@ def send_split_emails_by_sport(
         trafność 72% wobec 31%, więc mieszanie ich w jednym mailu opisywało
         jedną średnią dla dwóch niepodobnych rzeczy.
     """
+    # Sprawdzane na wejściu, nie 40 minut później przy SMTP_CONFIG[provider].
+    # Gdy wywołujący przekazał tu coś innego niż nazwę dostawcy, cały scraping
+    # przebiegał, manifesty się zapisywały, a wysyłka padała na `TypeError:
+    # unhashable type` — workflow raportował sukces i nikt nie dostawał maila.
+    # Typ sprawdzany osobno: `x in SMTP_CONFIG` dla listy albo słownika samo
+    # rzuca TypeError, więc bez tego komunikat byłby równie nieczytelny jak błąd,
+    # który ta walidacja ma zastąpić.
+    if not isinstance(provider, str) or provider not in SMTP_CONFIG:
+        raise ValueError(
+            f'Nieznany dostawca poczty: {provider!r} (typ {type(provider).__name__}). '
+            f'Dozwolone: {sorted(SMTP_CONFIG)}'
+        )
+
     _grade_label = '/'.join(sorted(grade_filter)) if grade_filter else 'all grades'
     if fallback_grades:
         _grade_label += f" → {'/'.join(sorted(fallback_grades))}"

@@ -863,8 +863,14 @@ def scrape_and_send_email(
             try:
                 from team_form import FORM_WINDOW, FormProvider
 
-                provider = FormProvider.from_store()
-                if provider.by_team:
+                # NIE nazywać tego `provider`: tak nazywa się parametr tej
+                # funkcji trzymający dostawcę poczty ('gmail'). Przesłonięcie go
+                # przekazało obiekt FormProvider do SMTP_CONFIG[provider] i
+                # wysyłka padała na `TypeError: unhashable type: 'FormProvider'`
+                # — pipeline kończył się sukcesem, manifesty się zapisywały, a
+                # mail nie wychodził wcale.
+                form_provider = FormProvider.from_store()
+                if form_provider.by_team:
                     _with_recent = 0
                     for row in form_rows:
                         # Bez daty meczu nie wolno sięgać do historii: przy
@@ -873,7 +879,7 @@ def scrape_and_send_email(
                         if not (row.get('match_date') or row.get('date')):
                             continue
                         sport = (row.get('sport') or '').lower()
-                        provider.attach(
+                        form_provider.attach(
                             row, window=FORM_WINDOW,
                             set_form_fields=sport in FORM_SCORING_SPORTS)
                         if row.get('home_recent_matches'):
