@@ -1825,6 +1825,14 @@ def teams_match(team1: str, team2: str, threshold: float = 0.35) -> bool:
     return similarity_score(team1, team2) >= threshold
 
 
+# Progi dla wyszukiwania drużyn przez `/search/teams` (Strategy 2). Osobne od
+# progu `teams_match`, bo tam kandydaci pochodzą z listy zdarzeń na konkretną
+# datę i sport, a tu z globalnej wyszukiwarki po wszystkich sportach — więc
+# dopasowanie musi być znacznie pewniejsze, żeby nie przypiąć obcego meczu.
+_TEAM_SEARCH_MIN_SIMILARITY = 0.60
+_OPPONENT_MIN_SIMILARITY = 0.45
+
+
 def accept_consent_popup(driver: 'webdriver.Chrome') -> bool:
     """
     Akceptuje cookie consent popup na SofaScore.
@@ -2487,30 +2495,70 @@ def search_event_via_api(home_team: str, away_team: str, sport: str = 'football'
     
     # ====== STRATEGY 2: Team search API (search by team name) ======
     print(f"   🔄 SofaScore Strategy 2: Szukam przez team search API...")
+    # Progi i kotwice jak w `find_event_via_team_schedule`. Wcześniej ta ścieżka
+    # brała `teams[0]` BEZ sprawdzenia, czy znaleziona drużyna w ogóle przypomina
+    # szukaną, nie weryfikowała sportu i akceptowała przeciwnika przy 0.30. Efekt
+    # zaobserwowany w logu produkcyjnym: dla zapytania
+    #   "CBR Brave vs Central Coast Rhinos" (hokej, Australia)
+    # zwracała "CF Badalona Futur vs CF Can Vidalet" (piłka, Hiszpania) przy
+    # sim 0.32 — czyli głosy kibiców z innego meczu, innego sportu i innego
+    # kontynentu mogły trafić do naszej predykcji.
     for team_query in [home_team, away_team]:
         try:
             search_url = f"https://api.sofascore.com/api/v1/search/teams/{team_query.replace(' ', '%20')}"
             search_data = _api_get_json(search_url, timeout=10)
-            if search_data and isinstance(search_data, dict):
-                teams = search_data.get('teams', [])
-                if teams:
-                    team_id = teams[0].get('id')
-                    team_name = teams[0].get('name', '')
-                    print(f"      Found team: '{team_name}' (ID: {team_id})")
-                    for endpoint in ['next', 'last']:
-                        events_url = f"https://api.sofascore.com/api/v1/team/{team_id}/events/{endpoint}/0"
-                        ev_data = _api_get_json(events_url, timeout=10)
-                        if ev_data and isinstance(ev_data, dict):
-                            events = ev_data.get('events', [])
-                            for event in events:
-                                event_home = event.get('homeTeam', {}).get('name', '')
-                                event_away = event.get('awayTeam', {}).get('name', '')
-                                other_team = away_team if team_query == home_team else home_team
-                                other_event = event_away if team_query == home_team else event_home
-                                other_sim = similarity_score(other_team, other_event)
-                                if other_sim >= 0.30:
-                                    print(f"   ✅ SofaScore Strategy 2: Found {event_home} vs {event_away} (sim:{other_sim:.2f})")
-                                    return event.get('id')
+            if not (search_data and isinstance(search_data, dict)):
+                continue
+            for cand in (search_data.get('teams') or [])[:5]:
+                team_id = cand.get('id')
+                team_name = cand.get('name', '')
+                if not team_id or not team_name:
+                    continue
+
+                # 1. Znaleziona drużyna musi odpowiadać zapytaniu.
+                name_sim = similarity_score(team_query, team_name)
+                if name_sim < _TEAM_SEARCH_MIN_SIMILARITY:
+                    logger.debug(f"SofaScore Strategy 2: odrzucam '{team_name}' "
+                                 f"dla '{team_query}' (sim {name_sim:.2f})")
+                    continue
+
+                # 2. Ten sam sport, gdy go znamy.
+                cand_slug = ((cand.get('sport') or {}).get('slug') or '').lower()
+                if sport_slug and cand_slug and cand_slug != sport_slug.lower():
+                    logger.debug(f"SofaScore Strategy 2: '{team_name}' to "
+                                 f"{cand_slug}, szukamy {sport_slug}")
+                    continue
+
+                print(f"      Found team: '{team_name}' (ID: {team_id}, "
+                      f"sim {name_sim:.2f})")
+                other_team = away_team if team_query == home_team else home_team
+
+                for endpoint in ['next', 'last']:
+                    events_url = f"https://api.sofascore.com/api/v1/team/{team_id}/events/{endpoint}/0"
+                    ev_data = _api_get_json(events_url, timeout=10)
+                    if not (ev_data and isinstance(ev_data, dict)):
+                        continue
+                    for event in ev_data.get('events', []):
+                        ev_home = event.get('homeTeam') or {}
+                        ev_away = event.get('awayTeam') or {}
+
+                        # 3. Kotwica na ID: znaleziona drużyna musi FAKTYCZNIE
+                        # grać w tym zdarzeniu. Bez tego zbieżność nazw wystarczy,
+                        # żeby przypiąć obcy mecz.
+                        if team_id == ev_home.get('id'):
+                            other_event = ev_away.get('name', '')
+                        elif team_id == ev_away.get('id'):
+                            other_event = ev_home.get('name', '')
+                        else:
+                            continue
+
+                        other_sim = similarity_score(other_team, other_event)
+                        if other_sim < _OPPONENT_MIN_SIMILARITY:
+                            continue
+                        print(f"   ✅ SofaScore Strategy 2: Found "
+                              f"{ev_home.get('name', '')} vs {ev_away.get('name', '')} "
+                              f"(sim:{other_sim:.2f})")
+                        return event.get('id')
         except Exception as e:
             logger.debug(f"SofaScore team search error for '{team_query}': {e}")
 
