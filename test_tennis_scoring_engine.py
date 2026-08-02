@@ -464,6 +464,11 @@ class TestDataQualityV5:
             last_match_b_result='L',
             sofascore_home_win_prob=55,
             sofascore_away_win_prob=45,
+            # Liczba głosów należy do "pełnych danych": fan vote jest teraz
+            # ważony wolumenem, tak jak w silniku piłkarskim, bo odczyt bez
+            # głosów to sygnatura estymaty AI (`sofascore_total_votes = 0`),
+            # która nie może ciążyć jak prawdziwa opinia społeczności.
+            sofascore_total_votes=2500,
         )
         f = extractor.extract(m)
         assert f['_data_quality'] == pytest.approx(1.0, abs=0.01)  # pyright: ignore[reportUnknownMemberType]

@@ -146,6 +146,19 @@ def _form_score(form: List[str], decay: float = 0.85) -> float:
     return total_pts / total_w if total_w > 0 else 0.5
 
 
+def _vote_volume_factor(votes: float) -> float:
+    """Discount a fan vote by how many people actually voted.
+
+    Mirrors `_sofascore_confidence_factor` in the football engine: 0 votes means
+    no signal, 50 gives about half weight, 1000 or more gives full weight. Zero
+    is the important case — it is what the AI estimator writes when SofaScore has
+    no event, and a guess must not carry the weight of a crowd.
+    """
+    if votes <= 0:
+        return 0.0
+    return min(1.0, math.log10(votes + 1) / math.log10(1000))
+
+
 def _first_form(m: Dict[str, Any], *keys: str) -> List[str]:
     """First key that actually holds form letters, in preference order.
 
@@ -451,11 +464,20 @@ class TennisFeatureExtractor:
         # 7. SofaScore fan vote (crowd wisdom signal)
         ss_a = _sf(m.get('sofascore_home_win_prob', 0))
         ss_b = _sf(m.get('sofascore_away_win_prob', 0))
+        ss_votes = _sf(m.get('sofascore_total_votes', m.get('sofascore_votes')))
+        # Waga wg liczby głosów, tak jak w silniku piłkarskim. Bez tego odczyt z
+        # jednego głosu liczył się tyle samo co z 74 392, a wpis wygenerowany
+        # przez estymator AI (`sofascore_total_votes = 0`, pole
+        # `sofascore_estimated_by_ai`) wpływał na typ jak prawdziwy głos
+        # społeczności — zmierzone: skrajna estymata 90/10 przesuwała cal_a z
+        # 0.5000 na 0.5286, podczas gdy piłka nożna słusznie jej nie ruszała.
+        f['sofascore_volume_factor'] = _vote_volume_factor(ss_votes)
         if ss_a > 0 and ss_b > 0:
             ss_total = ss_a + ss_b
             f['sofascore_prob_a'] = ss_a / ss_total
             f['sofascore_prob_b'] = ss_b / ss_total
-            available += 1
+            if f['sofascore_volume_factor'] > 0:
+                available += 1
         else:
             f['sofascore_prob_a'] = 0.5
             f['sofascore_prob_b'] = 0.5
@@ -663,10 +685,12 @@ class TennisScoringEngine:
         if match.get('last_match_a_date') and match.get('last_match_b_date'):
             active.add('fatigue')
 
-        # SofaScore fan vote
+        # SofaScore fan vote — abstains when there are no real votes behind it,
+        # so an AI-estimated reading fills the display without steering the pick.
         estimates['sofascore'] = feats.get('sofascore_prob_a', 0.5)
-        if _sf(match.get('sofascore_home_win_prob')) > 0 and \
-                _sf(match.get('sofascore_away_win_prob')) > 0:
+        if (_sf(match.get('sofascore_home_win_prob')) > 0
+                and _sf(match.get('sofascore_away_win_prob')) > 0
+                and feats.get('sofascore_volume_factor', 0.0) > 0):
             active.add('sofascore')
 
         # Availability / injury impact.
@@ -717,6 +741,13 @@ class TennisScoringEngine:
         # full weight total would leave abstaining sources implicitly voting
         # for 0.5 and bias every data-poor match toward an even split.
         active_weights = {k: w[k] for k in w if k in active}
+        # Skalowanie wagą wolumenu, jak `ss_w = w['sofascore'] * ss_volume` w
+        # silniku piłkarskim: odczyt z 12 głosów nie może ciążyć tyle samo co z
+        # 74 392. Samo bramkowanie `active` odsiewało tylko zero głosów.
+        if 'sofascore' in active_weights:
+            active_weights['sofascore'] *= feats.get('sofascore_volume_factor', 1.0)
+            if active_weights['sofascore'] <= 0:
+                del active_weights['sofascore']
         if active_weights:
             w_total = sum(active_weights.values()) or 1.0
             prob_a = sum(estimates[k] * wt for k, wt in active_weights.items()) / w_total
