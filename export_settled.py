@@ -131,6 +131,79 @@ def normalise_row(raw: Dict[str, Any]) -> Dict[str, Any]:
         'availability': _first(raw, 'availability', default={}),
         'data_quality': _first(raw, 'data_quality', 'dataQuality', default={}),
     }
+
+    # Tennis inputs live in a nested, camelCase `tennis` block that this
+    # function never unpacked, so ranking (engine weight 0.11) and surface form
+    # (0.12) were invisible to every measurement — a coverage report read 0% and
+    # that was indistinguishable from "the scraper never collects them". It does:
+    # real rows carry rankingA=127 / rankingB=68 and populated surfaceFormA.
+    # Every earlier tennis number was therefore produced by re-scoring rows with
+    # almost a quarter of the weight budget missing.
+    tennis = raw.get('tennis') or {}
+    if isinstance(tennis, dict):
+        for src, dst in (
+            ('rankingA', 'ranking_a'),
+            ('rankingB', 'ranking_b'),
+            ('surface', 'surface'),
+            ('surfaceFormA', 'surface_form_a'),
+            ('surfaceFormB', 'surface_form_b'),
+            ('lastMatchA', 'last_match_a'),
+            ('lastMatchB', 'last_match_b'),
+            ('lastH2H', 'last_h2h'),
+            ('probA', 'tennis_prob_a'),
+            ('probB', 'tennis_prob_b'),
+            ('skipReason', 'tennis_skip_reason'),
+        ):
+            if src in tennis:
+                row[dst] = tennis[src]
+
+        # The engine reads flat `last_match_*_date` / `_result`; the scraper
+        # nests them. Unpack so fatigue has something to work with.
+        for side in ('a', 'b'):
+            block = tennis.get(f'lastMatch{side.upper()}')
+            if isinstance(block, dict):
+                for src, dst in (('date', 'date'), ('result', 'result'),
+                                 ('score', 'score'), ('opponent', 'opponent')):
+                    if src in block:
+                        row[f'last_match_{side}_{dst}'] = block[src]
+
+    # What the pipeline actually published. Recomputing it from the row is
+    # possible, but keeping the recorded values lets a report compare what we
+    # claimed at the time against what the current engine would claim now.
+    scoring = raw.get('scoring') or {}
+    if isinstance(scoring, dict):
+        for src, dst in (('pick', 'scoring_pick'), ('prob', 'scoring_prob'),
+                         ('ev', 'scoring_ev'), ('edge', 'scoring_edge'),
+                         ('kelly', 'scoring_kelly'),
+                         ('confidence', 'scoring_confidence')):
+            if src in scoring:
+                row[dst] = scoring[src]
+
+    for src, dst in (('predictionGrade', 'prediction_grade'),
+                     ('prediction_grade', 'prediction_grade'),
+                     ('advancedScore', 'advanced_score'),
+                     ('advanced_score', 'advanced_score'),
+                     ('favorite', 'favorite'),
+                     ('qualifies', 'qualifies'),
+                     ('time', 'match_time'),
+                     ('match_time', 'match_time')):
+        if src in raw and raw[src] is not None:
+            row[dst] = raw[src]
+
+    # Flat snake_case variants win when present — rows coming straight from the
+    # pipeline (not from results/*.json) already use them.
+    for key in (
+        'ranking_a', 'ranking_b', 'ranking_info',
+        'form_a', 'form_b',
+        'surface_form_a', 'surface_form_b', 'surface_form_is_proxy',
+        'surface_stats_a', 'surface_stats_b',
+        'last_match_a_date', 'last_match_a_result', 'last_match_a_score',
+        'last_match_b_date', 'last_match_b_result', 'last_match_b_score',
+        'tennis_phase_path',
+    ):
+        if raw.get(key) not in (None, '', [], {}):
+            row[key] = raw[key]
+
     return row
 
 
