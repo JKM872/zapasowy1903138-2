@@ -1761,6 +1761,62 @@ def normalize_team_name(name: str) -> str:
     return name
 
 
+def _split_person_name(name: str) -> Tuple[List[str], List[str]]:
+    """Split a normalised name into words and single-letter initials."""
+    tokens = normalize_team_name(name).split()
+    return ([t for t in tokens if len(t) > 1],
+            [t for t in tokens if len(t) == 1])
+
+
+def _person_name_similarity(name1: str, name2: str) -> float:
+    """Match 'Surname I.' against 'Firstname Surname'.
+
+    The generic team-name methods are built for club names and collapse on this
+    pattern whenever the surname is short or there are two initials. Measured
+    against real pairs: 'Gea A.' vs 'Alejandro Gea' scored 0.33, 'Kovacevic A.'
+    vs 'Aleksandar Kovacevic' 0.58 and 'Overbeck C. E.' vs 'Carol Elizabeth
+    Overbeck' 0.44 — all genuine, all below the search threshold, so tightening
+    that threshold to stop cross-sport mismatches would have started rejecting
+    correct tennis players instead.
+
+    Deliberately narrow: it only fires when exactly one side is abbreviated
+    (has initials) and the other is not, which is a person-name shape that club
+    names do not take. Returns 0.0 when the pattern does not apply, so callers
+    can take the maximum with the other methods.
+    """
+    words1, initials1 = _split_person_name(name1)
+    words2, initials2 = _split_person_name(name2)
+
+    if bool(initials1) == bool(initials2):
+        return 0.0  # both abbreviated or neither — nothing special to exploit
+    if initials1:
+        short_words, short_initials, full_words = words1, initials1, words2
+    else:
+        short_words, short_initials, full_words = words2, initials2, words1
+    if not short_words or len(full_words) < 2:
+        return 0.0
+
+    # The abbreviated side keeps the surname; the full side ends with it.
+    surname = ' '.join(short_words)
+    surname_sim = max(
+        SequenceMatcher(None, surname, full_words[-1]).ratio(),
+        max((SequenceMatcher(None, surname, w).ratio() for w in full_words),
+            default=0.0),
+    )
+    if surname_sim < 0.85:
+        return 0.0
+
+    # Do the initials line up with the remaining given names? A surname alone is
+    # good; a surname plus a matching initial is what makes this safe to trust.
+    remaining = [w for w in full_words if w != full_words[-1]] or full_words[:-1]
+    available = {w[0] for w in remaining}
+    if short_initials and available:
+        if all(i in available for i in short_initials):
+            return 0.92
+        return 0.0  # surname fits but the given name contradicts it
+    return 0.78
+
+
 def similarity_score(name1: str, name2: str) -> float:
     """
     Oblicza similarity score między dwoma nazwami (0.0 - 1.0).
@@ -1817,7 +1873,10 @@ def similarity_score(name1: str, name2: str) -> float:
         max_len = max(len(norm1), len(norm2))
         prefix_score = min(0.85, common_prefix_len / max_len + 0.3)
     
-    return max(seq_score, containment, jaccard, first_word_score, prefix_score)
+    person_score = _person_name_similarity(name1, name2)
+
+    return max(seq_score, containment, jaccard, first_word_score, prefix_score,
+               person_score)
 
 
 def teams_match(team1: str, team2: str, threshold: float = 0.35) -> bool:
@@ -4895,8 +4954,10 @@ _GEMINI_MODEL_CHAIN_DEFAULT = [
     'gemini-2.5-flash',         # Najnowszy production flash (maj 2025)
     'gemini-2.0-flash-001',     # Stable production
     'gemini-2.0-flash',          # Alias bieżącej generacji
-    'gemini-1.5-flash-002',      # Starszy stable
-    'gemini-1.5-flash-8b',       # Najtańszy fallback
+    # `gemini-1.5-flash-002` i `gemini-1.5-flash-8b` usunięte: w logu z
+    # 2026-08-02 zwracały 404 "not found / not supported for generateContent",
+    # więc rotacja marnowała na nie czas przy każdym meczu. Trzy pozostałe
+    # zwracały 429 — to wyczerpana quota konta, nie zła nazwa modelu.
 ]
 _GEMINI_MODEL_CHAIN: List[str] = [
     m.strip() for m in (
@@ -4906,18 +4967,40 @@ _GEMINI_MODEL_CHAIN: List[str] = [
 ]
 _gemini_active_model: Optional[str] = None  # zapamiętany pierwszy działający
 
-# Groq models — production replacements po deprecations 04/2025.
-# llama-3.2-*-vision-preview → llama-4-scout (vision capable).
-# llama-3.3-70b-versatile dla text-only event resolution.
-_GROQ_VISION_MODEL_CHAIN = [
-    'meta-llama/llama-4-scout-17b-16e-instruct',
-    'meta-llama/llama-4-maverick-17b-128e-instruct',
+# Groq models. Nazwy mają datę ważności, więc trzymamy je w jednym miejscu i
+# pozwalamy nadpisać zmienną środowiskową — kolejna deprecjacja nie powinna
+# wymagać zmiany kodu.
+#
+# Stan na 2026-08-02, wg https://console.groq.com/docs/deprecations:
+#   meta-llama/llama-4-scout-17b-16e-instruct     wyłączony 17.07.2026
+#   meta-llama/llama-4-maverick-17b-128e-instruct wyłączony 09.03.2026
+#   llama-3.3-70b-versatile, llama-3.1-8b-instant wyłączane 16.08.2026
+#
+# Oba modele vision w poprzednim łańcuchu były więc już martwe — w logu
+# produkcyjnym zwracały 404 i cała ścieżka "SofaScore AI Vision" kończyła się
+# komunikatem "wyczerpano modele". Zalecane następniki: qwen/qwen3.6-27b dla
+# zadań z obrazem, openai/gpt-oss-* dla tekstu.
+_GROQ_VISION_MODEL_CHAIN_DEFAULT = [
+    'qwen/qwen3.6-27b',
 ]
-_GROQ_TEXT_MODEL_CHAIN = [
-    'llama-3.3-70b-versatile',
-    'llama-3.1-8b-instant',
-    'meta-llama/llama-4-scout-17b-16e-instruct',  # vision model also handles text
+_GROQ_TEXT_MODEL_CHAIN_DEFAULT = [
+    'openai/gpt-oss-120b',
+    'openai/gpt-oss-20b',
+    'qwen/qwen3.6-27b',
 ]
+
+
+def _model_chain_from_env(var: str, default: List[str]) -> List[str]:
+    raw = os.getenv(var, '').strip()
+    names = [m.strip() for m in (raw or ','.join(default)).split(',')
+             if m.strip()]
+    return names or list(default)
+
+
+_GROQ_VISION_MODEL_CHAIN = _model_chain_from_env(
+    'SOFASCORE_GROQ_VISION_MODELS', _GROQ_VISION_MODEL_CHAIN_DEFAULT)
+_GROQ_TEXT_MODEL_CHAIN = _model_chain_from_env(
+    'SOFASCORE_GROQ_TEXT_MODELS', _GROQ_TEXT_MODEL_CHAIN_DEFAULT)
 _groq_active_vision_model: Optional[str] = None
 _groq_active_text_model: Optional[str] = None
 
