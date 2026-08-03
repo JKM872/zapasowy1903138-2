@@ -1,0 +1,607 @@
+{
+  "meta": {
+    "generated_at": "2026-08-03T07:15:45.712128+02:00",
+    "target_date": "2026-08-03",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 4,
+      "qualified": 3
+    },
+    "enrichment_status_counts": {
+      "enriched": 1,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 2
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 140.1,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Chile - LNB",
+      "match_url": "https://www.oddssafari.com/matches/basketball/chile/lnb/leones-quilpue-vs-u.de-concepcion/2291148?MarketTypeID=201",
+      "match_id": "2291148",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Leones Quilpue",
+      "away_team": "U.de Concepcion",
+      "event_date": "04/08",
+      "event_time": "00:30",
+      "outcome": "1",
+      "open_odds": 2.12,
+      "current_odds": 1.79,
+      "drop_pct": 16.0,
+      "max_odds": 1.9,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16643491,
+        "home_team": "Leones Quilpue",
+        "away_team": "U.de Concepcion",
+        "sport": "basketball",
+        "league": "Chile - LNB",
+        "match_time": "00:30"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "USA - WNBA",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/ny-liberty-vs-sea-storm/2281677?MarketTypeID=201",
+      "match_id": "2281677",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "NY Liberty",
+      "away_team": "SEA Storm",
+      "event_date": "03/08",
+      "event_time": "23:00",
+      "outcome": "2",
+      "open_odds": 4.3,
+      "current_odds": 3.8,
+      "drop_pct": 12.0,
+      "max_odds": 4.0,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Puerto Rico - Superior Nacional",
+      "match_url": "https://www.oddssafari.com/matches/basketball/puerto-rico/superior-nacional/criollos-de-caguas-vs-bayamon/2290942?MarketTypeID=201",
+      "match_id": "2290942",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Criollos de Caguas",
+      "away_team": "Bayamon",
+      "event_date": "04/08",
+      "event_time": "00:00",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.85,
+      "drop_pct": 12.0,
+      "max_odds": 1.93,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 5,
+        "away_wins_in_h2h_last5": 5,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16689177,
+        "home_team": "Criollos de Caguas",
+        "away_team": "Bayamon",
+        "sport": "basketball",
+        "league": "Puerto Rico - Superior Nacional",
+        "match_time": "00:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Lebanon - LBL",
+      "match_url": "https://www.oddssafari.com/matches/basketball/lebanon/lbl/al-riyadhi-beirut-vs-sagesse/2291154?MarketTypeID=201",
+      "match_id": "2291154",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Al Riyadhi Beirut",
+      "away_team": "Sagesse",
+      "event_date": "03/08",
+      "event_time": "18:30",
+      "outcome": "1",
+      "open_odds": 1.65,
+      "current_odds": 1.46,
+      "drop_pct": 11.0,
+      "max_odds": 1.47,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/koszykowka/al-riyadi-KKNkkwCQ/sagesse-al-hekmeh-beirut-OxRjlt6O/?mid=hlFZMPbm",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Al-Riyadi",
+        "away_team": "Sagesse Beirut",
+        "match_time": "03.08.2026 18:30",
+        "sport": "basketball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.4,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "sofascore_home_win_prob": 61,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 39,
+        "sofascore_total_votes": 458,
+        "h2h_last5": [
+          {
+            "date": "01.08.26",
+            "home": "Sagesse Beirut",
+            "away": "Al-Riyadi",
+            "score": "96-65",
+            "winner": "home",
+            "raw": "01.08.26 Sagesse Beirut 96-65 Al-Riyadi"
+          },
+          {
+            "date": "30.07.26",
+            "home": "Al-Riyadi",
+            "away": "Sagesse Beirut",
+            "score": "99-86",
+            "winner": "home",
+            "raw": "30.07.26 Al-Riyadi 99-86 Sagesse Beirut"
+          },
+          {
+            "date": "28.07.26",
+            "home": "Sagesse Beirut",
+            "away": "Al-Riyadi",
+            "score": "90-78",
+            "winner": "home",
+            "raw": "28.07.26 Sagesse Beirut 90-78 Al-Riyadi"
+          },
+          {
+            "date": "26.07.26",
+            "home": "Al-Riyadi",
+            "away": "Sagesse Beirut",
+            "score": "87-85",
+            "winner": "home",
+            "raw": "26.07.26 Al-Riyadi 87-85 Sagesse Beirut"
+          },
+          {
+            "date": "24.07.26",
+            "home": "Sagesse Beirut",
+            "away": "Al-Riyadi",
+            "score": "101-96",
+            "winner": "home",
+            "raw": "24.07.26 Sagesse Beirut 101-96 Al-Riyadi"
+          }
+        ],
+        "last_h2h_date": "01.08.26",
+        "last_h2h_score": "96-65",
+        "last_h2h_home": "Sagesse Beirut",
+        "last_h2h_away": "Al-Riyadi",
+        "form_advantage": false
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Chile - LNB",
+      "match_url": "https://www.oddssafari.com/matches/basketball/chile/lnb/leones-quilpue-vs-u.de-concepcion/2291148?MarketTypeID=201",
+      "match_id": "2291148",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Leones Quilpue",
+      "away_team": "U.de Concepcion",
+      "event_date": "04/08",
+      "event_time": "00:30",
+      "outcome": "1",
+      "open_odds": 2.12,
+      "current_odds": 1.79,
+      "drop_pct": 16.0,
+      "max_odds": 1.9,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16643491,
+        "home_team": "Leones Quilpue",
+        "away_team": "U.de Concepcion",
+        "sport": "basketball",
+        "league": "Chile - LNB",
+        "match_time": "00:30"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Puerto Rico - Superior Nacional",
+      "match_url": "https://www.oddssafari.com/matches/basketball/puerto-rico/superior-nacional/criollos-de-caguas-vs-bayamon/2290942?MarketTypeID=201",
+      "match_id": "2290942",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Criollos de Caguas",
+      "away_team": "Bayamon",
+      "event_date": "04/08",
+      "event_time": "00:00",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.85,
+      "drop_pct": 12.0,
+      "max_odds": 1.93,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 5,
+        "away_wins_in_h2h_last5": 5,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16689177,
+        "home_team": "Criollos de Caguas",
+        "away_team": "Bayamon",
+        "sport": "basketball",
+        "league": "Puerto Rico - Superior Nacional",
+        "match_time": "00:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Lebanon - LBL",
+      "match_url": "https://www.oddssafari.com/matches/basketball/lebanon/lbl/al-riyadhi-beirut-vs-sagesse/2291154?MarketTypeID=201",
+      "match_id": "2291154",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Al Riyadhi Beirut",
+      "away_team": "Sagesse",
+      "event_date": "03/08",
+      "event_time": "18:30",
+      "outcome": "1",
+      "open_odds": 1.65,
+      "current_odds": 1.46,
+      "drop_pct": 11.0,
+      "max_odds": 1.47,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/koszykowka/al-riyadi-KKNkkwCQ/sagesse-al-hekmeh-beirut-OxRjlt6O/?mid=hlFZMPbm",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Al-Riyadi",
+        "away_team": "Sagesse Beirut",
+        "match_time": "03.08.2026 18:30",
+        "sport": "basketball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.4,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "sofascore_home_win_prob": 61,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 39,
+        "sofascore_total_votes": 458,
+        "h2h_last5": [
+          {
+            "date": "01.08.26",
+            "home": "Sagesse Beirut",
+            "away": "Al-Riyadi",
+            "score": "96-65",
+            "winner": "home",
+            "raw": "01.08.26 Sagesse Beirut 96-65 Al-Riyadi"
+          },
+          {
+            "date": "30.07.26",
+            "home": "Al-Riyadi",
+            "away": "Sagesse Beirut",
+            "score": "99-86",
+            "winner": "home",
+            "raw": "30.07.26 Al-Riyadi 99-86 Sagesse Beirut"
+          },
+          {
+            "date": "28.07.26",
+            "home": "Sagesse Beirut",
+            "away": "Al-Riyadi",
+            "score": "90-78",
+            "winner": "home",
+            "raw": "28.07.26 Sagesse Beirut 90-78 Al-Riyadi"
+          },
+          {
+            "date": "26.07.26",
+            "home": "Al-Riyadi",
+            "away": "Sagesse Beirut",
+            "score": "87-85",
+            "winner": "home",
+            "raw": "26.07.26 Al-Riyadi 87-85 Sagesse Beirut"
+          },
+          {
+            "date": "24.07.26",
+            "home": "Sagesse Beirut",
+            "away": "Al-Riyadi",
+            "score": "101-96",
+            "winner": "home",
+            "raw": "24.07.26 Sagesse Beirut 101-96 Al-Riyadi"
+          }
+        ],
+        "last_h2h_date": "01.08.26",
+        "last_h2h_score": "96-65",
+        "last_h2h_home": "Sagesse Beirut",
+        "last_h2h_away": "Al-Riyadi",
+        "form_advantage": false
+      },
+      "enrichment_error": null
+    }
+  ]
+}
