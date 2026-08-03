@@ -120,7 +120,7 @@ export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
   const sortedGroups = sortLeagueGroups(grouped, liveMatchIds)
 
   return (
-    <div className="rounded-xl border bg-card shadow-sm">
+    <div className="overflow-hidden rounded-md border border-border bg-card">
       {sortedGroups.map(([league, leagueMatches]) => {
         const hasLive = leagueMatches.some(m => {
           const ls = findLiveScore(m)
@@ -132,6 +132,7 @@ export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
             key={league}
             league={league}
             country={leagueMatches[0]?.country}
+            sport={leagueMatches[0]?.sport}
             matchCount={leagueMatches.length}
             hasLive={hasLive}
             defaultOpen={true}
