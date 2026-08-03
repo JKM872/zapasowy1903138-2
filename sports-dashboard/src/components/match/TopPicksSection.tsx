@@ -7,7 +7,8 @@ import { Flame, Sparkles, Zap } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { SPORT_MAP, PREDICTION_COLORS } from '@/lib/constants'
+import { PREDICTION_COLORS } from '@/lib/constants'
+import { SportIcon } from '@/components/shared/SportIcon'
 import { formatMatchTime, formatOdds } from '@/lib/format'
 import { TeamLogo } from '@/components/match/TeamLogo'
 import { RadialProgress } from '@/components/charts/RadialProgress'
@@ -20,8 +21,6 @@ interface Props {
 }
 
 function TopPickCard({ match, onSelect }: { match: Match; onSelect?: (m: Match) => void }) {
-  const sportCfg = SPORT_MAP[match.sport]
-  const SportIcon = sportCfg?.icon
   const geminiConf = match.gemini?.confidence ?? match.forebet?.probability ?? 0
 
   return (
@@ -41,7 +40,7 @@ function TopPickCard({ match, onSelect }: { match: Match; onSelect?: (m: Match) 
         {/* Header: sport + time */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            {SportIcon && <SportIcon className={cn('h-3 w-3', sportCfg.color)} />}
+            <SportIcon sport={match.sport} colored className="text-[14px]" />
             <span className="text-[10px] text-muted-foreground truncate max-w-[120px]">
               {match.league ?? match.sport}
             </span>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { MATERIAL_SYMBOLS_HREF } from '@/lib/constants'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { Header } from '@/components/layout/Header'
@@ -16,19 +17,32 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+
+
 export const metadata: Metadata = {
-  title: 'Sports Predictions Dashboard',
+  title: 'Analiza zdarzeń sportowych',
   description:
-    'Real-time sports predictions, odds comparison, and analytics powered by Forebet, SofaScore & AI.',
-  keywords: ['sports', 'predictions', 'betting', 'odds', 'forebet', 'sofascore'],
+    'Narzędzie analityczne dla zdarzeń sportowych: kursy, prawdopodobieństwa, wartość oczekiwana i forma drużyn. Nie przyjmujemy zakładów.',
+  keywords: ['analiza', 'sport', 'kursy', 'prawdopodobieństwo', 'wartość oczekiwana', 'statystyki'],
 }
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+    <html lang="pl" suppressHydrationWarning>
+      <head>
+        {/* Material Symbols is an icon font, so it is not available through
+            next/font/google. Requesting it by icon_names ships only the glyphs
+            the sport registry actually uses instead of the ~3 MB full set. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <Providers>
           <div className="relative flex min-h-screen flex-col">
             <Header />

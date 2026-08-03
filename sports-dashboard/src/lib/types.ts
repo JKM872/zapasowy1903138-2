@@ -2,7 +2,23 @@
 // SPORTS DASHBOARD - TypeScript Types
 // ============================================================================
 
-export type Sport = 'football' | 'basketball' | 'tennis' | 'hockey' | 'volleyball' | 'handball'
+/**
+ * Sports the registry knows how to label and draw.
+ *
+ * The backend derives `sport` straight from the stored row, so a key that is not
+ * listed here can still arrive. Never index the registry directly with a raw
+ * value — use `getSportConfig`, which falls back gracefully. Leaving `baseball`
+ * out is what made the sport tabs add up to 658 while "all" reported 670.
+ */
+export type Sport =
+  | 'football'
+  | 'basketball'
+  | 'tennis'
+  | 'hockey'
+  | 'volleyball'
+  | 'handball'
+  | 'baseball'
+  | 'table_tennis'
 
 export type Prediction = '1' | 'X' | '2' | '1X' | 'X2' | '12' | null
 

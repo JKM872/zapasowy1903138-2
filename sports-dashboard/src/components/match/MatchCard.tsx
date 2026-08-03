@@ -7,7 +7,8 @@ import { Clock, TrendingUp, ChevronRight } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { SPORT_MAP, PREDICTION_COLORS } from '@/lib/constants'
+import { PREDICTION_COLORS } from '@/lib/constants'
+import { SportIcon } from '@/components/shared/SportIcon'
 import { formatMatchTime, formatOdds, formatPct } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
 import { LiveScoreBadge } from './LiveScoreBadge'
@@ -24,9 +25,7 @@ interface Props {
 }
 
 export function MatchCard({ match, liveScore, onSelect }: Props) {
-  const sportCfg = SPORT_MAP[match.sport]
   const conf = match.aiPrediction?.compositeConfidence ?? match.gemini?.confidence ?? match.scoring?.confidence ?? match.confidence ?? match.forebet?.probability ?? 0
-  const SportIcon = sportCfg?.icon
   const recommendation = match.gemini?.recommendation
   const isHighPick = recommendation === 'HIGH'
   const isLive = liveScore?.status === 'live' || liveScore?.status === 'halftime'
@@ -50,7 +49,7 @@ export function MatchCard({ match, liveScore, onSelect }: Props) {
         'bg-muted/30',
       )}>
         <div className="flex items-center gap-1.5 min-w-0">
-          {SportIcon && <SportIcon className={cn('h-3.5 w-3.5 shrink-0', sportCfg.color)} />}
+          <SportIcon sport={match.sport} colored className="shrink-0 text-[16px]" />
           <span className="text-[11px] text-muted-foreground truncate">
             {match.league ?? match.sport}
           </span>

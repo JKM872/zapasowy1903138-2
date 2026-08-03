@@ -15,7 +15,8 @@ import {
   Thermometer, Wind, Droplets, Lock, Crown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { SPORT_MAP, PREDICTION_COLORS } from '@/lib/constants'
+import { PREDICTION_COLORS } from '@/lib/constants'
+import { SportIcon } from '@/components/shared/SportIcon'
 import { formatFractionPct, formatMatchTime, formatOdds, formatPct, formatVotes } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
 import { TeamLogo } from './TeamLogo'
@@ -41,9 +42,7 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
 
   if (!match) return null
 
-  const sportCfg = SPORT_MAP[match.sport]
   const conf = match.gemini?.confidence ?? match.scoring?.confidence ?? match.confidence ?? match.forebet?.probability ?? 0
-  const SportIcon = sportCfg?.icon
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -52,7 +51,7 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
         <div className="p-5 pb-0">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-3">
-              {SportIcon && <SportIcon className={cn('h-4 w-4', sportCfg.color)} />}
+              <SportIcon sport={match.sport} colored className="text-[18px]" />
               <span className="text-xs text-muted-foreground">{match.league ?? match.sport}</span>
               <GradeBadge grade={match.predictionGrade} className="ml-1" />
               <span className="text-xs text-muted-foreground ml-auto flex items-center gap-1">

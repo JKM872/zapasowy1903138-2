@@ -23,6 +23,7 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
 import { SPORTS, QUICK_FILTERS } from '@/lib/constants'
+import { SportIcon } from '@/components/shared/SportIcon'
 import { useFilterStore } from '@/store/filterStore'
 import type { Sport } from '@/lib/types'
 
@@ -76,7 +77,7 @@ export function FilterBar() {
               {SPORTS.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   <span className="flex items-center gap-2">
-                    <s.icon className={cn('h-3.5 w-3.5', s.color)} />
+                    <SportIcon sport={s.id} colored className="text-[16px]" />
                     {s.name}
                   </span>
                 </SelectItem>
