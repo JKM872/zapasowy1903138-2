@@ -34,6 +34,28 @@ export function formatMatchTime(timeStr: string): string {
 }
 
 /**
+ * Render a value that is ALREADY a percentage (0-100): 62.3 → "62%".
+ *
+ * The API mixes both scales, which is how the same bug landed in four places:
+ * `scoring.prob` and `tennis.probA` arrive as 62.3, while
+ * `scoring.dataQuality` and `factors[].weight` arrive as 0.71 and 0.3. Writing
+ * `prob * 100` produced "6900%" on live match rows. Naming the two cases makes
+ * the scale part of the call instead of something to remember.
+ */
+export function formatPct(v: number | null | undefined, digits = 0): string {
+  if (v == null || Number.isNaN(v)) return '-'
+  return `${v.toFixed(digits)}%`
+}
+
+/**
+ * Render a 0-1 fraction as a percentage: 0.71 → "71%".
+ */
+export function formatFractionPct(v: number | null | undefined, digits = 0): string {
+  if (v == null || Number.isNaN(v)) return '-'
+  return `${(v * 100).toFixed(digits)}%`
+}
+
+/**
  * Format large vote counts: 1234567 → "1.2M", 12345 → "12.3k"
  */
 export function formatVotes(n: number): string {

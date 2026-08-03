@@ -3,14 +3,16 @@
 // ============================================================================
 'use client'
 
-import { Clock, ChevronRight, Gem, BarChart3 } from 'lucide-react'
+import Link from 'next/link'
+import { Clock, ChevronRight, Gem, BarChart3, Lock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { PREDICTION_COLORS } from '@/lib/constants'
-import { formatMatchTime, formatOdds } from '@/lib/format'
+import { formatMatchTime, formatOdds, formatPct } from '@/lib/format'
 import { LiveScoreBadge } from './LiveScoreBadge'
 import { RecommendationBadge } from './RecommendationBadge'
 import { TeamLogo } from './TeamLogo'
+import { GradeBadge } from './GradeBadge'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
 import type { Match, LiveScore } from '@/lib/types'
@@ -142,6 +144,20 @@ export function MatchRow({ match, liveScore, onSelect }: Props) {
 
         {/* Predictions + Odds row */}
         <div className="flex items-center gap-2 flex-wrap">
+          {/* Prediction grade */}
+          <GradeBadge grade={match.predictionGrade} />
+
+          {/* Premium lock — Grade A masked for non-subscribers */}
+          {match.locked && (
+            <Link
+              href="/pricing"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0 text-[10px] font-semibold text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 transition-colors"
+            >
+              <Lock className="h-2.5 w-2.5" /> Premium — unlock $5/wk
+            </Link>
+          )}
+
           {/* Forebet prediction + all 3 probabilities */}
           {forebetPred && (
             <div className="flex items-center gap-1">
@@ -226,7 +242,7 @@ export function MatchRow({ match, liveScore, onSelect }: Props) {
               </Badge>
               {match.scoring.prob > 0 && (
                 <span className="text-[10px] text-violet-500/80 tabular-nums">
-                  {Math.round(match.scoring.prob * 100)}%
+                  {formatPct(match.scoring.prob)}
                 </span>
               )}
               {match.scoring.ev > 0 && (

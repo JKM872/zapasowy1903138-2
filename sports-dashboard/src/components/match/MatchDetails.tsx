@@ -9,15 +9,17 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
+import Link from 'next/link'
 import {
   Target, BarChart3, TrendingUp, History, Brain, Clock, Zap, CloudSun,
-  Thermometer, Wind, Droplets,
+  Thermometer, Wind, Droplets, Lock, Crown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SPORT_MAP, PREDICTION_COLORS } from '@/lib/constants'
-import { formatMatchTime, formatOdds, formatVotes } from '@/lib/format'
+import { formatFractionPct, formatMatchTime, formatOdds, formatPct, formatVotes } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
 import { TeamLogo } from './TeamLogo'
+import { GradeBadge } from './GradeBadge'
 import { AIPredictionPanel } from './AIPredictionPanel'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
@@ -52,6 +54,7 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
             <div className="flex items-center gap-2 mb-3">
               {SportIcon && <SportIcon className={cn('h-4 w-4', sportCfg.color)} />}
               <span className="text-xs text-muted-foreground">{match.league ?? match.sport}</span>
+              <GradeBadge grade={match.predictionGrade} className="ml-1" />
               <span className="text-xs text-muted-foreground ml-auto flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 {formatMatchTime(match.time)}
@@ -89,6 +92,25 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
         </div>
 
         <Separator />
+
+        {/* ── Premium upsell (Grade A locked for non-subscribers) ── */}
+        {match.locked && (
+          <div className="mx-5 mt-4 rounded-xl border border-amber-500/40 bg-gradient-to-br from-amber-500/10 to-yellow-500/5 p-4">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Crown className="h-4 w-4 text-amber-500" />
+              Grade A — Premium pick
+            </div>
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              This is one of our highest-conviction selections. Unlock the full AI
+              analysis, scoring-engine EV and the exact pick for $5/week.
+            </p>
+            <Link href="/pricing">
+              <button className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-black hover:bg-amber-400 transition-colors">
+                <Lock className="h-3.5 w-3.5" /> Unlock Grade A
+              </button>
+            </Link>
+          </div>
+        )}
 
         {/* ── Tabs ── */}
         <div className="px-5 pb-5">
@@ -190,28 +212,28 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <StatBox label="Pick" value={
-                      <Badge className="bg-violet-500 text-white mt-0.5">{match.scoring.pick}</Badge>
+                      <Badge className="bg-violet-500 text-white mt-0.5">{match.scoring.pick || '-'}</Badge>
                     } />
                     <StatBox label="Probability" value={
-                      <span className="font-bold">{Math.round(match.scoring.prob * 100)}%</span>
+                      <span className="font-bold">{formatPct(num(match.scoring.prob))}</span>
                     } />
                     <StatBox label="Expected Value" value={
-                      <span className={cn('font-bold', match.scoring.ev > 0 ? 'text-emerald-600' : 'text-rose-600')}>
-                        {match.scoring.ev > 0 ? '+' : ''}{match.scoring.ev.toFixed(3)}
+                      <span className={cn('font-bold', num(match.scoring.ev) > 0 ? 'text-emerald-600' : 'text-rose-600')}>
+                        {num(match.scoring.ev) > 0 ? '+' : ''}{num(match.scoring.ev).toFixed(3)}
                       </span>
                     } />
                     <StatBox label="Edge" value={
-                      <span className={cn('font-bold', match.scoring.edge > 0 ? 'text-emerald-600' : 'text-muted-foreground')}>
-                        {match.scoring.edge > 0 ? '+' : ''}{match.scoring.edge.toFixed(1)}%
+                      <span className={cn('font-bold', num(match.scoring.edge) > 0 ? 'text-emerald-600' : 'text-muted-foreground')}>
+                        {num(match.scoring.edge) > 0 ? '+' : ''}{num(match.scoring.edge).toFixed(1)}%
                       </span>
                     } />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <StatBox label="Kelly %" value={
-                      <span className="font-bold">{match.scoring.kelly.toFixed(1)}%</span>
+                      <span className="font-bold">{num(match.scoring.kelly).toFixed(1)}%</span>
                     } />
                     <StatBox label="Data Quality" value={
-                      <RadialProgress value={match.scoring.dataQuality * 100} size={36} strokeWidth={3} color="#8b5cf6" />
+                      <RadialProgress value={num(match.scoring.dataQuality) * 100} size={36} strokeWidth={3} color="#8b5cf6" />
                     } />
                   </div>
                   {/* Tennis-specific info */}
@@ -220,7 +242,7 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
                       {match.tennis.surface && <span>Surface: <strong>{match.tennis.surface}</strong></span>}
                       {match.tennis.rankingA != null && <span>#{match.tennis.rankingA} vs #{match.tennis.rankingB}</span>}
                       <span className="ml-auto font-mono tabular-nums">
-                        A: {Math.round(match.tennis.probA * 100)}% · B: {Math.round(match.tennis.probB * 100)}%
+                        A: {formatPct(num(match.tennis.probA))} · B: {formatPct(num(match.tennis.probB))}
                       </span>
                     </div>
                   )}
@@ -333,23 +355,23 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
                   </div>
                   <div className="flex items-center gap-3 rounded-lg bg-violet-500/5 border border-violet-500/10 p-3">
                     <span className="text-sm text-muted-foreground">Pick:</span>
-                    <Badge className="bg-violet-500 text-white">{match.scoring.pick}</Badge>
-                    <RadialProgress value={match.scoring.confidence} size={36} strokeWidth={3} color="#8b5cf6" />
+                    <Badge className="bg-violet-500 text-white">{match.scoring.pick || '-'}</Badge>
+                    <RadialProgress value={num(match.scoring.confidence)} size={36} strokeWidth={3} color="#8b5cf6" />
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div className="rounded-lg bg-muted/40 p-2.5">
                       <p className="text-[10px] text-muted-foreground mb-1">EV</p>
-                      <p className={cn('text-lg font-bold tabular-nums', match.scoring.ev > 0 ? 'text-emerald-600' : 'text-rose-600')}>
-                        {match.scoring.ev > 0 ? '+' : ''}{match.scoring.ev.toFixed(3)}
+                      <p className={cn('text-lg font-bold tabular-nums', num(match.scoring.ev) > 0 ? 'text-emerald-600' : 'text-rose-600')}>
+                        {num(match.scoring.ev) > 0 ? '+' : ''}{num(match.scoring.ev).toFixed(3)}
                       </p>
                     </div>
                     <div className="rounded-lg bg-muted/40 p-2.5">
                       <p className="text-[10px] text-muted-foreground mb-1">Edge</p>
-                      <p className="text-lg font-bold tabular-nums">{match.scoring.edge > 0 ? '+' : ''}{match.scoring.edge.toFixed(1)}%</p>
+                      <p className="text-lg font-bold tabular-nums">{num(match.scoring.edge) > 0 ? '+' : ''}{num(match.scoring.edge).toFixed(1)}%</p>
                     </div>
                     <div className="rounded-lg bg-muted/40 p-2.5">
                       <p className="text-[10px] text-muted-foreground mb-1">Kelly</p>
-                      <p className="text-lg font-bold tabular-nums">{match.scoring.kelly.toFixed(1)}%</p>
+                      <p className="text-lg font-bold tabular-nums">{num(match.scoring.kelly).toFixed(1)}%</p>
                     </div>
                   </div>
                 </div>
@@ -424,6 +446,13 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
       </DialogContent>
     </Dialog>
   )
+}
+
+// ── Helpers ──
+
+/** Coerce possibly-null/undefined/NaN numeric API values to a safe number. */
+function num(v: number | null | undefined, fallback = 0): number {
+  return typeof v === 'number' && Number.isFinite(v) ? v : fallback
 }
 
 // ── Helper components ──

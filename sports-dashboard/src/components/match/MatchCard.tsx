@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { SPORT_MAP, PREDICTION_COLORS } from '@/lib/constants'
-import { formatMatchTime, formatOdds } from '@/lib/format'
+import { formatMatchTime, formatOdds, formatPct } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
 import { LiveScoreBadge } from './LiveScoreBadge'
 import { TeamLogo } from './TeamLogo'
@@ -167,7 +167,7 @@ export function MatchCard({ match, liveScore, onSelect }: Props) {
                 </Badge>
                 {match.scoring.prob > 0 && (
                   <span className="font-medium text-violet-500/80">
-                    {Math.round(match.scoring.prob * 100)}%
+                    {formatPct(match.scoring.prob)}
                   </span>
                 )}
                 {match.scoring.ev > 0 && (
