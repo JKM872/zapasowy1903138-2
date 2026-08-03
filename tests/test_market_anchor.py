@@ -149,7 +149,17 @@ class TestFootballAnchorFromCalibration:
 
 class TestTennisAnchor:
     def test_default_is_the_measured_value(self):
-        assert TennisScoringEngine().market_anchor() == pytest.approx(0.90)
+        # 0.93 replaced 0.90 after export_settled started unpacking the nested
+        # `tennis` block: with ranking and surface form present the engine scores
+        # Brier 0.3808 against the market's 0.3813, and this weight was the best
+        # in both windows (+3.5% earlier, +14.6% held out).
+        assert TennisScoringEngine().market_anchor() == pytest.approx(0.93)
+
+    def test_football_engine_agrees_on_the_tennis_anchor(self):
+        """Both engines must not disagree about how anchored tennis is."""
+        from football_scoring_engine import FootballScoringEngine
+        assert FootballScoringEngine().market_anchor_for_sport('tennis') == \
+            pytest.approx(TennisScoringEngine().MARKET_ANCHOR_DEFAULT)
 
     def test_anchoring_pulls_towards_the_price(self):
         e = TennisScoringEngine()
@@ -193,7 +203,7 @@ class TestTennisAnchor:
         assert e.score_match(m).cal_a == pytest.approx(own)
 
     @pytest.mark.parametrize('bad,expected', [(-1.0, 0.0), (3.0, 1.0),
-                                              ('x', 0.90), (None, 0.90)])
+                                              ('x', 0.93), (None, 0.93)])
     def test_bad_values_are_clamped_or_ignored(self, bad, expected):
         e = TennisScoringEngine()
         e.calibration = dict(e.calibration, market_anchor=bad)

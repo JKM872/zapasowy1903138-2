@@ -915,7 +915,7 @@ class TennisScoringEngine:
     # How much of the bookmaker's price to fold into the published probability.
     # Measured per sport in tools/market_blend.py, validated on a held-out later
     # window; see the note at the anchoring step in score_match.
-    MARKET_ANCHOR_DEFAULT: float = 0.90
+    MARKET_ANCHOR_DEFAULT: float = 0.93
 
     def market_anchor(self) -> float:
         """Anchor strength, overridable from the calibration file."""

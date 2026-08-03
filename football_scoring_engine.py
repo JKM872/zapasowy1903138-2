@@ -1058,10 +1058,16 @@ class FootballScoringEngine:
     #
     #   basketball  w=0.75  ROI +5.8% earlier, +25.9% held out (best in BOTH
     #               windows, which is the bar every earlier candidate failed)
-    #   tennis      w=0.90  no weight turns tennis profitable, but this cuts
-    #               staked volume from 1400 bets to 197 and the held-out loss
-    #               from 137.7 units to 31.4 — a 77% smaller loss, with the
-    #               sport still published rather than hidden
+    #   tennis      w=0.93  best in BOTH windows: +3.5% earlier, +14.6% held out,
+    #               against -5.9% and -5.3% at the previous 0.90
+    #
+    # The tennis figure was re-measured after export_settled.py started
+    # unpacking the nested `tennis` block. Ranking (0.11 of the tennis weight
+    # budget) and surface form (0.12) had been dropped from every exported row,
+    # so the earlier verdict — "engine Brier 0.5060 against the market's 0.4157,
+    # no weight is profitable" — described an engine missing a quarter of its
+    # inputs. With them present the engine scores 0.3808 against the market's
+    # 0.3813: level, not far behind.
     #
     # Sports absent here keep 0.0 on purpose: their held-out samples are 51-95
     # matches with prices, too few to justify changing what clients receive.
@@ -1069,7 +1075,7 @@ class FootballScoringEngine:
     # can be promoted the moment it has evidence.
     MARKET_ANCHOR: Dict[str, float] = {
         'basketball': 0.75,
-        'tennis': 0.90,
+        'tennis': 0.93,
     }
     MARKET_ANCHOR_DEFAULT: float = 0.0
 
