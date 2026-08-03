@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-03T07:19:33.207080+02:00",
+    "generated_at": "2026-08-03T18:39:16.036013+02:00",
     "target_date": "2026-08-03",
     "filter": {
       "min_odds": 1.35,
@@ -13,14 +13,14 @@
     },
     "enrichment_status_counts": {
       "enriched": 0,
-      "resolve_failed": 1,
+      "resolve_failed": 0,
       "process_match_error": 0,
-      "enriched_sofascore_only": 1
+      "enriched_sofascore_only": 2
     },
     "skip_reason_counts": {
       "odds_out_of_range": 1
     },
-    "elapsed_seconds": 162.7,
+    "elapsed_seconds": 183.9,
     "dry_run": false
   },
   "events": [
@@ -36,9 +36,9 @@
       "event_time": "05:00",
       "outcome": "2",
       "open_odds": 2.35,
-      "current_odds": 1.65,
+      "current_odds": 1.64,
       "drop_pct": 30.0,
-      "max_odds": 1.7,
+      "max_odds": 1.69,
       "sport_page_id": "140",
       "notes": [],
       "qualifies": true,
@@ -50,35 +50,6 @@
       "livesport_url": null,
       "livesport_confidence": 0.0,
       "enrichment": {
-        "home_form": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "home_form_overall": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "form_source": "sofascore_api",
-        "away_form": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
-        "away_form_overall": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
         "h2h_count": 10,
         "home_wins_in_h2h_last5": 5,
         "away_wins_in_h2h_last5": 5,
@@ -90,6 +61,75 @@
         "sport": "rugby",
         "league": "Australia - NRL",
         "match_time": "05:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/dolphins-vs-brisbane-broncos/2286498?MarketTypeID=1401",
+      "match_id": "2286498",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Dolphins",
+      "away_team": "Brisbane Broncos",
+      "event_date": "08/08",
+      "event_time": "07:30",
+      "outcome": "1",
+      "open_odds": 1.62,
+      "current_odds": 1.4,
+      "drop_pct": 14.0,
+      "max_odds": 1.45,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 7,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.143,
+        "sofascore_event_id": 15105955,
+        "home_team": "Dolphins",
+        "away_team": "Brisbane Broncos",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "07:30"
       },
       "enrichment_error": null
     },
@@ -105,9 +145,9 @@
       "event_time": "01:35",
       "outcome": "1",
       "open_odds": 6.3,
-      "current_odds": 5.25,
-      "drop_pct": 17.0,
-      "max_odds": 5.25,
+      "current_odds": 5.43,
+      "drop_pct": 14.0,
+      "max_odds": 6.6,
       "sport_page_id": "140",
       "notes": [],
       "qualifies": false,
@@ -115,34 +155,6 @@
       "dropped_outcome": "1",
       "focus_team": "home",
       "away_team_focus": false
-    },
-    {
-      "league": "Australia - NRL",
-      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/dolphins-vs-brisbane-broncos/2286498?MarketTypeID=1401",
-      "match_id": "2286498",
-      "sport_slug": "rugby-league",
-      "sport": "rugby",
-      "home_team": "Dolphins",
-      "away_team": "Brisbane Broncos",
-      "event_date": "08/08",
-      "event_time": "07:30",
-      "outcome": "1",
-      "open_odds": 1.62,
-      "current_odds": 1.45,
-      "drop_pct": 11.0,
-      "max_odds": 1.48,
-      "sport_page_id": "140",
-      "notes": [],
-      "qualifies": true,
-      "skip_reason": null,
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false,
-      "enrichment_status": "resolve_failed",
-      "livesport_url": null,
-      "livesport_confidence": 0.0,
-      "enrichment": null,
-      "enrichment_error": null
     }
   ],
   "qualified": [
@@ -158,9 +170,9 @@
       "event_time": "05:00",
       "outcome": "2",
       "open_odds": 2.35,
-      "current_odds": 1.65,
+      "current_odds": 1.64,
       "drop_pct": 30.0,
-      "max_odds": 1.7,
+      "max_odds": 1.69,
       "sport_page_id": "140",
       "notes": [],
       "qualifies": true,
@@ -172,35 +184,6 @@
       "livesport_url": null,
       "livesport_confidence": 0.0,
       "enrichment": {
-        "home_form": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "home_form_overall": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "form_source": "sofascore_api",
-        "away_form": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
-        "away_form_overall": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
         "h2h_count": 10,
         "home_wins_in_h2h_last5": 5,
         "away_wins_in_h2h_last5": 5,
@@ -227,9 +210,9 @@
       "event_time": "07:30",
       "outcome": "1",
       "open_odds": 1.62,
-      "current_odds": 1.45,
-      "drop_pct": 11.0,
-      "max_odds": 1.48,
+      "current_odds": 1.4,
+      "drop_pct": 14.0,
+      "max_odds": 1.45,
       "sport_page_id": "140",
       "notes": [],
       "qualifies": true,
@@ -237,10 +220,51 @@
       "dropped_outcome": "1",
       "focus_team": "home",
       "away_team_focus": false,
-      "enrichment_status": "resolve_failed",
+      "enrichment_status": "enriched_sofascore_only",
       "livesport_url": null,
       "livesport_confidence": 0.0,
-      "enrichment": null,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 7,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.143,
+        "sofascore_event_id": 15105955,
+        "home_team": "Dolphins",
+        "away_team": "Brisbane Broncos",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "07:30"
+      },
       "enrichment_error": null
     }
   ]
