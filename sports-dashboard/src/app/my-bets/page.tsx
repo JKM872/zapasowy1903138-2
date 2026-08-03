@@ -26,6 +26,14 @@ import { useAuthStore } from '@/store/authStore'
 import { AuthDialog } from '@/components/auth/AuthDialog'
 import type { ApiBet } from '@/lib/api'
 
+/** The API returns raw English statuses; these are what the user should read. */
+const BET_STATUS_LABELS: Record<string, string> = {
+  won: 'trafiony',
+  lost: 'nietrafiony',
+  pending: 'w toku',
+  void: 'anulowany',
+}
+
 export default function MyBetsPage() {
   const { user } = useAuthStore()
   const { data, isLoading, isError, error } = useBets({ limit: 200 })
@@ -85,11 +93,11 @@ export default function MyBetsPage() {
   // Auth gate — prompt sign in for write actions
   if (!user) {
     return (
-      <div className="container py-6 space-y-6">
+      <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">My Bets</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Moje typy</h1>
           <p className="text-muted-foreground mt-1">
-            Track your picks and measure performance over time.
+            Zapisuj swoje typy i sprawdzaj, jak wychodzą w czasie.
           </p>
         </div>
         <Card className="border-dashed">
@@ -98,13 +106,13 @@ export default function MyBetsPage() {
               <LogIn className="h-8 w-8 text-primary" />
             </div>
             <div className="text-center space-y-1">
-              <p className="font-semibold text-lg">Sign in to track your bets</p>
+              <p className="font-semibold text-lg">Zaloguj się, aby zapisywać typy</p>
               <p className="text-sm text-muted-foreground max-w-sm">
-                Create an account to record your predictions, track win rates, and measure ROI.
+                Utwórz konto, aby zapisywać typy, liczyć skuteczność i ROI.
               </p>
             </div>
             <Button onClick={() => setAuthOpen(true)} className="gap-2">
-              <LogIn className="h-4 w-4" /> Sign In
+              <LogIn className="h-4 w-4" /> Zaloguj
             </Button>
           </CardContent>
         </Card>
@@ -114,29 +122,29 @@ export default function MyBetsPage() {
   }
 
   return (
-    <div className="container py-6 space-y-6">
+    <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">My Bets</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Moje typy</h1>
           <p className="text-muted-foreground mt-1">
-            Track your picks and measure performance over time.
+            Zapisuj swoje typy i sprawdzaj, jak wychodzą w czasie.
           </p>
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>
-              <Plus className="h-4 w-4 mr-2" /> Add Bet
+              <Plus className="h-4 w-4 mr-2" /> Dodaj typ
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>New Bet</DialogTitle>
+              <DialogTitle>Nowy typ</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-2">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label>Home Team</Label>
+                  <Label>Gospodarz</Label>
                   <Input
                     placeholder="e.g. Barcelona"
                     value={homeTeam}
@@ -144,7 +152,7 @@ export default function MyBetsPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Away Team</Label>
+                  <Label>Gość</Label>
                   <Input
                     placeholder="e.g. Real Madrid"
                     value={awayTeam}
@@ -154,7 +162,7 @@ export default function MyBetsPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label>Match Date</Label>
+                  <Label>Data zdarzenia</Label>
                   <Input
                     type="date"
                     value={matchDate}
@@ -162,22 +170,22 @@ export default function MyBetsPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Pick</Label>
+                  <Label>Typ</Label>
                   <Select value={pick} onValueChange={(v) => setPick(v as '1' | 'X' | '2')}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select outcome" />
+                      <SelectValue placeholder="Wybierz wynik" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 — Home Win</SelectItem>
-                      <SelectItem value="X">X — Draw</SelectItem>
-                      <SelectItem value="2">2 — Away Win</SelectItem>
+                      <SelectItem value="1">1 — gospodarz</SelectItem>
+                      <SelectItem value="X">X — remis</SelectItem>
+                      <SelectItem value="2">2 — gość</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label>Odds</Label>
+                  <Label>Kurs</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -187,7 +195,7 @@ export default function MyBetsPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Stake</Label>
+                  <Label>Stawka</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -204,11 +212,11 @@ export default function MyBetsPage() {
               disabled={!homeTeam || !awayTeam || !pick || createBet.isPending}
             >
               {createBet.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              Save Bet
+              Zapisz typ
             </Button>
             {createBet.isError && (
               <p className="text-xs text-destructive text-center mt-1">
-                {(createBet.error as Error)?.message ?? 'Failed to save bet'}
+                {(createBet.error as Error)?.message ?? 'Nie udało się zapisać typu'}
               </p>
             )}
           </DialogContent>
@@ -218,23 +226,23 @@ export default function MyBetsPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Wszystkie</CardTitle></CardHeader>
           <CardContent><span className="text-2xl font-bold">{total}</span></CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Won</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Trafione</CardTitle></CardHeader>
           <CardContent><span className="text-2xl font-bold text-emerald-500">{won}</span></CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Lost</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Nietrafione</CardTitle></CardHeader>
           <CardContent><span className="text-2xl font-bold text-red-500">{lost}</span></CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Pending</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">W toku</CardTitle></CardHeader>
           <CardContent><span className="text-2xl font-bold text-muted-foreground">{pending}</span></CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Win Rate</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Skuteczność</CardTitle></CardHeader>
           <CardContent className="space-y-1">
             <span className={cn('text-2xl font-bold tabular-nums', winRate >= 50 ? 'text-emerald-500' : 'text-red-500')}>
               {winRate > 0 ? `${winRate.toFixed(0)}%` : '—'}
@@ -243,7 +251,7 @@ export default function MyBetsPage() {
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Profit/Loss</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Zysk / strata</CardTitle></CardHeader>
           <CardContent>
             <span className={cn('text-2xl font-bold tabular-nums', profit >= 0 ? 'text-emerald-500' : 'text-red-500')}>
               {profit >= 0 ? '+' : ''}{profit.toFixed(2)}
@@ -260,8 +268,8 @@ export default function MyBetsPage() {
         <div className="flex items-center gap-3 rounded-xl border border-destructive/50 bg-destructive/10 p-4">
           <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
           <div>
-            <p className="text-sm font-medium text-destructive">Failed to load bets</p>
-            <p className="text-xs text-muted-foreground">{(error as Error)?.message ?? 'Backend unavailable'}</p>
+            <p className="text-sm font-medium text-destructive">Nie udało się pobrać typów</p>
+            <p className="text-xs text-muted-foreground">{(error as Error)?.message ?? 'Serwer nie odpowiada'}</p>
           </div>
         </div>
       )}
@@ -282,7 +290,7 @@ export default function MyBetsPage() {
                 <div className="rounded-full bg-muted p-3 w-fit mx-auto">
                   <Target className="h-6 w-6 text-muted-foreground" />
                 </div>
-                <p className="text-muted-foreground">No bets tracked yet. Tap &quot;Add Bet&quot; to get started.</p>
+                <p className="text-muted-foreground">Nie zapisano jeszcze żadnego typu. Kliknij &quot;Dodaj typ&quot;, aby zacząć.</p>
               </CardContent>
             </Card>
           )}
@@ -311,7 +319,7 @@ export default function MyBetsPage() {
                     <span className="text-[10px] text-muted-foreground">@ <span className="font-mono">{bet.odds_at_bet}</span></span>
                   )}
                   {bet.stake != null && (
-                    <span className="text-[10px] text-muted-foreground">Stake: <span className="font-mono">{bet.stake}</span></span>
+                    <span className="text-[10px] text-muted-foreground">Stawka: <span className="font-mono">{bet.stake}</span></span>
                   )}
                   {bet.match_date && (
                     <span className="text-[10px] text-muted-foreground/60">{bet.match_date}</span>
@@ -327,7 +335,7 @@ export default function MyBetsPage() {
                 bet.status === 'pending' && 'bg-muted text-muted-foreground',
                 bet.status === 'void' && 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30',
               )} variant="outline">
-                {bet.status}
+                {BET_STATUS_LABELS[bet.status] ?? bet.status}
               </Badge>
 
               {/* Delete */}

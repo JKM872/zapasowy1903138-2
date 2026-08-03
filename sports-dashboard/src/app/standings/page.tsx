@@ -36,19 +36,19 @@ export default function StandingsPage() {
   const leagues = leaguesData?.leagues ?? []
 
   return (
-    <div className="container py-6 space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+    <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Standings</h1>
-          <p className="text-muted-foreground mt-1">
-            Live league tables powered by Football-Data.org.
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Tabele ligowe</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Aktualne tabele na podstawie danych Football-Data.org.
           </p>
         </div>
 
         {leagues.length > 0 && (
           <Select value={league} onValueChange={setLeague}>
             <SelectTrigger className="w-[220px]">
-              <SelectValue placeholder="Select league" />
+              <SelectValue placeholder="Wybierz ligę" />
             </SelectTrigger>
             <SelectContent>
               {leagues.map((l) => (
@@ -68,10 +68,12 @@ export default function StandingsPage() {
       {isError && (
         <Card className="border-destructive/50 bg-destructive/5">
           <CardContent className="py-8 text-center">
+            {/* The previous copy told the visitor to set a Heroku environment
+                variable, which is our problem, not theirs. */}
             <p className="text-sm text-destructive">
               {(error as Error)?.message?.includes('503')
-                ? 'Set FOOTBALL_DATA_API_KEY environment variable on Heroku to enable standings.'
-                : (error as Error)?.message ?? 'Failed to load standings'}
+                ? 'Tabele są chwilowo niedostępne. Pracujemy nad przywróceniem danych.'
+                : 'Nie udało się pobrać tabeli. Spróbuj ponownie za chwilę.'}
             </p>
           </CardContent>
         </Card>
@@ -85,7 +87,7 @@ export default function StandingsPage() {
               {data.league}
             </CardTitle>
             {data.season && (
-              <CardDescription>Season {data.season}</CardDescription>
+              <CardDescription>Sezon {data.season}</CardDescription>
             )}
           </CardHeader>
           <CardContent className="p-0">
@@ -94,16 +96,16 @@ export default function StandingsPage() {
                 <thead>
                   <tr className="border-b bg-muted/30">
                     <th className="text-left py-2.5 px-3 w-8">#</th>
-                    <th className="text-left py-2.5 px-3">Team</th>
-                    <th className="text-center py-2.5 px-2 w-10">P</th>
-                    <th className="text-center py-2.5 px-2 w-10">W</th>
-                    <th className="text-center py-2.5 px-2 w-10">D</th>
-                    <th className="text-center py-2.5 px-2 w-10">L</th>
-                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell">GF</th>
-                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell">GA</th>
-                    <th className="text-center py-2.5 px-2 w-12">GD</th>
-                    <th className="text-center py-2.5 px-2 w-12 font-bold">Pts</th>
-                    <th className="text-center py-2.5 px-2 hidden md:table-cell">Form</th>
+                    <th className="text-left py-2.5 px-3">Drużyna</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Mecze">M</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Zwycięstwa">Z</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Remisy">R</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Porażki">P</th>
+                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell" title="Bramki zdobyte">BZ</th>
+                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell" title="Bramki stracone">BS</th>
+                    <th className="text-center py-2.5 px-2 w-12" title="Różnica bramek">RB</th>
+                    <th className="text-center py-2.5 px-2 w-12 font-bold" title="Punkty">Pkt</th>
+                    <th className="text-center py-2.5 px-2 hidden md:table-cell">Forma</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -159,10 +161,10 @@ export default function StandingsPage() {
             {/* Legend */}
             <div className="flex items-center gap-4 text-[10px] text-muted-foreground px-4 py-2 border-t">
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Champions League
+                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Liga Mistrzów
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-red-500" /> Relegation
+                <span className="w-2 h-2 rounded-full bg-red-500" /> Strefa spadkowa
               </span>
             </div>
           </CardContent>

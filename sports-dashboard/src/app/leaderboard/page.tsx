@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+import { getSportConfig } from '@/lib/constants'
+import { SportIcon } from '@/components/shared/SportIcon'
 import { useStats, useBetStats } from '@/hooks/useMatches'
 
 function getRankIcon(rank: number) {
@@ -22,8 +24,9 @@ interface SourceEntry {
   name: string
   icon: typeof Target
   color: string
-  coverage: number
-  matchesTracked: number
+  /** Null when the API does not report coverage for this source. */
+  coverage: number | null
+  matchesTracked: number | null
   description: string
 }
 
@@ -42,7 +45,7 @@ export default function LeaderboardPage() {
       color: 'text-blue-500',
       coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_predictions ?? 0) / totalMatches) * 100) : 0,
       matchesTracked: stats?.matches_with_predictions ?? 0,
-      description: 'Algorithm-based match outcome predictions with probability scores',
+      description: 'Przewidywania algorytmiczne z prawdopodobieństwem wyniku',
     },
     {
       rank: 2,
@@ -51,16 +54,19 @@ export default function LeaderboardPage() {
       color: 'text-orange-500',
       coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_sofascore ?? 0) / totalMatches) * 100) : 0,
       matchesTracked: stats?.matches_with_sofascore ?? 0,
-      description: 'Community voting predictions from SofaScore users',
+      description: 'Głosy kibiców z serwisu SofaScore',
     },
     {
       rank: 3,
       name: 'Gemini AI',
       icon: Brain,
       color: 'text-violet-500',
-      coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_predictions ?? 0) / totalMatches) * 100) : 0,
-      matchesTracked: stats?.matches_with_predictions ?? 0,
-      description: 'Google Gemini deep analysis with reasoning and confidence scores',
+      // The stats endpoint reports no Gemini coverage. This used to reuse the
+      // Forebet count, so both sources always showed an identical figure that was
+      // never measured. Unknown is reported as unknown.
+      coverage: null,
+      matchesTracked: null,
+      description: 'Pogłębiona analiza Google Gemini z uzasadnieniem',
     },
     {
       rank: 4,
@@ -69,16 +75,19 @@ export default function LeaderboardPage() {
       color: 'text-emerald-500',
       coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_odds ?? 0) / totalMatches) * 100) : 0,
       matchesTracked: stats?.matches_with_odds ?? 0,
-      description: 'Pre-match odds from major bookmakers via FlashScore',
+      description: 'Kursy przedmeczowe od bukmacherów, przez FlashScore',
     },
-  ].sort((a, b) => b.coverage - a.coverage).map((s, i) => ({ ...s, rank: i + 1 }))
+    // Sources without a measured coverage sort last rather than as zero.
+  ].sort((a, b) => (b.coverage ?? -1) - (a.coverage ?? -1))
+    .map((s, i) => ({ ...s, rank: i + 1 }))
 
   return (
-    <div className="container py-6 space-y-6">
+    <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Leaderboard</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Źródła danych</h1>
         <p className="text-muted-foreground mt-1">
-          Prediction source coverage &amp; performance across {totalMatches} tracked matches (last 30 days).
+          Skąd pochodzą dane i jaka część zdarzeń jest nimi objęta. Podstawa:{' '}
+          {totalMatches.toLocaleString('pl-PL')} zdarzeń z ostatnich 30 dni.
         </p>
       </div>
 
@@ -106,7 +115,7 @@ export default function LeaderboardPage() {
                     <div className="flex items-center justify-between">
                       {getRankIcon(entry.rank)}
                       <Badge variant="secondary" className="text-xs">
-                        {entry.matchesTracked} matches
+                        {entry.matchesTracked} zdarzeń
                       </Badge>
                     </div>
                   </CardHeader>
@@ -122,10 +131,12 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="flex items-center justify-between text-sm mb-1">
-                        <span className="text-muted-foreground">Coverage</span>
-                        <span className="font-mono font-semibold">{entry.coverage}%</span>
+                        <span className="text-muted-foreground">Pokrycie</span>
+                        <span className="font-mono font-semibold">
+                          {entry.coverage != null ? `${entry.coverage}%` : 'brak danych'}
+                        </span>
                       </div>
-                      <Progress value={entry.coverage} className="h-2" />
+                      <Progress value={entry.coverage ?? 0} className="h-2" />
                     </div>
                   </CardContent>
                 </Card>
@@ -136,8 +147,8 @@ export default function LeaderboardPage() {
           {/* Full source table */}
           <Card>
             <CardHeader>
-              <CardTitle>All Data Sources</CardTitle>
-              <CardDescription>Coverage across all tracked matches in the last 30 days</CardDescription>
+              <CardTitle>Wszystkie źródła</CardTitle>
+              <CardDescription>Pokrycie wszystkich śledzonych zdarzeń z ostatnich 30 dni</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -156,11 +167,17 @@ export default function LeaderboardPage() {
                         <p className="text-xs text-muted-foreground truncate">{entry.description}</p>
                       </div>
                       <div className="hidden sm:flex items-center gap-2 w-32">
-                        <Progress value={entry.coverage} className="h-1.5 flex-1" />
-                        <span className="text-sm font-mono w-10 text-right">{entry.coverage}%</span>
+                        <Progress value={entry.coverage ?? 0} className="h-1.5 flex-1" />
+                        <span className="w-14 text-right font-mono text-sm">
+                          {entry.coverage != null ? `${entry.coverage}%` : '—'}
+                        </span>
                       </div>
                       <div className="w-24 text-right">
-                        <span className="text-xs text-muted-foreground">{entry.matchesTracked} matches</span>
+                        <span className="text-xs text-muted-foreground">
+                          {entry.matchesTracked != null
+                            ? `${entry.matchesTracked} zdarzeń`
+                            : 'brak danych'}
+                        </span>
                       </div>
                     </div>
                   )
@@ -173,8 +190,8 @@ export default function LeaderboardPage() {
           {stats?.sport_breakdown && stats.sport_breakdown.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Coverage by Sport</CardTitle>
-                <CardDescription>Prediction availability per sport category</CardDescription>
+                <CardTitle>Pokrycie według dyscypliny</CardTitle>
+                <CardDescription>Dostępność predykcji w poszczególnych dyscyplinach</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -182,13 +199,17 @@ export default function LeaderboardPage() {
                     const pct = sp.total > 0 ? Math.round((sp.with_predictions / sp.total) * 100) : 0
                     return (
                       <div key={sp.sport} className="flex items-center gap-3 rounded-lg border p-3">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium capitalize">{sp.sport}</p>
-                          <p className="text-xs text-muted-foreground">{sp.total} matches &middot; {sp.with_predictions} with predictions</p>
+                        <SportIcon sport={sp.sport} colored className="h-4 w-4" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium">{getSportConfig(sp.sport).name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {sp.total.toLocaleString('pl-PL')} zdarzeń &middot;{' '}
+                            {sp.with_predictions.toLocaleString('pl-PL')} z predykcją
+                          </p>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex shrink-0 items-center gap-2">
                           <Progress value={pct} className="h-1.5 w-16" />
-                          <span className="text-xs font-mono w-8 text-right">{pct}%</span>
+                          <span className="w-9 text-right font-mono text-xs tabular-nums">{pct}%</span>
                         </div>
                       </div>
                     )
@@ -202,26 +223,26 @@ export default function LeaderboardPage() {
           {betStats && betStats.total_bets > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Your Betting Performance</CardTitle>
-                <CardDescription>Personal stats from tracked bets</CardDescription>
+                <CardTitle>Twoje wyniki</CardTitle>
+                <CardDescription>Statystyki z zapisanych przez Ciebie typów</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="text-center">
                     <p className="text-2xl font-bold">{betStats.total_bets}</p>
-                    <p className="text-xs text-muted-foreground">Total Bets</p>
+                    <p className="text-xs text-muted-foreground">Typy</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-emerald-500">
                       {betStats.win_rate != null ? `${betStats.win_rate.toFixed(1)}%` : '—'}
                     </p>
-                    <p className="text-xs text-muted-foreground">Win Rate</p>
+                    <p className="text-xs text-muted-foreground">Skuteczność</p>
                   </div>
                   <div className="text-center">
                     <p className={cn('text-2xl font-bold tabular-nums', betStats.total_profit >= 0 ? 'text-emerald-500' : 'text-red-500')}>
                       {betStats.total_profit >= 0 ? '+' : ''}{betStats.total_profit.toFixed(2)}
                     </p>
-                    <p className="text-xs text-muted-foreground">Profit/Loss</p>
+                    <p className="text-xs text-muted-foreground">Zysk / strata</p>
                   </div>
                   <div className="text-center">
                     <p className={cn('text-2xl font-bold tabular-nums', (betStats.roi ?? 0) >= 0 ? 'text-emerald-500' : 'text-red-500')}>

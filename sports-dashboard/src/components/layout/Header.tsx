@@ -21,7 +21,8 @@ const NAV_ITEMS = [
   { href: '/standings',   label: 'Tabele',      icon: Trophy     },
   { href: '/stats',       label: 'Statystyki',  icon: BarChart3  },
   { href: '/my-bets',     label: 'Moje typy',   icon: Ticket     },
-  { href: '/leaderboard', label: 'Ranking',     icon: Users      },
+  // The page ranks data sources by coverage, not users, so "Ranking" misled.
+  { href: '/leaderboard', label: 'Źródła',      icon: Users      },
 ]
 
 function NavLinks({ mobile, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
