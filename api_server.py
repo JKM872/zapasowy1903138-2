@@ -89,6 +89,27 @@ except Exception as e:
     supabase = None
     SUPABASE_AVAILABLE = False
 
+# ---------------------------------------------------------------------------
+# Stripe (weekly $5 subscription — unlocks Grade A predictions)
+# All secrets come from environment; never hardcode keys.
+# ---------------------------------------------------------------------------
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STRIPE_PRICE_ID = os.environ.get('STRIPE_PRICE_ID', '')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+FRONTEND_URL = (os.environ.get('FRONTEND_URL', '') or 'http://localhost:3000').rstrip('/')
+try:
+    import stripe as _stripe
+    if STRIPE_SECRET_KEY:
+        _stripe.api_key = STRIPE_SECRET_KEY
+        STRIPE_AVAILABLE = True
+    else:
+        STRIPE_AVAILABLE = False
+        logger.warning('Stripe not configured: STRIPE_SECRET_KEY is empty')
+except Exception as e:  # pragma: no cover - import guard
+    logger.warning('Stripe SDK not available: %s', e)
+    _stripe = None
+    STRIPE_AVAILABLE = False
+
 # Import ESPN API client for live scores
 try:
     from espn_api_client import ESPNAPIClient
@@ -244,15 +265,15 @@ def normalize_supabase_match(row):
             'recommendation': row.get('gemini_recommendation'),
             'reasoning': row.get('gemini_reasoning'),
         } if row.get('gemini_prediction') else None,
-        # Scoring engine output
+        # Scoring engine output (numeric fields default to 0 to avoid null.toFixed in UI)
         'scoring': {
             'pick': row.get('scoring_pick', ''),
-            'prob': safe_value(row.get('scoring_prob')),
-            'ev': safe_value(row.get('scoring_ev')),
-            'edge': safe_value(row.get('scoring_edge')),
-            'kelly': safe_value(row.get('scoring_kelly')),
-            'confidence': safe_value(row.get('scoring_confidence')),
-            'dataQuality': safe_value(row.get('scoring_data_quality')),
+            'prob': safe_value(row.get('scoring_prob'), 0),
+            'ev': safe_value(row.get('scoring_ev'), 0),
+            'edge': safe_value(row.get('scoring_edge'), 0),
+            'kelly': safe_value(row.get('scoring_kelly'), 0),
+            'confidence': safe_value(row.get('scoring_confidence'), 0),
+            'dataQuality': safe_value(row.get('scoring_data_quality'), 0),
         } if row.get('scoring_pick') else None,
         # Tennis metadata
         'tennis': {
@@ -269,6 +290,9 @@ def normalize_supabase_match(row):
                       or 0,
         # Value bet: EV > 0 from scoring engine
         'value_bet': safe_value(row.get('scoring_ev'), 0) > 0,
+        # Prediction grade A-F (basis for Grade A/B paywall)
+        'predictionGrade': (str(row.get('prediction_grade')).strip().upper()
+                            if row.get('prediction_grade') else None),
         # Focus team
         'focusTeam': 'home',
     }
@@ -325,20 +349,17 @@ def normalize_match(match):
             'reasoning': match.get('gemini_reasoning') or gm.get('reasoning'),
         }
     
-    # Team logos – prefer pre-resolved, else resolve via TheSportsDB
+    # Team logos – only the pre-resolved ones here. Network lookups happen in
+    # `resolve_logos_for_page` AFTER pagination: this function runs for every
+    # match in the day's files (1250 on 2026-08-02), so resolving here meant
+    # ~2500 TheSportsDB requests before returning the first page. Measured cold:
+    # 58 s for `per_page=3`, then 0.7 s once the cache was warm — which on Heroku
+    # means the first request after a dyno restart exceeds the 30 s limit and
+    # fails outright.
     home_team_val = match.get('home_team') or match.get('homeTeam', '')
     away_team_val = match.get('away_team') or match.get('awayTeam', '')
     home_logo = match.get('home_logo_url') or match.get('homeLogo') or ''
     away_logo = match.get('away_logo_url') or match.get('awayLogo') or ''
-    if not home_logo or not away_logo:
-        try:
-            from team_logo_resolver import get_logo_url
-            if not home_logo and home_team_val:
-                home_logo = get_logo_url(home_team_val) or ''
-            if not away_logo and away_team_val:
-                away_logo = get_logo_url(away_team_val) or ''
-        except Exception:
-            pass
 
     return {
         'id': match.get('id') or hash(f"{home_team_val}_{away_team_val}"),
@@ -388,12 +409,12 @@ def normalize_match(match):
         # Scoring engine output (passed through from JSON export)
         'scoring': match.get('scoring') or ({
             'pick': match.get('scoring_pick', ''),
-            'prob': safe_value(match.get('scoring_prob')),
-            'ev': safe_value(match.get('scoring_ev')),
-            'edge': safe_value(match.get('scoring_edge')),
-            'kelly': safe_value(match.get('scoring_kelly')),
-            'confidence': safe_value(match.get('scoring_confidence')),
-            'dataQuality': safe_value(match.get('scoring_data_quality')),
+            'prob': safe_value(match.get('scoring_prob'), 0),
+            'ev': safe_value(match.get('scoring_ev'), 0),
+            'edge': safe_value(match.get('scoring_edge'), 0),
+            'kelly': safe_value(match.get('scoring_kelly'), 0),
+            'confidence': safe_value(match.get('scoring_confidence'), 0),
+            'dataQuality': safe_value(match.get('scoring_data_quality'), 0),
         } if match.get('scoring_pick') else None),
         # Tennis metadata (passed through from JSON export)
         'tennis': match.get('tennis') or ({
@@ -419,12 +440,83 @@ def normalize_match(match):
         ) > 0,
         # Focus team
         'focusTeam': match.get('focus_team') or match.get('focusTeam', 'home'),
+        # Prediction grade A-F (basis for Grade A/B paywall)
+        'predictionGrade': (
+            str(match.get('prediction_grade') or match.get('predictionGrade')).strip().upper()
+            if (match.get('prediction_grade') or match.get('predictionGrade')) else None
+        ),
         # AI Prediction (Ultra PRO analysis)
         'aiPrediction': _resolve_ai_prediction(match),
     }
 
 
+# ---------------------------------------------------------------------------
+# Freemium paywall: Grade A predictions are premium (subscribers only),
+# Grade B and below are free (lead-gen). Enforced server-side so the mask
+# cannot be bypassed from the browser.
+# ---------------------------------------------------------------------------
+def resolve_logos_for_page(matches: list) -> list:
+    """Fill missing team logos for the matches we are about to return.
+
+    Deliberately applied to one page rather than the whole day: logo lookups go
+    over the network to TheSportsDB, so doing them during normalisation cost one
+    request per team across every match loaded, not just the ones sent back.
+    """
+    try:
+        from team_logo_resolver import get_logo_url
+    except Exception:
+        return matches
+
+    for m in matches:
+        try:
+            if not m.get('homeLogo') and m.get('homeTeam'):
+                m['homeLogo'] = get_logo_url(m['homeTeam']) or ''
+            if not m.get('awayLogo') and m.get('awayTeam'):
+                m['awayLogo'] = get_logo_url(m['awayTeam']) or ''
+        except Exception:
+            continue
+    return matches
+
+
+def _current_user_is_subscriber() -> bool:
+    """Return True when the current request comes from an active subscriber."""
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if not user_id or user_id == 'anonymous' or not SUPABASE_AVAILABLE:
+        return False
+    try:
+        from supabase_manager import is_subscription_active
+        return is_subscription_active(supabase.get_subscription(user_id))
+    except Exception as e:
+        logger.warning('Subscription check failed: %s', e)
+        return False
+
+
+def apply_paywall(match: dict, is_subscriber: bool) -> dict:
+    """
+    Mask premium (Grade A) prediction data for non-subscribers.
+
+    Keeps enough context to entice conversion (teams, date, league, grade,
+    odds, form, H2H) but strips our proprietary picks/analysis. Grade B and
+    lower are returned untouched.
+    """
+    if is_subscriber:
+        return match
+    grade = (match.get('predictionGrade') or '').strip().upper()
+    if grade != 'A':
+        return match
+    # Premium content — strip our proprietary picks/analysis.
+    match['locked'] = True
+    match['aiPrediction'] = None
+    match['scoring'] = None
+    match['gemini'] = None
+    match['forebet'] = None          # hides the exact pick / probabilities
+    match['confidence'] = 0
+    match['value_bet'] = False
+    return match
+
+
 @app.route('/api/matches', methods=['GET'])
+@optional_auth
 def get_matches():
     """Get matches for a specific date and sport. Supabase first, file fallback."""
     user_date = request.args.get('date')          # explicitly requested by client
@@ -529,12 +621,18 @@ def get_matches():
     # Pagination
     start = (page - 1) * per_page
     end = start + per_page
-    
+
+    # Freemium paywall — mask Grade A for non-subscribers (server-side enforcement)
+    is_subscriber = _current_user_is_subscriber()
+    page_matches = [apply_paywall(m, is_subscriber) for m in all_matches[start:end]]
+    resolve_logos_for_page(page_matches)
+
     return jsonify({
         'date': date_str,
         'sport': sport,
         'source': source,
-        'data': all_matches[start:end],
+        'isSubscriber': is_subscriber,
+        'data': page_matches,
         'meta': {
             'total': len(all_matches),
             'page': page,
@@ -551,8 +649,10 @@ def get_matches():
 
 
 @app.route('/api/matches/<match_id>', methods=['GET'])
+@optional_auth
 def get_match(match_id):
     """Get a single match by ID."""
+    is_subscriber = _current_user_is_subscriber()
     # Search all available dates
     files = find_result_files()
     for f in files:
@@ -560,7 +660,8 @@ def get_match(match_id):
         for m in matches:
             normalized = normalize_match(m)
             if str(normalized['id']) == str(match_id):
-                return jsonify(normalized)
+                resolve_logos_for_page([normalized])
+                return jsonify(apply_paywall(normalized, is_subscriber))
     return jsonify({'error': 'Match not found'}), 404
 
 
@@ -1006,6 +1107,215 @@ def get_betting_stats():
     stats = supabase.get_user_betting_stats()
     
     return jsonify(stats)
+
+
+# =============================================================================
+# STRIPE SUBSCRIPTION ENDPOINTS (weekly $5 → Grade A access)
+# =============================================================================
+
+def _get_or_create_stripe_customer(user_id: str, email: str | None) -> str:
+    """Return an existing Stripe customer id for the user, or create one."""
+    # Reuse the customer id we already stored, if any.
+    if SUPABASE_AVAILABLE:
+        existing = supabase.get_subscription(user_id)
+        if existing and existing.get('stripe_customer_id'):
+            return existing['stripe_customer_id']
+    customer = _stripe.Customer.create(
+        email=email or None,
+        metadata={'user_id': user_id},
+    )
+    return customer.id
+
+
+@app.route('/api/checkout', methods=['POST'])
+@require_auth
+def create_checkout_session():
+    """Create a Stripe Checkout session for the weekly $5 subscription."""
+    if not STRIPE_AVAILABLE:
+        return jsonify({'error': 'Payments not configured'}), 503
+    if not STRIPE_PRICE_ID:
+        return jsonify({'error': 'STRIPE_PRICE_ID not configured'}), 503
+
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if not user_id or user_id == 'anonymous':
+        return jsonify({'error': 'Authentication required'}), 401
+
+    body = request.get_json(silent=True) or {}
+    email = body.get('email')
+
+    try:
+        customer_id = _get_or_create_stripe_customer(user_id, email)
+
+        session = _stripe.checkout.Session.create(
+            mode='subscription',
+            customer=customer_id,
+            client_reference_id=user_id,
+            line_items=[{'price': STRIPE_PRICE_ID, 'quantity': 1}],
+            # Ensure the user_id also rides on the subscription object so that
+            # customer.subscription.* webhooks (which don't carry session
+            # metadata) can be mapped back to the user.
+            subscription_data={'metadata': {'user_id': user_id}},
+            metadata={'user_id': user_id},
+            success_url=f'{FRONTEND_URL}/pricing?success=1',
+            cancel_url=f'{FRONTEND_URL}/pricing?canceled=1',
+            allow_promotion_codes=True,
+        )
+
+        # Persist the customer id early so we can map webhooks even before
+        # the first successful payment. Status stays inactive until webhook.
+        if SUPABASE_AVAILABLE:
+            supabase.upsert_subscription(user_id, stripe_customer_id=customer_id)
+
+        return jsonify({'url': session.url, 'id': session.id})
+    except Exception as e:
+        logger.error('Stripe checkout failed: %s', e)
+        return jsonify({'error': 'Failed to create checkout session'}), 502
+
+
+@app.route('/api/subscription/status', methods=['GET'])
+@require_auth
+def subscription_status():
+    """Return the current user's subscription status."""
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if not user_id or user_id == 'anonymous':
+        return jsonify({'active': False, 'status': 'inactive', 'current_period_end': None})
+
+    if not SUPABASE_AVAILABLE:
+        return jsonify({'active': False, 'status': 'inactive', 'current_period_end': None})
+
+    from supabase_manager import is_subscription_active
+    sub = supabase.get_subscription(user_id)
+    return jsonify({
+        'active': is_subscription_active(sub),
+        'status': (sub or {}).get('status', 'inactive'),
+        'current_period_end': (sub or {}).get('current_period_end'),
+    })
+
+
+def _iso_from_epoch(ts):
+    """Convert a Stripe epoch timestamp to an ISO-8601 string (UTC), or None."""
+    if not ts:
+        return None
+    try:
+        from datetime import timezone
+        return datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat()
+    except (ValueError, TypeError, OSError):
+        return None
+
+
+def _user_id_from_subscription(sub_obj: dict) -> str | None:
+    """Resolve our user_id from a Stripe subscription object.
+
+    Prefers subscription metadata; falls back to looking up the customer id
+    in our subscriptions table (updated/deleted events carry no metadata).
+    """
+    meta = (sub_obj.get('metadata') or {})
+    uid = meta.get('user_id')
+    if uid:
+        return uid
+    customer_id = sub_obj.get('customer')
+    if customer_id and SUPABASE_AVAILABLE:
+        row = supabase.get_subscription_by_customer(customer_id)
+        if row:
+            return row.get('user_id')
+    return None
+
+
+def _sync_subscription_from_stripe(sub_obj: dict) -> None:
+    """Upsert our subscriptions row from a Stripe subscription object."""
+    if not SUPABASE_AVAILABLE:
+        return
+    user_id = _user_id_from_subscription(sub_obj)
+    if not user_id:
+        logger.warning('Stripe webhook: could not map subscription %s to a user', sub_obj.get('id'))
+        return
+    supabase.upsert_subscription(
+        user_id,
+        stripe_customer_id=sub_obj.get('customer'),
+        stripe_subscription_id=sub_obj.get('id'),
+        status=sub_obj.get('status'),
+        current_period_end=_iso_from_epoch(sub_obj.get('current_period_end')),
+    )
+
+
+# Simple in-memory idempotency guard against Stripe event retries.
+_processed_stripe_events: dict = {}
+
+
+@app.route('/api/stripe/webhook', methods=['POST'])
+def stripe_webhook():
+    """Receive Stripe webhook events and sync subscription state to Supabase.
+
+    Public endpoint — authenticated solely by the Stripe signature.
+    """
+    if not STRIPE_AVAILABLE:
+        return jsonify({'error': 'Payments not configured'}), 503
+
+    # IMPORTANT: read the raw body BEFORE any request.json access, otherwise
+    # signature verification will fail.
+    payload = request.get_data()
+    sig_header = request.headers.get('Stripe-Signature', '')
+
+    if not STRIPE_WEBHOOK_SECRET:
+        logger.error('Stripe webhook received but STRIPE_WEBHOOK_SECRET is not set')
+        return jsonify({'error': 'Webhook secret not configured'}), 503
+
+    try:
+        event = _stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+    except ValueError:
+        return jsonify({'error': 'Invalid payload'}), 400
+    except _stripe.error.SignatureVerificationError:
+        return jsonify({'error': 'Invalid signature'}), 400
+    except Exception as e:
+        logger.error('Stripe webhook parse error: %s', e)
+        return jsonify({'error': 'Webhook error'}), 400
+
+    event_id = event.get('id')
+    # Idempotency: Stripe retries events; skip ones we've already handled.
+    if event_id and event_id in _processed_stripe_events:
+        return jsonify({'received': True, 'duplicate': True})
+
+    event_type = event.get('type')
+    data_object = (event.get('data') or {}).get('object') or {}
+
+    try:
+        if event_type == 'checkout.session.completed':
+            # Fetch the full subscription to get status + period end.
+            sub_id = data_object.get('subscription')
+            user_id = data_object.get('client_reference_id') or (data_object.get('metadata') or {}).get('user_id')
+            customer_id = data_object.get('customer')
+            if sub_id:
+                sub_obj = _stripe.Subscription.retrieve(sub_id)
+                # Ensure user_id is present even if metadata was lost.
+                if user_id and not (sub_obj.get('metadata') or {}).get('user_id'):
+                    sub_obj = dict(sub_obj)
+                    sub_obj.setdefault('metadata', {})['user_id'] = user_id
+                _sync_subscription_from_stripe(sub_obj)
+            elif user_id and SUPABASE_AVAILABLE:
+                supabase.upsert_subscription(user_id, stripe_customer_id=customer_id, status='active')
+
+        elif event_type in ('customer.subscription.updated', 'customer.subscription.created'):
+            _sync_subscription_from_stripe(data_object)
+
+        elif event_type == 'customer.subscription.deleted':
+            user_id = _user_id_from_subscription(data_object)
+            if user_id and SUPABASE_AVAILABLE:
+                supabase.upsert_subscription(
+                    user_id,
+                    stripe_subscription_id=data_object.get('id'),
+                    status='canceled',
+                    current_period_end=_iso_from_epoch(data_object.get('current_period_end')),
+                )
+        # Other event types are acknowledged but ignored.
+
+        if event_id:
+            _processed_stripe_events[event_id] = True
+    except Exception as e:
+        logger.error('Stripe webhook handling error for %s: %s', event_type, e)
+        # Return 500 so Stripe retries transient failures.
+        return jsonify({'error': 'Handler error'}), 500
+
+    return jsonify({'received': True})
 
 
 # =============================================================================
