@@ -335,12 +335,14 @@ def settle_from_result(match: Dict[str, Any],
         home_score, away_score = away_score, home_score
         detail['orientation_flipped'] = True
 
+    winner_name = winning_competitor_name(result)
+
     detail['score'] = f"{home_score}-{away_score}"
-    detail['winner_name'] = result.get('winner_name')
-    detail['actual'] = result.get('winner_name') or 'draw'
+    detail['winner_name'] = winner_name
+    detail['actual'] = winner_name or 'draw'
     detail['resolved_by'] = result.get('source')
 
-    if result.get('is_draw'):
+    if result.get('is_draw') or result.get('winner') == 'draw':
         detail['outcome'] = 'won' if picked_the_draw(match) else 'draw'
         return detail
 
@@ -351,9 +353,38 @@ def settle_from_result(match: Dict[str, Any],
         return detail
 
     detail['picked_name'] = picked
-    detail['outcome'] = ('won' if same_competitor(picked, result['winner_name'])
-                         else 'lost')
+
+    if not winner_name:
+        # Judging a pick against a missing name silently marks it lost. Better to
+        # leave it unsettled than to record a loss we cannot justify.
+        detail['outcome'] = 'pending'
+        detail['unsettled_reason'] = 'no winner name in result'
+        return detail
+
+    detail['outcome'] = 'won' if same_competitor(picked, winner_name) else 'lost'
     return detail
+
+
+def winning_competitor_name(result: Dict[str, Any]) -> Optional[str]:
+    """Name of the competitor who won, or None when it cannot be established.
+
+    Fresh resolver output carries ``winner_name``, but results read back from
+    ``outputs/result_store.json`` do not: the store keeps ``winner`` as
+    ``'home'``/``'away'`` beside our own team names. Without this fallback the
+    pick was compared against a missing name, so **every stored result settled
+    as a loss** — Jirasek Martin beat Flesar Milan 3-1, we had backed Jirasek,
+    and the report still printed LOST.
+    """
+    name = result.get('winner_name')
+    if name:
+        return name
+
+    winner = result.get('winner')
+    if winner == 'home':
+        return result.get('home_name') or result.get('home_team')
+    if winner == 'away':
+        return result.get('away_name') or result.get('away_team')
+    return None
 
 
 def settle_match(match: Dict[str, Any],

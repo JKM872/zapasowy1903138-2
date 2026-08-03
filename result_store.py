@@ -60,6 +60,10 @@ class ResultStore:
             'score_home': result.get('score_home'),
             'score_away': result.get('score_away'),
             'winner': result.get('winner'),
+            # Persisted so settling never has to infer it. Its absence meant
+            # every result read back from here was judged against a missing
+            # name and recorded as a loss.
+            'winner_name': result.get('winner_name'),
             'checked_at': datetime.now().isoformat(),
             'sport': sport,
             'home_team': home_team,
