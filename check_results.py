@@ -24,6 +24,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Any, Dict, List, Union
 
+# Flat stake the ROI figures assume. Shared so the report's "z N kurs." note and
+# the ROI it annotates can never be computed against different stakes.
+FLAT_STAKE_PLN = 100
+
 # Result store for persistent accumulation
 try:
     from result_store import ResultStore
@@ -530,10 +534,10 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
     decided = stats['won'] + stats['lost']
     stats['accuracy'] = (stats['won'] / decided * 100) if decided > 0 else 0.0
 
-    # ROI calculation (100 PLN flat stake)
+    # ROI calculation (flat stake per match)
     roi_total = 0.0
     roi_count = 0
-    stake = 100
+    stake = FLAT_STAKE_PLN
     for d in stats['details']:
         if d['outcome'] in ('won', 'lost'):
             odds_key = 'home_odds' if d['predicted'] == 'home' else 'away_odds'
@@ -551,13 +555,19 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
             roi_count += 1
     stats['roi_pln'] = roi_total
     stats['roi_pct'] = (roi_total / (roi_count * stake) * 100) if roi_count > 0 else 0.0
+    # Reported alongside the percentage. Without it the figure reads as though it
+    # covered every settled pick: on 2026-08-03 it said -44.0% next to "33/57"
+    # while resting on the five settled picks that carried a price, because table
+    # tennis — 124 of 143 sends — had no odds at all.
+    stats['roi_count'] = roi_count
+    stats['roi_decided'] = decided
     stats['by_role'] = _role_breakdown(stats['details'], stake)
 
     return stats
 
 
 def _role_breakdown(details: List[Dict[str, Any]],
-                    stake: int = 100) -> Dict[str, Dict[str, Any]]:
+                    stake: int = FLAT_STAKE_PLN) -> Dict[str, Dict[str, Any]]:
     """Split the settled picks into market favourites and everything else.
 
     The mail now goes out as two sends, so the report has to answer them
@@ -618,6 +628,7 @@ def _role_breakdown(details: List[Dict[str, Any]],
 SPORT_EMOJI = {
     'football': '⚽', 'basketball': '🏀', 'handball': '🤾',
     'volleyball': '🏐', 'tennis': '🎾', 'hockey': '🏒',
+    'baseball': '⚾', 'table_tennis': '🏓',
 }
 
 
@@ -633,6 +644,17 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
     accuracy = stats['accuracy']
     roi_pln = stats['roi_pln']
     roi_pct = stats['roi_pct']
+
+    # ROI can only be computed where a price was recorded, which is far fewer
+    # matches than the accuracy denominator. Stating the basis stops the figure
+    # from being read as a verdict on every pick: on 2026-08-03 it showed -44.0%
+    # beside "33/57" while resting on five priced matches.
+    roi_count = stats.get('roi_count', 0)
+    roi_decided = stats.get('roi_decided', won + lost)
+    if roi_count == 0:
+        roi_basis = 'brak meczów z kursem — ROI niemierzalne'
+    else:
+        roi_basis = f'liczone na {roi_count} z {roi_decided} rozliczonych (tylko z kursem)'
 
     # Per-sport rows
     sport_rows = ''
@@ -664,6 +686,14 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
         if not rb.get('total'):
             continue
         _roi_color = '#27ae60' if rb['roi_pct'] >= 0 else '#e74c3c'
+        # How many priced matches the ROI rests on. Without it the "reszta" row
+        # read -100.0% next to 31 wins, which looks like a broken model rather
+        # than a single priced loss.
+        _roi_n = int(rb.get('staked', 0) / FLAT_STAKE_PLN)
+        _roi_cell = (f"{rb['roi_pct']:+.1f}%<br>"
+                     f"<span style='font-size:10px;color:#8b949e;font-weight:400'>"
+                     f"z {_roi_n} kurs.</span>") if _roi_n else \
+            "<span style='font-size:11px;color:#8b949e;font-weight:400'>brak kursów</span>"
         role_rows += f"""
         <tr>
             <td>{_role_names.get(role, role)}</td>
@@ -673,7 +703,7 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
             <td style="text-align:center;color:#f39c12">{rb['draw']}</td>
             <td style="text-align:center;color:#7f8c8d">{rb['pending']}</td>
             <td style="text-align:center;font-weight:700">{rb['accuracy']:.0f}%</td>
-            <td style="text-align:center;font-weight:700;color:{_roi_color}">{rb['roi_pct']:+.1f}%</td>
+            <td style="text-align:center;font-weight:700;color:{_roi_color}">{_roi_cell}</td>
         </tr>"""
 
     role_section = ''
@@ -779,6 +809,7 @@ def generate_report_html(stats: Dict[str, Any], date: str) -> str:
       <div style="font-size:11px;color:#8b949e;text-transform:uppercase">ROI (100 PLN/mecz)</div>
       <div style="font-size:32px;font-weight:800;color:{roi_color}">{roi_pct:+.1f}%</div>
       <div style="font-size:11px;color:#8b949e">{roi_pln:+.0f} PLN</div>
+      <div style="font-size:11px;color:#8b949e;margin-top:4px">{roi_basis}</div>
     </div>
     <div style="flex:1;min-width:130px;background:#0d1117;border-radius:10px;padding:16px;text-align:center;border:1px solid #30363d">
       <div style="font-size:11px;color:#8b949e;text-transform:uppercase">Łącznie</div>
