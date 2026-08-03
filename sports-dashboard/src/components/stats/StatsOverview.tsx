@@ -7,6 +7,7 @@ import {
   BarChart3, Target, TrendingUp, Trophy, Percent, Clock,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { getSportConfig } from '@/lib/constants'
 import type { StatsData } from '@/lib/types'
 
 interface StatCardProps {
@@ -46,51 +47,59 @@ interface StatsOverviewProps {
 }
 
 export function StatsOverview({ data }: StatsOverviewProps) {
-  const accuracy = data.accuracy_30d != null ? data.accuracy_30d.toFixed(1) : '0.0'
-  const bestSport = data.sport_breakdown?.length
-    ? data.sport_breakdown.reduce((best, cur) =>
-        (cur.accuracy ?? 0) > (best.accuracy ?? 0) ? cur : best
-      )
+  /**
+   * The backend does not compute accuracy or ROI yet, so both arrive as null.
+   * Rendering "0.0%" claimed nothing ever hit, and picking the best sport with
+   * `accuracy ?? 0` always returned the first entry, labelling it "najwyższa
+   * skuteczność" on no evidence. Unknown values are shown as unknown.
+   */
+  const rated = data.sport_breakdown?.filter(s => s.accuracy != null) ?? []
+  const bestSport = rated.length
+    ? rated.reduce((best, cur) => ((cur.accuracy ?? 0) > (best.accuracy ?? 0) ? cur : best))
     : null
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6">
       <StatCard
         icon={BarChart3}
-        label="Total Matches"
-        value={data.total_matches.toLocaleString()}
-        subtitle="scraped overall"
+        label="Zdarzenia"
+        value={data.total_matches.toLocaleString('pl-PL')}
+        subtitle="zebrane łącznie"
       />
       <StatCard
         icon={Target}
-        label="With Predictions"
-        value={data.matches_with_predictions.toLocaleString()}
-        subtitle="from Forebet"
+        label="Z predykcją"
+        value={data.matches_with_predictions.toLocaleString('pl-PL')}
+        subtitle="z Forebet"
       />
       <StatCard
         icon={Percent}
-        label="Accuracy (30d)"
-        value={`${accuracy}%`}
-        subtitle="correct picks"
-        trend={data.accuracy_30d != null && data.accuracy_30d > 50 ? +(data.accuracy_30d - 50).toFixed(1) : data.accuracy_30d != null ? -(50 - data.accuracy_30d) : undefined}
+        label="Skuteczność (30 dni)"
+        value={data.accuracy_30d != null ? `${data.accuracy_30d.toFixed(1)}%` : '—'}
+        subtitle={data.accuracy_30d != null ? 'trafione typy' : 'jeszcze nieliczona'}
+        trend={
+          data.accuracy_30d != null
+            ? +(data.accuracy_30d - 50).toFixed(1)
+            : undefined
+        }
       />
       <StatCard
         icon={Trophy}
-        label="Best Sport"
-        value={bestSport ? bestSport.sport.charAt(0).toUpperCase() + bestSport.sport.slice(1) : '–'}
-        subtitle="highest accuracy"
+        label="Najlepsza dyscyplina"
+        value={bestSport ? getSportConfig(bestSport.sport).name : '—'}
+        subtitle={bestSport ? 'najwyższa skuteczność' : 'brak danych o skuteczności'}
       />
       <StatCard
         icon={TrendingUp}
-        label="With Odds"
-        value={data.matches_with_odds ?? 0}
-        subtitle="bookmaker odds"
+        label="Z kursami"
+        value={(data.matches_with_odds ?? 0).toLocaleString('pl-PL')}
+        subtitle="kursy bukmacherskie"
       />
       <StatCard
         icon={Clock}
-        label="ROI (30d)"
-        value={data.roi_30d != null ? `${data.roi_30d.toFixed(1)}%` : '–'}
-        subtitle="return on investment"
+        label="ROI (30 dni)"
+        value={data.roi_30d != null ? `${data.roi_30d.toFixed(1)}%` : '—'}
+        subtitle={data.roi_30d != null ? 'zwrot z inwestycji' : 'jeszcze nieliczony'}
       />
     </div>
   )

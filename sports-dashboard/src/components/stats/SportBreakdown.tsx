@@ -37,7 +37,7 @@ export function SportBreakdown({ sportStats }: SportBreakdownProps) {
             <div key={stat.sport} className="flex items-center gap-3">
               {/* Icon */}
               <div className="shrink-0 w-8 h-8 rounded-md bg-muted flex items-center justify-center">
-                <SportIcon sport={stat.sport} colored className="text-[18px]" />
+                <SportIcon sport={stat.sport} colored className="h-[18px] w-[18px]" />
               </div>
 
               {/* Info */}

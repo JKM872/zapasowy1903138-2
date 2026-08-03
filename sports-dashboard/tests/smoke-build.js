@@ -68,7 +68,7 @@ const newMarkers = [
   // Three-column bookmaker shell
   { pattern: /Dyscypliny/i, name: 'SportSidebar heading' },
   { pattern: /lg:grid-cols-\[232px/i, name: 'EventsShell column template' },
-  { pattern: /material-symbol/i, name: 'Material Symbols icon class' },
+  { pattern: /viewBox/i, name: 'Inline SVG icons' },
   // Text strings that survive minification
   { pattern: /Typy modelu/i, name: 'CompactFilters: model picks chip' },
   { pattern: /Warto[śs][ćc]/i, name: 'CompactFilters: value chip' },
@@ -89,6 +89,11 @@ const oldPatterns = [
   { pattern: /class="[^"]*FilterBar[^"]*"/i, name: 'Old FilterBar component class' },
   // Old MatchCard grid used lg:grid-cols-3
   { pattern: /lg:grid-cols-3.*MatchCard/i, name: 'Old 3-column MatchCard grid' },
+  // Regression guard: the Material Symbols icon font rendered its glyph names as
+  // visible text whenever the font failed to load, so "sports_soccer" and the
+  // like appeared all over the UI. Icons are inline SVG now; the names must not
+  // be shipped as content again.
+  { pattern: /sports_soccer|sports_basketball|material-symbol/i, name: 'Icon font glyph names' },
 ]
 for (const { pattern, name } of oldPatterns) {
   assert(!pattern.test(content), `Absent: ${name}`)

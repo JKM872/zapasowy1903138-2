@@ -70,7 +70,7 @@ export function AnalysisBasket() {
           return (
             <li key={item.matchId} className="px-3 py-2">
               <div className="flex items-start gap-2">
-                <SportIcon sport={item.sport} colored className="mt-0.5 text-[14px]" />
+                <SportIcon sport={item.sport} colored className="mt-0.5 h-3.5 w-3.5" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-medium" title={item.label}>
                     {item.label}

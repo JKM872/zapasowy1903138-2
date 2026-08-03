@@ -55,7 +55,7 @@ export function SportTabs({ sportCounts = {}, className }: Props) {
               >
                 <SportIcon
                   sport={config.id}
-                  className={cn('text-[18px]', !isActive && config.color)}
+                  className={cn('h-[18px] w-[18px]', !isActive && config.color)}
                 />
                 <span>{config.name}</span>
                 <span className="text-[10px] tabular-nums opacity-70">{count}</span>

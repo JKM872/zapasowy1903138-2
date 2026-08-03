@@ -1,6 +1,17 @@
 // ============================================================================
 // Constants – sport registry, market labels, filter presets
 // ============================================================================
+import type { IconType } from 'react-icons'
+import {
+  MdSportsSoccer,
+  MdSportsTennis,
+  MdSportsBasketball,
+  MdSportsHandball,
+  MdSportsHockey,
+  MdSportsVolleyball,
+  MdSportsBaseball,
+  MdSportsScore,
+} from 'react-icons/md'
 import type { Sport } from './types'
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''
@@ -13,8 +24,16 @@ export interface SportConfig {
   id: Sport | string
   /** Polish label shown in the sidebar and filters. */
   name: string
-  /** Material Symbols Rounded glyph name, rendered by <SportIcon>. */
-  glyph: string
+  /**
+   * Google Material Design icon, as an inline SVG component.
+   *
+   * The first attempt used the Material Symbols icon font from Google Fonts.
+   * When the font failed to load, the browser fell back to text and rendered the
+   * literal glyph names ("sports_soccer") across the page. Inline SVG cannot
+   * degrade that way, needs no request to Google, and keeps the icons available
+   * offline.
+   */
+  icon: IconType
   /** Accent used for the icon in the sport tree. */
   color: string
   /** Whether the sport has a draw, i.e. a three-way 1-X-2 market. */
@@ -23,51 +42,28 @@ export interface SportConfig {
   order: number
 }
 
-/** Glyph used for any sport the registry does not recognise. */
-const UNKNOWN_SPORT_GLYPH = 'sports'
-
 /**
- * Material Symbols has no dedicated table tennis glyph, so it borrows the
- * tennis racket. Everything else maps one to one.
+ * Material Design has no dedicated table tennis icon, so it borrows the tennis
+ * racket. Everything else maps one to one.
  */
 export const SPORTS: SportConfig[] = [
-  { id: 'football',     name: 'Piłka nożna',    glyph: 'sports_soccer',     color: 'text-emerald-400', hasDraw: true,  order: 1 },
-  { id: 'tennis',       name: 'Tenis',          glyph: 'sports_tennis',     color: 'text-violet-400',  hasDraw: false, order: 2 },
-  { id: 'basketball',   name: 'Koszykówka',     glyph: 'sports_basketball', color: 'text-amber-400',   hasDraw: false, order: 3 },
-  { id: 'handball',     name: 'Piłka ręczna',   glyph: 'sports_handball',   color: 'text-teal-400',    hasDraw: true,  order: 4 },
-  { id: 'hockey',       name: 'Hokej',          glyph: 'sports_hockey',     color: 'text-sky-400',     hasDraw: true,  order: 5 },
-  { id: 'volleyball',   name: 'Siatkówka',      glyph: 'sports_volleyball', color: 'text-pink-400',    hasDraw: false, order: 6 },
-  { id: 'baseball',     name: 'Baseball',       glyph: 'sports_baseball',   color: 'text-orange-400',  hasDraw: false, order: 7 },
-  { id: 'table_tennis', name: 'Tenis stołowy',  glyph: 'sports_tennis',     color: 'text-lime-400',    hasDraw: false, order: 8 },
+  { id: 'football',     name: 'Piłka nożna',   icon: MdSportsSoccer,     color: 'text-emerald-500', hasDraw: true,  order: 1 },
+  { id: 'tennis',       name: 'Tenis',         icon: MdSportsTennis,     color: 'text-violet-500',  hasDraw: false, order: 2 },
+  { id: 'basketball',   name: 'Koszykówka',    icon: MdSportsBasketball, color: 'text-amber-500',   hasDraw: false, order: 3 },
+  { id: 'handball',     name: 'Piłka ręczna',  icon: MdSportsHandball,   color: 'text-teal-500',    hasDraw: true,  order: 4 },
+  { id: 'hockey',       name: 'Hokej',         icon: MdSportsHockey,     color: 'text-sky-500',     hasDraw: true,  order: 5 },
+  { id: 'volleyball',   name: 'Siatkówka',     icon: MdSportsVolleyball, color: 'text-pink-500',    hasDraw: false, order: 6 },
+  { id: 'baseball',     name: 'Baseball',      icon: MdSportsBaseball,   color: 'text-orange-500',  hasDraw: false, order: 7 },
+  { id: 'table_tennis', name: 'Tenis stołowy', icon: MdSportsTennis,     color: 'text-lime-500',    hasDraw: false, order: 8 },
 ]
 
 const SPORT_BY_ID = new Map(SPORTS.map(s => [s.id, s]))
-
-/**
- * Google Fonts URL for exactly the glyphs the registry uses.
- *
- * Derived from SPORTS rather than hardcoded, so adding a sport cannot leave its
- * icon rendering as the literal glyph name. `display=block` hides the text until
- * the font is ready instead of flashing "sports_soccer" on screen.
- */
-export const MATERIAL_SYMBOLS_HREF = (() => {
-  const glyphs = Array.from(
-    new Set([...SPORTS.map(s => s.glyph), UNKNOWN_SPORT_GLYPH]),
-  ).sort()
-  const axes = 'opsz,wght,FILL,GRAD@24,400,1,0'
-  return (
-    'https://fonts.googleapis.com/css2' +
-    `?family=Material+Symbols+Rounded:${axes}` +
-    `&icon_names=${glyphs.join(',')}` +
-    '&display=block'
-  )
-})()
 
 /** Shown for any sport key the registry does not recognise. */
 export const UNKNOWN_SPORT: SportConfig = {
   id: 'unknown',
   name: 'Inne',
-  glyph: UNKNOWN_SPORT_GLYPH,
+  icon: MdSportsScore,
   color: 'text-zinc-400',
   hasDraw: false,
   order: 99,

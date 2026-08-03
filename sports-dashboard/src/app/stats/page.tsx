@@ -13,11 +13,11 @@ export default function StatsPage() {
   const { data, isLoading, isError, error } = useStats()
 
   return (
-    <div className="container py-6 space-y-8">
+    <div className="mx-auto max-w-6xl space-y-6 px-3 py-6 sm:px-4">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Statistics</h1>
-        <p className="text-muted-foreground mt-1">
-          Prediction accuracy, sport breakdowns, and performance trends.
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Statystyki</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Pokrycie danymi i skuteczność predykcji w podziale na dyscypliny.
         </p>
       </div>
 
@@ -28,8 +28,8 @@ export default function StatsPage() {
       )}
 
       {isError && (
-        <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-          Failed to load stats: {(error as Error)?.message ?? 'Unknown error'}
+        <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+          Nie udało się pobrać statystyk: {(error as Error)?.message ?? 'nieznany błąd'}
         </div>
       )}
 
@@ -37,7 +37,7 @@ export default function StatsPage() {
         <>
           <StatsOverview data={data} />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <AccuracyChart sportStats={data.sport_breakdown ?? []} />
             <SportBreakdown sportStats={data.sport_breakdown ?? []} />
           </div>

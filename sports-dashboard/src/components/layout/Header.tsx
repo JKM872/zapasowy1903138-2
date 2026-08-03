@@ -35,16 +35,20 @@ function NavLinks({ mobile, onNavigate }: { mobile?: boolean; onNavigate?: () =>
             key={href}
             href={href}
             onClick={onNavigate}
+            title={label}
             className={cn(
-              'flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+              'flex shrink-0 items-center gap-2 whitespace-nowrap rounded-md px-2 py-2 text-sm font-medium transition-colors lg:px-3',
               mobile ? 'w-full' : '',
               active
                 ? 'bg-primary text-primary-foreground'
                 : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
             )}
           >
-            <Icon className="h-4 w-4" />
-            {label}
+            <Icon className="h-4 w-4 shrink-0" />
+            {/* Labels appear once there is room; below that the icon carries the
+                meaning, with the title attribute as the fallback. The full set of
+                labels used to wrap the header onto a second line. */}
+            <span className={mobile ? '' : 'hidden lg:inline'}>{label}</span>
           </Link>
         )
       })}
@@ -62,7 +66,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-[1700px] items-center gap-4 px-2 sm:px-4">
+      <div className="mx-auto flex h-14 max-w-[1700px] items-center gap-1.5 overflow-hidden px-2 sm:gap-2 sm:px-4">
         {/* Mobile menu */}
         <Sheet>
           <SheetTrigger asChild>
@@ -80,11 +84,11 @@ export function Header() {
 
         {/* Logo */}
         {/* Brand name is a placeholder until the real one is chosen. */}
-        <Link href="/" className="flex items-center gap-2 whitespace-nowrap font-bold">
+        <Link href="/" className="flex shrink-0 items-center gap-2 whitespace-nowrap font-bold">
           <Trophy className="h-5 w-5 shrink-0 text-primary" />
           <span className="hidden flex-col leading-none sm:flex">
             <span className="text-base">Analiza Sportowa</span>
-            <span className="text-[10px] font-normal text-muted-foreground">
+            <span className="hidden text-[10px] font-normal text-muted-foreground xl:block">
               narzędzie analityczne
             </span>
           </span>
@@ -92,19 +96,19 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1 ml-6">
+        <nav className="ml-2 hidden items-center gap-0.5 md:flex lg:ml-4">
           <NavLinks />
         </nav>
 
         {/* Spacer */}
-        <div className="flex-1" />
+        <div className="min-w-0 flex-1" />
 
         {/* Premium / Upgrade */}
-        <Link href="/pricing">
+        <Link href="/pricing" className="shrink-0">
           <Button
             variant={isSubscriber ? 'ghost' : 'default'}
             size="sm"
-            className={cn('gap-1.5', isSubscriber && 'text-amber-500')}
+            className={cn('shrink-0 gap-1.5', isSubscriber && 'text-amber-500')}
             title={isSubscriber ? 'Premium aktywne' : 'Odblokuj ocenę A'}
           >
             <Crown className="h-3.5 w-3.5" />
@@ -123,7 +127,7 @@ export function Header() {
             </Button>
           </div>
         ) : (
-          <Button variant="outline" size="sm" onClick={() => setAuthOpen(true)} className="gap-1.5">
+          <Button variant="outline" size="sm" onClick={() => setAuthOpen(true)} className="shrink-0 gap-1.5">
             <LogIn className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Zaloguj</span>
           </Button>
@@ -133,6 +137,7 @@ export function Header() {
         <Button
           variant="ghost"
           size="icon"
+          className="shrink-0"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

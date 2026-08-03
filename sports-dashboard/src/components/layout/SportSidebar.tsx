@@ -68,7 +68,7 @@ export function SportSidebar({
             : 'text-foreground/80 hover:bg-panel-hover',
         )}
       >
-        <SportIcon sport="unknown" className="text-[18px]" />
+        <SportIcon sport="unknown" className="h-[18px] w-[18px]" />
         <span className="flex-1">Wszystkie</span>
         <span className="text-xs tabular-nums opacity-70">{total}</span>
       </button>
@@ -89,7 +89,7 @@ export function SportSidebar({
             >
               <SportIcon
                 sport={config.id}
-                className={cn('text-[18px]', !isActive && config.color)}
+                className={cn('h-[18px] w-[18px]', !isActive && config.color)}
               />
               <span className="flex-1 truncate">{config.name}</span>
               <span className="text-xs tabular-nums opacity-70">{count}</span>

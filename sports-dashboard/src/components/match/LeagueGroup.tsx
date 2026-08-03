@@ -47,7 +47,7 @@ export function LeagueGroup({
         >
           {/* Sport glyph, in the time column */}
           <span className="flex items-center justify-center py-1.5">
-            <SportIcon sport={sport} colored className="text-[16px]" />
+            <SportIcon sport={sport} colored className="h-4 w-4" />
           </span>
 
           {/* League name */}

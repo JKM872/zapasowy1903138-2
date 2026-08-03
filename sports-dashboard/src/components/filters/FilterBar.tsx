@@ -77,7 +77,7 @@ export function FilterBar() {
               {SPORTS.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   <span className="flex items-center gap-2">
-                    <SportIcon sport={s.id} colored className="text-[16px]" />
+                    <SportIcon sport={s.id} colored className="h-4 w-4" />
                     {s.name}
                   </span>
                 </SelectItem>

@@ -49,7 +49,7 @@ export function MatchCard({ match, liveScore, onSelect }: Props) {
         'bg-muted/30',
       )}>
         <div className="flex items-center gap-1.5 min-w-0">
-          <SportIcon sport={match.sport} colored className="shrink-0 text-[16px]" />
+          <SportIcon sport={match.sport} colored className="h-4 w-4" />
           <span className="text-[11px] text-muted-foreground truncate">
             {match.league ?? match.sport}
           </span>

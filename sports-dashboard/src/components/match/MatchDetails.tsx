@@ -51,7 +51,7 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
         <div className="p-5 pb-0">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-3">
-              <SportIcon sport={match.sport} colored className="text-[18px]" />
+              <SportIcon sport={match.sport} colored className="h-[18px] w-[18px]" />
               <span className="text-xs text-muted-foreground">{match.league ?? match.sport}</span>
               <GradeBadge grade={match.predictionGrade} className="ml-1" />
               <span className="text-xs text-muted-foreground ml-auto flex items-center gap-1">

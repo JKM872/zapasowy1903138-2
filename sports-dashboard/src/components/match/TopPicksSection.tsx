@@ -40,7 +40,7 @@ function TopPickCard({ match, onSelect }: { match: Match; onSelect?: (m: Match) 
         {/* Header: sport + time */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <SportIcon sport={match.sport} colored className="text-[14px]" />
+            <SportIcon sport={match.sport} colored className="h-3.5 w-3.5" />
             <span className="text-[10px] text-muted-foreground truncate max-w-[120px]">
               {match.league ?? match.sport}
             </span>
