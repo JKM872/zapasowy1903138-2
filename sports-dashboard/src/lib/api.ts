@@ -23,8 +23,10 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit & { auth?: bo
     ...(options?.headers as Record<string, string> ?? {}),
   }
 
-  // Attach auth token for mutating requests
-  if (options?.auth !== false && (options?.method === 'POST' || options?.method === 'PUT' || options?.method === 'DELETE')) {
+  // Attach auth token when available (unless explicitly disabled).
+  // Needed on GET /api/matches too, so the server can unlock Grade A for
+  // active subscribers via the paywall.
+  if (options?.auth !== false && !headers['Authorization']) {
     const token = getAuthToken()
     if (token) headers['Authorization'] = token
   }
@@ -247,4 +249,30 @@ export interface TeamInfo {
 
 export async function getTeamInfo(team: string): Promise<TeamInfo> {
   return fetchApi(`/api/team-info?team=${encodeURIComponent(team)}`)
+}
+
+// ---------------------------------------------------------------------------
+// Subscription / Stripe checkout (weekly $5 → Grade A access)
+// ---------------------------------------------------------------------------
+
+export interface SubscriptionStatus {
+  active: boolean
+  status: string
+  current_period_end: string | null
+}
+
+/** Fetch the current user's subscription status (requires auth). */
+export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
+  const token = getAuthToken()
+  return fetchApi<SubscriptionStatus>('/api/subscription/status', {
+    headers: token ? { Authorization: token } : {},
+  })
+}
+
+/** Create a Stripe Checkout session and return the redirect URL. */
+export async function createCheckoutSession(email?: string): Promise<{ url: string; id: string }> {
+  return fetchApi('/api/checkout', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  })
 }

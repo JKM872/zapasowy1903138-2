@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  Trophy, BarChart3, Ticket, Users, Sun, Moon, Menu, LogIn, LogOut,
+  Trophy, BarChart3, Ticket, Users, Sun, Moon, Menu, LogIn, LogOut, Crown,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { AuthDialog } from '@/components/auth/AuthDialog'
 import { useAuthStore } from '@/store/authStore'
+import { useSubscription } from '@/hooks/useSubscription'
 
 const NAV_ITEMS = [
   { href: '/standings',   label: 'Standings',   icon: Trophy     },
@@ -54,6 +55,7 @@ function NavLinks({ mobile, onNavigate }: { mobile?: boolean; onNavigate?: () =>
 export function Header() {
   const { theme, setTheme } = useTheme()
   const { user, init, signOut } = useAuthStore()
+  const { isSubscriber } = useSubscription()
   const [authOpen, setAuthOpen] = useState(false)
 
   useEffect(() => { init() }, [init])
@@ -90,6 +92,19 @@ export function Header() {
 
         {/* Spacer */}
         <div className="flex-1" />
+
+        {/* Premium / Upgrade */}
+        <Link href="/pricing">
+          <Button
+            variant={isSubscriber ? 'ghost' : 'default'}
+            size="sm"
+            className={cn('gap-1.5', isSubscriber && 'text-amber-500')}
+            title={isSubscriber ? 'Premium active' : 'Unlock Grade A'}
+          >
+            <Crown className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">{isSubscriber ? 'Premium' : 'Upgrade'}</span>
+          </Button>
+        </Link>
 
         {/* Auth controls */}
         {user ? (

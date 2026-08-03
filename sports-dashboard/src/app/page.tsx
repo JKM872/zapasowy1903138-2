@@ -9,6 +9,7 @@ import { MatchDetails } from '@/components/match/MatchDetails'
 import { SportTabs } from '@/components/navigation/SportTabs'
 import { DateCarousel } from '@/components/navigation/DateCarousel'
 import { CompactFilters } from '@/components/filters/CompactFilters'
+import { PromoBanner } from '@/components/shared/PromoBanner'
 import { useMatches, useLiveScores } from '@/hooks/useMatches'
 import type { Match } from '@/lib/types'
 
@@ -34,6 +35,9 @@ export default function HomePage() {
           <CompactFilters />
         </div>
       </div>
+
+      {/* Freemium upsell banner (hidden for subscribers) */}
+      <PromoBanner />
 
       {/* Main content */}
       <main className="mx-auto max-w-5xl px-4 py-4">

@@ -161,6 +161,10 @@ export interface Match {
   aiPrediction?: AIPrediction | null
   confidence?: number
   value_bet?: boolean
+  /** Overall grade A-F. Basis for the Grade A/B freemium paywall. */
+  predictionGrade?: string | null
+  /** Set by the backend paywall when premium (Grade A) data is masked for non-subscribers. */
+  locked?: boolean
 }
 
 export interface MatchFilters {

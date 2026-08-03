@@ -6,13 +6,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import * as api from '@/lib/api'
 import { useFilterStore } from '@/store/filterStore'
+import { useAuthStore } from '@/store/authStore'
 
 export function useMatches() {
   const { sport, date, search } = useFilterStore()
+  const userId = useAuthStore((s) => s.user?.id ?? 'anon')
   const dateStr = date ? format(date, 'yyyy-MM-dd') : undefined
 
   return useQuery({
-    queryKey: ['matches', sport, dateStr ?? 'latest', search],
+    // userId in the key so matches refetch after login/logout — the server
+    // unlocks Grade A for active subscribers based on the auth token.
+    queryKey: ['matches', sport, dateStr ?? 'latest', search, userId],
     queryFn: () => api.getMatches({ sport, date: dateStr, search }),
     staleTime: 60_000,          // 1 min
     refetchInterval: 300_000,   // 5 min background refresh

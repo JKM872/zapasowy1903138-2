@@ -7,15 +7,18 @@ export function Footer() {
         <p className="flex items-center gap-1">
           Made with <Heart className="h-3 w-3 text-rose-500" /> Sports&nbsp;Predictor
         </p>
-        <a
-          href="https://github.com/JKM872/zapasowy1903138-2"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 hover:text-foreground transition-colors"
-        >
-          <Github className="h-3.5 w-3.5" />
-          Open Source
-        </a>
+        <div className="flex items-center gap-4">
+          <a href="/pricing" className="hover:text-foreground transition-colors">Pricing</a>
+          <a
+            href="https://github.com/JKM872/zapasowy1903138-2"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:text-foreground transition-colors"
+          >
+            <Github className="h-3.5 w-3.5" />
+            Open Source
+          </a>
+        </div>
       </div>
     </footer>
   )
