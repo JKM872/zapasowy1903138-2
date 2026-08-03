@@ -38,7 +38,7 @@ import logging
 import random
 import base64
 from datetime import datetime, timedelta, timezone
-from typing import Dict, Optional, Any, List
+from typing import Any, Dict, List, Optional, Tuple
 from difflib import SequenceMatcher
 from urllib.parse import quote
 
