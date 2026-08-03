@@ -8,6 +8,7 @@ import { LeagueGroup } from './LeagueGroup'
 import { EmptyState } from '@/components/shared/EmptyState'
 import type { Match, LiveScore } from '@/lib/types'
 import { useFilterStore } from '@/store/filterStore'
+import { useBasketStore } from '@/store/basketStore'
 import { groupMatchesByLeague, sortLeagueGroups } from '@/lib/utils'
 
 interface Props {
@@ -73,6 +74,17 @@ function applyLocalFilters(matches: Match[], filters: ReturnType<typeof useFilte
 export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
   const filters = useFilterStore()
   const filtered = applyLocalFilters(matches, filters)
+
+  // Subscribing here keeps the odds buttons in sync with the basket without
+  // threading callbacks through every caller of MatchList.
+  const basketItems = useBasketStore(s => s.items)
+  const toggleOutcome = useBasketStore(s => s.toggle)
+  const selectedByMatch = new Map<string, string[]>()
+  for (const item of basketItems) {
+    const existing = selectedByMatch.get(item.matchId)
+    if (existing) existing.push(item.outcome)
+    else selectedByMatch.set(item.matchId, [item.outcome])
+  }
 
   // Build live score lookup by team names
   const liveMap = new Map<string, LiveScore>()
@@ -143,6 +155,8 @@ export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
                 match={m}
                 liveScore={findLiveScore(m)}
                 onSelect={onSelect}
+                onPick={toggleOutcome}
+                selectedOutcomes={selectedByMatch.get(String(m.id)) ?? []}
               />
             ))}
           </LeagueGroup>

@@ -11,13 +11,17 @@ import { SportTabs } from '@/components/navigation/SportTabs'
 import { DateCarousel } from '@/components/navigation/DateCarousel'
 import { CompactFilters } from '@/components/filters/CompactFilters'
 import { PromoBanner } from '@/components/shared/PromoBanner'
+import { AnalysisBasket } from '@/components/basket/AnalysisBasket'
 import { useMatches, useLiveScores } from '@/hooks/useMatches'
+import { useBasketStore } from '@/store/basketStore'
 import type { Match } from '@/lib/types'
 
 export default function HomePage() {
   const { data, isLoading, isError, error } = useMatches()
   const { data: liveScores } = useLiveScores()
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null)
+
+  const basketCount = useBasketStore(s => s.items.length)
 
   const matches = data?.data ?? []
   const sportCounts = data?.sportCounts ?? {}
@@ -37,7 +41,12 @@ export default function HomePage() {
 
       <PromoBanner />
 
-      <EventsShell sportCounts={sportCounts} matches={matches}>
+      <EventsShell
+        sportCounts={sportCounts}
+        matches={matches}
+        aside={<AnalysisBasket />}
+        asideCount={basketCount}
+      >
         {isError && (
           <div className="mb-3 rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
             Nie udało się pobrać zdarzeń: {(error as Error)?.message ?? 'nieznany błąd'}
