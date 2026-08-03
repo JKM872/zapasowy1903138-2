@@ -3295,6 +3295,70 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
 # TENNIS HELPER FUNCTIONS (last match, surface form, data completeness)
 # ===================================================================
 
+_ROW_DATE_SELECTORS = (
+    'span.h2h__date',
+    '[class*="h2h__date"]',
+    '[data-testid*="date"]',
+    'span[class*="date"]',
+)
+_ROW_DATE_RE = re.compile(r'\b(\d{1,2}\.\d{1,2}\.(?:\d{4}|\d{2}))\b')
+
+
+def _extract_row_date(row) -> Optional[str]:
+    """Date of an H2H row, tolerant of Livesport's changing markup.
+
+    The single hardcoded `span.h2h__date` was the whole reason the tennis
+    fatigue signal was empty: when that class stopped matching, the caller's
+    `if d and s` guard threw away the score, opponent and result it had already
+    parsed. Surface form kept working from the very same rows because it never
+    reads the date. Falling back to a date pattern in the row text means a class
+    rename degrades one field instead of silencing the feature.
+    """
+    for selector in _ROW_DATE_SELECTORS:
+        try:
+            el = row.select_one(selector)
+        except Exception:
+            continue
+        if el:
+            text = el.get_text(strip=True)
+            if text:
+                return text
+    try:
+        hit = _ROW_DATE_RE.search(row.get_text(' ', strip=True))
+    except Exception:
+        return None
+    return hit.group(1) if hit else None
+
+
+def _store_last_match(out: Dict, side: str, date: Optional[str],
+                      score: Optional[str], opponent: Optional[str],
+                      result: Optional[str]) -> bool:
+    """Record one player's last match, keeping what was parsed.
+
+    The six call sites used to guard on `if d and s`, so a row whose date could
+    not be read discarded its score, opponent and result as well. The date is
+    only needed by the fatigue feature; the result is worth keeping regardless.
+    """
+    if not score:
+        return False
+    prefix = f'last_match_{side}_'
+    already = out.get(prefix + 'score')
+    if already and not date:
+        # Do not overwrite an earlier, more complete row with a date-less one.
+        return False
+    out[prefix + 'score'] = score
+    out[prefix + 'opponent'] = opponent
+    out[prefix + 'result'] = result
+    if date:
+        out[prefix + 'date'] = date
+    return True
+
+
+def _needs_last_match(out: Dict, side: str) -> bool:
+    """Keep looking while the dated row is still missing."""
+    return not out.get(f'last_match_{side}_date')
+
+
 def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chrome,
                                        match_url: str, out: Dict,
                                        player_a: str, player_b: str) -> None:
@@ -3324,8 +3388,7 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
 
         for row in rows[:8]:
             try:
-                date_el = row.select_one('span.h2h__date')
-                match_date = date_el.get_text(strip=True) if date_el else None
+                match_date = _extract_row_date(row)
 
                 home_el = row.select_one('span.h2h__homeParticipant span.h2h__participantInner')
                 away_el = row.select_one('span.h2h__awayParticipant span.h2h__participantInner')
@@ -3417,21 +3480,11 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
         return False
 
     for header_text, section in player_sections:
-        if not out.get('last_match_a_date') and _header_matches_player(header_text, player_a):
-            d, s, o, r = _extract_last_from_section(section, player_a)
-            if d and s:
-                out['last_match_a_date'] = d
-                out['last_match_a_score'] = s
-                out['last_match_a_opponent'] = o
-                out['last_match_a_result'] = r
+        if _needs_last_match(out, 'a') and _header_matches_player(header_text, player_a):
+            _store_last_match(out, 'a', *_extract_last_from_section(section, player_a))
 
-        if not out.get('last_match_b_date') and _header_matches_player(header_text, player_b):
-            d, s, o, r = _extract_last_from_section(section, player_b)
-            if d and s:
-                out['last_match_b_date'] = d
-                out['last_match_b_score'] = s
-                out['last_match_b_opponent'] = o
-                out['last_match_b_result'] = r
+        if _needs_last_match(out, 'b') and _header_matches_player(header_text, player_b):
+            _store_last_match(out, 'b', *_extract_last_from_section(section, player_b))
 
     # ------------------------------------------------------------------
     # STRATEGY 2: scan unknown (header-less) sections for player rows
@@ -3444,40 +3497,24 @@ def _extract_last_matches_for_players(soup: BeautifulSoup, driver: webdriver.Chr
             and not _header_matches_player(hdr, player_b)
         ]
         for section in remaining:
-            if not out.get('last_match_a_date'):
-                d, s, o, r = _extract_last_from_section(section, player_a)
-                if d and s:
-                    out['last_match_a_date'] = d
-                    out['last_match_a_score'] = s
-                    out['last_match_a_opponent'] = o
-                    out['last_match_a_result'] = r
-            if not out.get('last_match_b_date'):
-                d, s, o, r = _extract_last_from_section(section, player_b)
-                if d and s:
-                    out['last_match_b_date'] = d
-                    out['last_match_b_score'] = s
-                    out['last_match_b_opponent'] = o
-                    out['last_match_b_result'] = r
+            if _needs_last_match(out, 'a'):
+                _store_last_match(out, 'a',
+                                  *_extract_last_from_section(section, player_a))
+            if _needs_last_match(out, 'b'):
+                _store_last_match(out, 'b',
+                                  *_extract_last_from_section(section, player_b))
 
     # ------------------------------------------------------------------
     # STRATEGY 3: last-resort row scan of direct H2H section
     # ------------------------------------------------------------------
     if not out.get('last_match_a_date') or not out.get('last_match_b_date'):
         if h2h_direct_section:
-            if not out.get('last_match_a_date'):
-                d, s, o, r = _extract_last_from_section(h2h_direct_section, player_a)
-                if d and s:
-                    out['last_match_a_date'] = d
-                    out['last_match_a_score'] = s
-                    out['last_match_a_opponent'] = o
-                    out['last_match_a_result'] = r
-            if not out.get('last_match_b_date'):
-                d, s, o, r = _extract_last_from_section(h2h_direct_section, player_b)
-                if d and s:
-                    out['last_match_b_date'] = d
-                    out['last_match_b_score'] = s
-                    out['last_match_b_opponent'] = o
-                    out['last_match_b_result'] = r
+            if _needs_last_match(out, 'a'):
+                _store_last_match(out, 'a', *_extract_last_from_section(
+                    h2h_direct_section, player_a))
+            if _needs_last_match(out, 'b'):
+                _store_last_match(out, 'b', *_extract_last_from_section(
+                    h2h_direct_section, player_b))
 
 
 def _apply_real_surface_form(out: Dict, player_a: str, player_b: str) -> None:
