@@ -1,11 +1,12 @@
 // ============================================================================
-// Home Page – FlashScore-style layout: SportTabs → DateCarousel → Filters → Grouped Matches
+// Home – bookmaker-style event board: sports tree / events / analysis basket
 // ============================================================================
 'use client'
 
 import { useState } from 'react'
 import { MatchList } from '@/components/match/MatchList'
 import { MatchDetails } from '@/components/match/MatchDetails'
+import { EventsShell } from '@/components/layout/EventsShell'
 import { SportTabs } from '@/components/navigation/SportTabs'
 import { DateCarousel } from '@/components/navigation/DateCarousel'
 import { CompactFilters } from '@/components/filters/CompactFilters'
@@ -23,27 +24,23 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Sport navigation tabs – sticky below header */}
-      <SportTabs sportCounts={sportCounts} />
-
-      {/* Date carousel – sticky below sport tabs */}
       <DateCarousel />
 
-      {/* Compact filters bar */}
-      <div className="border-b bg-background">
-        <div className="mx-auto max-w-5xl px-4 py-2">
+      {/* Sports live in the sidebar on desktop; these tabs cover narrow screens. */}
+      <SportTabs sportCounts={sportCounts} className="lg:hidden" />
+
+      <div className="border-b border-border bg-card">
+        <div className="mx-auto max-w-[1700px] px-2 py-1.5 sm:px-4">
           <CompactFilters />
         </div>
       </div>
 
-      {/* Freemium upsell banner (hidden for subscribers) */}
       <PromoBanner />
 
-      {/* Main content */}
-      <main className="mx-auto max-w-5xl px-4 py-4">
+      <EventsShell sportCounts={sportCounts} matches={matches}>
         {isError && (
-          <div className="mb-4 rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-            Failed to load matches: {(error as Error)?.message ?? 'Unknown error'}
+          <div className="mb-3 rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+            Nie udało się pobrać zdarzeń: {(error as Error)?.message ?? 'nieznany błąd'}
           </div>
         )}
 
@@ -53,9 +50,8 @@ export default function HomePage() {
           isLoading={isLoading}
           onSelect={setSelectedMatch}
         />
-      </main>
+      </EventsShell>
 
-      {/* Match Details Dialog */}
       <MatchDetails
         match={selectedMatch}
         open={!!selectedMatch}

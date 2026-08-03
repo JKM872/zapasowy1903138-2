@@ -29,7 +29,7 @@ import { FilterBar } from './FilterBar'
 const QUICK_CHIPS = [
   {
     id: 'ai-picks',
-    label: 'AI Picks',
+    label: 'Typy modelu',
     icon: Sparkles,
     activeColor: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-300/50',
     filter: { geminiRecommendation: 'HIGH' as const, hasPredictions: true },
@@ -38,7 +38,7 @@ const QUICK_CHIPS = [
   },
   {
     id: 'value-bets',
-    label: 'Value',
+    label: 'Wartość',
     icon: Zap,
     activeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-300/50',
     filter: { hasOdds: true, hasPredictions: true },
@@ -47,7 +47,7 @@ const QUICK_CHIPS = [
   },
   {
     id: 'high-conf',
-    label: 'High Confidence',
+    label: 'Wysoka pewność',
     icon: Target,
     activeColor: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-300/50',
     filter: { minConfidence: 75, hasPredictions: true },
@@ -57,9 +57,9 @@ const QUICK_CHIPS = [
 ]
 
 const SORT_OPTIONS = [
-  { label: 'Time', value: 'time' as const },
-  { label: 'Confidence', value: 'confidence' as const },
-  { label: 'Sport', value: 'sport' as const },
+  { label: 'Godzina', value: 'time' as const },
+  { label: 'Pewność', value: 'confidence' as const },
+  { label: 'Dyscyplina', value: 'sport' as const },
 ]
 
 export function CompactFilters() {
@@ -81,7 +81,7 @@ export function CompactFilters() {
       <div className="relative shrink-0 w-[180px] sm:w-[220px]">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
         <Input
-          placeholder="Search teams, leagues..."
+          placeholder="Szukaj drużyn, lig..."
           value={filters.search}
           onChange={(e) => filters.setSearch(e.target.value)}
           className="h-8 pl-8 pr-8 text-xs"
@@ -129,7 +129,7 @@ export function CompactFilters() {
           <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs shrink-0">
             <ArrowUpDown className="h-3 w-3" />
             <span className="hidden sm:inline">
-              {SORT_OPTIONS.find(o => o.value === filters.sortBy)?.label ?? 'Sort'}
+              {SORT_OPTIONS.find(o => o.value === filters.sortBy)?.label ?? 'Sortuj'}
             </span>
           </Button>
         </DropdownMenuTrigger>
@@ -151,7 +151,7 @@ export function CompactFilters() {
         <SheetTrigger asChild>
           <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs shrink-0 relative">
             <SlidersHorizontal className="h-3 w-3" />
-            <span className="hidden sm:inline">Filters</span>
+            <span className="hidden sm:inline">Filtry</span>
             {filters.activeFilterCount > 0 && (
               <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[9px] bg-primary text-primary-foreground">
                 {filters.activeFilterCount}
@@ -161,7 +161,7 @@ export function CompactFilters() {
         </SheetTrigger>
         <SheetContent side="right" className="w-[320px] sm:w-[380px] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Filters</SheetTitle>
+            <SheetTitle>Filtry</SheetTitle>
           </SheetHeader>
           <div className="mt-4">
             <FilterBar />
@@ -178,7 +178,7 @@ export function CompactFilters() {
           className="h-7 gap-1 text-xs text-muted-foreground shrink-0"
         >
           <X className="h-3 w-3" />
-          Clear
+          Wyczyść
         </Button>
       )}
     </div>

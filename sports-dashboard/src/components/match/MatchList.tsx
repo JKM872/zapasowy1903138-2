@@ -28,6 +28,9 @@ function applyLocalFilters(matches: Match[], filters: ReturnType<typeof useFilte
   if (filters.minConfidence > 0) {
     result = result.filter((m) => (m.gemini?.confidence ?? m.confidence ?? m.forebet?.probability ?? 0) >= filters.minConfidence)
   }
+  if (filters.league) {
+    result = result.filter((m) => m.league === filters.league)
+  }
   if (filters.hasOdds) {
     result = result.filter((m) => m.odds?.home != null)
   }
@@ -106,8 +109,8 @@ export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
   if (filtered.length === 0) {
     return (
       <EmptyState
-        title="No matches found"
-        description="Try adjusting your filters or selecting a different date."
+        title="Brak zdarzeń"
+        description="Zmień filtry lub wybierz inny dzień."
       />
     )
   }

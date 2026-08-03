@@ -153,6 +153,7 @@ export const QUICK_FILTERS = [
 // ---------------------------------------------------------------------------
 export const DEFAULT_FILTERS = {
   sport: 'all' as const,
+  league: null,
   date: null,
   minConfidence: 0,
   hasOdds: false,

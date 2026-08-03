@@ -60,15 +60,22 @@ const content = allJS + indexHTML
 // ── 3. Verify NEW UI markers present ──
 section('New UI markers (must be present)')
 const newMarkers = [
-  // Sticky layout markers (CSS classes survive minification)
-  { pattern: /sticky.*top-\[100px\].*z-30/i, name: 'DateCarousel sticky class' },
+  // Sticky layout markers (CSS classes survive minification). The date strip now
+  // anchors under the 56px header because the sport tabs moved into the sidebar.
+  { pattern: /sticky.*top-14.*z-30/i, name: 'DateCarousel sticky class' },
   { pattern: /SportTabs|sportCounts|sport-tab/i, name: 'SportTabs reference' },
   { pattern: /LeagueGroup|CollapsibleTrigger/i, name: 'LeagueGroup reference' },
+  // Three-column bookmaker shell
+  { pattern: /Dyscypliny/i, name: 'SportSidebar heading' },
+  { pattern: /lg:grid-cols-\[232px/i, name: 'EventsShell column template' },
+  { pattern: /material-symbol/i, name: 'Material Symbols icon class' },
   // Text strings that survive minification
-  { pattern: /AI Picks|AI.Picks/i, name: 'CompactFilters: AI Picks chip text' },
-  { pattern: /BTTS/i, name: 'MatchRow: BTTS forebet data' },
-  { pattern: /Value Bets|Value.Bets/i, name: 'CompactFilters: Value Bets chip' },
+  { pattern: /Typy modelu/i, name: 'CompactFilters: model picks chip' },
+  { pattern: /Warto[śs][ćc]/i, name: 'CompactFilters: value chip' },
+  { pattern: /BTTS/i, name: 'Forebet BTTS data' },
   { pattern: /groupMatchesByLeague|sortLeagueGroups/i, name: 'League grouping functions' },
+  // Positioning: the bookmaker-style layout must state it is not a bookmaker.
+  { pattern: /nie przyjmujemy zak[łl]ad[óo]w/i, name: 'Footer: not-a-bookmaker notice' },
 ]
 for (const { pattern, name } of newMarkers) {
   assert(pattern.test(content), `Contains: ${name}`)

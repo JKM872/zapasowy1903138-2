@@ -186,6 +186,8 @@ export interface Match {
 export interface MatchFilters {
   geminiRecommendation?: GeminiRecommendation | 'all'
   sport: Sport | 'all'
+  /** Exact league name, set by the sidebar tree. Null means every league. */
+  league: string | null
   date: Date | null
   minConfidence: number
   hasOdds: boolean

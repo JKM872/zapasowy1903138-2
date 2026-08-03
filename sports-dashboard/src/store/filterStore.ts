@@ -11,6 +11,7 @@ interface FilterState extends MatchFilters {
   activeFilterCount: number
   // Actions
   setSport: (sport: Sport | 'all') => void
+  setLeague: (league: string | null) => void
   setDate: (date: Date | null) => void
   setDatePreset: (preset: 'today' | 'tomorrow') => void
   setMinConfidence: (n: number) => void
@@ -28,6 +29,7 @@ interface FilterState extends MatchFilters {
 function countActive(s: MatchFilters): number {
   let c = 0
   if (s.sport !== 'all') c++
+  if (s.league) c++
   if (s.date) c++
   if (s.minConfidence > 0) c++
   if (s.hasOdds) c++
@@ -42,8 +44,14 @@ export const useFilterStore = create<FilterState>((set) => ({
   ...DEFAULT_FILTERS,
   activeFilterCount: 0,
 
+  // Changing sport clears the league: a league only exists within one sport, so
+  // keeping it would silently filter everything out.
   setSport: (sport) => set((s) => {
-    const next = { ...s, sport }
+    const next = { ...s, sport, league: null }
+    return { ...next, activeFilterCount: countActive(next) }
+  }),
+  setLeague: (league) => set((s) => {
+    const next = { ...s, league }
     return { ...next, activeFilterCount: countActive(next) }
   }),
   setDate: (date) => set((s) => {

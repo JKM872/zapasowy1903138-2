@@ -19,17 +19,18 @@ import {
   startOfDay,
   isSameDay,
 } from 'date-fns'
+import { pl } from 'date-fns/locale'
 
 function getDateLabel(date: Date): string {
-  if (isToday(date)) return 'Today'
-  if (isTomorrow(date)) return 'Tomorrow'
-  if (isYesterday(date)) return 'Yesterday'
-  return format(date, 'd MMM')
+  if (isToday(date)) return 'Dziś'
+  if (isTomorrow(date)) return 'Jutro'
+  if (isYesterday(date)) return 'Wczoraj'
+  return format(date, 'd MMM', { locale: pl })
 }
 
 function getWeekdayLabel(date: Date): string {
   if (isToday(date)) return ''
-  return format(date, 'EEE')
+  return format(date, 'EEE', { locale: pl })
 }
 
 export function DateCarousel() {
@@ -53,8 +54,10 @@ export function DateCarousel() {
   }
 
   return (
-    <div className="sticky top-[100px] z-30 w-full border-b bg-muted/30 backdrop-blur supports-[backdrop-filter]:bg-muted/20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    /* Sits directly under the 56px header now that the sport tabs moved into the
+       sidebar, so it anchors at top-14 rather than top-[100px]. */
+    <div className="sticky top-14 z-30 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+      <div className="mx-auto max-w-[1700px] px-2 sm:px-4">
         <div className="flex items-center justify-center gap-1 py-1.5">
           {/* Back arrow */}
           <Button

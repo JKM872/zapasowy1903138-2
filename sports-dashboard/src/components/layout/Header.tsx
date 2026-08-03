@@ -18,10 +18,10 @@ import { useAuthStore } from '@/store/authStore'
 import { useSubscription } from '@/hooks/useSubscription'
 
 const NAV_ITEMS = [
-  { href: '/standings',   label: 'Standings',   icon: Trophy     },
-  { href: '/stats',       label: 'Statistics',  icon: BarChart3  },
-  { href: '/my-bets',     label: 'My Bets',     icon: Ticket     },
-  { href: '/leaderboard', label: 'Leaderboard', icon: Users      },
+  { href: '/standings',   label: 'Tabele',      icon: Trophy     },
+  { href: '/stats',       label: 'Statystyki',  icon: BarChart3  },
+  { href: '/my-bets',     label: 'Moje typy',   icon: Ticket     },
+  { href: '/leaderboard', label: 'Ranking',     icon: Users      },
 ]
 
 function NavLinks({ mobile, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
@@ -62,7 +62,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-[1700px] items-center gap-4 px-2 sm:px-4">
         {/* Mobile menu */}
         <Sheet>
           <SheetTrigger asChild>
@@ -79,10 +79,16 @@ export function Header() {
         </Sheet>
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
-          <Trophy className="h-5 w-5 text-primary" />
-          <span className="hidden sm:inline">Sports Predictor</span>
-          <span className="sm:hidden">SP</span>
+        {/* Brand name is a placeholder until the real one is chosen. */}
+        <Link href="/" className="flex items-center gap-2 whitespace-nowrap font-bold">
+          <Trophy className="h-5 w-5 shrink-0 text-primary" />
+          <span className="hidden flex-col leading-none sm:flex">
+            <span className="text-base">Analiza Sportowa</span>
+            <span className="text-[10px] font-normal text-muted-foreground">
+              narzędzie analityczne
+            </span>
+          </span>
+          <span className="text-base sm:hidden">AS</span>
         </Link>
 
         {/* Desktop nav */}
@@ -99,10 +105,10 @@ export function Header() {
             variant={isSubscriber ? 'ghost' : 'default'}
             size="sm"
             className={cn('gap-1.5', isSubscriber && 'text-amber-500')}
-            title={isSubscriber ? 'Premium active' : 'Unlock Grade A'}
+            title={isSubscriber ? 'Premium aktywne' : 'Odblokuj ocenę A'}
           >
             <Crown className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">{isSubscriber ? 'Premium' : 'Upgrade'}</span>
+            <span className="hidden sm:inline">{isSubscriber ? 'Premium' : 'Kup dostęp'}</span>
           </Button>
         </Link>
 
@@ -112,14 +118,14 @@ export function Header() {
             <span className="hidden sm:inline text-xs text-muted-foreground truncate max-w-[120px]">
               {user.email}
             </span>
-            <Button variant="ghost" size="icon" onClick={() => signOut()} title="Sign out">
+            <Button variant="ghost" size="icon" onClick={() => signOut()} title="Wyloguj">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
         ) : (
           <Button variant="outline" size="sm" onClick={() => setAuthOpen(true)} className="gap-1.5">
             <LogIn className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Sign In</span>
+            <span className="hidden sm:inline">Zaloguj</span>
           </Button>
         )}
 
@@ -131,7 +137,7 @@ export function Header() {
         >
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">Przełącz motyw</span>
         </Button>
       </div>
 
