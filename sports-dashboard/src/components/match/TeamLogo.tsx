@@ -47,7 +47,9 @@ export function TeamLogo({ name, size = 'md', className, badgeUrl }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={logoUrl}
-          alt={name}
+          /* Decorative: the team name is always rendered next to the badge, so
+             an alt here would make screen readers announce it twice. */
+          alt=""
           className="h-full w-full object-contain p-0.5"
           onError={() => setFailed(true)}
           loading="lazy"
