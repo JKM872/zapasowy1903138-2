@@ -17,8 +17,11 @@ import { AuthDialog } from '@/components/auth/AuthDialog'
 import { useAuthStore } from '@/store/authStore'
 import { useSubscription } from '@/hooks/useSubscription'
 
+// Standings are deliberately absent. They need Football-Data.org, and our own
+// data cannot stand in: of 72 119 scraped football rows only 21 carry a league
+// name, and tennis and basketball carry none. The route still exists, but
+// linking to it would send every visitor to an error.
 const NAV_ITEMS = [
-  { href: '/standings',   label: 'Tabele',      icon: Trophy     },
   { href: '/stats',       label: 'Statystyki',  icon: BarChart3  },
   { href: '/my-bets',     label: 'Moje typy',   icon: Ticket     },
   // The page ranks data sources by coverage, not users, so "Ranking" misled.
