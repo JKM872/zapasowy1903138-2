@@ -57,6 +57,50 @@ def _first(d: Dict[str, Any], *keys: str, default: Any = None) -> Any:
     return default
 
 
+# Sport wnioskowany z adresu meczu, gdy wiersz nie ma pola `sport`. Kolejność ma
+# znaczenie: 'table-tennis' musi być sprawdzone przed 'tennis', a 'pilka-reczna'
+# przed 'pilka-nozna', bo są podciągami/sąsiadami w URL-ach Livesport.
+_SPORT_URL_PATTERNS: Tuple[Tuple[str, str], ...] = (
+    ('table-tennis', 'table_tennis'),
+    ('table_tennis', 'table_tennis'),
+    ('tenis-stolowy', 'table_tennis'),
+    ('pilka-reczna', 'handball'),
+    ('handball', 'handball'),
+    ('pilka-nozna', 'football'),
+    ('football', 'football'),
+    ('soccer', 'football'),
+    ('koszykowka', 'basketball'),
+    ('basketball', 'basketball'),
+    ('siatkowka', 'volleyball'),
+    ('volleyball', 'volleyball'),
+    ('hokej', 'hockey'),
+    ('ice-hockey', 'hockey'),
+    ('hockey', 'hockey'),
+    ('baseball', 'baseball'),
+    ('tenis', 'tennis'),
+    ('tennis', 'tennis'),
+)
+
+
+def infer_sport(raw: Dict[str, Any], default: str = 'football') -> str:
+    """Sport of a row, from its own field or failing that from its URL.
+
+    The AiScore table-tennis files carry no `sport` key at all — 0 of 126 rows in
+    one and 0 of 135 in the other — so defaulting to football filed 64 table
+    tennis matches under football and left table tennis with no rows of its own.
+    That mattered twice: it put another sport's fixtures into football's numbers,
+    and it made the sport that is 62% of what we mail impossible to measure.
+    """
+    declared = str(raw.get('sport') or '').strip().lower()
+    if declared:
+        return declared
+    url = str(_first(raw, 'match_url', 'matchUrl', default='') or '').lower()
+    for needle, sport in _SPORT_URL_PATTERNS:
+        if needle in url:
+            return sport
+    return default
+
+
 def normalise_row(raw: Dict[str, Any]) -> Dict[str, Any]:
     """Translate a ``results/*.json`` match into engine (snake_case) shape."""
     odds = raw.get('odds') or {}
@@ -68,7 +112,7 @@ def normalise_row(raw: Dict[str, Any]) -> Dict[str, Any]:
     row: Dict[str, Any] = {
         'home_team': _first(raw, 'home_team', 'homeTeam', default=''),
         'away_team': _first(raw, 'away_team', 'awayTeam', default=''),
-        'sport': (_first(raw, 'sport', default='football') or 'football').lower(),
+        'sport': infer_sport(raw),
         'league': _first(raw, 'league', default=''),
         'match_date': _first(raw, 'match_date', 'date', default=''),
         'match_url': _first(raw, 'match_url', 'matchUrl', default=''),
