@@ -66,6 +66,12 @@ SPORT_SLUG_TO_INTERNAL: Dict[str, Optional[str]] = {
     "rugby": "rugby",
     "e-sports": "esports",
     "esports": "esports",
+    # Normalised so the hyphenated form cannot leak through _internal_name as a
+    # separate sport. OddsSafari itself carries NO table tennis — its sportsMenu
+    # lists 14 sports and table tennis is not among them — so there is nothing to
+    # map it to a page id for. Table-tennis prices come from SofaScore.
+    "table-tennis": "table_tennis",
+    "table_tennis": "table_tennis",
     "american-football": None,
     "am.-football": None,
     "darts": None,

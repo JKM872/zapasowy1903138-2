@@ -289,7 +289,15 @@ def test_match_livesport_url_by_surnames():
 def test_resolve_odds_no_url_returns_empty():
     import table_tennis_aiscore_pipeline as pipe
     out = pipe.resolve_odds("A", "B", None)
-    assert out == {"home_odds": None, "away_odds": None, "bookmaker": None}
+    assert out["home_odds"] is None
+    assert out["away_odds"] is None
+    assert out["bookmaker"] is None
+
+
+def test_resolve_odds_says_why_it_failed():
+    """A bare `pass` hid a path that never produced a single price."""
+    import table_tennis_aiscore_pipeline as pipe
+    assert pipe.resolve_odds("A", "B", None)["reason"]
 
 
 def test_resolve_odds_multi_bookmaker(monkeypatch):
@@ -447,3 +455,61 @@ def test_collect_sofascore_dedupes_existing(monkeypatch):
     existing = {frozenset([normalize_name("Player A"), normalize_name("Player B")])}
     out = pipe.collect_sofascore_league_matches("2026-06-06", "home", existing_pairs=existing)
     assert out == []   # already covered by AiScore -> skipped
+
+
+# ---------------------------------------------------------------------------
+# Matching an AiScore fixture to its Livesport URL, for odds
+# ---------------------------------------------------------------------------
+
+class TestMatchLivesportUrl:
+    """Both players must appear in the slug.
+
+    The old rule accepted any two matching tokens, which a single name satisfies
+    on its own ("adrian" + "eliasz"). Any other fixture featuring that player
+    could then win the match and lend it its price, and a price pinned to the
+    wrong fixture feeds EV and the value flag.
+    """
+
+    @staticmethod
+    def _index(*slugs):
+        import re
+        entries = []
+        for slug in slugs:
+            tokens = set(re.findall(r"[a-ząćęłńóśźż]{4,}", slug.lower()))
+            tokens -= {"mecz", "match", "tenis", "stolowy", "table", "tennis",
+                       "www", "livesport", "https", "http", "com", "pilka"}
+            entries.append({"url": slug, "tokens": tokens})
+        return entries
+
+    def test_both_players_present_is_a_match(self):
+        import table_tennis_aiscore_pipeline as pipe
+        index = self._index(
+            "https://www.livesport.com/pl/mecz/tenis-stolowy/eliasz-adrian-skorski-michal/AAA1/")
+        assert pipe._match_livesport_url("Adrian Eliasz", "Michal Skorski", index) \
+            == index[0]["url"]
+
+    def test_only_one_player_present_is_rejected(self):
+        import table_tennis_aiscore_pipeline as pipe
+        # Both of Eliasz's name tokens appear, but the opponent is someone else.
+        index = self._index(
+            "https://www.livesport.com/pl/mecz/tenis-stolowy/eliasz-adrian-nowacki-piotr/BBB2/")
+        assert pipe._match_livesport_url("Adrian Eliasz", "Michal Skorski", index) is None
+
+    def test_the_richer_overlap_wins(self):
+        import table_tennis_aiscore_pipeline as pipe
+        index = self._index(
+            "https://www.livesport.com/pl/mecz/tenis-stolowy/eliasz-skorski/CCC3/",
+            "https://www.livesport.com/pl/mecz/tenis-stolowy/eliasz-adrian-skorski-michal/DDD4/",
+        )
+        assert pipe._match_livesport_url("Adrian Eliasz", "Michal Skorski", index) \
+            == index[1]["url"]
+
+    def test_an_empty_index_matches_nothing(self):
+        import table_tennis_aiscore_pipeline as pipe
+        assert pipe._match_livesport_url("Adrian Eliasz", "Michal Skorski", []) is None
+
+    def test_a_nameless_side_matches_nothing(self):
+        import table_tennis_aiscore_pipeline as pipe
+        index = self._index(
+            "https://www.livesport.com/pl/mecz/tenis-stolowy/eliasz-adrian-skorski-michal/EEE5/")
+        assert pipe._match_livesport_url("Adrian Eliasz", "", index) is None

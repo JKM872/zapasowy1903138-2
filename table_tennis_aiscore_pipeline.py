@@ -345,20 +345,32 @@ def build_livesport_tt_index(driver: Any, date_str: str,
 
 def _match_livesport_url(home: str, away: str,
                          index: List[Dict[str, Any]]) -> Optional[str]:
-    """Fuzzy-match an AiScore (home, away) to a Livesport match URL by surnames."""
+    """Fuzzy-match an AiScore (home, away) to a Livesport match URL by surnames.
+
+    Both players must appear in the candidate slug. The previous rule only asked
+    for two matching tokens in total, which "Adrian Eliasz" satisfies on its own
+    — so any other fixture featuring Eliasz could win the match and lend it its
+    price. Odds pinned to the wrong fixture are worse than no odds: they feed EV
+    and the value flag.
+    """
     from aiscore_scraper import normalize_name
-    want = set()
-    for nm in (home, away):
-        want |= {t for t in normalize_name(nm).split() if len(t) >= 4}
-    if not want:
+
+    home_tokens = {t for t in normalize_name(home).split() if len(t) >= 4}
+    away_tokens = {t for t in normalize_name(away).split() if len(t) >= 4}
+    if not home_tokens or not away_tokens:
         return None
+
     best_url, best_score = None, 0
     for entry in index:
-        score = len(want & entry["tokens"])
+        tokens = entry["tokens"]
+        home_hits = len(home_tokens & tokens)
+        away_hits = len(away_tokens & tokens)
+        if not home_hits or not away_hits:
+            continue
+        score = home_hits + away_hits
         if score > best_score:
             best_score, best_url = score, entry["url"]
-    # Require at least 2 surname tokens to match (one from each side ideally).
-    return best_url if best_score >= 2 else None
+    return best_url
 
 
 def resolve_odds(home: str, away: str, livesport_url: Optional[str]) -> Dict[str, Any]:
@@ -369,23 +381,35 @@ def resolve_odds(home: str, away: str, livesport_url: Optional[str]) -> Dict[str
     odds, in a sharp→popular priority order. This maximises coverage so most
     matches get odds. Best-effort: returns Nones if no bookmaker priced it.
     """
-    out: Dict[str, Any] = {"home_odds": None, "away_odds": None, "bookmaker": None}
+    out: Dict[str, Any] = {"home_odds": None, "away_odds": None,
+                           "bookmaker": None, "reason": None}
     if not livesport_url:
+        out["reason"] = "brak dopasowania do Livesport"
         return out
     try:
         from livesport_odds_api import LivesportOddsAPI
         api = LivesportOddsAPI()
         event_id = api.extract_event_id_from_url(livesport_url)
         if not event_id:
+            out["reason"] = "brak event_id w URL"
             return out
         odds = api.get_odds_from_multiple_bookmakers(
             event_id, sport="table_tennis", bookmakers=TT_BOOKMAKERS)
-        if odds and odds.get("success") and (odds.get("home_odds") or odds.get("away_odds")):
+        if not odds:
+            out["reason"] = "API kursów nie odpowiedziało"
+        elif not odds.get("success"):
+            out["reason"] = "żaden bukmacher nie wycenił meczu"
+        elif not (odds.get("home_odds") or odds.get("away_odds")):
+            out["reason"] = "odpowiedź bez kursów"
+        else:
             out["home_odds"] = odds.get("home_odds")
             out["away_odds"] = odds.get("away_odds")
             out["bookmaker"] = odds.get("bookmaker")
-    except Exception:
-        pass
+    except Exception as exc:
+        # This used to be a bare `pass`. Silence is why a path that has never
+        # produced a single price looked healthy for months: every table-tennis
+        # price in the history came from SofaScore, none from here.
+        out["reason"] = f"{type(exc).__name__}: {exc}"
     return out
 
 
@@ -975,6 +999,10 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                     print(f"   ⚠️ Nie zbudowano indeksu Livesport: {e}")
                     ls_index = []
             odds_found = sofa_odds
+            # Tally why prices are missing. Without this the run only reported a
+            # total, so a source that never worked was indistinguishable from a
+            # day with genuinely unpriced events.
+            reasons: Dict[str, int] = {}
             for r in need_odds:
                 ls_url = _match_livesport_url(r.get("home_team", ""), r.get("away_team", ""), ls_index)
                 odds = resolve_odds(r.get("home_team", ""), r.get("away_team", ""), ls_url)
@@ -983,8 +1011,15 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                     r["away_odds"] = odds["away_odds"]
                     r["odds_bookmaker"] = odds["bookmaker"]
                     odds_found += 1
+                else:
+                    why = odds.get("reason") or "nieznana przyczyna"
+                    reasons[why] = reasons.get(why, 0) + 1
             print(f"   💰 Kursy łącznie dla {odds_found}/{len(qual_rows)} meczów "
                   f"(SofaScore: {sofa_odds}, Livesport: {odds_found - sofa_odds})")
+            if reasons:
+                print("   📉 Dlaczego brak kursów z Livesport:")
+                for why, count in sorted(reasons.items(), key=lambda kv: -kv[1]):
+                    print(f"      {count:4}x  {why}")
     finally:
         try:
             driver.quit()
