@@ -28,6 +28,17 @@ from typing import Any, Dict, List, Union
 # the ROI it annotates can never be computed against different stakes.
 FLAT_STAKE_PLN = 100
 
+
+def _odds_value(match: Dict[str, Any], side: str) -> Any:
+    """Price for ``side`` ('home'/'draw'/'away') from a flat or nested row."""
+    val = match.get(f'{side}_odds')
+    if val is not None:
+        return val
+    odds = match.get('odds')
+    if isinstance(odds, dict):
+        return odds.get(side)
+    return None
+
 # Result store for persistent accumulation
 try:
     from result_store import ResultStore
@@ -463,8 +474,11 @@ def evaluate(matches: List[Dict[str, Any]], results: Dict[str, Dict[str, Any]]) 
             'sport': sport,
             'predicted': predicted,
             'focus_team': (m.get('focus_team') or 'home').lower(),
-            'home_odds': m.get('home_odds'),
-            'away_odds': m.get('away_odds'),
+            # Accept either shape. Manifests written before the mailer learned to
+            # resolve nested prices hold them under `odds`, and a pick counted as
+            # unpriced silently leaves the ROI denominator.
+            'home_odds': _odds_value(m, 'home'),
+            'away_odds': _odds_value(m, 'away'),
             'match_url': url,
             'match_date': m.get('match_date'),
             # Carried through from the manifest so the outcome can be judged

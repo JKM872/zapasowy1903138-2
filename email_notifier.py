@@ -1788,6 +1788,38 @@ _MANIFEST_FIELDS = [
 ]
 
 
+# Flat manifest field -> key inside a nested ``odds`` dict.
+#
+# Rows reach the mailer in two shapes. Pipelines that build a row in memory keep
+# flat ``home_odds``; anything re-read from ``results/*.json`` carries prices only
+# under ``odds: {home, draw, away}``. The manifest read the flat keys alone, so
+# every table-tennis pick was recorded as unpriced — 28 of 99 on 2026-08-03 had a
+# SofaScore price that never reached the report, which is why ROI rested on a
+# handful of matches and read -44%. ``export_settled`` already resolved both
+# shapes; the manifest has to as well, or the settlement never sees the price.
+_NESTED_ODDS_KEYS = {
+    'home_odds': 'home',
+    'draw_odds': 'draw',
+    'away_odds': 'away',
+}
+
+
+def _manifest_field(match: Dict[str, Any], field: str) -> Any:
+    """Value for a manifest field, accepting flat or nested odds."""
+    val = match.get(field)
+    if val is not None:
+        return val
+
+    nested_key = _NESTED_ODDS_KEYS.get(field)
+    if not nested_key:
+        return val
+
+    odds = match.get('odds')
+    if isinstance(odds, dict):
+        return odds.get(nested_key)
+    return None
+
+
 def _save_mailed_manifest(matches: List[Dict[str, Any]], date: str, tag: str = '') -> str:
     """Save a JSON manifest of matches that were actually emailed.
 
@@ -1802,7 +1834,7 @@ def _save_mailed_manifest(matches: List[Dict[str, Any]], date: str, tag: str = '
     for m in matches:
         rec: Dict[str, Any] = {}
         for field in _MANIFEST_FIELDS:
-            val = m.get(field)
+            val = _manifest_field(m, field)
             # Convert pandas NaN / numpy NaN to None for clean JSON
             if val is not None:
                 try:
