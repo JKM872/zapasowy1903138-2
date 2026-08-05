@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/shared/EmptyState'
 import type { Match, LiveScore } from '@/lib/types'
 import { useFilterStore } from '@/store/filterStore'
 import { useBasketStore } from '@/store/basketStore'
+import { usePreferences } from '@/hooks/usePreferences'
 import { groupMatchesByLeague, sortLeagueGroups } from '@/lib/utils'
 
 interface Props {
@@ -71,9 +72,38 @@ function applyLocalFilters(matches: Match[], filters: ReturnType<typeof useFilte
   return result
 }
 
+/**
+ * Reorder league groups so followed ones come first, keeping the existing order
+ * inside each tier. A followed league outranks a merely followed sport.
+ */
+function promoteFollowed(
+  groups: [string, Match[]][],
+  sports: string[],
+  leagues: string[],
+): [string, Match[]][] {
+  if (sports.length === 0 && leagues.length === 0) return groups
+
+  const followedSports = new Set(sports)
+  const followedLeagues = new Set(leagues)
+
+  const rank = ([league, groupMatches]: [string, Match[]]): number => {
+    if (followedLeagues.has(league)) return 0
+    if (groupMatches.some(m => followedSports.has(m.sport))) return 1
+    return 2
+  }
+
+  // A stable sort keeps live-first and the rest of the existing ordering intact
+  // within each tier.
+  return groups
+    .map((group, index) => ({ group, index, tier: rank(group) }))
+    .sort((a, b) => a.tier - b.tier || a.index - b.index)
+    .map(entry => entry.group)
+}
+
 export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
   const filters = useFilterStore()
   const filtered = applyLocalFilters(matches, filters)
+  const { sports: followedSports, leagues: followedLeagues } = usePreferences()
 
   // Subscribing here keeps the odds buttons in sync with the basket without
   // threading callbacks through every caller of MatchList.
@@ -127,9 +157,16 @@ export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
     )
   }
 
-  // Group matches by league
+  // Group matches by league, then lead with what this reader follows. A
+  // newcomer meets 670 events in time order, which says nothing about what is
+  // worth their attention; the questionnaire's answers reorder the board rather
+  // than filter it, so nothing is hidden.
   const grouped = groupMatchesByLeague(filtered)
-  const sortedGroups = sortLeagueGroups(grouped, liveMatchIds)
+  const sortedGroups = promoteFollowed(
+    sortLeagueGroups(grouped, liveMatchIds),
+    followedSports,
+    followedLeagues,
+  )
 
   return (
     <div className="overflow-hidden rounded-md border border-border bg-card">

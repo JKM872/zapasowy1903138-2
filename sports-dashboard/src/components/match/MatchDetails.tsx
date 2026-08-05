@@ -17,6 +17,7 @@ import {
 import { cn } from '@/lib/utils'
 import { PREDICTION_COLORS, SHOW_FAN_VOTE } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
+import { MatchComments } from './MatchComments'
 import { formatFractionPct, formatMatchTime, formatOdds, formatPct, formatVotes } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
 import { TeamLogo } from './TeamLogo'
@@ -249,8 +250,12 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
               )}
 
               {!match.forebet && !match.sofascore?.home && !match.scoring && (
-                <EmptyState text="No predictions available for this match." />
+                <EmptyState text="Brak predykcji dla tego zdarzenia." />
               )}
+
+              {/* Reader-contributed context, kept below the model's own view so
+                  the two are never mistaken for each other. */}
+              <MatchComments matchId={match.id} />
             </TabsContent>
 
             {/* ── Odds tab ── */}

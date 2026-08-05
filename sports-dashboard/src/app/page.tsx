@@ -12,6 +12,7 @@ import { DateCarousel } from '@/components/navigation/DateCarousel'
 import { CompactFilters } from '@/components/filters/CompactFilters'
 import { PromoBanner } from '@/components/shared/PromoBanner'
 import { AnalysisBasket } from '@/components/basket/AnalysisBasket'
+import { OnboardingDialog } from '@/components/shared/OnboardingDialog'
 import { useMatches, useLiveScores } from '@/hooks/useMatches'
 import { useBasketStore } from '@/store/basketStore'
 import type { Match } from '@/lib/types'
@@ -66,6 +67,9 @@ export default function HomePage() {
         open={!!selectedMatch}
         onOpenChange={(open) => !open && setSelectedMatch(null)}
       />
+
+      {/* Asked once, right after a reader first signs in. */}
+      <OnboardingDialog sportCounts={sportCounts} matches={matches} />
     </>
   )
 }

@@ -12,7 +12,7 @@ Database: Configured via environment variables
 
 from supabase import create_client, Client
 from typing import Any, Dict, List, Optional, cast
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import os
 
 # Supabase credentials from environment (with fallback)
@@ -779,6 +779,138 @@ class SupabaseManager:
             return True
         except Exception as e:
             print(f"[ERROR] Error upserting subscription: {e}")
+            return False
+
+    # ------------------------------------------------------------------
+    # Match comments (migration 004)
+    # ------------------------------------------------------------------
+
+    def get_match_comments(self, match_key: str, limit: int = 100) -> List[Dict[str, Any]]:
+        """Visible comments for one match, newest first."""
+        if not match_key:
+            return []
+        try:
+            resp = (
+                self.client.table('match_comments')
+                .select('id, match_key, user_id, author_label, body, created_at')
+                .eq('match_key', str(match_key))
+                .eq('is_hidden', False)
+                .order('created_at', desc=True)
+                .limit(limit)
+                .execute()
+            )
+            return cast(List[Dict[str, Any]], resp.data) if resp.data else []
+        except Exception as e:
+            print(f"[ERROR] Error fetching comments: {e}")
+            return []
+
+    def count_recent_comments(self, user_id: str, seconds: int = 60) -> int:
+        """How many comments this author posted recently, for rate limiting.
+
+        Returns -1 when the count cannot be established, so a caller can tell
+        "none" apart from "unknown" and avoid letting a failed check wave
+        everything through.
+        """
+        if not user_id or user_id == 'anonymous':
+            return -1
+        try:
+            since = (datetime.now(timezone.utc) - timedelta(seconds=seconds)).isoformat()
+            resp = (
+                self.client.table('match_comments')
+                .select('id')
+                .eq('user_id', user_id)
+                .gte('created_at', since)
+                .execute()
+            )
+            return len(resp.data) if resp.data else 0
+        except Exception as e:
+            print(f"[ERROR] Error counting recent comments: {e}")
+            return -1
+
+    def add_match_comment(self, match_key: str, user_id: str, body: str,
+                          author_label: str = '') -> Optional[Dict[str, Any]]:
+        """Insert one comment. Returns the stored row, or None on failure."""
+        if not match_key or not user_id or user_id == 'anonymous':
+            return None
+        text = (body or '').strip()
+        if not text:
+            return None
+        try:
+            resp = (
+                self.client.table('match_comments')
+                .insert({
+                    'match_key': str(match_key),
+                    'user_id': user_id,
+                    'author_label': (author_label or '').strip()[:80] or None,
+                    'body': text[:1000],
+                })
+                .execute()
+            )
+            rows = cast(List[Dict[str, Any]], resp.data) if resp.data else []
+            return rows[0] if rows else None
+        except Exception as e:
+            print(f"[ERROR] Error adding comment: {e}")
+            return None
+
+    def delete_match_comment(self, comment_id: int, user_id: str) -> bool:
+        """Delete a comment, but only if it belongs to *user_id*."""
+        if not comment_id or not user_id or user_id == 'anonymous':
+            return False
+        try:
+            resp = (
+                self.client.table('match_comments')
+                .delete()
+                .eq('id', comment_id)
+                .eq('user_id', user_id)
+                .execute()
+            )
+            return bool(resp.data)
+        except Exception as e:
+            print(f"[ERROR] Error deleting comment: {e}")
+            return False
+
+    # ------------------------------------------------------------------
+    # Reader preferences (migration 004)
+    # ------------------------------------------------------------------
+
+    def get_user_preferences(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """Followed sports and leagues for a reader, or None if never set."""
+        if not user_id or user_id == 'anonymous':
+            return None
+        try:
+            resp = (
+                self.client.table('user_preferences')
+                .select('*')
+                .eq('user_id', user_id)
+                .limit(1)
+                .execute()
+            )
+            rows = cast(List[Dict[str, Any]], resp.data) if resp.data else []
+            return rows[0] if rows else None
+        except Exception as e:
+            print(f"[ERROR] Error fetching preferences: {e}")
+            return None
+
+    def upsert_user_preferences(self, user_id: str, sports: List[str],
+                                leagues: List[str], onboarded: bool = True) -> bool:
+        """Store a reader's followed sports and leagues."""
+        if not user_id or user_id == 'anonymous':
+            return False
+        record = {
+            'user_id': user_id,
+            # Deduplicated and capped: the questionnaire is a short list, and an
+            # unbounded array here would be an easy way to bloat a row.
+            'sports': sorted({s.strip() for s in (sports or []) if s and s.strip()})[:20],
+            'leagues': sorted({l.strip() for l in (leagues or []) if l and l.strip()})[:100],
+            'onboarded': bool(onboarded),
+            'updated_at': datetime.now(timezone.utc).isoformat(),
+        }
+        try:
+            self.client.table('user_preferences').upsert(
+                record, on_conflict='user_id').execute()
+            return True
+        except Exception as e:
+            print(f"[ERROR] Error saving preferences: {e}")
             return False
 
     def delete_bet(self, bet_id: int) -> bool:

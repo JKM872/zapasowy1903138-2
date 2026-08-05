@@ -1763,6 +1763,166 @@ def get_league_info():
     })
 
 
+# =============================================================================
+# MATCH COMMENTS (migration 004)
+#
+# Readers add context a model cannot see: a missing first-choice setter, a table
+# moved indoors, a player flying in the same morning. Reading is open; posting
+# needs an account, so a comment always has an author who can be held to it.
+# =============================================================================
+
+# Ceilings applied here rather than trusted from the client. The column has its
+# own CHECK, but a clear 400 beats a database error.
+COMMENT_MAX_LEN = 1000
+COMMENT_RATE_LIMIT = 5          # comments per window, per author
+COMMENT_RATE_WINDOW_S = 60
+
+
+@app.route('/api/matches/<match_id>/comments', methods=['GET'])
+@optional_auth
+def get_match_comments(match_id):
+    """Comments for one match, newest first."""
+    if not SUPABASE_AVAILABLE:
+        # An empty list, not an error: the board must still open without a
+        # database, exactly as the rest of the app does.
+        return jsonify({'comments': [], 'available': False})
+
+    rows = supabase.get_match_comments(match_id)
+    user_id = getattr(request, 'user_id', 'anonymous')
+    return jsonify({
+        'available': True,
+        'comments': [{
+            'id': r.get('id'),
+            'body': r.get('body'),
+            'author': r.get('author_label') or 'Użytkownik',
+            'createdAt': r.get('created_at'),
+            # Lets the UI offer deletion without exposing anyone's user id.
+            'isMine': bool(user_id != 'anonymous' and r.get('user_id') == user_id),
+        } for r in rows],
+    })
+
+
+@app.route('/api/matches/<match_id>/comments', methods=['POST'])
+@require_auth
+def add_match_comment(match_id):
+    """Post a comment as the signed-in reader."""
+    if not SUPABASE_AVAILABLE:
+        return jsonify({'error': 'Komentarze są chwilowo niedostępne'}), 503
+
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if user_id == 'anonymous':
+        return jsonify({'error': 'Zaloguj się, aby dodać komentarz'}), 401
+
+    payload = request.get_json(silent=True) or {}
+    body = str(payload.get('body') or '').strip()
+    if not body:
+        return jsonify({'error': 'Komentarz nie może być pusty'}), 400
+    if len(body) > COMMENT_MAX_LEN:
+        return jsonify({
+            'error': f'Komentarz może mieć najwyżej {COMMENT_MAX_LEN} znaków',
+        }), 400
+
+    # Rate limit. A failed count returns -1, which is treated as "cannot verify"
+    # and refused, so a broken check cannot become an open door.
+    recent = supabase.count_recent_comments(user_id, COMMENT_RATE_WINDOW_S)
+    if recent < 0:
+        return jsonify({'error': 'Nie udało się zweryfikować limitu, spróbuj ponownie'}), 503
+    if recent >= COMMENT_RATE_LIMIT:
+        return jsonify({
+            'error': 'Za dużo komentarzy w krótkim czasie. Odczekaj chwilę.',
+        }), 429
+
+    row = supabase.add_match_comment(
+        match_id, user_id, body,
+        author_label=str(payload.get('author') or '').strip(),
+    )
+    if not row:
+        return jsonify({'error': 'Nie udało się zapisać komentarza'}), 500
+
+    return jsonify({
+        'id': row.get('id'),
+        'body': row.get('body'),
+        'author': row.get('author_label') or 'Użytkownik',
+        'createdAt': row.get('created_at'),
+        'isMine': True,
+    }), 201
+
+
+@app.route('/api/comments/<int:comment_id>', methods=['DELETE'])
+@require_auth
+def delete_match_comment(comment_id):
+    """Delete one of your own comments."""
+    if not SUPABASE_AVAILABLE:
+        return jsonify({'error': 'Komentarze są chwilowo niedostępne'}), 503
+
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if user_id == 'anonymous':
+        return jsonify({'error': 'Zaloguj się'}), 401
+
+    # The ownership check is in the query, so another reader's id cannot be
+    # deleted by guessing it.
+    if not supabase.delete_match_comment(comment_id, user_id):
+        return jsonify({'error': 'Nie znaleziono komentarza'}), 404
+    return jsonify({'deleted': comment_id})
+
+
+# =============================================================================
+# READER PREFERENCES (migration 004)
+#
+# Which sports and leagues someone follows, so the board can lead with those
+# instead of presenting 670 events in time order.
+# =============================================================================
+
+@app.route('/api/preferences', methods=['GET'])
+@require_auth
+def get_preferences():
+    """Followed sports and leagues for the signed-in reader."""
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if not SUPABASE_AVAILABLE or user_id == 'anonymous':
+        return jsonify({'sports': [], 'leagues': [], 'onboarded': False,
+                        'available': SUPABASE_AVAILABLE})
+
+    prefs = supabase.get_user_preferences(user_id)
+    if not prefs:
+        # No row yet means the questionnaire has not been answered.
+        return jsonify({'sports': [], 'leagues': [], 'onboarded': False,
+                        'available': True})
+    return jsonify({
+        'sports': prefs.get('sports') or [],
+        'leagues': prefs.get('leagues') or [],
+        'onboarded': bool(prefs.get('onboarded')),
+        'available': True,
+    })
+
+
+@app.route('/api/preferences', methods=['PUT'])
+@require_auth
+def put_preferences():
+    """Store the reader's answers to the questionnaire."""
+    if not SUPABASE_AVAILABLE:
+        return jsonify({'error': 'Preferencje są chwilowo niedostępne'}), 503
+
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if user_id == 'anonymous':
+        return jsonify({'error': 'Zaloguj się, aby zapisać preferencje'}), 401
+
+    payload = request.get_json(silent=True) or {}
+    sports = payload.get('sports')
+    leagues = payload.get('leagues')
+    if not isinstance(sports, list) or not isinstance(leagues, list):
+        return jsonify({'error': 'Pola sports i leagues muszą być listami'}), 400
+
+    ok = supabase.upsert_user_preferences(
+        user_id,
+        [str(s) for s in sports],
+        [str(l) for l in leagues],
+        onboarded=bool(payload.get('onboarded', True)),
+    )
+    if not ok:
+        return jsonify({'error': 'Nie udało się zapisać preferencji'}), 500
+    return jsonify({'saved': True})
+
+
 # ============================================================================
 # Serve Next.js static export (frontend)
 # ============================================================================

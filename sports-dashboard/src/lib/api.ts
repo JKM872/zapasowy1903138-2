@@ -276,3 +276,67 @@ export async function createCheckoutSession(email?: string): Promise<{ url: stri
     body: JSON.stringify({ email }),
   })
 }
+
+// ---------------------------------------------------------------------------
+// Match comments
+// ---------------------------------------------------------------------------
+
+export interface MatchComment {
+  id: number
+  body: string
+  author: string
+  createdAt: string
+  /** Whether the signed-in reader wrote it, so deletion can be offered. */
+  isMine: boolean
+}
+
+export interface CommentsResponse {
+  comments: MatchComment[]
+  /** False when the server has no database configured. */
+  available: boolean
+}
+
+export async function getComments(matchId: string | number): Promise<CommentsResponse> {
+  return fetchApi<CommentsResponse>(`/api/matches/${encodeURIComponent(String(matchId))}/comments`)
+}
+
+export async function addComment(
+  matchId: string | number,
+  body: string,
+  author?: string,
+): Promise<MatchComment> {
+  return fetchApi<MatchComment>(
+    `/api/matches/${encodeURIComponent(String(matchId))}/comments`,
+    { method: 'POST', body: JSON.stringify({ body, author }) },
+  )
+}
+
+export async function deleteComment(commentId: number): Promise<{ deleted: number }> {
+  return fetchApi<{ deleted: number }>(`/api/comments/${commentId}`, { method: 'DELETE' })
+}
+
+// ---------------------------------------------------------------------------
+// Reader preferences
+// ---------------------------------------------------------------------------
+
+export interface Preferences {
+  sports: string[]
+  leagues: string[]
+  /** False until the questionnaire has been answered, even with empty answers. */
+  onboarded: boolean
+  available: boolean
+}
+
+export async function getPreferences(): Promise<Preferences> {
+  return fetchApi<Preferences>('/api/preferences')
+}
+
+export async function savePreferences(
+  sports: string[],
+  leagues: string[],
+): Promise<{ saved: boolean }> {
+  return fetchApi<{ saved: boolean }>('/api/preferences', {
+    method: 'PUT',
+    body: JSON.stringify({ sports, leagues, onboarded: true }),
+  })
+}
