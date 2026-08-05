@@ -469,10 +469,13 @@ def resolve_logos_for_page(matches: list) -> list:
 
     for m in matches:
         try:
+            # The sport decides whether a badge can exist at all: tennis and
+            # table tennis list people, and the badge index only holds teams.
+            sport = m.get('sport')
             if not m.get('homeLogo') and m.get('homeTeam'):
-                m['homeLogo'] = get_logo_url(m['homeTeam']) or ''
+                m['homeLogo'] = get_logo_url(m['homeTeam'], sport) or ''
             if not m.get('awayLogo') and m.get('awayTeam'):
-                m['awayLogo'] = get_logo_url(m['awayTeam']) or ''
+                m['awayLogo'] = get_logo_url(m['awayTeam'], sport) or ''
         except Exception:
             continue
     return matches

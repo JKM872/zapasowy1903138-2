@@ -13,6 +13,7 @@ Batch (in-place, adds home_logo_url / away_logo_url):
 
 import json
 import os
+import re
 import time
 import urllib.parse
 import urllib.request
@@ -64,16 +65,147 @@ def _normalize_name(name: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Name variants
+#
+# Measured on 2 280 looked-up names, only 78 (3.4%) resolved to a badge. The
+# misses were not random — TheSportsDB is an English club/team database and our
+# rows are Polish, so three fixable things accounted for nearly all of them:
+#
+#   * country names arrive translated ("Meksyk", "Portoryko", "Czechy"),
+#   * women's and youth sides carry a suffix ("Meksyk K", "Polska U18 K"),
+#     while the badge is filed under the base side,
+#   * punctuation is glued ("St.Louis Cardinals").
+#
+# Individual sports are hopeless by design: "Putincewa J." is a person, and
+# searchteams.php only knows teams. Those keep the initials avatar.
+# ---------------------------------------------------------------------------
+
+_INDIVIDUAL_SPORTS = {"tennis", "table_tennis", "table-tennis", "darts", "snooker"}
+
+# Suffixes that mark a variant of a side, not a different side. Ordered longest
+# first so "U18 K" is stripped before "K".
+_SIDE_SUFFIXES = (
+    " u21 k", " u19 k", " u18 k", " u17 k",
+    " u21", " u23", " u19", " u18", " u17",
+    " (k)", " k",
+    " ii", " 2", " b",
+)
+
+_PL_TO_EN = {
+    # Countries seen in the data, plus their common neighbours.
+    "algieria": "Algeria", "belgia": "Belgium", "belize": "Belize",
+    "brazylia": "Brazil", "chile": "Chile", "chorwacja": "Croatia",
+    "czarnogóra": "Montenegro", "czarnogora": "Montenegro",
+    "czechy": "Czech Republic", "dominikana": "Dominican Republic",
+    "finlandia": "Finland", "francja": "France", "grecja": "Greece",
+    "gwatemala": "Guatemala", "guatemala": "Guatemala",
+    "hiszpania": "Spain", "holandia": "Netherlands", "indonezja": "Indonesia",
+    "irlandia": "Ireland", "islandia": "Iceland", "jamajka": "Jamaica",
+    "japonia": "Japan", "kambodża": "Cambodia", "kambodza": "Cambodia",
+    "kanada": "Canada", "kenia": "Kenya", "kolumbia": "Colombia",
+    "kostaryka": "Costa Rica", "kuba": "Cuba", "łotwa": "Latvia",
+    "lotwa": "Latvia", "maroko": "Morocco", "meksyk": "Mexico",
+    "niemcy": "Germany", "nikaragua": "Nicaragua", "norwegia": "Norway",
+    "panama": "Panama", "paragwaj": "Paraguay", "polska": "Poland",
+    "portoryko": "Puerto Rico", "portugalia": "Portugal",
+    "rumunia": "Romania", "senegal": "Senegal", "serbia": "Serbia",
+    "słowacja": "Slovakia", "slowacja": "Slovakia",
+    "słowenia": "Slovenia", "slowenia": "Slovenia",
+    "szkocja": "Scotland", "szwajcaria": "Switzerland", "szwecja": "Sweden",
+    "timor wschodni": "East Timor", "turcja": "Turkey", "ukraina": "Ukraine",
+    "urugwaj": "Uruguay", "wenezuela": "Venezuela", "węgry": "Hungary",
+    "wegry": "Hungary", "wietnam": "Vietnam", "włochy": "Italy",
+    "wlochy": "Italy", "austria": "Austria", "dania": "Denmark",
+    "estonia": "Estonia", "litwa": "Lithuania", "bułgaria": "Bulgaria",
+    "bulgaria": "Bulgaria", "armenia": "Armenia", "gruzja": "Georgia",
+    "izrael": "Israel", "egipt": "Egypt", "nigeria": "Nigeria",
+    "ghana": "Ghana", "australia": "Australia", "chiny": "China",
+    "korea": "South Korea", "tajlandia": "Thailand", "filipiny": "Philippines",
+    "peru": "Peru", "ekwador": "Ecuador", "boliwia": "Bolivia",
+    "argentyna": "Argentina", "honduras": "Honduras", "salwador": "El Salvador",
+    "haiti": "Haiti", "trynidad i tobago": "Trinidad and Tobago",
+    "curacao": "Curacao", "surinam": "Suriname",
+}
+
+
+def _strip_side_suffix(name: str) -> Optional[str]:
+    """Base side for a women's/youth/reserve variant, or None.
+
+    Matching ignores case but the result keeps the original spelling, so the term
+    stays readable in logs and usable by a case-sensitive source.
+    """
+    lowered = name.lower()
+    for suffix in _SIDE_SUFFIXES:
+        if lowered.endswith(suffix) and len(lowered) > len(suffix) + 2:
+            return name[: -len(suffix)].strip()
+    return None
+
+
+def _name_variants(team_name: str) -> List[str]:
+    """Search terms to try, best first, without duplicates."""
+    raw = team_name.strip()
+    lowered = raw.lower()
+    variants: List[str] = [raw]
+
+    # "St.Louis Cardinals" -> "St. Louis Cardinals"
+    spaced = re.sub(r"\.(?=\S)", ". ", raw)
+    if spaced != raw:
+        variants.append(spaced)
+
+    translated = _PL_TO_EN.get(lowered)
+    if translated:
+        variants.append(translated)
+
+    base = _strip_side_suffix(raw)
+    if base:
+        variants.append(base)
+        base_translated = _PL_TO_EN.get(base.lower())
+        if base_translated:
+            variants.append(base_translated)
+
+    seen: set = set()
+    out: List[str] = []
+    for v in variants:
+        key = v.strip().lower()
+        if v.strip() and key not in seen:
+            seen.add(key)
+            out.append(v.strip())
+    return out
+
+
+def _query_badge(term: str) -> Optional[str]:
+    """One TheSportsDB lookup. Returns a badge URL or None."""
+    encoded = urllib.parse.quote(term, safe="")
+    api_url = f"{_SPORTSDB_BASE}/{_API_KEY}/searchteams.php?t={encoded}"
+    req = urllib.request.Request(api_url, headers={"User-Agent": "PicklySportsApp/1.0"})
+    with urllib.request.urlopen(req, timeout=_REQUEST_TIMEOUT) as resp:
+        data: Dict[str, Any] = json.loads(resp.read().decode())
+    teams: List[Any] = data.get("teams") or []
+    if not teams:
+        return None
+    first: Dict[str, Any] = teams[0]
+    return first.get("strBadge") or first.get("strLogo") or None
+
+
+# ---------------------------------------------------------------------------
 # Core lookup
 # ---------------------------------------------------------------------------
 
-def get_logo_url(team_name: str) -> Optional[str]:
+def get_logo_url(team_name: str, sport: Optional[str] = None) -> Optional[str]:
     """
     Return a badge/logo URL for *team_name* or ``None``.
+
+    Several spellings are tried before giving up — see ``_name_variants``. When
+    *sport* is an individual one the lookup is skipped entirely: the competitors
+    are people and ``searchteams.php`` only indexes teams, so every such call was
+    a guaranteed miss that still cost a request.
 
     Results (including misses) are cached on disk for fast subsequent calls.
     """
     if not team_name or not team_name.strip():
+        return None
+
+    if sport and sport.strip().lower() in _INDIVIDUAL_SPORTS:
         return None
 
     key = _normalize_name(team_name)
@@ -86,21 +218,14 @@ def get_logo_url(team_name: str) -> Optional[str]:
         if now - cached.get("ts", 0) < ttl:
             return cached.get("url")
 
-    # Fetch from TheSportsDB
-    encoded = urllib.parse.quote(team_name.strip(), safe="")
-    api_url = f"{_SPORTSDB_BASE}/{_API_KEY}/searchteams.php?t={encoded}"
-    req = urllib.request.Request(api_url, headers={"User-Agent": "PicklySportsApp/1.0"})
-
     url: Optional[str] = None
     try:
-        with urllib.request.urlopen(req, timeout=_REQUEST_TIMEOUT) as resp:
-            data: Dict[str, Any] = json.loads(resp.read().decode())
-        teams: List[Any] = data.get("teams") or []
-        if teams:
-            t: Dict[str, Any] = teams[0]
-            url = t.get("strBadge") or t.get("strLogo") or None
+        for term in _name_variants(team_name):
+            url = _query_badge(term)
+            if url:
+                break
     except Exception:
-        # On network error keep stale cache entry if exists, else store None
+        # On network error keep a stale hit rather than overwriting it with a miss.
         if cached and cached.get("url"):
             return cached["url"]
 

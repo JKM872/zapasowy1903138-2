@@ -15,7 +15,7 @@ import {
   Thermometer, Wind, Droplets, Lock, Crown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { PREDICTION_COLORS } from '@/lib/constants'
+import { PREDICTION_COLORS, SHOW_FAN_VOTE } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatFractionPct, formatMatchTime, formatOdds, formatPct, formatVotes } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
@@ -184,8 +184,8 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
                 </div>
               )}
 
-              {/* SofaScore */}
-              {match.sofascore?.home != null && (
+              {/* Fan vote — hidden by default, see SHOW_FAN_VOTE */}
+              {SHOW_FAN_VOTE && match.sofascore?.home != null && (
                 <div className="rounded-xl border bg-card p-4 space-y-3">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <BarChart3 className="h-4 w-4 text-orange-500" /> SofaScore Fan Vote

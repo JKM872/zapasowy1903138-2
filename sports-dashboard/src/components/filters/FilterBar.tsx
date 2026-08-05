@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
-import { SPORTS, QUICK_FILTERS } from '@/lib/constants'
+import { SPORTS, QUICK_FILTERS, SHOW_FAN_VOTE } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { useFilterStore } from '@/store/filterStore'
 import type { Sport } from '@/lib/types'
@@ -151,12 +151,14 @@ export function FilterBar() {
         </label>
         <label className="flex items-center gap-2 text-sm cursor-pointer">
           <Switch checked={store.hasPredictions} onCheckedChange={store.setHasPredictions} className="scale-90" />
-          Has Predictions
+          Z predykcją
         </label>
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <Switch checked={store.hasSofascore} onCheckedChange={store.setHasSofascore} className="scale-90" />
-          Has SofaScore
-        </label>
+        {SHOW_FAN_VOTE && (
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
+            <Switch checked={store.hasSofascore} onCheckedChange={store.setHasSofascore} className="scale-90" />
+            Z głosami kibiców
+          </label>
+        )}
       </div>
 
       {/* Quick presets */}

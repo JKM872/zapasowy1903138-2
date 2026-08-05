@@ -119,6 +119,18 @@ export const PREDICTION_COLORS: Record<string, string> = {
   '12': 'bg-violet-500 text-white',
 }
 
+/**
+ * Whether the SofaScore fan vote is shown per match.
+ *
+ * Hidden on request: the crowd's split is an input to the model, not a verdict
+ * for the reader, and showing it next to our own pick invited comparing the two
+ * as if they were competing tips. The data still reaches the scoring engine and
+ * is still listed on the data-sources page, so nothing is hidden about where the
+ * numbers come from — only the per-match widget is gone. Flip to `true` to bring
+ * it back.
+ */
+export const SHOW_FAN_VOTE = false
+
 /** Column headers above the odds buttons. */
 export const MARKET_COLUMNS_3WAY = ['1', 'X', '2'] as const
 export const MARKET_COLUMNS_2WAY = ['1', '2'] as const
@@ -139,7 +151,6 @@ export function getConfidenceTier(confidence: number) {
 export const QUICK_FILTERS = [
   { label: 'Najwyższa pewność', action: { minConfidence: 85, hasPredictions: true } },
   { label: 'Z kursami',         action: { hasOdds: true, hasPredictions: true }     },
-  { label: 'Z głosami kibiców', action: { hasSofascore: true }                      },
   { label: 'Dziś',              action: { date: 'today' as const }                  },
   { label: 'Jutro',             action: { date: 'tomorrow' as const }               },
 ]
