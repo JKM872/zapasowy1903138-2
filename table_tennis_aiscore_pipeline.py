@@ -1069,6 +1069,19 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
     paths = write_outputs(rows, date_str, focus)
     print(f"\n💾 Zapisano:\n   CSV:  {paths['csv']}\n   JSON: {paths['json']}")
 
+    # ── How much of the card can actually be settled in money ──
+    # The mail now drops unpriced picks, so an empty send has to be explained
+    # here instead of looking like a failure.
+    _qual = [r for r in rows if r.get("email_qualifies") or r.get("qualifies")]
+    _priced = [r for r in _qual if r.get("home_odds") and r.get("away_odds")]
+    if _qual:
+        print(f"\n[KURSY] {len(_priced)}/{len(_qual)} kwalifikujących się ma oba kursy "
+              f"({100 * len(_priced) / len(_qual):.0f}%) — tylko te pójdą mailem")
+        if not _priced:
+            print("   ⚠️ Żaden mecz nie ma kursów — mail będzie pusty. "
+                  "Bukmacherzy wystawiają te turnieje blisko godziny rozpoczęcia, "
+                  "więc wczesny przebieg trafia na zamknięte rynki.")
+
     # ── EMAIL (like tennis) ──
     if send_email and email_cfg and email_cfg.get("to") and email_cfg.get("from"):
         try:
@@ -1081,11 +1094,23 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 provider=email_cfg.get("provider", "gmail"),
                 subject=f"🏓 Table Tennis ({focus}) — {date_str}",
                 date=date_str,
-                # AiScore exposes no table-tennis odds, so DON'T drop no-odds
-                # matches — otherwise every qualifying pick is filtered out and
-                # no e-mail is sent. Qualification already happened upstream
-                # (H2H ≥60% + mandatory Fan Vote).
-                skip_no_odds=False,
+                # Only priced picks go out. AiScore itself has no odds, but
+                # SofaScore prices these amateur events often enough to matter:
+                # measured over the mailed manifests, 150 of 546 table-tennis
+                # picks carried a price (27.5%), swinging between 4.9% and 100%
+                # by day depending on how many markets were open when the run
+                # finished.
+                #
+                # Sending unpriced picks made them unmeasurable. Without a price
+                # there is no expected value and no ROI, so the report could only
+                # ever quote accuracy — and 65% accuracy at odds of 1.10 loses
+                # money. A thinner card that can be settled in money beats a full
+                # card that cannot.
+                #
+                # The trade-off is real: on a day when no market is open the mail
+                # will be empty. That is reported explicitly below rather than
+                # papered over.
+                skip_no_odds=True,
                 min_odds_threshold=0.0,
                 # Only the top two grades go out. This is only safe now that the
                 # grade is scored against what is knowable for table tennis:
