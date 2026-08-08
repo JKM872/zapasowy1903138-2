@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-08T12:38:55.144162+02:00",
+    "generated_at": "2026-08-08T15:46:23.752798+02:00",
     "target_date": "2026-08-08",
     "filter": {
       "min_odds": 1.35,
@@ -8,19 +8,19 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 4,
-      "qualified": 2
+      "events": 5,
+      "qualified": 3
     },
     "enrichment_status_counts": {
       "enriched": 1,
       "resolve_failed": 0,
       "process_match_error": 0,
-      "enriched_sofascore_only": 1
+      "enriched_sofascore_only": 2
     },
     "skip_reason_counts": {
       "odds_out_of_range": 2
     },
-    "elapsed_seconds": 208.7,
+    "elapsed_seconds": 265.8,
     "dry_run": false
   },
   "events": [
@@ -36,9 +36,9 @@
       "event_time": "03:00",
       "outcome": "2",
       "open_odds": 7.32,
-      "current_odds": 2.74,
-      "drop_pct": 63.0,
-      "max_odds": 2.9,
+      "current_odds": 3.17,
+      "drop_pct": 57.0,
+      "max_odds": 3.55,
       "sport_page_id": "20",
       "notes": [],
       "qualifies": false,
@@ -46,6 +46,125 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true
+    },
+    {
+      "league": "International  - South American Championship (W)",
+      "match_url": "https://www.oddssafari.com/matches/basketball/south-american-championship-w/uruguay-vs-chile/2295470?MarketTypeID=201",
+      "match_id": "2295470",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Uruguay",
+      "away_team": "Chile",
+      "event_date": "08/08",
+      "event_time": "17:00",
+      "outcome": "2",
+      "open_odds": 2.8,
+      "current_odds": 1.7,
+      "drop_pct": 39.0,
+      "max_odds": 1.7,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/koszykowka/chile-CShiDZYo/urugwaj-EkUpadY9/?mid=OE8AbzMt",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Urugwaj K",
+        "away_team": "Chile K",
+        "match_time": "08.08.2026 17:00",
+        "sport": "basketball",
+        "league": null,
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_odds": 2.1,
+        "draw_odds": null,
+        "away_odds": 1.75,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "h2h_last5": [
+          {
+            "date": "01.09.24",
+            "home": "Chile K",
+            "away": "Urugwaj K",
+            "score": "80-64",
+            "winner": "home",
+            "raw": "01.09.24 Chile K 80-64 Urugwaj K"
+          },
+          {
+            "date": "01.08.22",
+            "home": "Chile K",
+            "away": "Urugwaj K",
+            "score": "55-43",
+            "winner": "home",
+            "raw": "01.08.22 Chile K 55-43 Urugwaj K"
+          },
+          {
+            "date": "23.05.16",
+            "home": "Urugwaj K",
+            "away": "Chile K",
+            "score": "53-68",
+            "winner": "away",
+            "raw": "23.05.16 Urugwaj K 53-68 Chile K"
+          }
+        ],
+        "last_h2h_date": "01.09.24",
+        "last_h2h_score": "80-64",
+        "last_h2h_home": "Chile K",
+        "last_h2h_away": "Urugwaj K",
+        "form_advantage": false
+      },
+      "enrichment_error": null
     },
     {
       "league": "International Clubs - Euroleague",
@@ -82,9 +201,9 @@
       "event_time": "09:15",
       "outcome": "1",
       "open_odds": 2.34,
-      "current_odds": 2.02,
+      "current_odds": 2.01,
       "drop_pct": 14.0,
-      "max_odds": 2.06,
+      "max_odds": 2.05,
       "sport_page_id": "20",
       "notes": [],
       "qualifies": true,
@@ -141,6 +260,77 @@
     },
     {
       "league": "International  - South American Championship (W)",
+      "match_url": "https://www.oddssafari.com/matches/basketball/south-american-championship-w/argentina-vs-brazil/2295440?MarketTypeID=201",
+      "match_id": "2295440",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Argentina",
+      "away_team": "Brazil",
+      "event_date": "09/08",
+      "event_time": "20:30",
+      "outcome": "1",
+      "open_odds": 1.55,
+      "current_odds": 1.38,
+      "drop_pct": 11.0,
+      "max_odds": 1.4,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 14583009,
+        "home_team": "Argentina",
+        "away_team": "Brazil",
+        "sport": "basketball",
+        "league": "International  - South American Championship (W)",
+        "match_time": "20:30"
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "International  - South American Championship (W)",
       "match_url": "https://www.oddssafari.com/matches/basketball/south-american-championship-w/uruguay-vs-chile/2295470?MarketTypeID=201",
       "match_id": "2295470",
       "sport_slug": "basketball",
@@ -151,9 +341,9 @@
       "event_time": "17:00",
       "outcome": "2",
       "open_odds": 2.8,
-      "current_odds": 2.48,
-      "drop_pct": 12.0,
-      "max_odds": 2.5,
+      "current_odds": 1.7,
+      "drop_pct": 39.0,
+      "max_odds": 1.7,
       "sport_page_id": "20",
       "notes": [],
       "qualifies": true,
@@ -217,9 +407,9 @@
           "L",
           "W"
         ],
-        "home_odds": 1.5,
+        "home_odds": 2.1,
         "draw_odds": null,
-        "away_odds": 2.65,
+        "away_odds": 1.75,
         "forebet_prediction": null,
         "forebet_probability": null,
         "forebet_over_under": null,
@@ -257,9 +447,7 @@
         "form_advantage": false
       },
       "enrichment_error": null
-    }
-  ],
-  "qualified": [
+    },
     {
       "league": "Philippines - Governors Cup",
       "match_url": "https://www.oddssafari.com/matches/basketball/philippines/governors-cup/phoenix-fuel-masters-vs-rain-or-shine-elasto-painters/2282917?MarketTypeID=201",
@@ -272,9 +460,9 @@
       "event_time": "09:15",
       "outcome": "1",
       "open_odds": 2.34,
-      "current_odds": 2.02,
+      "current_odds": 2.01,
       "drop_pct": 14.0,
-      "max_odds": 2.06,
+      "max_odds": 2.05,
       "sport_page_id": "20",
       "notes": [],
       "qualifies": true,
@@ -331,120 +519,70 @@
     },
     {
       "league": "International  - South American Championship (W)",
-      "match_url": "https://www.oddssafari.com/matches/basketball/south-american-championship-w/uruguay-vs-chile/2295470?MarketTypeID=201",
-      "match_id": "2295470",
+      "match_url": "https://www.oddssafari.com/matches/basketball/south-american-championship-w/argentina-vs-brazil/2295440?MarketTypeID=201",
+      "match_id": "2295440",
       "sport_slug": "basketball",
       "sport": "basketball",
-      "home_team": "Uruguay",
-      "away_team": "Chile",
-      "event_date": "08/08",
-      "event_time": "17:00",
-      "outcome": "2",
-      "open_odds": 2.8,
-      "current_odds": 2.48,
-      "drop_pct": 12.0,
-      "max_odds": 2.5,
+      "home_team": "Argentina",
+      "away_team": "Brazil",
+      "event_date": "09/08",
+      "event_time": "20:30",
+      "outcome": "1",
+      "open_odds": 1.55,
+      "current_odds": 1.38,
+      "drop_pct": 11.0,
+      "max_odds": 1.4,
       "sport_page_id": "20",
       "notes": [],
       "qualifies": true,
       "skip_reason": null,
-      "dropped_outcome": "2",
-      "focus_team": "away",
-      "away_team_focus": true,
-      "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/koszykowka/chile-CShiDZYo/urugwaj-EkUpadY9/?mid=OE8AbzMt",
-      "livesport_confidence": 1.0,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
       "enrichment": {
-        "home_team": "Urugwaj K",
-        "away_team": "Chile K",
-        "match_time": "08.08.2026 17:00",
-        "sport": "basketball",
-        "league": null,
-        "h2h_count": 3,
-        "home_wins_in_h2h_last5": 0,
-        "away_wins_in_h2h_last5": 3,
-        "win_rate": 1.0,
-        "qualifies": true,
         "home_form": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "away_form": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "home_form_overall": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "away_form_overall": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "home_form_home": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
-        "away_form_away": [
-          "L",
-          "L",
+          "W",
+          "W",
           "W",
           "L",
           "W"
         ],
-        "home_odds": 1.5,
-        "draw_odds": null,
-        "away_odds": 2.65,
-        "forebet_prediction": null,
-        "forebet_probability": null,
-        "forebet_over_under": null,
-        "forebet_btts": null,
-        "h2h_last5": [
-          {
-            "date": "01.09.24",
-            "home": "Chile K",
-            "away": "Urugwaj K",
-            "score": "80-64",
-            "winner": "home",
-            "raw": "01.09.24 Chile K 80-64 Urugwaj K"
-          },
-          {
-            "date": "01.08.22",
-            "home": "Chile K",
-            "away": "Urugwaj K",
-            "score": "55-43",
-            "winner": "home",
-            "raw": "01.08.22 Chile K 55-43 Urugwaj K"
-          },
-          {
-            "date": "23.05.16",
-            "home": "Urugwaj K",
-            "away": "Chile K",
-            "score": "53-68",
-            "winner": "away",
-            "raw": "23.05.16 Urugwaj K 53-68 Chile K"
-          }
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
         ],
-        "last_h2h_date": "01.09.24",
-        "last_h2h_score": "80-64",
-        "last_h2h_home": "Chile K",
-        "last_h2h_away": "Urugwaj K",
-        "form_advantage": false
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 14583009,
+        "home_team": "Argentina",
+        "away_team": "Brazil",
+        "sport": "basketball",
+        "league": "International  - South American Championship (W)",
+        "match_time": "20:30"
       },
       "enrichment_error": null
     }
