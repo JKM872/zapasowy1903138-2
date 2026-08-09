@@ -301,6 +301,211 @@ def _enrich_row_via_sofascore(row: DroppingOddsRow) -> Dict[str, Any]:
     return result
 
 
+def _apply_venue_form(
+    enrichment: Dict[str, Any],
+    driver,
+    url: str,
+) -> bool:
+    """Fetch home-form-at-home / away-form-away the same way the main pipeline does.
+
+    The main sport-scraper pipeline gets venue form from ``extract_advanced_team_form``,
+    which walks the dedicated LiveSport H2H sub-pages (``/h2h/ogolem/`` and
+    ``/h2h/u-siebie/``). Dropping odds used to call this only when the *overall*
+    form was missing, so whenever the match page happened to render overall
+    badges the venue form was never fetched at all — that is why only general
+    form showed up in the mail.
+
+    This runs unconditionally for non-tennis sports and fills overall form only
+    where it is still missing. Mutates *enrichment*; returns True if venue form
+    was obtained.
+    """
+    try:
+        from livesport_h2h_scraper import extract_advanced_team_form
+    except ImportError as exc:
+        logger.debug("extract_advanced_team_form unavailable: %s", exc)
+        return False
+
+    try:
+        form_data = extract_advanced_team_form(url, driver) or {}
+    except Exception as exc:
+        logger.debug("extract_advanced_team_form failed for %s: %s", url, exc)
+        return False
+
+    home_venue = form_data.get("home_form_home") or []
+    away_venue = form_data.get("away_form_away") or []
+    home_overall = form_data.get("home_form_overall") or []
+    away_overall = form_data.get("away_form_overall") or []
+
+    if home_venue:
+        enrichment["home_form_home"] = home_venue
+    if away_venue:
+        enrichment["away_form_away"] = away_venue
+
+    # Overall form: only fill gaps, never overwrite what process_match found.
+    if home_overall and not (
+        enrichment.get("home_form") or enrichment.get("home_form_overall")
+    ):
+        enrichment["home_form"] = home_overall
+        enrichment["home_form_overall"] = home_overall
+    if away_overall and not (
+        enrichment.get("away_form") or enrichment.get("away_form_overall")
+    ):
+        enrichment["away_form"] = away_overall
+        enrichment["away_form_overall"] = away_overall
+
+    if home_venue or away_venue:
+        enrichment["venue_form_source"] = "livesport_h2h_pages"
+        if "form_advantage" in form_data:
+            enrichment.setdefault("form_advantage", form_data.get("form_advantage"))
+        if "away_advantage" in form_data:
+            enrichment.setdefault("away_advantage", form_data.get("away_advantage"))
+        print(f"   🏠 Forma u siebie: {home_venue} | 🛫 na wyjeździe: {away_venue}")
+        return True
+
+    return False
+
+
+def _summarize_h2h(
+    enrichment: Dict[str, Any],
+    h2h_rows: List[Dict[str, Any]],
+    *,
+    home_team: str,
+    away_team: str,
+    focus_team: Optional[str],
+) -> None:
+    """Derive H2H counts and last-meeting fields from parsed H2H rows.
+
+    Mirrors what ``process_match`` puts in its output dict so the mail layer
+    sees the same shape regardless of which path produced the data.
+    """
+    if not h2h_rows:
+        return
+
+    rows = h2h_rows[:5]
+    home_norm = _normalize(home_team or "")
+    away_norm = _normalize(away_team or "")
+
+    home_wins = away_wins = draws = 0
+    for entry in rows:
+        score = str(entry.get("score", ""))
+        m = re.search(r"(\d+)\s*[:\-]\s*(\d+)", score)
+        if not m:
+            continue
+        gh, ga = int(m.group(1)), int(m.group(2))
+        r_home = _normalize(str(entry.get("home", "")))
+        r_away = _normalize(str(entry.get("away", "")))
+
+        if gh == ga:
+            draws += 1
+            continue
+
+        winner_norm = r_home if gh > ga else r_away
+        if home_norm and (home_norm in winner_norm or winner_norm in home_norm):
+            home_wins += 1
+        elif away_norm and (away_norm in winner_norm or winner_norm in away_norm):
+            away_wins += 1
+
+    total = home_wins + away_wins + draws
+    if not total:
+        return
+
+    enrichment["h2h_last5"] = rows
+    enrichment["h2h_count"] = total
+    enrichment["home_wins_in_h2h_last5"] = home_wins
+    enrichment["away_wins_in_h2h_last5"] = away_wins
+    enrichment["draws_in_h2h_last5"] = draws
+    enrichment.setdefault("h2h_source", "livesport_h2h_page")
+
+    if not enrichment.get("win_rate"):
+        focus_wins = away_wins if focus_team == "away" else home_wins
+        enrichment["win_rate"] = round(focus_wins / total, 3)
+
+    first = rows[0]
+    enrichment.setdefault("last_h2h_date", first.get("date"))
+    enrichment.setdefault("last_h2h_score", first.get("score"))
+    enrichment.setdefault("last_h2h_home", first.get("home"))
+    enrichment.setdefault("last_h2h_away", first.get("away"))
+
+
+def _fetch_direct_h2h(
+    enrichment: Dict[str, Any],
+    driver,
+    url: str,
+    *,
+    home_team: str,
+    away_team: str,
+    focus_team: Optional[str],
+) -> bool:
+    """Fetch the direct head-to-head table when process_match returned none.
+
+    Navigates straight to ``/h2h/ogolem/`` — the same trick the main pipeline
+    uses — instead of relying on the H2H tab click, which fails silently in
+    headless CI.
+    """
+    try:
+        from bs4 import BeautifulSoup
+
+        from livesport_h2h_scraper import (
+            build_h2h_overall_url,
+            is_livesport_error_page,
+            parse_h2h_from_soup,
+        )
+    except ImportError as exc:
+        logger.debug("direct H2H helpers unavailable: %s", exc)
+        return False
+
+    h2h_url = build_h2h_overall_url(url)
+    if not h2h_url:
+        return False
+
+    try:
+        print("   ⚔️ Pobieram bezpośredni H2H...")
+        driver.get(h2h_url)
+        time.sleep(3.0)
+        page = driver.page_source
+        if is_livesport_error_page(page):
+            return False
+        soup = BeautifulSoup(page, "html.parser")
+        rows = parse_h2h_from_soup(soup, home_team or "") or []
+    except Exception as exc:
+        logger.debug("direct H2H fetch failed for %s: %s", h2h_url, exc)
+        return False
+
+    if not rows:
+        return False
+
+    before = enrichment.get("h2h_count")
+    _summarize_h2h(
+        enrichment,
+        rows,
+        home_team=home_team,
+        away_team=away_team,
+        focus_team=focus_team,
+    )
+    if enrichment.get("h2h_last5"):
+        print(f"   ✅ H2H bezpośredni: {len(enrichment['h2h_last5'])} spotkań")
+        return enrichment.get("h2h_count") != before
+    return False
+
+
+def _apply_tennis_form_aliases(enrichment: Dict[str, Any]) -> None:
+    """Map tennis player-form fields onto the generic form keys.
+
+    ``process_match_tennis`` reports form as ``form_a``/``form_b`` and the
+    venue analogue as ``surface_form_a``/``surface_form_b``. The mail layer
+    reads the generic ``home_form``/``away_form`` names, so alias them here.
+    Tennis has no home/away venue split, hence no ``*_form_home`` mapping.
+    """
+    for generic, tennis_key in (("home", "form_a"), ("away", "form_b")):
+        val = enrichment.get(tennis_key) or []
+        if val and not (
+            enrichment.get(f"{generic}_form") or enrichment.get(f"{generic}_form_overall")
+        ):
+            enrichment[f"{generic}_form"] = val
+            enrichment[f"{generic}_form_overall"] = val
+            enrichment.setdefault("form_source", "livesport_tennis")
+
+
 def _enrich_row(
     driver,
     row: DroppingOddsRow,
@@ -397,36 +602,44 @@ def _enrich_row(
     # We try 3 strategies in order: (1) advanced H2H pages, (2) re-parse match
     # page directly, (3) derive from h2h_last5 results.
     enrichment = result["enrichment"]
-    if sport != "tennis":
+    resolved_home = enrichment.get("home_team") or row.home_team
+    resolved_away = enrichment.get("away_team") or row.away_team
+
+    if sport == "tennis":
+        # Tennis: expose player form under the generic keys, and make sure the
+        # direct H2H table is present (surface form is the venue analogue and
+        # already comes out of process_match_tennis).
+        _apply_tennis_form_aliases(enrichment)
+        if not enrichment.get("h2h_last5"):
+            _fetch_direct_h2h(
+                enrichment,
+                driver,
+                url,
+                home_team=resolved_home,
+                away_team=resolved_away,
+                focus_team=focus_team,
+            )
+    else:
+        # Venue form (u siebie / na wyjeździe) — ALWAYS, matching the main
+        # pipeline. Running this only as a fallback meant it was skipped
+        # whenever overall form happened to be present.
+        print("   📊 Forma szczegółowa (ogólna + u siebie / na wyjeździe)...")
+        _apply_venue_form(enrichment, driver, url)
+
+        # Direct H2H table, if process_match's tab click came back empty.
+        if not enrichment.get("h2h_last5"):
+            _fetch_direct_h2h(
+                enrichment,
+                driver,
+                url,
+                home_team=resolved_home,
+                away_team=resolved_away,
+                focus_team=focus_team,
+            )
+
         existing_home = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
         existing_away = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
-        
-        # Strategy 1: extract_advanced_team_form (H2H sub-pages with badges)
-        if not (existing_home and existing_away):
-            try:
-                from livesport_h2h_scraper import extract_advanced_team_form
-                print(f"   📊 Strategy 1: zaawansowana forma z H2H...")
-                form_data = extract_advanced_team_form(url, driver)
-                home_overall = form_data.get("home_form_overall") or []
-                away_overall = form_data.get("away_form_overall") or []
-                
-                if home_overall:
-                    enrichment["home_form"] = home_overall
-                    enrichment["home_form_overall"] = home_overall
-                    enrichment["home_form_home"] = form_data.get("home_form_home", [])
-                    existing_home = home_overall
-                if away_overall:
-                    enrichment["away_form"] = away_overall
-                    enrichment["away_form_overall"] = away_overall
-                    enrichment["away_form_away"] = form_data.get("away_form_away", [])
-                    existing_away = away_overall
-                
-                if home_overall or away_overall:
-                    enrichment["form_advantage"] = form_data.get("form_advantage", False)
-                    print(f"   ✅ Strategy 1: H={home_overall} | A={away_overall}")
-            except Exception as exc:
-                logger.debug("extract_advanced_team_form failed: %s", exc)
-        
+
         # Strategy 2: Re-parse the match page directly for form badges in team header
         if not (existing_home and existing_away):
             try:
@@ -461,6 +674,17 @@ def _enrich_row(
             except Exception as exc:
                 logger.debug("Match-page form re-parse failed: %s", exc)
     
+    # Backfill H2H aggregates when the per-meeting list exists but the counts
+    # do not (process_match only fills them on the qualifying path).
+    if enrichment.get("h2h_last5") and not enrichment.get("h2h_count"):
+        _summarize_h2h(
+            enrichment,
+            enrichment["h2h_last5"],
+            home_team=resolved_home,
+            away_team=resolved_away,
+            focus_team=focus_team,
+        )
+
     # Strategy 3: Derive form from h2h_last5 results (always works if H2H exists)
     final_home_form = enrichment.get("home_form_overall") or enrichment.get("home_form") or []
     final_away_form = enrichment.get("away_form_overall") or enrichment.get("away_form") or []
@@ -685,7 +909,16 @@ _KEEP_KEYS = (
     "favorite", "advanced_score", "tennis_skip_reason",
     "h2h_last5", "last_h2h_date", "last_h2h_score",
     "last_h2h_home", "last_h2h_away",
-    "form_advantage", "form_source",
+    "draws_in_h2h_last5",
+    "form_advantage", "away_advantage", "form_source",
+    "venue_form_source", "h2h_source",
+    # Tennis: the venue-form analogue is surface form, so these must survive
+    # into the JSON for the mail/scoring layer to be able to show it.
+    "surface", "surface_form_a", "surface_form_b",
+    "surface_stats_a", "surface_stats_b",
+    "form_a", "form_b",
+    "tennis_data_warnings", "tennis_phase_path",
+    "ranking_a", "ranking_b",
 )
 
 

@@ -71,10 +71,14 @@ def _pick_form(enrichment: Dict[str, Any], side: str) -> List[Any]:
     under different keys depending on the path it took (full advanced form,
     fallback, tennis-specific). Returns the first non-empty list it finds.
     """
+    # NOTE: venue form (``home_form_home`` / ``away_form_away``) is deliberately
+    # NOT a fallback here. It used to be, which made venue form silently
+    # masquerade as general form and hid the fact that general form was missing.
+    # Venue form is rendered as its own row in the match card instead.
     candidates = (
         f"{side}_form",
         f"{side}_form_overall",
-        f"{side}_form_home" if side == "home" else f"{side}_form_away",
+        "form_a" if side == "home" else "form_b",  # tennis player form
     )
     for key in candidates:
         val = enrichment.get(key)
@@ -459,28 +463,42 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
     # Form section — always show, even with placeholders
     home_form_str = _format_form(home_form)
     away_form_str = _format_form(away_form)
-    home_venue_str = _format_form(home_form_venue) if home_form_venue else None
-    away_venue_str = _format_form(away_form_venue) if away_form_venue else None
     
-    venue_html = ""
-    if home_venue_str:
-        venue_html += f'''
-                <div style="margin-top: 4px; padding-left: 8px; border-left: 2px solid #ddd;">
-                    <span style="font-size: 11px; color: #888;">u siebie:</span>
-                    <span style="font-size: 12px;">{home_venue_str}</span>
+    # Venue form is always rendered (with an em-dash placeholder when absent) so
+    # a missing value is visibly missing rather than silently omitted. Tennis has
+    # no home/away split — surface form is its analogue.
+    is_tennis = str(sport).lower() in ("tennis", "tenis")
+    if is_tennis:
+        surface = enrichment.get("surface") or "?"
+        venue_rows = (
+            (f"na nawierzchni ({surface})", _format_form(enrichment.get("surface_form_a"))),
+            (f"na nawierzchni ({surface})", _format_form(enrichment.get("surface_form_b"))),
+        )
+    else:
+        venue_rows = (
+            ("u siebie", _format_form(home_form_venue)),
+            ("na wyjeździe", _format_form(away_form_venue)),
+        )
+
+    venue_html = f'''
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e8e8e8;">
+                    <div style="font-size: 11px; color: #666; margin-bottom: 4px;">🏠 Forma szczegółowa</div>
+                    <div style="margin-bottom: 3px;">
+                        <span style="font-size: 12px; color: #333; font-weight: 600;">{home}</span>
+                        <span style="font-size: 11px; color: #888;"> ({venue_rows[0][0]}):</span>
+                        <span style="font-size: 12px;">{venue_rows[0][1]}</span>
+                    </div>
+                    <div>
+                        <span style="font-size: 12px; color: #333; font-weight: 600;">{away}</span>
+                        <span style="font-size: 11px; color: #888;"> ({venue_rows[1][0]}):</span>
+                        <span style="font-size: 12px;">{venue_rows[1][1]}</span>
+                    </div>
                 </div>
-        '''
-    if away_venue_str:
-        venue_html += f'''
-                <div style="margin-top: 4px; padding-left: 8px; border-left: 2px solid #ddd;">
-                    <span style="font-size: 11px; color: #888;">na wyjeździe:</span>
-                    <span style="font-size: 12px;">{away_venue_str}</span>
-                </div>
-        '''
-    
+    '''
+
     html += f'''
             <div style="margin-bottom: 14px; padding: 10px; background: #fafafa; border-radius: 8px;">
-                <div style="font-size: 11px; color: #666; margin-bottom: 6px;">📊 Forma drużyn (ostatnie 5)</div>
+                <div style="font-size: 11px; color: #666; margin-bottom: 6px;">📊 Forma ogólna (ostatnie 5)</div>
                 <div style="margin-bottom: 4px;">
                     <span style="font-size: 12px; color: #333; font-weight: 600;">{home}:</span>
                     <span style="font-size: 12px;">{home_form_str}</span>
@@ -494,6 +512,56 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
     '''
     
     # H2H section
+    h2h_rows = enrichment.get("h2h_last5") or []
+    if isinstance(h2h_rows, str):
+        import ast
+        try:
+            h2h_rows = ast.literal_eval(h2h_rows)
+        except (ValueError, SyntaxError):
+            h2h_rows = []
+    if not isinstance(h2h_rows, list):
+        h2h_rows = []
+
+    h2h_wins_line = ""
+    hw = enrichment.get("home_wins_in_h2h_last5")
+    aw = enrichment.get("away_wins_in_h2h_last5")
+    dr = enrichment.get("draws_in_h2h_last5")
+    if hw is not None or aw is not None:
+        parts = [f"{home}: {hw or 0}"]
+        if dr is not None:
+            parts.append(f"remisy: {dr}")
+        parts.append(f"{away}: {aw or 0}")
+        h2h_wins_line = (
+            '<div style="font-size: 12px; color: #333; margin-top: 4px;">'
+            + " &nbsp;|&nbsp; ".join(parts)
+            + "</div>"
+        )
+
+    # Per-meeting list of direct encounters — this is the "H2H bezpośredni"
+    # detail that was previously collected but never rendered.
+    h2h_list_html = ""
+    if h2h_rows:
+        items = []
+        for entry in h2h_rows[:5]:
+            if not isinstance(entry, dict):
+                continue
+            e_date = entry.get("date") or ""
+            e_home = entry.get("home") or ""
+            e_away = entry.get("away") or ""
+            e_score = entry.get("score") or ""
+            items.append(
+                f'<div style="font-size: 11px; color: #444; padding: 2px 0;">'
+                f'<span style="color: #888;">{e_date}</span> &nbsp;'
+                f'{e_home} <strong>{e_score}</strong> {e_away}</div>'
+            )
+        if items:
+            h2h_list_html = (
+                '<div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #c8e6c9;">'
+                '<div style="font-size: 11px; color: #666; margin-bottom: 2px;">Bezpośrednie spotkania:</div>'
+                + "".join(items)
+                + "</div>"
+            )
+
     if h2h_count and h2h_count > 0:
         last_date = enrichment.get("last_h2h_date") or ""
         last_score = enrichment.get("last_h2h_score") or ""
@@ -511,9 +579,25 @@ def _build_match_card(event: Dict[str, Any], index: int) -> str:
             last_line = f'<div style="font-size: 11px; color: #666; margin-top: 4px;">Ostatni mecz: {" ".join(parts)}</div>'
         html += f'''
             <div style="margin-bottom: 14px; padding: 10px; background: #e8f5e9; border-radius: 8px;">
-                <div style="font-size: 11px; color: #666; margin-bottom: 4px;">⚔️ H2H (ostatnie {h2h_count} meczów)</div>
+                <div style="font-size: 11px; color: #666; margin-bottom: 4px;">⚔️ H2H bezpośredni (ostatnie {h2h_count} meczów)</div>
                 <div style="font-size: 14px; font-weight: 600;">Win rate: {win_rate*100:.0f}%</div>
+                {h2h_wins_line}
                 {last_line}
+                {h2h_list_html}
+            </div>
+        '''
+    elif h2h_list_html:
+        # Counts missing but we do have the meetings — still show them.
+        html += f'''
+            <div style="margin-bottom: 14px; padding: 10px; background: #e8f5e9; border-radius: 8px;">
+                <div style="font-size: 11px; color: #666; margin-bottom: 4px;">⚔️ H2H bezpośredni</div>
+                {h2h_list_html}
+            </div>
+        '''
+    else:
+        html += '''
+            <div style="margin-bottom: 14px; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                <div style="font-size: 11px; color: #666;">⚔️ H2H bezpośredni: brak danych</div>
             </div>
         '''
     
