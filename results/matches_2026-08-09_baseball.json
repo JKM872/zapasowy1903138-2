@@ -1,15 +1,15 @@
 {
   "date": "2026-08-09",
   "sport": "baseball",
-  "generatedAt": "2026-08-09T10:15:16.451729",
+  "generatedAt": "2026-08-09T15:10:12.537930",
   "stats": {
     "total": 74,
     "qualifying": 35,
-    "formAdvantage": 23
+    "formAdvantage": 26
   },
   "matches": [
     {
-      "id": -6620760820152381552,
+      "id": 5777763790787028723,
       "homeTeam": "Nippon Ham Fighters",
       "awayTeam": "Rakuten Gold. Eagles",
       "time": "09.08.2026 05:00",
@@ -101,7 +101,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 68,
+      "confidence": 70,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -145,7 +145,7 @@
       "predictionGrade": "C"
     },
     {
-      "id": 6660264056459413757,
+      "id": -8235057968029147681,
       "homeTeam": "Yomiuri Giants",
       "awayTeam": "Yakult Swallows",
       "time": "09.08.2026 05:00",
@@ -237,7 +237,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 78,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -282,7 +282,7 @@
       "predictionGrade": "C"
     },
     {
-      "id": -566583350146841226,
+      "id": -859142476647624912,
       "homeTeam": "Chiba Lotte Marines",
       "awayTeam": "Orix Buffaloes",
       "time": "09.08.2026 08:00",
@@ -291,35 +291,79 @@
       "country": "",
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/chiba-lotte-marines-KKlHBnlo/orix-buffaloes-lphNjEdn/?mid=phM0W4S0",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed",
         "match_already_started"
       ],
       "channelSkipWarnings": [
-        "fan_vote_missing",
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 2,
+        "home": 3,
         "draw": 0,
-        "away": 3,
+        "away": 2,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
+      "homeForm": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "formAdvantage": true,
       "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 63.0,
+        "exactScore": "4-3",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 0,
+        "draw": null,
+        "away": 100,
+        "votes": 1
+      },
+      "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
-      "scoring": null,
+      "scoring": {
+        "pick": "1",
+        "prob": 77.5,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 53.0,
+        "dataQuality": 0.73
+      },
       "tennis": null,
       "baseball": {
         "pitcherHome": null,
@@ -330,15 +374,52 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 0,
+      "confidence": 90,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 78%",
+          "Source consensus: moderate (2/4)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 80%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
     },
     {
-      "id": -3255371371460116420,
+      "id": 2228453792861342162,
       "homeTeam": "Seibu Lions",
       "awayTeam": "Fukuoka S. Hawks",
       "time": "09.08.2026 08:00",
@@ -394,7 +475,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8795836647124637196,
+      "id": -5945177251597388346,
       "homeTeam": "Hanshin Tigers",
       "awayTeam": "Chunichi Dragons",
       "time": "09.08.2026 09:00",
@@ -450,7 +531,7 @@
       "predictionGrade": null
     },
     {
-      "id": -842628167702409388,
+      "id": -5499823800078664275,
       "homeTeam": "Yokohama Baystars",
       "awayTeam": "Hiroshima Carp",
       "time": "09.08.2026 09:00",
@@ -468,17 +549,17 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 3,
+        "home": 4,
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 60
+        "winRate": 80
       },
       "homeForm": [
         "W",
         "W",
-        "L",
         "W",
+        "L",
         "W"
       ],
       "awayForm": [
@@ -486,28 +567,28 @@
         "L",
         "L",
         "L",
-        "W"
+        "L"
       ],
       "homeFormHome": [
         "W",
         "W",
-        "L",
         "W",
+        "L",
         "W"
       ],
       "awayFormAway": [
         "L",
         "L",
+        "L",
         "W",
-        "W",
-        "L"
+        "W"
       ],
       "formAdvantage": true,
       "odds": null,
       "forebet": {
-        "prediction": "2",
-        "probability": 51.0,
-        "exactScore": "3-4",
+        "prediction": "1",
+        "probability": 60.0,
+        "exactScore": "4-3",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -525,11 +606,11 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 76.3,
+        "prob": 86.6,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 47.0,
+        "confidence": 63.0,
         "dataQuality": 0.73
       },
       "tennis": null,
@@ -542,7 +623,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 85,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -554,7 +635,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
+        "consensus_strength": "moderate",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -572,22 +653,22 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 76%",
+          "Model probability: 87%",
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 2660929915359638674,
+      "id": 8747777214501997688,
       "homeTeam": "Caliente de Durango",
       "awayTeam": "Monclova",
       "time": "09.08.2026 00:00",
@@ -643,7 +724,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6124100953173350195,
+      "id": -4231261765130549587,
       "homeTeam": "Campeche",
       "awayTeam": "Puebla",
       "time": "09.08.2026 00:15",
@@ -655,7 +736,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:52/80",
+        "fan_vote_below_threshold:53/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -709,21 +790,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 52,
+        "home": 47,
         "draw": null,
-        "away": 48,
-        "votes": 85
+        "away": 53,
+        "votes": 127
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 68.9,
+        "prob": 71.4,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 48.0,
+        "confidence": 41.0,
         "dataQuality": 0.73
       },
       "tennis": null,
@@ -736,7 +817,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 75,
+      "confidence": 82,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -766,6 +847,7 @@
       },
       "explanation": {
         "primary_factors": [
+          "Model probability: 71%",
           "Source consensus: moderate (2/4)"
         ],
         "risk_factors": [
@@ -779,7 +861,7 @@
       "predictionGrade": "C"
     },
     {
-      "id": 2085791911171727610,
+      "id": 6031426103412640471,
       "homeTeam": "Tabasco",
       "awayTeam": "Bravos de Leon",
       "time": "09.08.2026 01:00",
@@ -791,7 +873,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:63/80",
+        "fan_vote_below_threshold:64/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -836,10 +918,10 @@
       "odds": null,
       "forebet": null,
       "sofascore": {
-        "home": 63,
+        "home": 64,
         "draw": null,
-        "away": 37,
-        "votes": 78
+        "away": 36,
+        "votes": 120
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -907,7 +989,7 @@
       "predictionGrade": "C"
     },
     {
-      "id": -2003434377820695291,
+      "id": -4375654613627594227,
       "homeTeam": "Toros de Tijuana",
       "awayTeam": "Laguna",
       "time": "09.08.2026 02:35",
@@ -972,17 +1054,17 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 85,
+        "home": 86,
         "draw": null,
-        "away": 15,
-        "votes": 93
+        "away": 14,
+        "votes": 144
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 77.5,
+        "prob": 76.3,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
@@ -999,7 +1081,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 90,
+      "confidence": 80,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -1029,7 +1111,7 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 78%",
+          "Model probability: 76%",
           "Source consensus: strong (3/4)",
           "Form advantage confirmed"
         ],
@@ -1044,7 +1126,7 @@
       "predictionGrade": "B"
     },
     {
-      "id": -4772801686410553776,
+      "id": -3090403742635383457,
       "homeTeam": "Diablos Rojos",
       "awayTeam": "Oaxaca",
       "time": "09.08.2026 20:00",
@@ -1107,10 +1189,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 92,
+        "home": 93,
         "draw": null,
-        "away": 8,
-        "votes": 187
+        "away": 7,
+        "votes": 271
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -1134,7 +1216,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 90,
+      "confidence": 82,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -1179,7 +1261,7 @@
       "predictionGrade": "B"
     },
     {
-      "id": -7537258266064624324,
+      "id": 1661267260774613464,
       "homeTeam": "Caliente de Durango",
       "awayTeam": "Monclova",
       "time": "09.08.2026 23:00",
@@ -1234,7 +1316,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6395587040332610008,
+      "id": -7335686542933237586,
       "homeTeam": "Monterrey",
       "awayTeam": "Jalisco",
       "time": "09.08.2026 23:00",
@@ -1289,7 +1371,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3315297955807572507,
+      "id": 6928863321183696885,
       "homeTeam": "Arizona Diamondbacks",
       "awayTeam": "Los Angeles Dodgers",
       "time": "09.08.2026 00:10",
@@ -1301,7 +1383,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:73/80",
+        "fan_vote_below_threshold:72/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -1360,21 +1442,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 27,
+        "home": 28,
         "draw": null,
-        "away": 73,
-        "votes": 714
+        "away": 72,
+        "votes": 1149
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 48.9,
-        "ev": 0.1,
-        "edge": 4.4,
-        "kelly": 2.0,
-        "confidence": 38.0,
+        "prob": 51.1,
+        "ev": 0.15,
+        "edge": 6.7,
+        "kelly": 3.0,
+        "confidence": 40.0,
         "dataQuality": 0.82
       },
       "tennis": null,
@@ -1387,7 +1469,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 70,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -1399,8 +1481,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 4.456,
+        "consensus_strength": "weak",
+        "market_model_gap": 6.656,
         "skip_reason": null
       },
       "availability": {
@@ -1417,6 +1499,7 @@
       },
       "explanation": {
         "primary_factors": [
+          "Positive expected value: 0.15",
           "Form advantage confirmed"
         ],
         "risk_factors": [
@@ -1425,13 +1508,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 4.4,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 6.7,
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 4496950296209215391,
+      "id": -7394598908670804612,
       "homeTeam": "Seattle Mariners",
       "awayTeam": "Tampa Bay Rays",
       "time": "09.08.2026 01:50",
@@ -1487,7 +1570,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4657107077388181709,
+      "id": -3939495911764970543,
       "homeTeam": "Washington Nationals",
       "awayTeam": "Cincinnati Reds",
       "time": "09.08.2026 16:15",
@@ -1499,7 +1582,8 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:61/80"
+        "fan_vote_below_threshold:63/80",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -1547,9 +1631,9 @@
         "bookmaker": "oddssafari_coupon"
       },
       "forebet": {
-        "prediction": "1",
-        "probability": 55.0,
-        "exactScore": "4-3",
+        "prediction": "2",
+        "probability": 63.0,
+        "exactScore": "3-4",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -1557,10 +1641,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 61,
+        "home": 63,
         "draw": null,
-        "away": 39,
-        "votes": 926
+        "away": 37,
+        "votes": 1717
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -1571,7 +1655,7 @@
         "ev": 0.155,
         "edge": 7.9,
         "kelly": 4.0,
-        "confidence": 61.0,
+        "confidence": 55.0,
         "dataQuality": 0.82
       },
       "tennis": null,
@@ -1584,7 +1668,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 78,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -1596,7 +1680,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "strong",
+        "consensus_strength": "moderate",
         "market_model_gap": 7.88,
         "skip_reason": null
       },
@@ -1615,7 +1699,7 @@
       "explanation": {
         "primary_factors": [
           "Positive expected value: 0.15",
-          "Source consensus: strong (3/4)"
+          "Source consensus: moderate (2/4)"
         ],
         "risk_factors": [
           "Fatigue risk: high"
@@ -1623,12 +1707,12 @@
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
         "expected_edge": 7.9,
-        "consensus_note": "strong (3 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "A"
+      "predictionGrade": "B"
     },
     {
-      "id": 8592997418281404672,
+      "id": -5454989029661674207,
       "homeTeam": "Boston Red Sox",
       "awayTeam": "Athletics",
       "time": "09.08.2026 17:35",
@@ -1696,10 +1780,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 89,
+        "home": 90,
         "draw": null,
-        "away": 11,
-        "votes": 1014
+        "away": 10,
+        "votes": 1777
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -1723,7 +1807,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 90,
+      "confidence": 85,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -1768,7 +1852,7 @@
       "predictionGrade": "A"
     },
     {
-      "id": -2488359654277646957,
+      "id": -887318565375588358,
       "homeTeam": "New York Yankees",
       "awayTeam": "Atlanta Braves",
       "time": "09.08.2026 17:35",
@@ -1780,7 +1864,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:61/80"
+        "fan_vote_below_threshold:63/80"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -1838,10 +1922,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 61,
+        "home": 63,
         "draw": null,
-        "away": 39,
-        "votes": 1110
+        "away": 37,
+        "votes": 1866
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -1865,7 +1949,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 85,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -1908,7 +1992,7 @@
       "predictionGrade": "A"
     },
     {
-      "id": -2446754856615095508,
+      "id": 7570268495111005971,
       "homeTeam": "Philadelphia Phillies",
       "awayTeam": "Toronto Blue Jays",
       "time": "09.08.2026 17:35",
@@ -1963,7 +2047,7 @@
       "predictionGrade": null
     },
     {
-      "id": -113078547736696071,
+      "id": -4823598745385177196,
       "homeTeam": "Pittsburgh Pirates",
       "awayTeam": "New York Mets",
       "time": "09.08.2026 17:35",
@@ -2018,7 +2102,7 @@
       "predictionGrade": null
     },
     {
-      "id": -356034518939334986,
+      "id": -1731712087066955005,
       "homeTeam": "Miami Marlins",
       "awayTeam": "Los Angeles Angels",
       "time": "09.08.2026 17:40",
@@ -2086,10 +2170,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 81,
+        "home": 83,
         "draw": null,
-        "away": 19,
-        "votes": 634
+        "away": 17,
+        "votes": 1098
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -2113,7 +2197,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 68,
+      "confidence": 72,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -2156,7 +2240,7 @@
       "predictionGrade": "B"
     },
     {
-      "id": -1339523146792030073,
+      "id": -3807960934694410644,
       "homeTeam": "Chicago White Sox",
       "awayTeam": "Cleveland Guardians",
       "time": "09.08.2026 18:10",
@@ -2168,7 +2252,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:58/80"
+        "fan_vote_below_threshold:59/80"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -2226,21 +2310,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 58,
+        "home": 59,
         "draw": null,
-        "away": 42,
-        "votes": 573
+        "away": 41,
+        "votes": 978
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 51.1,
-        "ev": -0.013,
-        "edge": -0.7,
-        "kelly": 0.0,
-        "confidence": 32.0,
+        "prob": 53.9,
+        "ev": 0.04,
+        "edge": 2.1,
+        "kelly": 1.1,
+        "confidence": 42.0,
         "dataQuality": 0.82
       },
       "tennis": null,
@@ -2253,8 +2337,8 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 55,
-      "value_bet": false,
+      "confidence": 70,
+      "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
         "quality_score": 1.0,
@@ -2266,7 +2350,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -0.713,
+        "market_model_gap": 2.087,
         "skip_reason": null
       },
       "availability": {
@@ -2289,13 +2373,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -0.7,
+        "expected_edge": 2.1,
         "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -8427007100243072741,
+      "id": -2286304467743024595,
       "homeTeam": "Kansas City Royals",
       "awayTeam": "Chicago Cubs",
       "time": "09.08.2026 18:10",
@@ -2350,7 +2434,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2859308185578921827,
+      "id": -8786949174933609878,
       "homeTeam": "Milwaukee Brewers",
       "awayTeam": "Minnesota Twins",
       "time": "09.08.2026 18:10",
@@ -2421,7 +2505,7 @@
         "home": 92,
         "draw": null,
         "away": 8,
-        "votes": 786
+        "votes": 1347
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -2445,7 +2529,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 90,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -2490,7 +2574,7 @@
       "predictionGrade": "A"
     },
     {
-      "id": -5433214289212597920,
+      "id": 8596676489836304503,
       "homeTeam": "St.Louis Cardinals",
       "awayTeam": "Colorado Rockies",
       "time": "09.08.2026 18:15",
@@ -2545,7 +2629,7 @@
       "predictionGrade": null
     },
     {
-      "id": 833418464092168724,
+      "id": 5333396408170514266,
       "homeTeam": "Texas Rangers",
       "awayTeam": "Baltimore Orioles",
       "time": "09.08.2026 18:35",
@@ -2557,7 +2641,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:76/80"
+        "fan_vote_below_threshold:77/80"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -2615,21 +2699,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 76,
+        "home": 77,
         "draw": null,
-        "away": 24,
-        "votes": 516
+        "away": 23,
+        "votes": 881
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 59.8,
-        "ev": 0.041,
-        "edge": 2.4,
-        "kelly": 1.4,
-        "confidence": 54.0,
+        "prob": 64.8,
+        "ev": 0.127,
+        "edge": 7.3,
+        "kelly": 4.3,
+        "confidence": 60.0,
         "dataQuality": 0.82
       },
       "tennis": null,
@@ -2642,7 +2726,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 78,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -2655,7 +2739,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 2.362,
+        "market_model_gap": 7.362,
         "skip_reason": null
       },
       "availability": {
@@ -2672,6 +2756,7 @@
       },
       "explanation": {
         "primary_factors": [
+          "Positive expected value: 0.13",
           "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
@@ -2680,13 +2765,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 2.4,
+        "expected_edge": 7.3,
         "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "B"
     },
     {
-      "id": 7860468325797212380,
+      "id": 263865001739537945,
       "homeTeam": "San Francisco Giants",
       "awayTeam": "Detroit Tigers",
       "time": "09.08.2026 20:05",
@@ -2741,7 +2826,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7911026003071220261,
+      "id": 9041363660724767597,
       "homeTeam": "Arizona Diamondbacks",
       "awayTeam": "Los Angeles Dodgers",
       "time": "09.08.2026 20:10",
@@ -2753,7 +2838,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:73/80"
+        "fan_vote_below_threshold:72/80"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -2811,21 +2896,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 27,
+        "home": 28,
         "draw": null,
-        "away": 73,
-        "votes": 714
+        "away": 72,
+        "votes": 1149
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 48.9,
-        "ev": 0.1,
-        "edge": 4.4,
-        "kelly": 2.0,
-        "confidence": 38.0,
+        "prob": 51.1,
+        "ev": 0.15,
+        "edge": 6.7,
+        "kelly": 3.0,
+        "confidence": 40.0,
         "dataQuality": 0.82
       },
       "tennis": null,
@@ -2838,7 +2923,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 65,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -2850,8 +2935,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 4.456,
+        "consensus_strength": "weak",
+        "market_model_gap": 6.656,
         "skip_reason": null
       },
       "availability": {
@@ -2868,6 +2953,7 @@
       },
       "explanation": {
         "primary_factors": [
+          "Positive expected value: 0.15",
           "Form advantage confirmed"
         ],
         "risk_factors": [
@@ -2876,13 +2962,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 4.4,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 6.7,
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -8638586518805550877,
+      "id": 5383884757040514335,
       "homeTeam": "Seattle Mariners",
       "awayTeam": "Tampa Bay Rays",
       "time": "09.08.2026 20:10",
@@ -2937,7 +3023,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8668699300255913405,
+      "id": -1284703213409786748,
       "homeTeam": "Traiskirchen",
       "awayTeam": "Wr. Neustadt",
       "time": "09.08.2026 12:00",
@@ -2993,7 +3079,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5437656719806828725,
+      "id": -4323442843377260277,
       "homeTeam": "Hluboka",
       "awayTeam": "Trebic",
       "time": "09.08.2026 11:00",
@@ -3002,9 +3088,10 @@
       "country": "",
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/hluboka-nad-vltavou-6BsQefpl/nuclears-trebic-ClrMdzVs/?mid=Y18LOWOs",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
+        "base_qualification_failed",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -3012,65 +3099,24 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 3,
+        "home": 2,
         "draw": 0,
-        "away": 2,
+        "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
-      "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "exactScore": "3-6",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
       "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 58.9,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 31.0,
-        "dataQuality": 0.64
-      },
+      "scoring": null,
       "tennis": null,
       "baseball": {
         "pitcherHome": null,
@@ -3081,49 +3127,15 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 75,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5986428007507297144,
+      "id": 6229575810692521512,
       "homeTeam": "Hrosi Brno",
       "awayTeam": "Eagles Prague",
       "time": "09.08.2026 11:00",
@@ -3132,9 +3144,10 @@
       "country": "",
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/eagles-prague-rwxa6Y6n/hrosi-brno-Onp74Cya/?mid=6F6TMAgf",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
+        "base_qualification_failed",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -3142,65 +3155,24 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 3,
+        "home": 2,
         "draw": 0,
-        "away": 2,
+        "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
-      "forebet": {
-        "prediction": "1",
-        "probability": 57.0,
-        "exactScore": "6-4",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
       "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 53.9,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 30.0,
-        "dataQuality": 0.64
-      },
+      "scoring": null,
       "tennis": null,
       "baseball": {
         "pitcherHome": null,
@@ -3211,49 +3183,15 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 65,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 4817175824298735942,
+      "id": -5593196566703244324,
       "homeTeam": "SaBaT Prague",
       "awayTeam": "Draci Brno",
       "time": "09.08.2026 11:00",
@@ -3309,7 +3247,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8539602179733418363,
+      "id": 828914601860534832,
       "homeTeam": "XL5",
       "awayTeam": "Helsinki Mets",
       "time": "09.08.2026 08:00",
@@ -3318,9 +3256,10 @@
       "country": "",
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/helsinki-mets-6aTUTEPR/xl5-MRYLQZdn/?mid=YyGsnNs2",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
+        "base_qualification_failed",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -3330,54 +3269,22 @@
       "h2h": {
         "home": 2,
         "draw": 0,
-        "away": 1,
-        "total": 3,
-        "winRate": 66
+        "away": 2,
+        "total": 4,
+        "winRate": 50
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
       "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 76.3,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 48.0,
-        "dataQuality": 0.55
-      },
+      "scoring": null,
       "tennis": null,
       "baseball": {
         "pitcherHome": null,
@@ -3388,52 +3295,15 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 68,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 76%"
-        ],
-        "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -504023013931815814,
+      "id": 5174503528884098505,
       "homeTeam": "Helsinki Mets",
       "awayTeam": "Puumat",
       "time": "09.08.2026 11:00",
@@ -3489,7 +3359,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6564741899032267003,
+      "id": 1517732100255129663,
       "homeTeam": "Tigers",
       "awayTeam": "Puumat",
       "time": "09.08.2026 14:00",
@@ -3501,7 +3371,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing",
@@ -3544,7 +3415,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2727636831032822763,
+      "id": -3470199153949202254,
       "homeTeam": "Beziers Pirates",
       "awayTeam": "Paris",
       "time": "09.08.2026 09:00",
@@ -3566,9 +3437,9 @@
       "h2h": {
         "home": 1,
         "draw": 0,
-        "away": 2,
-        "total": 3,
-        "winRate": 33
+        "away": 3,
+        "total": 4,
+        "winRate": 25
       },
       "homeForm": [],
       "awayForm": [],
@@ -3600,7 +3471,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6452171510033470182,
+      "id": 1541089591566458081,
       "homeTeam": "La Rochelle",
       "awayTeam": "Stade Toulousain",
       "time": "09.08.2026 09:00",
@@ -3609,62 +3480,6 @@
       "country": "",
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/la-rochelle-bThWOHXs/stade-toulousain-AavlcKQ1/?mid=0Y908D1C",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed",
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing",
-        "baseball_missing_pitcher"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 3,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": {
-        "pitcherHome": null,
-        "pitcherAway": null,
-        "pitcherHomeEra": null,
-        "pitcherAwayEra": null,
-        "pitcherHomeWhip": null,
-        "pitcherAwayWhip": null,
-        "pitcherAvailable": false
-      },
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -947557303905177083,
-      "homeTeam": "Rouen",
-      "awayTeam": "Montpellier",
-      "time": "09.08.2026 09:00",
-      "date": "2026-08-09",
-      "league": null,
-      "country": "",
-      "sport": "baseball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/baseball/montpellier-jwtqOtnE/rouen-4tpmN01K/?mid=SKBhAZWa",
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -3675,46 +3490,46 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 4,
+        "home": 3,
         "draw": 0,
-        "away": 1,
+        "away": 2,
         "total": 5,
-        "winRate": 80
+        "winRate": 60
       },
       "homeForm": [
         "W",
         "W",
-        "W",
-        "W",
+        "L",
+        "L",
         "L"
       ],
       "awayForm": [
         "L",
-        "W",
-        "W",
-        "W",
+        "L",
+        "L",
+        "L",
         "L"
       ],
       "homeFormHome": [
         "W",
         "W",
-        "W",
         "L",
+        "W",
         "W"
       ],
       "awayFormAway": [
         "L",
         "L",
         "L",
-        "W",
-        "L"
+        "L",
+        "W"
       ],
       "formAdvantage": true,
       "odds": null,
       "forebet": {
         "prediction": "1",
-        "probability": 78.0,
-        "exactScore": "6-3",
+        "probability": 66.0,
+        "exactScore": "4-3",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -3727,11 +3542,11 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 86.6,
+        "prob": 77.5,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 62.0,
+        "confidence": 58.0,
         "dataQuality": 0.64
       },
       "tennis": null,
@@ -3744,7 +3559,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 90,
+      "confidence": 80,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 3,
@@ -3774,7 +3589,7 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 87%",
+          "Model probability: 78%",
           "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
@@ -3789,7 +3604,132 @@
       "predictionGrade": "C"
     },
     {
-      "id": -3621992116265200182,
+      "id": -2842430893350478524,
+      "homeTeam": "Rouen",
+      "awayTeam": "Montpellier",
+      "time": "09.08.2026 09:00",
+      "date": "2026-08-09",
+      "league": null,
+      "country": "",
+      "sport": "baseball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/baseball/montpellier-jwtqOtnE/rouen-4tpmN01K/?mid=SKBhAZWa",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing",
+        "baseball_missing_pitcher"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 86.6,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 61.0,
+        "dataQuality": 0.55
+      },
+      "tennis": null,
+      "baseball": {
+        "pitcherHome": null,
+        "pitcherAway": null,
+        "pitcherHomeEra": null,
+        "pitcherAwayEra": null,
+        "pitcherHomeWhip": null,
+        "pitcherAwayWhip": null,
+        "pitcherAvailable": false
+      },
+      "confidence": 85,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.45,
+        "h2h_available": true,
+        "forebet_available": false,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 87%",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Low data quality: 45%",
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "2/4 sources available (quality: 45%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "D"
+    },
+    {
+      "id": 2164027580869632497,
       "homeTeam": "Senart",
       "awayTeam": "Savigny",
       "time": "09.08.2026 09:00",
@@ -3809,11 +3749,11 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 1,
+        "home": 2,
         "draw": 0,
-        "away": 4,
+        "away": 3,
         "total": 5,
-        "winRate": 20
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
@@ -3845,7 +3785,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6256853391847829744,
+      "id": -1334119275302382154,
       "homeTeam": "Tottori Johoku",
       "awayTeam": "Okayama Gakugeikan",
       "time": "09.08.2026 04:30",
@@ -3901,7 +3841,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8609949346319661566,
+      "id": 3312533512517706860,
       "homeTeam": "Naruto Uzushio",
       "awayTeam": "Hachioji Jissen",
       "time": "09.08.2026 07:00",
@@ -3910,10 +3850,9 @@
       "country": "",
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/hachioji-jissen-8vcInc3F/naruto-uzushio-GIAot2p2/?mid=OdDjyzbU",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -3921,24 +3860,54 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 0,
+        "home": 1,
         "draw": 0,
         "away": 0,
-        "total": 3,
-        "winRate": 0
+        "total": 1,
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L"
+      ],
+      "formAdvantage": true,
       "odds": null,
-      "forebet": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 53.0,
+        "exactScore": "3-4",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
       "focusTeam": "home",
-      "scoring": null,
+      "scoring": {
+        "pick": "1",
+        "prob": 59.8,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 36.0,
+        "dataQuality": 0.64
+      },
       "tennis": null,
       "baseball": {
         "pitcherHome": null,
@@ -3949,15 +3918,50 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 0,
+      "confidence": 70,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.6,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 1,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 0,
+        "away_matches_last_7d": 0,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "low",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 60%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "F"
     },
     {
-      "id": 3161738503571537874,
+      "id": -556702226453412797,
       "homeTeam": "Chukyo",
       "awayTeam": "Kasumigaura",
       "time": "09.08.2026 09:30",
@@ -3980,7 +3984,7 @@
         "home": 0,
         "draw": 0,
         "away": 1,
-        "total": 2,
+        "total": 1,
         "winRate": 0
       },
       "homeForm": [],
@@ -4013,7 +4017,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1084571684036823041,
+      "id": 9100129908408262560,
       "homeTeam": "Meitoku Gijuku",
       "awayTeam": "Nichinan Gakuen",
       "time": "09.08.2026 23:00",
@@ -4068,7 +4072,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2735413054695432046,
+      "id": -5649031913584419640,
       "homeTeam": "Hanwha Eagles",
       "awayTeam": "Kiwoom Heroes",
       "time": "09.08.2026 09:00",
@@ -4124,7 +4128,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4886829323541161045,
+      "id": -1185968368084067,
       "homeTeam": "KT Wiz Suwon",
       "awayTeam": "Lotte Giants",
       "time": "09.08.2026 09:00",
@@ -4136,7 +4140,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:62/80",
+        "fan_vote_below_threshold:71/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -4195,10 +4199,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 62,
+        "home": 71,
         "draw": null,
-        "away": 38,
-        "votes": 8
+        "away": 29,
+        "votes": 774
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -4209,7 +4213,7 @@
         "ev": 0.04,
         "edge": 2.1,
         "kelly": 1.1,
-        "confidence": 43.0,
+        "confidence": 44.0,
         "dataQuality": 0.82
       },
       "tennis": null,
@@ -4222,7 +4226,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 70,
+      "confidence": 82,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 4,
@@ -4234,7 +4238,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
+        "consensus_strength": "moderate",
         "market_model_gap": 2.087,
         "skip_reason": null
       },
@@ -4252,21 +4256,21 @@
       },
       "explanation": {
         "primary_factors": [
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
         "expected_edge": 2.1,
-        "consensus_note": "weak (1 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 2616164564049720801,
+      "id": 1077001363060216171,
       "homeTeam": "LG Twins",
       "awayTeam": "KIA Tigers",
       "time": "09.08.2026 09:00",
@@ -4278,6 +4282,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
+        "fan_vote_below_threshold:76/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -4331,10 +4336,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 20,
+        "home": 24,
         "draw": null,
-        "away": 80,
-        "votes": 15
+        "away": 76,
+        "votes": 17
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -4358,7 +4363,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 70,
+      "confidence": 68,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -4400,7 +4405,7 @@
       "predictionGrade": "D"
     },
     {
-      "id": -6438242951967880023,
+      "id": 491022666561054836,
       "homeTeam": "NC Dinos",
       "awayTeam": "SSG Landers",
       "time": "09.08.2026 09:00",
@@ -4456,7 +4461,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1205665162209519730,
+      "id": -368906685054213373,
       "homeTeam": "Samsung Lions",
       "awayTeam": "Doosan Bears",
       "time": "09.08.2026 09:00",
@@ -4468,7 +4473,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:64/80",
+        "fan_vote_below_threshold:59/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -4512,9 +4517,9 @@
       "formAdvantage": false,
       "odds": null,
       "forebet": {
-        "prediction": "2",
-        "probability": 59.0,
-        "exactScore": "2-4",
+        "prediction": "1",
+        "probability": 63.0,
+        "exactScore": "4-3",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -4522,21 +4527,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 64,
+        "home": 41,
         "draw": null,
-        "away": 36,
-        "votes": 11
+        "away": 59,
+        "votes": 32
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 53.9,
+        "prob": 59.8,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 27.0,
+        "confidence": 29.0,
         "dataQuality": 0.73
       },
       "tennis": null,
@@ -4591,7 +4596,7 @@
       "predictionGrade": "D"
     },
     {
-      "id": -8799300810255508535,
+      "id": 3508306450486326745,
       "homeTeam": "TSG Hawks",
       "awayTeam": "Chinatrust Brothers",
       "time": "09.08.2026 08:05",
@@ -4647,7 +4652,7 @@
       "predictionGrade": null
     },
     {
-      "id": 173127114914622745,
+      "id": 1973718623081837754,
       "homeTeam": "Fubon Guardians",
       "awayTeam": "Uni Lions",
       "time": "09.08.2026 09:05",
@@ -4782,7 +4787,7 @@
       "predictionGrade": "D"
     },
     {
-      "id": -4421886197249611246,
+      "id": -3697489239779246590,
       "homeTeam": "Rakuten Monkeys",
       "awayTeam": "Wei Chuan Dragons",
       "time": "09.08.2026 09:05",
@@ -4838,7 +4843,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3558927431488581074,
+      "id": 9153292876642660532,
       "homeTeam": "Buffalo Bisons",
       "awayTeam": "Norfolk Tides",
       "time": "09.08.2026 17:05",
@@ -4848,8 +4853,10 @@
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/buffalo-bisons-dtAJRFZ6/norfolk-tides-tKMWrleh/?mid=OnJ3q7tA",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
       ],
@@ -4893,7 +4900,7 @@
       "forebet": {
         "prediction": "2",
         "probability": 51.0,
-        "exactScore": "3-4",
+        "exactScore": "4-6",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -4901,21 +4908,21 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 94,
+        "home": 92,
         "draw": null,
-        "away": 6,
-        "votes": 18
+        "away": 8,
+        "votes": 50
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 64.8,
+        "prob": 59.8,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 37.0,
+        "confidence": 35.0,
         "dataQuality": 0.73
       },
       "tennis": null,
@@ -4928,7 +4935,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 70,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -4940,7 +4947,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -4958,21 +4965,21 @@
       },
       "explanation": {
         "primary_factors": [
-          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high"
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
         ],
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "D"
     },
     {
-      "id": -8364342511131460219,
+      "id": 8133248331608046988,
       "homeTeam": "Syracuse Mets",
       "awayTeam": "Columbus Clippers",
       "time": "09.08.2026 17:05",
@@ -4984,7 +4991,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:76/80"
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -5037,10 +5044,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 24,
+        "home": 15,
         "draw": null,
-        "away": 76,
-        "votes": 17
+        "away": 85,
+        "votes": 47
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -5108,7 +5115,7 @@
       "predictionGrade": "D"
     },
     {
-      "id": -3923429928107078315,
+      "id": -5784848402604756593,
       "homeTeam": "Worcester",
       "awayTeam": "Lehigh Valley IronPigs",
       "time": "09.08.2026 17:05",
@@ -5118,8 +5125,10 @@
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/lehigh-valley-ironpigs-tYoSP8ir/worcester-red-sox-UJSe7Xug/?mid=WCMBsoBM",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
       ],
@@ -5171,10 +5180,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 89,
+        "home": 90,
         "draw": null,
-        "away": 11,
-        "votes": 18
+        "away": 10,
+        "votes": 40
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -5185,8 +5194,8 @@
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 65.0,
-        "dataQuality": 0.73
+        "confidence": 63.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -5198,7 +5207,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 85,
+      "confidence": 63.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -5210,7 +5219,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "strong",
+        "consensus_strength": "moderate",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -5229,7 +5238,7 @@
       "explanation": {
         "primary_factors": [
           "Model probability: 90%",
-          "Source consensus: strong (3/4)",
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
@@ -5238,12 +5247,12 @@
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "strong (3 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "B"
+      "predictionGrade": "C"
     },
     {
-      "id": -5494883602371089653,
+      "id": 2109164497201618208,
       "homeTeam": "Indianapolis Indians",
       "awayTeam": "Iowa Cubs",
       "time": "09.08.2026 17:35",
@@ -5253,10 +5262,8 @@
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/indianapolis-indians-rVaptnuB/iowa-cubs-p0otFr17/?mid=G2iEYkSi",
       "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "fan_vote_below_threshold:75/80"
-      ],
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
       ],
@@ -5308,10 +5315,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 75,
+        "home": 84,
         "draw": null,
-        "away": 25,
-        "votes": 16
+        "away": 16,
+        "votes": 45
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -5322,8 +5329,8 @@
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 53.0,
-        "dataQuality": 0.73
+        "confidence": 52.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -5335,7 +5342,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 52.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -5347,7 +5354,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "strong",
+        "consensus_strength": "moderate",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -5366,7 +5373,7 @@
       "explanation": {
         "primary_factors": [
           "Model probability: 76%",
-          "Source consensus: strong (3/4)",
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
@@ -5375,12 +5382,12 @@
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "strong (3 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "B"
+      "predictionGrade": "C"
     },
     {
-      "id": -3049424851953988921,
+      "id": 936350931490838553,
       "homeTeam": "Scranton/WB",
       "awayTeam": "Rochester Red Wings",
       "time": "09.08.2026 17:35",
@@ -5435,7 +5442,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2160737785493729728,
+      "id": -5923042364309394635,
       "homeTeam": "Memphis Redbirds",
       "awayTeam": "Nashville Sounds",
       "time": "09.08.2026 18:05",
@@ -5490,7 +5497,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3249014763207461042,
+      "id": 3274631231552018579,
       "homeTeam": "St. Paul",
       "awayTeam": "Louisville Bats",
       "time": "09.08.2026 19:07",
@@ -5553,10 +5560,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 85,
+        "home": 87,
         "draw": null,
-        "away": 15,
-        "votes": 13
+        "away": 13,
+        "votes": 38
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -5567,8 +5574,8 @@
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 65.0,
-        "dataQuality": 0.73
+        "confidence": 63.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -5580,7 +5587,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 90,
+      "confidence": 63.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -5592,7 +5599,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "strong",
+        "consensus_strength": "moderate",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -5611,7 +5618,7 @@
       "explanation": {
         "primary_factors": [
           "Model probability: 90%",
-          "Source consensus: strong (3/4)",
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
@@ -5620,12 +5627,12 @@
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "strong (3 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "B"
+      "predictionGrade": "C"
     },
     {
-      "id": -2750996866381292842,
+      "id": -2867191107100726574,
       "homeTeam": "Gwinnett Stripers",
       "awayTeam": "Jacksonville",
       "time": "09.08.2026 20:05",
@@ -5635,10 +5642,8 @@
       "sport": "baseball",
       "matchUrl": "https://www.livesport.com/pl/mecz/baseball/gwinnett-stripers-ncNSqUun/jacksonville-jumbo-shrimp-QoM45BA5/?mid=2XUfoTBc",
       "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "fan_vote_below_threshold:79/80"
-      ],
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
       ],
@@ -5690,22 +5695,22 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 79,
+        "home": 85,
         "draw": null,
-        "away": 21,
-        "votes": 14
+        "away": 15,
+        "votes": 41
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 76.3,
+        "prob": 68.9,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 53.0,
-        "dataQuality": 0.73
+        "confidence": 49.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -5717,7 +5722,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 49.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -5729,7 +5734,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "strong",
+        "consensus_strength": "moderate",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -5747,8 +5752,7 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 76%",
-          "Source consensus: strong (3/4)",
+          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
@@ -5757,12 +5761,12 @@
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "strong (3 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "B"
+      "predictionGrade": "C"
     },
     {
-      "id": -2124220518212984242,
+      "id": 1220970141853881837,
       "homeTeam": "Toledo Mud Hens",
       "awayTeam": "Omaha Storm Chasers",
       "time": "09.08.2026 20:05",
@@ -5817,7 +5821,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7135883570570107032,
+      "id": -1854663472388507937,
       "homeTeam": "Charlotte Knights",
       "awayTeam": "Durham Bulls",
       "time": "09.08.2026 21:05",
@@ -5869,21 +5873,12 @@
       ],
       "formAdvantage": true,
       "odds": null,
-      "forebet": {
-        "prediction": "2",
-        "probability": 51.0,
-        "exactScore": "3-4",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": {
-        "home": 83,
+        "home": 90,
         "draw": null,
-        "away": 17,
-        "votes": 12
+        "away": 10,
+        "votes": 40
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -5894,8 +5889,8 @@
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 29.0,
-        "dataQuality": 0.73
+        "confidence": 36.0,
+        "dataQuality": 0.55
       },
       "tennis": null,
       "baseball": {
@@ -5907,19 +5902,19 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 36.0,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 0.8,
+        "sources_available": 3,
+        "quality_score": 0.6,
         "h2h_available": true,
-        "forebet_available": true,
+        "forebet_available": false,
         "sofascore_available": true,
         "gemini_available": true,
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -5937,21 +5932,21 @@
       },
       "explanation": {
         "primary_factors": [
-          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high"
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
         ],
-        "data_quality_note": "4/4 sources available (quality: 80%)",
+        "data_quality_note": "3/4 sources available (quality: 60%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "D"
     },
     {
-      "id": 8829252914140305814,
+      "id": -1755985442988421851,
       "homeTeam": "Albuquerque Isotopes",
       "awayTeam": "Sugar Land",
       "time": "09.08.2026 00:35",
@@ -6016,22 +6011,22 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 17,
+        "home": 15,
         "draw": null,
-        "away": 83,
-        "votes": 18
+        "away": 85,
+        "votes": 47
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 66.7,
+        "prob": 59.8,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 39.0,
-        "dataQuality": 0.73
+        "confidence": 34.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -6043,7 +6038,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 70,
+      "confidence": 34.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -6084,10 +6079,10 @@
         "expected_edge": 0.0,
         "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "D"
     },
     {
-      "id": 5136814418439297672,
+      "id": -1691421102049235187,
       "homeTeam": "Salt Lake Bees",
       "awayTeam": "Oklahoma City Dodgers",
       "time": "09.08.2026 00:35",
@@ -6143,7 +6138,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6160570631960044086,
+      "id": -3738717832176492947,
       "homeTeam": "Reno Aces",
       "awayTeam": "El Paso Chihuahuas",
       "time": "09.08.2026 01:35",
@@ -6155,7 +6150,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:58/80",
+        "fan_vote_below_threshold:57/80",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -6209,22 +6204,22 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 58,
+        "home": 57,
         "draw": null,
-        "away": 42,
-        "votes": 19
+        "away": 43,
+        "votes": 49
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
-        "pick": "1",
-        "prob": 53.9,
+        "pick": "2",
+        "prob": 51.1,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 26.0,
-        "dataQuality": 0.73
+        "confidence": 24.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -6236,7 +6231,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 24.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -6248,7 +6243,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -6266,21 +6261,21 @@
       },
       "explanation": {
         "primary_factors": [
-          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high"
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
         ],
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "D"
     },
     {
-      "id": -8959139751763751923,
+      "id": -8313710153086437153,
       "homeTeam": "Sacramento River Cats",
       "awayTeam": "Round Rock Express",
       "time": "09.08.2026 01:37",
@@ -6336,7 +6331,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4394231598647213724,
+      "id": 8991996192557697279,
       "homeTeam": "Las Vegas Aviators",
       "awayTeam": "Tacoma Rainiers",
       "time": "09.08.2026 02:05",
@@ -6392,7 +6387,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7864157470316909915,
+      "id": -4843451441267600329,
       "homeTeam": "Albuquerque Isotopes",
       "awayTeam": "Sugar Land",
       "time": "09.08.2026 19:35",
@@ -6455,22 +6450,22 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 17,
+        "home": 15,
         "draw": null,
-        "away": 83,
-        "votes": 18
+        "away": 85,
+        "votes": 47
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 66.7,
+        "prob": 59.8,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 39.0,
-        "dataQuality": 0.73
+        "confidence": 34.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -6482,7 +6477,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 70,
+      "confidence": 34.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -6523,10 +6518,10 @@
         "expected_edge": 0.0,
         "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "D"
     },
     {
-      "id": 6648583487861601744,
+      "id": -7182482826203209891,
       "homeTeam": "Reno Aces",
       "awayTeam": "El Paso Chihuahuas",
       "time": "09.08.2026 20:05",
@@ -6538,7 +6533,7 @@
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "fan_vote_below_threshold:58/80"
+        "fan_vote_below_threshold:57/80"
       ],
       "channelSkipWarnings": [
         "baseball_missing_pitcher"
@@ -6591,22 +6586,22 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 58,
+        "home": 57,
         "draw": null,
-        "away": 42,
-        "votes": 19
+        "away": 43,
+        "votes": 49
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
-        "pick": "1",
-        "prob": 53.9,
+        "pick": "2",
+        "prob": 51.1,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 26.0,
-        "dataQuality": 0.73
+        "confidence": 24.0,
+        "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": {
@@ -6618,7 +6613,7 @@
         "pitcherAwayWhip": null,
         "pitcherAvailable": false
       },
-      "confidence": 80,
+      "confidence": 24.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -6630,7 +6625,7 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -6648,21 +6643,21 @@
       },
       "explanation": {
         "primary_factors": [
-          "Source consensus: moderate (2/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high"
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
         ],
         "data_quality_note": "4/4 sources available (quality: 80%)",
         "availability_note": "",
         "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "D"
     },
     {
-      "id": -7432812127694556247,
+      "id": 6961935781272489544,
       "homeTeam": "Sacramento River Cats",
       "awayTeam": "Round Rock Express",
       "time": "09.08.2026 20:05",
@@ -6717,7 +6712,7 @@
       "predictionGrade": null
     },
     {
-      "id": -632573057857495531,
+      "id": 229108948291735111,
       "homeTeam": "Leicester",
       "awayTeam": "Long Eaton",
       "time": "09.08.2026 11:00",
@@ -6739,8 +6734,8 @@
       "h2h": {
         "home": 0,
         "draw": 0,
-        "away": 2,
-        "total": 2,
+        "away": 3,
+        "total": 3,
         "winRate": 0
       },
       "homeForm": [],
@@ -6773,7 +6768,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3332478230327807211,
+      "id": -3315862770152234661,
       "homeTeam": "Manchester",
       "awayTeam": "Sheffield Bruins",
       "time": "09.08.2026 11:00",
@@ -6793,11 +6788,11 @@
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 1,
+        "home": 2,
         "draw": 0,
         "away": 3,
-        "total": 4,
-        "winRate": 25
+        "total": 5,
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
@@ -6829,10 +6824,10 @@
       "predictionGrade": null
     },
     {
-      "id": 894168391969670380,
+      "id": 7247487835915687918,
       "homeTeam": "Leicester",
       "awayTeam": "Long Eaton",
-      "time": "09.08.2026 14:00",
+      "time": "09.08.2026 13:45",
       "date": "2026-08-09",
       "league": null,
       "country": "",
@@ -6841,7 +6836,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing",
@@ -6850,8 +6846,8 @@
       "h2h": {
         "home": 0,
         "draw": 0,
-        "away": 2,
-        "total": 2,
+        "away": 3,
+        "total": 3,
         "winRate": 0
       },
       "homeForm": [],
@@ -6884,7 +6880,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2280655402011688226,
+      "id": -4933053567085999438,
       "homeTeam": "Manchester",
       "awayTeam": "Sheffield Bruins",
       "time": "09.08.2026 14:00",
@@ -6896,18 +6892,19 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing",
         "baseball_missing_pitcher"
       ],
       "h2h": {
-        "home": 1,
+        "home": 2,
         "draw": 0,
         "away": 3,
-        "total": 4,
-        "winRate": 25
+        "total": 5,
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
