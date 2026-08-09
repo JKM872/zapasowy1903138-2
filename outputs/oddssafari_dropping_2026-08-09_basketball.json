@@ -1,0 +1,237 @@
+{
+  "meta": {
+    "generated_at": "2026-08-09T10:03:30.605479+02:00",
+    "target_date": "2026-08-09",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 4,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "elapsed_seconds": 23.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "USA - WNBA",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/ny-liberty-vs-lv-aces/2282913?MarketTypeID=201",
+      "match_id": "2282913",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "NY Liberty",
+      "away_team": "LV Aces",
+      "event_date": "09/08",
+      "event_time": "16:30",
+      "outcome": "1",
+      "open_odds": 1.8,
+      "current_odds": 1.24,
+      "drop_pct": 31.0,
+      "max_odds": 1.26,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "International Clubs - Euroleague",
+      "match_url": "https://www.oddssafari.com/matches/basketball/euroleague/fenerbahce-vs-virtus-bologna/2288711?MarketTypeID=201",
+      "match_id": "2288711",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Fenerbahce",
+      "away_team": "Virtus Bologna",
+      "event_date": "25/09",
+      "event_time": "17:45",
+      "outcome": "2",
+      "open_odds": 6.75,
+      "current_odds": 5.41,
+      "drop_pct": 20.0,
+      "max_odds": 6.5,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "USA - WNBA",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/min-lynx-vs-dal-wings/2282915?MarketTypeID=201",
+      "match_id": "2282915",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "MIN Lynx",
+      "away_team": "DAL Wings",
+      "event_date": "09/08",
+      "event_time": "19:30",
+      "outcome": "2",
+      "open_odds": 3.4,
+      "current_odds": 2.95,
+      "drop_pct": 13.0,
+      "max_odds": 3.1,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "USA - WNBA",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/sea-storm-vs-chi-sky/2283759?MarketTypeID=201",
+      "match_id": "2283759",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "SEA Storm",
+      "away_team": "CHI Sky",
+      "event_date": "11/08",
+      "event_time": "02:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.76,
+      "drop_pct": 12.0,
+      "max_odds": 1.8,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 6,
+        "away_wins_in_h2h_last5": 4,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 15415879,
+        "home_team": "SEA Storm",
+        "away_team": "CHI Sky",
+        "sport": "basketball",
+        "league": "USA - WNBA",
+        "match_time": "02:00"
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "USA - WNBA",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/sea-storm-vs-chi-sky/2283759?MarketTypeID=201",
+      "match_id": "2283759",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "SEA Storm",
+      "away_team": "CHI Sky",
+      "event_date": "11/08",
+      "event_time": "02:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.76,
+      "drop_pct": 12.0,
+      "max_odds": 1.8,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 10,
+        "home_wins_in_h2h_last5": 6,
+        "away_wins_in_h2h_last5": 4,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 15415879,
+        "home_team": "SEA Storm",
+        "away_team": "CHI Sky",
+        "sport": "basketball",
+        "league": "USA - WNBA",
+        "match_time": "02:00"
+      },
+      "enrichment_error": null
+    }
+  ]
+}
