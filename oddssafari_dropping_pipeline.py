@@ -604,6 +604,17 @@ def _enrich_row(
                     focus_team=focus_team,
                     date=date,
                 )
+            # Fan Vote i Forebet też nie zależą od Livesportu.
+            _fill_votes_and_forebet(
+                fallback,
+                driver,
+                home_team=row.home_team,
+                away_team=row.away_team,
+                sport=sport,
+                date=date,
+                use_forebet=use_forebet,
+                use_sofascore=use_sofascore,
+            )
             result["status"] = "enriched_sofascore_only"
             result["enrichment"] = fallback
             print(
@@ -783,6 +794,19 @@ def _enrich_row(
             focus_team=focus_team,
             date=date,
         )
+
+    # Strategy 6: Fan Vote (API) + Forebet. Independent of the Livesport path,
+    # which is where they were previously stuck.
+    _fill_votes_and_forebet(
+        enrichment,
+        driver,
+        home_team=enrichment.get("home_team") or row.home_team,
+        away_team=enrichment.get("away_team") or row.away_team,
+        sport=sport,
+        date=date,
+        use_forebet=use_forebet,
+        use_sofascore=use_sofascore,
+    )
 
     return result
 
@@ -1031,6 +1055,89 @@ def _fill_venue_and_h2h_from_sofascore(
     return changed
 
 
+def _fill_votes_and_forebet(
+    enrichment: Dict[str, Any],
+    driver,
+    *,
+    home_team: str,
+    away_team: str,
+    sport: str,
+    date: Optional[str] = None,
+    use_forebet: bool = True,
+    use_sofascore: bool = True,
+) -> bool:
+    """Fill SofaScore Fan Vote and the Forebet prediction.
+
+    Both already run inside ``process_match``, but only on the Livesport path
+    and only when its earlier steps succeed — measured coverage on 2026-08-10
+    was 7 of 40 events for Fan Vote and 0 for Forebet. Running them as an
+    independent step covers the SofaScore-only events too.
+
+    Fan Vote goes through the API endpoint (``/event/{id}/votes``), so it needs
+    no browser; it only requires the event ID that the earlier SofaScore steps
+    already resolved. Forebet needs the page, so it reuses *driver*.
+
+    Mutates *enrichment*; returns True when anything was added.
+    """
+    changed = False
+
+    if use_sofascore and enrichment.get("sofascore_total_votes") is None:
+        event_id = enrichment.get("sofascore_event_id")
+        if event_id:
+            try:
+                from sofascore_scraper import get_votes_via_api
+
+                votes = get_votes_via_api(int(event_id))
+            except Exception as exc:
+                logger.debug("Fan Vote lookup failed: %s", exc)
+                votes = None
+            if votes:
+                enrichment.update(votes)
+                changed = True
+                print(
+                    f"   🗳️ Fan Vote: {votes.get('sofascore_home_win_prob')}%"
+                    f" / {votes.get('sofascore_draw_prob')}%"
+                    f" / {votes.get('sofascore_away_win_prob')}%"
+                    f" ({votes.get('sofascore_total_votes')} głosów)"
+                )
+
+    if use_forebet and not enrichment.get("forebet_prediction") and driver is not None:
+        try:
+            from forebet_scraper import search_forebet_prediction
+
+            fb = search_forebet_prediction(
+                home_team,
+                away_team,
+                match_date=date or "",
+                driver=driver,
+                sport=sport,
+                # Forebet wymaga trybu widocznego — tak samo jak w głównym
+                # pipeline; w CI obsługuje to xvfb (use_xvfb auto-detect).
+                headless=False,
+            )
+        except Exception as exc:
+            logger.debug("Forebet lookup failed: %s", exc)
+            fb = None
+
+        # Główny pipeline bramkuje na 'success' — bez tego częściowy wynik
+        # trafiałby do maila jako pełna predykcja.
+        if isinstance(fb, dict) and fb.get("success"):
+            for key in (
+                "prediction", "probability", "exact_score", "over_under",
+                "btts", "avg_goals", "home_prob", "draw_prob", "away_prob",
+            ):
+                val = fb.get(key)
+                if val is not None:
+                    enrichment[f"forebet_{key}"] = val
+            changed = True
+            print(
+                f"   🔮 Forebet: {fb.get('prediction')}"
+                f" ({fb.get('probability')}%)"
+            )
+
+    return changed
+
+
 def _derive_form_from_h2h(
     h2h: List[Dict[str, Any]],
     home_team: str,
@@ -1104,6 +1211,9 @@ _KEEP_KEYS = (
     "home_odds", "draw_odds", "away_odds",
     "forebet_prediction", "forebet_probability",
     "forebet_over_under", "forebet_btts",
+    "forebet_exact_score", "forebet_avg_goals",
+    "forebet_home_prob", "forebet_draw_prob", "forebet_away_prob",
+    "sofascore_btts_yes", "sofascore_btts_no",
     "sofascore_home_win_prob", "sofascore_draw_prob", "sofascore_away_win_prob",
     "sofascore_total_votes",
     "favorite", "advanced_score", "tennis_skip_reason",
