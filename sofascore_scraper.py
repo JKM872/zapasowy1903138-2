@@ -36,6 +36,7 @@ import hashlib
 import threading
 import logging
 import random
+import unicodedata
 import base64
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
@@ -1891,6 +1892,78 @@ def teams_match(team1: str, team2: str, threshold: float = 0.35) -> bool:
 _TEAM_SEARCH_MIN_SIMILARITY = 0.60
 _OPPONENT_MIN_SIMILARITY = 0.45
 
+# Słowa pomijane przy budowaniu akronimu — same w sobie nie niosą inicjału,
+# którego używałby skrót nazwy ('Club Atlético Boca' -> 'AB', nie 'CAB').
+_ACRONYM_SKIP_WORDS = frozenset({
+    'club', 'clube', 'cd', 'ca', 'ac', 'cf', 'fc', 'sc', 'afc', 'sv', 'bk',
+    'de', 'del', 'da', 'do', 'dos', 'das', 'la', 'el', 'los', 'las', 'le',
+    'of', 'and', 'y', 'e', 'the', 'ii', 'u20', 'u19', 'u21', 'b',
+})
+
+
+def team_acronym(name: str) -> str:
+    """Akronim z inicjałów znaczących słów nazwy.
+
+    ``'Social Atlético Televisión'`` -> ``'SAT'``. Diakrytyki są usuwane, żeby
+    'Atlético' dawało 'A'.
+    """
+    if not name:
+        return ''
+    ascii_name = unicodedata.normalize('NFKD', str(name))
+    ascii_name = ascii_name.encode('ascii', 'ignore').decode('ascii')
+    ascii_name = re.sub(r'[^A-Za-z0-9\s]', ' ', ascii_name)
+    initials = []
+    for word in ascii_name.split():
+        if word.lower() in _ACRONYM_SKIP_WORDS:
+            continue
+        initials.append(word[0].upper())
+    return ''.join(initials)
+
+
+def acronym_match(query: str, candidate: str) -> bool:
+    """Czy *query* jest akronimem nazwy *candidate*.
+
+    OddsSafari podaje część drużyn skrótem ('SAT' zamiast 'Social Atlético
+    Televisión'), a podobieństwo tekstowe daje wtedy 0.21 i odpada na progu
+    0.45. Bez tego mecz jest nierozpoznawalny, mimo że SofaScore go ma.
+
+    Wymaga skrótu o długości 3-6 znaków, bo dwuliterowe zbitki trafiałyby
+    w zbyt wiele nazw.
+    """
+    if not query or not candidate:
+        return False
+    q = re.sub(r'[^A-Za-z0-9]', '', str(query)).upper()
+    if not (3 <= len(q) <= 6):
+        return False
+    # Skrót musi wyglądać jak skrót: same litery, bez spacji w oryginale.
+    if not q.isalpha():
+        return False
+    if len(str(query).split()) > 1:
+        return False
+    acr = team_acronym(candidate)
+    if not acr or len(acr) < len(q):
+        return False
+    # Dokładny akronim albo akronim zaczynający się od skrótu ('SAT' dla
+    # 'Social Atletico Televisicon Junior' -> 'SATJ').
+    return acr == q or acr.startswith(q)
+
+
+def names_match(query: str, candidate: str,
+                min_similarity: float = _OPPONENT_MIN_SIMILARITY) -> Tuple[bool, float]:
+    """Czy nazwy oznaczają tę samą drużynę: podobieństwo lub akronim.
+
+    Zwraca ``(dopasowanie, wynik)``, gdzie wynik to podobieństwo tekstowe
+    (dla trafienia po akronimie zwracamy 1.0, bo to dopasowanie dokładne).
+    """
+    if not query or not candidate:
+        return False, 0.0
+    sim = similarity_score(query, candidate)
+    if sim >= min_similarity:
+        return True, sim
+    if acronym_match(query, candidate) or acronym_match(candidate, query):
+        return True, 1.0
+    return False, sim
+
 
 def accept_consent_popup(driver: 'webdriver.Chrome') -> bool:
     """
@@ -2521,17 +2594,31 @@ def find_team_by_name(team_name: str, sport_slug: Optional[str] = None) -> Optio
     )
     if not isinstance(data, dict):
         return None
+
+    # Wybieramy NAJLEPIEJ dopasowanego kandydata, nie pierwszego z listy.
+    # Poprzednio zapytanie 'SAT' zwracało 'Sutton United' tylko dlatego, że
+    # stało wyżej w wynikach — a potem harmonogram tej drużyny nie zawierał
+    # szukanego meczu, więc całe rozpoznanie padało. Zły anchor jest gorszy
+    # niż brak anchora.
+    best = None
+    best_score = 0.0
     for team in data.get('teams') or []:
         team_sport = ((team.get('sport') or {}).get('slug') or '').lower()
         if sport_slug and team_sport != sport_slug.lower():
             continue
-        if team.get('id'):
-            return {
-                'id': team['id'],
-                'name': team.get('name') or '',
-                'sport': team_sport,
-            }
-    return None
+        if not team.get('id'):
+            continue
+        name = team.get('name') or ''
+        matched, score = names_match(
+            team_name, name, min_similarity=_TEAM_SEARCH_MIN_SIMILARITY
+        )
+        if matched and score > best_score:
+            best = {'id': team['id'], 'name': name, 'sport': team_sport}
+            best_score = score
+
+    if best:
+        best['similarity'] = round(best_score, 3)
+    return best
 
 
 def find_event_via_team_schedule(
@@ -2539,17 +2626,34 @@ def find_event_via_team_schedule(
     away_team: str,
     sport_slug: Optional[str] = None,
     min_similarity: float = 0.45,
+    date_str: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Find an upcoming event by walking one team's schedule.
+    """Find an event by walking one team's schedule.
 
     Needed for sports that ``/sport/{slug}/scheduled-events`` does not serve
     (e-sports returns nothing there), but whose teams are searchable. Looks at
     both teams' ``events/next`` and ``events/last`` feeds and matches the
-    opponent by name similarity.
+    opponent by name (similarity or acronym).
+
+    Gdy podano ``date_str`` (``YYYY-MM-DD``), z kilku spotkań tej samej pary
+    wybieramy to najbliższe dacie i z właściwą orientacją gospodarz/gość.
+    Bez tego zwracane było pierwsze trafienie z historii, więc dla pary
+    grającej regularnie ``event_id`` wskazywał starszy mecz — dla samej formy
+    bez znaczenia, ale Fan Vote i rozstrzyganie wyniku dotyczą konkretnego
+    zdarzenia.
 
     Returns ``{'event_id', 'home_team_id', 'away_team_id', 'home_name',
     'away_name', 'tournament'}`` or None.
     """
+    target_ts = None
+    if date_str:
+        try:
+            target_ts = datetime.strptime(str(date_str)[:10], '%Y-%m-%d').timestamp()
+        except ValueError:
+            target_ts = None
+
+    candidates: List[Tuple[float, Dict[str, Any]]] = []
+
     for primary, opponent, primary_is_home in (
         (home_team, away_team, True),
         (away_team, home_team, False),
@@ -2578,10 +2682,15 @@ def find_event_via_team_schedule(
                 else:
                     continue
 
-                sim = similarity_score(opponent, other_name)
-                if sim < min_similarity:
+                # Skróty: OddsSafari podaje 'SAT', SofaScore 'Social Atlético
+                # Televisión' — podobieństwo 0.21, akronim trafia dokładnie.
+                matched, sim = names_match(
+                    opponent, other_name, min_similarity=min_similarity
+                )
+                if not matched:
                     continue
-                return {
+
+                found = {
                     'event_id': event.get('id'),
                     'home_team_id': ev_home.get('id'),
                     'away_team_id': ev_away.get('id'),
@@ -2590,7 +2699,29 @@ def find_event_via_team_schedule(
                     'tournament': (event.get('tournament') or {}).get('name', ''),
                     'opponent_similarity': round(sim, 3),
                     'matched_opponent': other_name,
+                    'start_timestamp': event.get('startTimestamp'),
                 }
+
+                # Bez daty odniesienia zachowujemy dotychczasowe zachowanie:
+                # pierwsze trafienie wygrywa (i oszczędzamy zapytania).
+                if target_ts is None:
+                    return found
+
+                score = 0.0
+                # Zgodna orientacja gospodarz/gość jest mocną wskazówką.
+                anchored_home = (team['id'] == ev_home.get('id'))
+                if anchored_home == primary_is_home:
+                    score += 5.0
+                ts = event.get('startTimestamp')
+                if ts:
+                    days = abs(float(ts) - target_ts) / 86400.0
+                    # Ten sam dzień: pełna premia; potem maleje.
+                    score += max(0.0, 10.0 - days)
+                candidates.append((score, found))
+
+    if candidates:
+        candidates.sort(key=lambda kv: -kv[0])
+        return candidates[0][1]
     return None
 
 

@@ -586,6 +586,7 @@ def _enrich_row(
             away_team=row.away_team,
             sport=sport,
             focus_team=focus_team,
+            date=date,
         ):
             fallback.setdefault("home_team", row.home_team)
             fallback.setdefault("away_team", row.away_team)
@@ -601,6 +602,7 @@ def _enrich_row(
                     away_team=row.away_team,
                     sport=sport,
                     focus_team=focus_team,
+                    date=date,
                 )
             result["status"] = "enriched_sofascore_only"
             result["enrichment"] = fallback
@@ -757,6 +759,7 @@ def _enrich_row(
             away_team=enrichment.get("away_team") or row.away_team,
             sport=sport,
             focus_team=focus_team,
+            date=date,
         )
         if filled:
             final_home = enrichment.get("home_form") or final_home
@@ -778,6 +781,7 @@ def _enrich_row(
             away_team=enrichment.get("away_team") or row.away_team,
             sport=sport,
             focus_team=focus_team,
+            date=date,
         )
 
     return result
@@ -800,6 +804,7 @@ def _fill_form_from_sofascore(
     away_team: str,
     sport: str,
     focus_team: Optional[str] = None,
+    date: Optional[str] = None,
 ) -> bool:
     """Fill missing form (and H2H) in *enrichment* from the SofaScore API.
 
@@ -822,7 +827,9 @@ def _fill_form_from_sofascore(
     # The schedule walk also gives us both team IDs, which the plain event
     # search does not — and team IDs are what the form endpoint needs.
     try:
-        found = find_event_via_team_schedule(home_team, away_team, slug)
+        found = find_event_via_team_schedule(
+            home_team, away_team, slug, date_str=date
+        )
     except Exception as exc:
         logger.debug("SofaScore schedule lookup failed: %s", exc)
         found = None
@@ -895,6 +902,7 @@ def _fill_venue_and_h2h_from_sofascore(
     away_team: str,
     sport: str,
     focus_team: Optional[str] = None,
+    date: Optional[str] = None,
 ) -> bool:
     """Fill venue form and the per-meeting H2H list from SofaScore.
 
@@ -934,7 +942,9 @@ def _fill_venue_and_h2h_from_sofascore(
     slug = SOFASCORE_SPORT_SLUGS.get(sport, sport)
     if not (home_id and away_id):
         try:
-            found = find_event_via_team_schedule(home_team, away_team, slug)
+            found = find_event_via_team_schedule(
+                home_team, away_team, slug, date_str=date
+            )
         except Exception as exc:
             logger.debug("SofaScore schedule lookup failed: %s", exc)
             found = None
