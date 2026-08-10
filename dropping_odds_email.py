@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import smtplib
 import sys
 from datetime import datetime
@@ -95,6 +96,89 @@ def _pick_form(enrichment: Dict[str, Any], side: str) -> List[Any]:
             elif isinstance(val, list) and len(val) > 0:
                 return val
     return []
+
+
+def _event_sort_key(event: Dict[str, Any], report_date: str = "") -> tuple:
+    """Klucz sortowania chronologicznego: (dzień, godzina, -spadek).
+
+    OddsSafari podaje datę jako ``DD/MM`` bez roku, a godzinę jako ``HH:MM``.
+    Rok bierzemy z daty raportu; gdy różnica wychodzi absurdalnie duża, mecz
+    należy do przełomu roku i rok korygujemy. Zdarzenia bez daty lub godziny
+    idą na koniec, żeby brak danych nie udawał wczesnej godziny.
+    """
+    raw_date = str(event.get("event_date") or event.get("match_date") or "").strip()
+    raw_time = str(
+        event.get("event_time") or event.get("match_time") or ""
+    ).strip()
+
+    year = None
+    if report_date:
+        m = re.match(r"(\d{4})-(\d{2})-(\d{2})", str(report_date))
+        if m:
+            year = int(m.group(1))
+    if year is None:
+        year = datetime.now().year
+
+    day_key = None
+    m = re.match(r"^(\d{1,2})[/.-](\d{1,2})$", raw_date)
+    if m:
+        day, month = int(m.group(1)), int(m.group(2))
+        try:
+            candidate = datetime(year, month, day)
+        except ValueError:
+            candidate = None
+        if candidate and report_date:
+            try:
+                ref = datetime.strptime(str(report_date)[:10], "%Y-%m-%d")
+                # Przełom roku: 01/01 w raporcie z 31/12 należy do przyszłego roku.
+                if (candidate - ref).days < -180:
+                    candidate = candidate.replace(year=year + 1)
+                elif (candidate - ref).days > 180:
+                    candidate = candidate.replace(year=year - 1)
+            except ValueError:
+                pass
+        day_key = candidate
+
+    time_key = None
+    m = re.match(r"^(\d{1,2}):(\d{2})", raw_time)
+    if m:
+        hour, minute = int(m.group(1)), int(m.group(2))
+        if 0 <= hour <= 23 and 0 <= minute <= 59:
+            time_key = (hour, minute)
+
+    # Brak daty/godziny -> na koniec listy.
+    missing = day_key is None or time_key is None
+    return (
+        1 if missing else 0,
+        day_key or datetime.max,
+        time_key or (99, 99),
+        -_safe_float(event.get("drop_pct")),
+    )
+
+
+def _has_any_analysis_data(event: Dict[str, Any]) -> bool:
+    """Czy zdarzenie ma cokolwiek, na czym można oprzeć ocenę.
+
+    Bez formy, H2H i formy na nawierzchni model liczy typ z samych kursów i
+    priorów, a karta pokazywała wtedy pewnie wyglądający typ z prawdopodobieństwem
+    i EV, mimo że nie stało za tym żadne dane o drużynach.
+    """
+    enr = event.get("enrichment") or {}
+    if not enr:
+        return False
+    keys = (
+        "home_form", "away_form", "home_form_overall", "away_form_overall",
+        "home_form_home", "away_form_away", "form_a", "form_b",
+        "surface_form_a", "surface_form_b", "h2h_last5",
+    )
+    for key in keys:
+        val = enr.get(key)
+        if isinstance(val, (list, tuple)) and len(val) > 0:
+            return True
+        if isinstance(val, str) and val.strip() not in ("", "[]", "—"):
+            return True
+    # Same liczniki H2H też są informacją.
+    return bool(enr.get("h2h_count"))
 
 
 def _passes_recent_form_filter(
@@ -334,7 +418,18 @@ def event_to_match_row(event: Dict[str, Any]) -> Dict[str, Any]:
     if side_field and dropped_price > 1.0 and not row.get(side_field):
         row[side_field] = dropped_price
 
-    scored = _run_scoring_engine(event, match_data=row)
+    # Bez żadnych danych o drużynach model liczyłby typ wyłącznie z kursu i
+    # priorów, a karta pokazywała go tak samo pewnie jak typ oparty na formie
+    # i H2H (np. "Remis 28%, EV -0.332" dla meczu bez ani jednej danej).
+    # W takim wypadku nie podajemy typu — brak danych ma być widoczny.
+    has_data = _has_any_analysis_data(event)
+    if not has_data:
+        row["no_analysis_data"] = True
+        row["no_analysis_reason"] = (
+            event.get("enrichment_status") or "brak danych o drużynach"
+        )
+
+    scored = _run_scoring_engine(event, match_data=row) if has_data else None
     if scored:
         # The engines return -999 for "no market to price against". Passing that
         # through printed an EV of -999.000 in the card; the template shows a
@@ -770,9 +865,12 @@ def build_dropping_odds_email_html(
         emoji = sport_emoji.get(sport.lower(), "🏆")
         sport_label = f" {emoji} {sport.upper()}"
     
-    # Sort by drop_pct descending (biggest drops first)
-    events_sorted = sorted(events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
-    skipped_sorted = sorted(skipped_events, key=lambda e: _safe_float(e.get("drop_pct")), reverse=True)
+    # Chronologicznie: dzień, potem godzina. Sortowanie po spadku mieszało
+    # mecze z różnych dni i godzin, co przy zdarzeniach przechodzących przez
+    # północ (np. 02:00 następnego dnia) łatwo prowadziło do pomyłek przy
+    # czytaniu listy.
+    events_sorted = sorted(events, key=lambda e: _event_sort_key(e, date))
+    skipped_sorted = sorted(skipped_events, key=lambda e: _event_sort_key(e, date))
     
     # Build qualifying match cards with the MAIN pipeline's renderer, so every
     # event carries the same information as in the scraper mail. Falls back to
@@ -865,7 +963,7 @@ def build_dropping_odds_email_html(
             <strong>Legenda:</strong> 
             ↓% = spadek kursu od otwarcia | 
             W✅ = wygrana | D🟡 = remis | L❌ = przegrana |
-            Sortowanie: od największego spadku
+            Sortowanie: chronologicznie (dzień, godzina)
         </div>
         
         <!-- Match cards -->
