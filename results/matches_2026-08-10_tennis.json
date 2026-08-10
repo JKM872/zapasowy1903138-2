@@ -1,7 +1,7 @@
 {
   "date": "2026-08-10",
   "sport": "tennis",
-  "generatedAt": "2026-08-10T02:20:33.114403",
+  "generatedAt": "2026-08-10T04:55:09.360958",
   "stats": {
     "total": 98,
     "qualifying": 14,
@@ -9,7 +9,7 @@
   },
   "matches": [
     {
-      "id": -222481054358845633,
+      "id": -1869190042681101063,
       "homeTeam": "Van De Zandschulp B.",
       "awayTeam": "Mensik J.",
       "time": "10.08.2026 00:20",
@@ -112,7 +112,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 80,
+      "confidence": 90,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -154,7 +154,7 @@
       "predictionGrade": "B"
     },
     {
-      "id": 4232690409291435170,
+      "id": 6819622346323155861,
       "homeTeam": "Jodar R.",
       "awayTeam": "Fils A.",
       "time": "10.08.2026 22:00",
@@ -254,7 +254,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3979833170395687030,
+      "id": 288843808772754080,
       "homeTeam": "Darderi L.",
       "awayTeam": "Nakashima B.",
       "time": "10.08.2026 23:30",
@@ -352,7 +352,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1607965217641958677,
+      "id": -8746255957002833041,
       "homeTeam": "Eala A.",
       "awayTeam": "Bencic B.",
       "time": "10.08.2026 00:55",
@@ -361,24 +361,21 @@
       "country": "",
       "sport": "tennis",
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/bencic-belinda-ObGlDvu0/eala-alexandra-ppu9X7PH/?mid=l6BLpEd5",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed",
         "match_already_started"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
-        "home": 5,
+        "home": 0,
         "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 0
+        "away": 1,
+        "total": 1,
+        "winRate": 100
       },
       "homeForm": [
-        "W",
+        "L",
         "W",
         "W",
         "W",
@@ -387,8 +384,8 @@
       "awayForm": [
         "W",
         "W",
-        "L",
         "W",
+        "L",
         "W"
       ],
       "homeFormHome": [],
@@ -400,55 +397,95 @@
         "away": 1.83,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 54.0,
+        "exactScore": "2-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 56,
+        "draw": null,
+        "away": 44,
+        "votes": 10933
+      },
+      "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 50.6,
-        "ev": -0.073,
-        "edge": -4.0,
+        "prob": 54.0,
+        "ev": -0.012,
+        "edge": -0.7,
         "kelly": 0.0,
-        "confidence": 42.0,
+        "confidence": 43.0,
         "dataQuality": 0.71
       },
       "tennis": {
         "surface": "hard",
         "rankingA": 20,
         "rankingB": 14,
-        "probA": 49.4,
-        "probB": 50.6,
-        "lastH2H": null,
+        "probA": 46.0,
+        "probB": 54.0,
+        "lastH2H": {
+          "date": "10.08.26",
+          "score": "0-2",
+          "home": "Eala A.",
+          "away": "Bencic B."
+        },
         "lastMatchA": null,
         "lastMatchB": null,
-        "surfaceFormA": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "surfaceFormB": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
+        "surfaceFormA": [],
+        "surfaceFormB": [],
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 42.0,
+      "confidence": 80,
       "value_bet": false,
-      "dataQuality": 0.71,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 1,
+        "consensus_strength": "weak",
+        "market_model_gap": -0.645,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 0,
+        "away_matches_last_7d": 0,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "low",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [],
+        "risk_factors": [
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 100%)",
+        "availability_note": "",
+        "expected_edge": -0.7,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
     },
     {
-      "id": 5452207758569795451,
+      "id": 4702717485203603504,
       "homeTeam": "Sznajder D.",
       "awayTeam": "Świątek I.",
       "time": "10.08.2026 23:00",
@@ -520,7 +557,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4738850602015857813,
+      "id": -1647141608469774436,
       "homeTeam": "Darderi L.",
       "awayTeam": "Cerundolo F.",
       "time": "10.08.2026 14:00",
@@ -562,48 +599,36 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 51.1,
-        "ev": -0.065,
-        "edge": -3.5,
+        "prob": 50.7,
+        "ev": -0.072,
+        "edge": -3.9,
         "kelly": 0.0,
-        "confidence": 29.0,
-        "dataQuality": 0.29
+        "confidence": 25.0,
+        "dataQuality": 0.14
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 22,
         "rankingB": null,
-        "probA": 51.1,
-        "probB": 48.9,
+        "probA": 50.7,
+        "probB": 49.3,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
-        "surfaceFormA": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "surfaceFormB": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
+        "surfaceFormA": [],
+        "surfaceFormB": [],
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 29.0,
+      "confidence": 25.0,
       "value_bet": false,
-      "dataQuality": 0.29,
+      "dataQuality": 0.14,
       "availability": null,
       "explanation": null,
       "predictionGrade": null
     },
     {
-      "id": -8723384768773248699,
+      "id": 4492467567097332929,
       "homeTeam": "Arribage T.",
       "awayTeam": "Marozsan F.",
       "time": "10.08.2026 20:00",
@@ -645,42 +670,36 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 65.5,
-        "ev": -0.064,
-        "edge": -4.5,
+        "prob": 65.2,
+        "ev": -0.067,
+        "edge": -4.7,
         "kelly": 0.0,
-        "confidence": 35.0,
-        "dataQuality": 0.29
+        "confidence": 30.0,
+        "dataQuality": 0.14
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 61,
         "rankingB": null,
-        "probA": 65.5,
-        "probB": 34.5,
+        "probA": 65.2,
+        "probB": 34.8,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
-        "surfaceFormB": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
+        "surfaceFormB": [],
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 35.0,
+      "confidence": 30.0,
       "value_bet": false,
-      "dataQuality": 0.29,
+      "dataQuality": 0.14,
       "availability": null,
       "explanation": null,
       "predictionGrade": null
     },
     {
-      "id": -168726715230089487,
+      "id": 6271557127286565924,
       "homeTeam": "Chan D.",
       "awayTeam": "Arevalo M.",
       "time": "10.08.2026 20:00",
@@ -752,7 +771,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4191980653368925518,
+      "id": 2860308532351476480,
       "homeTeam": "Heliovaara H.",
       "awayTeam": "Cerundolo F.",
       "time": "10.08.2026 21:30",
@@ -824,7 +843,7 @@
       "predictionGrade": null
     },
     {
-      "id": 217423587134896240,
+      "id": -7511271105677544722,
       "homeTeam": "Luz O.",
       "awayTeam": "Andreozzi G.",
       "time": "10.08.2026 23:00",
@@ -854,9 +873,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 2.45,
+        "home": 2.35,
         "draw": null,
-        "away": 1.48,
+        "away": 1.53,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -866,19 +885,19 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 61.7,
-        "ev": -0.086,
-        "edge": -5.8,
+        "prob": 60.3,
+        "ev": -0.077,
+        "edge": -5.0,
         "kelly": 0.0,
-        "confidence": 38.0,
-        "dataQuality": 0.43
+        "confidence": 33.0,
+        "dataQuality": 0.29
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 864,
         "rankingB": null,
-        "probA": 38.3,
-        "probB": 61.7,
+        "probA": 39.7,
+        "probB": 60.3,
         "lastH2H": {
           "date": "18.02.26",
           "score": "2-1",
@@ -887,26 +906,20 @@
         },
         "lastMatchA": null,
         "lastMatchB": null,
-        "surfaceFormA": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
+        "surfaceFormA": [],
         "surfaceFormB": [],
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 38.0,
+      "confidence": 33.0,
       "value_bet": false,
-      "dataQuality": 0.43,
+      "dataQuality": 0.29,
       "availability": null,
       "explanation": null,
       "predictionGrade": null
     },
     {
-      "id": -2070148647681089220,
+      "id": -3199151195080726268,
       "homeTeam": "Siniakova K.",
       "awayTeam": "Hunter S.",
       "time": "10.08.2026 21:00",
@@ -948,44 +961,36 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 65.1,
-        "ev": -0.088,
-        "edge": -6.3,
+        "prob": 67.0,
+        "ev": -0.061,
+        "edge": -4.4,
         "kelly": 0.0,
-        "confidence": 35.0,
-        "dataQuality": 0.29
+        "confidence": 31.0,
+        "dataQuality": 0.14
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 37,
         "rankingB": null,
-        "probA": 65.1,
-        "probB": 34.9,
+        "probA": 67.0,
+        "probB": 33.0,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
-        "surfaceFormA": [
-          "L",
-          "W",
-          "L",
-          "L"
-        ],
-        "surfaceFormB": [
-          "L",
-          "W"
-        ],
+        "surfaceFormA": [],
+        "surfaceFormB": [],
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 35.0,
+      "confidence": 31.0,
       "value_bet": false,
-      "dataQuality": 0.29,
+      "dataQuality": 0.14,
       "availability": null,
       "explanation": null,
       "predictionGrade": null
     },
     {
-      "id": -3567031751133297813,
+      "id": 6113768691155132232,
       "homeTeam": "Matsuda K.",
       "awayTeam": "Matsuoka H.",
       "time": "10.08.2026 08:30",
@@ -1029,7 +1034,7 @@
       "odds": {
         "home": 2.6,
         "draw": null,
-        "away": 1.43,
+        "away": 1.45,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -1039,9 +1044,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 63.4,
-        "ev": -0.093,
-        "edge": -6.5,
+        "prob": 63.1,
+        "ev": -0.085,
+        "edge": -5.9,
         "kelly": 0.0,
         "confidence": 47.0,
         "dataQuality": 0.71
@@ -1050,8 +1055,8 @@
         "surface": "hard",
         "rankingA": 478,
         "rankingB": 309,
-        "probA": 36.6,
-        "probB": 63.4,
+        "probA": 36.9,
+        "probB": 63.1,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -1080,7 +1085,7 @@
       "predictionGrade": null
     },
     {
-      "id": -9097962986920174126,
+      "id": 417080915526391828,
       "homeTeam": "Pankin S.",
       "awayTeam": "Palan D.",
       "time": "10.08.2026 08:30",
@@ -1122,9 +1127,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.5,
+        "home": 1.53,
         "draw": null,
-        "away": 2.4,
+        "away": 2.35,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -1134,19 +1139,19 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 61.0,
-        "ev": -0.086,
-        "edge": -5.7,
+        "prob": 60.0,
+        "ev": -0.081,
+        "edge": -5.3,
         "kelly": 0.0,
-        "confidence": 46.0,
+        "confidence": 45.0,
         "dataQuality": 0.71
       },
       "tennis": {
         "surface": "hard",
         "rankingA": 421,
         "rankingB": 498,
-        "probA": 61.0,
-        "probB": 39.0,
+        "probA": 60.0,
+        "probB": 40.0,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -1167,7 +1172,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 46.0,
+      "confidence": 45.0,
       "value_bet": false,
       "dataQuality": 0.71,
       "availability": null,
@@ -1175,7 +1180,7 @@
       "predictionGrade": null
     },
     {
-      "id": 159516041572809883,
+      "id": -1167577454113930591,
       "homeTeam": "Ratti L.",
       "awayTeam": "Sach T.",
       "time": "10.08.2026 08:30",
@@ -1213,15 +1218,15 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.53,
+        "home": 1.55,
         "draw": null,
-        "away": 2.35,
+        "away": 2.3,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "1",
+        "prediction": "2",
         "probability": 52.0,
-        "exactScore": "2-1",
+        "exactScore": "0-2",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -1232,16 +1237,16 @@
         "home": 86,
         "draw": null,
         "away": 14,
-        "votes": 354
+        "votes": 572
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 61.9,
-        "ev": -0.053,
-        "edge": -3.5,
+        "prob": 61.1,
+        "ev": -0.052,
+        "edge": -3.4,
         "kelly": 0.0,
         "confidence": 50.0,
         "dataQuality": 0.86
@@ -1250,8 +1255,8 @@
         "surface": "hard",
         "rankingA": 380,
         "rankingB": 512,
-        "probA": 61.9,
-        "probB": 38.1,
+        "probA": 61.1,
+        "probB": 38.9,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -1280,153 +1285,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "strong",
-        "market_model_gap": -3.459,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 0,
-        "away_matches_last_7d": 0,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "low",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Source consensus: strong (3/4)"
-        ],
-        "risk_factors": [],
-        "data_quality_note": "4/4 sources available (quality: 100%)",
-        "availability_note": "",
-        "expected_edge": -3.5,
-        "consensus_note": "strong (3 sources agree)"
-      },
-      "predictionGrade": "B"
-    },
-    {
-      "id": -3614365745107258459,
-      "homeTeam": "Sultanov K.",
-      "awayTeam": "Binda A.",
-      "time": "10.08.2026 10:00",
-      "date": "2026-08-10",
-      "league": "",
-      "country": "",
-      "sport": "tennis",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/binda-alexandr-pY05SOxc/sultanov-khumoyun-QTHn3MYj/?mid=Ic5IF5mI",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "fan_vote_below_threshold:54/55"
-      ],
-      "channelSkipWarnings": [],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 2,
-        "winRate": 100
-      },
-      "homeForm": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.5,
-        "draw": null,
-        "away": 2.35,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 62.0,
-        "exactScore": "2-0",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": {
-        "home": 54,
-        "draw": null,
-        "away": 46,
-        "votes": 333
-      },
-      "sofascoreFound": true,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 62.6,
-        "ev": -0.061,
-        "edge": -4.1,
-        "kelly": 0.0,
-        "confidence": 51.0,
-        "dataQuality": 0.86
-      },
-      "tennis": {
-        "surface": "clay",
-        "rankingA": 508,
-        "rankingB": 571,
-        "probA": 62.6,
-        "probB": 37.4,
-        "lastH2H": {
-          "date": "05.12.24",
-          "score": "0-0",
-          "home": "Sultanov K.",
-          "away": "Binda A."
-        },
-        "lastMatchA": null,
-        "lastMatchB": null,
-        "surfaceFormA": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "surfaceFormB": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "L"
-        ],
-        "skipReason": null
-      },
-      "baseball": null,
-      "confidence": 68,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
         "consensus_strength": "moderate",
-        "market_model_gap": -4.067,
+        "market_model_gap": -3.416,
         "skip_reason": null
       },
       "availability": {
@@ -1448,13 +1308,84 @@
         "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -4.1,
+        "expected_edge": -3.4,
         "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -6478898986810640618,
+      "id": -5034091614728414605,
+      "homeTeam": "Sultanov K.",
+      "awayTeam": "Binda A.",
+      "time": "10.08.2026 10:00",
+      "date": "2026-08-10",
+      "league": "",
+      "country": "",
+      "sport": "tennis",
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/binda-alexandr-pY05SOxc/sultanov-khumoyun-QTHn3MYj/?mid=Ic5IF5mI",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 0,
+        "total": 0,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": {
+        "home": 1.5,
+        "draw": null,
+        "away": 2.45,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 62.6,
+        "ev": -0.06,
+        "edge": -4.0,
+        "kelly": 0.0,
+        "confidence": 29.0,
+        "dataQuality": 0.14
+      },
+      "tennis": {
+        "surface": "hard",
+        "rankingA": null,
+        "rankingB": null,
+        "probA": 62.6,
+        "probB": 37.4,
+        "lastH2H": null,
+        "lastMatchA": null,
+        "lastMatchB": null,
+        "surfaceFormA": [],
+        "surfaceFormB": [],
+        "skipReason": null
+      },
+      "baseball": null,
+      "confidence": 29.0,
+      "value_bet": false,
+      "dataQuality": 0.14,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 2802255732368982152,
       "homeTeam": "Onclin G.",
       "awayTeam": "Zhou Y.",
       "time": "10.08.2026 14:00",
@@ -1499,7 +1430,7 @@
       },
       "forebet": {
         "prediction": "1",
-        "probability": 73.0,
+        "probability": 54.0,
         "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
@@ -1589,7 +1520,7 @@
       "predictionGrade": "B"
     },
     {
-      "id": 908197825184211606,
+      "id": -8880240344500244067,
       "homeTeam": "Balshaw F.",
       "awayTeam": "Milavsky D.",
       "time": "10.08.2026 20:00",
@@ -1678,7 +1609,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4131508810179269362,
+      "id": -5219525956793783301,
       "homeTeam": "Jorda Sanchis D.",
       "awayTeam": "Pinnington Jones J.",
       "time": "10.08.2026 20:00",
@@ -1750,7 +1681,7 @@
       "predictionGrade": null
     },
     {
-      "id": -362166529655351101,
+      "id": 8848059478560921169,
       "homeTeam": "Blanchet U.",
       "awayTeam": "Sakamoto R.",
       "time": "10.08.2026 21:30",
@@ -1822,7 +1753,7 @@
       "predictionGrade": null
     },
     {
-      "id": -9022761254006759908,
+      "id": -4252670627504079260,
       "homeTeam": "Smith C.",
       "awayTeam": "Gill F.",
       "time": "10.08.2026 22:00",
@@ -1913,7 +1844,7 @@
       "predictionGrade": null
     },
     {
-      "id": -352674258054398553,
+      "id": 6318005371035065020,
       "homeTeam": "Cretu C.",
       "awayTeam": "Moeller M.",
       "time": "10.08.2026 12:30",
@@ -1957,7 +1888,7 @@
       "odds": {
         "home": 1.93,
         "draw": null,
-        "away": 1.78,
+        "away": 1.8,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -1967,9 +1898,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 51.2,
-        "ev": -0.089,
-        "edge": -5.0,
+        "prob": 50.9,
+        "ev": -0.083,
+        "edge": -4.6,
         "kelly": 0.0,
         "confidence": 42.0,
         "dataQuality": 0.71
@@ -1978,8 +1909,8 @@
         "surface": "clay",
         "rankingA": 260,
         "rankingB": 319,
-        "probA": 48.8,
-        "probB": 51.2,
+        "probA": 49.1,
+        "probB": 50.9,
         "lastH2H": {
           "date": "05.08.24",
           "score": "2-0",
@@ -2013,7 +1944,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2944421501769320314,
+      "id": -3670050832190267403,
       "homeTeam": "Ribeiro E.",
       "awayTeam": "Alcala Gurri M.",
       "time": "10.08.2026 12:30",
@@ -2046,7 +1977,7 @@
       "odds": {
         "home": 4.4,
         "draw": null,
-        "away": 1.16,
+        "away": 1.18,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -2056,9 +1987,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 80.0,
-        "ev": -0.072,
-        "edge": -6.2,
+        "prob": 79.8,
+        "ev": -0.059,
+        "edge": -5.0,
         "kelly": 0.0,
         "confidence": 36.0,
         "dataQuality": 0.14
@@ -2067,14 +1998,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 20.0,
-        "probB": 80.0,
+        "probA": 20.2,
+        "probB": 79.8,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: B (1.16) < 1.35"
+        "skipReason": "odds_below_threshold: B (1.18) < 1.35"
       },
       "baseball": null,
       "confidence": 36.0,
@@ -2085,7 +2016,7 @@
       "predictionGrade": null
     },
     {
-      "id": 559670662611280355,
+      "id": -6810990302975793018,
       "homeTeam": "Tseng C. H.",
       "awayTeam": "Sachko V.",
       "time": "10.08.2026 12:30",
@@ -2133,9 +2064,9 @@
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "2",
-        "probability": 53.0,
-        "exactScore": "0-2",
+        "prediction": "1",
+        "probability": 54.0,
+        "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -2181,7 +2112,7 @@
         "skipReason": "Brak obowiązkowego SofaScore fan vote"
       },
       "baseball": null,
-      "confidence": 42.0,
+      "confidence": 58,
       "value_bet": false,
       "dataQuality": 0.71,
       "availability": null,
@@ -2189,7 +2120,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6739937395550989971,
+      "id": 1689102855205421039,
       "homeTeam": "Brancaccio R.",
       "awayTeam": "Jianu F. C.",
       "time": "10.08.2026 14:00",
@@ -2233,9 +2164,9 @@
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "exactScore": "1-2",
+        "prediction": "1",
+        "probability": 56.0,
+        "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -2243,10 +2174,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 81,
+        "home": 82,
         "draw": null,
-        "away": 19,
-        "votes": 275
+        "away": 18,
+        "votes": 401
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -2286,7 +2217,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 51.0,
+      "confidence": 75,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -2298,7 +2229,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
+        "consensus_strength": "strong",
         "market_model_gap": -3.867,
         "skip_reason": null
       },
@@ -2315,19 +2246,19 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Sources disagree on prediction"
+        "primary_factors": [
+          "Source consensus: strong (3/4)"
         ],
+        "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
         "expected_edge": -3.9,
-        "consensus_note": "weak (1 sources agree)"
+        "consensus_note": "strong (3 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "B"
     },
     {
-      "id": 9039869409095862968,
+      "id": 5258554340619078070,
       "homeTeam": "Petkovic M.",
       "awayTeam": "McDonald N.",
       "time": "10.08.2026 15:00",
@@ -2369,9 +2300,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 2.15,
+        "home": 2.2,
         "draw": null,
-        "away": 1.63,
+        "away": 1.58,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -2381,9 +2312,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 55.4,
-        "ev": -0.098,
-        "edge": -6.0,
+        "prob": 56.6,
+        "ev": -0.106,
+        "edge": -6.7,
         "kelly": 0.0,
         "confidence": 44.0,
         "dataQuality": 0.71
@@ -2392,8 +2323,8 @@
         "surface": "clay",
         "rankingA": 429,
         "rankingB": 526,
-        "probA": 44.6,
-        "probB": 55.4,
+        "probA": 43.4,
+        "probB": 56.6,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -2422,7 +2353,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5447988497918490351,
+      "id": 6169601172364285518,
       "homeTeam": "Dellien Velasco M. A.",
       "awayTeam": "Galan D. E.",
       "time": "10.08.2026 13:00",
@@ -2494,7 +2425,7 @@
       "predictionGrade": null
     },
     {
-      "id": -555602625969194863,
+      "id": 3243655329759882414,
       "homeTeam": "Cecchinato M.",
       "awayTeam": "Hardt N.",
       "time": "10.08.2026 15:00",
@@ -2527,7 +2458,7 @@
       },
       "forebet": {
         "prediction": "1",
-        "probability": 59.0,
+        "probability": 53.0,
         "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
@@ -2620,7 +2551,7 @@
       "predictionGrade": "B"
     },
     {
-      "id": -6905170389964035276,
+      "id": -3965176988459849029,
       "homeTeam": "Romano F.",
       "awayTeam": "Giunta M.",
       "time": "10.08.2026 16:30",
@@ -2715,7 +2646,7 @@
       "predictionGrade": null
     },
     {
-      "id": 308182533278246765,
+      "id": -1173690215462891960,
       "homeTeam": "Mrva M.",
       "awayTeam": "Basile P.",
       "time": "10.08.2026 18:30",
@@ -2810,7 +2741,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3482889900843045418,
+      "id": 7176823799380922,
       "homeTeam": "Agafonov E.",
       "awayTeam": "Deckers A.",
       "time": "10.08.2026 05:00",
@@ -2820,8 +2751,10 @@
       "sport": "tennis",
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/agafonov-egor-j9U3UOQN/deckers-alec-hlifDwAk/?mid=MH4rCR7c",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
       "channelSkipWarnings": [],
       "h2h": {
         "home": 1,
@@ -2848,9 +2781,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 2.5,
+        "home": 2.45,
         "draw": null,
-        "away": 1.48,
+        "away": 1.5,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
@@ -2864,29 +2797,29 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 17,
+        "home": 18,
         "draw": null,
-        "away": 83,
-        "votes": 931
+        "away": 82,
+        "votes": 1644
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 64.5,
-        "ev": -0.046,
-        "edge": -3.1,
+        "prob": 63.7,
+        "ev": -0.044,
+        "edge": -2.9,
         "kelly": 0.0,
-        "confidence": 52.0,
+        "confidence": 51.0,
         "dataQuality": 0.86
       },
       "tennis": {
         "surface": "hard",
         "rankingA": 686,
         "rankingB": 577,
-        "probA": 35.5,
-        "probB": 64.5,
+        "probA": 36.3,
+        "probB": 63.7,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -2907,7 +2840,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 52.0,
+      "confidence": 51.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -2920,7 +2853,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -3.068,
+        "market_model_gap": -2.967,
         "skip_reason": null
       },
       "availability": {
@@ -2942,13 +2875,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -3.1,
+        "expected_edge": -2.9,
         "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 6457550934545755190,
+      "id": -3955450688541997455,
       "homeTeam": "Isomura K.",
       "awayTeam": "Sasikumar M.",
       "time": "10.08.2026 05:00",
@@ -2958,15 +2891,17 @@
       "sport": "tennis",
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/isomura-kokoro-YXvdyprk/mukund-sasi-kumar-AHPRXol6/?mid=hIxkSwbe",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
       "channelSkipWarnings": [],
       "h2h": {
         "home": 0,
         "draw": 0,
         "away": 1,
         "total": 1,
-        "winRate": 100
+        "winRate": 0
       },
       "homeForm": [
         "W",
@@ -2986,14 +2921,14 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.85,
+        "home": 1.73,
         "draw": null,
-        "away": 1.88,
+        "away": 2.0,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
         "prediction": "1",
-        "probability": 56.0,
+        "probability": 57.0,
         "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
@@ -3002,19 +2937,19 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 36,
+        "home": 40,
         "draw": null,
-        "away": 64,
-        "votes": 886
+        "away": 60,
+        "votes": 1638
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": {
-        "pick": "2",
-        "prob": 51.4,
-        "ev": -0.034,
-        "edge": -1.8,
+        "pick": "1",
+        "prob": 51.7,
+        "ev": -0.106,
+        "edge": -6.1,
         "kelly": 0.0,
         "confidence": 46.0,
         "dataQuality": 0.86
@@ -3023,8 +2958,8 @@
         "surface": "hard",
         "rankingA": 566,
         "rankingB": 578,
-        "probA": 48.6,
-        "probB": 51.4,
+        "probA": 51.7,
+        "probB": 48.3,
         "lastH2H": {
           "date": "09.08.24",
           "score": "2-1",
@@ -3063,7 +2998,7 @@
         "form_available": true,
         "h2h_count": 1,
         "consensus_strength": "weak",
-        "market_model_gap": -1.791,
+        "market_model_gap": -6.103,
         "skip_reason": null
       },
       "availability": {
@@ -3085,13 +3020,13 @@
         ],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -1.8,
+        "expected_edge": -6.1,
         "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 5070902056208217020,
+      "id": -2892395363437162972,
       "homeTeam": "Leong M. W. K.",
       "awayTeam": "Arutiunian E.",
       "time": "10.08.2026 05:00",
@@ -3103,7 +3038,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -3135,7 +3071,7 @@
       "odds": {
         "home": 2.1,
         "draw": null,
-        "away": 1.68,
+        "away": 1.65,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -3145,9 +3081,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 53.7,
-        "ev": -0.098,
-        "edge": -5.8,
+        "prob": 54.1,
+        "ev": -0.107,
+        "edge": -6.5,
         "kelly": 0.0,
         "confidence": 43.0,
         "dataQuality": 0.71
@@ -3156,8 +3092,8 @@
         "surface": "hard",
         "rankingA": 544,
         "rankingB": 621,
-        "probA": 46.3,
-        "probB": 53.7,
+        "probA": 45.9,
+        "probB": 54.1,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -3186,7 +3122,7 @@
       "predictionGrade": null
     },
     {
-      "id": -59815213115842932,
+      "id": 2553220845023076475,
       "homeTeam": "Ichikawa T.",
       "awayTeam": "Singh K.",
       "time": "10.08.2026 06:30",
@@ -3198,7 +3134,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -3281,7 +3218,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3160099277927684832,
+      "id": -1978442831218106369,
       "homeTeam": "Rawat S.",
       "awayTeam": "Mitsui S.",
       "time": "10.08.2026 06:30",
@@ -3294,27 +3231,39 @@
       "channelQualifies": false,
       "channelSkipReasons": [
         "base_qualification_failed",
-        "odds_below_threshold"
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 2,
         "draw": 0,
         "away": 0,
-        "total": 0,
+        "total": 5,
         "winRate": 0
       },
-      "homeForm": [],
-      "awayForm": [],
+      "homeForm": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
       "homeFormHome": [],
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 3.3,
+        "home": 3.0,
         "draw": null,
-        "away": 1.3,
+        "away": 1.35,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -3324,36 +3273,48 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 72.6,
-        "ev": -0.056,
-        "edge": -4.3,
+        "prob": 68.6,
+        "ev": -0.074,
+        "edge": -5.5,
         "kelly": 0.0,
-        "confidence": 33.0,
-        "dataQuality": 0.14
+        "confidence": 49.0,
+        "dataQuality": 0.71
       },
       "tennis": {
-        "surface": null,
-        "rankingA": null,
-        "rankingB": null,
-        "probA": 27.4,
-        "probB": 72.6,
+        "surface": "hard",
+        "rankingA": 536,
+        "rankingB": 652,
+        "probA": 31.4,
+        "probB": 68.6,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
-        "surfaceFormA": [],
-        "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: B (1.30) < 1.35"
+        "surfaceFormA": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surfaceFormB": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "skipReason": null
       },
       "baseball": null,
-      "confidence": 33.0,
+      "confidence": 49.0,
       "value_bet": false,
-      "dataQuality": null,
+      "dataQuality": 0.71,
       "availability": null,
       "explanation": null,
       "predictionGrade": null
     },
     {
-      "id": -8044703913477351541,
+      "id": 3467482727463288816,
       "homeTeam": "Sinclair C.",
       "awayTeam": "Zhalgasbay D.",
       "time": "10.08.2026 06:30",
@@ -3365,7 +3326,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -3395,9 +3357,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.95,
+        "home": 1.9,
         "draw": null,
-        "away": 1.8,
+        "away": 1.83,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -3407,9 +3369,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 51.9,
-        "ev": -0.065,
-        "edge": -3.6,
+        "prob": 50.9,
+        "ev": -0.068,
+        "edge": -3.7,
         "kelly": 0.0,
         "confidence": 42.0,
         "dataQuality": 0.71
@@ -3418,8 +3380,8 @@
         "surface": "hard",
         "rankingA": 503,
         "rankingB": 503,
-        "probA": 48.1,
-        "probB": 51.9,
+        "probA": 49.1,
+        "probB": 50.9,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -3448,7 +3410,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5744236462291943765,
+      "id": 684142435476044351,
       "homeTeam": "Boyer T.",
       "awayTeam": "Mayo A.",
       "time": "10.08.2026 15:00",
@@ -3486,15 +3448,15 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.53,
+        "home": 1.63,
         "draw": null,
-        "away": 2.35,
+        "away": 2.15,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "2",
+        "prediction": "1",
         "probability": 56.0,
-        "exactScore": "0-2",
+        "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -3512,19 +3474,19 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 62.0,
-        "ev": -0.052,
-        "edge": -3.4,
+        "prob": 58.5,
+        "ev": -0.046,
+        "edge": -2.9,
         "kelly": 0.0,
-        "confidence": 50.0,
+        "confidence": 49.0,
         "dataQuality": 0.86
       },
       "tennis": {
         "surface": "hard",
         "rankingA": 168,
         "rankingB": 625,
-        "probA": 62.0,
-        "probB": 38.0,
+        "probA": 58.5,
+        "probB": 41.5,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -3545,7 +3507,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 50.0,
+      "confidence": 49.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -3557,8 +3519,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": -3.359,
+        "consensus_strength": "moderate",
+        "market_model_gap": -2.85,
         "skip_reason": null
       },
       "availability": {
@@ -3574,19 +3536,19 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Sources disagree on prediction"
+        "primary_factors": [
+          "Source consensus: moderate (2/4)"
         ],
+        "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -3.4,
-        "consensus_note": "weak (1 sources agree)"
+        "expected_edge": -2.9,
+        "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -7855044146211754265,
+      "id": -1181881728494880128,
       "homeTeam": "King E.",
       "awayTeam": "Fenty A.",
       "time": "10.08.2026 15:00",
@@ -3617,7 +3579,7 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 3.55,
+        "home": 3.6,
         "draw": null,
         "away": 1.25,
         "bookmaker": "Pinnacle"
@@ -3629,9 +3591,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 74.9,
-        "ev": -0.064,
-        "edge": -5.1,
+        "prob": 75.1,
+        "ev": -0.061,
+        "edge": -4.9,
         "kelly": 0.0,
         "confidence": 34.0,
         "dataQuality": 0.14
@@ -3640,8 +3602,8 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 25.1,
-        "probB": 74.9,
+        "probA": 24.9,
+        "probB": 75.1,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -3658,7 +3620,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2701505064594723922,
+      "id": 7833366233597531289,
       "homeTeam": "Winter E.",
       "awayTeam": "Young G.",
       "time": "10.08.2026 15:00",
@@ -3702,9 +3664,9 @@
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "1",
-        "probability": 62.0,
-        "exactScore": "2-0",
+        "prediction": "2",
+        "probability": 60.0,
+        "exactScore": "0-2",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -3712,10 +3674,10 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 91,
+        "home": 88,
         "draw": null,
-        "away": 9,
-        "votes": 135
+        "away": 12,
+        "votes": 206
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
@@ -3767,7 +3729,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": -2.603,
         "skip_reason": null
       },
@@ -3784,19 +3746,19 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [
-          "Source consensus: moderate (2/4)"
+        "primary_factors": [],
+        "risk_factors": [
+          "Sources disagree on prediction"
         ],
-        "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
         "expected_edge": -2.6,
-        "consensus_note": "moderate (2 sources agree)"
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -2306281627419826590,
+      "id": -6334661617190417012,
       "homeTeam": "Johns G.",
       "awayTeam": "Rottgering M.",
       "time": "10.08.2026 16:30",
@@ -3838,9 +3800,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 2.3,
+        "home": 2.4,
         "draw": null,
-        "away": 1.55,
+        "away": 1.5,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -3850,9 +3812,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 58.3,
-        "ev": -0.096,
-        "edge": -6.2,
+        "prob": 60.0,
+        "ev": -0.1,
+        "edge": -6.6,
         "kelly": 0.0,
         "confidence": 45.0,
         "dataQuality": 0.71
@@ -3861,8 +3823,8 @@
         "surface": "hard",
         "rankingA": 381,
         "rankingB": 416,
-        "probA": 41.7,
-        "probB": 58.3,
+        "probA": 40.0,
+        "probB": 60.0,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -3891,7 +3853,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1147906850586601579,
+      "id": 2043872524863752234,
       "homeTeam": "Rai A.",
       "awayTeam": "Vandecasteele Q.",
       "time": "10.08.2026 16:30",
@@ -3922,9 +3884,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 3.1,
+        "home": 3.2,
         "draw": null,
-        "away": 1.33,
+        "away": 1.3,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -3934,9 +3896,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 70.8,
-        "ev": -0.058,
-        "edge": -4.3,
+        "prob": 72.0,
+        "ev": -0.064,
+        "edge": -4.9,
         "kelly": 0.0,
         "confidence": 33.0,
         "dataQuality": 0.14
@@ -3945,14 +3907,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 29.2,
-        "probB": 70.8,
+        "probA": 28.0,
+        "probB": 72.0,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: B (1.33) < 1.35"
+        "skipReason": "odds_below_threshold: B (1.30) < 1.35"
       },
       "baseball": null,
       "confidence": 33.0,
@@ -3963,7 +3925,7 @@
       "predictionGrade": null
     },
     {
-      "id": 378125223836563265,
+      "id": 784304980906725997,
       "homeTeam": "Suresh D.",
       "awayTeam": "Kim A.",
       "time": "10.08.2026 16:30",
@@ -4058,7 +4020,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8205132991838363840,
+      "id": -5532327569067964697,
       "homeTeam": "Barton H.",
       "awayTeam": "Lechno-Wasiutyński F.",
       "time": "10.08.2026 08:30",
@@ -4089,9 +4051,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.04,
+        "home": 1.06,
         "draw": null,
-        "away": 8.5,
+        "away": 7.75,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -4101,9 +4063,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "1",
-        "prob": 89.7,
-        "ev": -0.067,
-        "edge": -6.4,
+        "prob": 88.6,
+        "ev": -0.061,
+        "edge": -5.7,
         "kelly": 0.0,
         "confidence": 40.0,
         "dataQuality": 0.14
@@ -4112,14 +4074,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 89.7,
-        "probB": 10.3,
+        "probA": 88.6,
+        "probB": 11.4,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: A (1.04) < 1.35"
+        "skipReason": "odds_below_threshold: A (1.06) < 1.35"
       },
       "baseball": null,
       "confidence": 40.0,
@@ -4130,7 +4092,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8436335596760321279,
+      "id": 7050714522347249048,
       "homeTeam": "Kumstat J.",
       "awayTeam": "Zeuch T.",
       "time": "10.08.2026 08:30",
@@ -4161,7 +4123,7 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.04,
+        "home": 1.05,
         "draw": null,
         "away": 8.5,
         "bookmaker": "Pinnacle"
@@ -4173,9 +4135,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "1",
-        "prob": 89.7,
-        "ev": -0.067,
-        "edge": -6.4,
+        "prob": 89.6,
+        "ev": -0.059,
+        "edge": -5.6,
         "kelly": 0.0,
         "confidence": 40.0,
         "dataQuality": 0.14
@@ -4184,14 +4146,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 89.7,
-        "probB": 10.3,
+        "probA": 89.6,
+        "probB": 10.4,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: A (1.04) < 1.35"
+        "skipReason": "odds_below_threshold: A (1.05) < 1.35"
       },
       "baseball": null,
       "confidence": 40.0,
@@ -4202,7 +4164,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1952717016011656538,
+      "id": -6640669849084247620,
       "homeTeam": "Zeballos F.",
       "awayTeam": "Kirkin E.",
       "time": "10.08.2026 08:30",
@@ -4274,7 +4236,7 @@
       "predictionGrade": null
     },
     {
-      "id": -518957219438666939,
+      "id": 1761174558169244310,
       "homeTeam": "Opitz J.",
       "awayTeam": "Krutykh O.",
       "time": "10.08.2026 10:00",
@@ -4307,7 +4269,7 @@
       "odds": {
         "home": 4.2,
         "draw": null,
-        "away": 1.18,
+        "away": 1.2,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -4317,9 +4279,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 79.0,
-        "ev": -0.068,
-        "edge": -5.8,
+        "prob": 78.7,
+        "ev": -0.056,
+        "edge": -4.7,
         "kelly": 0.0,
         "confidence": 36.0,
         "dataQuality": 0.14
@@ -4328,14 +4290,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 21.0,
-        "probB": 79.0,
+        "probA": 21.3,
+        "probB": 78.7,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: B (1.18) < 1.35"
+        "skipReason": "odds_below_threshold: B (1.20) < 1.35"
       },
       "baseball": null,
       "confidence": 36.0,
@@ -4346,7 +4308,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8443804161974318856,
+      "id": -1387448050197240319,
       "homeTeam": "Wallin O.",
       "awayTeam": "Guttau N.",
       "time": "10.08.2026 10:00",
@@ -4377,9 +4339,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.28,
+        "home": 1.25,
         "draw": null,
-        "away": 3.35,
+        "away": 3.65,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -4389,9 +4351,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "1",
-        "prob": 73.2,
-        "ev": -0.062,
-        "edge": -4.9,
+        "prob": 75.4,
+        "ev": -0.058,
+        "edge": -4.6,
         "kelly": 0.0,
         "confidence": 34.0,
         "dataQuality": 0.14
@@ -4400,14 +4362,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 73.2,
-        "probB": 26.8,
+        "probA": 75.4,
+        "probB": 24.6,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: A (1.28) < 1.35"
+        "skipReason": "odds_below_threshold: A (1.25) < 1.35"
       },
       "baseball": null,
       "confidence": 34.0,
@@ -4418,7 +4380,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5347855198452821493,
+      "id": 9203737888267929186,
       "homeTeam": "Yevseyev D.",
       "awayTeam": "Purtseladze S.",
       "time": "10.08.2026 10:00",
@@ -4460,7 +4422,7 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.63,
+        "home": 1.65,
         "draw": null,
         "away": 2.15,
         "bookmaker": "Pinnacle"
@@ -4472,9 +4434,9 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 56.7,
-        "ev": -0.076,
-        "edge": -4.7,
+        "prob": 56.4,
+        "ev": -0.07,
+        "edge": -4.2,
         "kelly": 0.0,
         "confidence": 44.0,
         "dataQuality": 0.71
@@ -4483,8 +4445,8 @@
         "surface": "clay",
         "rankingA": 439,
         "rankingB": 659,
-        "probA": 56.7,
-        "probB": 43.3,
+        "probA": 56.4,
+        "probB": 43.6,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -4513,7 +4475,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5214398521830203447,
+      "id": 6204361440955325913,
       "homeTeam": "Ferrari G.",
       "awayTeam": "Mashtakov N.",
       "time": "10.08.2026 08:00",
@@ -4539,14 +4501,14 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.6,
+        "home": 1.58,
         "draw": null,
-        "away": 2.2,
+        "away": 2.25,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
         "prediction": "1",
-        "probability": 79.0,
+        "probability": 54.0,
         "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
@@ -4565,19 +4527,19 @@
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 59.4,
-        "ev": -0.05,
+        "prob": 60.2,
+        "ev": -0.049,
         "edge": -3.1,
         "kelly": 0.0,
-        "confidence": 45.0,
+        "confidence": 46.0,
         "dataQuality": 0.71
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 456,
         "rankingB": 654,
-        "probA": 59.4,
-        "probB": 40.6,
+        "probA": 60.2,
+        "probB": 39.8,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -4598,7 +4560,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 45.0,
+      "confidence": 46.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -4611,7 +4573,7 @@
         "form_available": false,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -3.1,
+        "market_model_gap": -3.091,
         "skip_reason": null
       },
       "availability": {
@@ -4639,7 +4601,7 @@
       "predictionGrade": "C"
     },
     {
-      "id": -5398899238812584859,
+      "id": -3759754309532596252,
       "homeTeam": "Homberg M.",
       "awayTeam": "Carboni L.",
       "time": "10.08.2026 08:00",
@@ -4734,7 +4696,7 @@
       "predictionGrade": null
     },
     {
-      "id": -401471896258305630,
+      "id": -5614133391460903688,
       "homeTeam": "Vanshelboim E.",
       "awayTeam": "Mecarelli M.",
       "time": "10.08.2026 08:00",
@@ -4772,15 +4734,15 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.6,
+        "home": 1.73,
         "draw": null,
-        "away": 2.2,
+        "away": 2.0,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "1",
-        "probability": 64.0,
-        "exactScore": "2-0",
+        "prediction": "2",
+        "probability": 58.0,
+        "exactScore": "1-2",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -4788,29 +4750,29 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 83,
+        "home": 82,
         "draw": null,
-        "away": 17,
-        "votes": 325
+        "away": 18,
+        "votes": 549
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 59.8,
-        "ev": -0.043,
-        "edge": -2.7,
+        "prob": 55.8,
+        "ev": -0.035,
+        "edge": -2.0,
         "kelly": 0.0,
-        "confidence": 50.0,
+        "confidence": 48.0,
         "dataQuality": 0.86
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 420,
         "rankingB": 950,
-        "probA": 59.8,
-        "probB": 40.2,
+        "probA": 55.8,
+        "probB": 44.2,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -4831,7 +4793,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 50.0,
+      "confidence": 48.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -4843,8 +4805,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": -2.7,
+        "consensus_strength": "weak",
+        "market_model_gap": -2.003,
         "skip_reason": null
       },
       "availability": {
@@ -4860,19 +4822,19 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [
-          "Source consensus: moderate (2/4)"
+        "primary_factors": [],
+        "risk_factors": [
+          "Sources disagree on prediction"
         ],
-        "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -2.7,
-        "consensus_note": "moderate (2 sources agree)"
+        "expected_edge": -2.0,
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 5961190159687607893,
+      "id": 4279808878315375036,
       "homeTeam": "Caniato C. A.",
       "awayTeam": "Crivellaro G.",
       "time": "10.08.2026 09:30",
@@ -4903,7 +4865,7 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.13,
+        "home": 1.14,
         "draw": null,
         "away": 5.0,
         "bookmaker": "Pinnacle"
@@ -4915,9 +4877,9 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "1",
-        "prob": 82.4,
-        "ev": -0.069,
-        "edge": -6.1,
+        "prob": 82.3,
+        "ev": -0.062,
+        "edge": -5.4,
         "kelly": 0.0,
         "confidence": 37.0,
         "dataQuality": 0.14
@@ -4926,14 +4888,14 @@
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 82.4,
-        "probB": 17.6,
+        "probA": 82.3,
+        "probB": 17.7,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: A (1.13) < 1.35"
+        "skipReason": "odds_below_threshold: A (1.14) < 1.35"
       },
       "baseball": null,
       "confidence": 37.0,
@@ -4944,7 +4906,7 @@
       "predictionGrade": null
     },
     {
-      "id": 664342111879851003,
+      "id": -5286843669821948309,
       "homeTeam": "Kravchenko G.",
       "awayTeam": "D'Agostino S.",
       "time": "10.08.2026 09:30",
@@ -4989,7 +4951,7 @@
       },
       "forebet": {
         "prediction": "1",
-        "probability": 68.0,
+        "probability": 62.0,
         "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
@@ -5046,7 +5008,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 52.0,
+      "confidence": 80,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -5058,7 +5020,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 1,
-        "consensus_strength": "weak",
+        "consensus_strength": "moderate",
         "market_model_gap": -4.729,
         "skip_reason": null
       },
@@ -5075,19 +5037,19 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Sources disagree on prediction"
+        "primary_factors": [
+          "Source consensus: moderate (2/4)"
         ],
+        "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
         "expected_edge": -4.7,
-        "consensus_note": "weak (1 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "B"
     },
     {
-      "id": -5690031621451149702,
+      "id": 6509019583347356428,
       "homeTeam": "Martin Manzano J. C.",
       "awayTeam": "Weis A.",
       "time": "10.08.2026 09:30",
@@ -5125,15 +5087,15 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.8,
+        "home": 1.68,
         "draw": null,
-        "away": 1.9,
+        "away": 2.1,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "2",
-        "probability": 53.0,
-        "exactScore": "0-2",
+        "prediction": "1",
+        "probability": 55.0,
+        "exactScore": "2-0",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -5141,29 +5103,29 @@
         "awayProb": null
       },
       "sofascore": {
-        "home": 76,
+        "home": 75,
         "draw": null,
-        "away": 24,
-        "votes": 206
+        "away": 25,
+        "votes": 328
       },
       "sofascoreFound": true,
       "sofascoreSkipReason": null,
       "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 53.9,
-        "ev": -0.031,
+        "prob": 57.8,
+        "ev": -0.029,
         "edge": -1.7,
         "kelly": 0.0,
-        "confidence": 47.0,
+        "confidence": 49.0,
         "dataQuality": 0.86
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 405,
         "rankingB": 594,
-        "probA": 53.9,
-        "probB": 46.1,
+        "probA": 57.8,
+        "probB": 42.2,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -5184,7 +5146,7 @@
         "skipReason": null
       },
       "baseball": null,
-      "confidence": 47.0,
+      "confidence": 49.0,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 4,
@@ -5196,8 +5158,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.656,
+        "consensus_strength": "moderate",
+        "market_model_gap": -1.724,
         "skip_reason": null
       },
       "availability": {
@@ -5213,19 +5175,19 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Sources disagree on prediction"
+        "primary_factors": [
+          "Source consensus: moderate (2/4)"
         ],
+        "risk_factors": [],
         "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
         "expected_edge": -1.7,
-        "consensus_note": "weak (1 sources agree)"
+        "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 2952545084536551277,
+      "id": -8247001115895286270,
       "homeTeam": "Michalski D.",
       "awayTeam": "De Bernardis A.",
       "time": "10.08.2026 18:00",
@@ -5302,7 +5264,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7750524612534630260,
+      "id": 5607798895038519087,
       "homeTeam": "Sels J.",
       "awayTeam": "Verwerft L. G.",
       "time": "10.08.2026 12:00",
@@ -5333,9 +5295,9 @@
       "awayFormAway": [],
       "formAdvantage": false,
       "odds": {
-        "home": 1.25,
+        "home": 1.33,
         "draw": null,
-        "away": 3.4,
+        "away": 2.95,
         "bookmaker": "Pinnacle"
       },
       "forebet": null,
@@ -5345,28 +5307,28 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "1",
-        "prob": 74.0,
-        "ev": -0.075,
-        "edge": -6.0,
+        "prob": 69.8,
+        "ev": -0.072,
+        "edge": -5.4,
         "kelly": 0.0,
-        "confidence": 34.0,
+        "confidence": 32.0,
         "dataQuality": 0.14
       },
       "tennis": {
         "surface": null,
         "rankingA": null,
         "rankingB": null,
-        "probA": 74.0,
-        "probB": 26.0,
+        "probA": 69.8,
+        "probB": 30.2,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
         "surfaceFormA": [],
         "surfaceFormB": [],
-        "skipReason": "odds_below_threshold: A (1.25) < 1.35"
+        "skipReason": "odds_below_threshold: A (1.33) < 1.35"
       },
       "baseball": null,
-      "confidence": 34.0,
+      "confidence": 32.0,
       "value_bet": false,
       "dataQuality": null,
       "availability": null,
@@ -5374,7 +5336,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1390511648683130676,
+      "id": 1878484443905793303,
       "homeTeam": "Marterer M.",
       "awayTeam": "Pontjodikromo S.",
       "time": "10.08.2026 13:00",
@@ -5464,7 +5426,7 @@
       "predictionGrade": null
     },
     {
-      "id": 495049613652886072,
+      "id": -7389854033646975587,
       "homeTeam": "Torcq B.",
       "awayTeam": "Collignon K.",
       "time": "10.08.2026 13:00",
@@ -5536,7 +5498,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8187009536815740423,
+      "id": -4452142172272402964,
       "homeTeam": "Tamm K.",
       "awayTeam": "Mintz Z.",
       "time": "10.08.2026 10:00",
@@ -5606,7 +5568,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7033409155633410277,
+      "id": -1786300273026329700,
       "homeTeam": "Larue L.",
       "awayTeam": "Alopaeus F.",
       "time": "10.08.2026 11:30",
@@ -5677,7 +5639,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2274827535698070312,
+      "id": -8922185440035173432,
       "homeTeam": "Molder M.",
       "awayTeam": "Liimatainen L.",
       "time": "10.08.2026 11:30",
@@ -5746,7 +5708,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4885002552977463367,
+      "id": 5903054345601152797,
       "homeTeam": "Photiadis P.",
       "awayTeam": "Klaassen S.",
       "time": "10.08.2026 11:30",
@@ -5818,7 +5780,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7172886246072569409,
+      "id": -655611270985544063,
       "homeTeam": "Ahti V.",
       "awayTeam": "Paldanius O.",
       "time": "10.08.2026 13:30",
@@ -5896,7 +5858,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6586373963570037042,
+      "id": -5626881227467294549,
       "homeTeam": "Bacaloni A.",
       "awayTeam": "Hou Y.",
       "time": "10.08.2026 13:30",
@@ -5968,7 +5930,7 @@
       "predictionGrade": null
     },
     {
-      "id": -2053274040431546411,
+      "id": -940181198096602767,
       "homeTeam": "Karlsson Wistrand J.",
       "awayTeam": "Blando J.",
       "time": "10.08.2026 13:30",
@@ -6043,7 +6005,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6926084889004396737,
+      "id": 2485661380995466050,
       "homeTeam": "Giovannini F.",
       "awayTeam": "Faucon R.",
       "time": "10.08.2026 15:00",
@@ -6055,7 +6017,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "odds_below_threshold"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -6072,7 +6035,12 @@
       "homeFormHome": [],
       "awayFormAway": [],
       "formAdvantage": false,
-      "odds": null,
+      "odds": {
+        "home": 4.7,
+        "draw": null,
+        "away": 1.12,
+        "bookmaker": "Pinnacle"
+      },
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
@@ -6080,38 +6048,28 @@
       "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 60.2,
-        "ev": 0.0,
-        "edge": 0.0,
+        "prob": 81.6,
+        "ev": -0.086,
+        "edge": -7.7,
         "kelly": 0.0,
-        "confidence": 33.0,
-        "dataQuality": 0.29
+        "confidence": 37.0,
+        "dataQuality": 0.14
       },
       "tennis": {
-        "surface": "clay",
-        "rankingA": 591,
-        "rankingB": 591,
-        "probA": 39.8,
-        "probB": 60.2,
+        "surface": null,
+        "rankingA": null,
+        "rankingB": null,
+        "probA": 18.4,
+        "probB": 81.6,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
-        "surfaceFormA": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "surfaceFormB": [
-          "L",
-          "L",
-          "W"
-        ],
-        "skipReason": "odds_missing"
+        "surfaceFormA": [],
+        "surfaceFormB": [],
+        "skipReason": "odds_below_threshold: B (1.12) < 1.35"
       },
       "baseball": null,
-      "confidence": 33.0,
+      "confidence": 37.0,
       "value_bet": false,
       "dataQuality": null,
       "availability": null,
@@ -6119,7 +6077,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8270998695436947316,
+      "id": -7407736417603140954,
       "homeTeam": "Hermans M.",
       "awayTeam": "De Carvalho V.",
       "time": "10.08.2026 15:00",
@@ -6148,27 +6106,41 @@
       "homeFormHome": [],
       "awayFormAway": [],
       "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 1.4,
+        "draw": null,
+        "away": 2.6,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 57.0,
+        "exactScore": "0-2",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
       "scoring": {
         "pick": "1",
-        "prob": 82.7,
-        "ev": 0.0,
-        "edge": 0.0,
+        "prob": 66.1,
+        "ev": -0.074,
+        "edge": -5.3,
         "kelly": 0.0,
-        "confidence": 42.0,
-        "dataQuality": 0.29
+        "confidence": 39.0,
+        "dataQuality": 0.43
       },
       "tennis": {
         "surface": "clay",
         "rankingA": 1295,
         "rankingB": 1295,
-        "probA": 82.7,
-        "probB": 17.3,
+        "probA": 66.1,
+        "probB": 33.9,
         "lastH2H": null,
         "lastMatchA": null,
         "lastMatchB": null,
@@ -6177,18 +6149,18 @@
           "L",
           "L"
         ],
-        "skipReason": "odds_missing"
+        "skipReason": "Brak obowiązkowego SofaScore fan vote"
       },
       "baseball": null,
-      "confidence": 42.0,
+      "confidence": 39.0,
       "value_bet": false,
-      "dataQuality": null,
+      "dataQuality": 0.43,
       "availability": null,
       "explanation": null,
       "predictionGrade": null
     },
     {
-      "id": -562076126828283959,
+      "id": 2358057289549330927,
       "homeTeam": "Kominek K.",
       "awayTeam": "Fedor J.",
       "time": "10.08.2026 09:30",
@@ -6275,7 +6247,7 @@
       "predictionGrade": null
     },
     {
-      "id": 174411764525947244,
+      "id": 578600010091345395,
       "homeTeam": "Kusy J.",
       "awayTeam": "Strilka S.",
       "time": "10.08.2026 09:30",
@@ -6353,7 +6325,7 @@
       "predictionGrade": null
     },
     {
-      "id": 750984483745381319,
+      "id": 1477528538563498155,
       "homeTeam": "Luxa T.",
       "awayTeam": "Vymazal K.",
       "time": "10.08.2026 09:30",
@@ -6429,7 +6401,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1779137562581816880,
+      "id": -931643896154220376,
       "homeTeam": "Rychnavsky J.",
       "awayTeam": "Marsik M.",
       "time": "10.08.2026 09:30",
@@ -6504,7 +6476,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8935405684630463394,
+      "id": 7195287718248394758,
       "homeTeam": "Tichy T.",
       "awayTeam": "Vagner D.",
       "time": "10.08.2026 09:30",
@@ -6577,7 +6549,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7651012060065202369,
+      "id": -2115423349033722038,
       "homeTeam": "Vanek D.",
       "awayTeam": "Sebek F.",
       "time": "10.08.2026 09:30",
@@ -6660,7 +6632,7 @@
       "predictionGrade": null
     },
     {
-      "id": 42429370725771326,
+      "id": -3493431769817028600,
       "homeTeam": "Wirgler T.",
       "awayTeam": "Dujka D.",
       "time": "10.08.2026 09:30",
@@ -6738,7 +6710,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8602325413613569997,
+      "id": -2765665865580885579,
       "homeTeam": "Zapsky T.",
       "awayTeam": "Krejci T.",
       "time": "10.08.2026 09:30",
@@ -6818,7 +6790,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6513350644009257516,
+      "id": 8077615722671398733,
       "homeTeam": "Benda V.",
       "awayTeam": "Stepankova K.",
       "time": "10.08.2026 08:00",
@@ -6888,7 +6860,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7719549322475762981,
+      "id": -8394954240204928708,
       "homeTeam": "Dulikova K.",
       "awayTeam": "Pirkova K.",
       "time": "10.08.2026 08:00",
@@ -6959,7 +6931,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2047283973665536350,
+      "id": -1550216728872033933,
       "homeTeam": "Halamova K.",
       "awayTeam": "Drevojanova E.",
       "time": "10.08.2026 08:00",
@@ -7036,7 +7008,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3806730220862988485,
+      "id": 6987773095809131568,
       "homeTeam": "Hettlerova S.",
       "awayTeam": "Foldova K.",
       "time": "10.08.2026 08:00",
@@ -7112,7 +7084,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7376102259926338147,
+      "id": 6353882848480495624,
       "homeTeam": "Horutova A.",
       "awayTeam": "Hermanova T.",
       "time": "10.08.2026 08:00",
@@ -7195,7 +7167,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6052485768341904131,
+      "id": -1720528783801513746,
       "homeTeam": "Jarolimkova M.",
       "awayTeam": "Maresova S.",
       "time": "10.08.2026 08:00",
@@ -7268,7 +7240,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4971438677594916190,
+      "id": 7435827458672356002,
       "homeTeam": "Karsnakova R.",
       "awayTeam": "Zajickova K.",
       "time": "10.08.2026 08:00",
@@ -7344,7 +7316,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1366113099834348493,
+      "id": 1585050344674932801,
       "homeTeam": "Oliveriusova S.",
       "awayTeam": "Jancarikova A.",
       "time": "10.08.2026 08:00",
@@ -7422,7 +7394,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8863161783070665414,
+      "id": -1685332099838720548,
       "homeTeam": "Cernovicky J.",
       "awayTeam": "Tichy T.",
       "time": "10.08.2026 12:30",
@@ -7488,7 +7460,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5219315678087705821,
+      "id": 742786493343787706,
       "homeTeam": "Krechler D.",
       "awayTeam": "Lebis J.",
       "time": "10.08.2026 12:30",
@@ -7554,7 +7526,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3605162873178048569,
+      "id": 5400472208037998093,
       "homeTeam": "Kouba V.",
       "awayTeam": "Cank T.",
       "time": "10.08.2026 14:00",
@@ -7620,7 +7592,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3750543663396014718,
+      "id": 2577576017575453260,
       "homeTeam": "Marsik M.",
       "awayTeam": "Svoboda J.",
       "time": "10.08.2026 14:00",
@@ -7686,7 +7658,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8919522908956699744,
+      "id": -1551216014240017322,
       "homeTeam": "Motal J.",
       "awayTeam": "Vanek D.",
       "time": "10.08.2026 14:00",
@@ -7752,7 +7724,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7951935977302652397,
+      "id": 2249380251137932720,
       "homeTeam": "Perutka M.",
       "awayTeam": "Bohaty M.",
       "time": "10.08.2026 14:00",
@@ -7818,7 +7790,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3737747448853987491,
+      "id": 113981141769442033,
       "homeTeam": "Strilka S.",
       "awayTeam": "Kominek K.",
       "time": "10.08.2026 14:00",
@@ -7884,7 +7856,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4867923429863960397,
+      "id": -5103648400543967364,
       "homeTeam": "Kusy J.",
       "awayTeam": "Jirasek M.",
       "time": "10.08.2026 15:30",
@@ -7950,7 +7922,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6127909868816787183,
+      "id": -7695626164984136448,
       "homeTeam": "Jancarikova A.",
       "awayTeam": "Vrajikova R.",
       "time": "10.08.2026 11:00",
@@ -8016,7 +7988,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7553182548866166771,
+      "id": -5823645881010260218,
       "homeTeam": "Mojzisova V.",
       "awayTeam": "Karsnakova R.",
       "time": "10.08.2026 11:00",
@@ -8082,7 +8054,7 @@
       "predictionGrade": null
     },
     {
-      "id": -1216441726761813847,
+      "id": -6694780402015355024,
       "homeTeam": "Ostravska A.",
       "awayTeam": "Navratilova V.",
       "time": "10.08.2026 11:00",
@@ -8148,7 +8120,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8947497593031818104,
+      "id": -7743054751631136720,
       "homeTeam": "Ruzickova T.",
       "awayTeam": "Krejcova T.",
       "time": "10.08.2026 11:00",
@@ -8214,7 +8186,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4879066532111091436,
+      "id": 8485089735465246212,
       "homeTeam": "Stepankova K.",
       "awayTeam": "Benackova V.",
       "time": "10.08.2026 11:00",
@@ -8280,7 +8252,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6009767886538545506,
+      "id": -2260065522851578668,
       "homeTeam": "Gottvaldova A.",
       "awayTeam": "Blazkova K.",
       "time": "10.08.2026 12:30",
@@ -8346,7 +8318,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1682260314740971770,
+      "id": 1220295295735672051,
       "homeTeam": "Hermanova T.",
       "awayTeam": "Pirkova K.",
       "time": "10.08.2026 12:30",
@@ -8412,7 +8384,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3182367933726201145,
+      "id": -3030837050029400007,
       "homeTeam": "Matouskova B.",
       "awayTeam": "Halamova K.",
       "time": "10.08.2026 12:30",
