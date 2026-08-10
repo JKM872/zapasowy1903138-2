@@ -1827,15 +1827,30 @@ def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict
             
             # 2. FORMA U SIEBIE (gospodarze)
             h2h_home_url = f"{base_url}/h2h/u-siebie/?mid={mid}"
-            result['home_form_home'], _ = _extract_form_from_h2h_page(
-                h2h_home_url, driver, 'home'
+            result['home_form_home'] = _extract_venue_form(
+                h2h_home_url, driver, tracked_is_home=True
             )
-            
+            if not result['home_form_home']:
+                result['home_form_home'], _ = _extract_form_from_h2h_page(
+                    h2h_home_url, driver, 'home'
+                )
+
             # 3. FORMA NA WYJEŹDZIE (goście)
-            # NOWA METODA: Pobierz dane z strony ogólnej H2H i filtruj mecze gości na wyjeździe
-            result['away_form_away'] = _extract_away_form_from_overall(
-                h2h_overall_url, driver, result['away_form_overall']
+            # Dedykowana podstrona "/h2h/na-wyjezdzie/" — jej sekcja [0] to mecze
+            # gościa rozegrane na wyjeździe. Poprzednia metoda czytała drugą
+            # sekcję strony OGÓLNEJ i przy nieaktualnych selektorach nazw
+            # wpadała w założenie "gość zawsze był stroną wyjazdową": nie
+            # filtrowała meczów po terenie i odwracała wynik tam, gdzie drużyna
+            # grała u siebie.
+            h2h_away_url = f"{base_url}/h2h/na-wyjezdzie/?mid={mid}"
+            result['away_form_away'] = _extract_venue_form(
+                h2h_away_url, driver, tracked_is_home=False
             )
+            if not result['away_form_away']:
+                # Podstrona niedostępna — zachowujemy dotychczasowe zachowanie.
+                result['away_form_away'] = _extract_away_form_from_overall(
+                    h2h_overall_url, driver, result['away_form_overall']
+                )
             
             # 4. ANALIZA PRZEWAGI FORMY
             result['form_advantage'] = _analyze_form_advantage(result)
@@ -1955,6 +1970,69 @@ def _extract_form_from_h2h_page(url: str, driver: webdriver.Chrome, context: str
         print(f"      ⚠️ _extract_form_from_h2h_page error ({context}): {e}")
     
     return (home_form[:5], away_form[:5])
+
+
+def _extract_venue_form(
+    url: str,
+    driver: webdriver.Chrome,
+    tracked_is_home: bool,
+) -> List[str]:
+    """Forma z podstrony venue (``/h2h/u-siebie/`` lub ``/h2h/na-wyjezdzie/``).
+
+    Semantyka tych podstron — sprawdzona na żywo na kilku meczach:
+
+    * ``/h2h/u-siebie/``    sekcja [0] = mecze GOSPODARZA rozegrane u siebie
+    * ``/h2h/na-wyjezdzie/`` sekcja [0] = mecze GOŚCIA rozegranego na wyjeździe
+    * ostatnia sekcja = H2H bezpośredni zawężony do tego terenu
+
+    ``tracked_is_home`` mówi, czy śledzona drużyna była w tych meczach
+    gospodarzem. Jest potrzebne tylko dla ścieżki zapasowej: odznaki Livesportu
+    (Z/P/R) są już liczone z perspektywy śledzonej drużyny, ale surowy wynik
+    wiersza nie — i właśnie odwrócenie tej orientacji powodowało, że forma
+    wyjazdowa była liczona na odwrót.
+
+    UWAGA: nie da się wywnioskować gospodarza/gościa z kolejności w slugu URL —
+    sprawdzone, że ``.../galatasaray-.../juventus-.../`` to mecz, w którym
+    gospodarzem jest Juventus. Dlatego opieramy się na tych podstronach, a nie
+    na nazwach z URL.
+    """
+    try:
+        driver.get(url)
+        time.sleep(3.0)
+        page = driver.page_source
+        if is_livesport_error_page(page):
+            return []
+        soup = BeautifulSoup(page, 'html.parser')
+
+        sections = soup.find_all('div', class_='h2h__section')
+        if not sections:
+            return []
+        section = sections[0]
+
+        # Odznaki są najpewniejsze — już z perspektywy śledzonej drużyny.
+        form = _extract_form_badges(section)
+        if form:
+            return form[:5]
+
+        # Zapas: licz z wyniku wiersza, ale ze WŁAŚCIWĄ orientacją.
+        out: List[str] = []
+        for row in section.select('a.h2h__row')[:5]:
+            try:
+                _score, winner = _h2h_row_score(row)
+                if winner == 'unknown':
+                    continue
+                if winner == 'draw':
+                    out.append('D')
+                elif tracked_is_home:
+                    out.append('W' if winner == 'home' else 'L')
+                else:
+                    out.append('W' if winner == 'away' else 'L')
+            except (ValueError, AttributeError, TypeError):
+                continue
+        return out[:5]
+    except Exception as e:
+        logger.debug(f"_extract_venue_form error dla {url}: {e}")
+        return []
 
 
 def _extract_away_form_from_overall(url: str, driver: webdriver.Chrome, away_form_overall: List[str]) -> List[str]:
