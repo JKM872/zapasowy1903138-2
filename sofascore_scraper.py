@@ -2222,6 +2222,147 @@ def get_team_recent_form(team_id: int, team_name: str, limit: int = 5,
     return form
 
 
+def get_event_team_ids(event_id: int) -> Optional[Dict[str, Any]]:
+    """Return ``{'home_team_id', 'away_team_id', 'home_team', 'away_team'}``.
+
+    Needed when an event was resolved by ID alone (the plain event search does
+    not hand back team IDs, and the form/venue endpoints are keyed by team).
+    """
+    if not event_id:
+        return None
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/event/{event_id}", timeout=10
+    )
+    if not isinstance(data, dict):
+        return None
+    event = data.get('event') or {}
+    home = event.get('homeTeam') or {}
+    away = event.get('awayTeam') or {}
+    if not home.get('id') and not away.get('id'):
+        return None
+    return {
+        'home_team_id': home.get('id'),
+        'away_team_id': away.get('id'),
+        'home_team': home.get('name'),
+        'away_team': away.get('name'),
+    }
+
+
+def get_team_venue_form(team_id: int, venue: str, limit: int = 5,
+                        allow_draws: bool = False) -> List[str]:
+    """Recent form restricted to matches played at *venue* ('home' or 'away').
+
+    Same endpoint and result logic as :func:`get_team_recent_form`, but only
+    counts events where the team actually played at that venue. This is the
+    SofaScore equivalent of Livesport's "u siebie" / "na wyjeździe" H2H
+    sub-pages, and it is available for every event SofaScore knows — including
+    the fixtures Livesport cannot match by name.
+
+    Returns newest-first, up to ``limit`` entries, or [] on failure.
+    """
+    if not team_id or venue not in ('home', 'away'):
+        return []
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/team/{team_id}/events/last/0", timeout=10
+    )
+    if not isinstance(data, dict):
+        return []
+
+    form: List[str] = []
+    # API returns oldest-first; walk newest-first.
+    for event in reversed(data.get('events', []) or []):
+        try:
+            if ((event.get('status') or {}).get('type') or '').lower() != 'finished':
+                continue
+            team_is_home = (event.get('homeTeam') or {}).get('id') == team_id
+            team_is_away = (event.get('awayTeam') or {}).get('id') == team_id
+            if not team_is_home and not team_is_away:
+                continue
+            # Venue filter — the whole point of this function.
+            if venue == 'home' and not team_is_home:
+                continue
+            if venue == 'away' and not team_is_away:
+                continue
+
+            hs = (event.get('homeScore') or {}).get('current')
+            as_ = (event.get('awayScore') or {}).get('current')
+            if hs is None or as_ is None:
+                continue
+            if hs == as_:
+                if not allow_draws:
+                    continue
+                form.append('D')
+            else:
+                home_won = hs > as_
+                won = (team_is_home and home_won) or (team_is_away and not home_won)
+                form.append('W' if won else 'L')
+            if len(form) >= limit:
+                break
+        except (AttributeError, TypeError):
+            continue
+    return form
+
+
+def get_h2h_matches(home_team_id: int, away_team_id: int,
+                    limit: int = 5) -> List[Dict[str, Any]]:
+    """Per-meeting H2H list built by scanning one team's recent events.
+
+    SofaScore's ``/event/{id}/h2h`` gives only aggregate win counts, and
+    ``/event/{id}/h2h/events`` does not respond, so we look through the home
+    team's finished events and keep the ones against *away_team_id*.
+
+    Rows are shaped like the Livesport H2H rows (``date``, ``home``, ``away``,
+    ``score``) so the reporting layer renders both sources identically.
+
+    Caveat: limited to SofaScore's "last events" window, so older meetings can
+    be missing and the list may come back short or empty for rare pairings.
+    """
+    if not home_team_id or not away_team_id:
+        return []
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/team/{home_team_id}/events/last/0",
+        timeout=10,
+    )
+    if not isinstance(data, dict):
+        return []
+
+    rows: List[Dict[str, Any]] = []
+    for event in reversed(data.get('events', []) or []):
+        try:
+            if ((event.get('status') or {}).get('type') or '').lower() != 'finished':
+                continue
+            home = event.get('homeTeam') or {}
+            away = event.get('awayTeam') or {}
+            ids = {home.get('id'), away.get('id')}
+            if ids != {home_team_id, away_team_id}:
+                continue
+            hs = (event.get('homeScore') or {}).get('current')
+            as_ = (event.get('awayScore') or {}).get('current')
+            if hs is None or as_ is None:
+                continue
+
+            date_str = ''
+            ts = event.get('startTimestamp')
+            if ts:
+                try:
+                    date_str = datetime.fromtimestamp(int(ts)).strftime('%d.%m.%y')
+                except (ValueError, OSError, OverflowError):
+                    date_str = ''
+
+            rows.append({
+                'date': date_str,
+                'home': home.get('name') or '',
+                'away': away.get('name') or '',
+                'score': f"{hs}:{as_}",
+                'winner': 'draw' if hs == as_ else ('home' if hs > as_ else 'away'),
+            })
+            if len(rows) >= limit:
+                break
+        except (AttributeError, TypeError):
+            continue
+    return rows
+
+
 # SofaScore reports court types as free text ('Red clay', 'Hardcourt outdoor',
 # 'Grass', 'Carpet indoor'…). Normalise to the buckets the tennis engine uses.
 _SURFACE_ALIASES = (

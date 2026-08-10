@@ -69,6 +69,19 @@ def _normalize(name: str) -> str:
     return " ".join(name.split())
 
 
+def _token_overlap(a: str, b: str) -> int:
+    """Count significant tokens shared by two already-normalised names.
+
+    Tokens shorter than four characters are ignored so club prefixes and
+    connectives ('cd', 'fc', 'de', 'gks') do not create spurious matches.
+    """
+    if not a or not b:
+        return 0
+    ta = {t for t in a.split() if len(t) >= 4}
+    tb = {t for t in b.split() if len(t) >= 4}
+    return len(ta & tb)
+
+
 def _fuzzy_word_in_slug(word: str, slug: str) -> bool:
     """Check if a word appears in the slug, allowing minor differences.
     
@@ -395,14 +408,29 @@ def _summarize_h2h(
         r_home = _normalize(str(entry.get("home", "")))
         r_away = _normalize(str(entry.get("away", "")))
 
+        # Work out which side of the H2H row is which fixture team. Scoring both
+        # orientations beats substring matching: sources spell names differently
+        # ('Espanol Osorno' vs 'CD Español de Osorno'), and it avoids the
+        # single-shared-word trap ('Manchester United' vs 'Manchester City').
+        straight = _token_overlap(r_home, home_norm) + _token_overlap(r_away, away_norm)
+        flipped = _token_overlap(r_home, away_norm) + _token_overlap(r_away, home_norm)
+        if straight == 0 and flipped == 0:
+            continue
+
         if gh == ga:
             draws += 1
             continue
 
-        winner_norm = r_home if gh > ga else r_away
-        if home_norm and (home_norm in winner_norm or winner_norm in home_norm):
+        row_home_won = gh > ga
+        if straight >= flipped:
+            # Row home == fixture home.
+            fixture_home_won = row_home_won
+        else:
+            fixture_home_won = not row_home_won
+
+        if fixture_home_won:
             home_wins += 1
-        elif away_norm and (away_norm in winner_norm or winner_norm in away_norm):
+        else:
             away_wins += 1
 
     total = home_wins + away_wins + draws
@@ -564,6 +592,16 @@ def _enrich_row(
             fallback.setdefault("sport", sport)
             fallback.setdefault("league", row.league)
             fallback.setdefault("match_time", row.event_time)
+            # Livesport gave us nothing, so this is the only chance at venue
+            # form and the H2H list for this fixture.
+            if sport != "tennis":
+                _fill_venue_and_h2h_from_sofascore(
+                    fallback,
+                    home_team=row.home_team,
+                    away_team=row.away_team,
+                    sport=sport,
+                    focus_team=focus_team,
+                )
             result["status"] = "enriched_sofascore_only"
             result["enrichment"] = fallback
             print(
@@ -728,6 +766,20 @@ def _enrich_row(
     if not (final_home or final_away):
         print(f"   ⚠️ Wszystkie 4 strategie zawiodły — brak formy")
 
+    # Strategy 5: venue form + per-meeting H2H from SofaScore. Deliberately
+    # independent of whether overall form was found, because Livesport commonly
+    # returns overall form while leaving the venue sub-pages and H2H table
+    # empty. Tennis is excluded: its venue analogue is surface form, which
+    # process_match_tennis already provides.
+    if sport != "tennis":
+        _fill_venue_and_h2h_from_sofascore(
+            enrichment,
+            home_team=enrichment.get("home_team") or row.home_team,
+            away_team=enrichment.get("away_team") or row.away_team,
+            sport=sport,
+            focus_team=focus_team,
+        )
+
     return result
 
 
@@ -827,6 +879,144 @@ def _fill_form_from_sofascore(
 
     if found.get("event_id"):
         enrichment.setdefault("sofascore_event_id", found["event_id"])
+    # Cache the team IDs so the venue/H2H fill does not repeat this lookup.
+    if found.get("home_team_id"):
+        enrichment.setdefault("sofascore_home_team_id", found["home_team_id"])
+    if found.get("away_team_id"):
+        enrichment.setdefault("sofascore_away_team_id", found["away_team_id"])
+
+    return changed
+
+
+def _fill_venue_and_h2h_from_sofascore(
+    enrichment: Dict[str, Any],
+    *,
+    home_team: str,
+    away_team: str,
+    sport: str,
+    focus_team: Optional[str] = None,
+) -> bool:
+    """Fill venue form and the per-meeting H2H list from SofaScore.
+
+    Runs regardless of whether overall form is already present, because those
+    are separate gaps: Livesport frequently yields overall form while the venue
+    sub-pages and the H2H table come back empty, and for the ~half of fixtures
+    Livesport cannot match by name there is no Livesport data at all. SofaScore
+    covers both from team IDs, which is what makes per-event parity possible.
+
+    Mutates *enrichment*; returns True when anything was added.
+    """
+    needs_venue = not (
+        enrichment.get("home_form_home") and enrichment.get("away_form_away")
+    )
+    needs_h2h = not enrichment.get("h2h_last5")
+    if not (needs_venue or needs_h2h):
+        return False
+
+    try:
+        from sofascore_scraper import (
+            SOFASCORE_SPORT_SLUGS,
+            find_event_via_team_schedule,
+            get_event_team_ids,
+            get_h2h_matches,
+            get_team_venue_form,
+            search_event_via_api,
+        )
+    except ImportError as exc:
+        logger.debug("SofaScore venue/H2H fill unavailable: %s", exc)
+        return False
+
+    # Reuse whatever an earlier SofaScore step already resolved for this event.
+    home_id = enrichment.get("sofascore_home_team_id")
+    away_id = enrichment.get("sofascore_away_team_id")
+    event_id = enrichment.get("sofascore_event_id")
+
+    slug = SOFASCORE_SPORT_SLUGS.get(sport, sport)
+    if not (home_id and away_id):
+        try:
+            found = find_event_via_team_schedule(home_team, away_team, slug)
+        except Exception as exc:
+            logger.debug("SofaScore schedule lookup failed: %s", exc)
+            found = None
+        if found:
+            home_id = home_id or found.get("home_team_id")
+            away_id = away_id or found.get("away_team_id")
+            event_id = event_id or found.get("event_id")
+
+    if not event_id:
+        try:
+            event_id = search_event_via_api(home_team, away_team, sport)
+        except Exception:
+            event_id = None
+
+    # Team IDs are what the venue/H2H endpoints need; the plain event search
+    # does not return them, so resolve them from the event when missing.
+    if (not home_id or not away_id) and event_id:
+        try:
+            ids = get_event_team_ids(event_id)
+        except Exception:
+            ids = None
+        if ids:
+            home_id = home_id or ids.get("home_team_id")
+            away_id = away_id or ids.get("away_team_id")
+
+    if not home_id and not away_id:
+        return False
+
+    if event_id:
+        enrichment.setdefault("sofascore_event_id", event_id)
+    if home_id:
+        enrichment.setdefault("sofascore_home_team_id", home_id)
+    if away_id:
+        enrichment.setdefault("sofascore_away_team_id", away_id)
+
+    changed = False
+    allow_draws = _sport_has_draws(sport)
+
+    if needs_venue:
+        if not enrichment.get("home_form_home") and home_id:
+            try:
+                hv = get_team_venue_form(
+                    home_id, "home", limit=5, allow_draws=allow_draws
+                )
+            except Exception:
+                hv = []
+            if hv:
+                enrichment["home_form_home"] = hv
+                changed = True
+        if not enrichment.get("away_form_away") and away_id:
+            try:
+                av = get_team_venue_form(
+                    away_id, "away", limit=5, allow_draws=allow_draws
+                )
+            except Exception:
+                av = []
+            if av:
+                enrichment["away_form_away"] = av
+                changed = True
+        if changed:
+            enrichment["venue_form_source"] = "sofascore_api"
+            print(
+                f"   🏠 SofaScore venue: u siebie={enrichment.get('home_form_home')}"
+                f" | wyjazd={enrichment.get('away_form_away')}"
+            )
+
+    if needs_h2h and home_id and away_id:
+        try:
+            rows = get_h2h_matches(home_id, away_id, limit=5)
+        except Exception:
+            rows = []
+        if rows:
+            _summarize_h2h(
+                enrichment,
+                rows,
+                home_team=home_team,
+                away_team=away_team,
+                focus_team=focus_team,
+            )
+            enrichment["h2h_source"] = "sofascore_api"
+            print(f"   ⚔️ SofaScore H2H: {len(rows)} spotkań")
+            changed = True
 
     return changed
 
@@ -912,6 +1102,7 @@ _KEEP_KEYS = (
     "draws_in_h2h_last5",
     "form_advantage", "away_advantage", "form_source",
     "venue_form_source", "h2h_source",
+    "sofascore_event_id", "sofascore_home_team_id", "sofascore_away_team_id",
     # Tennis: the venue-form analogue is surface form, so these must survive
     # into the JSON for the mail/scoring layer to be able to show it.
     "surface", "surface_form_a", "surface_form_b",
