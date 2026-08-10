@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "generated_at": "2026-08-10T09:50:31.148063+02:00",
+    "target_date": "2026-08-10",
+    "filter": {
+      "min_odds": 1.6,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "elapsed_seconds": 0.9,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Belarus - Belarusian Cup",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/belarus/belarusian-cup/mogilev-vs-met.-zhlobin/2293553?MarketTypeID=401",
+      "match_id": "2293553",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Mogilev",
+      "away_team": "Met. Zhlobin",
+      "event_date": "11/08",
+      "event_time": "15:30",
+      "outcome": "1",
+      "open_odds": 9.0,
+      "current_odds": 6.93,
+      "drop_pct": 23.0,
+      "max_odds": 8.0,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Belarus - Belarusian Cup",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/belarus/belarusian-cup/yunost-minsk-vs-din.-molodechno/2293051?MarketTypeID=401",
+      "match_id": "2293051",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Yunost Minsk",
+      "away_team": "Din. Molodechno",
+      "event_date": "10/08",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 3.5,
+      "current_odds": 3.09,
+      "drop_pct": 12.0,
+      "max_odds": 3.3,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": []
+}

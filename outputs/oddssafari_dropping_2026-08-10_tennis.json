@@ -1,0 +1,3782 @@
+{
+  "meta": {
+    "generated_at": "2026-08-10T10:05:44.429265+02:00",
+    "target_date": "2026-08-10",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 22,
+      "qualified": 14
+    },
+    "enrichment_status_counts": {
+      "enriched": 10,
+      "resolve_failed": 1,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 3
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 8
+    },
+    "elapsed_seconds": 901.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/schwarzler-j.-vs-andrade-a./2296467?MarketTypeID=301",
+      "match_id": "2296467",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Schwarzler J.",
+      "away_team": "Andrade A.",
+      "event_date": "10/08",
+      "event_time": "14:00",
+      "outcome": "2",
+      "open_odds": 3.8,
+      "current_odds": 2.42,
+      "drop_pct": 36.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 16661576,
+        "home_team": "Schwarzler J.",
+        "away_team": "Andrade A.",
+        "sport": "tennis",
+        "league": "Challenger - Brownsburg",
+        "match_time": "14:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/fomin-s.-vs-zhukov-m./2295642?MarketTypeID=301",
+      "match_id": "2295642",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fomin S.",
+      "away_team": "Zhukov M.",
+      "event_date": "11/08",
+      "event_time": "05:00",
+      "outcome": "2",
+      "open_odds": 3.25,
+      "current_odds": 2.28,
+      "drop_pct": 30.0,
+      "max_odds": 2.45,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16762338,
+        "home_team": "Fomin S.",
+        "away_team": "Zhukov M.",
+        "sport": "tennis",
+        "league": "Challenger - Astana",
+        "match_time": "05:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/homberg-m.-vs-carboni-l./2296545?MarketTypeID=301",
+      "match_id": "2296545",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Homberg M.",
+      "away_team": "Carboni L.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 3.3,
+      "current_odds": 2.42,
+      "drop_pct": 27.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/carboni-lorenzo-2yamY2wB/maximilian-homberg-f54w66h2/?mid=fXNsIbdU",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Homberg M.",
+        "away_team": "Carboni L.",
+        "match_time": "10.08.2026 08:05",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.4,
+        "away_odds": 1.5,
+        "favorite": "player_b",
+        "advanced_score": 4.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Aboian V.",
+            "away": "Homberg M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "09.08.26 Aboian V. 0-2 Homberg M."
+          },
+          {
+            "date": "17.07.26",
+            "home": "Rapagnetta D.",
+            "away": "Homberg M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "17.07.26 Rapagnetta D. 2-0 Homberg M."
+          },
+          {
+            "date": "16.07.26",
+            "home": "Ciavarella N.",
+            "away": "Homberg M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "16.07.26 Ciavarella N. 0-2 Homberg M."
+          },
+          {
+            "date": "15.07.26",
+            "home": "Buldorini P.",
+            "away": "Homberg M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "15.07.26 Buldorini P. 1-2 Homberg M."
+          },
+          {
+            "date": "26.06.26",
+            "home": "Homberg M.",
+            "away": "Planinsek F. J.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "26.06.26 Homberg M. 1-2 Planinsek F. J."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": null,
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Homberg M.)",
+          "missing_recent_matches_B (Carboni L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 819,
+        "ranking_b": 481
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Montreal Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-montreal-doubles/heliovaara-h.patten-h.-vs-cerundolo-f.etcheverry-t.m./2296406?MarketTypeID=301",
+      "match_id": "2296406",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Heliovaara H./Patten H.",
+      "away_team": "Cerundolo F./Etcheverry T.M.",
+      "event_date": "10/08",
+      "event_time": "21:10",
+      "outcome": "1",
+      "open_odds": 1.53,
+      "current_odds": 1.14,
+      "drop_pct": 26.0,
+      "max_odds": 1.17,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/king-e.-vs-fenty-a./2296595?MarketTypeID=301",
+      "match_id": "2296595",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "King E.",
+      "away_team": "Fenty A.",
+      "event_date": "10/08",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 4.8,
+      "current_odds": 3.73,
+      "drop_pct": 22.0,
+      "max_odds": 4.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/sinclair-c.-vs-zhalgasbay-d./2296574?MarketTypeID=301",
+      "match_id": "2296574",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sinclair C.",
+      "away_team": "Zhalgasbay D.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.85,
+      "drop_pct": 20.0,
+      "max_odds": 1.9,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/sinclair-colin-Oxu66IL4/zhalgasbay-damir-zFhXdfUi/?mid=hvE9W6U6",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sinclair C.",
+        "away_team": "Zhalgasbay D.",
+        "match_time": "10.08.2026 08:15",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.85,
+        "away_odds": 1.85,
+        "favorite": "player_a",
+        "advanced_score": 4.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Sinclair C.",
+            "away": "Kachmazov A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "09.08.26 Sinclair C. 2-1 Kachmazov A."
+          },
+          {
+            "date": "03.08.26",
+            "home": "Sinclair C.",
+            "away": "Singh D.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.08.26 Sinclair C. 0-2 Singh D."
+          },
+          {
+            "date": "02.08.26",
+            "home": "Sinclair C.",
+            "away": "McKennon M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.08.26 Sinclair C. 2-0 McKennon M."
+          },
+          {
+            "date": "29.07.26",
+            "home": "Sinclair C.",
+            "away": "Matsuda K.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "29.07.26 Sinclair C. 0-2 Matsuda K."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Alkaya M.",
+            "away": "Sinclair C.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "28.07.26 Alkaya M. 1-2 Sinclair C."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Sinclair C.)",
+          "missing_recent_matches_B (Zhalgasbay D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 503,
+        "ranking_b": 503
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Montreal Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-montreal-doubles/arribage-t.olivetti-a.-vs-marozsan-f.medvedev-d./2296690?MarketTypeID=301",
+      "match_id": "2296690",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Arribage T./Olivetti A.",
+      "away_team": "Marozsan F./Medvedev D.",
+      "event_date": "10/08",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 3.25,
+      "current_odds": 2.64,
+      "drop_pct": 19.0,
+      "max_odds": 2.75,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/roca-batalla-o.-vs-bondioli-f./2296446?MarketTypeID=301",
+      "match_id": "2296446",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Roca Batalla O.",
+      "away_team": "Bondioli F.",
+      "event_date": "11/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 1.85,
+      "current_odds": 1.49,
+      "drop_pct": 19.0,
+      "max_odds": 1.51,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hamburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/cretu-c.-vs-moeller-m./2296427?MarketTypeID=301",
+      "match_id": "2296427",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cretu C.",
+      "away_team": "Moeller M.",
+      "event_date": "10/08",
+      "event_time": "12:30",
+      "outcome": "2",
+      "open_odds": 2.2,
+      "current_odds": 1.82,
+      "drop_pct": 17.0,
+      "max_odds": 1.85,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/cretu-cezar-0xqR9dG1/moeller-marvin-W4qdFpGM/?mid=ziTmYwek",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Cretu C.",
+        "away_team": "Moeller M.",
+        "match_time": "10.08.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.9,
+        "away_odds": 1.83,
+        "favorite": "player_b",
+        "advanced_score": 19.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.08.24",
+            "home": "Cretu C.",
+            "away": "Moeller M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "05.08.24 Cretu C. 2-0 Moeller M."
+          }
+        ],
+        "last_h2h_date": "05.08.24",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Cretu C.",
+        "last_h2h_away": "Moeller M.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.2
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Cretu C.)",
+          "missing_recent_matches_B (Moeller M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 260,
+        "ranking_b": 319
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/dellien-velasco-m.a.-vs-galan-d.e./2296448?MarketTypeID=301",
+      "match_id": "2296448",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Dellien Velasco M.A.",
+      "away_team": "Galan D.E.",
+      "event_date": "10/08",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 4.4,
+      "current_odds": 3.66,
+      "drop_pct": 17.0,
+      "max_odds": 3.9,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ratti-l.-vs-sach-t./2295641?MarketTypeID=301",
+      "match_id": "2295641",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ratti L.",
+      "away_team": "Sach T.",
+      "event_date": "10/08",
+      "event_time": "09:10",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.3,
+      "drop_pct": 16.0,
+      "max_odds": 2.35,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/ratti-lucio-xdrR3fug/sach-tai-W6rvCM52/?mid=8W7w3S3C",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Ratti L.",
+        "away_team": "Sach T.",
+        "match_time": "10.08.2026 09:45",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.55,
+        "away_odds": 2.3,
+        "favorite": "player_a",
+        "advanced_score": 51.6,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.08.26",
+            "home": "Ratti L.",
+            "away": "Basing M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.08.26 Ratti L. 0-2 Basing M."
+          },
+          {
+            "date": "28.06.26",
+            "home": "Ratti L.",
+            "away": "Planinsek F. J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "28.06.26 Ratti L. 2-1 Planinsek F. J."
+          },
+          {
+            "date": "27.06.26",
+            "home": "Ratti L.",
+            "away": "Petak D.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "27.06.26 Ratti L. 2-1 Petak D."
+          },
+          {
+            "date": "26.06.26",
+            "home": "Ratti L.",
+            "away": "Dullinger V.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "26.06.26 Ratti L. 2-0 Dullinger V."
+          },
+          {
+            "date": "25.06.26",
+            "home": "Ratti L.",
+            "away": "Cherie Ligniere E.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "25.06.26 Ratti L. 2-0 Cherie Ligniere E."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.0
+        },
+        "surface_stats_b": {
+          "hard": 0.2
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Ratti L.)",
+          "missing_recent_matches_B (Sach T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 380,
+        "ranking_b": 512
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/rai-a.-vs-vandecasteele-q./2296720?MarketTypeID=301",
+      "match_id": "2296720",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Rai A.",
+      "away_team": "Vandecasteele Q.",
+      "event_date": "10/08",
+      "event_time": "16:10",
+      "outcome": "2",
+      "open_odds": 1.53,
+      "current_odds": 1.31,
+      "drop_pct": 15.0,
+      "max_odds": 1.36,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/balshaw-f.-vs-milavsky-d./2296470?MarketTypeID=301",
+      "match_id": "2296470",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Balshaw F.",
+      "away_team": "Milavsky D.",
+      "event_date": "10/08",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.61,
+      "drop_pct": 15.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/balshaw-felix-OUFziENR/milavsky-daniel-QFuNOiRL/?mid=tn77KERr",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Balshaw F.",
+        "away_team": "Milavsky D.",
+        "match_time": "10.08.2026 20:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.2,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 10.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "13.07.26",
+            "home": "Napolitano S.",
+            "away": "Balshaw F.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "13.07.26 Napolitano S. 2-1 Balshaw F."
+          },
+          {
+            "date": "10.07.26",
+            "home": "Broska F.",
+            "away": "Balshaw F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "10.07.26 Broska F. 2-0 Balshaw F."
+          },
+          {
+            "date": "09.07.26",
+            "home": "Balshaw F.",
+            "away": "Henning P.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "09.07.26 Balshaw F. 2-0 Henning P."
+          },
+          {
+            "date": "07.07.26",
+            "home": "Balshaw F.",
+            "away": "Sanchez Jover C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "07.07.26 Balshaw F. 2-0 Sanchez Jover C."
+          },
+          {
+            "date": "27.06.26",
+            "home": "Balshaw F.",
+            "away": "Nagal S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "27.06.26 Balshaw F. 0-2 Nagal S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": null,
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Balshaw F.)",
+          "missing_recent_matches_B (Milavsky D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 248,
+        "ranking_b": 306
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/pankin-s.-vs-palan-d./2295640?MarketTypeID=301",
+      "match_id": "2295640",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Pankin S.",
+      "away_team": "Palan D.",
+      "event_date": "10/08",
+      "event_time": "08:30",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.37,
+      "drop_pct": 14.0,
+      "max_odds": 2.42,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/palan-dominik-Q5wGqMq4/pankin-semen-AqOZJFvK/?mid=4za2Jmlg",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Pankin S.",
+        "away_team": "Palan D.",
+        "match_time": "10.08.2026 08:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.4,
+        "favorite": "player_a",
+        "advanced_score": 6.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.08.26",
+            "home": "Sun F.",
+            "away": "Pankin S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.08.26 Sun F. 2-0 Pankin S."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Pankin S.",
+            "away": "Dhamne M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "30.07.26 Pankin S. 1-2 Dhamne M."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Tokac T.",
+            "away": "Pankin S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "28.07.26 Tokac T. 0-2 Pankin S."
+          },
+          {
+            "date": "10.07.26",
+            "home": "Cocola S.",
+            "away": "Pankin S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "10.07.26 Cocola S. 2-0 Pankin S."
+          },
+          {
+            "date": "09.07.26",
+            "home": "Bekeni M.",
+            "away": "Pankin S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "09.07.26 Bekeni M. 1-2 Pankin S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Pankin S.)",
+          "missing_recent_matches_B (Palan D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 421,
+        "ranking_b": 498
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/kravchenko-g.-vs-dagostino-s./2296591?MarketTypeID=301",
+      "match_id": "2296591",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kravchenko G.",
+      "away_team": "D'Agostino S.",
+      "event_date": "10/08",
+      "event_time": "09:10",
+      "outcome": "2",
+      "open_odds": 3.0,
+      "current_odds": 2.62,
+      "drop_pct": 13.0,
+      "max_odds": 2.7,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "WTA - Toronto",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-toronto/shnaider-d.-vs-swiatek-i./2295711?MarketTypeID=301",
+      "match_id": "2295711",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Shnaider D.",
+      "away_team": "Swiatek I.",
+      "event_date": "10/08",
+      "event_time": "23:00",
+      "outcome": "2",
+      "open_odds": 1.5,
+      "current_odds": 1.31,
+      "drop_pct": 13.0,
+      "max_odds": 1.34,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/vanshelboim-e.-vs-mecarelli-m./2296565?MarketTypeID=301",
+      "match_id": "2296565",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Vanshelboim E.",
+      "away_team": "Mecarelli M.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 2.02,
+      "drop_pct": 12.0,
+      "max_odds": 2.07,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/mecarelli-michele-QcllcTXF/vanshelboim-eric-0YMC7sFJ/?mid=fsXLLkGl",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Vanshelboim E.",
+        "away_team": "Mecarelli M.",
+        "match_time": "10.08.2026 08:05",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.73,
+        "away_odds": 2.0,
+        "favorite": "player_a",
+        "advanced_score": 64.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Vanshelboim E.",
+            "away": "Buldorini P.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "09.08.26 Vanshelboim E. 2-1 Buldorini P."
+          },
+          {
+            "date": "01.08.26",
+            "home": "Vanshelboim E.",
+            "away": "Lagutin P.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "01.08.26 Vanshelboim E. 0-2 Lagutin P."
+          },
+          {
+            "date": "31.07.26",
+            "home": "Vanshelboim E.",
+            "away": "Hoeyeraal H.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "31.07.26 Vanshelboim E. 2-1 Hoeyeraal H."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Vanshelboim E.",
+            "away": "Cordoba C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Vanshelboim E. 2-0 Cordoba C."
+          },
+          {
+            "date": "29.07.26",
+            "home": "Vanshelboim E.",
+            "away": "Orgiles Garcia Retamero I.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.07.26 Vanshelboim E. 2-0 Orgiles Garcia Retamero I."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Vanshelboim E.)",
+          "missing_recent_matches_B (Mecarelli M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 420,
+        "ranking_b": 950
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/suresh-d.-vs-kim-a./2296682?MarketTypeID=301",
+      "match_id": "2296682",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Suresh D.",
+      "away_team": "Kim A.",
+      "event_date": "10/08",
+      "event_time": "16:10",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.84,
+      "drop_pct": 12.0,
+      "max_odds": 1.88,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/kim-aidan-jmIkcNeE/suresh-dhakshineswar-ImMlps4p/?mid=xvjdrv36",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Suresh D.",
+        "away_team": "Kim A.",
+        "match_time": "10.08.2026 16:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.85,
+        "away_odds": 1.85,
+        "favorite": "player_a",
+        "advanced_score": 31.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Suresh D.",
+            "away": "Godoy S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "09.08.26 Suresh D. 2-0 Godoy S."
+          },
+          {
+            "date": "02.08.26",
+            "home": "Suresh D.",
+            "away": "Colby R.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "02.08.26 Suresh D. 0-2 Colby R."
+          },
+          {
+            "date": "25.07.26",
+            "home": "Michelsen A.",
+            "away": "Suresh D.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "25.07.26 Michelsen A. 2-1 Suresh D."
+          },
+          {
+            "date": "24.07.26",
+            "home": "Suresh D.",
+            "away": "Martin A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "24.07.26 Suresh D. 2-1 Martin A."
+          },
+          {
+            "date": "23.07.26",
+            "home": "Gojo B.",
+            "away": "Suresh D.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "23.07.26 Gojo B. 0-2 Suresh D."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Suresh D.)",
+          "missing_recent_matches_B (Kim A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 393,
+        "ranking_b": 584
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/smith-col.-vs-gill-f./2296468?MarketTypeID=301",
+      "match_id": "2296468",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Smith Col.",
+      "away_team": "Gill F.",
+      "event_date": "10/08",
+      "event_time": "22:00",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.63,
+      "drop_pct": 12.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/colton-smith-IHCZRRUJ/gill-felix-4Q5fNOq4/?mid=lW09vzJE",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Smith C.",
+        "away_team": "Gill F.",
+        "match_time": "10.08.2026 22:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.6,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 0.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "04.08.26",
+            "home": "Hara Friend J. D.",
+            "away": "Smith C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "04.08.26 Hara Friend J. D. 2-1 Smith C."
+          },
+          {
+            "date": "26.07.26",
+            "home": "Pascual Ferra R.",
+            "away": "Smith C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "26.07.26 Pascual Ferra R. 2-1 Smith C."
+          },
+          {
+            "date": "21.07.26",
+            "home": "Smith C.",
+            "away": "Wolf J.J.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "21.07.26 Smith C. 0-2 Wolf J.J."
+          },
+          {
+            "date": "17.07.26",
+            "home": "Smith C.",
+            "away": "Bu Y.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "17.07.26 Smith C. 1-2 Bu Y."
+          },
+          {
+            "date": "16.07.26",
+            "home": "Smith C.",
+            "away": "Matsuoka H.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.07.26 Smith C. 2-0 Matsuoka H."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Smith C.)",
+          "missing_recent_matches_B (Gill F.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 197,
+        "ranking_b": 218
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/ferrari-g.-vs-mashtakov-n./2296566?MarketTypeID=301",
+      "match_id": "2296566",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ferrari G.",
+      "away_team": "Mashtakov N.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 2.48,
+      "current_odds": 2.2,
+      "drop_pct": 11.0,
+      "max_odds": 2.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/ferrari-gianmarco-IoLNpAMF/mashtakov-nikita-SC4vdKb1/?mid=Isml7j1e",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Ferrari G.",
+        "away_team": "Mashtakov N.",
+        "match_time": "10.08.2026 08:05",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.63,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 58.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Ferrari G.",
+            "away": "Betti E.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "09.08.26 Ferrari G. 2-0 Betti E."
+          },
+          {
+            "date": "19.06.26",
+            "home": "Ferrari G.",
+            "away": "Tabacco F.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.06.26 Ferrari G. 0-2 Tabacco F."
+          },
+          {
+            "date": "18.06.26",
+            "home": "Tabacco G.",
+            "away": "Ferrari G.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "18.06.26 Tabacco G. 1-2 Ferrari G."
+          },
+          {
+            "date": "17.06.26",
+            "home": "Spadola A.",
+            "away": "Ferrari G.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "17.06.26 Spadola A. 0-2 Ferrari G."
+          },
+          {
+            "date": "16.06.26",
+            "home": "Borrelli L.",
+            "away": "Ferrari G.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "16.06.26 Borrelli L. 0-2 Ferrari G."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Ferrari G.)",
+          "missing_recent_matches_B (Mashtakov N.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 456,
+        "ranking_b": 654,
+        "form_source": "sofascore_api",
+        "sofascore_event_id": 15954669
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/caniato-c.a.-vs-crivellaro-g./2296663?MarketTypeID=301",
+      "match_id": "2296663",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Caniato C.A.",
+      "away_team": "Crivellaro G.",
+      "event_date": "10/08",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 1.28,
+      "current_odds": 1.14,
+      "drop_pct": 11.0,
+      "max_odds": 1.15,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "WTA - Toronto",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-toronto/bencic-b.-vs-gauff-c./2297126?MarketTypeID=301",
+      "match_id": "2297126",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Bencic B.",
+      "away_team": "Gauff C.",
+      "event_date": "11/08",
+      "event_time": "17:00",
+      "outcome": "2",
+      "open_odds": 1.8,
+      "current_odds": 1.59,
+      "drop_pct": 11.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 8,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.75,
+        "sofascore_event_id": 15711430,
+        "home_team": "Bencic B.",
+        "away_team": "Gauff C.",
+        "sport": "tennis",
+        "league": "WTA - Toronto",
+        "match_time": "17:00"
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/schwarzler-j.-vs-andrade-a./2296467?MarketTypeID=301",
+      "match_id": "2296467",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Schwarzler J.",
+      "away_team": "Andrade A.",
+      "event_date": "10/08",
+      "event_time": "14:00",
+      "outcome": "2",
+      "open_odds": 3.8,
+      "current_odds": 2.42,
+      "drop_pct": 36.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 16661576,
+        "home_team": "Schwarzler J.",
+        "away_team": "Andrade A.",
+        "sport": "tennis",
+        "league": "Challenger - Brownsburg",
+        "match_time": "14:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/fomin-s.-vs-zhukov-m./2295642?MarketTypeID=301",
+      "match_id": "2295642",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fomin S.",
+      "away_team": "Zhukov M.",
+      "event_date": "11/08",
+      "event_time": "05:00",
+      "outcome": "2",
+      "open_odds": 3.25,
+      "current_odds": 2.28,
+      "drop_pct": 30.0,
+      "max_odds": 2.45,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16762338,
+        "home_team": "Fomin S.",
+        "away_team": "Zhukov M.",
+        "sport": "tennis",
+        "league": "Challenger - Astana",
+        "match_time": "05:00"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/homberg-m.-vs-carboni-l./2296545?MarketTypeID=301",
+      "match_id": "2296545",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Homberg M.",
+      "away_team": "Carboni L.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 3.3,
+      "current_odds": 2.42,
+      "drop_pct": 27.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/carboni-lorenzo-2yamY2wB/maximilian-homberg-f54w66h2/?mid=fXNsIbdU",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Homberg M.",
+        "away_team": "Carboni L.",
+        "match_time": "10.08.2026 08:05",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.4,
+        "away_odds": 1.5,
+        "favorite": "player_b",
+        "advanced_score": 4.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Aboian V.",
+            "away": "Homberg M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "09.08.26 Aboian V. 0-2 Homberg M."
+          },
+          {
+            "date": "17.07.26",
+            "home": "Rapagnetta D.",
+            "away": "Homberg M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "17.07.26 Rapagnetta D. 2-0 Homberg M."
+          },
+          {
+            "date": "16.07.26",
+            "home": "Ciavarella N.",
+            "away": "Homberg M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "16.07.26 Ciavarella N. 0-2 Homberg M."
+          },
+          {
+            "date": "15.07.26",
+            "home": "Buldorini P.",
+            "away": "Homberg M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "15.07.26 Buldorini P. 1-2 Homberg M."
+          },
+          {
+            "date": "26.06.26",
+            "home": "Homberg M.",
+            "away": "Planinsek F. J.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "26.06.26 Homberg M. 1-2 Planinsek F. J."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": null,
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Homberg M.)",
+          "missing_recent_matches_B (Carboni L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 819,
+        "ranking_b": 481
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/sinclair-c.-vs-zhalgasbay-d./2296574?MarketTypeID=301",
+      "match_id": "2296574",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sinclair C.",
+      "away_team": "Zhalgasbay D.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.85,
+      "drop_pct": 20.0,
+      "max_odds": 1.9,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/sinclair-colin-Oxu66IL4/zhalgasbay-damir-zFhXdfUi/?mid=hvE9W6U6",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sinclair C.",
+        "away_team": "Zhalgasbay D.",
+        "match_time": "10.08.2026 08:15",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.85,
+        "away_odds": 1.85,
+        "favorite": "player_a",
+        "advanced_score": 4.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Sinclair C.",
+            "away": "Kachmazov A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "09.08.26 Sinclair C. 2-1 Kachmazov A."
+          },
+          {
+            "date": "03.08.26",
+            "home": "Sinclair C.",
+            "away": "Singh D.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.08.26 Sinclair C. 0-2 Singh D."
+          },
+          {
+            "date": "02.08.26",
+            "home": "Sinclair C.",
+            "away": "McKennon M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.08.26 Sinclair C. 2-0 McKennon M."
+          },
+          {
+            "date": "29.07.26",
+            "home": "Sinclair C.",
+            "away": "Matsuda K.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "29.07.26 Sinclair C. 0-2 Matsuda K."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Alkaya M.",
+            "away": "Sinclair C.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "28.07.26 Alkaya M. 1-2 Sinclair C."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Sinclair C.)",
+          "missing_recent_matches_B (Zhalgasbay D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 503,
+        "ranking_b": 503
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/roca-batalla-o.-vs-bondioli-f./2296446?MarketTypeID=301",
+      "match_id": "2296446",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Roca Batalla O.",
+      "away_team": "Bondioli F.",
+      "event_date": "11/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 1.85,
+      "current_odds": 1.49,
+      "drop_pct": 19.0,
+      "max_odds": 1.51,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hamburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/cretu-c.-vs-moeller-m./2296427?MarketTypeID=301",
+      "match_id": "2296427",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cretu C.",
+      "away_team": "Moeller M.",
+      "event_date": "10/08",
+      "event_time": "12:30",
+      "outcome": "2",
+      "open_odds": 2.2,
+      "current_odds": 1.82,
+      "drop_pct": 17.0,
+      "max_odds": 1.85,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/cretu-cezar-0xqR9dG1/moeller-marvin-W4qdFpGM/?mid=ziTmYwek",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Cretu C.",
+        "away_team": "Moeller M.",
+        "match_time": "10.08.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.9,
+        "away_odds": 1.83,
+        "favorite": "player_b",
+        "advanced_score": 19.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.08.24",
+            "home": "Cretu C.",
+            "away": "Moeller M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "05.08.24 Cretu C. 2-0 Moeller M."
+          }
+        ],
+        "last_h2h_date": "05.08.24",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Cretu C.",
+        "last_h2h_away": "Moeller M.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.2
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Cretu C.)",
+          "missing_recent_matches_B (Moeller M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 260,
+        "ranking_b": 319
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ratti-l.-vs-sach-t./2295641?MarketTypeID=301",
+      "match_id": "2295641",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ratti L.",
+      "away_team": "Sach T.",
+      "event_date": "10/08",
+      "event_time": "09:10",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.3,
+      "drop_pct": 16.0,
+      "max_odds": 2.35,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/ratti-lucio-xdrR3fug/sach-tai-W6rvCM52/?mid=8W7w3S3C",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Ratti L.",
+        "away_team": "Sach T.",
+        "match_time": "10.08.2026 09:45",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.55,
+        "away_odds": 2.3,
+        "favorite": "player_a",
+        "advanced_score": 51.6,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.08.26",
+            "home": "Ratti L.",
+            "away": "Basing M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.08.26 Ratti L. 0-2 Basing M."
+          },
+          {
+            "date": "28.06.26",
+            "home": "Ratti L.",
+            "away": "Planinsek F. J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "28.06.26 Ratti L. 2-1 Planinsek F. J."
+          },
+          {
+            "date": "27.06.26",
+            "home": "Ratti L.",
+            "away": "Petak D.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "27.06.26 Ratti L. 2-1 Petak D."
+          },
+          {
+            "date": "26.06.26",
+            "home": "Ratti L.",
+            "away": "Dullinger V.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "26.06.26 Ratti L. 2-0 Dullinger V."
+          },
+          {
+            "date": "25.06.26",
+            "home": "Ratti L.",
+            "away": "Cherie Ligniere E.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "25.06.26 Ratti L. 2-0 Cherie Ligniere E."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.0
+        },
+        "surface_stats_b": {
+          "hard": 0.2
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Ratti L.)",
+          "missing_recent_matches_B (Sach T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 380,
+        "ranking_b": 512
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/balshaw-f.-vs-milavsky-d./2296470?MarketTypeID=301",
+      "match_id": "2296470",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Balshaw F.",
+      "away_team": "Milavsky D.",
+      "event_date": "10/08",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.61,
+      "drop_pct": 15.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/balshaw-felix-OUFziENR/milavsky-daniel-QFuNOiRL/?mid=tn77KERr",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Balshaw F.",
+        "away_team": "Milavsky D.",
+        "match_time": "10.08.2026 20:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.2,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 10.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "13.07.26",
+            "home": "Napolitano S.",
+            "away": "Balshaw F.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "13.07.26 Napolitano S. 2-1 Balshaw F."
+          },
+          {
+            "date": "10.07.26",
+            "home": "Broska F.",
+            "away": "Balshaw F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "10.07.26 Broska F. 2-0 Balshaw F."
+          },
+          {
+            "date": "09.07.26",
+            "home": "Balshaw F.",
+            "away": "Henning P.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "09.07.26 Balshaw F. 2-0 Henning P."
+          },
+          {
+            "date": "07.07.26",
+            "home": "Balshaw F.",
+            "away": "Sanchez Jover C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "07.07.26 Balshaw F. 2-0 Sanchez Jover C."
+          },
+          {
+            "date": "27.06.26",
+            "home": "Balshaw F.",
+            "away": "Nagal S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "27.06.26 Balshaw F. 0-2 Nagal S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": null,
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Balshaw F.)",
+          "missing_recent_matches_B (Milavsky D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 248,
+        "ranking_b": 306
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/pankin-s.-vs-palan-d./2295640?MarketTypeID=301",
+      "match_id": "2295640",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Pankin S.",
+      "away_team": "Palan D.",
+      "event_date": "10/08",
+      "event_time": "08:30",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.37,
+      "drop_pct": 14.0,
+      "max_odds": 2.42,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/palan-dominik-Q5wGqMq4/pankin-semen-AqOZJFvK/?mid=4za2Jmlg",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Pankin S.",
+        "away_team": "Palan D.",
+        "match_time": "10.08.2026 08:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.4,
+        "favorite": "player_a",
+        "advanced_score": 6.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.08.26",
+            "home": "Sun F.",
+            "away": "Pankin S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.08.26 Sun F. 2-0 Pankin S."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Pankin S.",
+            "away": "Dhamne M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "30.07.26 Pankin S. 1-2 Dhamne M."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Tokac T.",
+            "away": "Pankin S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "28.07.26 Tokac T. 0-2 Pankin S."
+          },
+          {
+            "date": "10.07.26",
+            "home": "Cocola S.",
+            "away": "Pankin S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "10.07.26 Cocola S. 2-0 Pankin S."
+          },
+          {
+            "date": "09.07.26",
+            "home": "Bekeni M.",
+            "away": "Pankin S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "09.07.26 Bekeni M. 1-2 Pankin S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Pankin S.)",
+          "missing_recent_matches_B (Palan D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 421,
+        "ranking_b": 498
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/vanshelboim-e.-vs-mecarelli-m./2296565?MarketTypeID=301",
+      "match_id": "2296565",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Vanshelboim E.",
+      "away_team": "Mecarelli M.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 2.02,
+      "drop_pct": 12.0,
+      "max_odds": 2.07,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/mecarelli-michele-QcllcTXF/vanshelboim-eric-0YMC7sFJ/?mid=fsXLLkGl",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Vanshelboim E.",
+        "away_team": "Mecarelli M.",
+        "match_time": "10.08.2026 08:05",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.73,
+        "away_odds": 2.0,
+        "favorite": "player_a",
+        "advanced_score": 64.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Vanshelboim E.",
+            "away": "Buldorini P.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "09.08.26 Vanshelboim E. 2-1 Buldorini P."
+          },
+          {
+            "date": "01.08.26",
+            "home": "Vanshelboim E.",
+            "away": "Lagutin P.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "01.08.26 Vanshelboim E. 0-2 Lagutin P."
+          },
+          {
+            "date": "31.07.26",
+            "home": "Vanshelboim E.",
+            "away": "Hoeyeraal H.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "31.07.26 Vanshelboim E. 2-1 Hoeyeraal H."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Vanshelboim E.",
+            "away": "Cordoba C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Vanshelboim E. 2-0 Cordoba C."
+          },
+          {
+            "date": "29.07.26",
+            "home": "Vanshelboim E.",
+            "away": "Orgiles Garcia Retamero I.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.07.26 Vanshelboim E. 2-0 Orgiles Garcia Retamero I."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Vanshelboim E.)",
+          "missing_recent_matches_B (Mecarelli M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 420,
+        "ranking_b": 950
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/suresh-d.-vs-kim-a./2296682?MarketTypeID=301",
+      "match_id": "2296682",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Suresh D.",
+      "away_team": "Kim A.",
+      "event_date": "10/08",
+      "event_time": "16:10",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.84,
+      "drop_pct": 12.0,
+      "max_odds": 1.88,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/kim-aidan-jmIkcNeE/suresh-dhakshineswar-ImMlps4p/?mid=xvjdrv36",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Suresh D.",
+        "away_team": "Kim A.",
+        "match_time": "10.08.2026 16:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.85,
+        "away_odds": 1.85,
+        "favorite": "player_a",
+        "advanced_score": 31.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Suresh D.",
+            "away": "Godoy S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "09.08.26 Suresh D. 2-0 Godoy S."
+          },
+          {
+            "date": "02.08.26",
+            "home": "Suresh D.",
+            "away": "Colby R.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "02.08.26 Suresh D. 0-2 Colby R."
+          },
+          {
+            "date": "25.07.26",
+            "home": "Michelsen A.",
+            "away": "Suresh D.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "25.07.26 Michelsen A. 2-1 Suresh D."
+          },
+          {
+            "date": "24.07.26",
+            "home": "Suresh D.",
+            "away": "Martin A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "24.07.26 Suresh D. 2-1 Martin A."
+          },
+          {
+            "date": "23.07.26",
+            "home": "Gojo B.",
+            "away": "Suresh D.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "23.07.26 Gojo B. 0-2 Suresh D."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Suresh D.)",
+          "missing_recent_matches_B (Kim A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 393,
+        "ranking_b": 584
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Brownsburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-brownsburg/smith-col.-vs-gill-f./2296468?MarketTypeID=301",
+      "match_id": "2296468",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Smith Col.",
+      "away_team": "Gill F.",
+      "event_date": "10/08",
+      "event_time": "22:00",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.63,
+      "drop_pct": 12.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/colton-smith-IHCZRRUJ/gill-felix-4Q5fNOq4/?mid=lW09vzJE",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Smith C.",
+        "away_team": "Gill F.",
+        "match_time": "10.08.2026 22:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.6,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 0.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "04.08.26",
+            "home": "Hara Friend J. D.",
+            "away": "Smith C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "04.08.26 Hara Friend J. D. 2-1 Smith C."
+          },
+          {
+            "date": "26.07.26",
+            "home": "Pascual Ferra R.",
+            "away": "Smith C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "26.07.26 Pascual Ferra R. 2-1 Smith C."
+          },
+          {
+            "date": "21.07.26",
+            "home": "Smith C.",
+            "away": "Wolf J.J.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "21.07.26 Smith C. 0-2 Wolf J.J."
+          },
+          {
+            "date": "17.07.26",
+            "home": "Smith C.",
+            "away": "Bu Y.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "17.07.26 Smith C. 1-2 Bu Y."
+          },
+          {
+            "date": "16.07.26",
+            "home": "Smith C.",
+            "away": "Matsuoka H.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.07.26 Smith C. 2-0 Matsuoka H."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Smith C.)",
+          "missing_recent_matches_B (Gill F.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 197,
+        "ranking_b": 218
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/ferrari-g.-vs-mashtakov-n./2296566?MarketTypeID=301",
+      "match_id": "2296566",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ferrari G.",
+      "away_team": "Mashtakov N.",
+      "event_date": "10/08",
+      "event_time": "08:00",
+      "outcome": "2",
+      "open_odds": 2.48,
+      "current_odds": 2.2,
+      "drop_pct": 11.0,
+      "max_odds": 2.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/ferrari-gianmarco-IoLNpAMF/mashtakov-nikita-SC4vdKb1/?mid=Isml7j1e",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Ferrari G.",
+        "away_team": "Mashtakov N.",
+        "match_time": "10.08.2026 08:05",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.63,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 58.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "09.08.26",
+            "home": "Ferrari G.",
+            "away": "Betti E.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "09.08.26 Ferrari G. 2-0 Betti E."
+          },
+          {
+            "date": "19.06.26",
+            "home": "Ferrari G.",
+            "away": "Tabacco F.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.06.26 Ferrari G. 0-2 Tabacco F."
+          },
+          {
+            "date": "18.06.26",
+            "home": "Tabacco G.",
+            "away": "Ferrari G.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "18.06.26 Tabacco G. 1-2 Ferrari G."
+          },
+          {
+            "date": "17.06.26",
+            "home": "Spadola A.",
+            "away": "Ferrari G.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "17.06.26 Spadola A. 0-2 Ferrari G."
+          },
+          {
+            "date": "16.06.26",
+            "home": "Borrelli L.",
+            "away": "Ferrari G.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "16.06.26 Borrelli L. 0-2 Ferrari G."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Ferrari G.)",
+          "missing_recent_matches_B (Mashtakov N.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 456,
+        "ranking_b": 654,
+        "form_source": "sofascore_api",
+        "sofascore_event_id": 15954669
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Toronto",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-toronto/bencic-b.-vs-gauff-c./2297126?MarketTypeID=301",
+      "match_id": "2297126",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Bencic B.",
+      "away_team": "Gauff C.",
+      "event_date": "11/08",
+      "event_time": "17:00",
+      "outcome": "2",
+      "open_odds": 1.8,
+      "current_odds": 1.59,
+      "drop_pct": 11.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 8,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 6,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.75,
+        "sofascore_event_id": 15711430,
+        "home_team": "Bencic B.",
+        "away_team": "Gauff C.",
+        "sport": "tennis",
+        "league": "WTA - Toronto",
+        "match_time": "17:00"
+      },
+      "enrichment_error": null
+    }
+  ]
+}
