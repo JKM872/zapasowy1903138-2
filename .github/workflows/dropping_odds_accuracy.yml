@@ -1,0 +1,134 @@
+name: "Dropping Odds Accuracy Report"
+
+on:
+  # 07:00 UTC — po obu przebiegach "Check Results" (22:00 i 06:00 UTC), żeby
+  # liczyć na świeżo rozstrzygniętym result_store.
+  schedule:
+    - cron: '0 7 * * *'
+
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Ostatnie N dni (puste = całe archiwum)'
+        required: false
+        type: string
+      sport:
+        description: 'Tylko jeden sport (puste = wszystkie)'
+        required: false
+        type: string
+      settle:
+        description: 'Dociągnij brakujące wyniki z SofaScore API'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  accuracy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    services:
+      # SofaScore odrzuca zakresy IP GitHuba przez Cloudflare — bez tego
+      # dociąganie brakujących wyników (--settle) dostaje 403.
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
+    steps:
+      # Potrzebujemy zacommitowanych outputs/oddssafari_dropping_*.json
+      # oraz outputs/result_store.json.
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Setup Tor (SOCKS5 on :9050)
+        continue-on-error: true
+        run: bash tools/setup_tor.sh
+
+      - name: Build argument list
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.days }}" ]; then
+            ARGS="$ARGS --days ${{ github.event.inputs.days }}"
+          fi
+          if [ -n "${{ github.event.inputs.sport }}" ]; then
+            ARGS="$ARGS --sport ${{ github.event.inputs.sport }}"
+          fi
+          # Harmonogram zawsze dociąga braki; przy ręcznym uruchomieniu decyduje input.
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event.inputs.settle }}" = "true" ]; then
+            ARGS="$ARGS --settle"
+          fi
+          echo "ACC_ARGS=$ARGS" >> $GITHUB_ENV
+          echo "Argumenty: $ARGS"
+
+      - name: Dropping odds accuracy
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
+        run: |
+          echo "## Skuteczność dropping odds (OddsSafari)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python dropping_odds_accuracy.py $ACC_ARGS 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit accuracy report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/dropping_odds_accuracy.json 2>/dev/null || true
+          git add outputs/dropping_odds_settled.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ Brak zmian w raporcie"
+          else
+            git commit -m "data: dropping odds accuracy report [skip ci]"
+            pushed=false
+            for attempt in 1 2 3 4 5 6; do
+              if git push origin HEAD:main; then
+                echo "✅ Raport wypchnięty (próba $attempt)"
+                pushed=true
+                break
+              fi
+              echo "⚠️ Push odrzucony (próba $attempt) — rebase na origin/main..."
+              git fetch origin main || true
+              if ! git rebase origin/main; then
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::warning::Nie udało się wypchnąć raportu — zostaje na następny przebieg"
+            fi
+          fi
+
+      - name: Upload report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: dropping-odds-accuracy-${{ github.run_id }}
+          path: |
+            outputs/dropping_odds_accuracy.json
+            outputs/dropping_odds_settled.json
+          retention-days: 30

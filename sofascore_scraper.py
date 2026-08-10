@@ -2248,6 +2248,41 @@ def get_event_team_ids(event_id: int) -> Optional[Dict[str, Any]]:
     }
 
 
+def get_event_result(event_id: int) -> Optional[Dict[str, Any]]:
+    """Final result of a single event: status, score and winner.
+
+    Used by the dropping-odds accuracy check to settle fixtures that never
+    appear on the main pipeline's card, so they are absent from
+    ``outputs/result_store.json``.
+
+    Returns ``{'status', 'score_home', 'score_away', 'winner', 'home_team',
+    'away_team'}`` with ``winner`` in ``home`` / ``away`` / ``draw``, or None
+    when the event is unknown or not finished.
+    """
+    if not event_id:
+        return None
+    data = _api_get_json(
+        f"https://api.sofascore.com/api/v1/event/{event_id}", timeout=10
+    )
+    if not isinstance(data, dict):
+        return None
+    event = data.get('event') or {}
+    if ((event.get('status') or {}).get('type') or '').lower() != 'finished':
+        return None
+    hs = (event.get('homeScore') or {}).get('current')
+    as_ = (event.get('awayScore') or {}).get('current')
+    if hs is None or as_ is None:
+        return None
+    return {
+        'status': 'finished',
+        'score_home': hs,
+        'score_away': as_,
+        'winner': 'draw' if hs == as_ else ('home' if hs > as_ else 'away'),
+        'home_team': (event.get('homeTeam') or {}).get('name'),
+        'away_team': (event.get('awayTeam') or {}).get('name'),
+    }
+
+
 def get_team_venue_form(team_id: int, venue: str, limit: int = 5,
                         allow_draws: bool = False) -> List[str]:
     """Recent form restricted to matches played at *venue* ('home' or 'away').
