@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-11T06:16:46.711782+02:00",
+    "generated_at": "2026-08-11T19:05:53.895755+02:00",
     "target_date": "2026-08-11",
     "filter": {
       "min_odds": 1.35,
@@ -8,44 +8,249 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 3,
-      "qualified": 1
+      "events": 6,
+      "qualified": 4
     },
     "enrichment_status_counts": {
       "enriched": 0,
       "resolve_failed": 0,
       "process_match_error": 0,
-      "enriched_sofascore_only": 1
+      "enriched_sofascore_only": 4
     },
     "skip_reason_counts": {
       "odds_out_of_range": 2
     },
-    "elapsed_seconds": 42.8,
+    "elapsed_seconds": 406.3,
     "dry_run": false
   },
   "events": [
     {
       "league": "Philippines - Governors Cup",
-      "match_url": "https://www.oddssafari.com/matches/basketball/philippines/governors-cup/converge-fiberxers-vs-terrafirma-dyip/2283762?MarketTypeID=201",
-      "match_id": "2283762",
+      "match_url": "https://www.oddssafari.com/matches/basketball/philippines/governors-cup/timplados-hotshots-vs-phoenix-fuel-masters/2284244?MarketTypeID=201",
+      "match_id": "2284244",
       "sport_slug": "basketball",
       "sport": "basketball",
-      "home_team": "Converge Fiberxers",
-      "away_team": "Terrafirma Dyip",
-      "event_date": "11/08",
-      "event_time": "09:15",
+      "home_team": "Timplados Hotshots",
+      "away_team": "Phoenix Fuel Masters",
+      "event_date": "12/08",
+      "event_time": "11:30",
       "outcome": "1",
-      "open_odds": 1.57,
-      "current_odds": 1.19,
-      "drop_pct": 24.0,
-      "max_odds": 1.22,
+      "open_odds": 1.96,
+      "current_odds": 1.4,
+      "drop_pct": 29.0,
+      "max_odds": 1.42,
       "sport_page_id": "20",
       "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
+      "qualifies": true,
+      "skip_reason": null,
       "dropped_outcome": "1",
       "focus_team": "home",
-      "away_team_focus": false
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.7,
+        "sofascore_event_id": 16412720,
+        "home_team": "Timplados Hotshots",
+        "away_team": "Phoenix Fuel Masters",
+        "sport": "basketball",
+        "league": "Philippines - Governors Cup",
+        "match_time": "11:30",
+        "sofascore_home_team_id": 96587,
+        "sofascore_away_team_id": 96575,
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "11.07.26",
+            "home": "Phoenix Fuel Masters",
+            "away": "Magnolia Chicken Timplados",
+            "score": "98:86",
+            "winner": "home"
+          },
+          {
+            "date": "13.03.26",
+            "home": "Magnolia Chicken Timplados",
+            "away": "Phoenix Fuel Masters",
+            "score": "98:101",
+            "winner": "away"
+          },
+          {
+            "date": "31.10.25",
+            "home": "Phoenix Fuel Masters",
+            "away": "Magnolia Chicken Timplados",
+            "score": "80:83",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "11.07.26",
+        "last_h2h_score": "98:86",
+        "last_h2h_home": "Phoenix Fuel Masters",
+        "last_h2h_away": "Magnolia Chicken Timplados",
+        "sofascore_home_win_prob": 61,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 39,
+        "sofascore_total_votes": 134,
+        "forebet_prediction": "2",
+        "forebet_probability": 68.0,
+        "forebet_exact_score": "78-89",
+        "forebet_avg_goals": 171.6,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Chile - LNB",
+      "match_url": "https://www.oddssafari.com/matches/basketball/chile/lnb/u.de-concepcion-vs-leones-quilpue/2295130?MarketTypeID=201",
+      "match_id": "2295130",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "U.de Concepcion",
+      "away_team": "Leones Quilpue",
+      "event_date": "13/08",
+      "event_time": "01:30",
+      "outcome": "2",
+      "open_odds": 3.05,
+      "current_odds": 2.19,
+      "drop_pct": 28.0,
+      "max_odds": 2.25,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16752878,
+        "sofascore_home_team_id": 233049,
+        "sofascore_away_team_id": 134420,
+        "home_team": "U.de Concepcion",
+        "away_team": "Leones Quilpue",
+        "sport": "basketball",
+        "league": "Chile - LNB",
+        "match_time": "01:30",
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "04.08.26",
+            "home": "Leones de Quilpué",
+            "away": "Universidad de Concepción",
+            "score": "86:74",
+            "winner": "home"
+          },
+          {
+            "date": "10.06.26",
+            "home": "Universidad de Concepción",
+            "away": "Leones de Quilpué",
+            "score": "78:79",
+            "winner": "away"
+          },
+          {
+            "date": "07.06.26",
+            "home": "Leones de Quilpué",
+            "away": "Universidad de Concepción",
+            "score": "83:78",
+            "winner": "home"
+          },
+          {
+            "date": "01.06.26",
+            "home": "Universidad de Concepción",
+            "away": "Leones de Quilpué",
+            "score": "89:78",
+            "winner": "home"
+          },
+          {
+            "date": "31.05.26",
+            "home": "Universidad de Concepción",
+            "away": "Leones de Quilpué",
+            "score": "88:92",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "04.08.26",
+        "last_h2h_score": "86:74",
+        "last_h2h_home": "Leones de Quilpué",
+        "last_h2h_away": "Universidad de Concepción",
+        "sofascore_home_win_prob": 63,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 37,
+        "sofascore_total_votes": 27,
+        "forebet_exact_score": "87-78"
+      },
+      "enrichment_error": null
     },
     {
       "league": "International Clubs - Euroleague",
@@ -72,130 +277,27 @@
     },
     {
       "league": "USA - WNBA",
-      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/la-sparks-vs-phx-mercury/2284242?MarketTypeID=201",
-      "match_id": "2284242",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/lv-aces-vs-was-mystics/2284243?MarketTypeID=201",
+      "match_id": "2284243",
       "sport_slug": "basketball",
       "sport": "basketball",
-      "home_team": "LA Sparks",
-      "away_team": "PHX Mercury",
+      "home_team": "LV Aces",
+      "away_team": "WAS Mystics",
       "event_date": "12/08",
       "event_time": "02:00",
-      "outcome": "1",
-      "open_odds": 2.0,
-      "current_odds": 1.77,
-      "drop_pct": 11.0,
-      "max_odds": 1.8,
+      "outcome": "2",
+      "open_odds": 3.6,
+      "current_odds": 3.04,
+      "drop_pct": 16.0,
+      "max_odds": 3.2,
       "sport_page_id": "20",
       "notes": [],
-      "qualifies": true,
-      "skip_reason": null,
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false,
-      "enrichment_status": "enriched_sofascore_only",
-      "livesport_url": null,
-      "livesport_confidence": 0.0,
-      "enrichment": {
-        "home_form": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "home_form_overall": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "form_source": "sofascore_api",
-        "away_form": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "away_form_overall": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "h2h_count": 3,
-        "home_wins_in_h2h_last5": 2,
-        "away_wins_in_h2h_last5": 1,
-        "h2h_source": "sofascore_api",
-        "win_rate": 0.3,
-        "sofascore_event_id": 15415881,
-        "sofascore_home_team_id": 3447,
-        "sofascore_away_team_id": 3444,
-        "home_team": "LA Sparks",
-        "away_team": "PHX Mercury",
-        "sport": "basketball",
-        "league": "USA - WNBA",
-        "match_time": "02:00",
-        "home_form_home": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "away_form_away": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "venue_form_source": "sofascore_api",
-        "h2h_last5": [
-          {
-            "date": "22.07.26",
-            "home": "Los Angeles Sparks",
-            "away": "Phoenix Mercury",
-            "score": "82:86",
-            "winner": "away"
-          },
-          {
-            "date": "14.06.26",
-            "home": "Phoenix Mercury",
-            "away": "Los Angeles Sparks",
-            "score": "102:111",
-            "winner": "away"
-          },
-          {
-            "date": "22.05.26",
-            "home": "Phoenix Mercury",
-            "away": "Los Angeles Sparks",
-            "score": "88:97",
-            "winner": "away"
-          }
-        ],
-        "draws_in_h2h_last5": 0,
-        "last_h2h_date": "22.07.26",
-        "last_h2h_score": "82:86",
-        "last_h2h_home": "Los Angeles Sparks",
-        "last_h2h_away": "Phoenix Mercury",
-        "sofascore_home_win_prob": 37,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 63,
-        "sofascore_total_votes": 570,
-        "forebet_prediction": "2",
-        "forebet_probability": 68.0,
-        "forebet_exact_score": "78-89",
-        "forebet_avg_goals": 171.6,
-        "forebet_home_prob": 31,
-        "forebet_away_prob": 68
-      },
-      "enrichment_error": null
-    }
-  ],
-  "qualified": [
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
     {
       "league": "USA - WNBA",
       "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/la-sparks-vs-phx-mercury/2284242?MarketTypeID=201",
@@ -208,8 +310,8 @@
       "event_time": "02:00",
       "outcome": "1",
       "open_odds": 2.0,
-      "current_odds": 1.77,
-      "drop_pct": 11.0,
+      "current_odds": 1.75,
+      "drop_pct": 13.0,
       "max_odds": 1.8,
       "sport_page_id": "20",
       "notes": [],
@@ -307,16 +409,604 @@
         "last_h2h_score": "82:86",
         "last_h2h_home": "Los Angeles Sparks",
         "last_h2h_away": "Phoenix Mercury",
-        "sofascore_home_win_prob": 37,
+        "sofascore_home_win_prob": 48,
         "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 63,
-        "sofascore_total_votes": 570,
+        "sofascore_away_win_prob": 52,
+        "sofascore_total_votes": 1503,
         "forebet_prediction": "2",
         "forebet_probability": 68.0,
         "forebet_exact_score": "78-89",
         "forebet_avg_goals": 171.6,
         "forebet_home_prob": 31,
         "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Mexico - LNBP",
+      "match_url": "https://www.oddssafari.com/matches/basketball/mexico/lnbp/panteras-vs-lobos-de-puebla/2289539?MarketTypeID=201",
+      "match_id": "2289539",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Panteras",
+      "away_team": "Lobos de Puebla",
+      "event_date": "12/08",
+      "event_time": "02:30",
+      "outcome": "1",
+      "open_odds": 1.83,
+      "current_odds": 1.61,
+      "drop_pct": 12.0,
+      "max_odds": 1.65,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 1.0,
+        "sofascore_event_id": 9856276,
+        "sofascore_home_team_id": 393124,
+        "sofascore_away_team_id": 392553,
+        "home_team": "Panteras",
+        "away_team": "Lobos de Puebla",
+        "sport": "basketball",
+        "league": "Mexico - LNBP",
+        "match_time": "02:30",
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "06.11.21",
+            "home": "Aguilas De Rio Abajo",
+            "away": "CD Panteras",
+            "score": "36:91",
+            "winner": "away"
+          },
+          {
+            "date": "09.10.21",
+            "home": "CD Panteras",
+            "away": "Aguilas De Rio Abajo",
+            "score": "38:26",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "06.11.21",
+        "last_h2h_score": "36:91",
+        "last_h2h_home": "Aguilas De Rio Abajo",
+        "last_h2h_away": "CD Panteras",
+        "sofascore_home_win_prob": 63,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 37,
+        "sofascore_total_votes": 19,
+        "forebet_prediction": "1",
+        "forebet_probability": 62.0,
+        "forebet_exact_score": "87-82",
+        "forebet_avg_goals": 171.0,
+        "forebet_home_prob": 62,
+        "forebet_away_prob": 38
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Philippines - Governors Cup",
+      "match_url": "https://www.oddssafari.com/matches/basketball/philippines/governors-cup/timplados-hotshots-vs-phoenix-fuel-masters/2284244?MarketTypeID=201",
+      "match_id": "2284244",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Timplados Hotshots",
+      "away_team": "Phoenix Fuel Masters",
+      "event_date": "12/08",
+      "event_time": "11:30",
+      "outcome": "1",
+      "open_odds": 1.96,
+      "current_odds": 1.4,
+      "drop_pct": 29.0,
+      "max_odds": 1.42,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.7,
+        "sofascore_event_id": 16412720,
+        "home_team": "Timplados Hotshots",
+        "away_team": "Phoenix Fuel Masters",
+        "sport": "basketball",
+        "league": "Philippines - Governors Cup",
+        "match_time": "11:30",
+        "sofascore_home_team_id": 96587,
+        "sofascore_away_team_id": 96575,
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "11.07.26",
+            "home": "Phoenix Fuel Masters",
+            "away": "Magnolia Chicken Timplados",
+            "score": "98:86",
+            "winner": "home"
+          },
+          {
+            "date": "13.03.26",
+            "home": "Magnolia Chicken Timplados",
+            "away": "Phoenix Fuel Masters",
+            "score": "98:101",
+            "winner": "away"
+          },
+          {
+            "date": "31.10.25",
+            "home": "Phoenix Fuel Masters",
+            "away": "Magnolia Chicken Timplados",
+            "score": "80:83",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "11.07.26",
+        "last_h2h_score": "98:86",
+        "last_h2h_home": "Phoenix Fuel Masters",
+        "last_h2h_away": "Magnolia Chicken Timplados",
+        "sofascore_home_win_prob": 61,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 39,
+        "sofascore_total_votes": 134,
+        "forebet_prediction": "2",
+        "forebet_probability": 68.0,
+        "forebet_exact_score": "78-89",
+        "forebet_avg_goals": 171.6,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Chile - LNB",
+      "match_url": "https://www.oddssafari.com/matches/basketball/chile/lnb/u.de-concepcion-vs-leones-quilpue/2295130?MarketTypeID=201",
+      "match_id": "2295130",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "U.de Concepcion",
+      "away_team": "Leones Quilpue",
+      "event_date": "13/08",
+      "event_time": "01:30",
+      "outcome": "2",
+      "open_odds": 3.05,
+      "current_odds": 2.19,
+      "drop_pct": 28.0,
+      "max_odds": 2.25,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16752878,
+        "sofascore_home_team_id": 233049,
+        "sofascore_away_team_id": 134420,
+        "home_team": "U.de Concepcion",
+        "away_team": "Leones Quilpue",
+        "sport": "basketball",
+        "league": "Chile - LNB",
+        "match_time": "01:30",
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "04.08.26",
+            "home": "Leones de Quilpué",
+            "away": "Universidad de Concepción",
+            "score": "86:74",
+            "winner": "home"
+          },
+          {
+            "date": "10.06.26",
+            "home": "Universidad de Concepción",
+            "away": "Leones de Quilpué",
+            "score": "78:79",
+            "winner": "away"
+          },
+          {
+            "date": "07.06.26",
+            "home": "Leones de Quilpué",
+            "away": "Universidad de Concepción",
+            "score": "83:78",
+            "winner": "home"
+          },
+          {
+            "date": "01.06.26",
+            "home": "Universidad de Concepción",
+            "away": "Leones de Quilpué",
+            "score": "89:78",
+            "winner": "home"
+          },
+          {
+            "date": "31.05.26",
+            "home": "Universidad de Concepción",
+            "away": "Leones de Quilpué",
+            "score": "88:92",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "04.08.26",
+        "last_h2h_score": "86:74",
+        "last_h2h_home": "Leones de Quilpué",
+        "last_h2h_away": "Universidad de Concepción",
+        "sofascore_home_win_prob": 63,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 37,
+        "sofascore_total_votes": 27,
+        "forebet_exact_score": "87-78"
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "USA - WNBA",
+      "match_url": "https://www.oddssafari.com/matches/basketball/usa/wnba/la-sparks-vs-phx-mercury/2284242?MarketTypeID=201",
+      "match_id": "2284242",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "LA Sparks",
+      "away_team": "PHX Mercury",
+      "event_date": "12/08",
+      "event_time": "02:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.75,
+      "drop_pct": 13.0,
+      "max_odds": 1.8,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 15415881,
+        "sofascore_home_team_id": 3447,
+        "sofascore_away_team_id": 3444,
+        "home_team": "LA Sparks",
+        "away_team": "PHX Mercury",
+        "sport": "basketball",
+        "league": "USA - WNBA",
+        "match_time": "02:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "22.07.26",
+            "home": "Los Angeles Sparks",
+            "away": "Phoenix Mercury",
+            "score": "82:86",
+            "winner": "away"
+          },
+          {
+            "date": "14.06.26",
+            "home": "Phoenix Mercury",
+            "away": "Los Angeles Sparks",
+            "score": "102:111",
+            "winner": "away"
+          },
+          {
+            "date": "22.05.26",
+            "home": "Phoenix Mercury",
+            "away": "Los Angeles Sparks",
+            "score": "88:97",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "22.07.26",
+        "last_h2h_score": "82:86",
+        "last_h2h_home": "Los Angeles Sparks",
+        "last_h2h_away": "Phoenix Mercury",
+        "sofascore_home_win_prob": 48,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 52,
+        "sofascore_total_votes": 1503,
+        "forebet_prediction": "2",
+        "forebet_probability": 68.0,
+        "forebet_exact_score": "78-89",
+        "forebet_avg_goals": 171.6,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Mexico - LNBP",
+      "match_url": "https://www.oddssafari.com/matches/basketball/mexico/lnbp/panteras-vs-lobos-de-puebla/2289539?MarketTypeID=201",
+      "match_id": "2289539",
+      "sport_slug": "basketball",
+      "sport": "basketball",
+      "home_team": "Panteras",
+      "away_team": "Lobos de Puebla",
+      "event_date": "12/08",
+      "event_time": "02:30",
+      "outcome": "1",
+      "open_odds": 1.83,
+      "current_odds": 1.61,
+      "drop_pct": 12.0,
+      "max_odds": 1.65,
+      "sport_page_id": "20",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 1.0,
+        "sofascore_event_id": 9856276,
+        "sofascore_home_team_id": 393124,
+        "sofascore_away_team_id": 392553,
+        "home_team": "Panteras",
+        "away_team": "Lobos de Puebla",
+        "sport": "basketball",
+        "league": "Mexico - LNBP",
+        "match_time": "02:30",
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "06.11.21",
+            "home": "Aguilas De Rio Abajo",
+            "away": "CD Panteras",
+            "score": "36:91",
+            "winner": "away"
+          },
+          {
+            "date": "09.10.21",
+            "home": "CD Panteras",
+            "away": "Aguilas De Rio Abajo",
+            "score": "38:26",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "06.11.21",
+        "last_h2h_score": "36:91",
+        "last_h2h_home": "Aguilas De Rio Abajo",
+        "last_h2h_away": "CD Panteras",
+        "sofascore_home_win_prob": 63,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 37,
+        "sofascore_total_votes": 19,
+        "forebet_prediction": "1",
+        "forebet_probability": 62.0,
+        "forebet_exact_score": "87-82",
+        "forebet_avg_goals": 171.0,
+        "forebet_home_prob": 62,
+        "forebet_away_prob": 38
       },
       "enrichment_error": null
     }
