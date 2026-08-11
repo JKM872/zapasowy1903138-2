@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-11T06:27:43.098737+02:00",
+    "generated_at": "2026-08-11T13:19:01.488628+02:00",
     "target_date": "2026-08-11",
     "filter": {
       "min_odds": 1.35,
@@ -8,19 +8,19 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 15,
-      "qualified": 11
+      "events": 27,
+      "qualified": 19
     },
     "enrichment_status_counts": {
-      "enriched": 9,
-      "resolve_failed": 0,
+      "enriched": 14,
+      "resolve_failed": 3,
       "process_match_error": 0,
       "enriched_sofascore_only": 2
     },
     "skip_reason_counts": {
-      "odds_out_of_range": 4
+      "odds_out_of_range": 8
     },
-    "elapsed_seconds": 661.5,
+    "elapsed_seconds": 1492.4,
     "dry_run": false
   },
   "events": [
@@ -36,9 +36,9 @@
       "event_time": "14:00",
       "outcome": "2",
       "open_odds": 3.8,
-      "current_odds": 2.16,
-      "drop_pct": 43.0,
-      "max_odds": 2.3,
+      "current_odds": 2.22,
+      "drop_pct": 42.0,
+      "max_odds": 2.25,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -46,64 +46,34 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true,
-      "enrichment_status": "enriched_sofascore_only",
+      "enrichment_status": "resolve_failed",
       "livesport_url": null,
       "livesport_confidence": 0.0,
-      "enrichment": {
-        "home_form": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "home_form_overall": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "form_source": "sofascore_api",
-        "away_form": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "away_form_overall": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "h2h_count": 1,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 0,
-        "h2h_source": "sofascore_api",
-        "win_rate": 0.0,
-        "sofascore_event_id": 16661576,
-        "sofascore_home_team_id": 448184,
-        "sofascore_away_team_id": 190877,
-        "home_team": "Schwarzler J.",
-        "away_team": "Andrade A.",
-        "sport": "tennis",
-        "league": "Challenger - Brownsburg",
-        "match_time": "14:00",
-        "sofascore_home_win_prob": 80,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 20,
-        "sofascore_total_votes": 2628,
-        "forebet_prediction": "2",
-        "forebet_probability": 52.0,
-        "forebet_exact_score": "0-2",
-        "forebet_avg_goals": 8.9,
-        "forebet_home_prob": 48,
-        "forebet_away_prob": 52
-      },
+      "enrichment": null,
       "enrichment_error": null
+    },
+    {
+      "league": "ATP - Montreal Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-montreal-doubles/heliovaara-h.patten-h.-vs-cerundolo-f.etcheverry-t.m./2296406?MarketTypeID=301",
+      "match_id": "2296406",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Heliovaara H./Patten H.",
+      "away_team": "Cerundolo F./Etcheverry T.M.",
+      "event_date": "11/08",
+      "event_time": "16:30",
+      "outcome": "1",
+      "open_odds": 1.53,
+      "current_odds": 1.09,
+      "drop_pct": 29.0,
+      "max_odds": 1.13,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
     },
     {
       "league": "Challenger - Astana",
@@ -114,12 +84,12 @@
       "home_team": "Fomin S.",
       "away_team": "Zhukov M.",
       "event_date": "11/08",
-      "event_time": "08:50",
+      "event_time": "10:50",
       "outcome": "2",
       "open_odds": 3.25,
-      "current_odds": 2.31,
-      "drop_pct": 29.0,
-      "max_odds": 2.35,
+      "current_odds": 2.37,
+      "drop_pct": 27.0,
+      "max_odds": 2.5,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -133,7 +103,7 @@
       "enrichment": {
         "home_team": "Fomin S.",
         "away_team": "Zhukov M.",
-        "match_time": "11.08.2026 09:30",
+        "match_time": "11.08.2026 11:00",
         "sport": "tennis",
         "h2h_count": 5,
         "home_wins_in_h2h_last5": 2,
@@ -170,10 +140,10 @@
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 1.55,
-        "away_odds": 2.3,
+        "home_odds": 1.53,
+        "away_odds": 2.35,
         "favorite": "player_a",
-        "advanced_score": 13.8,
+        "advanced_score": 13.4,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -266,29 +236,6 @@
       "enrichment_error": null
     },
     {
-      "league": "ATP - Montreal Doubles",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-montreal-doubles/heliovaara-h.patten-h.-vs-cerundolo-f.etcheverry-t.m./2296406?MarketTypeID=301",
-      "match_id": "2296406",
-      "sport_slug": "tennis",
-      "sport": "tennis",
-      "home_team": "Heliovaara H./Patten H.",
-      "away_team": "Cerundolo F./Etcheverry T.M.",
-      "event_date": "11/08",
-      "event_time": "16:30",
-      "outcome": "1",
-      "open_odds": 1.53,
-      "current_odds": 1.1,
-      "drop_pct": 28.0,
-      "max_odds": 1.13,
-      "sport_page_id": "30",
-      "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false
-    },
-    {
       "league": "Challenger - Hamburg",
       "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/mackenzie-j.-vs-kumstat-j./2297296?MarketTypeID=301",
       "match_id": "2297296",
@@ -300,9 +247,9 @@
       "event_time": "14:00",
       "outcome": "1",
       "open_odds": 3.2,
-      "current_odds": 2.35,
-      "drop_pct": 27.0,
-      "max_odds": 2.45,
+      "current_odds": 2.36,
+      "drop_pct": 26.0,
+      "max_odds": 2.43,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -353,10 +300,10 @@
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 2.3,
-        "away_odds": 1.55,
+        "home_odds": 2.4,
+        "away_odds": 1.53,
         "favorite": "player_b",
-        "advanced_score": 46.9,
+        "advanced_score": 47.5,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -458,39 +405,39 @@
       "enrichment_error": null
     },
     {
-      "league": "Challenger - Astana",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ursu-v.-vs-dhamne-m./2295638?MarketTypeID=301",
-      "match_id": "2295638",
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/mpetshi-perricard-g.-vs-svajda-t./2297420?MarketTypeID=301",
+      "match_id": "2297420",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Ursu V.",
-      "away_team": "Dhamne M.",
+      "home_team": "Mpetshi Perricard G.",
+      "away_team": "Svajda T.",
       "event_date": "11/08",
-      "event_time": "05:00",
-      "outcome": "1",
-      "open_odds": 2.88,
-      "current_odds": 2.4,
-      "drop_pct": 17.0,
+      "event_time": "15:40",
+      "outcome": "2",
+      "open_odds": 3.0,
+      "current_odds": 2.37,
+      "drop_pct": 21.0,
       "max_odds": 2.45,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
       "skip_reason": null,
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
       "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/dhamne-manas-llqYSSzF/ursu-vadym-ENsOeB1H/?mid=WM0fL9Jt",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/mpetshi-perricard-giovanni-ITe9m2F8/svajda-trevor-4YQzKulF/?mid=M7k5f3O0",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": "Ursu V.",
-        "away_team": "Dhamne M.",
-        "match_time": "11.08.2026 05:00",
+        "home_team": "Mpetshi Perricard G.",
+        "away_team": "Svajda T.",
+        "match_time": "11.08.2026 16:00",
         "sport": "tennis",
         "h2h_count": 5,
         "home_wins_in_h2h_last5": 2,
         "away_wins_in_h2h_last5": 0,
-        "win_rate": 0.0,
+        "win_rate": 1.0,
         "qualifies": false,
         "home_form": [
           "L",
@@ -501,10 +448,10 @@
         ],
         "away_form": [
           "L",
+          "W",
           "L",
           "W",
-          "W",
-          "L"
+          "W"
         ],
         "home_form_overall": [
           "L",
@@ -515,58 +462,58 @@
         ],
         "away_form_overall": [
           "L",
+          "W",
           "L",
           "W",
-          "W",
-          "L"
+          "W"
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 2.4,
-        "away_odds": 1.5,
-        "favorite": "player_b",
-        "advanced_score": 41.0,
+        "home_odds": 1.55,
+        "away_odds": 2.3,
+        "favorite": "player_a",
+        "advanced_score": 2.3,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
             "date": "04.08.26",
-            "home": "Ursu V.",
-            "away": "Pereira T.",
+            "home": "Mpetshi Perricard G.",
+            "away": "Van De Zandschulp B.",
             "score": "1-2",
             "winner": "away",
-            "raw": "04.08.26 Ursu V. 1-2 Pereira T."
+            "raw": "04.08.26 Mpetshi Perricard G. 1-2 Van De Zandschulp B."
           },
           {
-            "date": "31.07.26",
-            "home": "Miyoshi K.",
-            "away": "Ursu V.",
-            "score": "2-0",
+            "date": "30.06.26",
+            "home": "Hanfmann Y.",
+            "away": "Mpetshi Perricard G.",
+            "score": "3-1",
             "winner": "home",
-            "raw": "31.07.26 Miyoshi K. 2-0 Ursu V."
+            "raw": "30.06.26 Hanfmann Y. 3-1 Mpetshi Perricard G."
           },
           {
-            "date": "30.07.26",
-            "home": "Yevseyev D.",
-            "away": "Ursu V.",
+            "date": "26.06.26",
+            "home": "Bautista R.",
+            "away": "Mpetshi Perricard G.",
             "score": "1-2",
             "winner": "away",
-            "raw": "30.07.26 Yevseyev D. 1-2 Ursu V."
+            "raw": "26.06.26 Bautista R. 1-2 Mpetshi Perricard G."
           },
           {
-            "date": "28.07.26",
-            "home": "Turker M. N.",
-            "away": "Ursu V.",
-            "score": "0-2",
+            "date": "23.06.26",
+            "home": "Tien L.",
+            "away": "Mpetshi Perricard G.",
+            "score": "1-2",
             "winner": "away",
-            "raw": "28.07.26 Turker M. N. 0-2 Ursu V."
+            "raw": "23.06.26 Tien L. 1-2 Mpetshi Perricard G."
           },
           {
-            "date": "14.07.26",
-            "home": "Ursu V.",
-            "away": "Palan D.",
-            "score": "0-2",
+            "date": "16.06.26",
+            "home": "Mpetshi Perricard G.",
+            "away": "Moutet C.",
+            "score": "1-2",
             "winner": "away",
-            "raw": "14.07.26 Ursu V. 0-2 Palan D."
+            "raw": "16.06.26 Mpetshi Perricard G. 1-2 Moutet C."
           }
         ],
         "last_h2h_date": null,
@@ -578,48 +525,51 @@
         "surface_form_a": [
           "L",
           "L",
-          "W",
-          "W",
-          "L"
+          "L",
+          "L",
+          "W"
         ],
         "surface_form_b": [
           "L",
+          "W",
           "L",
           "W",
           "W"
         ],
         "surface_stats_a": {
-          "hard": 0.4
+          "hard": 0.2
         },
         "surface_stats_b": {
-          "hard": 0.5
+          "hard": 0.6
         },
-        "form_a": [],
-        "form_b": [],
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
         "tennis_data_warnings": [
           "missing_h2h",
-          "missing_recent_matches_A (Ursu V.)",
-          "missing_recent_matches_B (Dhamne M.)",
-          "missing_form_A",
-          "missing_form_B"
+          "missing_recent_matches_A (Mpetshi Perricard G.)",
+          "missing_recent_matches_B (Svajda T.)"
         ],
         "tennis_phase_path": "full_pipeline",
-        "ranking_a": 401,
-        "ranking_b": 362,
-        "form_source": "sofascore_api",
-        "sofascore_event_id": 16762339,
-        "sofascore_home_team_id": 111857,
-        "sofascore_away_team_id": 415528,
-        "sofascore_home_win_prob": 18,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 82,
-        "sofascore_total_votes": 740,
-        "forebet_prediction": "2",
-        "forebet_probability": 58.0,
-        "forebet_exact_score": "0-2",
-        "forebet_avg_goals": 8.4,
-        "forebet_home_prob": 42,
-        "forebet_away_prob": 58
+        "ranking_a": 91,
+        "ranking_b": 383,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
       },
       "enrichment_error": null
     },
@@ -635,8 +585,8 @@
       "event_time": "15:10",
       "outcome": "1",
       "open_odds": 1.85,
-      "current_odds": 1.53,
-      "drop_pct": 17.0,
+      "current_odds": 1.52,
+      "drop_pct": 18.0,
       "max_odds": 1.55,
       "sport_page_id": "30",
       "notes": [],
@@ -789,139 +739,54 @@
       "enrichment_error": null
     },
     {
-      "league": "Challenger - Todi",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/izquierdo-n.s.-vs-piraino-g./2296447?MarketTypeID=301",
-      "match_id": "2296447",
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/shimabukuro-s.-vs-dellien-h./2297413?MarketTypeID=301",
+      "match_id": "2297413",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Izquierdo N.S.",
-      "away_team": "Piraino G.",
+      "home_team": "Shimabukuro S.",
+      "away_team": "Dellien H.",
       "event_date": "11/08",
-      "event_time": "13:00",
+      "event_time": "18:00",
       "outcome": "2",
-      "open_odds": 2.6,
-      "current_odds": 2.21,
-      "drop_pct": 15.0,
-      "max_odds": 2.25,
+      "open_odds": 6.9,
+      "current_odds": 5.65,
+      "drop_pct": 18.0,
+      "max_odds": 6.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Astana Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana-doubles/betov-s.singh-k.-vs-park-u.sinha-n.k./2297600?MarketTypeID=301",
+      "match_id": "2297600",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Betov S./Singh K.",
+      "away_team": "Park U./Sinha N.K.",
+      "event_date": "12/08",
+      "event_time": "05:00",
+      "outcome": "1",
+      "open_odds": 2.1,
+      "current_odds": 1.75,
+      "drop_pct": 17.0,
+      "max_odds": 1.78,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
       "skip_reason": null,
-      "dropped_outcome": "2",
-      "focus_team": "away",
-      "away_team_focus": true,
-      "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/piraino-gabriele-2VTqlA8l/sanchez-izquierdo-nikolas-6gnbtDJM/?mid=KvTFX7qp",
-      "livesport_confidence": 1.0,
-      "enrichment": {
-        "home_team": "Sanchez Izquierdo N.",
-        "away_team": "Piraino G.",
-        "match_time": "11.08.2026 13:00",
-        "sport": "tennis",
-        "h2h_count": 1,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 0,
-        "win_rate": 1.0,
-        "qualifies": false,
-        "home_form": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "away_form": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "home_form_overall": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "away_form_overall": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "home_form_home": [],
-        "away_form_away": [],
-        "home_odds": 1.6,
-        "away_odds": 2.2,
-        "favorite": "player_a",
-        "advanced_score": 31.4,
-        "tennis_skip_reason": null,
-        "h2h_last5": [
-          {
-            "date": "07.10.23",
-            "home": "Piraino G.",
-            "away": "Sanchez Izquierdo N.",
-            "score": "0-2",
-            "winner": "away",
-            "raw": "07.10.23 Piraino G. 0-2 Sanchez Izquierdo N."
-          }
-        ],
-        "last_h2h_date": "07.10.23",
-        "last_h2h_score": "0-2",
-        "last_h2h_home": "Piraino G.",
-        "last_h2h_away": "Sanchez Izquierdo N.",
-        "form_advantage": false,
-        "surface": "clay",
-        "surface_form_a": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "surface_form_b": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "surface_stats_a": {
-          "clay": 0.4
-        },
-        "surface_stats_b": {
-          "clay": 1.0
-        },
-        "form_a": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "form_b": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "tennis_data_warnings": [
-          "missing_recent_matches_A (Sanchez Izquierdo N.)",
-          "missing_recent_matches_B (Piraino G.)"
-        ],
-        "tennis_phase_path": "full_pipeline",
-        "ranking_a": 214,
-        "ranking_b": 404,
-        "forebet_prediction": "1",
-        "forebet_probability": 54.0,
-        "forebet_exact_score": "2-0",
-        "forebet_avg_goals": 10.0,
-        "forebet_home_prob": 54,
-        "forebet_away_prob": 46
-      },
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
       "enrichment_error": null
     },
     {
@@ -948,20 +813,96 @@
       "away_team_focus": false
     },
     {
-      "league": "Challenger - Hamburg",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/lechno-wasiutynski-f.-vs-purtseladze-s./2297297?MarketTypeID=301",
-      "match_id": "2297297",
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ratti-l.-vs-sultanov-k./2297279?MarketTypeID=301",
+      "match_id": "2297279",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Lechno-Wasiutynski F.",
-      "away_team": "Purtseladze S.",
+      "home_team": "Ratti L.",
+      "away_team": "Sultanov K.",
+      "event_date": "12/08",
+      "event_time": "05:00",
+      "outcome": "2",
+      "open_odds": 1.85,
+      "current_odds": 1.59,
+      "drop_pct": 14.0,
+      "max_odds": 1.62,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "sofascore_event_id": 16728402,
+        "sofascore_home_team_id": 405124,
+        "sofascore_away_team_id": 149100,
+        "home_team": "Ratti L.",
+        "away_team": "Sultanov K.",
+        "sport": "tennis",
+        "league": "Challenger - Astana",
+        "match_time": "05:00",
+        "sofascore_home_win_prob": 51,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 49,
+        "sofascore_total_votes": 128,
+        "forebet_prediction": "2",
+        "forebet_probability": 62.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 38,
+        "forebet_away_prob": 62
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/oconnell-c.-vs-sweeny-d./2297414?MarketTypeID=301",
+      "match_id": "2297414",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "O'Connell C.",
+      "away_team": "Sweeny D.",
       "event_date": "11/08",
-      "event_time": "10:00",
+      "event_time": "14:00",
       "outcome": "1",
-      "open_odds": 1.65,
-      "current_odds": 1.44,
+      "open_odds": 1.73,
+      "current_odds": 1.51,
       "drop_pct": 13.0,
-      "max_odds": 1.45,
+      "max_odds": 1.55,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -970,20 +911,20 @@
       "focus_team": "home",
       "away_team_focus": false,
       "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/lechno-wasiutynski-fryderyk-8UVBz17q/purtseladze-saba-OI2qf1Ze/?mid=YLTVGzGU",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/o-connell-christopher-SptFeDiE/sweeny-dane-f7I9IJsH/?mid=n5miNhb4",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": "Lechno-Wasiutyński F.",
-        "away_team": "Purtseladze S.",
-        "match_time": "11.08.2026 10:00",
+        "home_team": "O'Connell C.",
+        "away_team": "Sweeny D.",
+        "match_time": "11.08.2026 14:30",
         "sport": "tennis",
-        "h2h_count": 5,
-        "home_wins_in_h2h_last5": 3,
-        "away_wins_in_h2h_last5": 0,
-        "win_rate": 1.0,
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.5,
         "qualifies": false,
         "home_form": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -991,13 +932,13 @@
         ],
         "away_form": [
           "L",
-          "W",
           "L",
           "W",
-          "W"
+          "L",
+          "L"
         ],
         "home_form_overall": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -1005,68 +946,44 @@
         ],
         "away_form_overall": [
           "L",
-          "W",
           "L",
           "W",
-          "W"
+          "L",
+          "L"
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 1.45,
-        "away_odds": 2.6,
+        "home_odds": 1.5,
+        "away_odds": 2.4,
         "favorite": "player_a",
-        "advanced_score": 42.5,
+        "advanced_score": 0.1,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
-            "date": "10.08.26",
-            "home": "Barton H.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "1-2",
-            "winner": "away",
-            "raw": "10.08.26 Barton H. 1-2 Lechno-Wasiutyński F."
-          },
-          {
-            "date": "09.08.26",
-            "home": "Dedura-Palomero M.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "1-2",
-            "winner": "away",
-            "raw": "09.08.26 Dedura-Palomero M. 1-2 Lechno-Wasiutyński F."
-          },
-          {
-            "date": "28.07.26",
-            "home": "Munkhammar P.",
-            "away": "Lechno-Wasiutyński F.",
+            "date": "04.01.26",
+            "home": "Sweeny D.",
+            "away": "O'Connell C.",
             "score": "2-1",
             "winner": "home",
-            "raw": "28.07.26 Munkhammar P. 2-1 Lechno-Wasiutyński F."
+            "raw": "04.01.26 Sweeny D. 2-1 O'Connell C."
           },
           {
-            "date": "06.07.26",
-            "home": "Staeheli L.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "1-0",
+            "date": "11.04.23",
+            "home": "O'Connell C.",
+            "away": "Sweeny D.",
+            "score": "2-0",
             "winner": "home",
-            "raw": "06.07.26 Staeheli L. 1-0 Lechno-Wasiutyński F."
-          },
-          {
-            "date": "05.07.26",
-            "home": "Tixhon D.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "0-2",
-            "winner": "away",
-            "raw": "05.07.26 Tixhon D. 0-2 Lechno-Wasiutyński F."
+            "raw": "11.04.23 O'Connell C. 2-0 Sweeny D."
           }
         ],
-        "last_h2h_date": null,
-        "last_h2h_score": null,
-        "last_h2h_home": null,
-        "last_h2h_away": null,
+        "last_h2h_date": "04.01.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Sweeny D.",
+        "last_h2h_away": "O'Connell C.",
         "form_advantage": false,
-        "surface": "clay",
+        "surface": "hard",
         "surface_form_a": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -1074,19 +991,19 @@
         ],
         "surface_form_b": [
           "L",
-          "W",
           "L",
           "W",
+          "L",
           "L"
         ],
         "surface_stats_a": {
-          "clay": 0.6
+          "hard": 0.4
         },
         "surface_stats_b": {
-          "clay": 0.4
+          "hard": 0.2
         },
         "form_a": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -1094,25 +1011,24 @@
         ],
         "form_b": [
           "L",
-          "W",
           "L",
           "W",
-          "W"
+          "L",
+          "L"
         ],
         "tennis_data_warnings": [
-          "missing_h2h",
-          "missing_recent_matches_A (Lechno-Wasiutyński F.)",
-          "missing_recent_matches_B (Purtseladze S.)"
+          "missing_recent_matches_A (O'Connell C.)",
+          "missing_recent_matches_B (Sweeny D.)"
         ],
         "tennis_phase_path": "full_pipeline",
-        "ranking_a": 636,
-        "ranking_b": 659,
-        "forebet_prediction": "1",
-        "forebet_probability": 63.0,
-        "forebet_exact_score": "2-1",
-        "forebet_avg_goals": 10.3,
-        "forebet_home_prob": 63,
-        "forebet_away_prob": 37
+        "ranking_a": 133,
+        "ranking_b": 122,
+        "forebet_prediction": "2",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 35,
+        "forebet_away_prob": 65
       },
       "enrichment_error": null
     },
@@ -1182,9 +1098,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 1.95,
-        "away_odds": 1.75,
+        "away_odds": 1.78,
         "favorite": "player_b",
-        "advanced_score": 10.6,
+        "advanced_score": 10.3,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -1286,20 +1202,390 @@
       "enrichment_error": null
     },
     {
-      "league": "ATP - Cincinnati",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/shimabukuro-s.-vs-dellien-h./2297413?MarketTypeID=301",
-      "match_id": "2297413",
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/stoiana-m.-vs-erjavec-v./2297455?MarketTypeID=301",
+      "match_id": "2297455",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Shimabukuro S.",
-      "away_team": "Dellien H.",
+      "home_team": "Stoiana M.",
+      "away_team": "Erjavec V.",
       "event_date": "11/08",
-      "event_time": "18:00",
+      "event_time": "15:40",
+      "outcome": "1",
+      "open_odds": 1.67,
+      "current_odds": 1.45,
+      "drop_pct": 13.0,
+      "max_odds": 1.48,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/erjavec-veronika-rsErY1Yt/stoiana-mary-K6fgsbWR/?mid=YV2v7kRk",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Stoiana M.",
+        "away_team": "Erjavec V.",
+        "match_time": "11.08.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.43,
+        "away_odds": 2.6,
+        "favorite": "player_a",
+        "advanced_score": 1.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "01.08.26",
+            "home": "Korniejewa A.",
+            "away": "Stoiana M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "01.08.26 Korniejewa A. 2-1 Stoiana M."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Stoiana M.",
+            "away": "Stearns P.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "28.07.26 Stoiana M. 1-2 Stearns P."
+          },
+          {
+            "date": "24.07.26",
+            "home": "Stoiana M.",
+            "away": "Ku Y.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "24.07.26 Stoiana M. 1-2 Ku Y."
+          },
+          {
+            "date": "23.07.26",
+            "home": "Stoiana M.",
+            "away": "Pareja J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.07.26 Stoiana M. 2-0 Pareja J."
+          },
+          {
+            "date": "22.07.26",
+            "home": "Stoiana M.",
+            "away": "Rogers A. S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "22.07.26 Stoiana M. 2-0 Rogers A. S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [],
+        "surface_form_b": [
+          "L"
+        ],
+        "surface_stats_a": null,
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Stoiana M.)",
+          "missing_recent_matches_B (Erjavec V.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 127,
+        "ranking_b": 104,
+        "forebet_prediction": "1",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 53,
+        "forebet_away_prob": 47
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/van-assche-l.-vs-heide-g./2297425?MarketTypeID=301",
+      "match_id": "2297425",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Van Assche L.",
+      "away_team": "Heide G.",
+      "event_date": "11/08",
+      "event_time": "15:40",
+      "outcome": "1",
+      "open_odds": 1.5,
+      "current_odds": 1.31,
+      "drop_pct": 13.0,
+      "max_odds": 1.33,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/kraus-s.-vs-bassols-ribera-m./2297443?MarketTypeID=301",
+      "match_id": "2297443",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kraus S.",
+      "away_team": "Bassols Ribera M.",
+      "event_date": "11/08",
+      "event_time": "16:00",
       "outcome": "2",
-      "open_odds": 6.9,
-      "current_odds": 6.09,
+      "open_odds": 2.43,
+      "current_odds": 2.11,
+      "drop_pct": 13.0,
+      "max_odds": 2.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/bassols-ribera-marina-dvDRCAx9/kraus-sinja-6oA7gaee/?mid=6PETaYJM",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kraus S.",
+        "away_team": "Bassols M.",
+        "match_time": "11.08.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.68,
+        "away_odds": 2.05,
+        "favorite": "player_a",
+        "advanced_score": 72.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "18.07.26",
+            "home": "Bassols M.",
+            "away": "Kraus S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "18.07.26 Bassols M. 1-2 Kraus S."
+          },
+          {
+            "date": "04.02.24",
+            "home": "Bassols M.",
+            "away": "Kraus S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "04.02.24 Bassols M. 0-2 Kraus S."
+          }
+        ],
+        "last_h2h_date": "18.07.26",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Bassols M.",
+        "last_h2h_away": "Kraus S.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Kraus S.)",
+          "missing_recent_matches_B (Bassols M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 81,
+        "ranking_b": 136,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.8,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/gogineni-v.-vs-virtanen-o./2297463?MarketTypeID=301",
+      "match_id": "2297463",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gogineni V.",
+      "away_team": "Virtanen O.",
+      "event_date": "11/08",
+      "event_time": "14:30",
+      "outcome": "1",
+      "open_odds": 5.0,
+      "current_odds": 4.39,
       "drop_pct": 12.0,
-      "max_odds": 6.5,
+      "max_odds": 4.7,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/vandewinkel-h.-vs-urhobo-a./2297452?MarketTypeID=301",
+      "match_id": "2297452",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Vandewinkel H.",
+      "away_team": "Urhobo A.",
+      "event_date": "11/08",
+      "event_time": "17:30",
+      "outcome": "1",
+      "open_odds": 1.49,
+      "current_odds": 1.31,
+      "drop_pct": 12.0,
+      "max_odds": 1.38,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/mejia-n.-vs-fearnley-j./2297418?MarketTypeID=301",
+      "match_id": "2297418",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mejia N.",
+      "away_team": "Fearnley J.",
+      "event_date": "11/08",
+      "event_time": "19:10",
+      "outcome": "2",
+      "open_odds": 1.45,
+      "current_odds": 1.28,
+      "drop_pct": 12.0,
+      "max_odds": 1.3,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": false,
@@ -1307,6 +1593,173 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/lajal-m.-vs-svrcina-d./2297427?MarketTypeID=301",
+      "match_id": "2297427",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Lajal M.",
+      "away_team": "Svrcina D.",
+      "event_date": "11/08",
+      "event_time": "19:10",
+      "outcome": "1",
+      "open_odds": 2.2,
+      "current_odds": 1.95,
+      "drop_pct": 12.0,
+      "max_odds": 2.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/lajal-mark-2q51si8O/svrcina-dalibor-vDue624T/?mid=lficdPgl",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Lajal M.",
+        "away_team": "Svrcina D.",
+        "match_time": "11.08.2026 20:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.9,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 32.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "02.08.26",
+            "home": "Wolf J.J.",
+            "away": "Lajal M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.08.26 Wolf J.J. 2-0 Lajal M."
+          },
+          {
+            "date": "31.07.26",
+            "home": "Rice K.",
+            "away": "Lajal M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "31.07.26 Rice K. 0-2 Lajal M."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Lajal M.",
+            "away": "Shick B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Lajal M. 2-0 Shick B."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Lajal M.",
+            "away": "Chidekh C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Lajal M. 2-0 Chidekh C."
+          },
+          {
+            "date": "29.07.26",
+            "home": "Lajal M.",
+            "away": "Zhu E.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.07.26 Lajal M. 2-0 Zhu E."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.3333333333333333
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Lajal M.)",
+          "missing_recent_matches_B (Svrcina D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 157,
+        "ranking_b": 111,
+        "forebet_prediction": "2",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 35,
+        "forebet_away_prob": 65
+      },
+      "enrichment_error": null
     },
     {
       "league": "WTA - Toronto",
@@ -1320,7 +1773,7 @@
       "event_time": "23:00",
       "outcome": "2",
       "open_odds": 1.8,
-      "current_odds": 1.58,
+      "current_odds": 1.59,
       "drop_pct": 12.0,
       "max_odds": 1.62,
       "sport_page_id": "30",
@@ -1373,10 +1826,10 @@
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 2.4,
-        "away_odds": 1.6,
+        "home_odds": 2.45,
+        "away_odds": 1.55,
         "favorite": "player_b",
-        "advanced_score": 55.7,
+        "advanced_score": 56.2,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -1466,20 +1919,156 @@
       "enrichment_error": null
     },
     {
-      "league": "ATP - Cincinnati",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/oconnell-c.-vs-sweeny-d./2297414?MarketTypeID=301",
-      "match_id": "2297414",
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/izquierdo-n.s.-vs-piraino-g./2296447?MarketTypeID=301",
+      "match_id": "2296447",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "O'Connell C.",
-      "away_team": "Sweeny D.",
+      "home_team": "Izquierdo N.S.",
+      "away_team": "Piraino G.",
       "event_date": "11/08",
-      "event_time": "14:00",
+      "event_time": "13:00",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.28,
+      "drop_pct": 12.0,
+      "max_odds": 2.35,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/piraino-gabriele-2VTqlA8l/sanchez-izquierdo-nikolas-6gnbtDJM/?mid=KvTFX7qp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sanchez Izquierdo N.",
+        "away_team": "Piraino G.",
+        "match_time": "11.08.2026 13:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.4,
+        "favorite": "player_a",
+        "advanced_score": 32.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "07.10.23",
+            "home": "Piraino G.",
+            "away": "Sanchez Izquierdo N.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "07.10.23 Piraino G. 0-2 Sanchez Izquierdo N."
+          }
+        ],
+        "last_h2h_date": "07.10.23",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Piraino G.",
+        "last_h2h_away": "Sanchez Izquierdo N.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": {
+          "clay": 1.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Sanchez Izquierdo N.)",
+          "missing_recent_matches_B (Piraino G.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 214,
+        "ranking_b": 404,
+        "forebet_prediction": "1",
+        "forebet_probability": 54.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 54,
+        "forebet_away_prob": 46
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/nishikori-k.-vs-comesana-f./2297431?MarketTypeID=301",
+      "match_id": "2297431",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Nishikori K.",
+      "away_team": "Comesana F.",
+      "event_date": "11/08",
+      "event_time": "16:50",
       "outcome": "1",
-      "open_odds": 1.73,
-      "current_odds": 1.54,
-      "drop_pct": 11.0,
-      "max_odds": 1.56,
+      "open_odds": 2.15,
+      "current_odds": 1.89,
+      "drop_pct": 12.0,
+      "max_odds": 1.97,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -1488,165 +2077,164 @@
       "focus_team": "home",
       "away_team_focus": false,
       "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/o-connell-christopher-SptFeDiE/sweeny-dane-f7I9IJsH/?mid=n5miNhb4",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/comesana-francisco-SxKK0RUD/nishikori-kei-YNkOjUIB/?mid=OSkxElLj",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": "O'Connell C.",
-        "away_team": "Sweeny D.",
-        "match_time": "11.08.2026 14:30",
+        "home_team": "Nishikori K.",
+        "away_team": "Comesana F.",
+        "match_time": "11.08.2026 17:30",
         "sport": "tennis",
-        "h2h_count": 2,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 1,
-        "win_rate": 0.5,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
         "qualifies": false,
         "home_form": [
           "L",
-          "W",
           "L",
+          "W",
           "L",
           "W"
         ],
         "away_form": [
           "L",
-          "L",
+          "W",
           "W",
           "L",
           "L"
         ],
         "home_form_overall": [
           "L",
-          "W",
           "L",
+          "W",
           "L",
           "W"
         ],
         "away_form_overall": [
           "L",
-          "L",
+          "W",
           "W",
           "L",
           "L"
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 1.53,
-        "away_odds": 2.35,
-        "favorite": "player_a",
-        "advanced_score": 0.6,
+        "home_odds": 1.93,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 16.1,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
-            "date": "04.01.26",
-            "home": "Sweeny D.",
-            "away": "O'Connell C.",
-            "score": "2-1",
-            "winner": "home",
-            "raw": "04.01.26 Sweeny D. 2-1 O'Connell C."
-          },
-          {
-            "date": "11.04.23",
-            "home": "O'Connell C.",
-            "away": "Sweeny D.",
+            "date": "01.08.26",
+            "home": "Zheng M.",
+            "away": "Nishikori K.",
             "score": "2-0",
             "winner": "home",
-            "raw": "11.04.23 O'Connell C. 2-0 Sweeny D."
+            "raw": "01.08.26 Zheng M. 2-0 Nishikori K."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Jodar R.",
+            "away": "Nishikori K.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Jodar R. 2-0 Nishikori K."
+          },
+          {
+            "date": "27.07.26",
+            "home": "Nishikori K.",
+            "away": "Shang J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "27.07.26 Nishikori K. 2-1 Shang J."
+          },
+          {
+            "date": "22.04.26",
+            "home": "Kennedy J.",
+            "away": "Nishikori K.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "22.04.26 Kennedy J. 2-1 Nishikori K."
+          },
+          {
+            "date": "21.04.26",
+            "home": "Nishikori K.",
+            "away": "Smith C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "21.04.26 Nishikori K. 2-0 Smith C."
           }
         ],
-        "last_h2h_date": "04.01.26",
-        "last_h2h_score": "2-1",
-        "last_h2h_home": "Sweeny D.",
-        "last_h2h_away": "O'Connell C.",
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
         "form_advantage": false,
         "surface": "hard",
         "surface_form_a": [
-          "L",
-          "W",
-          "L",
-          "L",
-          "W"
-        ],
-        "surface_form_b": [
           "L",
           "L",
           "W",
           "L",
           "L"
         ],
+        "surface_form_b": [
+          "L",
+          "L"
+        ],
         "surface_stats_a": {
-          "hard": 0.4
+          "hard": 0.2
         },
         "surface_stats_b": {
-          "hard": 0.2
+          "hard": 0.0
         },
         "form_a": [
           "L",
-          "W",
           "L",
+          "W",
           "L",
           "W"
         ],
         "form_b": [
           "L",
-          "L",
+          "W",
           "W",
           "L",
           "L"
         ],
         "tennis_data_warnings": [
-          "missing_recent_matches_A (O'Connell C.)",
-          "missing_recent_matches_B (Sweeny D.)"
+          "missing_h2h",
+          "missing_recent_matches_A (Nishikori K.)",
+          "missing_recent_matches_B (Comesana F.)"
         ],
         "tennis_phase_path": "full_pipeline",
-        "ranking_a": 133,
-        "ranking_b": 122,
+        "ranking_a": 467,
+        "ranking_b": 107,
         "forebet_prediction": "2",
-        "forebet_probability": 56.0,
+        "forebet_probability": 58.0,
         "forebet_exact_score": "0-2",
-        "forebet_avg_goals": 11.0,
-        "forebet_home_prob": 44,
-        "forebet_away_prob": 56
+        "forebet_avg_goals": 9.9,
+        "forebet_home_prob": 42,
+        "forebet_away_prob": 58
       },
       "enrichment_error": null
     },
     {
-      "league": "ATP - Cincinnati",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/mejia-n.-vs-fearnley-j./2297418?MarketTypeID=301",
-      "match_id": "2297418",
+      "league": "Challenger - Todi Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi-doubles/sabanov-i.sabanov-m.-vs-basel-v.ribero-f./2296598?MarketTypeID=301",
+      "match_id": "2296598",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Mejia N.",
-      "away_team": "Fearnley J.",
+      "home_team": "Sabanov I./Sabanov M.",
+      "away_team": "Basel V./Ribero F.",
       "event_date": "11/08",
-      "event_time": "19:10",
+      "event_time": "13:10",
       "outcome": "2",
-      "open_odds": 1.45,
-      "current_odds": 1.29,
+      "open_odds": 2.3,
+      "current_odds": 2.05,
       "drop_pct": 11.0,
-      "max_odds": 1.32,
-      "sport_page_id": "30",
-      "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
-      "dropped_outcome": "2",
-      "focus_team": "away",
-      "away_team_focus": true
-    },
-    {
-      "league": "Challenger - Astana",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ratti-l.-vs-sultanov-k./2297279?MarketTypeID=301",
-      "match_id": "2297279",
-      "sport_slug": "tennis",
-      "sport": "tennis",
-      "home_team": "Ratti L.",
-      "away_team": "Sultanov K.",
-      "event_date": "12/08",
-      "event_time": "05:00",
-      "outcome": "2",
-      "open_odds": 1.85,
-      "current_odds": 1.65,
-      "drop_pct": 11.0,
-      "max_odds": 1.67,
+      "max_odds": 2.1,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -1654,6 +2242,292 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/lajovic-d.-vs-bonzi-b./2297429?MarketTypeID=301",
+      "match_id": "2297429",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Lajovic D.",
+      "away_team": "Bonzi B.",
+      "event_date": "11/08",
+      "event_time": "15:40",
+      "outcome": "2",
+      "open_odds": 1.63,
+      "current_odds": 1.45,
+      "drop_pct": 11.0,
+      "max_odds": 1.48,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/bonzi-benjamin-M5OpGHqH/lajovic-dusan-bJf33z45/?mid=A53J8gqB",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Lajovic D.",
+        "away_team": "Bonzi B.",
+        "match_time": "11.08.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.3333333333333333,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.55,
+        "away_odds": 1.45,
+        "favorite": "player_b",
+        "advanced_score": 2.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "31.10.23",
+            "home": "Lajovic D.",
+            "away": "Bonzi B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "31.10.23 Lajovic D. 2-0 Bonzi B."
+          },
+          {
+            "date": "28.03.18",
+            "home": "Lajovic D.",
+            "away": "Bonzi B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "28.03.18 Lajovic D. 2-0 Bonzi B."
+          },
+          {
+            "date": "19.05.17",
+            "home": "Lajovic D.",
+            "away": "Bonzi B.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.05.17 Lajovic D. 0-2 Bonzi B."
+          }
+        ],
+        "last_h2h_date": "31.10.23",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Lajovic D.",
+        "last_h2h_away": "Bonzi B.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.75
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Lajovic D.)",
+          "missing_recent_matches_B (Bonzi B.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 149,
+        "ranking_b": 103,
+        "forebet_prediction": "2",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 47,
+        "forebet_away_prob": 53
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/harris-b.-vs-jacquet-k./2297421?MarketTypeID=301",
+      "match_id": "2297421",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Harris B.",
+      "away_team": "Jacquet K.",
+      "event_date": "11/08",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.52,
+      "current_odds": 1.36,
+      "drop_pct": 11.0,
+      "max_odds": 1.38,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/harris-billy-G0X2O6XR/jacquet-kyrian-KGKot0sk/?mid=0SZ9Smzp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Harris B.",
+        "away_team": "Jacquet K.",
+        "match_time": "11.08.2026 19:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 3.05,
+        "away_odds": 1.33,
+        "favorite": "unknown",
+        "advanced_score": 0.0,
+        "tennis_skip_reason": "odds_below_threshold: B (1.33) < 1.35",
+        "h2h_last5": [],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": null,
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "fast_path_odds_gate"
+        ],
+        "tennis_phase_path": "fast_odds_skip",
+        "ranking_a": null,
+        "ranking_b": null,
+        "form_source": "sofascore_api",
+        "h2h_source": "sofascore_api",
+        "sofascore_event_id": 16784138,
+        "sofascore_home_team_id": 111837,
+        "sofascore_away_team_id": 267577,
+        "sofascore_home_win_prob": 15,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 85,
+        "sofascore_total_votes": 1028,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.9,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hamburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/mcdonald-n.-vs-ribeiro-e./2297336?MarketTypeID=301",
+      "match_id": "2297336",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "McDonald N.",
+      "away_team": "Ribeiro E.",
+      "event_date": "12/08",
+      "event_time": "08:30",
+      "outcome": "1",
+      "open_odds": 1.7,
+      "current_odds": 1.52,
+      "drop_pct": 11.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
       "enrichment_status": "enriched_sofascore_only",
       "livesport_url": null,
       "livesport_confidence": 0.0,
@@ -1661,52 +2535,75 @@
         "home_form": [
           "W",
           "L",
+          "L",
           "W",
-          "W",
-          "W"
+          "L"
         ],
         "home_form_overall": [
           "W",
           "L",
+          "L",
           "W",
-          "W",
-          "W"
+          "L"
         ],
         "form_source": "sofascore_api",
         "away_form": [
           "W",
           "L",
-          "W",
+          "L",
           "W",
           "L"
         ],
         "away_form_overall": [
           "W",
           "L",
-          "W",
+          "L",
           "W",
           "L"
         ],
-        "sofascore_event_id": 16728402,
-        "sofascore_home_team_id": 405124,
-        "sofascore_away_team_id": 149100,
-        "home_team": "Ratti L.",
-        "away_team": "Sultanov K.",
+        "sofascore_event_id": 16728286,
+        "sofascore_home_team_id": 484006,
+        "sofascore_away_team_id": 199488,
+        "home_team": "McDonald N.",
+        "away_team": "Ribeiro E.",
         "sport": "tennis",
-        "league": "Challenger - Astana",
-        "match_time": "05:00",
-        "sofascore_home_win_prob": 64,
+        "league": "Challenger - Hamburg",
+        "match_time": "08:30",
+        "sofascore_home_win_prob": 39,
         "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 36,
-        "sofascore_total_votes": 70,
+        "sofascore_away_win_prob": 61,
+        "sofascore_total_votes": 145,
         "forebet_prediction": "2",
-        "forebet_probability": 62.0,
-        "forebet_exact_score": "1-2",
-        "forebet_avg_goals": 10.3,
-        "forebet_home_prob": 38,
-        "forebet_away_prob": 62
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 37,
+        "forebet_away_prob": 63
       },
       "enrichment_error": null
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/sierra-s.-vs-ito-a./2297450?MarketTypeID=301",
+      "match_id": "2297450",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sierra S.",
+      "away_team": "Ito A.",
+      "event_date": "11/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 3.64,
+      "current_odds": 3.23,
+      "drop_pct": 11.0,
+      "max_odds": 3.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
     }
   ],
   "qualified": [
@@ -1722,9 +2619,9 @@
       "event_time": "14:00",
       "outcome": "2",
       "open_odds": 3.8,
-      "current_odds": 2.16,
-      "drop_pct": 43.0,
-      "max_odds": 2.3,
+      "current_odds": 2.22,
+      "drop_pct": 42.0,
+      "max_odds": 2.25,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -1732,63 +2629,10 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true,
-      "enrichment_status": "enriched_sofascore_only",
+      "enrichment_status": "resolve_failed",
       "livesport_url": null,
       "livesport_confidence": 0.0,
-      "enrichment": {
-        "home_form": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "home_form_overall": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "form_source": "sofascore_api",
-        "away_form": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "away_form_overall": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "h2h_count": 1,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 0,
-        "h2h_source": "sofascore_api",
-        "win_rate": 0.0,
-        "sofascore_event_id": 16661576,
-        "sofascore_home_team_id": 448184,
-        "sofascore_away_team_id": 190877,
-        "home_team": "Schwarzler J.",
-        "away_team": "Andrade A.",
-        "sport": "tennis",
-        "league": "Challenger - Brownsburg",
-        "match_time": "14:00",
-        "sofascore_home_win_prob": 80,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 20,
-        "sofascore_total_votes": 2628,
-        "forebet_prediction": "2",
-        "forebet_probability": 52.0,
-        "forebet_exact_score": "0-2",
-        "forebet_avg_goals": 8.9,
-        "forebet_home_prob": 48,
-        "forebet_away_prob": 52
-      },
+      "enrichment": null,
       "enrichment_error": null
     },
     {
@@ -1800,12 +2644,12 @@
       "home_team": "Fomin S.",
       "away_team": "Zhukov M.",
       "event_date": "11/08",
-      "event_time": "08:50",
+      "event_time": "10:50",
       "outcome": "2",
       "open_odds": 3.25,
-      "current_odds": 2.31,
-      "drop_pct": 29.0,
-      "max_odds": 2.35,
+      "current_odds": 2.37,
+      "drop_pct": 27.0,
+      "max_odds": 2.5,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -1819,7 +2663,7 @@
       "enrichment": {
         "home_team": "Fomin S.",
         "away_team": "Zhukov M.",
-        "match_time": "11.08.2026 09:30",
+        "match_time": "11.08.2026 11:00",
         "sport": "tennis",
         "h2h_count": 5,
         "home_wins_in_h2h_last5": 2,
@@ -1856,10 +2700,10 @@
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 1.55,
-        "away_odds": 2.3,
+        "home_odds": 1.53,
+        "away_odds": 2.35,
         "favorite": "player_a",
-        "advanced_score": 13.8,
+        "advanced_score": 13.4,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -1963,9 +2807,9 @@
       "event_time": "14:00",
       "outcome": "1",
       "open_odds": 3.2,
-      "current_odds": 2.35,
-      "drop_pct": 27.0,
-      "max_odds": 2.45,
+      "current_odds": 2.36,
+      "drop_pct": 26.0,
+      "max_odds": 2.43,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -2016,10 +2860,10 @@
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 2.3,
-        "away_odds": 1.55,
+        "home_odds": 2.4,
+        "away_odds": 1.53,
         "favorite": "player_b",
-        "advanced_score": 46.9,
+        "advanced_score": 47.5,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -2121,39 +2965,39 @@
       "enrichment_error": null
     },
     {
-      "league": "Challenger - Astana",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ursu-v.-vs-dhamne-m./2295638?MarketTypeID=301",
-      "match_id": "2295638",
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/mpetshi-perricard-g.-vs-svajda-t./2297420?MarketTypeID=301",
+      "match_id": "2297420",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Ursu V.",
-      "away_team": "Dhamne M.",
+      "home_team": "Mpetshi Perricard G.",
+      "away_team": "Svajda T.",
       "event_date": "11/08",
-      "event_time": "05:00",
-      "outcome": "1",
-      "open_odds": 2.88,
-      "current_odds": 2.4,
-      "drop_pct": 17.0,
+      "event_time": "15:40",
+      "outcome": "2",
+      "open_odds": 3.0,
+      "current_odds": 2.37,
+      "drop_pct": 21.0,
       "max_odds": 2.45,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
       "skip_reason": null,
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
       "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/dhamne-manas-llqYSSzF/ursu-vadym-ENsOeB1H/?mid=WM0fL9Jt",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/mpetshi-perricard-giovanni-ITe9m2F8/svajda-trevor-4YQzKulF/?mid=M7k5f3O0",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": "Ursu V.",
-        "away_team": "Dhamne M.",
-        "match_time": "11.08.2026 05:00",
+        "home_team": "Mpetshi Perricard G.",
+        "away_team": "Svajda T.",
+        "match_time": "11.08.2026 16:00",
         "sport": "tennis",
         "h2h_count": 5,
         "home_wins_in_h2h_last5": 2,
         "away_wins_in_h2h_last5": 0,
-        "win_rate": 0.0,
+        "win_rate": 1.0,
         "qualifies": false,
         "home_form": [
           "L",
@@ -2164,10 +3008,10 @@
         ],
         "away_form": [
           "L",
+          "W",
           "L",
           "W",
-          "W",
-          "L"
+          "W"
         ],
         "home_form_overall": [
           "L",
@@ -2178,58 +3022,58 @@
         ],
         "away_form_overall": [
           "L",
+          "W",
           "L",
           "W",
-          "W",
-          "L"
+          "W"
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 2.4,
-        "away_odds": 1.5,
-        "favorite": "player_b",
-        "advanced_score": 41.0,
+        "home_odds": 1.55,
+        "away_odds": 2.3,
+        "favorite": "player_a",
+        "advanced_score": 2.3,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
             "date": "04.08.26",
-            "home": "Ursu V.",
-            "away": "Pereira T.",
+            "home": "Mpetshi Perricard G.",
+            "away": "Van De Zandschulp B.",
             "score": "1-2",
             "winner": "away",
-            "raw": "04.08.26 Ursu V. 1-2 Pereira T."
+            "raw": "04.08.26 Mpetshi Perricard G. 1-2 Van De Zandschulp B."
           },
           {
-            "date": "31.07.26",
-            "home": "Miyoshi K.",
-            "away": "Ursu V.",
-            "score": "2-0",
+            "date": "30.06.26",
+            "home": "Hanfmann Y.",
+            "away": "Mpetshi Perricard G.",
+            "score": "3-1",
             "winner": "home",
-            "raw": "31.07.26 Miyoshi K. 2-0 Ursu V."
+            "raw": "30.06.26 Hanfmann Y. 3-1 Mpetshi Perricard G."
           },
           {
-            "date": "30.07.26",
-            "home": "Yevseyev D.",
-            "away": "Ursu V.",
+            "date": "26.06.26",
+            "home": "Bautista R.",
+            "away": "Mpetshi Perricard G.",
             "score": "1-2",
             "winner": "away",
-            "raw": "30.07.26 Yevseyev D. 1-2 Ursu V."
+            "raw": "26.06.26 Bautista R. 1-2 Mpetshi Perricard G."
           },
           {
-            "date": "28.07.26",
-            "home": "Turker M. N.",
-            "away": "Ursu V.",
-            "score": "0-2",
+            "date": "23.06.26",
+            "home": "Tien L.",
+            "away": "Mpetshi Perricard G.",
+            "score": "1-2",
             "winner": "away",
-            "raw": "28.07.26 Turker M. N. 0-2 Ursu V."
+            "raw": "23.06.26 Tien L. 1-2 Mpetshi Perricard G."
           },
           {
-            "date": "14.07.26",
-            "home": "Ursu V.",
-            "away": "Palan D.",
-            "score": "0-2",
+            "date": "16.06.26",
+            "home": "Mpetshi Perricard G.",
+            "away": "Moutet C.",
+            "score": "1-2",
             "winner": "away",
-            "raw": "14.07.26 Ursu V. 0-2 Palan D."
+            "raw": "16.06.26 Mpetshi Perricard G. 1-2 Moutet C."
           }
         ],
         "last_h2h_date": null,
@@ -2241,48 +3085,51 @@
         "surface_form_a": [
           "L",
           "L",
-          "W",
-          "W",
-          "L"
+          "L",
+          "L",
+          "W"
         ],
         "surface_form_b": [
           "L",
+          "W",
           "L",
           "W",
           "W"
         ],
         "surface_stats_a": {
-          "hard": 0.4
+          "hard": 0.2
         },
         "surface_stats_b": {
-          "hard": 0.5
+          "hard": 0.6
         },
-        "form_a": [],
-        "form_b": [],
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
         "tennis_data_warnings": [
           "missing_h2h",
-          "missing_recent_matches_A (Ursu V.)",
-          "missing_recent_matches_B (Dhamne M.)",
-          "missing_form_A",
-          "missing_form_B"
+          "missing_recent_matches_A (Mpetshi Perricard G.)",
+          "missing_recent_matches_B (Svajda T.)"
         ],
         "tennis_phase_path": "full_pipeline",
-        "ranking_a": 401,
-        "ranking_b": 362,
-        "form_source": "sofascore_api",
-        "sofascore_event_id": 16762339,
-        "sofascore_home_team_id": 111857,
-        "sofascore_away_team_id": 415528,
-        "sofascore_home_win_prob": 18,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 82,
-        "sofascore_total_votes": 740,
-        "forebet_prediction": "2",
-        "forebet_probability": 58.0,
-        "forebet_exact_score": "0-2",
-        "forebet_avg_goals": 8.4,
-        "forebet_home_prob": 42,
-        "forebet_away_prob": 58
+        "ranking_a": 91,
+        "ranking_b": 383,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
       },
       "enrichment_error": null
     },
@@ -2298,8 +3145,8 @@
       "event_time": "15:10",
       "outcome": "1",
       "open_odds": 1.85,
-      "current_odds": 1.53,
-      "drop_pct": 17.0,
+      "current_odds": 1.52,
+      "drop_pct": 18.0,
       "max_odds": 1.55,
       "sport_page_id": "30",
       "notes": [],
@@ -2452,20 +3299,48 @@
       "enrichment_error": null
     },
     {
-      "league": "Challenger - Todi",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/izquierdo-n.s.-vs-piraino-g./2296447?MarketTypeID=301",
-      "match_id": "2296447",
+      "league": "Challenger - Astana Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana-doubles/betov-s.singh-k.-vs-park-u.sinha-n.k./2297600?MarketTypeID=301",
+      "match_id": "2297600",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Izquierdo N.S.",
-      "away_team": "Piraino G.",
-      "event_date": "11/08",
-      "event_time": "13:00",
+      "home_team": "Betov S./Singh K.",
+      "away_team": "Park U./Sinha N.K.",
+      "event_date": "12/08",
+      "event_time": "05:00",
+      "outcome": "1",
+      "open_odds": 2.1,
+      "current_odds": 1.75,
+      "drop_pct": 17.0,
+      "max_odds": 1.78,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Astana",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ratti-l.-vs-sultanov-k./2297279?MarketTypeID=301",
+      "match_id": "2297279",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ratti L.",
+      "away_team": "Sultanov K.",
+      "event_date": "12/08",
+      "event_time": "05:00",
       "outcome": "2",
-      "open_odds": 2.6,
-      "current_odds": 2.21,
-      "drop_pct": 15.0,
-      "max_odds": 2.25,
+      "open_odds": 1.85,
+      "current_odds": 1.59,
+      "drop_pct": 14.0,
+      "max_odds": 1.62,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -2473,135 +3348,75 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true,
-      "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/piraino-gabriele-2VTqlA8l/sanchez-izquierdo-nikolas-6gnbtDJM/?mid=KvTFX7qp",
-      "livesport_confidence": 1.0,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
       "enrichment": {
-        "home_team": "Sanchez Izquierdo N.",
-        "away_team": "Piraino G.",
-        "match_time": "11.08.2026 13:00",
-        "sport": "tennis",
-        "h2h_count": 1,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 0,
-        "win_rate": 1.0,
-        "qualifies": false,
         "home_form": [
-          "L",
-          "L",
           "W",
           "L",
-          "W"
-        ],
-        "away_form": [
-          "W",
-          "W",
           "W",
           "W",
           "W"
         ],
         "home_form_overall": [
-          "L",
-          "L",
           "W",
           "L",
+          "W",
+          "W",
           "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
         ],
         "away_form_overall": [
           "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "home_form_home": [],
-        "away_form_away": [],
-        "home_odds": 1.6,
-        "away_odds": 2.2,
-        "favorite": "player_a",
-        "advanced_score": 31.4,
-        "tennis_skip_reason": null,
-        "h2h_last5": [
-          {
-            "date": "07.10.23",
-            "home": "Piraino G.",
-            "away": "Sanchez Izquierdo N.",
-            "score": "0-2",
-            "winner": "away",
-            "raw": "07.10.23 Piraino G. 0-2 Sanchez Izquierdo N."
-          }
-        ],
-        "last_h2h_date": "07.10.23",
-        "last_h2h_score": "0-2",
-        "last_h2h_home": "Piraino G.",
-        "last_h2h_away": "Sanchez Izquierdo N.",
-        "form_advantage": false,
-        "surface": "clay",
-        "surface_form_a": [
-          "L",
           "L",
           "W",
-          "L",
-          "W"
+          "W",
+          "L"
         ],
-        "surface_form_b": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "surface_stats_a": {
-          "clay": 0.4
-        },
-        "surface_stats_b": {
-          "clay": 1.0
-        },
-        "form_a": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "form_b": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "tennis_data_warnings": [
-          "missing_recent_matches_A (Sanchez Izquierdo N.)",
-          "missing_recent_matches_B (Piraino G.)"
-        ],
-        "tennis_phase_path": "full_pipeline",
-        "ranking_a": 214,
-        "ranking_b": 404,
-        "forebet_prediction": "1",
-        "forebet_probability": 54.0,
-        "forebet_exact_score": "2-0",
-        "forebet_avg_goals": 10.0,
-        "forebet_home_prob": 54,
-        "forebet_away_prob": 46
+        "sofascore_event_id": 16728402,
+        "sofascore_home_team_id": 405124,
+        "sofascore_away_team_id": 149100,
+        "home_team": "Ratti L.",
+        "away_team": "Sultanov K.",
+        "sport": "tennis",
+        "league": "Challenger - Astana",
+        "match_time": "05:00",
+        "sofascore_home_win_prob": 51,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 49,
+        "sofascore_total_votes": 128,
+        "forebet_prediction": "2",
+        "forebet_probability": 62.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 38,
+        "forebet_away_prob": 62
       },
       "enrichment_error": null
     },
     {
-      "league": "Challenger - Hamburg",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/lechno-wasiutynski-f.-vs-purtseladze-s./2297297?MarketTypeID=301",
-      "match_id": "2297297",
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/oconnell-c.-vs-sweeny-d./2297414?MarketTypeID=301",
+      "match_id": "2297414",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Lechno-Wasiutynski F.",
-      "away_team": "Purtseladze S.",
+      "home_team": "O'Connell C.",
+      "away_team": "Sweeny D.",
       "event_date": "11/08",
-      "event_time": "10:00",
+      "event_time": "14:00",
       "outcome": "1",
-      "open_odds": 1.65,
-      "current_odds": 1.44,
+      "open_odds": 1.73,
+      "current_odds": 1.51,
       "drop_pct": 13.0,
-      "max_odds": 1.45,
+      "max_odds": 1.55,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -2610,20 +3425,20 @@
       "focus_team": "home",
       "away_team_focus": false,
       "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/lechno-wasiutynski-fryderyk-8UVBz17q/purtseladze-saba-OI2qf1Ze/?mid=YLTVGzGU",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/o-connell-christopher-SptFeDiE/sweeny-dane-f7I9IJsH/?mid=n5miNhb4",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": "Lechno-Wasiutyński F.",
-        "away_team": "Purtseladze S.",
-        "match_time": "11.08.2026 10:00",
+        "home_team": "O'Connell C.",
+        "away_team": "Sweeny D.",
+        "match_time": "11.08.2026 14:30",
         "sport": "tennis",
-        "h2h_count": 5,
-        "home_wins_in_h2h_last5": 3,
-        "away_wins_in_h2h_last5": 0,
-        "win_rate": 1.0,
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.5,
         "qualifies": false,
         "home_form": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -2631,13 +3446,13 @@
         ],
         "away_form": [
           "L",
-          "W",
           "L",
           "W",
-          "W"
+          "L",
+          "L"
         ],
         "home_form_overall": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -2645,68 +3460,44 @@
         ],
         "away_form_overall": [
           "L",
-          "W",
           "L",
           "W",
-          "W"
+          "L",
+          "L"
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 1.45,
-        "away_odds": 2.6,
+        "home_odds": 1.5,
+        "away_odds": 2.4,
         "favorite": "player_a",
-        "advanced_score": 42.5,
+        "advanced_score": 0.1,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
-            "date": "10.08.26",
-            "home": "Barton H.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "1-2",
-            "winner": "away",
-            "raw": "10.08.26 Barton H. 1-2 Lechno-Wasiutyński F."
-          },
-          {
-            "date": "09.08.26",
-            "home": "Dedura-Palomero M.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "1-2",
-            "winner": "away",
-            "raw": "09.08.26 Dedura-Palomero M. 1-2 Lechno-Wasiutyński F."
-          },
-          {
-            "date": "28.07.26",
-            "home": "Munkhammar P.",
-            "away": "Lechno-Wasiutyński F.",
+            "date": "04.01.26",
+            "home": "Sweeny D.",
+            "away": "O'Connell C.",
             "score": "2-1",
             "winner": "home",
-            "raw": "28.07.26 Munkhammar P. 2-1 Lechno-Wasiutyński F."
+            "raw": "04.01.26 Sweeny D. 2-1 O'Connell C."
           },
           {
-            "date": "06.07.26",
-            "home": "Staeheli L.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "1-0",
+            "date": "11.04.23",
+            "home": "O'Connell C.",
+            "away": "Sweeny D.",
+            "score": "2-0",
             "winner": "home",
-            "raw": "06.07.26 Staeheli L. 1-0 Lechno-Wasiutyński F."
-          },
-          {
-            "date": "05.07.26",
-            "home": "Tixhon D.",
-            "away": "Lechno-Wasiutyński F.",
-            "score": "0-2",
-            "winner": "away",
-            "raw": "05.07.26 Tixhon D. 0-2 Lechno-Wasiutyński F."
+            "raw": "11.04.23 O'Connell C. 2-0 Sweeny D."
           }
         ],
-        "last_h2h_date": null,
-        "last_h2h_score": null,
-        "last_h2h_home": null,
-        "last_h2h_away": null,
+        "last_h2h_date": "04.01.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Sweeny D.",
+        "last_h2h_away": "O'Connell C.",
         "form_advantage": false,
-        "surface": "clay",
+        "surface": "hard",
         "surface_form_a": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -2714,19 +3505,19 @@
         ],
         "surface_form_b": [
           "L",
-          "W",
           "L",
           "W",
+          "L",
           "L"
         ],
         "surface_stats_a": {
-          "clay": 0.6
+          "hard": 0.4
         },
         "surface_stats_b": {
-          "clay": 0.4
+          "hard": 0.2
         },
         "form_a": [
-          "W",
+          "L",
           "W",
           "L",
           "L",
@@ -2734,25 +3525,24 @@
         ],
         "form_b": [
           "L",
-          "W",
           "L",
           "W",
-          "W"
+          "L",
+          "L"
         ],
         "tennis_data_warnings": [
-          "missing_h2h",
-          "missing_recent_matches_A (Lechno-Wasiutyński F.)",
-          "missing_recent_matches_B (Purtseladze S.)"
+          "missing_recent_matches_A (O'Connell C.)",
+          "missing_recent_matches_B (Sweeny D.)"
         ],
         "tennis_phase_path": "full_pipeline",
-        "ranking_a": 636,
-        "ranking_b": 659,
-        "forebet_prediction": "1",
-        "forebet_probability": 63.0,
-        "forebet_exact_score": "2-1",
-        "forebet_avg_goals": 10.3,
-        "forebet_home_prob": 63,
-        "forebet_away_prob": 37
+        "ranking_a": 133,
+        "ranking_b": 122,
+        "forebet_prediction": "2",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 35,
+        "forebet_away_prob": 65
       },
       "enrichment_error": null
     },
@@ -2822,9 +3612,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 1.95,
-        "away_odds": 1.75,
+        "away_odds": 1.78,
         "favorite": "player_b",
-        "advanced_score": 10.6,
+        "advanced_score": 10.3,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -2926,6 +3716,474 @@
       "enrichment_error": null
     },
     {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/stoiana-m.-vs-erjavec-v./2297455?MarketTypeID=301",
+      "match_id": "2297455",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Stoiana M.",
+      "away_team": "Erjavec V.",
+      "event_date": "11/08",
+      "event_time": "15:40",
+      "outcome": "1",
+      "open_odds": 1.67,
+      "current_odds": 1.45,
+      "drop_pct": 13.0,
+      "max_odds": 1.48,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/erjavec-veronika-rsErY1Yt/stoiana-mary-K6fgsbWR/?mid=YV2v7kRk",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Stoiana M.",
+        "away_team": "Erjavec V.",
+        "match_time": "11.08.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.43,
+        "away_odds": 2.6,
+        "favorite": "player_a",
+        "advanced_score": 1.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "01.08.26",
+            "home": "Korniejewa A.",
+            "away": "Stoiana M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "01.08.26 Korniejewa A. 2-1 Stoiana M."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Stoiana M.",
+            "away": "Stearns P.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "28.07.26 Stoiana M. 1-2 Stearns P."
+          },
+          {
+            "date": "24.07.26",
+            "home": "Stoiana M.",
+            "away": "Ku Y.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "24.07.26 Stoiana M. 1-2 Ku Y."
+          },
+          {
+            "date": "23.07.26",
+            "home": "Stoiana M.",
+            "away": "Pareja J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.07.26 Stoiana M. 2-0 Pareja J."
+          },
+          {
+            "date": "22.07.26",
+            "home": "Stoiana M.",
+            "away": "Rogers A. S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "22.07.26 Stoiana M. 2-0 Rogers A. S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [],
+        "surface_form_b": [
+          "L"
+        ],
+        "surface_stats_a": null,
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Stoiana M.)",
+          "missing_recent_matches_B (Erjavec V.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 127,
+        "ranking_b": 104,
+        "forebet_prediction": "1",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 53,
+        "forebet_away_prob": 47
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/kraus-s.-vs-bassols-ribera-m./2297443?MarketTypeID=301",
+      "match_id": "2297443",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kraus S.",
+      "away_team": "Bassols Ribera M.",
+      "event_date": "11/08",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 2.43,
+      "current_odds": 2.11,
+      "drop_pct": 13.0,
+      "max_odds": 2.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/bassols-ribera-marina-dvDRCAx9/kraus-sinja-6oA7gaee/?mid=6PETaYJM",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kraus S.",
+        "away_team": "Bassols M.",
+        "match_time": "11.08.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.68,
+        "away_odds": 2.05,
+        "favorite": "player_a",
+        "advanced_score": 72.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "18.07.26",
+            "home": "Bassols M.",
+            "away": "Kraus S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "18.07.26 Bassols M. 1-2 Kraus S."
+          },
+          {
+            "date": "04.02.24",
+            "home": "Bassols M.",
+            "away": "Kraus S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "04.02.24 Bassols M. 0-2 Kraus S."
+          }
+        ],
+        "last_h2h_date": "18.07.26",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Bassols M.",
+        "last_h2h_away": "Kraus S.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Kraus S.)",
+          "missing_recent_matches_B (Bassols M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 81,
+        "ranking_b": 136,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.8,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/lajal-m.-vs-svrcina-d./2297427?MarketTypeID=301",
+      "match_id": "2297427",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Lajal M.",
+      "away_team": "Svrcina D.",
+      "event_date": "11/08",
+      "event_time": "19:10",
+      "outcome": "1",
+      "open_odds": 2.2,
+      "current_odds": 1.95,
+      "drop_pct": 12.0,
+      "max_odds": 2.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/lajal-mark-2q51si8O/svrcina-dalibor-vDue624T/?mid=lficdPgl",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Lajal M.",
+        "away_team": "Svrcina D.",
+        "match_time": "11.08.2026 20:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.9,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 32.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "02.08.26",
+            "home": "Wolf J.J.",
+            "away": "Lajal M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.08.26 Wolf J.J. 2-0 Lajal M."
+          },
+          {
+            "date": "31.07.26",
+            "home": "Rice K.",
+            "away": "Lajal M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "31.07.26 Rice K. 0-2 Lajal M."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Lajal M.",
+            "away": "Shick B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Lajal M. 2-0 Shick B."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Lajal M.",
+            "away": "Chidekh C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Lajal M. 2-0 Chidekh C."
+          },
+          {
+            "date": "29.07.26",
+            "home": "Lajal M.",
+            "away": "Zhu E.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.07.26 Lajal M. 2-0 Zhu E."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.3333333333333333
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Lajal M.)",
+          "missing_recent_matches_B (Svrcina D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 157,
+        "ranking_b": 111,
+        "forebet_prediction": "2",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 35,
+        "forebet_away_prob": 65
+      },
+      "enrichment_error": null
+    },
+    {
       "league": "WTA - Toronto",
       "match_url": "https://www.oddssafari.com/matches/tennis/wta-toronto/bencic-b.-vs-gauff-c./2297126?MarketTypeID=301",
       "match_id": "2297126",
@@ -2937,7 +4195,7 @@
       "event_time": "23:00",
       "outcome": "2",
       "open_odds": 1.8,
-      "current_odds": 1.58,
+      "current_odds": 1.59,
       "drop_pct": 12.0,
       "max_odds": 1.62,
       "sport_page_id": "30",
@@ -2990,10 +4248,10 @@
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 2.4,
-        "away_odds": 1.6,
+        "home_odds": 2.45,
+        "away_odds": 1.55,
         "favorite": "player_b",
-        "advanced_score": 55.7,
+        "advanced_score": 56.2,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -3083,20 +4341,156 @@
       "enrichment_error": null
     },
     {
-      "league": "ATP - Cincinnati",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/oconnell-c.-vs-sweeny-d./2297414?MarketTypeID=301",
-      "match_id": "2297414",
+      "league": "Challenger - Todi",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi/izquierdo-n.s.-vs-piraino-g./2296447?MarketTypeID=301",
+      "match_id": "2296447",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "O'Connell C.",
-      "away_team": "Sweeny D.",
+      "home_team": "Izquierdo N.S.",
+      "away_team": "Piraino G.",
       "event_date": "11/08",
-      "event_time": "14:00",
+      "event_time": "13:00",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.28,
+      "drop_pct": 12.0,
+      "max_odds": 2.35,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/piraino-gabriele-2VTqlA8l/sanchez-izquierdo-nikolas-6gnbtDJM/?mid=KvTFX7qp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sanchez Izquierdo N.",
+        "away_team": "Piraino G.",
+        "match_time": "11.08.2026 13:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.4,
+        "favorite": "player_a",
+        "advanced_score": 32.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "07.10.23",
+            "home": "Piraino G.",
+            "away": "Sanchez Izquierdo N.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "07.10.23 Piraino G. 0-2 Sanchez Izquierdo N."
+          }
+        ],
+        "last_h2h_date": "07.10.23",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Piraino G.",
+        "last_h2h_away": "Sanchez Izquierdo N.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": {
+          "clay": 1.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Sanchez Izquierdo N.)",
+          "missing_recent_matches_B (Piraino G.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 214,
+        "ranking_b": 404,
+        "forebet_prediction": "1",
+        "forebet_probability": 54.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 54,
+        "forebet_away_prob": 46
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/nishikori-k.-vs-comesana-f./2297431?MarketTypeID=301",
+      "match_id": "2297431",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Nishikori K.",
+      "away_team": "Comesana F.",
+      "event_date": "11/08",
+      "event_time": "16:50",
       "outcome": "1",
-      "open_odds": 1.73,
-      "current_odds": 1.54,
-      "drop_pct": 11.0,
-      "max_odds": 1.56,
+      "open_odds": 2.15,
+      "current_odds": 1.89,
+      "drop_pct": 12.0,
+      "max_odds": 1.97,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -3105,142 +4499,164 @@
       "focus_team": "home",
       "away_team_focus": false,
       "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/o-connell-christopher-SptFeDiE/sweeny-dane-f7I9IJsH/?mid=n5miNhb4",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/comesana-francisco-SxKK0RUD/nishikori-kei-YNkOjUIB/?mid=OSkxElLj",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": "O'Connell C.",
-        "away_team": "Sweeny D.",
-        "match_time": "11.08.2026 14:30",
+        "home_team": "Nishikori K.",
+        "away_team": "Comesana F.",
+        "match_time": "11.08.2026 17:30",
         "sport": "tennis",
-        "h2h_count": 2,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 1,
-        "win_rate": 0.5,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
         "qualifies": false,
         "home_form": [
           "L",
-          "W",
           "L",
+          "W",
           "L",
           "W"
         ],
         "away_form": [
           "L",
-          "L",
+          "W",
           "W",
           "L",
           "L"
         ],
         "home_form_overall": [
           "L",
-          "W",
           "L",
+          "W",
           "L",
           "W"
         ],
         "away_form_overall": [
           "L",
-          "L",
+          "W",
           "W",
           "L",
           "L"
         ],
         "home_form_home": [],
         "away_form_away": [],
-        "home_odds": 1.53,
-        "away_odds": 2.35,
-        "favorite": "player_a",
-        "advanced_score": 0.6,
+        "home_odds": 1.93,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 16.1,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
-            "date": "04.01.26",
-            "home": "Sweeny D.",
-            "away": "O'Connell C.",
-            "score": "2-1",
-            "winner": "home",
-            "raw": "04.01.26 Sweeny D. 2-1 O'Connell C."
-          },
-          {
-            "date": "11.04.23",
-            "home": "O'Connell C.",
-            "away": "Sweeny D.",
+            "date": "01.08.26",
+            "home": "Zheng M.",
+            "away": "Nishikori K.",
             "score": "2-0",
             "winner": "home",
-            "raw": "11.04.23 O'Connell C. 2-0 Sweeny D."
+            "raw": "01.08.26 Zheng M. 2-0 Nishikori K."
+          },
+          {
+            "date": "30.07.26",
+            "home": "Jodar R.",
+            "away": "Nishikori K.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.07.26 Jodar R. 2-0 Nishikori K."
+          },
+          {
+            "date": "27.07.26",
+            "home": "Nishikori K.",
+            "away": "Shang J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "27.07.26 Nishikori K. 2-1 Shang J."
+          },
+          {
+            "date": "22.04.26",
+            "home": "Kennedy J.",
+            "away": "Nishikori K.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "22.04.26 Kennedy J. 2-1 Nishikori K."
+          },
+          {
+            "date": "21.04.26",
+            "home": "Nishikori K.",
+            "away": "Smith C.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "21.04.26 Nishikori K. 2-0 Smith C."
           }
         ],
-        "last_h2h_date": "04.01.26",
-        "last_h2h_score": "2-1",
-        "last_h2h_home": "Sweeny D.",
-        "last_h2h_away": "O'Connell C.",
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
         "form_advantage": false,
         "surface": "hard",
         "surface_form_a": [
-          "L",
-          "W",
-          "L",
-          "L",
-          "W"
-        ],
-        "surface_form_b": [
           "L",
           "L",
           "W",
           "L",
           "L"
         ],
+        "surface_form_b": [
+          "L",
+          "L"
+        ],
         "surface_stats_a": {
-          "hard": 0.4
+          "hard": 0.2
         },
         "surface_stats_b": {
-          "hard": 0.2
+          "hard": 0.0
         },
         "form_a": [
           "L",
-          "W",
           "L",
+          "W",
           "L",
           "W"
         ],
         "form_b": [
           "L",
-          "L",
+          "W",
           "W",
           "L",
           "L"
         ],
         "tennis_data_warnings": [
-          "missing_recent_matches_A (O'Connell C.)",
-          "missing_recent_matches_B (Sweeny D.)"
+          "missing_h2h",
+          "missing_recent_matches_A (Nishikori K.)",
+          "missing_recent_matches_B (Comesana F.)"
         ],
         "tennis_phase_path": "full_pipeline",
-        "ranking_a": 133,
-        "ranking_b": 122,
+        "ranking_a": 467,
+        "ranking_b": 107,
         "forebet_prediction": "2",
-        "forebet_probability": 56.0,
+        "forebet_probability": 58.0,
         "forebet_exact_score": "0-2",
-        "forebet_avg_goals": 11.0,
-        "forebet_home_prob": 44,
-        "forebet_away_prob": 56
+        "forebet_avg_goals": 9.9,
+        "forebet_home_prob": 42,
+        "forebet_away_prob": 58
       },
       "enrichment_error": null
     },
     {
-      "league": "Challenger - Astana",
-      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/ratti-l.-vs-sultanov-k./2297279?MarketTypeID=301",
-      "match_id": "2297279",
+      "league": "Challenger - Todi Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-todi-doubles/sabanov-i.sabanov-m.-vs-basel-v.ribero-f./2296598?MarketTypeID=301",
+      "match_id": "2296598",
       "sport_slug": "tennis",
       "sport": "tennis",
-      "home_team": "Ratti L.",
-      "away_team": "Sultanov K.",
-      "event_date": "12/08",
-      "event_time": "05:00",
+      "home_team": "Sabanov I./Sabanov M.",
+      "away_team": "Basel V./Ribero F.",
+      "event_date": "11/08",
+      "event_time": "13:10",
       "outcome": "2",
-      "open_odds": 1.85,
-      "current_odds": 1.65,
+      "open_odds": 2.3,
+      "current_odds": 2.05,
       "drop_pct": 11.0,
-      "max_odds": 1.67,
+      "max_odds": 2.1,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": true,
@@ -3248,6 +4664,292 @@
       "dropped_outcome": "2",
       "focus_team": "away",
       "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/lajovic-d.-vs-bonzi-b./2297429?MarketTypeID=301",
+      "match_id": "2297429",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Lajovic D.",
+      "away_team": "Bonzi B.",
+      "event_date": "11/08",
+      "event_time": "15:40",
+      "outcome": "2",
+      "open_odds": 1.63,
+      "current_odds": 1.45,
+      "drop_pct": 11.0,
+      "max_odds": 1.48,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/bonzi-benjamin-M5OpGHqH/lajovic-dusan-bJf33z45/?mid=A53J8gqB",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Lajovic D.",
+        "away_team": "Bonzi B.",
+        "match_time": "11.08.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.3333333333333333,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.55,
+        "away_odds": 1.45,
+        "favorite": "player_b",
+        "advanced_score": 2.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "31.10.23",
+            "home": "Lajovic D.",
+            "away": "Bonzi B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "31.10.23 Lajovic D. 2-0 Bonzi B."
+          },
+          {
+            "date": "28.03.18",
+            "home": "Lajovic D.",
+            "away": "Bonzi B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "28.03.18 Lajovic D. 2-0 Bonzi B."
+          },
+          {
+            "date": "19.05.17",
+            "home": "Lajovic D.",
+            "away": "Bonzi B.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.05.17 Lajovic D. 0-2 Bonzi B."
+          }
+        ],
+        "last_h2h_date": "31.10.23",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Lajovic D.",
+        "last_h2h_away": "Bonzi B.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.75
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Lajovic D.)",
+          "missing_recent_matches_B (Bonzi B.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 149,
+        "ranking_b": 103,
+        "forebet_prediction": "2",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 47,
+        "forebet_away_prob": 53
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/harris-b.-vs-jacquet-k./2297421?MarketTypeID=301",
+      "match_id": "2297421",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Harris B.",
+      "away_team": "Jacquet K.",
+      "event_date": "11/08",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.52,
+      "current_odds": 1.36,
+      "drop_pct": 11.0,
+      "max_odds": 1.38,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/harris-billy-G0X2O6XR/jacquet-kyrian-KGKot0sk/?mid=0SZ9Smzp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Harris B.",
+        "away_team": "Jacquet K.",
+        "match_time": "11.08.2026 19:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 3.05,
+        "away_odds": 1.33,
+        "favorite": "unknown",
+        "advanced_score": 0.0,
+        "tennis_skip_reason": "odds_below_threshold: B (1.33) < 1.35",
+        "h2h_last5": [],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": null,
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "fast_path_odds_gate"
+        ],
+        "tennis_phase_path": "fast_odds_skip",
+        "ranking_a": null,
+        "ranking_b": null,
+        "form_source": "sofascore_api",
+        "h2h_source": "sofascore_api",
+        "sofascore_event_id": 16784138,
+        "sofascore_home_team_id": 111837,
+        "sofascore_away_team_id": 267577,
+        "sofascore_home_win_prob": 15,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 85,
+        "sofascore_total_votes": 1028,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.9,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hamburg",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/mcdonald-n.-vs-ribeiro-e./2297336?MarketTypeID=301",
+      "match_id": "2297336",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "McDonald N.",
+      "away_team": "Ribeiro E.",
+      "event_date": "12/08",
+      "event_time": "08:30",
+      "outcome": "1",
+      "open_odds": 1.7,
+      "current_odds": 1.52,
+      "drop_pct": 11.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
       "enrichment_status": "enriched_sofascore_only",
       "livesport_url": null,
       "livesport_confidence": 0.0,
@@ -3255,50 +4957,50 @@
         "home_form": [
           "W",
           "L",
+          "L",
           "W",
-          "W",
-          "W"
+          "L"
         ],
         "home_form_overall": [
           "W",
           "L",
+          "L",
           "W",
-          "W",
-          "W"
+          "L"
         ],
         "form_source": "sofascore_api",
         "away_form": [
           "W",
           "L",
-          "W",
+          "L",
           "W",
           "L"
         ],
         "away_form_overall": [
           "W",
           "L",
-          "W",
+          "L",
           "W",
           "L"
         ],
-        "sofascore_event_id": 16728402,
-        "sofascore_home_team_id": 405124,
-        "sofascore_away_team_id": 149100,
-        "home_team": "Ratti L.",
-        "away_team": "Sultanov K.",
+        "sofascore_event_id": 16728286,
+        "sofascore_home_team_id": 484006,
+        "sofascore_away_team_id": 199488,
+        "home_team": "McDonald N.",
+        "away_team": "Ribeiro E.",
         "sport": "tennis",
-        "league": "Challenger - Astana",
-        "match_time": "05:00",
-        "sofascore_home_win_prob": 64,
+        "league": "Challenger - Hamburg",
+        "match_time": "08:30",
+        "sofascore_home_win_prob": 39,
         "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 36,
-        "sofascore_total_votes": 70,
+        "sofascore_away_win_prob": 61,
+        "sofascore_total_votes": 145,
         "forebet_prediction": "2",
-        "forebet_probability": 62.0,
-        "forebet_exact_score": "1-2",
-        "forebet_avg_goals": 10.3,
-        "forebet_home_prob": 38,
-        "forebet_away_prob": 62
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 37,
+        "forebet_away_prob": 63
       },
       "enrichment_error": null
     }
