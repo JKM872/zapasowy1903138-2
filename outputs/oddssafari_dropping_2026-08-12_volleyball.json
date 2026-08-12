@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-12T09:35:11.095169+02:00",
+    "generated_at": "2026-08-12T18:58:01.584227+02:00",
     "target_date": "2026-08-12",
     "filter": {
       "min_odds": 1.35,
@@ -8,7 +8,7 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 0,
+      "events": 1,
       "qualified": 0
     },
     "enrichment_status_counts": {
@@ -16,10 +16,36 @@
       "resolve_failed": 0,
       "process_match_error": 0
     },
-    "skip_reason_counts": {},
-    "elapsed_seconds": 5.0,
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 0.9,
     "dry_run": false
   },
-  "events": [],
+  "events": [
+    {
+      "league": "International  - Pan American Cup",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/pan-american-cup/cuba-vs-guatemala/2298117?MarketTypeID=701",
+      "match_id": "2298117",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Cuba",
+      "away_team": "Guatemala",
+      "event_date": "13/08",
+      "event_time": "02:00",
+      "outcome": "2",
+      "open_odds": 12.0,
+      "current_odds": 10.0,
+      "drop_pct": 17.0,
+      "max_odds": 11.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
   "qualified": []
 }
