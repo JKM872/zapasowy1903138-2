@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-14T09:31:12.788736+02:00",
+    "generated_at": "2026-08-14T18:56:45.919429+02:00",
     "target_date": "2026-08-14",
     "filter": {
       "min_odds": 1.6,
@@ -8,18 +8,19 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 3,
-      "qualified": 0
+      "events": 4,
+      "qualified": 1
     },
     "enrichment_status_counts": {
       "enriched": 0,
       "resolve_failed": 0,
-      "process_match_error": 0
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
     },
     "skip_reason_counts": {
       "odds_out_of_range": 3
     },
-    "elapsed_seconds": 2.0,
+    "elapsed_seconds": 43.3,
     "dry_run": false
   },
   "events": [
@@ -35,31 +36,8 @@
       "event_time": "07:00",
       "outcome": "X",
       "open_odds": 5.4,
-      "current_odds": 4.48,
-      "drop_pct": 17.0,
-      "max_odds": 4.5,
-      "sport_page_id": "40",
-      "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
-      "dropped_outcome": "X",
-      "focus_team": "draw",
-      "away_team_focus": false
-    },
-    {
-      "league": "Australia - AIHL",
-      "match_url": "https://www.oddssafari.com/matches/ice-hockey/australia/aihl/sydney-bears-vs-perth-thunder/2296643?MarketTypeID=401",
-      "match_id": "2296643",
-      "sport_slug": "ice-hockey",
-      "sport": "hockey",
-      "home_team": "Sydney Bears",
-      "away_team": "Perth Thunder",
-      "event_date": "15/08",
-      "event_time": "07:00",
-      "outcome": "X",
-      "open_odds": 5.2,
       "current_odds": 4.45,
-      "drop_pct": 14.0,
+      "drop_pct": 18.0,
       "max_odds": 4.5,
       "sport_page_id": "40",
       "notes": [],
@@ -81,9 +59,9 @@
       "event_time": "07:00",
       "outcome": "X",
       "open_odds": 13.0,
-      "current_odds": 11.25,
-      "drop_pct": 13.0,
-      "max_odds": 12.0,
+      "current_odds": 10.83,
+      "drop_pct": 17.0,
+      "max_odds": 13.0,
       "sport_page_id": "40",
       "notes": [],
       "qualifies": false,
@@ -91,7 +69,239 @@
       "dropped_outcome": "X",
       "focus_team": "draw",
       "away_team_focus": false
+    },
+    {
+      "league": "Australia - AIHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/australia/aihl/sydney-bears-vs-perth-thunder/2296643?MarketTypeID=401",
+      "match_id": "2296643",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Sydney Bears",
+      "away_team": "Perth Thunder",
+      "event_date": "15/08",
+      "event_time": "07:00",
+      "outcome": "X",
+      "open_odds": 5.2,
+      "current_odds": 4.5,
+      "drop_pct": 13.0,
+      "max_odds": 4.6,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "X",
+      "focus_team": "draw",
+      "away_team_focus": false
+    },
+    {
+      "league": "Australia - AIHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/australia/aihl/sydney-bears-vs-perth-thunder/2296643?MarketTypeID=401",
+      "match_id": "2296643",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Sydney Bears",
+      "away_team": "Perth Thunder",
+      "event_date": "15/08",
+      "event_time": "07:00",
+      "outcome": "1",
+      "open_odds": 2.13,
+      "current_odds": 1.89,
+      "drop_pct": 11.0,
+      "max_odds": 1.95,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15126370,
+        "sofascore_home_team_id": 282959,
+        "sofascore_away_team_id": 282958,
+        "home_team": "Sydney Bears",
+        "away_team": "Perth Thunder",
+        "sport": "hockey",
+        "league": "Australia - AIHL",
+        "match_time": "07:00",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "30.05.26",
+            "home": "Perth Thunder",
+            "away": "Sydney Bears",
+            "score": "6:1",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "30.05.26",
+        "last_h2h_score": "6:1",
+        "last_h2h_home": "Perth Thunder",
+        "last_h2h_away": "Sydney Bears",
+        "sofascore_home_win_prob": 75,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 25,
+        "sofascore_total_votes": 32
+      },
+      "enrichment_error": null
     }
   ],
-  "qualified": []
+  "qualified": [
+    {
+      "league": "Australia - AIHL",
+      "match_url": "https://www.oddssafari.com/matches/ice-hockey/australia/aihl/sydney-bears-vs-perth-thunder/2296643?MarketTypeID=401",
+      "match_id": "2296643",
+      "sport_slug": "ice-hockey",
+      "sport": "hockey",
+      "home_team": "Sydney Bears",
+      "away_team": "Perth Thunder",
+      "event_date": "15/08",
+      "event_time": "07:00",
+      "outcome": "1",
+      "open_odds": 2.13,
+      "current_odds": 1.89,
+      "drop_pct": 11.0,
+      "max_odds": 1.95,
+      "sport_page_id": "40",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15126370,
+        "sofascore_home_team_id": 282959,
+        "sofascore_away_team_id": 282958,
+        "home_team": "Sydney Bears",
+        "away_team": "Perth Thunder",
+        "sport": "hockey",
+        "league": "Australia - AIHL",
+        "match_time": "07:00",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "30.05.26",
+            "home": "Perth Thunder",
+            "away": "Sydney Bears",
+            "score": "6:1",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "30.05.26",
+        "last_h2h_score": "6:1",
+        "last_h2h_home": "Perth Thunder",
+        "last_h2h_away": "Sydney Bears",
+        "sofascore_home_win_prob": 75,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 25,
+        "sofascore_total_votes": 32
+      },
+      "enrichment_error": null
+    }
+  ]
 }
