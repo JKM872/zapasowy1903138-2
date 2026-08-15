@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-15T10:28:29.418152+02:00",
+    "generated_at": "2026-08-15T12:34:39.874599+02:00",
     "target_date": "2026-08-15",
     "filter": {
       "min_odds": 1.35,
@@ -8,45 +8,22 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 16,
+      "events": 17,
       "qualified": 10
     },
     "enrichment_status_counts": {
-      "enriched": 7,
-      "resolve_failed": 2,
+      "enriched": 8,
+      "resolve_failed": 1,
       "process_match_error": 0,
       "enriched_sofascore_only": 1
     },
     "skip_reason_counts": {
-      "odds_out_of_range": 6
+      "odds_out_of_range": 7
     },
-    "elapsed_seconds": 567.5,
+    "elapsed_seconds": 593.8,
     "dry_run": false
   },
   "events": [
-    {
-      "league": "ATP - Cincinnati",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/nakashima-b.-vs-kovacevic-a./2299551?MarketTypeID=301",
-      "match_id": "2299551",
-      "sport_slug": "tennis",
-      "sport": "tennis",
-      "home_team": "Nakashima B.",
-      "away_team": "Kovacevic A.",
-      "event_date": "16/08",
-      "event_time": "15:00",
-      "outcome": "2",
-      "open_odds": 5.0,
-      "current_odds": 3.45,
-      "drop_pct": 31.0,
-      "max_odds": 3.45,
-      "sport_page_id": "30",
-      "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
-      "dropped_outcome": "2",
-      "focus_team": "away",
-      "away_team_focus": true
-    },
     {
       "league": "WTA - Cincinnati",
       "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/bouzkova-m.-vs-stefanini-l./2299183?MarketTypeID=301",
@@ -59,9 +36,55 @@
       "event_time": "15:00",
       "outcome": "2",
       "open_odds": 4.5,
-      "current_odds": 3.4,
-      "drop_pct": 24.0,
-      "max_odds": 3.4,
+      "current_odds": 3.45,
+      "drop_pct": 23.0,
+      "max_odds": 3.45,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "ATP - Cincinnati Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati-doubles/cash-j.glasspool-l.-vs-ram-r.salisbury-j./2299569?MarketTypeID=301",
+      "match_id": "2299569",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cash J./Glasspool L.",
+      "away_team": "Ram R./Salisbury J.",
+      "event_date": "16/08",
+      "event_time": "14:00",
+      "outcome": "1",
+      "open_odds": 1.67,
+      "current_odds": 1.3,
+      "drop_pct": 22.0,
+      "max_odds": 1.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/nakashima-b.-vs-kovacevic-a./2299551?MarketTypeID=301",
+      "match_id": "2299551",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Nakashima B.",
+      "away_team": "Kovacevic A.",
+      "event_date": "16/08",
+      "event_time": "15:00",
+      "outcome": "2",
+      "open_odds": 5.0,
+      "current_odds": 3.9,
+      "drop_pct": 22.0,
+      "max_odds": 3.9,
       "sport_page_id": "30",
       "notes": [],
       "qualifies": false,
@@ -94,34 +117,6 @@
       "away_team_focus": true
     },
     {
-      "league": "ATP - Cincinnati Doubles",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati-doubles/cash-j.glasspool-l.-vs-ram-r.salisbury-j./2299569?MarketTypeID=301",
-      "match_id": "2299569",
-      "sport_slug": "tennis",
-      "sport": "tennis",
-      "home_team": "Cash J./Glasspool L.",
-      "away_team": "Ram R./Salisbury J.",
-      "event_date": "16/08",
-      "event_time": "14:00",
-      "outcome": "1",
-      "open_odds": 1.67,
-      "current_odds": 1.35,
-      "drop_pct": 19.0,
-      "max_odds": 1.37,
-      "sport_page_id": "30",
-      "notes": [],
-      "qualifies": true,
-      "skip_reason": null,
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false,
-      "enrichment_status": "resolve_failed",
-      "livesport_url": null,
-      "livesport_confidence": 0.0,
-      "enrichment": null,
-      "enrichment_error": null
-    },
-    {
       "league": "ATP - Cincinnati",
       "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/bellucci-m.-vs-mensik-j./2298862?MarketTypeID=301",
       "match_id": "2298862",
@@ -133,7 +128,7 @@
       "event_time": "16:10",
       "outcome": "1",
       "open_odds": 4.33,
-      "current_odds": 3.56,
+      "current_odds": 3.57,
       "drop_pct": 18.0,
       "max_odds": 4.0,
       "sport_page_id": "30",
@@ -379,9 +374,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 1.9,
-        "away_odds": 1.93,
+        "away_odds": 1.95,
         "favorite": "player_a",
-        "advanced_score": 61.8,
+        "advanced_score": 61.9,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -585,6 +580,195 @@
       "enrichment_error": null
     },
     {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/paul-t.-vs-hurkacz-h./2299193?MarketTypeID=301",
+      "match_id": "2299193",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Paul T.",
+      "away_team": "Hurkacz H.",
+      "event_date": "15/08",
+      "event_time": "17:20",
+      "outcome": "2",
+      "open_odds": 2.4,
+      "current_odds": 2.09,
+      "drop_pct": 13.0,
+      "max_odds": 2.09,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/hurkacz-hubert-zuHOBnY9/paul-tommy-pd3ye1BS/?mid=YZEu5IL7",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Paul T.",
+        "away_team": "Hurkacz H.",
+        "match_time": "15.08.2026 18:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.6,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.75,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 0.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.07.26",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "03.07.26 Hurkacz H. 3-1 Paul T."
+          },
+          {
+            "date": "15.05.25",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "15.05.25 Hurkacz H. 0-2 Paul T."
+          },
+          {
+            "date": "16.05.24",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "16.05.24 Hurkacz H. 1-2 Paul T."
+          },
+          {
+            "date": "13.03.23",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.03.23 Hurkacz H. 1-2 Paul T."
+          },
+          {
+            "date": "03.11.21",
+            "home": "Paul T.",
+            "away": "Hurkacz H.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.11.21 Paul T. 0-2 Hurkacz H."
+          }
+        ],
+        "last_h2h_date": "03.07.26",
+        "last_h2h_score": "3-1",
+        "last_h2h_home": "Hurkacz H.",
+        "last_h2h_away": "Paul T.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.3333333333333333
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Paul T.)",
+          "missing_recent_matches_B (Hurkacz H.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 24,
+        "ranking_b": 69,
+        "forebet_prediction": "2",
+        "forebet_probability": 57.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 11.1,
+        "forebet_home_prob": 43,
+        "forebet_away_prob": 57
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/zverev-a.-vs-norrie-c./2298774?MarketTypeID=301",
+      "match_id": "2298774",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Zverev A.",
+      "away_team": "Norrie C.",
+      "event_date": "16/08",
+      "event_time": "00:10",
+      "outcome": "2",
+      "open_odds": 4.5,
+      "current_odds": 3.92,
+      "drop_pct": 13.0,
+      "max_odds": 4.15,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
       "league": "Challenger - Astana",
       "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/dougaz-a.-vs-fomin-s./2298988?MarketTypeID=301",
       "match_id": "2298988",
@@ -612,7 +796,7 @@
       "enrichment": {
         "home_team": "Dougaz A.",
         "away_team": "Fomin S.",
-        "match_time": "15.08.2026 08:30",
+        "match_time": "15.08.2026 08:35",
         "sport": "tennis",
         "h2h_count": 5,
         "home_wins_in_h2h_last5": 4,
@@ -650,9 +834,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 1.55,
-        "away_odds": 2.25,
+        "away_odds": 2.3,
         "favorite": "player_a",
-        "advanced_score": 11.3,
+        "advanced_score": 11.6,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -752,29 +936,6 @@
         "forebet_away_prob": 44
       },
       "enrichment_error": null
-    },
-    {
-      "league": "ATP - Cincinnati",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/zverev-a.-vs-norrie-c./2298774?MarketTypeID=301",
-      "match_id": "2298774",
-      "sport_slug": "tennis",
-      "sport": "tennis",
-      "home_team": "Zverev A.",
-      "away_team": "Norrie C.",
-      "event_date": "16/08",
-      "event_time": "00:10",
-      "outcome": "2",
-      "open_odds": 4.5,
-      "current_odds": 3.92,
-      "drop_pct": 13.0,
-      "max_odds": 4.15,
-      "sport_page_id": "30",
-      "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
-      "dropped_outcome": "2",
-      "focus_team": "away",
-      "away_team_focus": true
     },
     {
       "league": "WTA - Cincinnati",
@@ -1009,9 +1170,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 2.65,
-        "away_odds": 1.48,
+        "away_odds": 1.5,
         "favorite": "player_b",
-        "advanced_score": 29.7,
+        "advanced_score": 29.6,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -1200,10 +1361,10 @@
         "sport": "tennis",
         "league": "WTA - Cincinnati",
         "match_time": "14:00",
-        "sofascore_home_win_prob": 85,
+        "sofascore_home_win_prob": 84,
         "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 15,
-        "sofascore_total_votes": 357,
+        "sofascore_away_win_prob": 16,
+        "sofascore_total_votes": 398,
         "forebet_prediction": "1",
         "forebet_probability": 56.0,
         "forebet_exact_score": "2-0",
@@ -1281,7 +1442,7 @@
         "home_odds": 1.6,
         "away_odds": 2.35,
         "favorite": "player_a",
-        "advanced_score": 49.3,
+        "advanced_score": 47.3,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -1315,23 +1476,10 @@
         "last_h2h_away": "Darderi L.",
         "form_advantage": false,
         "surface": "hard",
-        "surface_form_a": [
-          "L",
-          "W",
-          "W",
-          "W"
-        ],
-        "surface_form_b": [
-          "W",
-          "L",
-          "L"
-        ],
-        "surface_stats_a": {
-          "hard": 0.75
-        },
-        "surface_stats_b": {
-          "hard": 0.3333333333333333
-        },
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
         "form_a": [
           "L",
           "W",
@@ -1364,34 +1512,6 @@
     }
   ],
   "qualified": [
-    {
-      "league": "ATP - Cincinnati Doubles",
-      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati-doubles/cash-j.glasspool-l.-vs-ram-r.salisbury-j./2299569?MarketTypeID=301",
-      "match_id": "2299569",
-      "sport_slug": "tennis",
-      "sport": "tennis",
-      "home_team": "Cash J./Glasspool L.",
-      "away_team": "Ram R./Salisbury J.",
-      "event_date": "16/08",
-      "event_time": "14:00",
-      "outcome": "1",
-      "open_odds": 1.67,
-      "current_odds": 1.35,
-      "drop_pct": 19.0,
-      "max_odds": 1.37,
-      "sport_page_id": "30",
-      "notes": [],
-      "qualifies": true,
-      "skip_reason": null,
-      "dropped_outcome": "1",
-      "focus_team": "home",
-      "away_team_focus": false,
-      "enrichment_status": "resolve_failed",
-      "livesport_url": null,
-      "livesport_confidence": 0.0,
-      "enrichment": null,
-      "enrichment_error": null
-    },
     {
       "league": "Challenger - Hamburg",
       "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hamburg/de-almeida-m.p.-vs-kumstat-j./2299062?MarketTypeID=301",
@@ -1627,9 +1747,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 1.9,
-        "away_odds": 1.93,
+        "away_odds": 1.95,
         "favorite": "player_a",
-        "advanced_score": 61.8,
+        "advanced_score": 61.9,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -1833,6 +1953,172 @@
       "enrichment_error": null
     },
     {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/paul-t.-vs-hurkacz-h./2299193?MarketTypeID=301",
+      "match_id": "2299193",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Paul T.",
+      "away_team": "Hurkacz H.",
+      "event_date": "15/08",
+      "event_time": "17:20",
+      "outcome": "2",
+      "open_odds": 2.4,
+      "current_odds": 2.09,
+      "drop_pct": 13.0,
+      "max_odds": 2.09,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/hurkacz-hubert-zuHOBnY9/paul-tommy-pd3ye1BS/?mid=YZEu5IL7",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Paul T.",
+        "away_team": "Hurkacz H.",
+        "match_time": "15.08.2026 18:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.6,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.75,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 0.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.07.26",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "03.07.26 Hurkacz H. 3-1 Paul T."
+          },
+          {
+            "date": "15.05.25",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "15.05.25 Hurkacz H. 0-2 Paul T."
+          },
+          {
+            "date": "16.05.24",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "16.05.24 Hurkacz H. 1-2 Paul T."
+          },
+          {
+            "date": "13.03.23",
+            "home": "Hurkacz H.",
+            "away": "Paul T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.03.23 Hurkacz H. 1-2 Paul T."
+          },
+          {
+            "date": "03.11.21",
+            "home": "Paul T.",
+            "away": "Hurkacz H.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.11.21 Paul T. 0-2 Hurkacz H."
+          }
+        ],
+        "last_h2h_date": "03.07.26",
+        "last_h2h_score": "3-1",
+        "last_h2h_home": "Hurkacz H.",
+        "last_h2h_away": "Paul T.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.3333333333333333
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Paul T.)",
+          "missing_recent_matches_B (Hurkacz H.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 24,
+        "ranking_b": 69,
+        "forebet_prediction": "2",
+        "forebet_probability": 57.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 11.1,
+        "forebet_home_prob": 43,
+        "forebet_away_prob": 57
+      },
+      "enrichment_error": null
+    },
+    {
       "league": "Challenger - Astana",
       "match_url": "https://www.oddssafari.com/matches/tennis/challenger-astana/dougaz-a.-vs-fomin-s./2298988?MarketTypeID=301",
       "match_id": "2298988",
@@ -1860,7 +2146,7 @@
       "enrichment": {
         "home_team": "Dougaz A.",
         "away_team": "Fomin S.",
-        "match_time": "15.08.2026 08:30",
+        "match_time": "15.08.2026 08:35",
         "sport": "tennis",
         "h2h_count": 5,
         "home_wins_in_h2h_last5": 4,
@@ -1898,9 +2184,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 1.55,
-        "away_odds": 2.25,
+        "away_odds": 2.3,
         "favorite": "player_a",
-        "advanced_score": 11.3,
+        "advanced_score": 11.6,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -2211,9 +2497,9 @@
         "home_form_home": [],
         "away_form_away": [],
         "home_odds": 2.65,
-        "away_odds": 1.48,
+        "away_odds": 1.5,
         "favorite": "player_b",
-        "advanced_score": 29.7,
+        "advanced_score": 29.6,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -2402,10 +2688,10 @@
         "sport": "tennis",
         "league": "WTA - Cincinnati",
         "match_time": "14:00",
-        "sofascore_home_win_prob": 85,
+        "sofascore_home_win_prob": 84,
         "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 15,
-        "sofascore_total_votes": 357,
+        "sofascore_away_win_prob": 16,
+        "sofascore_total_votes": 398,
         "forebet_prediction": "1",
         "forebet_probability": 56.0,
         "forebet_exact_score": "2-0",
@@ -2483,7 +2769,7 @@
         "home_odds": 1.6,
         "away_odds": 2.35,
         "favorite": "player_a",
-        "advanced_score": 49.3,
+        "advanced_score": 47.3,
         "tennis_skip_reason": null,
         "h2h_last5": [
           {
@@ -2517,23 +2803,10 @@
         "last_h2h_away": "Darderi L.",
         "form_advantage": false,
         "surface": "hard",
-        "surface_form_a": [
-          "L",
-          "W",
-          "W",
-          "W"
-        ],
-        "surface_form_b": [
-          "W",
-          "L",
-          "L"
-        ],
-        "surface_stats_a": {
-          "hard": 0.75
-        },
-        "surface_stats_b": {
-          "hard": 0.3333333333333333
-        },
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
         "form_a": [
           "L",
           "W",
