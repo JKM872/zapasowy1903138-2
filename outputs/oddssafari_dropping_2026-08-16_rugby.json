@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "generated_at": "2026-08-16T12:33:52.128603+02:00",
+    "target_date": "2026-08-16",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 346.5,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "South Africa - Currie Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/south-africa/currie-cup/bulls-vs-cheetahs/2293283?MarketTypeID=1301",
+      "match_id": "2293283",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Bulls",
+      "away_team": "Cheetahs",
+      "event_date": "16/08",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 3.2,
+      "current_odds": 2.78,
+      "drop_pct": 13.0,
+      "max_odds": 2.9,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/canberra-raiders-vs-brisbane-broncos/2297577?MarketTypeID=1401",
+      "match_id": "2297577",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Canberra Raiders",
+      "away_team": "Brisbane Broncos",
+      "event_date": "21/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.62,
+      "current_odds": 1.44,
+      "drop_pct": 11.0,
+      "max_odds": 1.48,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15105970,
+        "sofascore_home_team_id": 4256,
+        "sofascore_away_team_id": 4258,
+        "home_team": "Canberra Raiders",
+        "away_team": "Brisbane Broncos",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "08:00",
+        "home_form_home": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "14.09.25",
+            "home": "Canberra Raiders",
+            "away": "Brisbane Broncos",
+            "score": "28:29",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "14.09.25",
+        "last_h2h_score": "28:29",
+        "last_h2h_home": "Canberra Raiders",
+        "last_h2h_away": "Brisbane Broncos",
+        "sofascore_home_win_prob": 57,
+        "sofascore_draw_prob": 3,
+        "sofascore_away_win_prob": 40,
+        "sofascore_total_votes": 60,
+        "forebet_prediction": "1",
+        "forebet_probability": 72.0,
+        "forebet_exact_score": "26-14",
+        "forebet_avg_goals": 38.8,
+        "forebet_home_prob": 72,
+        "forebet_away_prob": 27
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/canberra-raiders-vs-brisbane-broncos/2297577?MarketTypeID=1401",
+      "match_id": "2297577",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Canberra Raiders",
+      "away_team": "Brisbane Broncos",
+      "event_date": "21/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.62,
+      "current_odds": 1.44,
+      "drop_pct": 11.0,
+      "max_odds": 1.48,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15105970,
+        "sofascore_home_team_id": 4256,
+        "sofascore_away_team_id": 4258,
+        "home_team": "Canberra Raiders",
+        "away_team": "Brisbane Broncos",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "08:00",
+        "home_form_home": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "14.09.25",
+            "home": "Canberra Raiders",
+            "away": "Brisbane Broncos",
+            "score": "28:29",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "14.09.25",
+        "last_h2h_score": "28:29",
+        "last_h2h_home": "Canberra Raiders",
+        "last_h2h_away": "Brisbane Broncos",
+        "sofascore_home_win_prob": 57,
+        "sofascore_draw_prob": 3,
+        "sofascore_away_win_prob": 40,
+        "sofascore_total_votes": 60,
+        "forebet_prediction": "1",
+        "forebet_probability": 72.0,
+        "forebet_exact_score": "26-14",
+        "forebet_avg_goals": 38.8,
+        "forebet_home_prob": 72,
+        "forebet_away_prob": 27
+      },
+      "enrichment_error": null
+    }
+  ]
+}
