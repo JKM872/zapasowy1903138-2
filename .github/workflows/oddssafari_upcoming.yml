@@ -1,0 +1,271 @@
+name: OddsSafari Upcoming Odds (hourly)
+
+# Runs every hour: it watches the *upcoming* card, and both things it measures
+# move continuously through the day — prices drift and drop, and a fixture's
+# bookmaker count grows as the market forms. A once-a-day look would miss the
+# moment money arrives on an outcome.
+#
+# Different question from oddssafari_dropping.yml. That workflow reports what
+# *changed* (the dropping-odds table only lists outcomes that moved). This one
+# starts from the full coupon card — every fixture with its moneyline prices and
+# NumOfBookmakers — joins the drops onto it, and keeps only fixtures that have
+# not kicked off yet.
+#
+# Filters are the pipeline's shared ones: per-sport odds ranges from
+# SPORT_ODDS_RANGE (football 1.80–2.50, handball/hockey 1.60–2.50, others
+# 1.35–2.50) via is_qualifying_row, plus a bookmaker-count floor and the
+# kickoff window.
+#
+# The sport list is built at runtime rather than as a static matrix with skips:
+# a skipped job still costs a billed minute, and 13 sports every hour would burn
+# ~200 minutes a day doing nothing. The hourly schedule runs the four sports
+# whose cards actually move; the rest are one workflow_dispatch away.
+#
+# Results are uploaded as artifacts, not committed — 24 commits a day would bury
+# the repo. oddssafari_dropping.yml remains the committed daily record.
+
+on:
+  schedule:
+    - cron: '5 * * * *'
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: 'One sport, "scheduled" for the hourly core four, or "all" for every coupon sport'
+        required: false
+        default: 'scheduled'
+        type: choice
+        options:
+          - scheduled
+          - all
+          - football
+          - basketball
+          - tennis
+          - hockey
+          - handball
+          - baseball
+          - rugby
+          - esports
+          # No form source for these — reported on odds/drops/bookmakers only.
+          - american-football
+          - darts
+          - cricket
+          - mma
+          - boxing
+      hours:
+        description: 'Look-ahead horizon in hours'
+        required: false
+        default: '12'
+        type: string
+      min_bookmakers:
+        description: 'Minimum bookmakers pricing the candidate outcome'
+        required: false
+        default: '5'
+        type: string
+      require_drop:
+        description: 'Keep only fixtures whose candidate price dropped'
+        required: false
+        default: false
+        type: boolean
+      min_drop:
+        description: 'Minimum drop % on the candidate (0 = drops scored, not required)'
+        required: false
+        default: '0'
+        type: string
+      max_enrich:
+        description: 'Max fixtures given form/H2H enrichment (0 = all)'
+        required: false
+        default: '12'
+        type: string
+      dry_run:
+        description: 'Odds only — skip form enrichment (fast, no browser)'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+concurrency:
+  # An hourly schedule must never pile up if one run is slow.
+  group: oddssafari-upcoming-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  select-sports:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      sports: ${{ steps.pick.outputs.sports }}
+      count: ${{ steps.pick.outputs.count }}
+    steps:
+      - name: Build the sport matrix
+        id: pick
+        env:
+          # Sports whose cards move enough to be worth an hourly look.
+          SCHEDULED: '["football","basketball","tennis","hockey"]'
+          # Every sport the OddsSafari coupon menu carries (14 total; there is
+          # no volleyball and no table tennis on the coupon).
+          ALL: >-
+            ["football","basketball","tennis","hockey","handball","baseball",
+             "rugby","esports","american-football","darts","cricket","mma","boxing"]
+        run: |
+          REQUESTED="${{ github.event.inputs.sport || 'scheduled' }}"
+          case "$REQUESTED" in
+            scheduled) SPORTS="$SCHEDULED" ;;
+            all)       SPORTS=$(echo "$ALL" | tr -d '[:space:]') ;;
+            *)         SPORTS="[\"$REQUESTED\"]" ;;
+          esac
+          echo "Selected sports: $SPORTS"
+          echo "sports=$SPORTS" >> $GITHUB_OUTPUT
+          echo "count=$(echo "$SPORTS" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))')" >> $GITHUB_OUTPUT
+
+  upcoming-odds:
+    needs: select-sports
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        sport: ${{ fromJson(needs.select-sports.outputs.sports) }}
+
+    # SofaScore is the form source that actually carries this pipeline, and
+    # Cloudflare challenges GitHub's IP ranges far harder than a home
+    # connection. sofascore_scraper reads FLARESOLVERR_URL and warms curl_cffi
+    # with the cf_clearance cookies FlareSolverr wins, so without this service
+    # the form data quietly collapses in CI while working fine locally.
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # forebet_scraper prefers Puppeteer Extra + Stealth (its documented best
+      # method for CI) and looks for node_modules/puppeteer-extra, falling back
+      # to curl_cffi only when Node is absent.
+      - name: Setup Node.js
+        if: github.event.inputs.dry_run != 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install Chrome
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          echo "CHROME_BIN=${CHROME_PATH}" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=${CHROME_PATH}" >> $GITHUB_ENV
+
+      - name: Install ChromeDriver
+        if: github.event.inputs.dry_run != 'true'
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install -r requirements.txt
+          # requirements.txt carries no SOCKS extra, but SOFASCORE_PROXY below is
+          # a socks5h:// URL — requests raises "Missing dependencies for SOCKS
+          # support" without these.
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
+
+      - name: Install Node.js dependencies
+        if: github.event.inputs.dry_run != 'true'
+        run: npm ci || npm install
+
+      # Forebet refuses to render headless, so forebet_scraper runs Chrome on a
+      # virtual display when it detects CI. Without Xvfb the Forebet step fails
+      # and predictions are simply missing from the report.
+      - name: Install Xvfb (Forebet needs a visible display)
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Wait for FlareSolverr
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "FlareSolverr is ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+
+      - name: Setup Tor (SOCKS5 on :9050)
+        if: github.event.inputs.dry_run != 'true'
+        continue-on-error: true
+        run: bash tools/setup_tor.sh
+
+      - name: Resolve run date (Europe/Warsaw)
+        id: resolve-date
+        run: echo "target=$(TZ='Europe/Warsaw' date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+
+      - name: Run upcoming-odds pipeline (${{ matrix.sport }})
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          HOURS="${{ github.event.inputs.hours || '12' }}"
+          MIN_BK="${{ github.event.inputs.min_bookmakers || '5' }}"
+          MIN_DROP="${{ github.event.inputs.min_drop || '0' }}"
+          MAX_ENRICH="${{ github.event.inputs.max_enrich || '12' }}"
+
+          EXTRA=""
+          if [ "${{ github.event.inputs.require_drop }}" = "true" ]; then
+            EXTRA="$EXTRA --require-drop"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            EXTRA="$EXTRA --dry-run"
+          fi
+
+          python oddssafari_upcoming_pipeline.py \
+            --sport "${{ matrix.sport }}" \
+            --hours "$HOURS" \
+            --min-bookmakers "$MIN_BK" \
+            --min-drop "$MIN_DROP" \
+            --max-enrich "$MAX_ENRICH" \
+            --headless \
+            $EXTRA
+
+      - name: Summary (${{ matrix.sport }})
+        if: always()
+        run: |
+          TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
+          OUT="outputs/oddssafari_upcoming_${TARGET_DATE}_${{ matrix.sport }}.json"
+          echo "## ${{ matrix.sport }} — upcoming @ $(TZ='Europe/Warsaw' date +%H:%M)" >> "$GITHUB_STEP_SUMMARY"
+          python ci_oddssafari_summary.py "$OUT" >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload artifact (${{ matrix.sport }})
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: oddssafari-upcoming-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
+          path: |
+            outputs/oddssafari_upcoming_*.json
+          retention-days: 5
