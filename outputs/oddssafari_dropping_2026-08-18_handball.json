@@ -1,0 +1,298 @@
+{
+  "meta": {
+    "generated_at": "2026-08-18T12:31:21.691977+02:00",
+    "target_date": "2026-08-18",
+    "filter": {
+      "min_odds": 1.6,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 3,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "elapsed_seconds": 52.7,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Norway - NM Cup (W)",
+      "match_url": "https://www.oddssafari.com/matches/handball/norway/nm-cup-w/melhus-vs-utleira/2301968?MarketTypeID=601",
+      "match_id": "2301968",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Melhus",
+      "away_team": "Utleira",
+      "event_date": "18/08",
+      "event_time": "17:00",
+      "outcome": "1",
+      "open_odds": 15.5,
+      "current_odds": 12.0,
+      "drop_pct": 23.0,
+      "max_odds": 12.0,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Denmark - Super Cup",
+      "match_url": "https://www.oddssafari.com/matches/handball/denmark/super-cup/aalborg-vs-skanderborg-agf/2299088?MarketTypeID=601",
+      "match_id": "2299088",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Aalborg",
+      "away_team": "Skanderborg AGF",
+      "event_date": "23/08",
+      "event_time": "14:00",
+      "outcome": "2",
+      "open_odds": 9.0,
+      "current_odds": 7.39,
+      "drop_pct": 18.0,
+      "max_odds": 8.0,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Germany - Super Cup",
+      "match_url": "https://www.oddssafari.com/matches/handball/germany/super-cup/magdeburg-vs-fuchse-berlin/2299089?MarketTypeID=601",
+      "match_id": "2299089",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Magdeburg",
+      "away_team": "Fuchse Berlin",
+      "event_date": "22/08",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 2.05,
+      "current_odds": 1.78,
+      "drop_pct": 13.0,
+      "max_odds": 1.83,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16322131,
+        "sofascore_home_team_id": 3982,
+        "sofascore_away_team_id": 5453,
+        "home_team": "Magdeburg",
+        "away_team": "Fuchse Berlin",
+        "sport": "handball",
+        "league": "Germany - Super Cup",
+        "match_time": "16:00",
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "13.06.26",
+            "home": "SC Magdeburg",
+            "away": "Füchse Berlin",
+            "score": "35:40",
+            "winner": "away"
+          },
+          {
+            "date": "28.03.26",
+            "home": "SC Magdeburg",
+            "away": "Füchse Berlin",
+            "score": "35:33",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "13.06.26",
+        "last_h2h_score": "35:40",
+        "last_h2h_home": "SC Magdeburg",
+        "last_h2h_away": "Füchse Berlin",
+        "sofascore_home_win_prob": 66,
+        "sofascore_draw_prob": 3,
+        "sofascore_away_win_prob": 30,
+        "sofascore_total_votes": 243
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Germany - Super Cup",
+      "match_url": "https://www.oddssafari.com/matches/handball/germany/super-cup/magdeburg-vs-fuchse-berlin/2299089?MarketTypeID=601",
+      "match_id": "2299089",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Magdeburg",
+      "away_team": "Fuchse Berlin",
+      "event_date": "22/08",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 2.05,
+      "current_odds": 1.78,
+      "drop_pct": 13.0,
+      "max_odds": 1.83,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16322131,
+        "sofascore_home_team_id": 3982,
+        "sofascore_away_team_id": 5453,
+        "home_team": "Magdeburg",
+        "away_team": "Fuchse Berlin",
+        "sport": "handball",
+        "league": "Germany - Super Cup",
+        "match_time": "16:00",
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "13.06.26",
+            "home": "SC Magdeburg",
+            "away": "Füchse Berlin",
+            "score": "35:40",
+            "winner": "away"
+          },
+          {
+            "date": "28.03.26",
+            "home": "SC Magdeburg",
+            "away": "Füchse Berlin",
+            "score": "35:33",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "13.06.26",
+        "last_h2h_score": "35:40",
+        "last_h2h_home": "SC Magdeburg",
+        "last_h2h_away": "Füchse Berlin",
+        "sofascore_home_win_prob": 66,
+        "sofascore_draw_prob": 3,
+        "sofascore_away_win_prob": 30,
+        "sofascore_total_votes": 243
+      },
+      "enrichment_error": null
+    }
+  ]
+}

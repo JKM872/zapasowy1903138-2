@@ -1,0 +1,321 @@
+{
+  "meta": {
+    "generated_at": "2026-08-18T12:35:20.026809+02:00",
+    "target_date": "2026-08-18",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 4,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "elapsed_seconds": 83.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/canberra-raiders-vs-brisbane-broncos/2297577?MarketTypeID=1401",
+      "match_id": "2297577",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Canberra Raiders",
+      "away_team": "Brisbane Broncos",
+      "event_date": "21/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.62,
+      "current_odds": 1.32,
+      "drop_pct": 19.0,
+      "max_odds": 1.35,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "New Zealand - National Provincial Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/new-zealand/national-provincial-championship/canterbury-vs-northland/2294204?MarketTypeID=1314",
+      "match_id": "2294204",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Canterbury",
+      "away_team": "Northland",
+      "event_date": "20/08",
+      "event_time": "07:10",
+      "outcome": "2",
+      "open_odds": 4.25,
+      "current_odds": 3.6,
+      "drop_pct": 15.0,
+      "max_odds": 3.7,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "New Zealand - National Provincial Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/new-zealand/national-provincial-championship/otago-vs-wellington/2300969?MarketTypeID=1314",
+      "match_id": "2300969",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Otago",
+      "away_team": "Wellington",
+      "event_date": "23/08",
+      "event_time": "05:05",
+      "outcome": "2",
+      "open_odds": 5.75,
+      "current_odds": 5.0,
+      "drop_pct": 13.0,
+      "max_odds": 5.0,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Australia - NRL (W)",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl-w/newcastle-knights-vs-wests-tigers/2301091?MarketTypeID=1401",
+      "match_id": "2301091",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Newcastle Knights",
+      "away_team": "Wests Tigers",
+      "event_date": "22/08",
+      "event_time": "02:45",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.86,
+      "drop_pct": 11.0,
+      "max_odds": 1.9,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.9,
+        "sofascore_event_id": 13911452,
+        "sofascore_home_team_id": 4260,
+        "sofascore_away_team_id": 4262,
+        "home_team": "Newcastle Knights",
+        "away_team": "Wests Tigers",
+        "sport": "rugby",
+        "league": "Australia - NRL (W)",
+        "match_time": "02:45",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "26.04.26",
+            "home": "Newcastle Knights",
+            "away": "Penrith Panthers",
+            "score": "12:44",
+            "winner": "away"
+          },
+          {
+            "date": "08.08.25",
+            "home": "Newcastle Knights",
+            "away": "Penrith Panthers",
+            "score": "12:48",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "26.04.26",
+        "last_h2h_score": "12:44",
+        "last_h2h_home": "Newcastle Knights",
+        "last_h2h_away": "Penrith Panthers",
+        "sofascore_home_win_prob": 13,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 82,
+        "sofascore_total_votes": 728
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Australia - NRL (W)",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl-w/newcastle-knights-vs-wests-tigers/2301091?MarketTypeID=1401",
+      "match_id": "2301091",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Newcastle Knights",
+      "away_team": "Wests Tigers",
+      "event_date": "22/08",
+      "event_time": "02:45",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.86,
+      "drop_pct": 11.0,
+      "max_odds": 1.9,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.9,
+        "sofascore_event_id": 13911452,
+        "sofascore_home_team_id": 4260,
+        "sofascore_away_team_id": 4262,
+        "home_team": "Newcastle Knights",
+        "away_team": "Wests Tigers",
+        "sport": "rugby",
+        "league": "Australia - NRL (W)",
+        "match_time": "02:45",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "26.04.26",
+            "home": "Newcastle Knights",
+            "away": "Penrith Panthers",
+            "score": "12:44",
+            "winner": "away"
+          },
+          {
+            "date": "08.08.25",
+            "home": "Newcastle Knights",
+            "away": "Penrith Panthers",
+            "score": "12:48",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "26.04.26",
+        "last_h2h_score": "12:44",
+        "last_h2h_home": "Newcastle Knights",
+        "last_h2h_away": "Penrith Panthers",
+        "sofascore_home_win_prob": 13,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 82,
+        "sofascore_total_votes": 728
+      },
+      "enrichment_error": null
+    }
+  ]
+}
