@@ -355,11 +355,53 @@ def to_dropping_row(fixture: UpcomingFixture,
 # ---------------------------------------------------------------------------
 
 
+def _minutes_of_day(value: str) -> Optional[int]:
+    """Parse ``"HH:MM"`` into minutes since local midnight."""
+    text = (value or "").strip()
+    if not text:
+        return None
+    try:
+        hours, _, minutes = text.partition(":")
+        return int(hours) * 60 + int(minutes or 0)
+    except ValueError:
+        return None
+
+
+def in_local_time_window(kickoff_local: Optional[datetime],
+                         from_hm: str = "",
+                         until_hm: str = "") -> bool:
+    """Is the local kick-off time inside a time-of-day window?
+
+    Used to cut the day into blocks ("fixtures before 15:00" / "after 15:00")
+    so one digest can cover each, instead of mailing the same card all day.
+
+    The window wraps past midnight when *from* is later than *until*, which is
+    what an evening block needs: South American fixtures routinely kick off at
+    01:00 or 02:00 local and belong to the evening digest, not the morning one.
+    """
+    start, end = _minutes_of_day(from_hm), _minutes_of_day(until_hm)
+    if start is None and end is None:
+        return True
+    if kickoff_local is None:
+        return False
+    minutes = kickoff_local.hour * 60 + kickoff_local.minute
+
+    if start is None:
+        return minutes <= (end or 0)
+    if end is None:
+        return minutes >= start
+    if start <= end:
+        return start <= minutes <= end
+    return minutes >= start or minutes <= end
+
+
 def kickoff_window_reason(fixture: UpcomingFixture,
                           *,
                           now: datetime,
                           horizon_hours: float,
-                          min_lead_minutes: int) -> Optional[str]:
+                          min_lead_minutes: int,
+                          kickoff_from: str = "",
+                          kickoff_until: str = "") -> Optional[str]:
     """``None`` when the fixture is upcoming and actionable, else the reason."""
     kickoff = fixture.kickoff_utc()
     if kickoff is None:
@@ -369,6 +411,9 @@ def kickoff_window_reason(fixture: UpcomingFixture,
         return "started_or_too_soon"
     if minutes > horizon_hours * 60.0:
         return "beyond_horizon"
+    if not in_local_time_window(fixture.kickoff_local(), kickoff_from,
+                                kickoff_until):
+        return "outside_time_window"
     return None
 
 
@@ -383,7 +428,9 @@ def qualify(fixture: UpcomingFixture,
             require_drop: bool = False,
             min_odds: Optional[float] = None,
             max_odds: Optional[float] = None,
-            strict_sports: bool = False) -> Tuple[bool, Optional[str]]:
+            strict_sports: bool = False,
+            kickoff_from: str = "",
+            kickoff_until: str = "") -> Tuple[bool, Optional[str]]:
     """Return ``(qualifies, skip_reason)`` for a merged fixture."""
     if candidate is None or not candidate.odds:
         return False, "missing_current_odds"
@@ -391,6 +438,8 @@ def qualify(fixture: UpcomingFixture,
     window = kickoff_window_reason(
         fixture, now=now, horizon_hours=horizon_hours,
         min_lead_minutes=min_lead_minutes,
+        kickoff_from=kickoff_from,
+        kickoff_until=kickoff_until,
     )
     if window:
         return False, window
@@ -724,6 +773,16 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument("--hours", type=float, default=DEFAULT_HORIZON_HOURS,
                         help=f"How far ahead to look, in hours "
                              f"(default {DEFAULT_HORIZON_HOURS:g}).")
+    parser.add_argument("--kickoff-from", default="",
+                        help="Keep only fixtures kicking off at or after this "
+                             "local time (HH:MM). Combined with --kickoff-until "
+                             "it splits the day into digest blocks; a later "
+                             "--kickoff-from than --kickoff-until wraps past "
+                             "midnight, e.g. 15:00-04:00 for the evening block.")
+    parser.add_argument("--kickoff-until", default="",
+                        help="Keep only fixtures kicking off at or before this "
+                             "local time (HH:MM), e.g. 15:00 for the morning "
+                             "block.")
     parser.add_argument("--min-lead", type=int, default=DEFAULT_MIN_LEAD_MINUTES,
                         help="Skip fixtures starting sooner than this many "
                              f"minutes (default {DEFAULT_MIN_LEAD_MINUTES}).")
@@ -816,6 +875,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     print(f"  Sport:              {sport}")
     print(f"  Horizon:            next {args.hours:g}h "
           f"(min lead {args.min_lead} min)")
+    if args.kickoff_from or args.kickoff_until:
+        print(f"  Kickoff window:     "
+              f"{args.kickoff_from or '--'}–{args.kickoff_until or '--'} lokalnie")
     print(f"  Qualifying odds:    [{low:.2f}, {high:.2f}]"
           f"{'' if args.min_odds is None and args.max_odds is None else ' (override)'}")
     print(f"  Min bookmakers:     {args.min_bookmakers}")
@@ -877,6 +939,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                 min_odds=args.min_odds,
                 max_odds=args.max_odds,
                 strict_sports=args.strict_sports,
+                kickoff_from=args.kickoff_from,
+                kickoff_until=args.kickoff_until,
             )
             pre_score = (
                 score_candidate(fixture, candidate)[0] if candidate else 0.0
@@ -1033,6 +1097,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                     "per_sport_range": args.min_odds is None and args.max_odds is None,
                     "horizon_hours": args.hours,
                     "min_lead_minutes": args.min_lead,
+                    "kickoff_from": args.kickoff_from,
+                    "kickoff_until": args.kickoff_until,
                     "min_bookmakers": args.min_bookmakers,
                     "min_drop_pct": args.min_drop,
                     "require_drop": bool(args.require_drop),

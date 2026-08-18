@@ -122,11 +122,31 @@ def should_send(event: Dict[str, Any],
     return False, "already_mailed"
 
 
+def has_analysis(event: Dict[str, Any]) -> bool:
+    """Did this fixture actually get form/H2H data?
+
+    Matters because the enrichment budget (``--max-enrich``) leaves most of a
+    big card unenriched, and a fixture can still clear the score floor on market
+    signals alone (drop 30 + consensus 20 + favourite 15 + value 10). Mailing
+    those produced cards with "—" in every form field, which is worse than not
+    mailing them: the reader cannot act on them and learns to skim the mail.
+    """
+    enrichment = event.get("enrichment") or {}
+    if not isinstance(enrichment, dict) or not enrichment:
+        return False
+    if event.get("form_orientation") == "unverified":
+        return False
+    return any(enrichment.get(key) for key in
+               ("home_form_overall", "away_form_overall",
+                "home_form", "away_form", "h2h_last5"))
+
+
 def select_events(data: Dict[str, Any],
                   manifest: Dict[str, Dict[str, Any]],
                   *,
                   min_score: float = DEFAULT_MIN_SCORE,
                   min_drop_increase: float = DEFAULT_MIN_DROP_INCREASE,
+                  require_analysis: bool = True,
                   ) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     """Pick the fixtures to mail from a pipeline payload."""
     stats: Dict[str, int] = {}
@@ -136,6 +156,9 @@ def select_events(data: Dict[str, Any],
 
     chosen: List[Dict[str, Any]] = []
     for event in data.get("qualified") or []:
+        if require_analysis and not has_analysis(event):
+            bump("no_analysis_data")
+            continue
         score = float(event.get("score") or 0.0)
         if min_score and score < min_score:
             bump("below_min_score")
@@ -240,11 +263,16 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                         help="Re-mail a fixture when its drop deepened by at "
                              f"least this many points (default "
                              f"{DEFAULT_MIN_DROP_INCREASE:g}).")
+    parser.add_argument("--allow-missing-analysis", dest="require_analysis",
+                        action="store_false",
+                        help="Also mail fixtures with no form/H2H data (they "
+                             "render with empty form fields).")
     parser.add_argument("--manifest", default="",
                         help="Override the sent-state file path.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Report what would be mailed, send nothing, and "
                              "leave the manifest untouched.")
+    parser.set_defaults(require_analysis=True)
     return parser.parse_args(argv)
 
 
@@ -272,6 +300,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         data, manifest,
         min_score=args.min_score,
         min_drop_increase=args.min_drop_increase,
+        require_analysis=args.require_analysis,
     )
 
     print("=" * 70)
