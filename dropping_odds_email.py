@@ -407,6 +407,13 @@ def event_to_match_row(event: Dict[str, Any]) -> Dict[str, Any]:
         "last_h2h_away": enrichment.get("last_h2h_away"),
     })
 
+    # How many books price the outcome is known only to the coupon-based
+    # upcoming pipeline; the dropping-odds table does not expose it. Added only
+    # when present, so the movement badge for dropping events is untouched.
+    _books = _safe_float(event.get("bookmakers"))
+    if _books > 0:
+        row["dropping_odds"]["bookmakers"] = _books
+
     # The dropped price is a real quote, so give it to the engine: without any
     # odds on the row, EV and edge can never be computed and every card showed
     # a dash. Only the side that moved is known, and the engine simply skips
