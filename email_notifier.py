@@ -1944,6 +1944,11 @@ def _render_drop_badge(match: Dict[str, Any]) -> str:
 
     Expects ``match['dropping_odds']`` as
     ``{'drop_pct': 37.0, 'side': '2', 'open': 3.70, 'current': 2.34}``.
+
+    ``bookmakers`` is optional: the coupon-based upcoming pipeline knows how many
+    books priced the outcome, which says how well-formed the price is, while the
+    dropping-odds table does not expose it. Rendered only when present, so the
+    existing mails are unchanged.
     """
     info = match.get('dropping_odds')
     if not isinstance(info, dict):
@@ -1960,12 +1965,14 @@ def _render_drop_badge(match: Dict[str, Any]) -> str:
     opened, current = safe_float(info.get('open')), safe_float(info.get('current'))
     movement = (f'{opened:.2f} → {current:.2f}'
                 if opened > 0 and current > 0 else '')
+    books = int(safe_float(info.get('bookmakers')))
 
     return f"""
                     <div style="margin-top: 10px; padding: 8px 12px; background: {colour}; border-radius: 10px; display: inline-block;">
                         <span style="color: #fff; font-size: 13px; font-weight: bold;">↓ {pct:.1f}%</span>
                         <span style="color: rgba(255,255,255,0.9); font-size: 11px; margin-left: 8px;">na: {side_label}</span>
                         {f'<span style="color: #fff; font-size: 12px; margin-left: 8px; font-weight: bold;">{movement}</span>' if movement else ''}
+                        {f'<span style="color: rgba(255,255,255,0.9); font-size: 11px; margin-left: 8px;">{books} bukmacherów</span>' if books > 0 else ''}
                     </div>"""
 
 

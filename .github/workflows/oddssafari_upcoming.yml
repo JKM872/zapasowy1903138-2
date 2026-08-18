@@ -76,6 +76,16 @@ on:
         required: false
         default: '12'
         type: string
+      send_email:
+        description: 'E-mail the new/changed fixtures'
+        required: false
+        default: true
+        type: boolean
+      min_score:
+        description: 'Only e-mail fixtures scoring at least this (0 = no floor)'
+        required: false
+        default: '40'
+        type: string
       dry_run:
         description: 'Odds only — skip form enrichment (fast, no browser)'
         required: false
@@ -253,6 +263,49 @@ jobs:
             --headless \
             $EXTRA
 
+      # Which fixtures were already mailed today has to survive between hourly
+      # runs, otherwise every run re-sends the whole card. Cached rather than
+      # committed: 24 commits a day of mail bookkeeping would bury the history.
+      # Keys are unique per run and read back by prefix, since a cache entry
+      # cannot be overwritten.
+      - name: Restore mail state (${{ matrix.sport }})
+        if: github.event.inputs.send_email != 'false'
+        uses: actions/cache/restore@v4
+        with:
+          path: outputs/upcoming_mailed_*.json
+          key: upcoming-mail-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
+          restore-keys: |
+            upcoming-mail-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-
+
+      - name: E-mail new fixtures (${{ matrix.sport }})
+        id: mail
+        if: success() && github.event.inputs.send_email != 'false'
+        env:
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: |
+          TARGET_DATE="${{ steps.resolve-date.outputs.target }}"
+          OUT="outputs/oddssafari_upcoming_${TARGET_DATE}_${{ matrix.sport }}.json"
+          if [ ! -f "$OUT" ]; then
+            echo "No pipeline output at $OUT — nothing to mail"
+            exit 0
+          fi
+          if [ -z "$EMAIL_RECIPIENT" ] || [ -z "$EMAIL_SENDER" ] || [ -z "$EMAIL_PASSWORD" ]; then
+            echo "::warning::E-mail secrets not configured — skipping the mail"
+            exit 0
+          fi
+          python oddssafari_upcoming_email.py "$OUT" \
+            --sport "${{ matrix.sport }}" \
+            --min-score "${{ github.event.inputs.min_score || '40' }}"
+
+      - name: Save mail state (${{ matrix.sport }})
+        if: steps.mail.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: outputs/upcoming_mailed_*.json
+          key: upcoming-mail-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
+
       - name: Summary (${{ matrix.sport }})
         if: always()
         run: |
@@ -268,4 +321,5 @@ jobs:
           name: oddssafari-upcoming-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
           path: |
             outputs/oddssafari_upcoming_*.json
+            outputs/upcoming_mailed_*.json
           retention-days: 5
