@@ -1,0 +1,2378 @@
+{
+  "meta": {
+    "generated_at": "2026-08-20T12:44:04.244386+02:00",
+    "target_date": "2026-08-20",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 17,
+      "qualified": 12
+    },
+    "enrichment_status_counts": {
+      "enriched": 7,
+      "resolve_failed": 5,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 5
+    },
+    "elapsed_seconds": 713.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Challenger - Sion Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-sion-doubles/neuchrist-m.poljak-d.-vs-bernet-h.stricker-d.s./2302656?MarketTypeID=301",
+      "match_id": "2302656",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Neuchrist M./Poljak D.",
+      "away_team": "Bernet H./Stricker D.S.",
+      "event_date": "20/08",
+      "event_time": "15:00",
+      "outcome": "2",
+      "open_odds": 3.8,
+      "current_odds": 1.93,
+      "drop_pct": 49.0,
+      "max_odds": 1.95,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Sion",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-sion/hassan-b.-vs-blancaneaux-g./2302626?MarketTypeID=301",
+      "match_id": "2302626",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Hassan B.",
+      "away_team": "Blancaneaux G.",
+      "event_date": "20/08",
+      "event_time": "11:00",
+      "outcome": "1",
+      "open_odds": 2.75,
+      "current_odds": 2.02,
+      "drop_pct": 27.0,
+      "max_odds": 2.05,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/blancaneaux-geoffrey-EFwAtztn/hassan-benjamin-W66euka4/?mid=byHxlZ1E",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Hassan B.",
+        "away_team": "Blancaneaux G.",
+        "match_time": "20.08.2026 11:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.0,
+        "away_odds": 1.73,
+        "favorite": "player_b",
+        "advanced_score": 60.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "11.11.23",
+            "home": "Hassan B.",
+            "away": "Blancaneaux G.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "11.11.23 Hassan B. 0-2 Blancaneaux G."
+          }
+        ],
+        "last_h2h_date": "11.11.23",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Hassan B.",
+        "last_h2h_away": "Blancaneaux G.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Hassan B.)",
+          "missing_recent_matches_B (Blancaneaux G.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 514,
+        "ranking_b": 365,
+        "forebet_prediction": "2",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.2,
+        "forebet_home_prob": 45,
+        "forebet_away_prob": 55
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Kingston Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-kingston-doubles/fancutt-t.watanabe-s.-vs-kavcic-b.purcell-m./2302962?MarketTypeID=301",
+      "match_id": "2302962",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fancutt T./Watanabe S.",
+      "away_team": "Kavcic B./Purcell M.",
+      "event_date": "20/08",
+      "event_time": "18:10",
+      "outcome": "2",
+      "open_odds": 2.55,
+      "current_odds": 1.88,
+      "drop_pct": 26.0,
+      "max_odds": 1.92,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/anisimova-a.-vs-pegula-j./2302790?MarketTypeID=301",
+      "match_id": "2302790",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Anisimova A.",
+      "away_team": "Pegula J.",
+      "event_date": "20/08",
+      "event_time": "17:00",
+      "outcome": "1",
+      "open_odds": 2.6,
+      "current_odds": 2.04,
+      "drop_pct": 22.0,
+      "max_odds": 2.05,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/anisimowa-amanda-nwkutKbi/pegula-jessica-KdojxrAR/?mid=KS03RYT9",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Anisimowa A.",
+        "away_team": "Pegula J.",
+        "match_time": "20.08.2026 17:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "win_rate": 0.8,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.05,
+        "away_odds": 1.78,
+        "favorite": "player_b",
+        "advanced_score": 38.6,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "20.02.26",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "20.02.26 Pegula J. 2-1 Anisimowa A."
+          },
+          {
+            "date": "28.01.26",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "28.01.26 Pegula J. 2-0 Anisimowa A."
+          },
+          {
+            "date": "09.12.25",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "09.12.25 Pegula J. 0-2 Anisimowa A."
+          },
+          {
+            "date": "07.12.25",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "07.12.25 Pegula J. 2-1 Anisimowa A."
+          },
+          {
+            "date": "12.08.24",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "12.08.24 Pegula J. 2-1 Anisimowa A."
+          }
+        ],
+        "last_h2h_date": "20.02.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Pegula J.",
+        "last_h2h_away": "Anisimowa A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Anisimowa A.)",
+          "missing_recent_matches_B (Pegula J.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 10,
+        "ranking_b": 3,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "2",
+        "forebet_probability": 62.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 9.5,
+        "forebet_home_prob": 38,
+        "forebet_away_prob": 62
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Quebec",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-quebec/fearnley-j.-vs-galarneau-a./2302937?MarketTypeID=301",
+      "match_id": "2302937",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fearnley J.",
+      "away_team": "Galarneau A.",
+      "event_date": "20/08",
+      "event_time": "23:40",
+      "outcome": "2",
+      "open_odds": 3.75,
+      "current_odds": 3.05,
+      "drop_pct": 19.0,
+      "max_odds": 3.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Prague",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-prague/gombos-n.-vs-papoe-r.m./2302630?MarketTypeID=301",
+      "match_id": "2302630",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gombos N.",
+      "away_team": "Papoe R.M.",
+      "event_date": "20/08",
+      "event_time": "12:50",
+      "outcome": "2",
+      "open_odds": 1.94,
+      "current_odds": 1.6,
+      "drop_pct": 17.0,
+      "max_odds": 1.65,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/gombos-norbert-bDFSqjSo/papoe-radu-mihai-84miaY3T/?mid=MDUctr05",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Gombos N.",
+        "away_team": "Papoe R. M.",
+        "match_time": "20.08.2026 13:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W"
+        ],
+        "away_form": [
+          "L"
+        ],
+        "home_form_overall": [
+          "W"
+        ],
+        "away_form_overall": [
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 18.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "27.04.26",
+            "home": "Gombos N.",
+            "away": "Papoe R. M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "27.04.26 Gombos N. 2-0 Papoe R. M."
+          }
+        ],
+        "last_h2h_date": "27.04.26",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Gombos N.",
+        "last_h2h_away": "Papoe R. M.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Gombos N.)",
+          "missing_recent_matches_B (Papoe R. M.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 424,
+        "ranking_b": 300,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "1",
+        "forebet_probability": 60.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 9.1,
+        "forebet_home_prob": 60,
+        "forebet_away_prob": 40
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Sion Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-sion-doubles/basel-v.ribero-f.-vs-merino-a.zhu-m./2302616?MarketTypeID=301",
+      "match_id": "2302616",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Basel V./Ribero F.",
+      "away_team": "Merino A./Zhu M.",
+      "event_date": "20/08",
+      "event_time": "12:10",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.57,
+      "drop_pct": 15.0,
+      "max_odds": 1.63,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Roehampton",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-roehampton/geerts-m.-vs-poullain-l./2302593?MarketTypeID=301",
+      "match_id": "2302593",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Geerts M.",
+      "away_team": "Poullain L.",
+      "event_date": "20/08",
+      "event_time": "11:30",
+      "outcome": "2",
+      "open_odds": 2.02,
+      "current_odds": 1.75,
+      "drop_pct": 14.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/geerts-michael-jVP5NQJK/poullain-lucas-0OqIBG1T/?mid=ALVxwEQ0",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Geerts M.",
+        "away_team": "Poullain L.",
+        "match_time": "20.08.2026 11:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.0,
+        "away_odds": 1.73,
+        "favorite": "player_b",
+        "advanced_score": 46.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "04.03.21",
+            "home": "Poullain L.",
+            "away": "Geerts M.",
+            "score": "1-0",
+            "winner": "home",
+            "raw": "04.03.21 Poullain L. 1-0 Geerts M."
+          }
+        ],
+        "last_h2h_date": "04.03.21",
+        "last_h2h_score": "1-0",
+        "last_h2h_home": "Poullain L.",
+        "last_h2h_away": "Geerts M.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Geerts M.)",
+          "missing_recent_matches_B (Poullain L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 348,
+        "ranking_b": 369,
+        "forebet_prediction": "2",
+        "forebet_probability": 61.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 9.8,
+        "forebet_home_prob": 39,
+        "forebet_away_prob": 61
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Quebec",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-quebec/choinski-j.-vs-daniel-t./2302657?MarketTypeID=301",
+      "match_id": "2302657",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Choinski J.",
+      "away_team": "Daniel T.",
+      "event_date": "20/08",
+      "event_time": "19:10",
+      "outcome": "2",
+      "open_odds": 2.42,
+      "current_odds": 2.07,
+      "drop_pct": 14.0,
+      "max_odds": 2.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/choinski-jan-Es82hMVD/daniel-taro-h4fpmGci/?mid=fw1YgGne",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Choinski J.",
+        "away_team": "Daniel T.",
+        "match_time": "20.08.2026 19:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.7,
+        "away_odds": 2.0,
+        "favorite": "player_a",
+        "advanced_score": 53.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "01.01.24",
+            "home": "Daniel T.",
+            "away": "Choinski J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "01.01.24 Daniel T. 2-1 Choinski J."
+          }
+        ],
+        "last_h2h_date": "01.01.24",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Daniel T.",
+        "last_h2h_away": "Choinski J.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.0
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Choinski J.)",
+          "missing_recent_matches_B (Daniel T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 77,
+        "ranking_b": 186,
+        "forebet_prediction": "2",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 41,
+        "forebet_away_prob": 59
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/bejlek-s.-vs-keys-m./2302971?MarketTypeID=301",
+      "match_id": "2302971",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Bejlek S.",
+      "away_team": "Keys M.",
+      "event_date": "21/08",
+      "event_time": "17:00",
+      "outcome": "1",
+      "open_odds": 3.5,
+      "current_odds": 3.01,
+      "drop_pct": 14.0,
+      "max_odds": 3.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Cancun Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-cancun-doubles/alvarez-valdes-l.c.magadan-a.-vs-heredia-s.sharan-d./2301973?MarketTypeID=301",
+      "match_id": "2301973",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Alvarez Valdes L.C./Magadan A.",
+      "away_team": "Heredia S./Sharan D.",
+      "event_date": "20/08",
+      "event_time": "23:30",
+      "outcome": "1",
+      "open_odds": 1.35,
+      "current_odds": 1.17,
+      "drop_pct": 13.0,
+      "max_odds": 1.19,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "ATP - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-cincinnati/tirante-t.a.-vs-fils-a./2302794?MarketTypeID=301",
+      "match_id": "2302794",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Tirante T.A.",
+      "away_team": "Fils A.",
+      "event_date": "21/08",
+      "event_time": "00:30",
+      "outcome": "1",
+      "open_odds": 4.33,
+      "current_odds": 3.76,
+      "drop_pct": 13.0,
+      "max_odds": 4.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Prague Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-prague-doubles/grevelius-e.heinonen-a.-vs-molchanov-d.pavel-b./2302489?MarketTypeID=301",
+      "match_id": "2302489",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Grevelius E./Heinonen A.",
+      "away_team": "Molchanov D./Pavel B.",
+      "event_date": "20/08",
+      "event_time": "09:00",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.6,
+      "drop_pct": 13.0,
+      "max_odds": 1.62,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Kingston Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-kingston-doubles/reymond-a.sanchez-l.-vs-bianchi-j.j.pearson-k./2302809?MarketTypeID=301",
+      "match_id": "2302809",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Reymond A./Sanchez L.",
+      "away_team": "Bianchi J.J./Pearson K.",
+      "event_date": "20/08",
+      "event_time": "19:00",
+      "outcome": "1",
+      "open_odds": 1.35,
+      "current_odds": 1.18,
+      "drop_pct": 12.0,
+      "max_odds": 1.19,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "WTA - Cincinnati Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati-doubles/mcnally-c.jovic-i.-vs-zhang-s.jiang-x./2302797?MarketTypeID=301",
+      "match_id": "2302797",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "McNally C./Jovic I.",
+      "away_team": "Zhang S./Jiang X.",
+      "event_date": "20/08",
+      "event_time": "19:00",
+      "outcome": "1",
+      "open_odds": 2.55,
+      "current_odds": 2.25,
+      "drop_pct": 12.0,
+      "max_odds": 2.31,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Quebec",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-quebec/sakellaridis-s.-vs-vukic-a./2302798?MarketTypeID=301",
+      "match_id": "2302798",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sakellaridis S.",
+      "away_team": "Vukic A.",
+      "event_date": "20/08",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 2.75,
+      "current_odds": 2.44,
+      "drop_pct": 11.0,
+      "max_odds": 2.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/sakellaridis-stefanos-2Dmhcv8C/vukic-aleksandar-O2CmIROi/?mid=0pmyj68d",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sakellaridis S.",
+        "away_team": "Vukic A.",
+        "match_time": "20.08.2026 18:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.35,
+        "away_odds": 1.53,
+        "favorite": "player_b",
+        "advanced_score": 12.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Blanchet U.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "19.08.26 Sakellaridis S. 2-1 Blanchet U."
+          },
+          {
+            "date": "18.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Schoolkate T.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "18.08.26 Sakellaridis S. 2-1 Schoolkate T."
+          },
+          {
+            "date": "17.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Poling K.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "17.08.26 Sakellaridis S. 2-1 Poling K."
+          },
+          {
+            "date": "13.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Droguet T.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "13.08.26 Sakellaridis S. 0-2 Droguet T."
+          },
+          {
+            "date": "12.08.26",
+            "home": "Damm M.",
+            "away": "Sakellaridis S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "12.08.26 Damm M. 0-2 Sakellaridis S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Sakellaridis S.)",
+          "missing_recent_matches_B (Vukic A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 157,
+        "ranking_b": 99,
+        "forebet_prediction": "1",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 55,
+        "forebet_away_prob": 45
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Prague",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-prague/jianu-f.c.-vs-rehberg-m.h./2302567?MarketTypeID=301",
+      "match_id": "2302567",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Jianu F.C.",
+      "away_team": "Rehberg M.H.",
+      "event_date": "20/08",
+      "event_time": "11:20",
+      "outcome": "2",
+      "open_odds": 1.55,
+      "current_odds": 1.39,
+      "drop_pct": 11.0,
+      "max_odds": 1.4,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/jianu-filip-cristian-CpC7C67k/rehberg-max-hans-8AjWdU1N/?mid=I5muJQmR",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Jianu F. C.",
+        "away_team": "Rehberg M. H.",
+        "match_time": "20.08.2026 12:10",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.75,
+        "away_odds": 1.4,
+        "favorite": "player_b",
+        "advanced_score": 38.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.07.24",
+            "home": "Jianu F. C.",
+            "away": "Rehberg M. H.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "23.07.24 Jianu F. C. 0-2 Rehberg M. H."
+          }
+        ],
+        "last_h2h_date": "23.07.24",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Jianu F. C.",
+        "last_h2h_away": "Rehberg M. H.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Jianu F. C.)",
+          "missing_recent_matches_B (Rehberg M. H.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 284,
+        "ranking_b": 342,
+        "forebet_prediction": "2",
+        "forebet_probability": 73.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 11.8,
+        "forebet_home_prob": 27,
+        "forebet_away_prob": 73
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Sion Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-sion-doubles/neuchrist-m.poljak-d.-vs-bernet-h.stricker-d.s./2302656?MarketTypeID=301",
+      "match_id": "2302656",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Neuchrist M./Poljak D.",
+      "away_team": "Bernet H./Stricker D.S.",
+      "event_date": "20/08",
+      "event_time": "15:00",
+      "outcome": "2",
+      "open_odds": 3.8,
+      "current_odds": 1.93,
+      "drop_pct": 49.0,
+      "max_odds": 1.95,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Sion",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-sion/hassan-b.-vs-blancaneaux-g./2302626?MarketTypeID=301",
+      "match_id": "2302626",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Hassan B.",
+      "away_team": "Blancaneaux G.",
+      "event_date": "20/08",
+      "event_time": "11:00",
+      "outcome": "1",
+      "open_odds": 2.75,
+      "current_odds": 2.02,
+      "drop_pct": 27.0,
+      "max_odds": 2.05,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/blancaneaux-geoffrey-EFwAtztn/hassan-benjamin-W66euka4/?mid=byHxlZ1E",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Hassan B.",
+        "away_team": "Blancaneaux G.",
+        "match_time": "20.08.2026 11:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.0,
+        "away_odds": 1.73,
+        "favorite": "player_b",
+        "advanced_score": 60.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "11.11.23",
+            "home": "Hassan B.",
+            "away": "Blancaneaux G.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "11.11.23 Hassan B. 0-2 Blancaneaux G."
+          }
+        ],
+        "last_h2h_date": "11.11.23",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Hassan B.",
+        "last_h2h_away": "Blancaneaux G.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Hassan B.)",
+          "missing_recent_matches_B (Blancaneaux G.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 514,
+        "ranking_b": 365,
+        "forebet_prediction": "2",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.2,
+        "forebet_home_prob": 45,
+        "forebet_away_prob": 55
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Kingston Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-kingston-doubles/fancutt-t.watanabe-s.-vs-kavcic-b.purcell-m./2302962?MarketTypeID=301",
+      "match_id": "2302962",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fancutt T./Watanabe S.",
+      "away_team": "Kavcic B./Purcell M.",
+      "event_date": "20/08",
+      "event_time": "18:10",
+      "outcome": "2",
+      "open_odds": 2.55,
+      "current_odds": 1.88,
+      "drop_pct": 26.0,
+      "max_odds": 1.92,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Cincinnati",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati/anisimova-a.-vs-pegula-j./2302790?MarketTypeID=301",
+      "match_id": "2302790",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Anisimova A.",
+      "away_team": "Pegula J.",
+      "event_date": "20/08",
+      "event_time": "17:00",
+      "outcome": "1",
+      "open_odds": 2.6,
+      "current_odds": 2.04,
+      "drop_pct": 22.0,
+      "max_odds": 2.05,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/anisimowa-amanda-nwkutKbi/pegula-jessica-KdojxrAR/?mid=KS03RYT9",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Anisimowa A.",
+        "away_team": "Pegula J.",
+        "match_time": "20.08.2026 17:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "win_rate": 0.8,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.05,
+        "away_odds": 1.78,
+        "favorite": "player_b",
+        "advanced_score": 38.6,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "20.02.26",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "20.02.26 Pegula J. 2-1 Anisimowa A."
+          },
+          {
+            "date": "28.01.26",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "28.01.26 Pegula J. 2-0 Anisimowa A."
+          },
+          {
+            "date": "09.12.25",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "09.12.25 Pegula J. 0-2 Anisimowa A."
+          },
+          {
+            "date": "07.12.25",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "07.12.25 Pegula J. 2-1 Anisimowa A."
+          },
+          {
+            "date": "12.08.24",
+            "home": "Pegula J.",
+            "away": "Anisimowa A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "12.08.24 Pegula J. 2-1 Anisimowa A."
+          }
+        ],
+        "last_h2h_date": "20.02.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Pegula J.",
+        "last_h2h_away": "Anisimowa A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Anisimowa A.)",
+          "missing_recent_matches_B (Pegula J.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 10,
+        "ranking_b": 3,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "2",
+        "forebet_probability": 62.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 9.5,
+        "forebet_home_prob": 38,
+        "forebet_away_prob": 62
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Prague",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-prague/gombos-n.-vs-papoe-r.m./2302630?MarketTypeID=301",
+      "match_id": "2302630",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gombos N.",
+      "away_team": "Papoe R.M.",
+      "event_date": "20/08",
+      "event_time": "12:50",
+      "outcome": "2",
+      "open_odds": 1.94,
+      "current_odds": 1.6,
+      "drop_pct": 17.0,
+      "max_odds": 1.65,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/gombos-norbert-bDFSqjSo/papoe-radu-mihai-84miaY3T/?mid=MDUctr05",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Gombos N.",
+        "away_team": "Papoe R. M.",
+        "match_time": "20.08.2026 13:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W"
+        ],
+        "away_form": [
+          "L"
+        ],
+        "home_form_overall": [
+          "W"
+        ],
+        "away_form_overall": [
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 18.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "27.04.26",
+            "home": "Gombos N.",
+            "away": "Papoe R. M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "27.04.26 Gombos N. 2-0 Papoe R. M."
+          }
+        ],
+        "last_h2h_date": "27.04.26",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Gombos N.",
+        "last_h2h_away": "Papoe R. M.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Gombos N.)",
+          "missing_recent_matches_B (Papoe R. M.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 424,
+        "ranking_b": 300,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "1",
+        "forebet_probability": 60.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 9.1,
+        "forebet_home_prob": 60,
+        "forebet_away_prob": 40
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Sion Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-sion-doubles/basel-v.ribero-f.-vs-merino-a.zhu-m./2302616?MarketTypeID=301",
+      "match_id": "2302616",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Basel V./Ribero F.",
+      "away_team": "Merino A./Zhu M.",
+      "event_date": "20/08",
+      "event_time": "12:10",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.57,
+      "drop_pct": 15.0,
+      "max_odds": 1.63,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Roehampton",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-roehampton/geerts-m.-vs-poullain-l./2302593?MarketTypeID=301",
+      "match_id": "2302593",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Geerts M.",
+      "away_team": "Poullain L.",
+      "event_date": "20/08",
+      "event_time": "11:30",
+      "outcome": "2",
+      "open_odds": 2.02,
+      "current_odds": 1.75,
+      "drop_pct": 14.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/geerts-michael-jVP5NQJK/poullain-lucas-0OqIBG1T/?mid=ALVxwEQ0",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Geerts M.",
+        "away_team": "Poullain L.",
+        "match_time": "20.08.2026 11:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.0,
+        "away_odds": 1.73,
+        "favorite": "player_b",
+        "advanced_score": 46.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "04.03.21",
+            "home": "Poullain L.",
+            "away": "Geerts M.",
+            "score": "1-0",
+            "winner": "home",
+            "raw": "04.03.21 Poullain L. 1-0 Geerts M."
+          }
+        ],
+        "last_h2h_date": "04.03.21",
+        "last_h2h_score": "1-0",
+        "last_h2h_home": "Poullain L.",
+        "last_h2h_away": "Geerts M.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Geerts M.)",
+          "missing_recent_matches_B (Poullain L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 348,
+        "ranking_b": 369,
+        "forebet_prediction": "2",
+        "forebet_probability": 61.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 9.8,
+        "forebet_home_prob": 39,
+        "forebet_away_prob": 61
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Quebec",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-quebec/choinski-j.-vs-daniel-t./2302657?MarketTypeID=301",
+      "match_id": "2302657",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Choinski J.",
+      "away_team": "Daniel T.",
+      "event_date": "20/08",
+      "event_time": "19:10",
+      "outcome": "2",
+      "open_odds": 2.42,
+      "current_odds": 2.07,
+      "drop_pct": 14.0,
+      "max_odds": 2.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/choinski-jan-Es82hMVD/daniel-taro-h4fpmGci/?mid=fw1YgGne",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Choinski J.",
+        "away_team": "Daniel T.",
+        "match_time": "20.08.2026 19:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.7,
+        "away_odds": 2.0,
+        "favorite": "player_a",
+        "advanced_score": 53.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "01.01.24",
+            "home": "Daniel T.",
+            "away": "Choinski J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "01.01.24 Daniel T. 2-1 Choinski J."
+          }
+        ],
+        "last_h2h_date": "01.01.24",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Daniel T.",
+        "last_h2h_away": "Choinski J.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.0
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Choinski J.)",
+          "missing_recent_matches_B (Daniel T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 77,
+        "ranking_b": 186,
+        "forebet_prediction": "2",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 41,
+        "forebet_away_prob": 59
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Prague Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-prague-doubles/grevelius-e.heinonen-a.-vs-molchanov-d.pavel-b./2302489?MarketTypeID=301",
+      "match_id": "2302489",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Grevelius E./Heinonen A.",
+      "away_team": "Molchanov D./Pavel B.",
+      "event_date": "20/08",
+      "event_time": "09:00",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.6,
+      "drop_pct": 13.0,
+      "max_odds": 1.62,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Cincinnati Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-cincinnati-doubles/mcnally-c.jovic-i.-vs-zhang-s.jiang-x./2302797?MarketTypeID=301",
+      "match_id": "2302797",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "McNally C./Jovic I.",
+      "away_team": "Zhang S./Jiang X.",
+      "event_date": "20/08",
+      "event_time": "19:00",
+      "outcome": "1",
+      "open_odds": 2.55,
+      "current_odds": 2.25,
+      "drop_pct": 12.0,
+      "max_odds": 2.31,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Quebec",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-quebec/sakellaridis-s.-vs-vukic-a./2302798?MarketTypeID=301",
+      "match_id": "2302798",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sakellaridis S.",
+      "away_team": "Vukic A.",
+      "event_date": "20/08",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 2.75,
+      "current_odds": 2.44,
+      "drop_pct": 11.0,
+      "max_odds": 2.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/sakellaridis-stefanos-2Dmhcv8C/vukic-aleksandar-O2CmIROi/?mid=0pmyj68d",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sakellaridis S.",
+        "away_team": "Vukic A.",
+        "match_time": "20.08.2026 18:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.35,
+        "away_odds": 1.53,
+        "favorite": "player_b",
+        "advanced_score": 12.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Blanchet U.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "19.08.26 Sakellaridis S. 2-1 Blanchet U."
+          },
+          {
+            "date": "18.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Schoolkate T.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "18.08.26 Sakellaridis S. 2-1 Schoolkate T."
+          },
+          {
+            "date": "17.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Poling K.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "17.08.26 Sakellaridis S. 2-1 Poling K."
+          },
+          {
+            "date": "13.08.26",
+            "home": "Sakellaridis S.",
+            "away": "Droguet T.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "13.08.26 Sakellaridis S. 0-2 Droguet T."
+          },
+          {
+            "date": "12.08.26",
+            "home": "Damm M.",
+            "away": "Sakellaridis S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "12.08.26 Damm M. 0-2 Sakellaridis S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Sakellaridis S.)",
+          "missing_recent_matches_B (Vukic A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 157,
+        "ranking_b": 99,
+        "forebet_prediction": "1",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 55,
+        "forebet_away_prob": 45
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Prague",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-prague/jianu-f.c.-vs-rehberg-m.h./2302567?MarketTypeID=301",
+      "match_id": "2302567",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Jianu F.C.",
+      "away_team": "Rehberg M.H.",
+      "event_date": "20/08",
+      "event_time": "11:20",
+      "outcome": "2",
+      "open_odds": 1.55,
+      "current_odds": 1.39,
+      "drop_pct": 11.0,
+      "max_odds": 1.4,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/jianu-filip-cristian-CpC7C67k/rehberg-max-hans-8AjWdU1N/?mid=I5muJQmR",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Jianu F. C.",
+        "away_team": "Rehberg M. H.",
+        "match_time": "20.08.2026 12:10",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.75,
+        "away_odds": 1.4,
+        "favorite": "player_b",
+        "advanced_score": 38.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.07.24",
+            "home": "Jianu F. C.",
+            "away": "Rehberg M. H.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "23.07.24 Jianu F. C. 0-2 Rehberg M. H."
+          }
+        ],
+        "last_h2h_date": "23.07.24",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Jianu F. C.",
+        "last_h2h_away": "Rehberg M. H.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Jianu F. C.)",
+          "missing_recent_matches_B (Rehberg M. H.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 284,
+        "ranking_b": 342,
+        "forebet_prediction": "2",
+        "forebet_probability": 73.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 11.8,
+        "forebet_home_prob": 27,
+        "forebet_away_prob": 73
+      },
+      "enrichment_error": null
+    }
+  ]
+}
