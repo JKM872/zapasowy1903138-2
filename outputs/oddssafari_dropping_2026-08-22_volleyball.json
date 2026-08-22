@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "generated_at": "2026-08-22T12:28:06.045193+02:00",
+    "target_date": "2026-08-22",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 3,
+      "qualified": 2
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 1,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 175.9,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - Mediterranean Games",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/mediterranean-games/tunisia-vs-italy/2303695?MarketTypeID=701",
+      "match_id": "2303695",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Tunisia",
+      "away_team": "Italy",
+      "event_date": "22/08",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.83,
+      "current_odds": 1.47,
+      "drop_pct": 19.0,
+      "max_odds": 1.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "International  - European Championship (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/european-championship-w/ukraine-vs-greece/2303785?MarketTypeID=701",
+      "match_id": "2303785",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Ukraine",
+      "away_team": "Greece",
+      "event_date": "22/08",
+      "event_time": "14:00",
+      "outcome": "2",
+      "open_odds": 4.0,
+      "current_odds": 3.36,
+      "drop_pct": 16.0,
+      "max_odds": 3.85,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "International  - U20 European Championship (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/u20-european-championship-w/belarus-u20-vs-turkiye-u20/2304191?MarketTypeID=701",
+      "match_id": "2304191",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Belarus U20",
+      "away_team": "Turkiye U20",
+      "event_date": "22/08",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.22,
+      "drop_pct": 11.0,
+      "max_odds": 2.35,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 7199203,
+        "sofascore_home_team_id": 231492,
+        "sofascore_away_team_id": 79653,
+        "home_team": "Belarus U20",
+        "away_team": "Turkiye U20",
+        "sport": "volleyball",
+        "league": "International  - U20 European Championship (W)",
+        "match_time": "15:00",
+        "home_form_home": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "26.09.20",
+            "home": "Russia U20",
+            "away": "Belarus U20",
+            "score": "3:1",
+            "winner": "home"
+          },
+          {
+            "date": "02.09.16",
+            "home": "Belarus U20",
+            "away": "Russia U20",
+            "score": "0:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "26.09.20",
+        "last_h2h_score": "3:1",
+        "last_h2h_home": "Russia U20",
+        "last_h2h_away": "Belarus U20",
+        "sofascore_home_win_prob": 26,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 74,
+        "sofascore_total_votes": 35
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "International  - Mediterranean Games",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/mediterranean-games/tunisia-vs-italy/2303695?MarketTypeID=701",
+      "match_id": "2303695",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Tunisia",
+      "away_team": "Italy",
+      "event_date": "22/08",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.83,
+      "current_odds": 1.47,
+      "drop_pct": 19.0,
+      "max_odds": 1.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "International  - U20 European Championship (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/u20-european-championship-w/belarus-u20-vs-turkiye-u20/2304191?MarketTypeID=701",
+      "match_id": "2304191",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Belarus U20",
+      "away_team": "Turkiye U20",
+      "event_date": "22/08",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.22,
+      "drop_pct": 11.0,
+      "max_odds": 2.35,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 7199203,
+        "sofascore_home_team_id": 231492,
+        "sofascore_away_team_id": 79653,
+        "home_team": "Belarus U20",
+        "away_team": "Turkiye U20",
+        "sport": "volleyball",
+        "league": "International  - U20 European Championship (W)",
+        "match_time": "15:00",
+        "home_form_home": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "26.09.20",
+            "home": "Russia U20",
+            "away": "Belarus U20",
+            "score": "3:1",
+            "winner": "home"
+          },
+          {
+            "date": "02.09.16",
+            "home": "Belarus U20",
+            "away": "Russia U20",
+            "score": "0:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "26.09.20",
+        "last_h2h_score": "3:1",
+        "last_h2h_home": "Russia U20",
+        "last_h2h_away": "Belarus U20",
+        "sofascore_home_win_prob": 26,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 74,
+        "sofascore_total_votes": 35
+      },
+      "enrichment_error": null
+    }
+  ]
+}

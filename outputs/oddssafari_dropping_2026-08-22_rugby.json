@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "generated_at": "2026-08-22T12:32:47.940607+02:00",
+    "target_date": "2026-08-22",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "elapsed_seconds": 47.3,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Friendlies",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/friendlies/south-africa-vs-new-zealand/2287625?MarketTypeID=1301",
+      "match_id": "2287625",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "South Africa",
+      "away_team": "New Zealand",
+      "event_date": "22/08",
+      "event_time": "15:00",
+      "outcome": "2",
+      "open_odds": 3.5,
+      "current_odds": 3.0,
+      "drop_pct": 14.0,
+      "max_odds": 3.2,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "England - Super League",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/england/super-league/catalans-dragons-vs-hull-fc/2301501?MarketTypeID=1414",
+      "match_id": "2301501",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Catalans Dragons",
+      "away_team": "Hull FC",
+      "event_date": "22/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.36,
+      "drop_pct": 14.0,
+      "max_odds": 2.38,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 15176432,
+        "sofascore_home_team_id": 7945,
+        "sofascore_away_team_id": 4271,
+        "home_team": "Catalans Dragons",
+        "away_team": "Hull FC",
+        "sport": "rugby",
+        "league": "England - Super League",
+        "match_time": "19:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "29.03.26",
+            "home": "Hull",
+            "away": "Catalans Dragons",
+            "score": "24:20",
+            "winner": "home"
+          },
+          {
+            "date": "18.09.25",
+            "home": "Hull",
+            "away": "Catalans Dragons",
+            "score": "22:26",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "29.03.26",
+        "last_h2h_score": "24:20",
+        "last_h2h_home": "Hull",
+        "last_h2h_away": "Catalans Dragons",
+        "sofascore_home_win_prob": 75,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 20,
+        "sofascore_total_votes": 141,
+        "forebet_prediction": "2"
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "England - Super League",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/england/super-league/catalans-dragons-vs-hull-fc/2301501?MarketTypeID=1414",
+      "match_id": "2301501",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Catalans Dragons",
+      "away_team": "Hull FC",
+      "event_date": "22/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.36,
+      "drop_pct": 14.0,
+      "max_odds": 2.38,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 15176432,
+        "sofascore_home_team_id": 7945,
+        "sofascore_away_team_id": 4271,
+        "home_team": "Catalans Dragons",
+        "away_team": "Hull FC",
+        "sport": "rugby",
+        "league": "England - Super League",
+        "match_time": "19:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "29.03.26",
+            "home": "Hull",
+            "away": "Catalans Dragons",
+            "score": "24:20",
+            "winner": "home"
+          },
+          {
+            "date": "18.09.25",
+            "home": "Hull",
+            "away": "Catalans Dragons",
+            "score": "22:26",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "29.03.26",
+        "last_h2h_score": "24:20",
+        "last_h2h_home": "Hull",
+        "last_h2h_away": "Catalans Dragons",
+        "sofascore_home_win_prob": 75,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 20,
+        "sofascore_total_votes": 141,
+        "forebet_prediction": "2"
+      },
+      "enrichment_error": null
+    }
+  ]
+}
