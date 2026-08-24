@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-24T12:45:45.658837+02:00",
+    "generated_at": "2026-08-24T18:52:43.138190+02:00",
     "target_date": "2026-08-24",
     "filter": {
       "min_odds": 1.35,
@@ -8,17 +8,17 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 2,
-      "qualified": 2
+      "events": 3,
+      "qualified": 3
     },
     "enrichment_status_counts": {
       "enriched": 0,
       "resolve_failed": 0,
       "process_match_error": 0,
-      "enriched_sofascore_only": 2
+      "enriched_sofascore_only": 3
     },
     "skip_reason_counts": {},
-    "elapsed_seconds": 183.4,
+    "elapsed_seconds": 283.6,
     "dry_run": false
   },
   "events": [
@@ -119,16 +119,147 @@
         "last_h2h_score": "24:26",
         "last_h2h_home": "Auckland",
         "last_h2h_away": "Bay of Plenty",
-        "sofascore_home_win_prob": 58,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 42,
-        "sofascore_total_votes": 12,
+        "sofascore_home_win_prob": 53,
+        "sofascore_draw_prob": 7,
+        "sofascore_away_win_prob": 40,
+        "sofascore_total_votes": 15,
         "forebet_prediction": "2",
         "forebet_probability": 68.0,
         "forebet_exact_score": "22-50",
         "forebet_avg_goals": 66.6,
         "forebet_home_prob": 30,
         "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Friendlies",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/friendlies/argentina-vs-australia/2306453?MarketTypeID=1301",
+      "match_id": "2306453",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Argentina",
+      "away_team": "Australia",
+      "event_date": "29/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 2.38,
+      "current_odds": 2.11,
+      "drop_pct": 11.0,
+      "max_odds": 2.2,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16906632,
+        "sofascore_home_team_id": 4225,
+        "sofascore_away_team_id": 4223,
+        "home_team": "Argentina",
+        "away_team": "Australia",
+        "sport": "rugby",
+        "league": "Friendlies",
+        "match_time": "19:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "13.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "26:28",
+            "winner": "away"
+          },
+          {
+            "date": "06.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "28:24",
+            "winner": "home"
+          },
+          {
+            "date": "07.09.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "67:27",
+            "winner": "home"
+          },
+          {
+            "date": "31.08.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "19:20",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "13.09.25",
+        "last_h2h_score": "26:28",
+        "last_h2h_home": "Australia",
+        "last_h2h_away": "Argentina",
+        "sofascore_home_win_prob": 75,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 25,
+        "sofascore_total_votes": 4,
+        "forebet_prediction": "1",
+        "forebet_probability": 76.0,
+        "forebet_exact_score": "35-22",
+        "forebet_avg_goals": 54.3,
+        "forebet_home_prob": 76,
+        "forebet_away_prob": 22
       },
       "enrichment_error": null
     },
@@ -236,10 +367,10 @@
         "last_h2h_score": "18:28",
         "last_h2h_home": "St. George Illawarra Dragons",
         "last_h2h_away": "Manly Sea Eagles",
-        "sofascore_home_win_prob": 72,
+        "sofascore_home_win_prob": 73,
         "sofascore_draw_prob": 9,
         "sofascore_away_win_prob": 19,
-        "sofascore_total_votes": 86
+        "sofascore_total_votes": 91
       },
       "enrichment_error": null
     }
@@ -342,16 +473,147 @@
         "last_h2h_score": "24:26",
         "last_h2h_home": "Auckland",
         "last_h2h_away": "Bay of Plenty",
-        "sofascore_home_win_prob": 58,
-        "sofascore_draw_prob": null,
-        "sofascore_away_win_prob": 42,
-        "sofascore_total_votes": 12,
+        "sofascore_home_win_prob": 53,
+        "sofascore_draw_prob": 7,
+        "sofascore_away_win_prob": 40,
+        "sofascore_total_votes": 15,
         "forebet_prediction": "2",
         "forebet_probability": 68.0,
         "forebet_exact_score": "22-50",
         "forebet_avg_goals": 66.6,
         "forebet_home_prob": 30,
         "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Friendlies",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/friendlies/argentina-vs-australia/2306453?MarketTypeID=1301",
+      "match_id": "2306453",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Argentina",
+      "away_team": "Australia",
+      "event_date": "29/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 2.38,
+      "current_odds": 2.11,
+      "drop_pct": 11.0,
+      "max_odds": 2.2,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16906632,
+        "sofascore_home_team_id": 4225,
+        "sofascore_away_team_id": 4223,
+        "home_team": "Argentina",
+        "away_team": "Australia",
+        "sport": "rugby",
+        "league": "Friendlies",
+        "match_time": "19:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "13.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "26:28",
+            "winner": "away"
+          },
+          {
+            "date": "06.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "28:24",
+            "winner": "home"
+          },
+          {
+            "date": "07.09.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "67:27",
+            "winner": "home"
+          },
+          {
+            "date": "31.08.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "19:20",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "13.09.25",
+        "last_h2h_score": "26:28",
+        "last_h2h_home": "Australia",
+        "last_h2h_away": "Argentina",
+        "sofascore_home_win_prob": 75,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 25,
+        "sofascore_total_votes": 4,
+        "forebet_prediction": "1",
+        "forebet_probability": 76.0,
+        "forebet_exact_score": "35-22",
+        "forebet_avg_goals": 54.3,
+        "forebet_home_prob": 76,
+        "forebet_away_prob": 22
       },
       "enrichment_error": null
     },
@@ -459,10 +721,10 @@
         "last_h2h_score": "18:28",
         "last_h2h_home": "St. George Illawarra Dragons",
         "last_h2h_away": "Manly Sea Eagles",
-        "sofascore_home_win_prob": 72,
+        "sofascore_home_win_prob": 73,
         "sofascore_draw_prob": 9,
         "sofascore_away_win_prob": 19,
-        "sofascore_total_votes": 86
+        "sofascore_total_votes": 91
       },
       "enrichment_error": null
     }
