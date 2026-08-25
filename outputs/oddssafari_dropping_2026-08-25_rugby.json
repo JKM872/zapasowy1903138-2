@@ -1,0 +1,1224 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T13:00:59.330540+02:00",
+    "target_date": "2026-08-25",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 7,
+      "qualified": 5
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 5
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "elapsed_seconds": 1130.6,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/penrith-panthers-vs-wests-tigers/2306987?MarketTypeID=1401",
+      "match_id": "2306987",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Penrith Panthers",
+      "away_team": "Wests Tigers",
+      "event_date": "06/09",
+      "event_time": "06:05",
+      "outcome": "2",
+      "open_odds": 5.5,
+      "current_odds": 3.55,
+      "drop_pct": 35.0,
+      "max_odds": 3.7,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "New Zealand - National Provincial Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/new-zealand/national-provincial-championship/auckland-vs-bay-of-plenty/2305662?MarketTypeID=1301",
+      "match_id": "2305662",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Auckland",
+      "away_team": "Bay of Plenty",
+      "event_date": "28/08",
+      "event_time": "07:10",
+      "outcome": "2",
+      "open_odds": 2.0,
+      "current_odds": 1.72,
+      "drop_pct": 14.0,
+      "max_odds": 1.75,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 16237201,
+        "sofascore_home_team_id": 42726,
+        "sofascore_away_team_id": 42725,
+        "home_team": "Auckland",
+        "away_team": "Bay of Plenty",
+        "sport": "rugby",
+        "league": "New Zealand - National Provincial Championship",
+        "match_time": "07:10",
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "06.10.24",
+            "home": "Auckland",
+            "away": "Bay of Plenty",
+            "score": "24:26",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "06.10.24",
+        "last_h2h_score": "24:26",
+        "last_h2h_home": "Auckland",
+        "last_h2h_away": "Bay of Plenty",
+        "sofascore_home_win_prob": 55,
+        "sofascore_draw_prob": 9,
+        "sofascore_away_win_prob": 36,
+        "sofascore_total_votes": 22,
+        "forebet_prediction": "2",
+        "forebet_probability": 68.0,
+        "forebet_exact_score": "22-50",
+        "forebet_avg_goals": 66.6,
+        "forebet_home_prob": 30,
+        "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/new-zealand-warriors-vs-newcastle-knights/2301790?MarketTypeID=1401",
+      "match_id": "2301790",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "New Zealand Warriors",
+      "away_team": "Newcastle Knights",
+      "event_date": "30/08",
+      "event_time": "04:00",
+      "outcome": "1",
+      "open_odds": 1.47,
+      "current_odds": 1.28,
+      "drop_pct": 13.0,
+      "max_odds": 1.3,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Friendlies",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/friendlies/argentina-vs-australia/2306453?MarketTypeID=1301",
+      "match_id": "2306453",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Argentina",
+      "away_team": "Australia",
+      "event_date": "29/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 2.38,
+      "current_odds": 2.09,
+      "drop_pct": 12.0,
+      "max_odds": 2.12,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16906632,
+        "sofascore_home_team_id": 4225,
+        "sofascore_away_team_id": 4223,
+        "home_team": "Argentina",
+        "away_team": "Australia",
+        "sport": "rugby",
+        "league": "Friendlies",
+        "match_time": "19:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "13.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "26:28",
+            "winner": "away"
+          },
+          {
+            "date": "06.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "28:24",
+            "winner": "home"
+          },
+          {
+            "date": "07.09.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "67:27",
+            "winner": "home"
+          },
+          {
+            "date": "31.08.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "19:20",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "13.09.25",
+        "last_h2h_score": "26:28",
+        "last_h2h_home": "Australia",
+        "last_h2h_away": "Argentina",
+        "sofascore_home_win_prob": 59,
+        "sofascore_draw_prob": 6,
+        "sofascore_away_win_prob": 34,
+        "sofascore_total_votes": 32,
+        "forebet_prediction": "1",
+        "forebet_probability": 76.0,
+        "forebet_exact_score": "35-22",
+        "forebet_avg_goals": 54.3,
+        "forebet_home_prob": 76,
+        "forebet_away_prob": 22
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/brisbane-broncos-vs-melbourne-storm/2301784?MarketTypeID=1401",
+      "match_id": "2301784",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Brisbane Broncos",
+      "away_team": "Melbourne Storm",
+      "event_date": "27/08",
+      "event_time": "09:50",
+      "outcome": "2",
+      "open_odds": 1.91,
+      "current_odds": 1.68,
+      "drop_pct": 12.0,
+      "max_odds": 1.75,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 15105977,
+        "sofascore_home_team_id": 4258,
+        "sofascore_away_team_id": 4255,
+        "home_team": "Brisbane Broncos",
+        "away_team": "Melbourne Storm",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "09:50",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "20.03.26",
+            "home": "Melbourne Storm",
+            "away": "Brisbane Broncos",
+            "score": "14:18",
+            "winner": "away"
+          },
+          {
+            "date": "05.10.25",
+            "home": "Melbourne Storm",
+            "away": "Brisbane Broncos",
+            "score": "22:26",
+            "winner": "away"
+          },
+          {
+            "date": "04.09.25",
+            "home": "Brisbane Broncos",
+            "away": "Melbourne Storm",
+            "score": "30:14",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "20.03.26",
+        "last_h2h_score": "14:18",
+        "last_h2h_home": "Melbourne Storm",
+        "last_h2h_away": "Brisbane Broncos",
+        "sofascore_home_win_prob": 46,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 49,
+        "sofascore_total_votes": 167
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/manly-warringah-sea-eagles-vs-st.-george-illawarra-dragons/2301785?MarketTypeID=1401",
+      "match_id": "2301785",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Manly Warringah Sea Eagles",
+      "away_team": "St. George Illawarra Dragons",
+      "event_date": "28/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.57,
+      "current_odds": 1.39,
+      "drop_pct": 12.0,
+      "max_odds": 1.42,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15105976,
+        "sofascore_home_team_id": 4259,
+        "sofascore_away_team_id": 4265,
+        "home_team": "Manly Warringah Sea Eagles",
+        "away_team": "St. George Illawarra Dragons",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "08:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "10.04.26",
+            "home": "St. George Illawarra Dragons",
+            "away": "Manly Sea Eagles",
+            "score": "18:28",
+            "winner": "away"
+          },
+          {
+            "date": "30.08.25",
+            "home": "St. George Illawarra Dragons",
+            "away": "Manly Sea Eagles",
+            "score": "24:40",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "10.04.26",
+        "last_h2h_score": "18:28",
+        "last_h2h_home": "St. George Illawarra Dragons",
+        "last_h2h_away": "Manly Sea Eagles",
+        "sofascore_home_win_prob": 74,
+        "sofascore_draw_prob": 8,
+        "sofascore_away_win_prob": 18,
+        "sofascore_total_votes": 113
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/gold-coast-titans-vs-south-sydney-rabbitohs/2301788?MarketTypeID=1401",
+      "match_id": "2301788",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Gold Coast Titans",
+      "away_team": "South Sydney Rabbitohs",
+      "event_date": "29/08",
+      "event_time": "05:00",
+      "outcome": "2",
+      "open_odds": 1.52,
+      "current_odds": 1.35,
+      "drop_pct": 11.0,
+      "max_odds": 1.38,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 1.0,
+        "sofascore_event_id": 15105979,
+        "sofascore_home_team_id": 7313,
+        "sofascore_away_team_id": 4263,
+        "home_team": "Gold Coast Titans",
+        "away_team": "South Sydney Rabbitohs",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "05:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "10.08.25",
+            "home": "Gold Coast Titans",
+            "away": "South Sydney Rabbitohs",
+            "score": "18:20",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "10.08.25",
+        "last_h2h_score": "18:20",
+        "last_h2h_home": "Gold Coast Titans",
+        "last_h2h_away": "South Sydney Rabbitohs",
+        "sofascore_home_win_prob": 20,
+        "sofascore_draw_prob": 9,
+        "sofascore_away_win_prob": 71,
+        "sofascore_total_votes": 93
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "New Zealand - National Provincial Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/new-zealand/national-provincial-championship/auckland-vs-bay-of-plenty/2305662?MarketTypeID=1301",
+      "match_id": "2305662",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Auckland",
+      "away_team": "Bay of Plenty",
+      "event_date": "28/08",
+      "event_time": "07:10",
+      "outcome": "2",
+      "open_odds": 2.0,
+      "current_odds": 1.72,
+      "drop_pct": 14.0,
+      "max_odds": 1.75,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.3,
+        "sofascore_event_id": 16237201,
+        "sofascore_home_team_id": 42726,
+        "sofascore_away_team_id": 42725,
+        "home_team": "Auckland",
+        "away_team": "Bay of Plenty",
+        "sport": "rugby",
+        "league": "New Zealand - National Provincial Championship",
+        "match_time": "07:10",
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "06.10.24",
+            "home": "Auckland",
+            "away": "Bay of Plenty",
+            "score": "24:26",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "06.10.24",
+        "last_h2h_score": "24:26",
+        "last_h2h_home": "Auckland",
+        "last_h2h_away": "Bay of Plenty",
+        "sofascore_home_win_prob": 55,
+        "sofascore_draw_prob": 9,
+        "sofascore_away_win_prob": 36,
+        "sofascore_total_votes": 22,
+        "forebet_prediction": "2",
+        "forebet_probability": 68.0,
+        "forebet_exact_score": "22-50",
+        "forebet_avg_goals": 66.6,
+        "forebet_home_prob": 30,
+        "forebet_away_prob": 68
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Friendlies",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/friendlies/argentina-vs-australia/2306453?MarketTypeID=1301",
+      "match_id": "2306453",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Argentina",
+      "away_team": "Australia",
+      "event_date": "29/08",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 2.38,
+      "current_odds": 2.09,
+      "drop_pct": 12.0,
+      "max_odds": 2.12,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 16906632,
+        "sofascore_home_team_id": 4225,
+        "sofascore_away_team_id": 4223,
+        "home_team": "Argentina",
+        "away_team": "Australia",
+        "sport": "rugby",
+        "league": "Friendlies",
+        "match_time": "19:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "13.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "26:28",
+            "winner": "away"
+          },
+          {
+            "date": "06.09.25",
+            "home": "Australia",
+            "away": "Argentina",
+            "score": "28:24",
+            "winner": "home"
+          },
+          {
+            "date": "07.09.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "67:27",
+            "winner": "home"
+          },
+          {
+            "date": "31.08.24",
+            "home": "Argentina",
+            "away": "Australia",
+            "score": "19:20",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "13.09.25",
+        "last_h2h_score": "26:28",
+        "last_h2h_home": "Australia",
+        "last_h2h_away": "Argentina",
+        "sofascore_home_win_prob": 59,
+        "sofascore_draw_prob": 6,
+        "sofascore_away_win_prob": 34,
+        "sofascore_total_votes": 32,
+        "forebet_prediction": "1",
+        "forebet_probability": 76.0,
+        "forebet_exact_score": "35-22",
+        "forebet_avg_goals": 54.3,
+        "forebet_home_prob": 76,
+        "forebet_away_prob": 22
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/brisbane-broncos-vs-melbourne-storm/2301784?MarketTypeID=1401",
+      "match_id": "2301784",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Brisbane Broncos",
+      "away_team": "Melbourne Storm",
+      "event_date": "27/08",
+      "event_time": "09:50",
+      "outcome": "2",
+      "open_odds": 1.91,
+      "current_odds": 1.68,
+      "drop_pct": 12.0,
+      "max_odds": 1.75,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 15105977,
+        "sofascore_home_team_id": 4258,
+        "sofascore_away_team_id": 4255,
+        "home_team": "Brisbane Broncos",
+        "away_team": "Melbourne Storm",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "09:50",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "20.03.26",
+            "home": "Melbourne Storm",
+            "away": "Brisbane Broncos",
+            "score": "14:18",
+            "winner": "away"
+          },
+          {
+            "date": "05.10.25",
+            "home": "Melbourne Storm",
+            "away": "Brisbane Broncos",
+            "score": "22:26",
+            "winner": "away"
+          },
+          {
+            "date": "04.09.25",
+            "home": "Brisbane Broncos",
+            "away": "Melbourne Storm",
+            "score": "30:14",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "20.03.26",
+        "last_h2h_score": "14:18",
+        "last_h2h_home": "Melbourne Storm",
+        "last_h2h_away": "Brisbane Broncos",
+        "sofascore_home_win_prob": 46,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 49,
+        "sofascore_total_votes": 167
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/manly-warringah-sea-eagles-vs-st.-george-illawarra-dragons/2301785?MarketTypeID=1401",
+      "match_id": "2301785",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Manly Warringah Sea Eagles",
+      "away_team": "St. George Illawarra Dragons",
+      "event_date": "28/08",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.57,
+      "current_odds": 1.39,
+      "drop_pct": 12.0,
+      "max_odds": 1.42,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 15105976,
+        "sofascore_home_team_id": 4259,
+        "sofascore_away_team_id": 4265,
+        "home_team": "Manly Warringah Sea Eagles",
+        "away_team": "St. George Illawarra Dragons",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "08:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "10.04.26",
+            "home": "St. George Illawarra Dragons",
+            "away": "Manly Sea Eagles",
+            "score": "18:28",
+            "winner": "away"
+          },
+          {
+            "date": "30.08.25",
+            "home": "St. George Illawarra Dragons",
+            "away": "Manly Sea Eagles",
+            "score": "24:40",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "10.04.26",
+        "last_h2h_score": "18:28",
+        "last_h2h_home": "St. George Illawarra Dragons",
+        "last_h2h_away": "Manly Sea Eagles",
+        "sofascore_home_win_prob": 74,
+        "sofascore_draw_prob": 8,
+        "sofascore_away_win_prob": 18,
+        "sofascore_total_votes": 113
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Australia - NRL",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/australia/nrl/gold-coast-titans-vs-south-sydney-rabbitohs/2301788?MarketTypeID=1401",
+      "match_id": "2301788",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Gold Coast Titans",
+      "away_team": "South Sydney Rabbitohs",
+      "event_date": "29/08",
+      "event_time": "05:00",
+      "outcome": "2",
+      "open_odds": 1.52,
+      "current_odds": 1.35,
+      "drop_pct": 11.0,
+      "max_odds": 1.38,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 1.0,
+        "sofascore_event_id": 15105979,
+        "sofascore_home_team_id": 7313,
+        "sofascore_away_team_id": 4263,
+        "home_team": "Gold Coast Titans",
+        "away_team": "South Sydney Rabbitohs",
+        "sport": "rugby",
+        "league": "Australia - NRL",
+        "match_time": "05:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "10.08.25",
+            "home": "Gold Coast Titans",
+            "away": "South Sydney Rabbitohs",
+            "score": "18:20",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "10.08.25",
+        "last_h2h_score": "18:20",
+        "last_h2h_home": "Gold Coast Titans",
+        "last_h2h_away": "South Sydney Rabbitohs",
+        "sofascore_home_win_prob": 20,
+        "sofascore_draw_prob": 9,
+        "sofascore_away_win_prob": 71,
+        "sofascore_total_votes": 93
+      },
+      "enrichment_error": null
+    }
+  ]
+}
