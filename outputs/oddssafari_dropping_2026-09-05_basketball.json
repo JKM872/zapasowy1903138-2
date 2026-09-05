@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-05T15:20:05.183524+02:00",
+    "generated_at": "2026-09-05T18:43:25.984581+02:00",
     "target_date": "2026-09-05",
     "filter": {
       "min_odds": 1.35,
@@ -20,7 +20,7 @@
     "skip_reason_counts": {
       "odds_out_of_range": 5
     },
-    "elapsed_seconds": 125.3,
+    "elapsed_seconds": 54.3,
     "dry_run": false
   },
   "events": [
@@ -59,9 +59,9 @@
       "event_time": "23:30",
       "outcome": "2",
       "open_odds": 9.65,
-      "current_odds": 7.99,
-      "drop_pct": 17.0,
-      "max_odds": 8.8,
+      "current_odds": 7.92,
+      "drop_pct": 18.0,
+      "max_odds": 9.0,
       "sport_page_id": "20",
       "notes": [],
       "qualifies": false,
@@ -82,7 +82,7 @@
       "event_time": "23:30",
       "outcome": "1",
       "open_odds": 6.31,
-      "current_odds": 5.41,
+      "current_odds": 5.43,
       "drop_pct": 14.0,
       "max_odds": 6.31,
       "sport_page_id": "20",
@@ -142,19 +142,48 @@
       "livesport_url": null,
       "livesport_confidence": 0.0,
       "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
         "h2h_count": 10,
         "home_wins_in_h2h_last5": 2,
         "away_wins_in_h2h_last5": 8,
         "h2h_source": "sofascore_api",
         "win_rate": 0.8,
         "sofascore_event_id": 16685160,
+        "sofascore_home_team_id": 3435,
+        "sofascore_away_team_id": 3426,
         "home_team": "MIA Heat",
         "away_team": "MIN Timberwolves",
         "sport": "basketball",
         "league": "USA - NBA",
         "match_time": "23:30",
-        "sofascore_home_team_id": 3435,
-        "sofascore_away_team_id": 3426,
         "home_form_home": [
           "W",
           "L",
@@ -173,7 +202,13 @@
         "sofascore_home_win_prob": 22,
         "sofascore_draw_prob": null,
         "sofascore_away_win_prob": 78,
-        "sofascore_total_votes": 93
+        "sofascore_total_votes": 93,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "86-76",
+        "forebet_avg_goals": 166.6,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
       },
       "enrichment_error": null
     },
@@ -228,19 +263,48 @@
       "livesport_url": null,
       "livesport_confidence": 0.0,
       "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
         "h2h_count": 10,
         "home_wins_in_h2h_last5": 2,
         "away_wins_in_h2h_last5": 8,
         "h2h_source": "sofascore_api",
         "win_rate": 0.8,
         "sofascore_event_id": 16685160,
+        "sofascore_home_team_id": 3435,
+        "sofascore_away_team_id": 3426,
         "home_team": "MIA Heat",
         "away_team": "MIN Timberwolves",
         "sport": "basketball",
         "league": "USA - NBA",
         "match_time": "23:30",
-        "sofascore_home_team_id": 3435,
-        "sofascore_away_team_id": 3426,
         "home_form_home": [
           "W",
           "L",
@@ -259,7 +323,13 @@
         "sofascore_home_win_prob": 22,
         "sofascore_draw_prob": null,
         "sofascore_away_win_prob": 78,
-        "sofascore_total_votes": 93
+        "sofascore_total_votes": 93,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "86-76",
+        "forebet_avg_goals": 166.6,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
       },
       "enrichment_error": null
     }
