@@ -1311,7 +1311,9 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument("--max-rows", type=int, default=0,
                         help="Optional cap on rows processed end-to-end (0 = no cap).")
     parser.add_argument("--max-pages", type=int, default=20,
-                        help="Max pages of dropping-odds table per sport.")
+                        help="Deprecated / no-op: OddsSafari paginates in the "
+                             "browser and ships every row in one response, so "
+                             "all pages are always collected.")
     parser.add_argument("--sport-ids", default="",
                         help="Comma-separated OddsSafari sport IDs; empty = auto.")
     parser.add_argument("--sport", default="",

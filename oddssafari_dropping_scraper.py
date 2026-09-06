@@ -20,10 +20,14 @@ This module exposes:
   pipeline whether the costly enrichment phase can be attempted.
 * :func:`parse_dropping_odds_table` — pure parser that turns an HTML fragment
   containing the dropping-odds table into a list of row dicts (used in tests
-  against a static fixture, without the network).
+  against a static fixture, without the network). The rendered table only ever
+  contains the *current* client-side page, so this is now the fallback.
+* :func:`parse_dropping_odds_next_data` — pure parser over the embedded SSR
+  payload (``props.pageProps.markets``), which carries **all** rows for the
+  sport. OddsSafari paginates in the browser only and ignores ``?page=N``, so
+  this is the primary path and removes the old first-page-only cap.
 * :func:`collect_dropping_odds_rows` — Selenium-driven top-level entry point
-  that iterates every sport tab and every page and returns the full list of
-  raw row dicts.
+  that iterates every sport tab and returns the full list of raw row dicts.
 """
 
 from __future__ import annotations
@@ -381,6 +385,114 @@ def parse_dropping_odds_table(
     return rows
 
 
+def parse_dropping_odds_next_data(
+    html: str,
+    *,
+    base_url: str = "https://www.oddssafari.com",
+    sport_page_id: Optional[str] = None,
+) -> List[DroppingOddsRow]:
+    """Parse **every** dropping-odds row out of the embedded SSR payload.
+
+    The rendered table is paginated *client side* — OddsSafari ships the whole
+    result set in ``__NEXT_DATA__.props.pageProps.markets`` and the ``Page:
+    n / m`` control only slices it in the browser. ``?page=N`` is ignored by
+    the server (it re-serves page 1), so scraping the table markup caps out at
+    the first ~70 rows while the payload holds the full set (300+ for soccer).
+
+    Reading ``markets`` therefore replaces pagination entirely: one request per
+    sport returns every row, in the same order the table renders them.
+    """
+    match = _NEXT_DATA_RE.search(html or "")
+    if not match:
+        return []
+
+    try:
+        import json
+
+        data = json.loads(match.group(1))
+        markets = (
+            data.get("props", {}).get("pageProps", {}).get("markets") or []
+        )
+    except Exception as exc:
+        logger.warning("failed to parse __NEXT_DATA__ markets: %s", exc)
+        return []
+
+    rows: List[DroppingOddsRow] = []
+    for entry in markets:
+        if not isinstance(entry, dict):
+            continue
+
+        urls = entry.get("EventUrls") or {}
+        path = ""
+        if isinstance(urls, dict):
+            path = urls.get("en") or next(
+                (v for v in urls.values() if isinstance(v, str) and v), ""
+            )
+        if not path:
+            continue
+
+        # The table links to /matches + the event path, carrying the market
+        # type as a query arg. Rebuilding it identically keeps match_url (and
+        # therefore dedup keys and downstream lookups) byte-for-byte stable.
+        relative = f"/matches{path}"
+        market_type_id = entry.get("MarketTypeID")
+        if market_type_id is not None:
+            relative = f"{relative}?MarketTypeID={market_type_id}"
+
+        slug, match_id = _parse_match_url(relative)
+
+        event_date: Optional[str] = None
+        event_time: Optional[str] = None
+        raw_date = entry.get("EventDate")
+        if isinstance(raw_date, str) and raw_date.strip():
+            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+                try:
+                    parsed = datetime.strptime(raw_date.strip()[:19], fmt)
+                except ValueError:
+                    continue
+                event_date = parsed.strftime("%d/%m")
+                event_time = parsed.strftime("%H:%M")
+                break
+
+        open_odds = _parse_float(entry.get("OpenQuote"))
+        # AvgQuote is the post-drop price the table shows as "current"; MaxQuote
+        # is the best bookmaker quote rendered in the colMaxOdd column.
+        current_odds = _parse_float(entry.get("AvgQuote"))
+        max_odds = _parse_float(entry.get("MaxQuote"))
+
+        drop_pct = _parse_percent(str(entry.get("BetDiffPerc")))
+        if drop_pct is None and open_odds and current_odds and open_odds > 0:
+            drop_pct = round(abs(current_odds - open_odds) / open_odds * 100, 1)
+
+        outcome = (
+            entry.get("OutcomeShortName") or entry.get("OutcomeName") or ""
+        )
+
+        rows.append(
+            DroppingOddsRow(
+                league=(entry.get("LeagueName") or "").strip(),
+                match_url=urljoin(base_url, relative),
+                match_id=match_id or (
+                    str(entry.get("EventID")) if entry.get("EventID") else None
+                ),
+                sport_slug=slug,
+                sport=map_slug_to_internal(slug),
+                home_team=(entry.get("EventParticipant1_Name") or "").strip(),
+                away_team=(entry.get("EventParticipant2_Name") or "").strip(),
+                event_date=event_date,
+                event_time=event_time,
+                outcome=str(outcome).strip(),
+                open_odds=open_odds,
+                current_odds=current_odds,
+                drop_pct=drop_pct,
+                max_odds=max_odds,
+                sport_page_id=sport_page_id,
+            )
+        )
+
+    return rows
+
+
 _DATE_RE = re.compile(r"^\d{2}/\d{2}$")
 _TIME_RE = re.compile(r"^\d{1,2}:\d{2}$")
 
@@ -675,7 +787,12 @@ def collect_rows_via_http(
     When *sport* is given and *sport_page_ids* is not, the correct page IDs
     are discovered by content so a stale hardcoded ID cannot silently yield
     zero rows.
+
+    Every row for a sport arrives in a single response via the SSR payload
+    (see :func:`parse_dropping_odds_next_data`), so *max_pages_per_sport* is
+    accepted only for call-site compatibility and no longer limits the result.
     """
+    del max_pages_per_sport  # pagination is client-side; payload holds all rows
     session = session or requests.Session()
 
     ids = list(sport_page_ids or [])
@@ -694,32 +811,39 @@ def collect_rows_via_http(
     seen: set = set()
 
     for sid in ids:
-        page_signatures: set = set()
-        for page in range(1, max_pages_per_sport + 1):
-            suffix = "" if page == 1 else f"?page={page}"
-            url = f"{DROPPING_ODDS_ROOT}/sports/{sid}{suffix}"
-            html = fetch_dropping_odds_html(url, session=session)
-            if not html or _is_missing_sport_page(html):
-                break
+        url = f"{DROPPING_ODDS_ROOT}/sports/{sid}"
+        html = fetch_dropping_odds_html(url, session=session)
+        if not html or _is_missing_sport_page(html):
+            continue
+
+        # Primary: the SSR payload carries every row, so the site's client-side
+        # "Page: n / m" control needs no crawling. Falling back to the table
+        # markup keeps the scraper working if OddsSafari drops __NEXT_DATA__,
+        # but that path only ever sees the first page.
+        rows = parse_dropping_odds_next_data(html, sport_page_id=sid)
+        source = "next_data"
+        if not rows:
             rows = parse_dropping_odds_table(html, sport_page_id=sid)
-            if not rows:
-                break
-            signature = hash(tuple(
-                (r.match_url, r.outcome, r.current_odds) for r in rows
-            ))
-            if signature in page_signatures:
-                # Pagination exhausted: the site re-serves the same page.
-                break
-            page_signatures.add(signature)
+            source = "table_html"
+            if rows:
+                logger.warning(
+                    "sport_page_id=%s — SSR payload unavailable, parsed %d "
+                    "rows from the table (first page only)", sid, len(rows),
+                )
 
-            for row in rows:
-                key = (row.match_url, row.outcome)
-                if key in seen:
-                    continue
-                seen.add(key)
-                all_rows.append(row)
+        added = 0
+        for row in rows:
+            key = (row.match_url, row.outcome)
+            if key in seen:
+                continue
+            seen.add(key)
+            all_rows.append(row)
+            added += 1
 
-        logger.info("sport_page_id=%s — total rows so far: %d", sid, len(all_rows))
+        logger.info(
+            "sport_page_id=%s — %d rows via %s (+%d new, total=%d)",
+            sid, len(rows), source, added, len(all_rows),
+        )
 
     return all_rows
 
@@ -783,6 +907,16 @@ def _collect_sport_page(
 
         _wait_for_table(driver, timeout=page_wait_s)
         html = driver.page_source or ""
+        # The rendered DOM shows one client-side page at a time; the SSR payload
+        # embedded in the same document holds the complete set, so prefer it and
+        # stop after the first fetch instead of crawling ?page=N (ignored).
+        payload_rows = parse_dropping_odds_next_data(
+            html, sport_page_id=sport_page_id
+        )
+        if payload_rows:
+            rows.extend(payload_rows)
+            break
+
         page_rows = parse_dropping_odds_table(
             html, sport_page_id=sport_page_id
         )
@@ -870,6 +1004,7 @@ __all__ = [
     "discover_sport_page_ids",
     "collect_rows_via_http",
     "parse_dropping_odds_table",
+    "parse_dropping_odds_next_data",
     "is_qualifying_row",
     "collect_dropping_odds_rows",
     "serialize_rows",
