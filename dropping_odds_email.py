@@ -98,18 +98,14 @@ def _pick_form(enrichment: Dict[str, Any], side: str) -> List[Any]:
     return []
 
 
-def _event_sort_key(event: Dict[str, Any], report_date: str = "") -> tuple:
-    """Klucz sortowania chronologicznego: (dzień, godzina, -spadek).
+def _event_day(event: Dict[str, Any], report_date: str = "") -> Optional[datetime]:
+    """Zwróć dzień meczu jako ``datetime`` (bez godziny) albo ``None``.
 
-    OddsSafari podaje datę jako ``DD/MM`` bez roku, a godzinę jako ``HH:MM``.
-    Rok bierzemy z daty raportu; gdy różnica wychodzi absurdalnie duża, mecz
-    należy do przełomu roku i rok korygujemy. Zdarzenia bez daty lub godziny
-    idą na koniec, żeby brak danych nie udawał wczesnej godziny.
+    OddsSafari podaje datę jako ``DD/MM`` bez roku, więc rok bierzemy z daty
+    raportu i korygujemy go na przełomie roku (01/01 w raporcie z 31/12 należy
+    do następnego roku).
     """
     raw_date = str(event.get("event_date") or event.get("match_date") or "").strip()
-    raw_time = str(
-        event.get("event_time") or event.get("match_time") or ""
-    ).strip()
 
     year = None
     if report_date:
@@ -119,32 +115,58 @@ def _event_sort_key(event: Dict[str, Any], report_date: str = "") -> tuple:
     if year is None:
         year = datetime.now().year
 
-    day_key = None
-    m = re.match(r"^(\d{1,2})[/.-](\d{1,2})$", raw_date)
+    # Pełna data ``YYYY-MM-DD`` (np. z enrichmentu) — użyj jej bezpośrednio.
+    m = re.match(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", raw_date)
     if m:
-        day, month = int(m.group(1)), int(m.group(2))
         try:
-            candidate = datetime(year, month, day)
+            return datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)))
         except ValueError:
-            candidate = None
-        if candidate and report_date:
-            try:
-                ref = datetime.strptime(str(report_date)[:10], "%Y-%m-%d")
-                # Przełom roku: 01/01 w raporcie z 31/12 należy do przyszłego roku.
-                if (candidate - ref).days < -180:
-                    candidate = candidate.replace(year=year + 1)
-                elif (candidate - ref).days > 180:
-                    candidate = candidate.replace(year=year - 1)
-            except ValueError:
-                pass
-        day_key = candidate
+            return None
 
-    time_key = None
+    m = re.match(r"^(\d{1,2})[/.-](\d{1,2})$", raw_date)
+    if not m:
+        return None
+
+    day, month = int(m.group(1)), int(m.group(2))
+    try:
+        candidate = datetime(year, month, day)
+    except ValueError:
+        return None
+
+    if report_date:
+        try:
+            ref = datetime.strptime(str(report_date)[:10], "%Y-%m-%d")
+            if (candidate - ref).days < -180:
+                candidate = candidate.replace(year=year + 1)
+            elif (candidate - ref).days > 180:
+                candidate = candidate.replace(year=year - 1)
+        except ValueError:
+            pass
+    return candidate
+
+
+def _event_time_tuple(event: Dict[str, Any]) -> Optional[tuple]:
+    """Zwróć godzinę meczu jako ``(hour, minute)`` albo ``None``."""
+    raw_time = str(
+        event.get("event_time") or event.get("match_time") or ""
+    ).strip()
     m = re.match(r"^(\d{1,2}):(\d{2})", raw_time)
-    if m:
-        hour, minute = int(m.group(1)), int(m.group(2))
-        if 0 <= hour <= 23 and 0 <= minute <= 59:
-            time_key = (hour, minute)
+    if not m:
+        return None
+    hour, minute = int(m.group(1)), int(m.group(2))
+    if 0 <= hour <= 23 and 0 <= minute <= 59:
+        return (hour, minute)
+    return None
+
+
+def _event_sort_key(event: Dict[str, Any], report_date: str = "") -> tuple:
+    """Klucz sortowania chronologicznego: (dzień, godzina, -spadek).
+
+    Zdarzenia bez daty lub godziny idą na koniec, żeby brak danych nie udawał
+    wczesnej godziny.
+    """
+    day_key = _event_day(event, report_date)
+    time_key = _event_time_tuple(event)
 
     # Brak daty/godziny -> na koniec listy.
     missing = day_key is None or time_key is None
@@ -154,6 +176,57 @@ def _event_sort_key(event: Dict[str, Any], report_date: str = "") -> tuple:
         time_key or (99, 99),
         -_safe_float(event.get("drop_pct")),
     )
+
+
+# Dni tygodnia po polsku — nagłówek grupy czyta się lepiej niż samo "07/09".
+_PL_WEEKDAYS = ("pon", "wt", "śr", "czw", "pt", "sob", "niedz")
+
+
+def _event_when_label(event: Dict[str, Any], report_date: str = "") -> str:
+    """Data i godzina meczu w jednym stringu, np. ``06/09 20:45``.
+
+    Zwraca ``—`` tylko wtedy, gdy OddsSafari nie podało ani daty, ani godziny.
+    """
+    day = _event_day(event, report_date)
+    time_tuple = _event_time_tuple(event)
+
+    date_part = day.strftime("%d/%m") if day else str(
+        event.get("event_date") or event.get("match_date") or ""
+    ).strip()
+    time_part = (
+        f"{time_tuple[0]:02d}:{time_tuple[1]:02d}" if time_tuple else str(
+            event.get("event_time") or event.get("match_time") or ""
+        ).strip()
+    )
+
+    label = " ".join(p for p in (date_part, time_part) if p)
+    return label or "—"
+
+
+def _group_events_by_day(
+    events: List[Dict[str, Any]], report_date: str = ""
+) -> List[tuple]:
+    """Pogrupuj zdarzenia po dniu, zachowując kolejność chronologiczną.
+
+    Zwraca listę ``(etykieta_dnia, [zdarzenia])``. Karta meczu w głównym
+    rendererze pokazuje wyłącznie godzinę, więc dzień musi wynikać z nagłówka
+    grupy — inaczej przy meczach z kilku dni nie da się ich rozróżnić.
+    """
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    order: List[str] = []
+
+    for event in events:
+        day = _event_day(event, report_date)
+        if day is not None:
+            label = f"{day.strftime('%d/%m')} ({_PL_WEEKDAYS[day.weekday()]})"
+        else:
+            label = "Bez daty"
+        if label not in groups:
+            groups[label] = []
+            order.append(label)
+        groups[label].append(event)
+
+    return [(label, groups[label]) for label in order]
 
 
 def _has_any_analysis_data(event: Dict[str, Any]) -> bool:
@@ -844,6 +917,161 @@ def _build_skipped_card(event: Dict[str, Any], index: int) -> str:
     '''
 
 
+# Powody odsiewu z pipeline'u (``is_qualifying_row``) po polsku. Bez tego w
+# mailu widniałyby surowe klucze typu ``odds_out_of_range``.
+_SKIP_REASON_LABELS = {
+    "odds_out_of_range": "kurs poza zakresem",
+    "missing_current_odds": "brak kursu",
+    "unsupported_sport": "sport bez analizy",
+    "missing_teams": "brak drużyn",
+    "unknown": "—",
+}
+
+
+# Jednoznakowe znaczniki do tabeli — rozwinięte w legendzie pod nią. Pełne
+# opisy powtórzone w kilkuset wierszach kosztowały kilkadziesiąt kilobajtów.
+_SKIP_REASON_SHORT = {
+    "odds_out_of_range": "kurs",
+    "missing_current_odds": "brak",
+    "unsupported_sport": "sport",
+    "missing_teams": "druż.",
+    "unknown": "×",
+}
+
+
+def _skip_reason_label(event: Dict[str, Any]) -> str:
+    """Czytelny status wiersza: okazja albo powód pominięcia."""
+    if event.get("qualifies"):
+        return "okazja"
+    reason = str(event.get("skip_reason") or "unknown").strip()
+    return _SKIP_REASON_LABELS.get(reason, reason.replace("_", " "))
+
+
+def _day_heading(day_label: str, count: int) -> str:
+    """Nagłówek grupy dnia wstawiany między karty meczów."""
+    return (
+        f'<div style="background:linear-gradient(135deg,#1565c0,#1976d2);'
+        f'border-radius:8px;padding:8px 14px;margin:18px 0 10px;color:#fff;'
+        f'font-size:13px;font-weight:700;">📅 {day_label} — {count} '
+        f'{"mecz" if count == 1 else "meczów"}</div>'
+    )
+
+
+def _build_scanned_rows(
+    events: List[Dict[str, Any]], report_date: str = ""
+) -> str:
+    """Zbuduj wiersze tabeli ze wszystkimi przeskanowanymi meczami.
+
+    Świadomie bardzo oszczędny HTML: przy kilkuset meczach pełne karty
+    przekroczyłyby limit, po którym Gmail obcina wiadomość i ukrywa treść pod
+    "pokaż całą wiadomość".
+    """
+    rows_html = ""
+    for event in events:
+        when = _event_when_label(event, report_date)
+        home = event.get("home_team") or "?"
+        away = event.get("away_team") or "?"
+        league = event.get("league") or ""
+        outcome = event.get("dropped_outcome") or event.get("outcome") or ""
+        current_odds = _safe_float(event.get("current_odds"))
+        open_odds = _safe_float(event.get("open_odds"))
+        drop_pct = _safe_float(event.get("drop_pct"))
+        if drop_pct == 0 and open_odds > 0 and current_odds > 0:
+            drop_pct = ((open_odds - current_odds) / open_odds) * 100
+
+        qualifies = bool(event.get("qualifies"))
+        # Liga bywa bardzo długa ("International Clubs - CONCACAF Caribbean
+        # Cup"); powtórzona w kilkuset wierszach zauważalnie waży.
+        if len(league) > 26:
+            league = league[:25].rstrip() + "…"
+
+        odds_cell = f"{current_odds:.2f}" if current_odds > 0 else "—"
+        drop_cell = f"↓{drop_pct:.0f}%" if drop_pct > 0 else ""
+        side = f" {outcome}" if outcome else ""
+        status = "✔" if qualifies else _SKIP_REASON_SHORT.get(
+            str(event.get("skip_reason") or "unknown"), "×")
+
+        # Klasy zamiast inline-CSS: przy kilkuset meczach powtarzany styl
+        # w każdej komórce rozdmuchiwał wiadomość o setki kilobajtów i Gmail
+        # ucinał ją, ukrywając właśnie tę listę pod "pokaż całą wiadomość".
+        row_class = "sq" if qualifies else "sn"
+        league_html = f'<div class="sl">{league}</div>' if league else ""
+        rows_html += (
+            f'<tr class="{row_class}">'
+            f'<td class="sw">{when}</td>'
+            f'<td class="sm">{home} - {away}{league_html}</td>'
+            f'<td class="so">{odds_cell}<span class="ss">{side} {drop_cell}</span></td>'
+            f'<td class="st">{status}</td>'
+            f'</tr>'
+        )
+    return rows_html
+
+
+# Styl sekcji z pełną listą. Trzymany raz w <head>, nie w każdej komórce.
+_SCANNED_STYLES = """
+    .sq td { background: #f1f8e9; }
+    .sn td { background: #ffffff; }
+    .sq td, .sn td { padding: 5px 6px; border-bottom: 1px solid #eee;
+                     font-size: 11px; vertical-align: top; }
+    .sw { white-space: nowrap; font-weight: 600; color: #333; }
+    .sm { color: #222; }
+    .sv { color: #999; }
+    .sl { font-size: 9px; color: #999; }
+    .so { text-align: right; white-space: nowrap; color: #333; }
+    .ss { color: #999; font-size: 9px; }
+    .ss { color: #e65100; font-size: 9px; }
+    .st { text-align: right; white-space: nowrap; font-size: 9px; color: #9e9e9e; }
+    .sq .st { color: #2e7d32; font-weight: 700; }
+    .sday { font-size: 12px; font-weight: 700; color: #37474f; background: #eceff1;
+            padding: 6px 10px; border-radius: 6px; margin: 12px 0 4px; }
+"""
+
+
+def _build_scanned_section(
+    events: List[Dict[str, Any]], report_date: str = ""
+) -> str:
+    """Sekcja "wszystkie przeskanowane mecze", pogrupowana po dniu."""
+    if not events:
+        return ""
+
+    events_sorted = sorted(events, key=lambda e: _event_sort_key(e, report_date))
+    qualified_n = sum(1 for e in events_sorted if e.get("qualifies"))
+
+    tables = ""
+    for day_label, day_events in _group_events_by_day(events_sorted, report_date):
+        tables += (
+            f'<div class="sday">📅 {day_label} — {len(day_events)}</div>'
+            f'<table style="width:100%;border-collapse:collapse;">'
+            f'{_build_scanned_rows(day_events, report_date)}'
+            f'</table>'
+        )
+
+    return f'''
+        <div style="margin-top:24px;">
+            <div style="background:#ffffff;border-radius:10px;padding:12px 16px;margin-bottom:4px;">
+                <div style="font-size:14px;font-weight:700;color:#37474f;">
+                    📋 Wszystkie przeskanowane mecze ({len(events_sorted)})
+                </div>
+                <div style="font-size:11px;color:#888;margin-top:4px;">
+                    Pełna lista z OddsSafari — data i godzina każdego meczu.
+                    Zielone wiersze ({qualified_n}) to okazje w zakresie kursów,
+                    opisane szczegółowo w kartach poniżej.
+                </div>
+                <div style="font-size:10px;color:#aaa;margin-top:4px;">
+                    Status: <strong>✔</strong> okazja ·
+                    <strong>kurs</strong> kurs poza zakresem ·
+                    <strong>brak</strong> brak kursu ·
+                    <strong>sport</strong> sport bez analizy ·
+                    <strong>druż.</strong> brak nazw drużyn
+                </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;padding:8px 12px;">
+                {tables}
+            </div>
+        </div>
+    '''
+
+
 def build_dropping_odds_email_html(
     events: List[Dict[str, Any]],
     meta: Dict[str, Any],
@@ -851,12 +1079,16 @@ def build_dropping_odds_email_html(
     sport: Optional[str] = None,
     skipped_events: Optional[List[Dict[str, Any]]] = None,
     total_events: Optional[int] = None,
+    scanned_events: Optional[List[Dict[str, Any]]] = None,
 ) -> str:
     """Build the full HTML email body."""
     
     skipped_events = skipped_events or []
     if total_events is None:
-        total_events = meta.get("totals", {}).get("events", len(events))
+        total_events = (
+            len(scanned_events) if scanned_events
+            else meta.get("totals", {}).get("events", len(events))
+        )
     qualified_count = len(events)
     skipped_count = len(skipped_events)
     min_odds = meta.get("filter", {}).get("min_odds", 1.35)
@@ -883,23 +1115,50 @@ def build_dropping_odds_email_html(
     # event carries the same information as in the scraper mail. Falls back to
     # the local card only if that import fails, so a broken import degrades to
     # the old look instead of an empty mail.
+    # Karty pokazują wyłącznie godzinę meczu, więc dzień niesie nagłówek grupy.
+    # Bez tego mecze z kilku dni (OddsSafari podaje też jutrzejsze) wyglądały
+    # identycznie i nie dało się ich rozróżnić.
+    day_groups = _group_events_by_day(events_sorted, date)
+
     cards_html = ""
     if events_sorted:
         try:
             from email_notifier import create_html_email
 
-            rows = [event_to_match_row(e) for e in events_sorted]
-            cards_html = create_html_email(rows, date, sort_by='none',
-                                           include_sorted_odds=False,
-                                           cards_only=True)
+            for day_label, day_events in day_groups:
+                rows = [event_to_match_row(e) for e in day_events]
+                group_cards = create_html_email(rows, date, sort_by='none',
+                                                include_sorted_odds=False,
+                                                cards_only=True)
+                cards_html += _day_heading(day_label, len(day_events)) + group_cards
         except Exception as e:
             print(f"   ⚠️ Główny renderer niedostępny ({e}) — używam lokalnych kart")
-            for i, event in enumerate(events_sorted, 1):
-                cards_html += _build_match_card(event, i)
+            cards_html = ""
+            index = 1
+            for day_label, day_events in day_groups:
+                cards_html += _day_heading(day_label, len(day_events))
+                for event in day_events:
+                    cards_html += _build_match_card(event, index)
+                    index += 1
     
-    # If empty, show a friendly placeholder
+    # If empty, show a friendly placeholder. Rozróżniamy dwa różne "pusto":
+    # brak jakichkolwiek meczów vs. mecze były, ale żaden nie wpadł w zakres
+    # kursów — wcześniej oba pokazywały ten sam, mylący komunikat.
     if not events_sorted:
-        cards_html = '''
+        if scanned_events:
+            cards_html = f'''
+        <div style="background: #fff3e0; border-radius: 12px; padding: 24px; text-align: center; margin: 16px 0;">
+            <div style="font-size: 40px; margin-bottom: 12px;">🔍</div>
+            <div style="font-size: 16px; font-weight: 700; color: #e65100;">Brak okazji w zakresie kursów</div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px;">
+                Zeskanowano {len(scanned_events)} meczów, ale żaden nie mieści się
+                w zakresie {min_odds}-{max_odds}. Pełna lista z datą i godziną
+                każdego meczu znajduje się powyżej.
+            </div>
+        </div>
+        '''
+        else:
+            cards_html = '''
         <div style="background: #fff3e0; border-radius: 12px; padding: 24px; text-align: center; margin: 16px 0;">
             <div style="font-size: 40px; margin-bottom: 12px;">😴</div>
             <div style="font-size: 16px; font-weight: 700; color: #e65100;">Brak zdarzeń w tym sporcie dziś</div>
@@ -931,6 +1190,10 @@ def build_dropping_odds_email_html(
         </div>
         '''
     
+    # Pełna lista wszystkiego, co scraper zobaczył — łącznie z meczami poza
+    # zakresem kursów, których karty się nie budują.
+    scanned_html = _build_scanned_section(scanned_events or [], date)
+
     now = datetime.now(WARSAW_TZ).strftime("%H:%M")
     
     html = f'''<!DOCTYPE html>
@@ -938,6 +1201,7 @@ def build_dropping_odds_email_html(
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>{_SCANNED_STYLES}</style>
 </head>
 <body style="margin: 0; padding: 0; background: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <div style="max-width: 640px; margin: 0 auto; padding: 20px;">
@@ -970,9 +1234,15 @@ def build_dropping_odds_email_html(
             <strong>Legenda:</strong> 
             ↓% = spadek kursu od otwarcia | 
             W✅ = wygrana | D🟡 = remis | L❌ = przegrana |
-            Sortowanie: chronologicznie (dzień, godzina)
+            Sortowanie: chronologicznie (dzień, godzina) |
+            📅 = nagłówek dnia | poniżej pełna lista wszystkich zeskanowanych
+            meczów z datą i godziną, a pod nią szczegółowe karty okazji
         </div>
         
+        <!-- All scanned matches: first, because the detailed cards below are
+             heavy enough that Gmail may clip the tail of the message. -->
+        {scanned_html}
+
         <!-- Match cards -->
         {cards_html}
         
@@ -1012,9 +1282,14 @@ def send_dropping_odds_email(
     send_empty: bool = True,
     min_recent_wins: int = 0,
     recent_window: int = 3,
+    include_scanned_list: bool = True,
 ) -> bool:
     """Load the pipeline JSON output and send the dropping odds email.
-    
+
+    With *include_scanned_list* (default) the mail ends with a compact table of
+    **every** scanned fixture and its date and time, not just the ones inside
+    the qualifying odds range.
+
     Returns True on success, False on failure.
     """
     if not os.path.isfile(json_path):
@@ -1079,15 +1354,23 @@ def send_dropping_odds_email(
         qualified, meta, date, sport=sport,
         skipped_events=skipped_no_recent_win,
         total_events=len(all_events),
+        # Wszystko, co scraper zobaczył — nie tylko wiersze w zakresie kursów.
+        scanned_events=all_events if include_scanned_list else None,
     )
     
     sport_label = f" [{sport.upper()}]" if sport else ""
     min_odds = meta.get("filter", {}).get("min_odds", 1.35)
     max_odds = meta.get("filter", {}).get("max_odds", 2.20)
     if qualified:
-        subject = f"📉 Dropping Odds{sport_label} — {date} | {len(qualified)} okazji ({min_odds}-{max_odds})"
+        subject = (
+            f"📉 Dropping Odds{sport_label} — {date} | {len(qualified)} okazji "
+            f"z {len(all_events)} meczów ({min_odds}-{max_odds})"
+        )
     else:
-        subject = f"📉 Dropping Odds{sport_label} — {date} | brak okazji (status)"
+        subject = (
+            f"📉 Dropping Odds{sport_label} — {date} | brak okazji "
+            f"({len(all_events)} meczów zeskanowanych)"
+        )
     
     # Send
     smtp_cfg = SMTP_CONFIG.get(provider, SMTP_CONFIG["gmail"])
@@ -1140,6 +1423,10 @@ def main():
                              "email lists every event.")
     parser.add_argument("--recent-window", type=int, default=3,
                         help="How many recent form matches to inspect for --min-recent-wins (default: 3).")
+    parser.add_argument("--no-scanned-list", dest="include_scanned_list",
+                        action="store_false", default=True,
+                        help="Skip the closing table that lists every scanned "
+                             "fixture with its date and time.")
     
     args = parser.parse_args()
     
@@ -1154,6 +1441,7 @@ def main():
         send_empty=args.send_empty,
         min_recent_wins=args.min_recent_wins,
         recent_window=args.recent_window,
+        include_scanned_list=args.include_scanned_list,
     )
     
     sys.exit(0 if success else 1)
