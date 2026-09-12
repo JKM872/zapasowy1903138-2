@@ -15,10 +15,13 @@ Przepływ:
 1. **Forebet** — pełna lista meczów dnia dla sportu (``forebet_listing``).
 2. **Selekcja** — pomijamy remisy (predykcja ``X``) i mecze bez wyraźnej
    przewagi jednej ze stron.
-3. **Kursy** — najpierw kursy z Forebet (są tylko na części zdarzeń), w razie
-   braku z Livesport. Próg kursowy identyczny jak w głównym workflow
-   (``email_notifier._passes_sport_odds_threshold``) — przekroczenie granicy
-   oznacza skip.
+3. **Kursy** — najpierw **Pinnacle** (najniższa marża, więc kurs najbliższy
+   prawdziwemu prawdopodobieństwu), a gdy nie wycenił zdarzenia, pozostali
+   bukmacherzy Livesport. Brak kursu u Pinnacle i na Livesport = **skip**, bo
+   bez ceny nie ma EV ani ROI. Kursy pokazywane przez Forebet lądują w polach
+   ``forebet_*`` tylko do wglądu — nie wiemy, od kogo są ani jak świeże, więc
+   nie decydują o progu. Próg kursowy identyczny jak w głównym workflow
+   (``email_notifier._passes_sport_odds_threshold``).
 4. **Livesport** — H2H i forma (ogólna + u siebie / na wyjeździe).
 5. **SofaScore Fan Vote** — przez odporny wrapper ``sofascore_fanvote``.
 6. **AI** — krótka analiza przez Groq (``gemini_analyzer``, Groq jako backend).
@@ -61,6 +64,21 @@ THREE_WAY_MIN_FAV_PROB = 45.0
 THREE_WAY_MIN_GAP = 12.0
 TWO_WAY_MIN_FAV_PROB = 60.0
 TWO_WAY_MIN_GAP = 20.0
+
+# ── Kursy ──────────────────────────────────────────────────────────────────
+# Pinnacle ma najniższą marżę na rynku, więc jego kurs jest najbliższy
+# prawdziwemu prawdopodobieństwu — dlatego jest źródłem PIERWSZEGO WYBORU dla
+# progu kursowego, EV i maila. Kursy pokazywane przez Forebet zostają zapisane
+# w polach ``forebet_*``, ale NIE decydują o niczym: nie wiemy, od kogo są i
+# jak świeże, a od tej liczby zależy próg i EV.
+PRIMARY_BOOKMAKER = 'pinnacle'
+
+# Gdy Pinnacle nie wycenił zdarzenia, pytamy pozostałych bukmacherów Livesport
+# (od najostrzejszych do najpopularniejszych). Pierwszy z ceną wygrywa.
+LIVESPORT_FALLBACK_BOOKMAKERS = [
+    'bet365', 'unibet', 'william_hill', 'bwin',
+    'betfair', '1xbet', 'betway', 'nordicbet',
+]
 
 # Wagi scoringu — jawne, żeby dało się je zakwestionować i zmienić.
 WEIGHTS = {
@@ -377,18 +395,72 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
     return out
 
 
-def fetch_livesport_odds(driver: Any, match_url: str, sport: str) -> Dict[str, Any]:
-    """Kursy z Livesport (GraphQL) jako uzupełnienie braków Forebet."""
-    out = {'home_odds': None, 'draw_odds': None, 'away_odds': None, 'bookmaker': None}
+def resolve_odds(match_url: Optional[str], sport: str) -> Dict[str, Any]:
+    """Pobierz kursy: najpierw Pinnacle, potem pozostali bukmacherzy Livesport.
+
+    Pinnacle jest pytany OSOBNO i jako pierwszy, bo to jego kurs traktujemy
+    jako referencyjny (najniższa marża = najbliżej prawdziwego
+    prawdopodobieństwa). Dopiero gdy nie wycenił zdarzenia, schodzimy do
+    reszty bukmacherów na Livesport.
+
+    Gdy nie ma ani Pinnacle, ani żadnego innego kursu na Livesport, zwracamy
+    puste kursy z ``reason='brak_kursow'`` — mecz zostanie pominięty. Bez ceny
+    nie ma EV ani ROI, więc typ jest nierozliczalny.
+
+    Returns:
+        {'home_odds', 'draw_odds', 'away_odds', 'bookmaker', 'odds_source', 'reason'}
+    """
+    out: Dict[str, Any] = {
+        'home_odds': None, 'draw_odds': None, 'away_odds': None,
+        'bookmaker': None, 'odds_source': None, 'reason': None,
+    }
+
+    if not match_url:
+        out['reason'] = 'brak_url_livesport'
+        return out
+
     try:
-        from livesport_h2h_scraper import fetch_odds_from_livesport
-        res = fetch_odds_from_livesport(driver, match_url, sport=sport) or {}
-        out['home_odds'] = res.get('home_odds')
-        out['draw_odds'] = res.get('draw_odds')
-        out['away_odds'] = res.get('away_odds')
-        out['bookmaker'] = res.get('bookmaker')
+        from livesport_odds_api import LivesportOddsAPI
     except Exception as e:
-        print(f"      ⚠️ Kursy Livesport błąd: {e}")
+        print(f"      ⚠️ livesport_odds_api niedostępny: {e}")
+        out['reason'] = 'brak_modulu_kursow'
+        return out
+
+    try:
+        api = LivesportOddsAPI()
+        event_id = api.extract_event_id_from_url(match_url)
+        if not event_id:
+            out['reason'] = 'brak_event_id'
+            return out
+
+        # 1) Pinnacle — źródło referencyjne
+        for label, bookmakers in (
+            (PRIMARY_BOOKMAKER, [PRIMARY_BOOKMAKER]),
+            ('livesport', LIVESPORT_FALLBACK_BOOKMAKERS),
+        ):
+            res = api.get_odds_from_multiple_bookmakers(
+                event_id, sport=sport, bookmakers=bookmakers
+            ) or {}
+            if res.get('success') and res.get('home_odds') is not None:
+                out['home_odds'] = res.get('home_odds')
+                out['draw_odds'] = res.get('draw_odds')
+                out['away_odds'] = res.get('away_odds')
+                out['bookmaker'] = res.get('bookmaker')
+                out['odds_source'] = label
+                if label == PRIMARY_BOOKMAKER:
+                    print(f"      💰 Pinnacle: {out['home_odds']}/"
+                          f"{out['draw_odds'] or '-'}/{out['away_odds']}")
+                else:
+                    print(f"      💰 Livesport ({out['bookmaker']}): "
+                          f"{out['home_odds']}/{out['draw_odds'] or '-'}/{out['away_odds']}")
+                return out
+
+        out['reason'] = 'brak_kursow'
+        print("      ⛔ Brak kursów: ani Pinnacle, ani inny bukmacher Livesport")
+    except Exception as e:
+        print(f"      ⚠️ Kursy błąd: {type(e).__name__}: {e}")
+        out['reason'] = 'blad_pobierania_kursow'
+
     return out
 
 
@@ -639,8 +711,18 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                     'home': r.get('home_odds'),
                     'draw': r.get('draw_odds'),
                     'away': r.get('away_odds'),
+                    # 'pinnacle' albo 'livesport' — po czym widać, czy kurs
+                    # jest referencyjny, czy z fallbacku.
                     'source': r.get('odds_source'),
                     'bookmaker': r.get('bookmaker'),
+                    'note': r.get('odds_note'),
+                    # Kursy Forebet trzymane obok, do porównania. Nie wchodzą
+                    # do progu ani EV.
+                    'forebet': {
+                        'home': r.get('forebet_home_odds'),
+                        'draw': r.get('forebet_draw_odds'),
+                        'away': r.get('forebet_away_odds'),
+                    },
                 },
                 'ai': {
                     'prediction': r.get('gemini_prediction'),
@@ -716,20 +798,16 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         return {'sport': sport, 'date': date_str, 'forebet_total': len(all_matches),
                 'selected': 0, 'qualified': 0, 'outputs': paths}
 
-    # ── FAZA 3: wstępny próg kursowy na kursach Forebet ──
-    print("\n[3/6] Próg kursowy na kursach Forebet")
-    survivors: List[Dict[str, Any]] = []
-    skipped_odds = 0
-    for m in selected:
-        if m.get('odds_source') == 'forebet':
-            ok, reason = odds_gate(sport, m.get('home_odds'), m.get('away_odds'),
-                                   min_odds, max_odds)
-            if not ok:
-                skipped_odds += 1
-                continue
-        survivors.append(m)
-    print(f"   ✅ Po progu kursowym Forebet: {len(survivors)} "
-          f"(odrzucone przez kursy: {skipped_odds})")
+    # ── FAZA 3: kursy Forebet tylko do wglądu ──
+    # Kursy widoczne na Forebet NIE decydują o niczym: nie wiemy, od którego
+    # bukmachera pochodzą ani jak są świeże, a od tej liczby zależy próg
+    # kursowy i EV. Odsianie meczu na ich podstawie mogłoby wyrzucić zdarzenie,
+    # które u Pinnacle mieści się w progu. Zostają zapisane w polach
+    # `forebet_*` do porównania, a rozstrzyga Pinnacle (FAZA 4).
+    survivors = selected
+    forebet_priced = sum(1 for m in selected if m.get('odds_source') == 'forebet')
+    print(f"\n[3/6] Kursy Forebet: {forebet_priced}/{len(selected)} zdarzeń wycenionych "
+          f"(tylko do wglądu — o progu decyduje Pinnacle)")
 
     # ── FAZA 4: Livesport (index, H2H, forma, kursy) ──
     driver = None
@@ -775,12 +853,18 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             'forebet_away_prob': m.get('away_prob'),
             'forebet_exact_score': m.get('exact_score'),
             'forebet_avg_goals': m.get('avg_goals'),
-            'home_odds': m.get('home_odds'),
-            'draw_odds': m.get('draw_odds'),
-            'away_odds': m.get('away_odds'),
-            'odds_source': m.get('odds_source'),
-            'odds_note': m.get('odds_note'),
-            'bookmaker': 'Forebet' if m.get('odds_source') == 'forebet' else None,
+            # Kursy Forebet — wyłącznie do wglądu/porównania. O progu, EV i
+            # mailu decydują `home_odds`/`away_odds` z Pinnacle (lub innego
+            # bukmachera Livesport), ustawiane poniżej.
+            'forebet_home_odds': m.get('home_odds'),
+            'forebet_draw_odds': m.get('draw_odds'),
+            'forebet_away_odds': m.get('away_odds'),
+            'forebet_odds_note': m.get('odds_note'),
+            'home_odds': None,
+            'draw_odds': None,
+            'away_odds': None,
+            'odds_source': None,
+            'bookmaker': None,
             # Forma pochodzi wyłącznie z Livesport (Forebet jej nie publikuje
             # na stronie przeglądowej) — puste listy oznaczają "jeszcze nie
             # pobrano", a brak dopasowania w Livesport zostawia je puste.
@@ -805,23 +889,26 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                     if val:
                         row[key] = val
 
-                if row.get('odds_source') != 'forebet':
-                    ls_odds = fetch_livesport_odds(driver, ls_url, sport)
-                    if ls_odds.get('home_odds') is not None:
-                        row['home_odds'] = ls_odds['home_odds']
-                        row['draw_odds'] = ls_odds.get('draw_odds')
-                        row['away_odds'] = ls_odds['away_odds']
-                        row['odds_source'] = 'livesport'
-                        row['bookmaker'] = ls_odds.get('bookmaker')
+                # Kursy: Pinnacle jako pierwszy, potem reszta Livesport.
+                odds = resolve_odds(ls_url, sport)
+                row['home_odds'] = odds.get('home_odds')
+                row['draw_odds'] = odds.get('draw_odds')
+                row['away_odds'] = odds.get('away_odds')
+                row['odds_source'] = odds.get('odds_source')
+                row['bookmaker'] = odds.get('bookmaker')
+                row['odds_note'] = odds.get('reason')
             else:
-                print("      ⚠️ Brak dopasowania w Livesport (bez H2H/formy)")
+                print("      ⚠️ Brak dopasowania w Livesport (bez H2H/formy/kursów)")
+                row['odds_note'] = 'brak_url_livesport'
 
-        # Próg kursowy po dobraniu kursów z Livesport
+        # Próg kursowy na kursach Pinnacle/Livesport. Brak kursów = skip:
+        # bez ceny nie ma EV ani ROI, wiec typ jest nierozliczalny.
         ok, reason = odds_gate(sport, row.get('home_odds'), row.get('away_odds'),
                                min_odds, max_odds)
         if not ok:
             row['skip_reason'] = reason
-            print(f"      ⛔ {reason} (H={row.get('home_odds')}, A={row.get('away_odds')})")
+            print(f"      ⛔ {reason} (H={row.get('home_odds')}, A={row.get('away_odds')}"
+                  f", źródło={row.get('odds_source') or 'brak'})")
 
         # Fan Vote — tylko dla meczów, które jeszcze są w grze
         if use_sofascore and not row['skip_reason']:
@@ -925,6 +1012,9 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         'qualified': qualified,
         'channel_qualified': sum(1 for r in rows if r.get('channel_qualifies')),
         'with_odds': sum(1 for r in rows if r.get('home_odds') is not None),
+        'odds_pinnacle': sum(1 for r in rows if r.get('odds_source') == PRIMARY_BOOKMAKER),
+        'odds_livesport_fallback': sum(1 for r in rows if r.get('odds_source') == 'livesport'),
+        'skipped_no_odds': sum(1 for r in rows if r.get('skip_reason') == 'brak_kursow'),
         'with_h2h': sum(1 for r in rows if (r.get('h2h_count') or 0) > 0),
         'with_fanvote': sum(1 for r in rows if r.get('sofascore_found')),
         'with_ai': sum(1 for r in rows if r.get('gemini_recommendation')),
@@ -935,7 +1025,11 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     print('\n' + '=' * 70)
     print(f"🎯 KONIEC {sport.upper()} — {qualified} kwalifikujących się "
           f"z {len(rows)} przetworzonych ({len(all_matches)} na Forebet)")
-    print(f"   kursy={summary['with_odds']} h2h={summary['with_h2h']} "
+    print(f"   kursy={summary['with_odds']} "
+          f"(Pinnacle={summary['odds_pinnacle']}, "
+          f"inni Livesport={summary['odds_livesport_fallback']}, "
+          f"bez kursów={summary['skipped_no_odds']}) "
+          f"h2h={summary['with_h2h']} "
           f"fanvote={summary['with_fanvote']} ai={summary['with_ai']}")
     print('=' * 70)
 

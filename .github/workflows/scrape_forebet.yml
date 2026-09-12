@@ -243,8 +243,12 @@ jobs:
           print(f"- Po selekcji (bez remisów, z przewagą): **{s.get('selected', 0)}**")
           print(f"- Przetworzone: **{s.get('processed', 0)}**")
           print(f"- Kwalifikujące się: **{s.get('qualified', 0)}**")
-          print(f"- Z kursami: {s.get('with_odds', 0)} | z H2H: {s.get('with_h2h', 0)} "
-                f"| z Fan Vote: {s.get('with_fanvote', 0)} | z AI: {s.get('with_ai', 0)}")
+          print(f"- Kursy: **{s.get('with_odds', 0)}** "
+                f"(Pinnacle: {s.get('odds_pinnacle', 0)}, "
+                f"inni Livesport: {s.get('odds_livesport_fallback', 0)}, "
+                f"pominięte bez kursów: {s.get('skipped_no_odds', 0)})")
+          print(f"- Z H2H: {s.get('with_h2h', 0)} | z Fan Vote: {s.get('with_fanvote', 0)} "
+                f"| z AI: {s.get('with_ai', 0)}")
           rej = s.get('rejected_by_forebet_rules') or {}
           if rej:
               print("- Odrzucone regułami Forebet:")
