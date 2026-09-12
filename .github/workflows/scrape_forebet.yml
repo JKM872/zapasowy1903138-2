@@ -13,11 +13,18 @@ name: Forebet Scraper Pipeline (Forebet-first)
 # sportu policzył się równolegle, a awaria jednego nie zabrała pozostałych.
 
 on:
-  # 09:00 UTC: po nocnych aktualizacjach Forebet, a przed popołudniowymi
-  # meczami. Godzina wolna od pozostałych workflow (0, 3, 5:30, 6:30, 14 UTC),
-  # żeby nie ścigać się o push na main.
+  # 04:00 UTC. Wybrane jako jedyna sensowna WOLNA godzina: predykcje Forebet na
+  # dany dzień są już wystawione, a mecze jeszcze się nie zaczęły (parser pomija
+  # rozpoczęte, wiec późniejszy start = mniej meczów do analizy).
+  #
+  # Zajete godziny UTC w repo: 0 (scrape), 2 (backfill), 3 (scrape_away),
+  # 5:30 i 6:30 (table tennis), 6 (backtest, check_results), 7 (daily_report,
+  # dropping_odds_accuracy, oddssafari_upcoming), 8 (oddssafari_upcoming),
+  # 9 (worldcup_analysis), 10-11 i 13-14 i 16-17 (oddssafari_dropping),
+  # 12 (refresh_qualified_noon), 14 (scrape_baseball), 19 i 22 (raporty).
+  # Kolizja oznaczalaby wyscig o push na main miedzy workflow.
   schedule:
-    - cron: '0 9 * * *'
+    - cron: '0 4 * * *'
 
   workflow_dispatch:
     inputs:
