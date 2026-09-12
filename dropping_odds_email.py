@@ -487,6 +487,11 @@ def event_to_match_row(event: Dict[str, Any]) -> Dict[str, Any]:
     if _books > 0:
         row["dropping_odds"]["bookmakers"] = _books
 
+    # Ruch kursu od poprzedniego runu — widoczny na karcie pod badge'em spadku.
+    _since_prev = _odds_change_note(event)
+    if _since_prev:
+        row["dropping_odds"]["since_prev"] = _since_prev
+
     # The dropped price is a real quote, so give it to the engine: without any
     # odds on the row, EV and edge can never be computed and every card showed
     # a dash. Only the side that moved is known, and the engine simply skips
@@ -957,6 +962,66 @@ def _day_heading(day_label: str, count: int) -> str:
     )
 
 
+def _odds_change_cell(event: Dict[str, Any]) -> str:
+    """Komórka ``<td>`` ze zmianą kursu od poprzedniej analizy.
+
+    ``drop_pct`` z OddsSafari mierzy spadek od kursu otwarcia i nie mówi, co
+    stało się od ostatniego runu — kurs mógł spaść wczoraj i od tamtej pory
+    odbić. To pokazuje właśnie ten ruch.
+
+    Uwaga na kierunek: dalszy **spadek** kursu jest sygnałem pozytywnym (rynek
+    mocniej wierzy w ten wynik), więc jest zielony; **wzrost** oznacza, że kurs
+    się cofa.
+
+    Kolor niesie klasa samej komórki, bez zagnieżdżonego ``<span>`` — przy
+    kilkuset wierszach ten jeden dodatkowy tag kosztował ponad 10 KB, czyli
+    realne miejsce dla kolejnych meczów przed limitem obcięcia Gmaila.
+    """
+    change = event.get("odds_change")
+    if not isinstance(change, dict):
+        return '<td class="sc cn">nowy</td>'
+
+    direction = str(change.get("direction") or "").lower()
+    pct = abs(_safe_float(change.get("change_pct")))
+
+    if direction == "down":
+        return f'<td class="sc cd">↓{pct:.1f}%</td>'
+    if direction == "up":
+        return f'<td class="sc cu">↑{pct:.1f}%</td>'
+    return '<td class="sc cf">=</td>'
+
+
+def _odds_change_note(event: Dict[str, Any]) -> str:
+    """Opis słowny zmiany do kart okazji, np. ``2.30 → 1.84 (↓20% od 15:01)``."""
+    change = event.get("odds_change")
+    if not isinstance(change, dict):
+        return ""
+    prev = _safe_float(change.get("prev_odds"))
+    cur = _safe_float(change.get("current_odds"))
+    pct = _safe_float(change.get("change_pct"))
+    direction = str(change.get("direction") or "").lower()
+    if prev <= 0 or cur <= 0:
+        return ""
+
+    seen = str(change.get("prev_seen_at") or "")
+    when = ""
+    m = re.search(r"T(\d{2}:\d{2})", seen)
+    if m:
+        when = f" o {m.group(1)}"
+    date_m = re.match(r"(\d{4})-(\d{2})-(\d{2})", seen)
+    if date_m and when:
+        when = f" {date_m.group(3)}/{date_m.group(2)}{when}"
+
+    if direction == "flat":
+        return f"kurs bez zmian od poprzedniej analizy{when} ({cur:.2f})"
+    arrow = "↓" if direction == "down" else "↑"
+    word = "spadł" if direction == "down" else "wzrósł"
+    return (
+        f"od poprzedniej analizy{when} kurs {word}: "
+        f"{prev:.2f} → {cur:.2f} ({arrow}{abs(pct):.1f}%)"
+    )
+
+
 def _build_scanned_rows(
     events: List[Dict[str, Any]], report_date: str = ""
 ) -> str:
@@ -968,7 +1033,13 @@ def _build_scanned_rows(
     """
     rows_html = ""
     for event in events:
-        when = _event_when_label(event, report_date)
+        # Sama godzina: dzień niesie nagłówek grupy nad tabelą. Gdy godziny
+        # brakuje, wracamy do pełnej etykiety, żeby wiersz nie był bezczasowy.
+        time_tuple = _event_time_tuple(event)
+        time_part = (
+            f"{time_tuple[0]:02d}:{time_tuple[1]:02d}" if time_tuple
+            else _event_when_label(event, report_date)
+        )
         home = event.get("home_team") or "?"
         away = event.get("away_team") or "?"
         league = event.get("league") or ""
@@ -980,28 +1051,34 @@ def _build_scanned_rows(
             drop_pct = ((open_odds - current_odds) / open_odds) * 100
 
         qualifies = bool(event.get("qualifies"))
-        # Liga bywa bardzo długa ("International Clubs - CONCACAF Caribbean
-        # Cup"); powtórzona w kilkuset wierszach zauważalnie waży.
-        if len(league) > 26:
-            league = league[:25].rstrip() + "…"
 
         odds_cell = f"{current_odds:.2f}" if current_odds > 0 else "—"
         drop_cell = f"↓{drop_pct:.0f}%" if drop_pct > 0 else ""
         side = f" {outcome}" if outcome else ""
-        status = "✔" if qualifies else _SKIP_REASON_SHORT.get(
-            str(event.get("skip_reason") or "unknown"), "×")
 
-        # Klasy zamiast inline-CSS: przy kilkuset meczach powtarzany styl
-        # w każdej komórce rozdmuchiwał wiadomość o setki kilobajtów i Gmail
-        # ucinał ją, ukrywając właśnie tę listę pod "pokaż całą wiadomość".
+        # Budżet bajtowy: Gmail ucina wiadomość ~102 KB, a przy 500+ meczach
+        # każdy zbędny bajt w wierszu odbiera miejsce kolejnym meczom. Dlatego
+        # pola, które nic nie wnoszą, są pomijane:
+        #  * data — stoi w nagłówku dnia bezpośrednio nad tabelą, w wierszu
+        #    zostaje sama godzina,
+        #  * liga i znacznik statusu — tylko przy okazjach; dla odrzuconych
+        #    wystarczy szare tło, którego znaczenie wyjaśnia legenda.
+        if qualifies:
+            league_short = league if len(league) <= 24 else league[:23].rstrip() + "…"
+            extra = f'<div class="sl">{league_short}</div>' if league_short else ""
+            status_cell = '<td class="st">✔</td>'
+        else:
+            extra = ""
+            status_cell = ""
+
         row_class = "sq" if qualifies else "sn"
-        league_html = f'<div class="sl">{league}</div>' if league else ""
         rows_html += (
             f'<tr class="{row_class}">'
-            f'<td class="sw">{when}</td>'
-            f'<td class="sm">{home} - {away}{league_html}</td>'
-            f'<td class="so">{odds_cell}<span class="ss">{side} {drop_cell}</span></td>'
-            f'<td class="st">{status}</td>'
+            f'<td class="sw">{time_part}</td>'
+            f'<td class="sm">{home} - {away}{extra}</td>'
+            f'<td class="so">{odds_cell}{side} {drop_cell}</td>'
+            f'{_odds_change_cell(event)}'
+            f'{status_cell}'
             f'</tr>'
         )
     return rows_html
@@ -1015,16 +1092,67 @@ _SCANNED_STYLES = """
                      font-size: 11px; vertical-align: top; }
     .sw { white-space: nowrap; font-weight: 600; color: #333; }
     .sm { color: #222; }
-    .sv { color: #999; }
     .sl { font-size: 9px; color: #999; }
-    .so { text-align: right; white-space: nowrap; color: #333; }
-    .ss { color: #999; font-size: 9px; }
-    .ss { color: #e65100; font-size: 9px; }
-    .st { text-align: right; white-space: nowrap; font-size: 9px; color: #9e9e9e; }
-    .sq .st { color: #2e7d32; font-weight: 700; }
+    .so { text-align: right; white-space: nowrap; color: #555; font-size: 10px; }
+    .st { text-align: right; white-space: nowrap; font-size: 9px; color: #2e7d32;
+          font-weight: 700; }
+    .sc { text-align: right; white-space: nowrap; font-size: 9px; }
+    .cd { color: #2e7d32; font-weight: 700; }
+    .cu { color: #c62828; font-weight: 700; }
+    .cf { color: #bbb; }
+    .cn { color: #1976d2; }
     .sday { font-size: 12px; font-weight: 700; color: #37474f; background: #eceff1;
             padding: 6px 10px; border-radius: 6px; margin: 12px 0 4px; }
+    .cl { font-size: 11px; color: #444; padding: 3px 6px;
+          border-bottom: 1px solid #f2f2f2; }
+    .cl i { color: #777; font-style: normal; }
+    .cl b { color: #222; }
 """
+
+# Ile bajtów wolno zająć sekcji z pełną listą. Gmail obcina wiadomość około
+# 102 KB; resztę budżetu zostawiamy nagłówkowi, legendzie i marginesowi na
+# różnice między klientami pocztowymi.
+SCANNED_SECTION_BUDGET_B = 78 * 1024
+
+
+def _build_compact_line(event: Dict[str, Any], report_date: str = "") -> str:
+    """Jedna linia dla meczu, który nie przeszedł filtra kursów.
+
+    Wiersz tabeli kosztuje ~145 bajtów, z czego dwie trzecie to same tagi
+    ``<td>``. Przy 500+ meczach to przesądza o tym, czy lista zmieści się pod
+    limitem obcięcia Gmaila, dlatego odrzucone mecze dostają zwykłą linię —
+    kolumny i tak niosły tu mniej niż zajmowały.
+    """
+    time_tuple = _event_time_tuple(event)
+    time_part = (
+        f"{time_tuple[0]:02d}:{time_tuple[1]:02d}" if time_tuple
+        else _event_when_label(event, report_date)
+    )
+    home = event.get("home_team") or "?"
+    away = event.get("away_team") or "?"
+    current_odds = _safe_float(event.get("current_odds"))
+    drop_pct = _safe_float(event.get("drop_pct"))
+    outcome = event.get("dropped_outcome") or event.get("outcome") or ""
+
+    odds_txt = f"{current_odds:.2f}" if current_odds > 0 else "—"
+    drop_txt = f" ↓{drop_pct:.0f}%" if drop_pct > 0 else ""
+
+    change = event.get("odds_change")
+    move = ""
+    if isinstance(change, dict):
+        direction = str(change.get("direction") or "").lower()
+        pct = abs(_safe_float(change.get("change_pct")))
+        if direction == "down":
+            move = f' <b class="cd">↓{pct:.1f}%</b>'
+        elif direction == "up":
+            move = f' <b class="cu">↑{pct:.1f}%</b>'
+    else:
+        move = ' <b class="cn">nowy</b>'
+
+    return (
+        f'<div class="cl"><b>{time_part}</b> {home} - {away} '
+        f'<i>{odds_txt} {outcome}{drop_txt}</i>{move}</div>'
+    )
 
 
 def _build_scanned_section(
@@ -1037,13 +1165,49 @@ def _build_scanned_section(
     events_sorted = sorted(events, key=lambda e: _event_sort_key(e, report_date))
     qualified_n = sum(1 for e in events_sorted if e.get("qualifies"))
 
+    # Twardy budżet bajtowy. Liczba meczów jest zmienna (widziano 336, potem
+    # 615), więc bez tego lista raz się mieści, a raz przepada w obcięciu
+    # Gmaila. Gdy budżet się kończy, mówimy to wprost zamiast dać się uciąć
+    # w losowym miejscu.
+    budget = SCANNED_SECTION_BUDGET_B
+    used = 0
+    omitted = 0
+
     tables = ""
     for day_label, day_events in _group_events_by_day(events_sorted, report_date):
+        header = f'<div class="sday">📅 {day_label} — {len(day_events)}</div>'
+        # Okazje zostają w tabeli — jest ich mało i zasługują na czytelne
+        # kolumny; reszta idzie kompaktowymi liniami.
+        day_qualified = [e for e in day_events if e.get("qualifies")]
+        day_rest = [e for e in day_events if not e.get("qualifies")]
+
+        chunk = header
+        if day_qualified:
+            chunk += (
+                f'<table style="width:100%;border-collapse:collapse;">'
+                f'{_build_scanned_rows(day_qualified, report_date)}'
+                f'</table>'
+            )
+        for event in day_rest:
+            line = _build_compact_line(event, report_date)
+            if used + len(chunk.encode("utf-8")) + len(line.encode("utf-8")) > budget:
+                omitted += 1
+                continue
+            chunk += line
+
+        chunk_size = len(chunk.encode("utf-8"))
+        if used + chunk_size > budget:
+            omitted += len(day_rest)
+            continue
+        tables += chunk
+        used += chunk_size
+
+    if omitted:
         tables += (
-            f'<div class="sday">📅 {day_label} — {len(day_events)}</div>'
-            f'<table style="width:100%;border-collapse:collapse;">'
-            f'{_build_scanned_rows(day_events, report_date)}'
-            f'</table>'
+            f'<div style="font-size:11px;color:#e65100;padding:8px 4px;">'
+            f'… pozostałe {omitted} meczów pominięto, żeby wiadomość nie '
+            f'przekroczyła limitu, po którym Gmail ją obcina. Pełna lista jest '
+            f'w załączanym do runu pliku JSON.</div>'
         )
 
     return f'''
@@ -1058,11 +1222,18 @@ def _build_scanned_section(
                     opisane szczegółowo w kartach poniżej.
                 </div>
                 <div style="font-size:10px;color:#aaa;margin-top:4px;">
-                    Status: <strong>✔</strong> okazja ·
-                    <strong>kurs</strong> kurs poza zakresem ·
-                    <strong>brak</strong> brak kursu ·
-                    <strong>sport</strong> sport bez analizy ·
-                    <strong>druż.</strong> brak nazw drużyn
+                    Kolumny: godzina (dzień w nagłówku powyżej) · mecz ·
+                    kurs z typem i spadkiem od otwarcia · zmiana od poprzedniej
+                    analizy · <strong style="color:#2e7d32;">✔</strong> = okazja.
+                    Wiersze na białym tle nie przeszły filtra kursów.
+                </div>
+                <div style="font-size:10px;color:#aaa;margin-top:3px;">
+                    Zmiana od <em>poprzedniej analizy</em> (nie od otwarcia):
+                    <span class="cd">↓</span> kurs dalej spada
+                    (sygnał się umacnia) ·
+                    <span class="cu">↑</span> kurs odbił ·
+                    <span class="cf">=</span> bez zmian ·
+                    <span class="cn">nowy</span> pierwszy raz widziany
                 </div>
             </div>
             <div style="background:#ffffff;border-radius:10px;padding:8px 12px;">
@@ -1194,6 +1365,22 @@ def build_dropping_odds_email_html(
     # zakresem kursów, których karty się nie budują.
     scanned_html = _build_scanned_section(scanned_events or [], date)
 
+    # Kafelek z ruchem kursów od poprzedniego runu. Pokazujemy go tylko, gdy
+    # historia w ogóle działa — inaczej sugerowałby, że nic się nie zmieniło.
+    change_counts = meta.get("odds_change_counts") or {}
+    change_tile = ""
+    if change_counts:
+        moved_down = int(change_counts.get("down") or 0)
+        moved_up = int(change_counts.get("up") or 0)
+        change_tile = f'''
+                <div style="background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 8px;">
+                    <div style="font-size: 22px; font-weight: 700;">
+                        <span style="color:#a5d6a7;">↓{moved_down}</span>
+                        <span style="color:#ef9a9a; margin-left:6px;">↑{moved_up}</span>
+                    </div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Ruch od ost. analizy</div>
+                </div>'''
+
     now = datetime.now(WARSAW_TZ).strftime("%H:%M")
     
     html = f'''<!DOCTYPE html>
@@ -1226,6 +1413,7 @@ def build_dropping_odds_email_html(
                     <div style="font-size: 22px; font-weight: 700;">{min_odds}-{max_odds}</div>
                     <div style="font-size: 10px; color: rgba(255,255,255,0.7);">Zakres</div>
                 </div>
+                {change_tile}
             </div>
         </div>
         

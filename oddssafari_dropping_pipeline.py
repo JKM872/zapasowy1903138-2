@@ -42,6 +42,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
+from odds_history import OddsChange, OddsHistoryStore
 from oddssafari_dropping_scraper import (
     DroppingOddsRow,
     collect_dropping_odds_rows,
@@ -1255,6 +1256,7 @@ def _serialize_event(
     qualifies: bool,
     skip_reason: Optional[str],
     enrichment: Optional[Dict[str, Any]] = None,
+    odds_change: Optional["OddsChange"] = None,
 ) -> Dict[str, Any]:
     event = row.to_dict()
     event["qualifies"] = qualifies
@@ -1263,6 +1265,10 @@ def _serialize_event(
     event["dropped_outcome"] = row.outcome
     event["focus_team"] = focus_team
     event["away_team_focus"] = away_focus
+    # Ruch kursu od poprzedniego runu. ``drop_pct`` mierzy spadek od otwarcia,
+    # więc nie mówi, czy od ostatniej analizy kurs dalej spadał, czy odbił.
+    if odds_change is not None:
+        event["odds_change"] = odds_change.to_dict()
     if enrichment is not None:
         event["enrichment_status"] = enrichment.get("status")
         event["livesport_url"] = enrichment.get("livesport_url")
@@ -1314,6 +1320,10 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                         help="Deprecated / no-op: OddsSafari paginates in the "
                              "browser and ships every row in one response, so "
                              "all pages are always collected.")
+    parser.add_argument("--no-odds-history", dest="track_odds_history",
+                        action="store_false", default=True,
+                        help="Do not persist odds per run / do not compute the "
+                             "change since the previous run.")
     parser.add_argument("--sport-ids", default="",
                         help="Comma-separated OddsSafari sport IDs; empty = auto.")
     parser.add_argument("--sport", default="",
@@ -1456,6 +1466,24 @@ def main(argv: Optional[List[str]] = None) -> int:
             "enriched": 0, "resolve_failed": 0, "process_match_error": 0,
         }
 
+        # Historia kursów: jeden run zapisuje kurs, następny liczy zmianę.
+        # Wszystkie wiersze tego runu dzielą jeden run_id, żeby powtórzone
+        # uruchomienie nie porównywało kursu z samym sobą.
+        history: Optional[OddsHistoryStore] = None
+        run_id = datetime.now(WARSAW_TZ).replace(microsecond=0).isoformat()
+        change_counts: Dict[str, int] = {"down": 0, "up": 0, "flat": 0, "new": 0}
+        if args.track_odds_history:
+            try:
+                history = OddsHistoryStore(sport=sport_filter or "all")
+                print(
+                    f"📈 Historia kursów: {len(history)} znanych rynków "
+                    f"({os.path.basename(history.path)})"
+                )
+            except Exception as exc:
+                # Brak historii nie może zatrzymać raportu.
+                logger.warning("Historia kursów niedostępna: %s", exc)
+                history = None
+
         for idx, row in enumerate(rows, 1):
             qualifies, skip_reason = is_qualifying_row(
                 row, min_odds=args.min_odds, max_odds=args.max_odds
@@ -1522,11 +1550,40 @@ def main(argv: Optional[List[str]] = None) -> int:
                 status = enrichment.get("status") or "resolve_failed"
                 enrichment_counts[status] = enrichment_counts.get(status, 0) + 1
 
+            # Zapisz obecny kurs i policz zmianę względem poprzedniego runu.
+            # Robimy to dla KAŻDEGO wiersza, także niekwalifikującego się:
+            # mecz poza zakresem dziś może wejść w zakres przy następnym runie,
+            # a wtedy potrzebujemy jego wcześniejszego kursu.
+            odds_change = None
+            if history is not None:
+                try:
+                    odds_change = history.observe(
+                        match_id=row.match_id,
+                        outcome=row.outcome,
+                        current_odds=row.current_odds,
+                        home_team=row.home_team,
+                        away_team=row.away_team,
+                        event_date=row.event_date,
+                        event_time=row.event_time,
+                        league=row.league,
+                        run_id=run_id,
+                    )
+                except Exception as exc:
+                    logger.debug("Historia kursów — pominięto wiersz: %s", exc)
+                    odds_change = None
+                if odds_change is None:
+                    change_counts["new"] += 1
+                else:
+                    change_counts[odds_change.direction] = (
+                        change_counts.get(odds_change.direction, 0) + 1
+                    )
+
             event = _serialize_event(
                 row,
                 qualifies=qualifies,
                 skip_reason=skip_reason,
                 enrichment=enrichment,
+                odds_change=odds_change,
             )
             events.append(event)
 
@@ -1560,12 +1617,24 @@ def main(argv: Optional[List[str]] = None) -> int:
                 },
                 "enrichment_status_counts": enrichment_counts,
                 "skip_reason_counts": reason_counts,
+                "odds_change_counts": change_counts if history is not None else None,
                 "elapsed_seconds": round(time.time() - run_started, 1),
                 "dry_run": bool(args.dry_run),
             },
             "events": events,
             "qualified": qualified,
         }
+
+        # Historia zapisywana dopiero tutaj: jeden zapis na run zamiast setek,
+        # i tylko gdy zebranie wierszy faktycznie się udało.
+        if history is not None:
+            history.prune()
+            if history.save():
+                print(
+                    f"📈 Historia kursów zapisana: {len(history)} rynków "
+                    f"(↓{change_counts['down']} ↑{change_counts['up']} "
+                    f"→{change_counts['flat']} nowych {change_counts['new']})"
+                )
 
         _write_output(output_path, payload)
         print("=" * 70)

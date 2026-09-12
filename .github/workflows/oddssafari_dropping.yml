@@ -288,6 +288,7 @@ jobs:
           name: oddssafari-dropping-${{ matrix.sport }}-${{ steps.resolve-date.outputs.target }}-${{ github.run_id }}
           path: |
             outputs/oddssafari_dropping_*.json
+            outputs/oddssafari_odds_history_*.json
             logs/
           retention-days: 14
 
@@ -322,11 +323,24 @@ jobs:
           done
           ls -la outputs/oddssafari_dropping_*.json 2>/dev/null || echo "No JSONs found"
 
+          # Odds history has to come back too, otherwise the next run starts
+          # from an empty store and can never report a change since the last
+          # analysis. One file per sport, so the parallel jobs cannot clobber
+          # each other.
+          echo "📈 Collecting odds-history stores..."
+          find artifacts -name 'oddssafari_odds_history_*.json' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "outputs/$fname"
+          done
+          ls -la outputs/oddssafari_odds_history_*.json 2>/dev/null || echo "No history yet"
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add outputs/oddssafari_dropping_*.json 2>/dev/null || true
+          git add outputs/oddssafari_odds_history_*.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ No new dropping-odds output to commit"
           else

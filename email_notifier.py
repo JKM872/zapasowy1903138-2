@@ -1966,6 +1966,11 @@ def _render_drop_badge(match: Dict[str, Any]) -> str:
     movement = (f'{opened:.2f} → {current:.2f}'
                 if opened > 0 and current > 0 else '')
     books = int(safe_float(info.get('bookmakers')))
+    # Ruch od poprzedniego uruchomienia pipeline'u. ``drop_pct`` liczy spadek od
+    # kursu otwarcia, więc sam nie odpowiada na pytanie, czy kurs nadal spada,
+    # czy już odbił. Pole jest opcjonalne — pojawia się tylko tam, gdzie
+    # wywołujący prowadzi historię kursów.
+    since_prev = str(info.get('since_prev') or '').strip()
 
     return f"""
                     <div style="margin-top: 10px; padding: 8px 12px; background: {colour}; border-radius: 10px; display: inline-block;">
@@ -1973,7 +1978,8 @@ def _render_drop_badge(match: Dict[str, Any]) -> str:
                         <span style="color: rgba(255,255,255,0.9); font-size: 11px; margin-left: 8px;">na: {side_label}</span>
                         {f'<span style="color: #fff; font-size: 12px; margin-left: 8px; font-weight: bold;">{movement}</span>' if movement else ''}
                         {f'<span style="color: rgba(255,255,255,0.9); font-size: 11px; margin-left: 8px;">{books} bukmacherów</span>' if books > 0 else ''}
-                    </div>"""
+                    </div>{f'''
+                    <div style="margin-top: 6px; font-size: 11px; color: #555;">🔄 {since_prev}</div>''' if since_prev else ''}"""
 
 
 """Etykiety dwóch grup, na jakie dzielimy wysyłkę."""
