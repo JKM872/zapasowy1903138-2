@@ -24,6 +24,7 @@ preferuje Puppeteera i dopiero potem schodzi do szybszych metod.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import time
@@ -332,6 +333,272 @@ def parse_forebet_row(row, sport: str) -> Optional[Dict[str, Any]]:
 # Pobieranie strony dnia + listowanie
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Pełny dzień przez getrs.php (bez przeglądarki)
+# ---------------------------------------------------------------------------
+
+# Strona przeglądowa oddaje tylko pierwsze ~44 mecze dnia, posortowane rosnąco
+# po godzinie — czyli o każdej sensownej porze runu głównie te już rozegrane.
+# Reszta dnia siedzi pod kontrolką „More", która wywołuje ltodrows(...).
+#
+# Definicja ltodrows z /includes/js/all.js pokazuje, że to zwykły XHR:
+#
+#   "https://www.forebet.com/scripts/getrs.php?ln="+lang+"&tp="+e+"&in="+t
+#       +"&ord="+a+"&tz="+s+"&tzs="+r+"&tze="+l
+#
+# gdzie argumenty to dokładnie te z onclicka. Odpowiedź to JSON [mecze, ligi],
+# a JS pomija w nim wszystko do ostatniego już wyświetlonego meczu — czyli
+# jedno żądanie zwraca CAŁY dzień. To zdejmuje zależność od przeglądarki:
+# Puppeteer nie przechodzi Cloudflare na runnerze, a FlareSolverr przechodzi.
+GETRS_URL = 'https://www.forebet.com/scripts/getrs.php'
+
+_LTODROWS_RE = re.compile(r"ltodrows\(\s*(['\"].*?['\"])\s*\)", re.DOTALL)
+
+
+def extract_ltodrows_args(html: str) -> Optional[List[str]]:
+    """Wyciągnij argumenty ltodrows(...) z onclicka na stronie.
+
+    Bierzemy je z HTML-a, a nie wyliczamy sami: ``tz``/``tzs``/``tze`` to okno
+    czasowe wyliczane przez Forebet i zgadywanie ich to proszenie się o pustą
+    albo przesuniętą odpowiedź.
+
+    W surowym HTML cudzysłowy w atrybucie są encodowane (``&quot;``), dlatego
+    czytamy atrybut przez parser (który je rozkodowuje), a regex na tekście
+    zostaje tylko jako zapas.
+    """
+    candidates: List[str] = []
+    try:
+        soup = BeautifulSoup(html, 'html.parser')
+        for el in soup.find_all(attrs={'onclick': re.compile(r'ltodrows')}):
+            onclick = el.get('onclick') or ''
+            if 'ltodrows' in onclick:
+                candidates.append(onclick)
+    except Exception:
+        pass
+
+    if not candidates:
+        import html as _html
+        unescaped = _html.unescape(html)
+        m = _LTODROWS_RE.search(unescaped)
+        if m:
+            candidates.append(m.group(0))
+
+    for onclick in candidates:
+        inner = onclick[onclick.find('ltodrows'):]
+        start = inner.find('(')
+        end = inner.find(')', start)
+        if start < 0 or end < 0:
+            continue
+        args = re.findall(r"['\"]([^'\"]*)['\"]", inner[start:end])
+        if len(args) >= 2:
+            return args
+    return None
+
+
+def _fetch_via_flaresolverr(url: str, timeout: int = 90) -> Optional[str]:
+    """Pobierz URL przez FlareSolverr. Zwraca treść odpowiedzi albo None."""
+    endpoint = os.getenv('FLARESOLVERR_URL', 'http://localhost:8191/v1')
+    try:
+        import requests
+    except Exception:
+        return None
+    try:
+        resp = requests.post(
+            endpoint,
+            json={'cmd': 'request.get', 'url': url, 'maxTimeout': timeout * 1000},
+            timeout=timeout + 15,
+        )
+        if resp.status_code != 200:
+            print(f"   ⚠️ getrs.php: FlareSolverr HTTP {resp.status_code}")
+            return None
+        solution = (resp.json() or {}).get('solution') or {}
+        return solution.get('response')
+    except Exception as e:
+        print(f"   ⚠️ getrs.php przez FlareSolverr: {type(e).__name__}: {e}")
+        return None
+
+
+def _fetch_via_curl(url: str, timeout: int = 25) -> Optional[str]:
+    """Pobierz URL przez curl_cffi (tani strzał, bywa że Cloudflare przepuści)."""
+    try:
+        from curl_cffi import requests as curl_requests
+        resp = curl_requests.get(url, impersonate='chrome', timeout=timeout)
+        if resp.status_code == 200:
+            return resp.text
+        print(f"   ⚠️ getrs.php: curl_cffi HTTP {resp.status_code}")
+    except Exception as e:
+        print(f"   ⚠️ getrs.php przez curl_cffi: {type(e).__name__}: {e}")
+    return None
+
+
+def fetch_full_day_json(html: str, match_date: str) -> Optional[tuple]:
+    """Pobierz cały dzień z getrs.php. Zwraca (mecze, ligi) albo None."""
+    args = extract_ltodrows_args(html)
+    if not args:
+        print("   ⚠️ Brak wywołania ltodrows w HTML — nie znam parametrów getrs.php")
+        return None
+
+    # ltodrows(tp, in, <league>, ord, tz, tzs, tze)
+    params = {
+        'ln': 'en',
+        'tp': args[0] if len(args) > 0 else '1x2',
+        'in': args[1] if len(args) > 1 else match_date,
+        'ord': args[3] if len(args) > 3 and args[3] else '0',
+    }
+    if len(args) > 4 and args[4]:
+        params['tz'] = args[4]
+    if len(args) > 5 and args[5]:
+        params['tzs'] = args[5]
+    if len(args) > 6 and args[6]:
+        params['tze'] = args[6]
+
+    url = GETRS_URL + '?' + '&'.join(f'{k}={v}' for k, v in params.items())
+    print(f"   🔗 getrs.php: {url}")
+
+    # Świadomie NIE używamy tu pełnej kaskady `fetch_forebet_with_bypass`:
+    # gdy zawiedzie, przechodzi przez wszystkie metody z długimi timeoutami
+    # (potwierdzone lokalnie — zawiesza się na minuty). To jedno dodatkowe
+    # żądanie na sport, więc musi być ograniczone w czasie. FlareSolverr jest
+    # jedyną metodą, która w CI przechodzi Cloudflare, a curl_cffi kosztuje
+    # sekundy, więc próbujemy tylko tych dwóch.
+    raw = _fetch_via_flaresolverr(url) or _fetch_via_curl(url)
+
+    if not raw:
+        print("   ⚠️ getrs.php: brak odpowiedzi")
+        return None
+
+    # FlareSolverr owija odpowiedź w HTML (<pre>), wiec wyłuskujemy JSON.
+    text = raw.strip()
+    if not text.startswith('['):
+        m = re.search(r'(\[.*\])', text, re.DOTALL)
+        if not m:
+            print(f"   ⚠️ getrs.php: odpowiedź nie jest JSON-em ({len(text)} znaków)")
+            return None
+        text = m.group(1)
+
+    try:
+        import html as _html
+        data = json.loads(_html.unescape(text))
+    except Exception as e:
+        print(f"   ⚠️ getrs.php: nie mogę sparsować JSON: {type(e).__name__}: {e}")
+        return None
+
+    if not isinstance(data, list) or not data or not isinstance(data[0], list):
+        print(f"   ⚠️ getrs.php: nieoczekiwana struktura ({type(data).__name__})")
+        return None
+
+    matches = data[0]
+    leagues = data[1] if len(data) > 1 and isinstance(data[1], dict) else {}
+    print(f"   ✅ getrs.php: {len(matches)} meczów, {len(leagues)} lig")
+    if matches:
+        # Bez tego mapowanie pól to zgadywanie — przy zmianie API log od razu
+        # pokaze, jak nazywaja sie pola.
+        print(f"   🔑 pola meczu: {sorted(matches[0].keys())}")
+    return matches, leagues
+
+
+def _first(obj: Dict[str, Any], names: List[str]) -> Any:
+    for n in names:
+        if n in obj and obj[n] not in (None, ''):
+            return obj[n]
+    return None
+
+
+def _int_or_none(val: Any) -> Optional[int]:
+    try:
+        return int(float(val))
+    except (TypeError, ValueError):
+        return None
+
+
+def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
+                   sport: str, match_date: str) -> Optional[Dict[str, Any]]:
+    """Zamień obiekt meczu z getrs.php na wiersz w formacie ``parse_forebet_row``."""
+    sport_lower = (sport or '').lower()
+    two_way = sport_lower in TWO_WAY_SPORTS
+
+    home = _first(obj, ['host', 'HOST', 'Host', 'home', 'hteam', 'host_name'])
+    away = _first(obj, ['guest', 'GUEST', 'Guest', 'away', 'ateam', 'guest_name'])
+    if not home or not away:
+        return None
+
+    raw_dt = str(_first(obj, ['DATE_BAH', 'date_bah', 'date', 'DATE']) or '')
+    date_str, time_str = None, None
+    m = re.search(r'(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})', raw_dt)
+    if m:
+        date_str = f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
+        time_str = f'{m.group(4)}:{m.group(5)}'
+    else:
+        m = re.search(r'(\d{2})/(\d{2})/(\d{4})\s+(\d{1,2}:\d{2})', raw_dt)
+        if m:
+            date_str = f'{m.group(3)}-{m.group(2)}-{m.group(1)}'
+            time_str = m.group(4)
+
+    home_prob = _int_or_none(_first(obj, ['probH', 'prob_H', 'PROBH', 'ph', 'p1']))
+    draw_prob = _int_or_none(_first(obj, ['probD', 'prob_D', 'PROBD', 'pd', 'px']))
+    away_prob = _int_or_none(_first(obj, ['probA', 'prob_A', 'PROBA', 'pa', 'p2']))
+
+    prediction = None
+    probability = None
+    if home_prob is not None and away_prob is not None:
+        if two_way or draw_prob is None:
+            draw_prob = None
+            probability = float(max(home_prob, away_prob))
+            prediction = '1' if home_prob > away_prob else '2'
+        else:
+            best = max(home_prob, draw_prob, away_prob)
+            probability = float(best)
+            prediction = ('1' if best == home_prob
+                          else ('X' if best == draw_prob else '2'))
+
+    # Mecz uznajemy za rozpoczety, gdy jest wynik gospodarza albo komentarz
+    # statusowy — te same pola, ktore czyta JS Forebet.
+    host_score = _first(obj, ['Host_SC', 'host_sc', 'HOST_SC'])
+    comment = str(_first(obj, ['comment', 'COMMENT']) or '')
+    started = host_score not in (None, '') or comment.strip() != ''
+
+    league_id = str(_first(obj, ['league_id', 'LEAGUE_ID', 'lid']) or '')
+    league_info = leagues.get(league_id) if league_id else None
+    league, country = None, None
+    if isinstance(league_info, list):
+        country = league_info[0] if len(league_info) > 0 else None
+        league = league_info[1] if len(league_info) > 1 else None
+    elif isinstance(league_info, str):
+        league = league_info
+
+    match_id = str(_first(obj, ['id', 'ID', 'match_id']) or '') or None
+
+    odds_home = _to_float(_first(obj, ['odd_1', 'odds1', 'o1', 'HOdd', 'host_odd']))
+    odds_draw = _to_float(_first(obj, ['odd_X', 'oddsX', 'ox', 'DOdd', 'draw_odd']))
+    odds_away = _to_float(_first(obj, ['odd_2', 'odds2', 'o2', 'AOdd', 'guest_odd']))
+
+    return {
+        'home_team': str(home).strip(),
+        'away_team': str(away).strip(),
+        'sport': sport_lower,
+        'match_date': date_str,
+        'match_time': time_str,
+        'league': league,
+        'country': country,
+        'forebet_url': None,
+        'forebet_id': match_id,
+        'started': started,
+        'home_prob': home_prob,
+        'draw_prob': draw_prob,
+        'away_prob': away_prob,
+        'probability': probability,
+        'prediction': prediction,
+        'home_odds': odds_home,
+        'draw_odds': odds_draw,
+        'away_odds': odds_away,
+        'odds_source': 'forebet' if (odds_home and odds_away) else None,
+        'odds_note': None if (odds_home and odds_away) else 'forebet_unpriced',
+        'exact_score': None,
+        'avg_goals': None,
+        'source_row': 'getrs',
+    }
+
+
 def _find_rows(soup: BeautifulSoup) -> List[Any]:
     rows = soup.find_all('div', class_='rcnt')
     if rows:
@@ -548,7 +815,8 @@ def list_forebet_matches(sport: str, match_date: Optional[str] = None,
                          load_more_clicks: int = 25,
                          skip_started: bool = True,
                          filter_by_date: bool = True,
-                         html: Optional[str] = None) -> List[Dict[str, Any]]:
+                         html: Optional[str] = None,
+                         use_getrs: bool = True) -> List[Dict[str, Any]]:
     """Zwróć listę wszystkich meczów dnia z Forebet dla danego sportu.
 
     Args:
@@ -583,6 +851,25 @@ def list_forebet_matches(sport: str, match_date: Optional[str] = None,
         print(f"   ❌ Forebet {sport}: nie znaleziono wierszy meczów")
         return []
 
+    # Parsowanie wierszy z HTML daje tylko pierwszą porcję dnia. Cały dzień
+    # bierzemy z getrs.php — endpointu, który stoi za przyciskiem „More".
+    parsed_json: List[Dict[str, Any]] = []
+    if use_getrs:
+        result = fetch_full_day_json(html, match_date)
+        if result:
+            raw_matches, leagues = result
+            for obj in raw_matches:
+                if not isinstance(obj, dict):
+                    continue
+                try:
+                    mapped = map_json_match(obj, leagues, sport, match_date)
+                except Exception as e:
+                    print(f"   ⚠️ getrs.php: mecz nieparsowalny: {type(e).__name__}: {e}")
+                    continue
+                if mapped:
+                    parsed_json.append(mapped)
+            print(f"   📋 getrs.php: zmapowano {len(parsed_json)}/{len(raw_matches)} meczów")
+
     matches: List[Dict[str, Any]] = []
     seen: set = set()
     dropped_started = 0
@@ -615,9 +902,31 @@ def list_forebet_matches(sport: str, match_date: Optional[str] = None,
         seen.add(key)
         matches.append(data)
 
+    from_html = len(matches)
+
+    # Dołóż mecze z getrs.php, których nie było w HTML. HTML ma pierwszeństwo,
+    # bo z wiersza wyciągamy więcej (dokładny wynik, średnia, URL meczu).
+    added_json = 0
+    for data in parsed_json:
+        if skip_started and data.get('started'):
+            dropped_started += 1
+            continue
+        if filter_by_date and data.get('match_date') and data['match_date'] != match_date:
+            dropped_date += 1
+            continue
+        key = data.get('forebet_id') or f"{data['home_team']}|{data['away_team']}|{data.get('match_time')}"
+        if key in seen:
+            continue
+        seen.add(key)
+        matches.append(data)
+        added_json += 1
+
+    matches.sort(key=lambda m: (m.get('match_time') or '99:99'))
+
     priced = sum(1 for m in matches if m.get('odds_source') == 'forebet')
     print(f"   📋 Forebet {sport} {match_date}: {len(matches)} meczów "
-          f"({priced} z kursami Forebet) | odrzucone: "
+          f"(HTML={from_html}, getrs.php dodało={added_json}, "
+          f"{priced} z kursami Forebet) | odrzucone: "
           f"rozpoczęte={dropped_started}, inna_data={dropped_date}, "
           f"nieparsowalne={dropped_unparsed}")
     return matches
