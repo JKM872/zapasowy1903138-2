@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "generated_at": "2026-09-12T12:14:31.008716+02:00",
+    "target_date": "2026-09-12",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 2
+    },
+    "elapsed_seconds": 1.4,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - South American Championship (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/south-american-championship-w/brazil-vs-chile/2316445?MarketTypeID=701",
+      "match_id": "2316445",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Brazil",
+      "away_team": "Chile",
+      "event_date": "12/09",
+      "event_time": "16:30",
+      "outcome": "2",
+      "open_odds": 26.0,
+      "current_odds": 13.21,
+      "drop_pct": 49.0,
+      "max_odds": 20.0,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "International  - European Championship",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/european-championship/france-vs-turkiye/2316439?MarketTypeID=701",
+      "match_id": "2316439",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "France",
+      "away_team": "Turkiye",
+      "event_date": "12/09",
+      "event_time": "14:00",
+      "outcome": "1",
+      "open_odds": 1.44,
+      "current_odds": 1.28,
+      "drop_pct": 12.0,
+      "max_odds": 1.3,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": []
+}
