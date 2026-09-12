@@ -248,62 +248,28 @@ def odds_gate(sport: str, home_odds: Any, away_odds: Any,
 
 def build_livesport_index(driver: Any, sport: str, date_str: str,
                           max_scrolls: int = 14) -> List[Dict[str, Any]]:
-    """Zbierz linki meczów dnia z Livesport raz na sport (do dopasowań)."""
+    """Zbierz linki meczów dnia z Livesport raz na sport (do dopasowań).
+
+    Używa ``get_match_links_from_day()`` — tej samej funkcji, na której stoi
+    główny workflow. Własna wersja (scroll + ``_extract_match_links_from_soup``)
+    zwracała w CI 0 meczów, przez co nie było ani H2H, ani formy, ani kursów.
+    Nie ma sensu utrzymywać drugiej implementacji listowania dnia, gdy pierwsza
+    jest codziennie sprawdzana w produkcji.
+    """
     try:
-        from bs4 import BeautifulSoup
-        from livesport_h2h_scraper import (
-            SPORT_URLS,
-            _accept_cookies_on_page,
-            _extract_match_links_from_soup,
-            _count_match_links_in_page,
-            is_livesport_error_page,
-            _safe_page_source,
-        )
+        from livesport_h2h_scraper import SPORT_URLS, get_match_links_from_day
     except Exception as e:
         print(f"   ⚠️ Helpery Livesport niedostępne: {e}")
         return []
 
-    base = SPORT_URLS.get(sport.lower())
-    if not base:
+    if sport.lower() not in SPORT_URLS:
         print(f"   ⚠️ Livesport nie zna sportu '{sport}'")
         return []
 
-    url = f"{base}?date={date_str}"
     try:
-        driver.get(url)
-        time.sleep(2.5)
-        _accept_cookies_on_page(driver)
-
-        attempts = 0
-        while is_livesport_error_page(_safe_page_source(driver)) and attempts < 3:
-            attempts += 1
-            wait = 3.0 * attempts
-            print(f"   🚫 Livesport {sport}: strona błędu (próba {attempts}/3), czekam {wait:.0f}s")
-            time.sleep(wait)
-            driver.get(url)
-            time.sleep(3.0)
-            _accept_cookies_on_page(driver)
-
-        prev = _count_match_links_in_page(driver)
-        stale = 0
-        for _ in range(max_scrolls):
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(0.6)
-            cur = _count_match_links_in_page(driver)
-            if cur <= prev:
-                stale += 1
-                if stale >= 3:
-                    break
-            else:
-                stale = 0
-            prev = cur
-        driver.execute_script("window.scrollTo(0, 0);")
-        time.sleep(0.3)
-
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        links, _dbg = _extract_match_links_from_soup(soup, base, set(), leagues=None)
+        links = get_match_links_from_day(driver, date_str, sports=[sport.lower()]) or []
     except Exception as e:
-        print(f"   ⚠️ Livesport index ({sport}) błąd: {e}")
+        print(f"   ⚠️ Livesport index ({sport}) błąd: {type(e).__name__}: {e}")
         return []
 
     index: List[Dict[str, Any]] = []
