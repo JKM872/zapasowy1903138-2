@@ -21,8 +21,12 @@ puppeteer.use(StealthPlugin());
 
 // Sport URLs
 const SPORT_URLS = {
-    'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
-    'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today',
+    // Ten sam URL co w mapie `forebet_scraper.py` — strona /predictions-1x2 to
+    // kanoniczna dzienna lista 1X2 i tylko na niej `?date=` filtruje dzień.
+    // Rozjazd między JS i Pythonem oznaczał, że obie ścieżki pobierały inną
+    // stronę dla tego samego sportu.
+    'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
+    'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
     'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
     'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
     'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',

@@ -270,6 +270,11 @@ jobs:
             outputs/forebet_summary_*.json
             outputs/mailed_manifest_*.json
             logs/
+            # HTML pobrany z Forebet — bez niego diagnoza "dlaczego 0 meczów"
+            # sprowadza się do zgadywania po logu.
+            forebet_*_puppeteer.html
+            forebet_challenge_debug.html
+            forebet_debug*.html
           retention-days: 14
           if-no-files-found: warn
 
