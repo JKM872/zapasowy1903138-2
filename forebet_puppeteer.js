@@ -375,7 +375,16 @@ async function scrapeForebet(sport, outputFile, dateStr, cfSession) {
                     await page.setUserAgent(cfSession.userAgent);
                     console.log(`🍪 User-Agent z FlareSolverr ustawiony`);
                 }
-                const cookies = (cfSession.cookies || []).map(c => {
+                // Wstrzykujemy TYLKO ciasteczka Cloudflare. Przy pelnym
+                // zestawie z FlareSolverr (10 ciasteczek: consent, sesyjne,
+                // analityczne) Forebet oddal strone 6 KB zamiast listy meczow,
+                // a przy samym cf_clearance wpuscil normalnie (1,66 MB).
+                // Klucz do challenge'u to cf_clearance/__cf_bm; reszta tylko
+                // zwieksza szanse na konflikt z tym, co ustawi sama przegladarka.
+                const CF_COOKIES = ['cf_clearance', '__cf_bm', '__cflb', '__cfruid'];
+                const cookies = (cfSession.cookies || []).filter(
+                    c => CF_COOKIES.includes(c.name) || String(c.name).startsWith('cf_chl')
+                ).map(c => {
                     const out = {
                         name: c.name,
                         value: c.value,
@@ -396,7 +405,12 @@ async function scrapeForebet(sport, outputFile, dateStr, cfSession) {
                 });
                 if (cookies.length) {
                     await page.setCookie(...cookies);
-                    console.log(`🍪 Wstrzyknieto ${cookies.length} cookies Cloudflare`);
+                    console.log(`🍪 Wstrzyknieto ${cookies.length} cookies Cloudflare `
+                        + `(${cookies.map(c => c.name).join(', ')}) `
+                        + `z ${(cfSession.cookies || []).length} otrzymanych`);
+                } else {
+                    console.log(`⚠️ FlareSolverr nie dal zadnego ciasteczka Cloudflare `
+                        + `(otrzymano ${(cfSession.cookies || []).length} innych)`);
                 }
             } catch (e) {
                 console.log(`⚠️ Nie udalo sie wstrzyknac sesji CF: ${e.message}`);
