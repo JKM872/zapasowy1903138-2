@@ -445,14 +445,25 @@ def resolve_odds(match_url: Optional[str], sport: str,
     }
 
     def _sofascore_last_chance(reason_if_fail: str) -> Dict[str, Any]:
-        """SofaScore jako ostatnia szansa — nie wymaga URL-a Livesport."""
+        """SofaScore jako ostatnia szansa — nie wymaga URL-a Livesport.
+
+        Powód porażki SofaScore zostaje w ``reason``, a nie jest zastępowany
+        ogólnym ``brak_kursow``. Inaczej z logu nie da się odróżnić „SofaScore
+        nie zna tego zdarzenia" od „zna, ale nikt go nie wycenił" — a to dwie
+        różne diagnozy prowadzące do różnych napraw.
+        """
         if not (home_team and away_team):
             out['reason'] = reason_if_fail
             return out
+
+        print(f"      ↻ Pytam SofaScore o kursy ({home_team} vs {away_team})")
         ss = resolve_odds_sofascore(home_team, away_team, sport, date_str)
         if ss.get('home_odds') is not None:
             return ss
-        out['reason'] = reason_if_fail
+
+        ss_reason = ss.get('reason') or 'sofascore_brak_odpowiedzi'
+        print(f"      ⛔ SofaScore bez kursów: {ss_reason}")
+        out['reason'] = f'{reason_if_fail}|{ss_reason}'
         return out
 
     if not match_url:
