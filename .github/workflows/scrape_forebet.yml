@@ -48,7 +48,7 @@ on:
         required: false
         default: ''
       max_matches:
-        description: 'Limit meczów na sport (puste = bez limitu)'
+        description: 'Limit meczów na sport (puste = domyślny 60)'
         required: false
         default: ''
       send_email:
@@ -262,6 +262,7 @@ jobs:
           print(f"- Kursy: **{s.get('with_odds', 0)}** "
                 f"(Pinnacle: {s.get('odds_pinnacle', 0)}, "
                 f"inni Livesport: {s.get('odds_livesport_fallback', 0)}, "
+                f"SofaScore: {s.get('odds_sofascore', 0)}, "
                 f"pominięte bez kursów: {s.get('skipped_no_odds', 0)})")
           print(f"- Z H2H: {s.get('with_h2h', 0)} | z Fan Vote: {s.get('with_fanvote', 0)} "
                 f"| z AI: {s.get('with_ai', 0)}")
