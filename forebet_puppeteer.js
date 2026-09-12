@@ -287,7 +287,7 @@ async function clickLoadMore(page, maxClicks = 10) {
     return clickCount;
 }
 
-async function scrapeForebet(sport, outputFile, dateStr) {
+async function scrapeForebet(sport, outputFile, dateStr, cfSession) {
     const baseUrl = SPORT_URLS[sport.toLowerCase()] || SPORT_URLS['football'];
     // Forebet pokazuje dzień dzisiejszy domyślnie; inne dni tylko z ?date=.
     // Pipeline zawsze podaje datę, więc nie zgadujemy który dzień dostaliśmy.
@@ -321,6 +321,46 @@ async function scrapeForebet(sport, outputFile, dateStr) {
         browser = await puppeteer.launch(launchOptions);
 
         const page = await browser.newPage();
+
+        // 🍪 Sesja Cloudflare z FlareSolverr (cf_clearance + User-Agent).
+        // Stealth nie przechodzi Turnstile na runnerze GitHuba, a bez wejscia
+        // na strone nie da sie kliknac "More" — czyli widzimy tylko poczatek
+        // dnia. FlareSolverr challenge przechodzi, a poniewaz dziala na tym
+        // samym IP, jego cf_clearance jest wazne rowniez tutaj.
+        // cf_clearance jest powiazane z User-Agentem, wiec musi byc ten sam.
+        if (cfSession) {
+            try {
+                if (cfSession.userAgent) {
+                    await page.setUserAgent(cfSession.userAgent);
+                    console.log(`🍪 User-Agent z FlareSolverr ustawiony`);
+                }
+                const cookies = (cfSession.cookies || []).map(c => {
+                    const out = {
+                        name: c.name,
+                        value: c.value,
+                        domain: c.domain,
+                        path: c.path || '/',
+                        httpOnly: !!c.httpOnly,
+                        secure: !!c.secure
+                    };
+                    if (typeof c.expires === 'number' && c.expires > 0) {
+                        out.expires = c.expires;
+                    }
+                    // FlareSolverr zwraca m.in. 'unspecified', czego Puppeteer
+                    // nie przyjmuje — dopuszczamy tylko poprawne wartosci.
+                    if (['Strict', 'Lax', 'None'].includes(c.sameSite)) {
+                        out.sameSite = c.sameSite;
+                    }
+                    return out;
+                });
+                if (cookies.length) {
+                    await page.setCookie(...cookies);
+                    console.log(`🍪 Wstrzyknieto ${cookies.length} cookies Cloudflare`);
+                }
+            } catch (e) {
+                console.log(`⚠️ Nie udalo sie wstrzyknac sesji CF: ${e.message}`);
+            }
+        }
 
         // Ustaw viewport
         await page.setViewport({ width: 1920, height: 1080 });
@@ -424,13 +464,26 @@ const outputFile = process.argv[3] || 'forebet_output.html';
 const dateArg = (process.argv[4] || '').trim();
 const dateStr = /^\d{4}-\d{2}-\d{2}$/.test(dateArg) ? dateArg : '';
 
+// Opcjonalny 5. argument: plik JSON z sesja Cloudflare od FlareSolverr
+// ({cookies: [...], userAgent: "..."}).
+let cfSession = null;
+const cfPath = (process.argv[5] || '').trim();
+if (cfPath) {
+    try {
+        cfSession = JSON.parse(fs.readFileSync(cfPath, 'utf-8'));
+    } catch (e) {
+        console.log(`⚠️ Nie moge odczytac sesji CF z ${cfPath}: ${e.message}`);
+    }
+}
+
 console.log('🔥 FOREBET PUPPETEER SCRAPER - STEALTH MODE 🔥');
 console.log(`Sport: ${sport}`);
 console.log(`Output: ${outputFile}`);
 console.log(`Date: ${dateStr || '(dzisiaj)'}`);
+console.log(`Sesja CF: ${cfSession ? (cfSession.cookies || []).length + ' cookies' : 'brak'}`);
 console.log('');
 
-scrapeForebet(sport, outputFile, dateStr)
+scrapeForebet(sport, outputFile, dateStr, cfSession)
     .then(() => {
         console.log('✅ Zakończono');
         process.exit(0);

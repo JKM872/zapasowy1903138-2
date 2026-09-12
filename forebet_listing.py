@@ -342,11 +342,99 @@ def _find_rows(soup: BeautifulSoup) -> List[Any]:
     return []
 
 
+SPORT_URLS = {
+    'football': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
+    'soccer': 'https://www.forebet.com/en/football-tips-and-predictions-for-today/predictions-1x2',
+    'basketball': 'https://www.forebet.com/en/basketball/predictions-today',
+    'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
+    'handball': 'https://www.forebet.com/en/handball/predictions-today',
+    'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+    'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+    'tennis': 'https://www.forebet.com/en/tennis/predictions-today',
+    'rugby': 'https://www.forebet.com/en/rugby/predictions-today',
+    'baseball': 'https://www.forebet.com/en/baseball/predictions-today',
+}
+
+_CF_SESSION_FILE = 'forebet_cf_session.json'
+
+
+def build_sport_url(sport: str, match_date: Optional[str] = None) -> str:
+    """URL strony dnia dla sportu (z ?date= gdy podano datę)."""
+    base = SPORT_URLS.get(sport.lower(), SPORT_URLS['football'])
+    if match_date:
+        return f"{base}{'&' if '?' in base else '?'}date={match_date}"
+    return base
+
+
+def get_flaresolverr_session(url: str) -> Optional[Dict[str, Any]]:
+    """Rozwiąż challenge Cloudflare FlareSolverrem i zwróć ciasteczka + User-Agent.
+
+    Po co: Puppeteer-Stealth nie przechodzi Turnstile na runnerze GitHuba
+    (potwierdzone zapisanym forebet_challenge_debug.html: „Just a moment",
+    challenge-platform, turnstile), a tylko Puppeteer umie kliknąć „More".
+    FlareSolverr challenge przechodzi. Skoro oba działają na tym samym IP,
+    ``cf_clearance`` od FlareSolverr jest ważne także dla Puppeteera — to ten
+    sam mechanizm, którego repo używa już dla SofaScore (cookie warming).
+
+    Returns:
+        {'cookies': [...], 'userAgent': str} albo None.
+    """
+    endpoint = os.getenv('FLARESOLVERR_URL', 'http://localhost:8191/v1')
+    try:
+        import requests
+    except Exception as e:
+        print(f"   ⚠️ requests niedostępny: {e}")
+        return None
+
+    try:
+        resp = requests.post(
+            endpoint,
+            json={'cmd': 'request.get', 'url': url, 'maxTimeout': 120000},
+            timeout=150,
+        )
+        if resp.status_code != 200:
+            print(f"   ⚠️ FlareSolverr HTTP {resp.status_code} — brak sesji CF")
+            return None
+        solution = (resp.json() or {}).get('solution') or {}
+        cookies = solution.get('cookies') or []
+        user_agent = solution.get('userAgent') or ''
+        if not cookies:
+            print("   ⚠️ FlareSolverr nie zwrócił ciasteczek")
+            return None
+        has_clearance = any(c.get('name') == 'cf_clearance' for c in cookies)
+        print(f"   🍪 FlareSolverr: {len(cookies)} ciasteczek "
+              f"(cf_clearance: {'tak' if has_clearance else 'nie'})")
+        return {'cookies': cookies, 'userAgent': user_agent}
+    except Exception as e:
+        print(f"   ⚠️ FlareSolverr sesja błąd: {type(e).__name__}: {e}")
+        return None
+
+
+def _write_cf_session(session: Dict[str, Any]) -> Optional[str]:
+    try:
+        import json as _json
+        with open(_CF_SESSION_FILE, 'w', encoding='utf-8') as fh:
+            _json.dump(session, fh)
+        return _CF_SESSION_FILE
+    except OSError as e:
+        print(f"   ⚠️ Nie mogę zapisać sesji CF: {e}")
+        return None
+
+
 def _html_from_puppeteer(sport: str, match_date: Optional[str],
                          load_more_clicks: int) -> Optional[str]:
+    # Najpierw zdobądź ciasteczka CF, żeby Puppeteer nie zderzał się z
+    # challenge'em, którego nie umie rozwiązać — bez tego nigdy nie dojdzie
+    # do kliknięcia „More", a bez „More" widzimy tylko początek dnia.
+    cookies_file = None
+    session = get_flaresolverr_session(build_sport_url(sport, match_date))
+    if session:
+        cookies_file = _write_cf_session(session)
+
     try:
         return fb.fetch_forebet_with_puppeteer(
-            sport, match_date=match_date, load_more_clicks=load_more_clicks
+            sport, match_date=match_date, load_more_clicks=load_more_clicks,
+            cf_session_file=cookies_file,
         )
     except TypeError:
         # Starsza sygnatura bez daty — lepiej mieć pierwszą porcję niż nic.
