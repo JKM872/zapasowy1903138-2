@@ -286,7 +286,8 @@ def prefetch_all_sports(sports: list, match_date: str = None) -> dict:
 
 # 🔥 PUPPETEER STEALTH - najlepsza metoda dla CI/CD
 def fetch_forebet_with_puppeteer(sport: str, match_date: str = None,
-                                 load_more_clicks: int = None) -> Optional[str]:
+                                 load_more_clicks: int = None,
+                                 cf_session_file: str = None) -> Optional[str]:
     """
     Pobierz Forebet używając Puppeteer Extra z Stealth (Node.js).
     To jest najskuteczniejsza metoda dla GitHub Actions!
@@ -328,8 +329,11 @@ def fetch_forebet_with_puppeteer(sport: str, match_date: str = None,
         
         # Uruchom Puppeteer scraper
         cmd = ['node', 'forebet_puppeteer.js', sport.lower(), output_file]
-        if match_date:
-            cmd.append(match_date)
+        if match_date or cf_session_file:
+            # Data musi zostac na pozycji 4, zeby plik sesji trafil na 5.
+            cmd.append(match_date or '')
+        if cf_session_file:
+            cmd.append(cf_session_file)
 
         env = os.environ.copy()
         if load_more_clicks is not None:
