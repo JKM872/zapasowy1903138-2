@@ -285,10 +285,18 @@ def prefetch_all_sports(sports: list, match_date: str = None) -> dict:
     return results
 
 # 🔥 PUPPETEER STEALTH - najlepsza metoda dla CI/CD
-def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
+def fetch_forebet_with_puppeteer(sport: str, match_date: str = None,
+                                 load_more_clicks: int = None) -> Optional[str]:
     """
     Pobierz Forebet używając Puppeteer Extra z Stealth (Node.js).
     To jest najskuteczniejsza metoda dla GitHub Actions!
+
+    Args:
+        sport: Sport (football, basketball, ...)
+        match_date: Opcjonalna data YYYY-MM-DD. Puppeteer dokleja ?date=.
+        load_more_clicks: Ile razy kliknąć "More" (env FOREBET_LOAD_MORE_CLICKS).
+            Tylko ta ścieżka klika "More" — curl_cffi/FlareSolverr dostają
+            wyłącznie pierwszą porcję wierszy.
     """
     output_file = f'forebet_{sport.lower()}_puppeteer.html'
     
@@ -307,11 +315,24 @@ def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
             subprocess.run(['npm', 'install'], capture_output=True, timeout=120)
         
         # Uruchom Puppeteer scraper
+        cmd = ['node', 'forebet_puppeteer.js', sport.lower(), output_file]
+        if match_date:
+            cmd.append(match_date)
+
+        env = os.environ.copy()
+        if load_more_clicks is not None:
+            env['FOREBET_LOAD_MORE_CLICKS'] = str(load_more_clicks)
+
+        # Klikanie "More" wydłuża run — pełna lista dnia potrzebuje więcej
+        # czasu niż pierwsza porcja wierszy.
+        puppeteer_timeout = 180 if not load_more_clicks else 420
+
         result = subprocess.run(
-            ['node', 'forebet_puppeteer.js', sport.lower(), output_file],
+            cmd,
             capture_output=True,
             text=True,
-            timeout=180  # 3 minuty timeout
+            timeout=puppeteer_timeout,
+            env=env
         )
         
         # Pokaż output
@@ -339,7 +360,7 @@ def fetch_forebet_with_puppeteer(sport: str) -> Optional[str]:
             return None
             
     except subprocess.TimeoutExpired:
-        print("      ⚠️ Puppeteer: Timeout (3 minuty)")
+        print("      ⚠️ Puppeteer: Timeout")
         return None
     except FileNotFoundError:
         print("      ⚠️ Puppeteer: Node.js nie znaleziony")

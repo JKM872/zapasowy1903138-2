@@ -28,7 +28,12 @@ const SPORT_URLS = {
     'volleyball': 'https://www.forebet.com/en/volleyball/predictions-today',
     'handball': 'https://www.forebet.com/en/handball/predictions-today',
     'hockey': 'https://www.forebet.com/en/hockey/predictions-today',
-    'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today'
+    'ice-hockey': 'https://www.forebet.com/en/hockey/predictions-today',
+    // Dodane dla forebet_pipeline.py — te sporty istniały już w mapie URL
+    // scrapera Python (forebet_scraper.py), ale nie tutaj, więc ścieżka
+    // Puppeteer (jedyna klikająca "More") ich nie obsługiwała.
+    'rugby': 'https://www.forebet.com/en/rugby/predictions-today',
+    'baseball': 'https://www.forebet.com/en/baseball/predictions-today'
 };
 
 // Consent button selectors
@@ -278,8 +283,13 @@ async function clickLoadMore(page, maxClicks = 10) {
     return clickCount;
 }
 
-async function scrapeForebet(sport, outputFile) {
-    const url = SPORT_URLS[sport.toLowerCase()] || SPORT_URLS['football'];
+async function scrapeForebet(sport, outputFile, dateStr) {
+    const baseUrl = SPORT_URLS[sport.toLowerCase()] || SPORT_URLS['football'];
+    // Forebet pokazuje dzień dzisiejszy domyślnie; inne dni tylko z ?date=.
+    // Pipeline zawsze podaje datę, więc nie zgadujemy który dzień dostaliśmy.
+    const url = dateStr
+        ? `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}date=${dateStr}`
+        : baseUrl;
     console.log(`🌐 Forebet ${sport}: ${url}`);
 
     let browser;
@@ -342,8 +352,12 @@ async function scrapeForebet(sport, outputFile) {
             await simulateHumanBehavior(page);
         }
 
-        // 🔥 NEW: Click "Load More" to get all matches
-        const loadMoreClicks = await clickLoadMore(page, 10);
+        // 🔥 Click "Load More" to get all matches.
+        // Każdy sport na Forebet ma "More" — bez wyklikania go do końca
+        // widzimy tylko pierwszą porcję wierszy, a pipeline ma analizować
+        // WSZYSTKIE mecze dnia. Limit podnoszony przez env dla pełnej listy.
+        const maxClicks = parseInt(process.env.FOREBET_LOAD_MORE_CLICKS || '10', 10);
+        const loadMoreClicks = await clickLoadMore(page, Number.isNaN(maxClicks) ? 10 : maxClicks);
         console.log(`📊 Załadowano strony: ${loadMoreClicks + 1}`);
 
         // Pobierz HTML
@@ -402,13 +416,17 @@ async function scrapeForebet(sport, outputFile) {
 // Main
 const sport = process.argv[2] || 'football';
 const outputFile = process.argv[3] || 'forebet_output.html';
+// Opcjonalny 4. argument: data YYYY-MM-DD. Pominięty => dzisiejsza strona.
+const dateArg = (process.argv[4] || '').trim();
+const dateStr = /^\d{4}-\d{2}-\d{2}$/.test(dateArg) ? dateArg : '';
 
 console.log('🔥 FOREBET PUPPETEER SCRAPER - STEALTH MODE 🔥');
 console.log(`Sport: ${sport}`);
 console.log(`Output: ${outputFile}`);
+console.log(`Date: ${dateStr || '(dzisiaj)'}`);
 console.log('');
 
-scrapeForebet(sport, outputFile)
+scrapeForebet(sport, outputFile, dateStr)
     .then(() => {
         console.log('✅ Zakończono');
         process.exit(0);

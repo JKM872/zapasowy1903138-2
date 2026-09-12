@@ -1,0 +1,330 @@
+name: Forebet Scraper Pipeline (Forebet-first)
+
+# Osobny workflow, w którym Forebet jest ŹRÓDŁEM SELEKCJI meczów.
+#
+# Czym różni się od scrape.yml: tam lista meczów pochodzi z Livesport, a Forebet
+# jest tylko wzbogaceniem, które „czasem działa, a czasem nie" — gdy dopasowanie
+# nazw drużyn nie trafi, predykcja Forebet po prostu znika i nie ma tego jak
+# odzyskać. Tutaj kolejność jest odwrócona: bierzemy całą listę dnia z Forebet
+# (z wyklikanym „More"), odsiewamy remisy i mecze bez wyraźnej przewagi, a
+# dopiero wybrane wzbogacamy o kursy, H2H, formę, Fan Vote i analizę AI.
+#
+# Sporty idą w matrixie — tak samo jak w scrape.yml — żeby cały dzień każdego
+# sportu policzył się równolegle, a awaria jednego nie zabrała pozostałych.
+
+on:
+  # 09:00 UTC: po nocnych aktualizacjach Forebet, a przed popołudniowymi
+  # meczami. Godzina wolna od pozostałych workflow (0, 3, 5:30, 6:30, 14 UTC),
+  # żeby nie ścigać się o push na main.
+  schedule:
+    - cron: '0 9 * * *'
+
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: 'Sport (all = wszystkie)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - football
+          - basketball
+          - volleyball
+          - handball
+          - hockey
+          - tennis
+          - baseball
+          - rugby
+      date:
+        description: 'Data YYYY-MM-DD (puste = dziś UTC)'
+        required: false
+        default: ''
+      max_matches:
+        description: 'Limit meczów na sport (puste = bez limitu)'
+        required: false
+        default: ''
+      send_email:
+        description: 'Wysłać e-mail?'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  scrape-forebet:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        sport:
+          - football
+          - basketball
+          - volleyball
+          - handball
+          - hockey
+          - tennis
+          - baseball
+          - rugby
+
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        env:
+          LOG_LEVEL: info
+          CAPTCHA_SOLVER: none
+
+    steps:
+      # Ręczne uruchomienie z wybranym jednym sportem pomija pozostałe joby.
+      - name: Check if this sport should run
+        id: gate
+        run: |
+          REQUESTED="${{ github.event.inputs.sport }}"
+          if [ -z "$REQUESTED" ] || [ "$REQUESTED" = "all" ] || [ "$REQUESTED" = "${{ matrix.sport }}" ]; then
+            echo "run=true" >> $GITHUB_OUTPUT
+          else
+            echo "run=false" >> $GITHUB_OUTPUT
+            echo "⏭️ Pomijam ${{ matrix.sport }} (wybrano: $REQUESTED)"
+          fi
+
+      - name: Checkout code
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v6
+
+      - name: Setup Python 3.11
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # Node jest OBOWIĄZKOWY: tylko forebet_puppeteer.js klika „More" na
+      # Forebet. curl_cffi i FlareSolverr zwracają wyłącznie pierwszą porcję
+      # wierszy, czyli część dnia — a ten pipeline ma analizować całość.
+      - name: Setup Node.js
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Setup Chrome (pre-installed)
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || echo "")
+          if [ -z "$CHROME_PATH" ]; then
+            echo "::error::Chrome not found on runner"
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_PATH" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> $GITHUB_ENV
+          echo "✅ Chrome: $($CHROME_PATH --version)"
+
+      - name: Install Python dependencies
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # curl_cffi to podstawowy bypass Cloudflare dla Forebet
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi cloudscraper httpx[http2]
+          # SOCKS5 dla SofaScore przez Tora
+          pip install 'requests[socks]' 'PySocks>=1.7.1'
+          python -c "from curl_cffi import requests; print('curl_cffi OK')"
+
+      - name: Install Node.js dependencies
+        if: steps.gate.outputs.run == 'true'
+        run: npm ci || npm install
+
+      - name: Wait for FlareSolverr
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          echo "⏳ Waiting for FlareSolverr..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8191/health | grep -q '"status"'; then
+              echo "✅ FlareSolverr ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+
+      # Tor daje SofaScore inne IP niż spalone IP runnera — to jest główna
+      # przyczyna, dla której Fan Vote „działa, ale nie zawsze".
+      - name: Setup Tor (SOCKS5 on :9050)
+        if: steps.gate.outputs.run == 'true'
+        continue-on-error: true
+        run: bash tools/setup_tor.sh
+
+      - name: AI backend preflight
+        if: steps.gate.outputs.run == 'true'
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python tools/check_ai_backend.py
+
+      - name: Run Forebet pipeline - ${{ matrix.sport }}
+        if: steps.gate.outputs.run == 'true'
+        env:
+          FLARESOLVERR_URL: "http://localhost:8191/v1"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
+          # Ile razy kliknąć „More" — 30 pokrywa najliczniejsze dni piłkarskie.
+          FOREBET_LOAD_MORE_CLICKS: '30'
+          # Fan Vote: 3 próby z backoffem + rotacja obwodu Tora przy 403.
+          FANVOTE_ATTEMPTS: '3'
+          FANVOTE_ROTATE_TOR: '1'
+        run: |
+          TARGET_DATE="${{ github.event.inputs.date }}"
+          if [ -z "$TARGET_DATE" ]; then
+            TARGET_DATE=$(date -u +%Y-%m-%d)
+          fi
+          echo "🎯 Forebet pipeline: ${{ matrix.sport }} @ $TARGET_DATE"
+
+          MAX_ARG=""
+          if [ -n "${{ github.event.inputs.max_matches }}" ]; then
+            MAX_ARG="--max-matches ${{ github.event.inputs.max_matches }}"
+          fi
+
+          EMAIL_ARGS=""
+          if [ "${{ github.event.inputs.send_email }}" = "false" ]; then
+            EMAIL_ARGS="--no-email"
+          fi
+
+          python forebet_pipeline.py \
+            --sport ${{ matrix.sport }} \
+            --date "$TARGET_DATE" \
+            $MAX_ARG \
+            $EMAIL_ARGS \
+            --to "${{ secrets.EMAIL_RECIPIENT }}" \
+            --from-email "${{ secrets.EMAIL_SENDER }}" \
+            --password "${{ secrets.EMAIL_PASSWORD }}" \
+            --provider gmail \
+            --headless
+
+      - name: Summary - ${{ matrix.sport }}
+        if: always() && steps.gate.outputs.run == 'true'
+        run: |
+          TARGET_DATE="${{ github.event.inputs.date }}"
+          if [ -z "$TARGET_DATE" ]; then
+            TARGET_DATE=$(date -u +%Y-%m-%d)
+          fi
+          SUMMARY="outputs/forebet_summary_${{ matrix.sport }}_${TARGET_DATE}.json"
+          echo "### Forebet — ${{ matrix.sport }} ($TARGET_DATE)" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "$SUMMARY" ]; then
+            python - "$SUMMARY" <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, sys
+          with open(sys.argv[1], encoding='utf-8') as fh:
+              s = json.load(fh)
+          print(f"- Mecze na Forebet: **{s.get('forebet_total', 0)}**")
+          print(f"- Po selekcji (bez remisów, z przewagą): **{s.get('selected', 0)}**")
+          print(f"- Przetworzone: **{s.get('processed', 0)}**")
+          print(f"- Kwalifikujące się: **{s.get('qualified', 0)}**")
+          print(f"- Z kursami: {s.get('with_odds', 0)} | z H2H: {s.get('with_h2h', 0)} "
+                f"| z Fan Vote: {s.get('with_fanvote', 0)} | z AI: {s.get('with_ai', 0)}")
+          rej = s.get('rejected_by_forebet_rules') or {}
+          if rej:
+              print("- Odrzucone regułami Forebet:")
+              for reason, count in sorted(rej.items(), key=lambda kv: -kv[1]):
+                  print(f"  - `{reason}`: {count}")
+          PY
+          else
+            echo "⚠️ Brak pliku podsumowania — pipeline nie doszedł do zapisu." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload results - ${{ matrix.sport }}
+        if: always() && steps.gate.outputs.run == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: forebet-${{ matrix.sport }}-${{ github.run_id }}
+          path: |
+            results/*_forebet.json
+            outputs/forebet_*.csv
+            outputs/forebet_summary_*.json
+            outputs/mailed_manifest_*.json
+            logs/
+          retention-days: 14
+          if-no-files-found: warn
+
+  commit-results:
+    needs: scrape-forebet
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Collect results
+        run: |
+          mkdir -p results outputs
+          echo "📦 Zbieram JSON-y Forebet..."
+          find artifacts -name '*_forebet.json' -path '*/results/*' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "results/$fname"
+          done
+          echo "📦 Zbieram manifesty maili (potrzebne dla check_results)..."
+          find artifacts -name 'mailed_manifest_*.json' | while read f; do
+            fname=$(basename "$f")
+            echo "  → $fname"
+            cp "$f" "outputs/$fname"
+          done
+          ls -la results/*_forebet.json 2>/dev/null || echo "Brak wyników Forebet"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/*_forebet.json 2>/dev/null || true
+          git add outputs/mailed_manifest_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ Brak wyników Forebet do commita"
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "data: forebet-first results for $TODAY [skip ci]"
+            # Race-safe push — inne workflow sportowe też pushują na main.
+            pushed=false
+            for attempt in 1 2 3 4 5 6; do
+              if git push origin HEAD:main; then
+                echo "✅ Wyniki Forebet zacommitowane (próba $attempt)"
+                pushed=true
+                break
+              fi
+              echo "⚠️ Push odrzucony (próba $attempt) — rebase na origin/main..."
+              git fetch origin main || true
+              if ! git rebase origin/main; then
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $(( (RANDOM % 6) + 2 ))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::warning::Nie udało się wypushować wyników Forebet — zostaną w następnym runie"
+            fi
+          fi
