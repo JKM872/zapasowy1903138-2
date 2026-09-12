@@ -372,9 +372,19 @@ def _html_from_cache_methods(sport: str, match_date: Optional[str]) -> Optional[
 
     key = f"{sport.lower()}_{match_date}"
     cached = getattr(fb, '_forebet_html_cache', {}).get(key)
-    if cached:
-        return cached[0]
-    return None
+    if not cached:
+        return None
+
+    html = cached[0]
+    # Zapisz na dysk, żeby trafił do artefaktów. curl_cffi/FlareSolverr trzymają
+    # HTML tylko w pamięci, więc gdy coś się nie zgadza (za mało meczów, brak
+    # paginacji), nie ma czego obejrzeć po runie — zostaje zgadywanie z logu.
+    try:
+        with open(f'forebet_{sport.lower()}_fetched.html', 'w', encoding='utf-8') as fh:
+            fh.write(html)
+    except OSError as e:
+        print(f"   ⚠️ Nie mogę zapisać HTML do diagnostyki: {e}")
+    return html
 
 
 def _count_rows_for_date(html: str, match_date: str) -> tuple[int, int]:
