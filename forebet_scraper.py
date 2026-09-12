@@ -299,7 +299,19 @@ def fetch_forebet_with_puppeteer(sport: str, match_date: str = None,
             wyłącznie pierwszą porcję wierszy.
     """
     output_file = f'forebet_{sport.lower()}_puppeteer.html'
-    
+
+    # 🔥 KRYTYCZNE: usuń stary plik PRZED uruchomieniem.
+    # Bez tego, gdy Puppeteer polegnie (np. nierozwiązany challenge Cloudflare),
+    # poniższe `os.path.exists(output_file)` trafiało na plik z POPRZEDNIEGO
+    # runu — albo, co gorsza, na snapshot zacommitowany w repo, który przychodzi
+    # z każdym `actions/checkout`. Funkcja raportowała wtedy "Puppeteer
+    # SUCCESS!" i zwracała stronę sprzed wielu miesięcy jako świeży wynik.
+    try:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+    except OSError as e:
+        print(f"      ⚠️ Nie mogę usunąć starego {output_file}: {e}")
+
     try:
         print(f"      🚀 Puppeteer Stealth: Uruchamiam dla {sport}...")
         
@@ -343,6 +355,16 @@ def fetch_forebet_with_puppeteer(sport: str, match_date: str = None,
             for line in result.stderr.strip().split('\n')[:5]:
                 print(f"      ⚠️ {line}")
         
+        # Kod wyjścia jest jedynym wiarygodnym sygnałem od Node.
+        # Przy nierozwiązanym challenge'u Cloudflare skrypt zapisuje
+        # forebet_challenge_debug.html i kończy się kodem 1 — wtedy NIE ma
+        # świeżego HTML-a i trzeba zejść do kolejnej metody, a nie udawać
+        # sukcesu.
+        if result.returncode != 0:
+            print(f"      ❌ Puppeteer: zakończył się kodem {result.returncode} "
+                  f"(brak świeżego HTML)")
+            return None
+
         # Sprawdź czy plik został utworzony
         if os.path.exists(output_file):
             with open(output_file, 'r', encoding='utf-8') as f:

@@ -377,13 +377,37 @@ def _html_from_cache_methods(sport: str, match_date: Optional[str]) -> Optional[
     return None
 
 
+def _count_rows_for_date(html: str, match_date: str) -> tuple[int, int]:
+    """Zwróć (wszystkie wiersze, wiersze z datą == match_date).
+
+    Druga liczba jest testem świeżości. Strona z innego dnia ma wiersze, ale
+    żaden nie dotyczy pytanej daty — a bez tego sprawdzenia stary snapshot
+    wygląda jak poprawny wynik, bo „wiersze są”.
+    """
+    soup = BeautifulSoup(html, 'html.parser')
+    rows = _find_rows(soup)
+    fresh = 0
+    for row in rows:
+        row_date, _ = _parse_datetime(row)
+        if row_date == match_date:
+            fresh += 1
+    return len(rows), fresh
+
+
 def fetch_forebet_day_html(sport: str, match_date: Optional[str] = None,
                            prefer_puppeteer: bool = True,
                            load_more_clicks: int = 25) -> Optional[str]:
     """Pobierz HTML strony dnia dla sportu, preferując pełną listę.
 
     Kolejność: Puppeteer (klika „More” → wszystkie mecze) → curl_cffi/
-    FlareSolverr (tylko pierwsza porcja). Zwraca None gdy nic nie wyszło.
+    FlareSolverr (tylko pierwsza porcja).
+
+    Metoda jest uznana za udaną tylko wtedy, gdy HTML zawiera choć jeden mecz
+    z pytaną datą. Inaczej schodzimy do następnej metody: strona z innego dnia
+    (stary snapshot, cache FlareSolverr, strona challenge'u) ma wiersze, więc
+    licząc same wiersze uznalibyśmy ją za dobry wynik.
+
+    Zwraca None, gdy żadna metoda nie dała HTML-a na właściwy dzień.
     """
     if match_date is None:
         match_date = datetime.now().strftime('%Y-%m-%d')
@@ -391,7 +415,7 @@ def fetch_forebet_day_html(sport: str, match_date: Optional[str] = None,
     attempts: List[str] = ['puppeteer', 'fast'] if prefer_puppeteer else ['fast', 'puppeteer']
 
     best_html = None
-    best_rows = 0
+    best_fresh = 0
     for method in attempts:
         if method == 'puppeteer':
             html = _html_from_puppeteer(sport, match_date, load_more_clicks)
@@ -399,14 +423,23 @@ def fetch_forebet_day_html(sport: str, match_date: Optional[str] = None,
             html = _html_from_cache_methods(sport, match_date)
 
         if not html:
+            print(f"   📄 Forebet {sport} [{method}]: brak HTML")
             continue
 
-        rows = len(_find_rows(BeautifulSoup(html, 'html.parser')))
-        print(f"   📄 Forebet {sport} [{method}]: {rows} wierszy, {len(html)} znaków")
-        if rows > best_rows:
-            best_rows, best_html = rows, html
+        rows, fresh = _count_rows_for_date(html, match_date)
+        print(f"   📄 Forebet {sport} [{method}]: {rows} wierszy "
+              f"({fresh} na {match_date}), {len(html)} znaków")
+
+        if fresh == 0:
+            print(f"   ⚠️ Forebet {sport} [{method}]: żaden wiersz nie dotyczy "
+                  f"{match_date} — odrzucam jako nieświeży i próbuję dalej")
+            continue
+
+        if fresh > best_fresh:
+            best_fresh, best_html = fresh, html
+
         # Puppeteer z „More” to najpełniejsze źródło — nie ma po co dobierać.
-        if method == 'puppeteer' and rows > 0:
+        if method == 'puppeteer':
             break
 
     return best_html
