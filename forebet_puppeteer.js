@@ -152,6 +152,16 @@ async function clickLoadMore(page, maxClicks = 10) {
     console.log('📄 Szukam przycisku "Pokaż więcej"...');
 
     const loadMoreSelectors = [
+        // 🎯 PRAWDZIWA kontrolka Forebet, znaleziona w wyrenderowanej stronie:
+        //   <span onclick='ltodrows("1x2","2026-09-12","","0","-240",...)'>More</span>
+        // To jest doladowanie AJAX-em, a nie przycisk z klasa "showmore" —
+        // dlatego zadny z ponizszych selektorow nigdy nie trafial, a fallback
+        // po tekscie wymagal "show more"/"load more" i mijal sie z golym "More".
+        //
+        // Selektor po onclick jest tu konieczny dla precyzji: na stronie jest
+        // kilka elementow z napisem "More" (menu nawigacji, bottom-nav) i
+        // klikniecie w zly rozwija menu zamiast doladowac mecze.
+        '[onclick*="ltodrows"]',
         // Forebet specific
         '.showmore',
         '#showmore',
@@ -176,8 +186,14 @@ async function clickLoadMore(page, maxClicks = 10) {
         '[id*="showmore"]'
     ];
 
+    const countRows = async () =>
+        await page.evaluate(() => document.querySelectorAll('.rcnt').length).catch(() => 0);
+
     let clickCount = 0;
     let foundButton = true;
+    let rowsBefore = await countRows();
+    let noGrowth = 0;
+    console.log(`   📄 Wierszy przed doladowaniem: ${rowsBefore}`);
 
     while (foundButton && clickCount < maxClicks) {
         foundButton = false;
@@ -226,13 +242,19 @@ async function clickLoadMore(page, maxClicks = 10) {
             }
         }
 
-        // Also try clicking by text
+        // Also try clicking by text.
+        // Uwaga: Forebet podpisuje kontrolke po prostu "More", wiec wzorzec
+        // wymagajacy "show more"/"load more" nigdy jej nie lapal. Dopuszczamy
+        // samodzielne "More"/"Wiecej", ale tylko gdy to CALY tekst elementu —
+        // inaczej trafiamy w menu nawigacji, ktore rowniez zawiera "More".
         if (!foundButton) {
             try {
-                const links = await page.$$('a, button');
+                const links = await page.$$('a, button, span[onclick], div[onclick]');
                 for (const link of links) {
                     const text = await page.evaluate(el => el.textContent, link).catch(() => '');
-                    if (text && /show\s*more|load\s*more|pokaż\s*więcej|więcej\s*meczów/i.test(text)) {
+                    const exact = (text || '').trim();
+                    if (text && (/show\s*more|load\s*more|pokaż\s*więcej|więcej\s*meczów/i.test(text)
+                                 || /^(more|więcej)$/i.test(exact))) {
                         const isClickable = await page.evaluate(el => {
                             const rect = el.getBoundingClientRect();
                             return rect.width > 0 && rect.height > 0;
@@ -270,6 +292,25 @@ async function clickLoadMore(page, maxClicks = 10) {
                 console.log(`   📄 Infinite scroll: strona powiększona (${prevHeight} -> ${newHeight})`);
                 foundButton = true; // Continue loop
                 clickCount++;
+            }
+        }
+
+        // Czy klikniecie faktycznie doladowalo mecze? Na stronie jest kilka
+        // elementow z napisem "More" (menu, bottom-nav) i klikanie ich w
+        // nieskonczonosc tylko marnuje limit prob. Dwie interakcje bez wzrostu
+        // liczby wierszy = klikamy w cos innego niz doladowanie.
+        if (foundButton) {
+            const rowsNow = await countRows();
+            if (rowsNow > rowsBefore) {
+                console.log(`   📄 Wiersze: ${rowsBefore} -> ${rowsNow}`);
+                rowsBefore = rowsNow;
+                noGrowth = 0;
+            } else {
+                noGrowth++;
+                if (noGrowth >= 2) {
+                    console.log(`   📄 Brak wzrostu liczby wierszy (${rowsNow}) po ${noGrowth} interakcjach — przerywam`);
+                    break;
+                }
             }
         }
     }
