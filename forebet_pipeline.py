@@ -93,6 +93,20 @@ WEIGHTS = {
 H2H_MIN_WIN_RATE = 0.55
 H2H_MIN_MATCHES = 2
 
+# Ile meczów maksymalnie wzbogacamy na sport.
+#
+# Odkąd getrs.php oddaje cały dzień, sama piłka nożna daje ~1400 meczów i ~585
+# kandydatów po regułach Forebet. Każdy kandydat to wejście na Livesport po
+# H2H, formę i kursy, czyli kilkanaście sekund — 585 meczów to godziny, a
+# GitHub ubija joba po 6 h. Bez limitu run nie kończy się wcale i nie dochodzi
+# ani do zapisu wyników, ani do maila.
+#
+# Limit wybiera NAJLEPSZYCH kandydatów (najwyższe prawdopodobieństwo faworyta),
+# a nie pierwszych z listy. Lista jest posortowana po godzinie, więc branie
+# „od początku" oznaczało nocne mecze z egzotycznych lig — czyli te, których
+# Livesport najczęściej nie ma i nikt nie wycenia.
+DEFAULT_MAX_PER_SPORT = 60
+
 _GENERIC_TOKENS = {
     'fc', 'sc', 'ac', 'as', 'if', 'ff', 'sk', 'bk', 'cf', 'cd', 'ca', 'club',
     'team', 'city', 'united', 'women', 'men', 'youth', 'reserve', 'academy',
@@ -361,17 +375,66 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
     return out
 
 
-def resolve_odds(match_url: Optional[str], sport: str) -> Dict[str, Any]:
-    """Pobierz kursy: najpierw Pinnacle, potem pozostali bukmacherzy Livesport.
+def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
+                           date_str: Optional[str] = None) -> Dict[str, Any]:
+    """Kursy z SofaScore — trzecie źródło, szukane po NAZWACH drużyn.
+
+    Kluczowa różnica wobec Livesport: nie potrzebuje dopasowanego URL-a.
+    SofaScore ma własną wyszukiwarkę zespołów, więc ratuje mecze, których nie
+    udało się dopasować do listy dnia Livesport — a to była najczęstsza
+    przyczyna `brak_kursow` (8 z 17 meczów siatkówki, wszystkie z sensownym
+    score 60–79, wypadały tylko z tego powodu).
+    """
+    out: Dict[str, Any] = {
+        'home_odds': None, 'draw_odds': None, 'away_odds': None,
+        'bookmaker': None, 'odds_source': None, 'reason': None,
+    }
+    try:
+        from sofascore_scraper import search_event_via_api, get_odds_via_api
+    except Exception as e:
+        out['reason'] = f'brak_modulu_sofascore: {type(e).__name__}'
+        return out
+
+    try:
+        event_id = search_event_via_api(home_team, away_team, sport=sport,
+                                        date_str=date_str)
+        if not event_id:
+            out['reason'] = 'sofascore_brak_eventu'
+            return out
+
+        res = get_odds_via_api(event_id) or {}
+        if not res.get('odds_found'):
+            out['reason'] = 'sofascore_bez_kursow'
+            return out
+
+        out['home_odds'] = res.get('home_odds')
+        out['draw_odds'] = res.get('draw_odds')
+        out['away_odds'] = res.get('away_odds')
+        out['bookmaker'] = res.get('bookmaker') or 'SofaScore'
+        out['odds_source'] = 'sofascore'
+        print(f"      💰 SofaScore ({out['bookmaker']}): {out['home_odds']}/"
+              f"{out['draw_odds'] or '-'}/{out['away_odds']}")
+    except Exception as e:
+        out['reason'] = f'sofascore_blad: {type(e).__name__}'
+        print(f"      ⚠️ Kursy SofaScore błąd: {type(e).__name__}: {e}")
+    return out
+
+
+def resolve_odds(match_url: Optional[str], sport: str,
+                 home_team: Optional[str] = None,
+                 away_team: Optional[str] = None,
+                 date_str: Optional[str] = None) -> Dict[str, Any]:
+    """Pobierz kursy: Pinnacle → pozostali bukmacherzy Livesport → SofaScore.
 
     Pinnacle jest pytany OSOBNO i jako pierwszy, bo to jego kurs traktujemy
     jako referencyjny (najniższa marża = najbliżej prawdziwego
-    prawdopodobieństwa). Dopiero gdy nie wycenił zdarzenia, schodzimy do
-    reszty bukmacherów na Livesport.
+    prawdopodobieństwa). Potem reszta bukmacherów na Livesport. Na końcu
+    SofaScore, który szuka po nazwach drużyn i dlatego działa też bez
+    dopasowanego URL-a Livesport.
 
-    Gdy nie ma ani Pinnacle, ani żadnego innego kursu na Livesport, zwracamy
-    puste kursy z ``reason='brak_kursow'`` — mecz zostanie pominięty. Bez ceny
-    nie ma EV ani ROI, więc typ jest nierozliczalny.
+    ``brak_kursow`` zapada dopiero, gdy ŻADNA z tych platform nie ma ceny.
+    Bez ceny nie ma EV ani ROI, więc typ jest nierozliczalny — ale dopóki
+    którakolwiek wycenia zdarzenie, mecz zostaje w grze.
 
     Returns:
         {'home_odds', 'draw_odds', 'away_odds', 'bookmaker', 'odds_source', 'reason'}
@@ -381,23 +444,33 @@ def resolve_odds(match_url: Optional[str], sport: str) -> Dict[str, Any]:
         'bookmaker': None, 'odds_source': None, 'reason': None,
     }
 
-    if not match_url:
-        out['reason'] = 'brak_url_livesport'
+    def _sofascore_last_chance(reason_if_fail: str) -> Dict[str, Any]:
+        """SofaScore jako ostatnia szansa — nie wymaga URL-a Livesport."""
+        if not (home_team and away_team):
+            out['reason'] = reason_if_fail
+            return out
+        ss = resolve_odds_sofascore(home_team, away_team, sport, date_str)
+        if ss.get('home_odds') is not None:
+            return ss
+        out['reason'] = reason_if_fail
         return out
+
+    if not match_url:
+        # Brak dopasowania w Livesport nie może już oznaczać końca drogi —
+        # SofaScore szuka po nazwach.
+        return _sofascore_last_chance('brak_kursow')
 
     try:
         from livesport_odds_api import LivesportOddsAPI
     except Exception as e:
         print(f"      ⚠️ livesport_odds_api niedostępny: {e}")
-        out['reason'] = 'brak_modulu_kursow'
-        return out
+        return _sofascore_last_chance('brak_modulu_kursow')
 
     try:
         api = LivesportOddsAPI()
         event_id = api.extract_event_id_from_url(match_url)
         if not event_id:
-            out['reason'] = 'brak_event_id'
-            return out
+            return _sofascore_last_chance('brak_event_id')
 
         # 1) Pinnacle — źródło referencyjne
         for label, bookmakers in (
@@ -421,13 +494,12 @@ def resolve_odds(match_url: Optional[str], sport: str) -> Dict[str, Any]:
                           f"{out['home_odds']}/{out['draw_odds'] or '-'}/{out['away_odds']}")
                 return out
 
-        out['reason'] = 'brak_kursow'
-        print("      ⛔ Brak kursów: ani Pinnacle, ani inny bukmacher Livesport")
+        # 3) SofaScore — dopiero teraz wolno uznać, że ceny nie ma nigdzie.
+        print("      ↻ Brak kursów na Livesport (Pinnacle + pozostali) — pytam SofaScore")
+        return _sofascore_last_chance('brak_kursow')
     except Exception as e:
         print(f"      ⚠️ Kursy błąd: {type(e).__name__}: {e}")
-        out['reason'] = 'blad_pobierania_kursow'
-
-    return out
+        return _sofascore_last_chance('blad_pobierania_kursow')
 
 
 # ---------------------------------------------------------------------------
@@ -755,9 +827,22 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     for reason, count in sorted(rejected.items(), key=lambda kv: -kv[1]):
         print(f"      ↳ odrzucone [{reason}]: {count}")
 
-    if max_matches:
-        selected = selected[:max_matches]
-        print(f"   ✂️ Ograniczono do {len(selected)} meczów (--max-matches)")
+    cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
+    if len(selected) > cap:
+        # Najpierw wybierz najlepszych kandydatów, potem przywróć kolejność
+        # po godzinie — mail i JSON mają być chronologiczne.
+        by_quality = sorted(
+            selected,
+            key=lambda m: -(m.get('forebet_fav_prob') or 0),
+        )[:cap]
+        dropped = len(selected) - len(by_quality)
+        worst = min((m.get('forebet_fav_prob') or 0) for m in by_quality)
+        selected = sorted(by_quality, key=lambda m: (m.get('match_time') or '99:99'))
+        print(f"   ✂️ Limit {cap}/sport: wzbogacam {len(selected)} najlepszych "
+              f"kandydatów (odrzucono {dropped}, próg faworyta ≥ {worst}%)")
+        if not max_matches:
+            print(f"      ↳ limit domyślny — bez niego {dropped + cap} meczów "
+                  f"nie zmieściłoby się w czasie joba")
 
     if not selected:
         paths = write_outputs([], sport, date_str)
@@ -855,17 +940,22 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                     if val:
                         row[key] = val
 
-                # Kursy: Pinnacle jako pierwszy, potem reszta Livesport.
-                odds = resolve_odds(ls_url, sport)
-                row['home_odds'] = odds.get('home_odds')
-                row['draw_odds'] = odds.get('draw_odds')
-                row['away_odds'] = odds.get('away_odds')
-                row['odds_source'] = odds.get('odds_source')
-                row['bookmaker'] = odds.get('bookmaker')
-                row['odds_note'] = odds.get('reason')
             else:
-                print("      ⚠️ Brak dopasowania w Livesport (bez H2H/formy/kursów)")
-                row['odds_note'] = 'brak_url_livesport'
+                print("      ⚠️ Brak dopasowania w Livesport (bez H2H/formy)")
+
+        # Kursy: Pinnacle → pozostali bukmacherzy Livesport → SofaScore.
+        # Poza pętlą `if ls_url`, bo SofaScore szuka po nazwach drużyn i nie
+        # potrzebuje URL-a. Wcześniej brak dopasowania w Livesport oznaczał, że
+        # nie pytaliśmy o kurs NIGDZIE — i mecz ginął na `brak_kursow`, choć
+        # cena mogła istnieć.
+        odds = resolve_odds(row.get('match_url'), sport,
+                            home_team=home, away_team=away, date_str=date_str)
+        row['home_odds'] = odds.get('home_odds')
+        row['draw_odds'] = odds.get('draw_odds')
+        row['away_odds'] = odds.get('away_odds')
+        row['odds_source'] = odds.get('odds_source')
+        row['bookmaker'] = odds.get('bookmaker')
+        row['odds_note'] = odds.get('reason')
 
         # Próg kursowy na kursach Pinnacle/Livesport. Brak kursów = skip:
         # bez ceny nie ma EV ani ROI, wiec typ jest nierozliczalny.
@@ -980,6 +1070,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         'with_odds': sum(1 for r in rows if r.get('home_odds') is not None),
         'odds_pinnacle': sum(1 for r in rows if r.get('odds_source') == PRIMARY_BOOKMAKER),
         'odds_livesport_fallback': sum(1 for r in rows if r.get('odds_source') == 'livesport'),
+        'odds_sofascore': sum(1 for r in rows if r.get('odds_source') == 'sofascore'),
         'skipped_no_odds': sum(1 for r in rows if r.get('skip_reason') == 'brak_kursow'),
         'with_h2h': sum(1 for r in rows if (r.get('h2h_count') or 0) > 0),
         'with_fanvote': sum(1 for r in rows if r.get('sofascore_found')),
@@ -994,6 +1085,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     print(f"   kursy={summary['with_odds']} "
           f"(Pinnacle={summary['odds_pinnacle']}, "
           f"inni Livesport={summary['odds_livesport_fallback']}, "
+          f"SofaScore={summary['odds_sofascore']}, "
           f"bez kursów={summary['skipped_no_odds']}) "
           f"h2h={summary['with_h2h']} "
           f"fanvote={summary['with_fanvote']} ai={summary['with_ai']}")
@@ -1013,8 +1105,10 @@ def main() -> None:
                     help=f"Sport ({', '.join(SUPPORTED_SPORTS)})")
     ap.add_argument('--date', default=datetime.now(timezone.utc).strftime('%Y-%m-%d'),
                     help='Data YYYY-MM-DD (domyślnie dziś UTC)')
-    ap.add_argument('--max-matches', type=int, default=None,
-                    help='Ogranicz liczbę analizowanych meczów (testy)')
+    ap.add_argument('--max-matches', type=int,
+                    default=int(os.getenv('FOREBET_MAX_PER_SPORT', '0')) or None,
+                    help=(f'Ile meczów wzbogacać (domyślnie {DEFAULT_MAX_PER_SPORT}; '
+                          f'wybierani są najlepsi kandydaci, nie pierwsi z listy)'))
     ap.add_argument('--min-odds', type=float, default=0.0,
                     help='Dodatkowy dolny próg kursu (0 = tylko próg per sport)')
     ap.add_argument('--max-odds', type=float, default=0.0,
