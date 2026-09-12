@@ -517,8 +517,11 @@ def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
     sport_lower = (sport or '').lower()
     two_way = sport_lower in TWO_WAY_SPORTS
 
-    home = _first(obj, ['host', 'HOST', 'Host', 'home', 'hteam', 'host_name'])
-    away = _first(obj, ['guest', 'GUEST', 'Guest', 'away', 'ateam', 'guest_name'])
+    # Nazwy pól potwierdzone na realnej odpowiedzi getrs.php (1627 meczów):
+    # HOST_NAME/GUEST_NAME, Pred_1/Pred_X/Pred_2, best_odd_1/_X/_2, Host_SC,
+    # DATE_BAH, league_id, short_tag, goalsavg, host_form/guest_form.
+    home = _first(obj, ['HOST_NAME', 'host_name', 'host', 'home'])
+    away = _first(obj, ['GUEST_NAME', 'guest_name', 'guest', 'away'])
     if not home or not away:
         return None
 
@@ -534,9 +537,9 @@ def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
             date_str = f'{m.group(3)}-{m.group(2)}-{m.group(1)}'
             time_str = m.group(4)
 
-    home_prob = _int_or_none(_first(obj, ['probH', 'prob_H', 'PROBH', 'ph', 'p1']))
-    draw_prob = _int_or_none(_first(obj, ['probD', 'prob_D', 'PROBD', 'pd', 'px']))
-    away_prob = _int_or_none(_first(obj, ['probA', 'prob_A', 'PROBA', 'pa', 'p2']))
+    home_prob = _int_or_none(_first(obj, ['Pred_1', 'pred_1']))
+    draw_prob = _int_or_none(_first(obj, ['Pred_X', 'pred_X', 'Pred_x']))
+    away_prob = _int_or_none(_first(obj, ['Pred_2', 'pred_2']))
 
     prediction = None
     probability = None
@@ -551,26 +554,31 @@ def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
             prediction = ('1' if best == home_prob
                           else ('X' if best == draw_prob else '2'))
 
-    # Mecz uznajemy za rozpoczety, gdy jest wynik gospodarza albo komentarz
-    # statusowy — te same pola, ktore czyta JS Forebet.
-    host_score = _first(obj, ['Host_SC', 'host_sc', 'HOST_SC'])
-    comment = str(_first(obj, ['comment', 'COMMENT']) or '')
-    started = host_score not in (None, '') or comment.strip() != ''
+    # Rozpoczęty = jest już wynik gospodarza. Dodatkowo odsiewamy statusy,
+    # które JS Forebet też traktuje jako niegrywalne (przeniesiony, przerwany,
+    # odwołany, walkower) — na taki mecz nie ma po co zbierać danych.
+    host_score = _first(obj, ['Host_SC', 'host_sc'])
+    comment = str(_first(obj, ['comment']) or '').strip()
+    unplayable = comment in {'Postp.', 'Aban.', 'Cancl.', 'Awarded'}
+    started = host_score not in (None, '') or unplayable
 
-    league_id = str(_first(obj, ['league_id', 'LEAGUE_ID', 'lid']) or '')
+    league_id = str(_first(obj, ['league_id']) or '')
     league_info = leagues.get(league_id) if league_id else None
     league, country = None, None
     if isinstance(league_info, list):
+        # Obserwowany układ w mapie lig: [kraj, nazwa, slug]
         country = league_info[0] if len(league_info) > 0 else None
         league = league_info[1] if len(league_info) > 1 else None
     elif isinstance(league_info, str):
         league = league_info
+    if not league:
+        league = _first(obj, ['short_tag'])
 
-    match_id = str(_first(obj, ['id', 'ID', 'match_id']) or '') or None
+    match_id = str(_first(obj, ['id']) or '') or None
 
-    odds_home = _to_float(_first(obj, ['odd_1', 'odds1', 'o1', 'HOdd', 'host_odd']))
-    odds_draw = _to_float(_first(obj, ['odd_X', 'oddsX', 'ox', 'DOdd', 'draw_odd']))
-    odds_away = _to_float(_first(obj, ['odd_2', 'odds2', 'o2', 'AOdd', 'guest_odd']))
+    odds_home = _to_float(_first(obj, ['best_odd_1']))
+    odds_draw = _to_float(_first(obj, ['best_odd_X']))
+    odds_away = _to_float(_first(obj, ['best_odd_2']))
 
     return {
         'home_team': str(home).strip(),
@@ -593,10 +601,41 @@ def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
         'away_odds': odds_away,
         'odds_source': 'forebet' if (odds_home and odds_away) else None,
         'odds_note': None if (odds_home and odds_away) else 'forebet_unpriced',
-        'exact_score': None,
-        'avg_goals': None,
+        'exact_score': _predicted_score(obj),
+        'avg_goals': _to_float_any(_first(obj, ['goalsavg'])),
+        # Forma z Forebet — to jest ta „pod kolorami”, tylko że tu przychodzi
+        # gotowa w API. Livesport zostaje źródłem rozstrzygającym; ta służy
+        # jako zapas, gdy meczu nie da się dopasować do Livesport.
+        'forebet_home_form': _parse_form_string(_first(obj, ['host_form'])),
+        'forebet_away_form': _parse_form_string(_first(obj, ['guest_form'])),
         'source_row': 'getrs',
     }
+
+
+def _to_float_any(val: Any) -> Optional[float]:
+    """Zwykły float bez ograniczeń kursowych (średnia goli itp.)."""
+    try:
+        return float(str(val).replace(',', '.'))
+    except (TypeError, ValueError):
+        return None
+
+
+def _predicted_score(obj: Dict[str, Any]) -> Optional[str]:
+    """Przewidywany wynik z host_sc_pr / guest_sc_pr."""
+    h = _first(obj, ['host_sc_pr'])
+    a = _first(obj, ['guest_sc_pr'])
+    if h in (None, '') or a in (None, ''):
+        return None
+    return f"{h}-{a}"
+
+
+def _parse_form_string(val: Any) -> List[str]:
+    """Zamień formę Forebet na listę W/D/L. Puste, gdy format nieznany."""
+    if not val:
+        return []
+    txt = str(val).upper()
+    letters = [c for c in txt if c in ('W', 'D', 'L')]
+    return letters[:5]
 
 
 def _find_rows(soup: BeautifulSoup) -> List[Any]:
