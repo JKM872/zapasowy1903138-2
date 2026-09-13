@@ -56,14 +56,28 @@ SUPPORTED_SPORTS = [
 ]
 
 # ── Progi selekcji Forebet ─────────────────────────────────────────────────
-# Sens: "wybieramy mecz, gdzie jedna z drużyn ma przewagę". Przewagę mierzymy
-# prawdopodobieństwem faworyta i przewagą nad drugą stroną. Sporty bez remisu
-# mają wyższe progi, bo tam 50/50 jest punktem odniesienia (przy remisie w
-# stawce faworyt rzadko przekracza 60%).
+# Sporty z remisem: faworyt musi mieć sensowną przewagę, bo przy trzech wynikach
+# 40% nie znaczy jeszcze "wskazany zwycięzca".
 THREE_WAY_MIN_FAV_PROB = 45.0
 THREE_WAY_MIN_GAP = 12.0
-TWO_WAY_MIN_FAV_PROB = 60.0
-TWO_WAY_MIN_GAP = 20.0
+
+# Sporty bez remisu: BEZ progu prawdopodobieństwa.
+#
+# Wcześniej było tu 60% i 20 pp, co odsiewało większość stawki (w jednym runie
+# 10 z 15 meczów koszykówki). To był mój dobór, nie wymóg — przy dwóch wynikach
+# każde wskazanie powyżej 50% jest już wskazaniem zwycięzcy, a Forebet i tak
+# podaje stronę. Zamiast progu obowiązuje wymóg LEPSZEJ FORMY faworyta
+# (patrz REQUIRE_FORM_ADVANTAGE), który mówi o meczu więcej niż sam procent.
+TWO_WAY_MIN_FAV_PROB = 0.0
+TWO_WAY_MIN_GAP = 0.0
+
+# Faworyt musi być w lepszej formie niż przeciwnik.
+#
+# Sprawdzane dopiero po wzbogaceniu, bo forma pochodzi z Livesport (a jako
+# zapas z Forebet). Gdy formy nie znamy dla ŻADNEJ ze stron, mecz nie jest
+# odrzucany — brak danych to nie dowód przeciw. Taki wiersz dostaje
+# `form_unknown`, żeby dało się policzyć, jak często to się zdarza.
+REQUIRE_FORM_ADVANTAGE = True
 
 # ── Kursy ──────────────────────────────────────────────────────────────────
 # Pinnacle ma najniższą marżę na rynku, więc jego kurs jest najbliższy
@@ -327,8 +341,8 @@ def _call_groq(prompt: str, max_tokens: int = 1200) -> Optional[str]:
 
 def match_livesport_batch_ai(pairs: List[Tuple[str, str]],
                              index: List[Dict[str, Any]],
-                             chunk: int = 20,
-                             max_candidates: int = 150) -> Dict[str, str]:
+                             chunk: int = 15,
+                             max_candidates: int = 90) -> Dict[str, str]:
     """Dopasuj mecze Forebet do Livesport przez Groq, gdy tokeny zawiodły.
 
     Dopasowanie po tokenach nie ma szans w wielu realnych przypadkach:
@@ -820,6 +834,45 @@ def score_row(row: Dict[str, Any]) -> Dict[str, Any]:
     return row
 
 
+def _form_points(form: Any) -> Optional[float]:
+    """Punkty z formy w skali 0..1 (W=3, D=1, L=0). None gdy brak danych."""
+    if not form:
+        return None
+    seq = [str(x).upper()[:1] for x in form if str(x).strip()]
+    seq = [c for c in seq if c in ('W', 'D', 'L')]
+    if not seq:
+        return None
+    return sum(3 if c == 'W' else (1 if c == 'D' else 0) for c in seq) / (3 * len(seq))
+
+
+def form_advantage(row: Dict[str, Any]) -> Optional[bool]:
+    """Czy faworyt jest w lepszej formie niż przeciwnik?
+
+    Kolejność źródeł: forma ogólna z Livesport, a gdy jej nie ma — forma z
+    Forebet (``host_form``/``guest_form`` z getrs.php). Zwraca None, gdy dla
+    którejkolwiek strony nie znamy formy: to znaczy „nie wiem", a nie „gorsza".
+
+    Remis w formie (identyczne punkty) traktujemy jako BRAK przewagi, bo wymóg
+    brzmi „lepsza forma", nie „nie gorsza".
+    """
+    fav_home = row.get('favorite') == 'home'
+
+    fav_form = (row.get('home_form') if fav_home else row.get('away_form'))
+    dog_form = (row.get('away_form') if fav_home else row.get('home_form'))
+
+    if not fav_form or not dog_form:
+        fav_form = fav_form or (row.get('forebet_home_form') if fav_home
+                                else row.get('forebet_away_form'))
+        dog_form = dog_form or (row.get('forebet_away_form') if fav_home
+                                else row.get('forebet_home_form'))
+
+    fav_pts = _form_points(fav_form)
+    dog_pts = _form_points(dog_form)
+    if fav_pts is None or dog_pts is None:
+        return None
+    return fav_pts > dog_pts
+
+
 def apply_qualification(row: Dict[str, Any], min_score: float,
                         min_sources: int) -> Dict[str, Any]:
     """Ustaw flagi kwalifikacji + powody odrzucenia (jawne, nie milczące)."""
@@ -834,6 +887,17 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
 
     if (row.get('scoring_sources') or 0) < min_sources:
         reasons.append(f"zrodla_{row.get('scoring_sources')}<{min_sources}")
+
+    # Wymóg lepszej formy faworyta. Zastąpił próg 60% dla sportów bez remisu:
+    # mówi o meczu więcej niż sam procent Forebet.
+    if REQUIRE_FORM_ADVANTAGE:
+        verdict = form_advantage(row)
+        row['form_advantage'] = verdict
+        if verdict is False:
+            reasons.append('forma_gorsza_od_przeciwnika')
+        elif verdict is None:
+            # Brak danych o formie nie odrzuca meczu, ale jest odnotowany.
+            row['form_unknown'] = True
 
     # H2H nie ma tu osobnej bramki: wchodzi do score z wagą WEIGHTS['h2h'],
     # więc odrzucanie po nim drugi raz karałoby ten sam sygnał dwukrotnie.
@@ -1132,6 +1196,10 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             'away_form': [],
             'home_form_home': [],
             'away_form_away': [],
+            # Forma z Forebet (getrs.php) jako zapas dla wymogu lepszej formy,
+            # gdy meczu nie udało się dopasować do Livesport.
+            'forebet_home_form': m.get('forebet_home_form') or [],
+            'forebet_away_form': m.get('forebet_away_form') or [],
             'h2h_last5': [], 'h2h_count': 0,
             'home_wins_in_h2h_last5': 0, 'away_wins_in_h2h_last5': 0,
             'last_h2h_date': None, 'last_h2h_score': None,
@@ -1297,6 +1365,9 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         'odds_sofascore': sum(1 for r in rows if r.get('odds_source') == 'sofascore'),
         'skipped_no_odds': sum(1 for r in rows if r.get('skip_reason') == 'brak_kursow'),
         'matched_livesport': sum(1 for r in rows if r.get('match_url')),
+        'form_advantage_ok': sum(1 for r in rows if r.get('form_advantage') is True),
+        'form_advantage_worse': sum(1 for r in rows if r.get('form_advantage') is False),
+        'form_unknown': sum(1 for r in rows if r.get('form_unknown')),
         'sides_reversed': sum(1 for r in rows if r.get('sides_reversed')),
         'with_h2h': sum(1 for r in rows if (r.get('h2h_count') or 0) > 0),
         'with_fanvote': sum(1 for r in rows if r.get('sofascore_found')),
