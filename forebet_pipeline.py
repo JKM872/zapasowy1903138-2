@@ -297,6 +297,142 @@ def build_livesport_index(driver: Any, sport: str, date_str: str,
     return index
 
 
+def livesport_candidate_label(entry: Dict[str, Any]) -> Optional[str]:
+    """Czytelne „Gospodarz vs Gość" z URL-a Livesport, do promptu AI."""
+    slugs = _url_team_slugs(entry.get('url') or '')
+    if not slugs:
+        return None
+    home = slugs[0].replace('-', ' ').strip().title()
+    away = slugs[1].replace('-', ' ').strip().title()
+    if not home or not away:
+        return None
+    return f"{home} vs {away}"
+
+
+def _call_groq(prompt: str, max_tokens: int = 1200) -> Optional[str]:
+    """Wywołanie Groq przez wspólny ``groq_client`` (klucz z GROQ_API_KEY).
+
+    Osobne od ``forebet_scraper._call_groq_api``, bo tamto ma ``max_tokens=200``
+    — za mało na odpowiedź dla kilkudziesięciu meczów naraz.
+    """
+    try:
+        import requests
+        import groq_client
+    except Exception as e:
+        print(f"      ⚠️ Groq niedostępny: {type(e).__name__}: {e}")
+        return None
+
+    api_key = groq_client.api_key()
+    if not api_key:
+        print("      ⚠️ Brak GROQ_API_KEY — pomijam dopasowanie AI")
+        return None
+
+    model = groq_client.resolve_model(api_key)
+
+    def _post(model_id: str):
+        return requests.post(
+            groq_client.CHAT_ENDPOINT,
+            headers={'Authorization': f'Bearer {api_key}',
+                     'Content-Type': 'application/json'},
+            json={'model': model_id,
+                  'messages': [{'role': 'user', 'content': prompt}],
+                  'temperature': 0.0,
+                  'max_tokens': max_tokens},
+            timeout=groq_client.REQUEST_TIMEOUT,
+        )
+
+    try:
+        resp = _post(model)
+        if groq_client.is_decommissioned_error(resp.status_code, resp.text):
+            groq_client.reset_resolved_model()
+            new_model = groq_client.resolve_model(api_key, force=True)
+            if new_model != model:
+                print(f"      ↻ Groq: przechodzę na '{new_model}'")
+                resp = _post(new_model)
+        if resp.status_code != 200:
+            print(f"      ⚠️ Groq HTTP {resp.status_code}: {resp.text[:120]}")
+            return None
+        return resp.json()['choices'][0]['message']['content'].strip()
+    except Exception as e:
+        print(f"      ⚠️ Groq błąd: {type(e).__name__}: {e}")
+        return None
+
+
+def match_livesport_batch_ai(pairs: List[Tuple[str, str]],
+                             index: List[Dict[str, Any]],
+                             chunk: int = 20,
+                             max_candidates: int = 150) -> Dict[str, str]:
+    """Dopasuj mecze Forebet do Livesport przez Groq, gdy tokeny zawiodły.
+
+    Dopasowanie po tokenach nie ma szans w wielu realnych przypadkach:
+    Livesport jest w wersji polskiej („Poland" vs „polska", „France" vs
+    „francja"), skraca nazwy klubów, a w tenisie operuje nazwiskami w innym
+    formacie niż Forebet. To dopasowanie odpowiadało za połowę wszystkich strat
+    — 143 z 286 analizowanych meczów kończyło się na `brak_kursow`, najczęściej
+    właśnie dlatego, że nie było URL-a.
+
+    Odpowiedź AI to numery, nie nazwy — numer albo wskazuje istniejący mecz,
+    albo nie, i nie trzeba potem zgadywać, co model miał na myśli.
+
+    Returns:
+        {"home|away" (lowercase): url}
+    """
+    out: Dict[str, str] = {}
+    if not pairs or not index:
+        return out
+
+    labelled = []
+    for entry in index:
+        label = livesport_candidate_label(entry)
+        if label:
+            labelled.append((label, entry['url']))
+    if not labelled:
+        print("      ⚠️ Brak czytelnych nazw w indeksie Livesport — AI pominięte")
+        return out
+
+    labelled = labelled[:max_candidates]
+    candidates_text = '\n'.join(f"{i}. {lab}" for i, (lab, _) in enumerate(labelled, 1))
+
+    for start in range(0, len(pairs), chunk):
+        batch = pairs[start:start + chunk]
+        wanted = '\n'.join(f"{i}. {h} vs {a}" for i, (h, a) in enumerate(batch, 1))
+
+        prompt = (
+            "Match each FIXTURE to the same real-world fixture in CANDIDATES.\n"
+            "Candidate names may be in Polish, abbreviated, or have the teams in\n"
+            "the opposite order — match the fixture, not the word order.\n\n"
+            f"FIXTURES:\n{wanted}\n\n"
+            f"CANDIDATES:\n{candidates_text}\n\n"
+            "Reply with one line per FIXTURE, format: <fixture_number>:<candidate_number>\n"
+            "Use 0 as candidate_number when no candidate is the same fixture.\n"
+            "No other text."
+        )
+
+        answer = _call_groq(prompt)
+        if not answer:
+            continue
+
+        found = 0
+        for line in answer.splitlines():
+            m = re.search(r'(\d+)\s*[:\->\.]+\s*(\d+)', line)
+            if not m:
+                continue
+            fx, cand = int(m.group(1)), int(m.group(2))
+            if cand <= 0 or fx < 1 or fx > len(batch):
+                continue
+            if cand > len(labelled):
+                continue
+            home, away = batch[fx - 1]
+            out[f"{home.lower().strip()}|{away.lower().strip()}"] = labelled[cand - 1][1]
+            found += 1
+
+        print(f"      🤖 Groq dopasował {found}/{len(batch)} meczów "
+              f"(partia {start // chunk + 1})")
+        time.sleep(1.0)  # oszczędnie z limitem Groq
+
+    return out
+
+
 def match_livesport_url(home: str, away: str,
                         index: List[Dict[str, Any]]) -> Optional[str]:
     """Dopasuj mecz Forebet do URL Livesport po tokenach z obu nazw.
@@ -879,6 +1015,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         min_odds: float = 0.0, max_odds: float = 0.0,
         min_score: float = 55.0, min_sources: int = 2,
         use_sofascore: bool = True, use_ai: bool = True,
+        use_ai_matching: bool = True,
         use_livesport: bool = True, headless: bool = True,
         send_email: bool = True, send_telegram: bool = False,
         email_cfg: Optional[Dict[str, str]] = None,
@@ -958,6 +1095,28 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     else:
         print("\n[4/6] Livesport — pominięty")
 
+    # Dopasowanie do Livesport: najpierw tanie tokeny, potem Groq na resztę.
+    # Robimy to ZBIORCZO przed pętlą, żeby AI dostało jedno zapytanie na ~20
+    # meczów, a nie jedno na mecz.
+    url_by_pair: Dict[str, str] = {}
+    if index:
+        unmatched: List[Tuple[str, str]] = []
+        for m in survivors:
+            url = match_livesport_url(m['home_team'], m['away_team'], index)
+            key = f"{m['home_team'].lower().strip()}|{m['away_team'].lower().strip()}"
+            if url:
+                url_by_pair[key] = url
+            else:
+                unmatched.append((m['home_team'], m['away_team']))
+
+        print(f"   🔎 Dopasowanie po tokenach: {len(url_by_pair)}/{len(survivors)}")
+        if unmatched and use_ai_matching:
+            print(f"   🤖 Groq dopasowuje pozostałe {len(unmatched)} meczów...")
+            ai_hits = match_livesport_batch_ai(unmatched, index)
+            for key, url in ai_hits.items():
+                url_by_pair.setdefault(key, url)
+            print(f"   🔎 Po Groq: {len(url_by_pair)}/{len(survivors)} dopasowanych")
+
     rows: List[Dict[str, Any]] = []
 
     for i, m in enumerate(survivors, 1):
@@ -1014,7 +1173,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
 
         # Livesport: dopasowanie + H2H/forma/kursy
         if driver is not None:
-            ls_url = match_livesport_url(home, away, index)
+            ls_url = url_by_pair.get(f"{home.lower().strip()}|{away.lower().strip()}")
             row['match_url'] = ls_url
             if ls_url:
                 print(f"      🔗 Livesport: {ls_url}")
@@ -1170,6 +1329,8 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         'odds_livesport_fallback': sum(1 for r in rows if r.get('odds_source') == 'livesport'),
         'odds_sofascore': sum(1 for r in rows if r.get('odds_source') == 'sofascore'),
         'skipped_no_odds': sum(1 for r in rows if r.get('skip_reason') == 'brak_kursow'),
+        'matched_livesport': sum(1 for r in rows if r.get('match_url')),
+        'sides_reversed': sum(1 for r in rows if r.get('sides_reversed')),
         'with_h2h': sum(1 for r in rows if (r.get('h2h_count') or 0) > 0),
         'with_fanvote': sum(1 for r in rows if r.get('sofascore_found')),
         'with_ai': sum(1 for r in rows if r.get('gemini_recommendation')),
@@ -1222,6 +1383,8 @@ def main() -> None:
     ap.add_argument('--no-livesport', action='store_true', help='Bez H2H/formy')
     ap.add_argument('--no-sofascore', action='store_true', help='Bez Fan Vote')
     ap.add_argument('--no-ai', action='store_true', help='Bez analizy AI')
+    ap.add_argument('--no-ai-matching', action='store_true',
+                    help='Bez dopasowywania meczów do Livesport przez Groq')
     ap.add_argument('--headless', action='store_true', default=True)
     ap.add_argument('--no-headless', dest='headless', action='store_false')
     ap.add_argument('--to', default=os.getenv('EMAIL_RECIPIENT', ''))
@@ -1247,6 +1410,7 @@ def main() -> None:
         min_sources=args.min_sources,
         use_sofascore=not args.no_sofascore,
         use_ai=not args.no_ai,
+        use_ai_matching=not args.no_ai_matching,
         use_livesport=not args.no_livesport,
         headless=args.headless,
         send_email=not args.no_email,
