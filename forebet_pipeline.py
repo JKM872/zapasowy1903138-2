@@ -310,52 +310,19 @@ def livesport_candidate_label(entry: Dict[str, Any]) -> Optional[str]:
 
 
 def _call_groq(prompt: str, max_tokens: int = 1200) -> Optional[str]:
-    """Wywołanie Groq przez wspólny ``groq_client`` (klucz z GROQ_API_KEY).
+    """Wywołanie Groq z rotacją modeli przy limicie (``groq_client.chat``).
 
-    Osobne od ``forebet_scraper._call_groq_api``, bo tamto ma ``max_tokens=200``
-    — za mało na odpowiedź dla kilkudziesięciu meczów naraz.
+    Rotacja jest tu istotna, nie kosmetyczna: limity Groq liczą się per model,
+    a osiem sportów w matrixie uderza równolegle w ten sam model. Bez rotacji
+    pierwsze 429 kończyło dopasowanie i wracaliśmy do stanu „brak URL-a", czyli
+    do braku kursów.
     """
     try:
-        import requests
         import groq_client
     except Exception as e:
         print(f"      ⚠️ Groq niedostępny: {type(e).__name__}: {e}")
         return None
-
-    api_key = groq_client.api_key()
-    if not api_key:
-        print("      ⚠️ Brak GROQ_API_KEY — pomijam dopasowanie AI")
-        return None
-
-    model = groq_client.resolve_model(api_key)
-
-    def _post(model_id: str):
-        return requests.post(
-            groq_client.CHAT_ENDPOINT,
-            headers={'Authorization': f'Bearer {api_key}',
-                     'Content-Type': 'application/json'},
-            json={'model': model_id,
-                  'messages': [{'role': 'user', 'content': prompt}],
-                  'temperature': 0.0,
-                  'max_tokens': max_tokens},
-            timeout=groq_client.REQUEST_TIMEOUT,
-        )
-
-    try:
-        resp = _post(model)
-        if groq_client.is_decommissioned_error(resp.status_code, resp.text):
-            groq_client.reset_resolved_model()
-            new_model = groq_client.resolve_model(api_key, force=True)
-            if new_model != model:
-                print(f"      ↻ Groq: przechodzę na '{new_model}'")
-                resp = _post(new_model)
-        if resp.status_code != 200:
-            print(f"      ⚠️ Groq HTTP {resp.status_code}: {resp.text[:120]}")
-            return None
-        return resp.json()['choices'][0]['message']['content'].strip()
-    except Exception as e:
-        print(f"      ⚠️ Groq błąd: {type(e).__name__}: {e}")
-        return None
+    return groq_client.chat(prompt, max_tokens=max_tokens, temperature=0.0)
 
 
 def match_livesport_batch_ai(pairs: List[Tuple[str, str]],

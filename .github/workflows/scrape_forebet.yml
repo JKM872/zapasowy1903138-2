@@ -218,6 +218,29 @@ jobs:
           if [ -z "$TARGET_DATE" ]; then
             TARGET_DATE=$(date -u +%Y-%m-%d)
           fi
+
+          # Rozsuniecie startow. Osiem jobow matrixa startuje w tej samej
+          # sekundzie i wszystkie uderzaja w te sama organizacje Groq, ktorej
+          # limity licza sie per model — efektem bylo HTTP 429 i cisza AI
+          # dokladnie tam, gdzie AI jest potrzebne (dopasowanie meczow do
+          # Livesport). Rotacja modeli to lagodzi, ale rozsuniecie w czasie
+          # zmniejsza kolizje u zrodla.
+          case "${{ matrix.sport }}" in
+            football)   DELAY=0   ;;
+            basketball) DELAY=40  ;;
+            volleyball) DELAY=80  ;;
+            handball)   DELAY=120 ;;
+            hockey)     DELAY=160 ;;
+            tennis)     DELAY=200 ;;
+            baseball)   DELAY=240 ;;
+            rugby)      DELAY=280 ;;
+            *)          DELAY=0   ;;
+          esac
+          if [ "$DELAY" -gt 0 ]; then
+            echo "⏳ Rozsuniecie startu: czekam ${DELAY}s (limity Groq)"
+            sleep "$DELAY"
+          fi
+
           echo "🎯 Forebet pipeline: ${{ matrix.sport }} @ $TARGET_DATE"
 
           MAX_ARG=""

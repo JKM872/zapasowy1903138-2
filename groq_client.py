@@ -143,3 +143,105 @@ def is_decommissioned_error(status_code: int, body: str) -> bool:
     text = (body or '').lower()
     return any(marker in text for marker in
                ('decommission', 'does not exist', 'not found', 'unknown model'))
+
+
+def model_candidates(key: Optional[str] = None) -> List[str]:
+    """Modele do wypróbowania, od najlepszego, bez duplikatów i wycofanych.
+
+    Pierwszy jest model rozstrzygnięty przez :func:`resolve_model`, potem
+    reszta preferencji. Dzięki temu zachowanie „normalne" się nie zmienia, a
+    dopiero po odmowie schodzimy niżej.
+    """
+    ordered: List[str] = []
+    try:
+        ordered.append(resolve_model(key))
+    except Exception:
+        pass
+    for candidate in MODEL_PREFERENCES:
+        if candidate not in ordered:
+            ordered.append(candidate)
+    return [m for m in ordered if m and m not in RETIRED_MODELS]
+
+
+def is_rate_limited(status_code: int) -> bool:
+    """True gdy Groq odmówił z powodu limitu."""
+    return status_code == 429
+
+
+def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
+         key: Optional[str] = None, timeout: Optional[int] = None,
+         log=print) -> Optional[str]:
+    """Zapytaj Groq, przechodząc na kolejny model gdy bieżący odmawia.
+
+    Po co: limity Groq są liczone **per model**, a nie na całe konto. Do tej
+    pory jedno HTTP 429 kończyło wywołanie, mimo że pozostałe modele z
+    :data:`MODEL_PREFERENCES` najczęściej mają jeszcze zapas. W praktyce
+    oznaczało to ciszę AI dokładnie wtedy, gdy równolegle biegnie kilka jobów
+    (np. osiem sportów w matrixie) i wszystkie trafiają w ten sam model.
+
+    Obsługiwane odmowy:
+      - 429 (limit)            -> próbuj następnego modelu
+      - 400 decommissioned     -> odśwież listę modeli i próbuj dalej
+
+    Returns:
+        Treść odpowiedzi albo None, gdy żaden model nie odpowiedział.
+    """
+    try:
+        import requests
+    except Exception as e:  # pragma: no cover
+        log(f"      ⚠️ Groq: brak requests ({type(e).__name__})")
+        return None
+
+    if key is None:
+        key = api_key()
+    if not key:
+        log("      ⚠️ Groq: brak GROQ_API_KEY")
+        return None
+
+    if timeout is None:
+        timeout = REQUEST_TIMEOUT
+
+    candidates = model_candidates(key)
+    if not candidates:
+        return None
+
+    tried_reset = False
+    for model in candidates:
+        try:
+            resp = requests.post(
+                CHAT_ENDPOINT,
+                headers={'Authorization': f'Bearer {key}',
+                         'Content-Type': 'application/json'},
+                json={'model': model,
+                      'messages': [{'role': 'user', 'content': prompt}],
+                      'temperature': temperature,
+                      'max_tokens': max_tokens},
+                timeout=timeout,
+            )
+        except Exception as e:
+            log(f"      ⚠️ Groq [{model}]: {type(e).__name__}: {e}")
+            continue
+
+        if resp.status_code == 200:
+            try:
+                return resp.json()['choices'][0]['message']['content'].strip()
+            except Exception as e:
+                log(f"      ⚠️ Groq [{model}]: zła odpowiedź ({type(e).__name__})")
+                continue
+
+        if is_rate_limited(resp.status_code):
+            log(f"      ⚠️ Groq [{model}]: limit (429) — próbuję kolejnego modelu")
+            continue
+
+        if is_decommissioned_error(resp.status_code, resp.text) and not tried_reset:
+            tried_reset = True
+            reset_resolved_model()
+            resolve_model(key, force=True)
+            log(f"      ⚠️ Groq [{model}]: model wycofany — odświeżam listę")
+            continue
+
+        log(f"      ⚠️ Groq [{model}]: HTTP {resp.status_code} "
+            f"{(resp.text or '')[:100]}")
+
+    log(f"      ⛔ Groq: żaden z {len(candidates)} modeli nie odpowiedział")
+    return None
