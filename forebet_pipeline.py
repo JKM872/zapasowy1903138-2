@@ -132,7 +132,27 @@ H2H_MIN_MATCHES = 2
 # a nie pierwszych z listy. Lista jest posortowana po godzinie, więc branie
 # „od początku" oznaczało nocne mecze z egzotycznych lig — czyli te, których
 # Livesport najczęściej nie ma i nikt nie wycenia.
-DEFAULT_MAX_PER_SPORT = 60
+#
+# Wartość 60 była zachowawcza. Pomiar na realnym runie piłki (13.09):
+# mecz 5 o 11:51:34, mecz 20 o 12:01:36 => ~40 s/mecz, czyli 60 meczów zużywa
+# ~40 min z sześciu dostępnych godzin. Przy tym `brak_kursow` odrzucało 236 z
+# 504 zdarzeń, więc znaczna część tych 40 min szła na mecze bez rynku.
+#
+# Podniesione do 200 (~2,2 h przy 40 s/mecz). Wyższy limit jest bezpieczny
+# tylko dlatego, że niżej pilnuje go ENRICH_TIME_BUDGET_SECONDS — bez hamulca
+# job zginąłby na 6-godzinnym timeoucie GitHuba, tracąc CAŁY dorobek: zapis
+# wyników i mail są po pętli.
+DEFAULT_MAX_PER_SPORT = int(os.getenv('FOREBET_MAX_PER_SPORT_DEFAULT', '200'))
+
+# Twardy budżet czasu na wzbogacanie. Po jego przekroczeniu przerywamy pętlę i
+# przechodzimy do zapisu + maila z tym, co już mamy. Lepiej wysłać 150 meczów
+# niż stracić 200 na timeoucie.
+#
+# 3,5 h zostawia ~2,5 h zapasu na: pobranie Forebet, indeks Livesport,
+# scoring, zapis i wysyłkę — te etapy są przed/po pętli i też trwają.
+ENRICH_TIME_BUDGET_SECONDS = int(
+    os.getenv('FOREBET_ENRICH_BUDGET_SECONDS', str(int(3.5 * 3600)))
+)
 
 _GENERIC_TOKENS = {
     'fc', 'sc', 'ac', 'as', 'if', 'ff', 'sk', 'bk', 'cf', 'cd', 'ca', 'club',
@@ -1161,18 +1181,39 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     if len(selected) > cap:
         # Najpierw wybierz najlepszych kandydatów, potem przywróć kolejność
         # po godzinie — mail i JSON mają być chronologiczne.
-        by_quality = sorted(
-            selected,
-            key=lambda m: -(m.get('forebet_fav_prob') or 0),
-        )[:cap]
+        #
+        # Kolejność: NAJPIERW mecze, które Forebet zdołał wycenić, potem
+        # reszta; w obu grupach malejąco po sile faworyta.
+        #
+        # Dlaczego obecność kursów Forebet: to darmowy sygnał, że mecz w ogóle
+        # ma rynek. Pomiar na 504 zdarzeniach z runów 12-13.09:
+        #   z kursami Forebet  -> 87% ma realny kurs (90/103)
+        #   bez kursow Forebet -> 44% (178/401)
+        # a wśród 236 odrzuceń `brak_kursow` aż 94% (223) nie miało kursów
+        # Forebet. `brak_kursow` było powodem odrzucenia numer jeden.
+        #
+        # Samo sortowanie po forebet_fav_prob systematycznie promowało ligi
+        # egzotyczne — Forebet jest najpewniejszy tam, gdzie ma najmniej
+        # danych, a tam nikt nie wycenia. Stąd „mecze ze słabych lig" w mailu
+        # i masowe `brak_kursow`.
+        #
+        # To NIE jest użycie kursu Forebet do decyzji — o progu i EV nadal
+        # decyduje wyłącznie Pinnacle/Livesport/SofaScore. Tu liczy się tylko
+        # SAM FAKT wyceny jako wskaźnik pokrycia rynkowego.
+        def _priority(m):
+            has_market = bool(m.get('home_odds') or m.get('away_odds'))
+            return (0 if has_market else 1, -(m.get('forebet_fav_prob') or 0))
+
+        by_quality = sorted(selected, key=_priority)[:cap]
         dropped = len(selected) - len(by_quality)
         worst = min((m.get('forebet_fav_prob') or 0) for m in by_quality)
+        with_market = sum(1 for m in by_quality
+                          if m.get('home_odds') or m.get('away_odds'))
         selected = sorted(by_quality, key=lambda m: (m.get('match_time') or '99:99'))
         print(f"   ✂️ Limit {cap}/sport: wzbogacam {len(selected)} najlepszych "
               f"kandydatów (odrzucono {dropped}, próg faworyta ≥ {worst}%)")
-        if not max_matches:
-            print(f"      ↳ limit domyślny — bez niego {dropped + cap} meczów "
-                  f"nie zmieściłoby się w czasie joba")
+        print(f"      ↳ z rynkiem (kursy Forebet): {with_market}/{len(selected)}"
+              f" — pierwszeństwo, bo 87% z nich ma realny kurs vs 44% bez")
 
     if not selected:
         paths = write_outputs([], sport, date_str)
@@ -1229,8 +1270,24 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
 
     rows: List[Dict[str, Any]] = []
     ai_analysed = 0
+    enrich_started = time.time()
+    budget_hit = False
 
     for i, m in enumerate(survivors, 1):
+        # Hamulec czasu. Zapis wyników i mail są PO tej pętli, więc job ubity
+        # na 6-godzinnym timeoucie GitHuba nie zostawia niczego. Lepiej oddać
+        # niepełną listę niż stracić całość.
+        elapsed = time.time() - enrich_started
+        if elapsed > ENRICH_TIME_BUDGET_SECONDS:
+            budget_hit = True
+            remaining = len(survivors) - i + 1
+            print(f"\n   ⏳ Budżet czasu wyczerpany "
+                  f"({elapsed / 3600:.1f} h > "
+                  f"{ENRICH_TIME_BUDGET_SECONDS / 3600:.1f} h) — przerywam po "
+                  f"{i - 1}/{len(survivors)} meczach, pomijam {remaining}.")
+            print("      ↳ przechodzę do zapisu i maila z tym, co już mam")
+            break
+
         home, away = m['home_team'], m['away_team']
         print(f"\n   [{i}/{len(survivors)}] {home} vs {away} "
               f"({m.get('match_time') or '??:??'}, {m.get('league') or 'n/d'})")
@@ -1447,6 +1504,10 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         'forebet_total': len(all_matches),
         'selected': len(selected),
         'processed': len(rows),
+        # Jawny sygnał, że lista jest niepełna z powodu czasu, a nie reguł.
+        # Bez tego niepełny run wyglądałby jak słaby dzień na Forebet.
+        'enrich_budget_exhausted': budget_hit,
+        'not_processed_time': max(0, len(selected) - len(rows)) if budget_hit else 0,
         'qualified': qualified,
         'channel_qualified': sum(1 for r in rows if r.get('channel_qualifies')),
         'with_odds': sum(1 for r in rows if r.get('home_odds') is not None),
