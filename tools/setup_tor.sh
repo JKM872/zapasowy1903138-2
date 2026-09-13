@@ -26,7 +26,11 @@ set -u
 TOR_PORT="${TOR_SOCKS_PORT:-9050}"
 TOR_CONTROL_PORT="${TOR_CONTROL_PORT:-9051}"
 TOR_MAX_ATTEMPTS="${TOR_MAX_ATTEMPTS:-4}"
-XRW="${SOFASCORE_XRW:-61544a}"
+# v10.5 — token X-Requested-With liczony tak jak w bundlu SofaScore:
+#   sha256(floor(unix_seconds / 1800))[:6]   (okno 30-minutowe)
+# Dawna zaszyta wartosc '61544a' byla wazna tylko przez pol godziny.
+# SOFASCORE_XRW nadal moze przypiac wartosc na sztywno (debug).
+XRW="${SOFASCORE_XRW:-$(printf '%s' "$(( $(date +%s) / 1800 ))" | sha256sum | cut -c1-6)}"
 PROBE_URL="${SOFASCORE_PROBE_URL:-https://api.sofascore.com/api/v1/sport/football/scheduled-events/$(date +%Y-%m-%d)}"
 
 echo "🧅 Instaluje Tor..."

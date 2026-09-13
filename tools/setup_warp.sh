@@ -79,11 +79,15 @@ except Exception as e:
 port = os.environ.get("WARP_PROXY_PORT", "1080")
 url = os.environ.get("WARP_PROBE_URL")
 proxies = {"http": f"socks5://localhost:{port}", "https": f"socks5://localhost:{port}"}
-# v10.3: SofaScore wymaga naglowka X-Requested-With (token builda frontendu),
-# inaczej zwraca 403 "challenge" NIEZALEZNIE od IP. Sonda musi go wysylac,
-# zeby poprawnie ocenic czy IP WARP jest czyste (a nie rotowac w kolko na
-# falszywym 403). Wartosc nadpisywalna przez SOFASCORE_XRW.
-xrw = os.environ.get("SOFASCORE_XRW", "").strip() or "61544a"
+# v10.5: token X-Requested-With liczony jak w bundlu SofaScore:
+#   sha256(floor(unix/1800))[:6] — rotuje sie co 30 minut, wiec dawna zaszyta
+# wartosc '61544a' byla wazna tylko przez jedno okno.
+# Sonda MUSI wysylac to samo co scraper, inaczej ocenia czystosc IP na innym
+# sygnale niz rzeczywisty ruch. SOFASCORE_XRW przypina wartosc (debug).
+import hashlib
+import time
+xrw = (os.environ.get("SOFASCORE_XRW", "").strip()
+       or hashlib.sha256(str(int(time.time() // 1800)).encode()).hexdigest()[:6])
 try:
     r = cr.get(url, impersonate="chrome124", proxies=proxies, timeout=15,
                headers={"X-Requested-With": xrw, "Referer": "https://www.sofascore.com/"})

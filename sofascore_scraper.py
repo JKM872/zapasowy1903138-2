@@ -118,21 +118,59 @@ SOFASCORE_SPORT_SLUGS = {
 # (WARP), cookies czy profilu TLS. To byla przyczyna calej serii 403:
 # SofaScore dodal ten check, a scraper go nie wysylal.
 #
-# Token (`61544a`) pochodzi z JS aplikacji i moze sie zmienic przy ich
-# kolejnym deployu frontendu. Gdy znow pojawi sie 403 "challenge":
-#   1. Otworz https://www.sofascore.com, F12 -> Network -> klik dowolny
-#      request do /api/v1/ -> skopiuj wartosc naglowka `X-Requested-With`.
-#   2. Ustaw GitHub Secret SOFASCORE_XRW na ta wartosc (albo podmien default
-#      ponizej). Nie trzeba zmieniac nic wiecej.
-_SOFASCORE_XRW: str = os.getenv('SOFASCORE_XRW', '').strip() or '61544a'
-_xrw_challenge_warned: bool = False  # v10.3 — jednorazowy log gdy token wygasl
+# v10.5 — token NIE jest stala. Odtworzony z bundla frontendu
+# (_next/static/chunks/main-*.js):
+#
+#     function tb(){ let e = Math.floor(Date.now()/1e3/1800);
+#                    ty = yield t_(e.toString());   // t_ = SHA-256 hex
+#                    return ty.substring(0,6) }
+#
+# czyli:  sha256(str(floor(unix_seconds / 1800))).hexdigest()[:6]
+#
+# Token rotuje sie co 30 minut, wiec wpisywanie go na sztywno (dawne
+# '61544a') albo trzymanie w GitHub Secret psuje sie po pol godziny. Dlatego
+# liczymy go lokalnie przy kazdym zapytaniu — zero utrzymania.
+#
+# UWAGA co do 403 "challenge": pomiar z czystego IP pokazal HTTP 200 dla
+# KAZDEJ wartosci tokenu, a nawet przy calkowitym braku naglowka. Token wiec
+# nie jest bramka — 403 w CI bierze sie z reputacji IP (runner GitHub Actions,
+# exity Tora). Wysylamy poprawny token, bo tak robi przegladarka i moze byc
+# egzekwowany w przyszlosci, ale nie liczmy, ze sam naprawi 403.
+_XRW_BUCKET_SECONDS = 1800
+
+
+def _compute_xrw(now: float | None = None) -> str:
+    """Token X-Requested-With dla biezacego 30-minutowego okna."""
+    bucket = int((now if now is not None else time.time()) // _XRW_BUCKET_SECONDS)
+    return hashlib.sha256(str(bucket).encode()).hexdigest()[:6]
+
+
+# Pin przez env tylko do debugowania/awarii — normalnie pusty i liczymy sami.
+_SOFASCORE_XRW_PINNED: str = os.getenv('SOFASCORE_XRW', '').strip()
+
+
+def refresh_xrw() -> str:
+    """Aktualizuje token w API_HEADERS *w miejscu* i zwraca go.
+
+    In-place, bo API_HEADERS jest przekazywany przez referencje (curl_cffi),
+    wiec podmiana wartosci propaguje sie bez ruszania wywolan.
+    """
+    token = _SOFASCORE_XRW_PINNED or _compute_xrw()
+    try:
+        API_HEADERS['X-Requested-With'] = token
+    except NameError:  # przy pierwszym wywolaniu z definicji API_HEADERS
+        pass
+    return token
+
+
+_xrw_challenge_warned: bool = False  # jednorazowy log przy 403 "challenge"
 
 API_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
     'Accept': '*/*',
     'Accept-Language': 'en-US,en;q=0.9,pl;q=0.8',
     'Accept-Encoding': 'gzip, deflate, br',
-    'X-Requested-With': _SOFASCORE_XRW,
+    'X-Requested-With': _SOFASCORE_XRW_PINNED or _compute_xrw(),
     'Origin': 'https://www.sofascore.com',
     'Referer': 'https://www.sofascore.com/',
     'Sec-Ch-Ua': '"Google Chrome";v="136", "Chromium";v="136", "Not_A Brand";v="99"',
@@ -1311,6 +1349,10 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     Returns:
         Response jeśli sukces, None jeśli wszystkie próby zawiodą
     """
+    # v10.5: token rotuje sie co 30 min, a job trwa dluzej — odswiezamy przed
+    # kazdym zapytaniem, inaczej po pol godziny wysylalibysmy przestarzaly.
+    refresh_xrw()
+
     session = _get_api_session()
     if session is None:
         return None
@@ -1392,15 +1434,19 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
                         pass
                     if IS_CI:
                         print(f"   🔎 SofaScore 403 body: {body_preview!r}{srv}")
-                    if 'challenge' in body_preview:
+                    if 'challenge' in body_preview and not _xrw_challenge_warned:
+                        _xrw_challenge_warned = True
+                        # v10.5: NIE zrzucamy tego juz na token. Pomiar z czystego
+                        # IP: HTTP 200 dla dowolnego tokenu i nawet bez naglowka,
+                        # wiec 'challenge' = reputacja IP, nie zla wartosc tokenu.
                         print(
-                            "   🔑 SofaScore: 403 'challenge' — token X-Requested-With "
-                            f"({_SOFASCORE_XRW!r}) prawdopodobnie wygasl po deployu SofaScore. "
-                            "Pobierz nowy: F12 -> Network -> request /api/v1/ -> naglowek "
-                            "'X-Requested-With' i ustaw GitHub Secret SOFASCORE_XRW."
+                            "   🚧 SofaScore: 403 'challenge' — to blokada po IP, "
+                            f"nie po tokenie (wyslany: {API_HEADERS['X-Requested-With']!r}, "
+                            "liczony z 30-min okna). Ustawianie SOFASCORE_XRW tego "
+                            "NIE naprawi. Potrzebne czyste wyjscie: Tor/WARP."
                         )
-                # v10.4: fallback przez WARP proxy — siatka bezpieczenstwa gdyby
-                # IP GHA bylo odfiltrowane. Zwykle niepotrzebne (token wystarcza).
+                # v10.4: fallback przez WARP proxy. Wbrew dawnemu komentarzowi to
+                # NIE jest opcjonalna siatka — przy 403 'challenge' to jedyna droga.
                 proxies = _get_sofascore_proxies()
                 if use_curl and not tried_proxy and proxies is not None:
                     tried_proxy = True
