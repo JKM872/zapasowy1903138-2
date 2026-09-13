@@ -41,7 +41,7 @@ import sys
 import time
 import unicodedata
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple  # noqa: F401
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -321,6 +321,78 @@ def match_livesport_url(home: str, away: str,
         if score > best_score:
             best_score, best_url = score, entry['url']
     return best_url
+
+
+def _url_team_slugs(match_url: str) -> Optional[Tuple[str, str]]:
+    """Wyciągnij (slug_gospodarza, slug_gościa) z URL-a meczu Livesport.
+
+    Format: ``/mecz/<sport>/<gospodarz>-<id>/<gosc>-<id>/`` — kolejność w
+    ścieżce to zawsze gospodarz, potem gość.
+    """
+    if not match_url:
+        return None
+    path = match_url.split('?')[0].rstrip('/')
+    m = re.search(r'/(?:mecz|match)/[^/]+/([^/]+)/([^/]+)$', path)
+    if not m:
+        return None
+    # Ucinamy końcowy identyfikator Livesport (np. "-zqr59Ejs").
+    home = re.sub(r'-[A-Za-z0-9]{6,10}$', '', m.group(1))
+    away = re.sub(r'-[A-Za-z0-9]{6,10}$', '', m.group(2))
+    return home, away
+
+
+def is_livesport_reversed(match_url: str, forebet_home: str,
+                          forebet_away: str) -> Optional[bool]:
+    """Czy Livesport ma drużyny w odwrotnej kolejności niż Forebet?
+
+    To nie jest szczegół. ``LivesportOddsAPI`` zwraca ``home_odds``/``away_odds``
+    względem stron LIVESPORT, a my zapisujemy je do pól względem stron FOREBET.
+    Gdy kolejność jest odwrócona, kurs gospodarza dostaje cenę gościa — a wtedy
+    próg kursowy, EV i sam typ dotyczą złej drużyny.
+
+    Zmierzone na jednym runie: 84 z 191 wycenionych meczów miało odwróconą
+    kolejność, m.in. Forebet „Kristiansand vs Fjellhammer" przy URL-u
+    ``/fjellhammer-.../kristiansand-...``.
+
+    Returns:
+        True = odwrócone, False = zgodne, None = nie da się ustalić.
+    """
+    slugs = _url_team_slugs(match_url)
+    if not slugs:
+        return None
+    slug_home, slug_away = slugs
+
+    def score(slug: str, name: str) -> float:
+        name_tokens = _tokens(name)
+        slug_norm = _strip_accents(slug.lower()).replace('-', ' ')
+        slug_tokens = {t for t in slug_norm.split() if len(t) >= 4}
+        if not name_tokens or not slug_tokens:
+            return 0.0
+        # Jaccard po tokenach + premia za podciąg (nazwy bywają skracane).
+        inter = len(name_tokens & slug_tokens)
+        base = inter / len(name_tokens)
+        bonus = sum(1 for t in name_tokens if t in slug_norm) / len(name_tokens)
+        return base + bonus
+
+    direct = score(slug_home, forebet_home) + score(slug_away, forebet_away)
+    swapped = score(slug_home, forebet_away) + score(slug_away, forebet_home)
+
+    if direct == swapped:
+        return None
+    return swapped > direct
+
+
+def _swap_sides(row: Dict[str, Any]) -> None:
+    """Odwróć wszystko, co jest względne do stron: kursy, formę, H2H."""
+    row['home_odds'], row['away_odds'] = row.get('away_odds'), row.get('home_odds')
+    row['home_form'], row['away_form'] = row.get('away_form'), row.get('home_form')
+    row['home_form_home'], row['away_form_away'] = (
+        row.get('away_form_away'), row.get('home_form_home'))
+    row['home_wins_in_h2h_last5'], row['away_wins_in_h2h_last5'] = (
+        row.get('away_wins_in_h2h_last5'), row.get('home_wins_in_h2h_last5'))
+    for m in (row.get('h2h_last5') or []):
+        if isinstance(m, dict) and m.get('winner') in ('home', 'away'):
+            m['winner'] = 'away' if m['winner'] == 'home' else 'home'
 
 
 def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
@@ -967,6 +1039,21 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         row['odds_source'] = odds.get('odds_source')
         row['bookmaker'] = odds.get('bookmaker')
         row['odds_note'] = odds.get('reason')
+
+        # Livesport bywa listuje mecz z odwróconymi stronami. Kursy, forma i
+        # H2H są względne do stron LIVESPORT, a nasze pola do stron FOREBET —
+        # bez tej korekty kurs gospodarza dostawał cenę gościa.
+        # Kursy z SofaScore są szukane po naszych nazwach, więc ich nie ruszamy.
+        row['sides_reversed'] = False
+        if row.get('match_url') and row.get('odds_source') != 'sofascore':
+            reversed_sides = is_livesport_reversed(row['match_url'], home, away)
+            if reversed_sides:
+                _swap_sides(row)
+                row['sides_reversed'] = True
+                print(f"      🔄 Livesport ma odwrócone strony — zamieniam kursy/formę/H2H "
+                      f"(H={row.get('home_odds')}, A={row.get('away_odds')})")
+            elif reversed_sides is None:
+                print("      ⚠️ Nie mogę ustalić orientacji stron w Livesport")
 
         # Próg kursowy na kursach Pinnacle/Livesport. Brak kursów = skip:
         # bez ceny nie ma EV ani ROI, wiec typ jest nierozliczalny.
