@@ -28,16 +28,41 @@ from typing import List, Optional
 MODELS_ENDPOINT = 'https://api.groq.com/openai/v1/models'
 CHAT_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions'
 
-# Ordered preference. Small/fast models rank high because the in-repo use case
-# is short team-name matching prompts, not long-form reasoning.
+# Ordered preference.
+#
+# Kolejność wynika z LIMITU TOKENÓW NA MINUTĘ, nie z rozmiaru modelu. Prompty
+# w tym repo bywają duże (lista ~150 meczów-kandydatów do dopasowania to
+# 4-5K tokenów), a przy 8K TPM drugie takie wywołanie w tej samej minucie
+# dostaje 429 — i to właśnie było przyczyną ciszy AI, nie limit dzienny.
+#
+# Zmierzone limity konta (2026-09):
+#   groq/compound        30 RPM,  250 RPD, 70K TPM, brak limitu dziennego
+#   groq/compound-mini   30 RPM,  250 RPD, 70K TPM, brak limitu dziennego
+#   openai/gpt-oss-120b  30 RPM,   1K RPD,  8K TPM, 200K TPD
+#   openai/gpt-oss-20b   30 RPM,   1K RPD,  8K TPM, 200K TPD
+#   qwen/qwen3.8-27b     30 RPM,   1K RPD,  8K TPM, 200K TPD
+#   allam-2-7b           30 RPM,   7K RPD,  6K TPM, 500K TPD
+#
+# Dlatego compound (70K TPM) jest pierwszy: mieści duże prompty wielokrotnie
+# w minucie. Modele 8K TPM są dalej jako zapas dla krótkich zapytań.
+#
+# Poprzednia lista (llama-3.3-70b-versatile, llama-3.1-8b-instant, gemma2-9b-it,
+# mistral-saba-24b) była nieaktualna — te modele nie są już oferowane, więc
+# rotacja marnowała próby na nieistniejące ID.
 MODEL_PREFERENCES: List[str] = [
-    'llama-3.3-70b-versatile',
-    'llama-3.1-8b-instant',
+    'groq/compound',
+    'groq/compound-mini',
     'openai/gpt-oss-120b',
     'openai/gpt-oss-20b',
-    'gemma2-9b-it',
-    'mistral-saba-24b',
+    'qwen/qwen3.8-27b',
+    'qwen/qwen3.6-27b',
+    'allam-2-7b',
 ]
+
+# Modele, które nie są modelami czatu — nigdy ich nie wybieramy, nawet gdy
+# konto je widzi. prompt-guard to klasyfikatory bezpieczeństwa, a nie modele
+# generujące odpowiedzi, więc trafiłyby do rotacji tylko po to, by zawieść.
+NON_CHAT_MODEL_MARKERS = ('prompt-guard', 'whisper', 'tts', 'guard')
 
 # Models known to be retired — never select these even if a stale config or
 # cached list mentions them.
@@ -98,7 +123,16 @@ def list_available_models(key: Optional[str] = None, timeout: int = 10) -> List[
         return []
     return [m.get('id') for m in models
             if isinstance(m, dict) and m.get('id')
-            and m.get('id') not in RETIRED_MODELS]
+            and m.get('id') not in RETIRED_MODELS
+            and not is_non_chat_model(m.get('id'))]
+
+
+def is_non_chat_model(model_id: Optional[str]) -> bool:
+    """True dla modeli, które nie odpowiadają na czat (klasyfikatory, audio)."""
+    if not model_id:
+        return True
+    lowered = model_id.lower()
+    return any(marker in lowered for marker in NON_CHAT_MODEL_MARKERS)
 
 
 def resolve_model(key: Optional[str] = None, force: bool = False) -> str:
@@ -160,7 +194,8 @@ def model_candidates(key: Optional[str] = None) -> List[str]:
     for candidate in MODEL_PREFERENCES:
         if candidate not in ordered:
             ordered.append(candidate)
-    return [m for m in ordered if m and m not in RETIRED_MODELS]
+    return [m for m in ordered
+            if m and m not in RETIRED_MODELS and not is_non_chat_model(m)]
 
 
 def is_rate_limited(status_code: int) -> bool:
