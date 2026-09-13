@@ -79,6 +79,19 @@ TWO_WAY_MIN_GAP = 0.0
 # `form_unknown`, żeby dało się policzyć, jak często to się zdarza.
 REQUIRE_FORM_ADVANTAGE = True
 
+# Ile meczów na sport dostaje krótką analizę AI.
+#
+# Limit istnieje, bo analiza konkurowała o ten sam budżet Groq co DOPASOWANIE
+# meczów do Livesport — i wygrywała, bo woła raz na mecz. Przy 60 meczach × 8
+# sportów to blisko 500 zapytań, przy 30 na minutę i 1K na dobę. Skutek widać
+# było w logu: „Groq [groq/compound]: limit (429)" na wszystkich modelach, więc
+# dopasowanie nie dostawało już nic.
+#
+# Priorytet jest jasny: dopasowanie odblokowuje kursy, czyli decyduje, czy mecz
+# w ogóle wejdzie do maila. Analiza AI to jeden z pięciu składników scoringu i
+# jej brak nie zmniejsza liczby źródeł w scoringu — obniża tylko ocenę.
+AI_ANALYSIS_MAX_PER_SPORT = 12
+
 # ── Kursy ──────────────────────────────────────────────────────────────────
 # Pinnacle ma najniższą marżę na rynku, więc jego kurs jest najbliższy
 # prawdziwemu prawdopodobieństwu — dlatego jest źródłem PIERWSZEGO WYBORU dla
@@ -564,6 +577,54 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
     return out
 
 
+def _name_overlap(a: str, b: str) -> float:
+    """Udział wspólnych tokenów w krótszej z nazw (0..1)."""
+    ta, tb = _tokens(a), _tokens(b)
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / min(len(ta), len(tb))
+
+
+def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
+                            min_overlap: float = 0.5) -> Optional[str]:
+    """Sprawdź, czy zdarzenie SofaScore to naprawdę TEN mecz.
+
+    Returns:
+        'direct'   — zgodne strony,
+        'reversed' — ten sam mecz, ale odwrócone strony,
+        None       — to inny mecz (albo nie da się sprawdzić).
+
+    Wymagamy, by ZGADZAŁY SIĘ OBIE drużyny. Jedna trafiona nazwa nie wystarcza:
+    tak właśnie powstawały dopasowania w rodzaju „Aluminij W vs Primorje W" ->
+    „NK Maribor vs NK Aluminij".
+    """
+    try:
+        from sofascore_scraper import get_event_team_ids
+    except Exception:
+        return None
+
+    try:
+        info = get_event_team_ids(event_id) or {}
+    except Exception as e:
+        print(f"      ⚠️ Weryfikacja SofaScore nieudana: {type(e).__name__}: {e}")
+        return None
+
+    ss_home = str(info.get('home_team') or '')
+    ss_away = str(info.get('away_team') or '')
+    if not ss_home or not ss_away:
+        return None
+
+    direct = min(_name_overlap(home_team, ss_home), _name_overlap(away_team, ss_away))
+    reverse = min(_name_overlap(home_team, ss_away), _name_overlap(away_team, ss_home))
+
+    best = max(direct, reverse)
+    if best < min_overlap:
+        print(f"      ⛔ SofaScore zwrócił inny mecz: '{ss_home} vs {ss_away}' "
+              f"(zgodność {best:.2f} < {min_overlap})")
+        return None
+    return 'direct' if direct >= reverse else 'reversed'
+
+
 def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
                            date_str: Optional[str] = None) -> Dict[str, Any]:
     """Kursy z SofaScore — trzecie źródło, szukane po NAZWACH drużyn.
@@ -591,14 +652,32 @@ def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
             out['reason'] = 'sofascore_brak_eventu'
             return out
 
+        # Weryfikacja dopasowania. Wyszukiwarka SofaScore zwraca zdarzenie po
+        # JEDNEJ trafionej nazwie, więc potrafi oddać całkowicie inny mecz:
+        # "ŽNK Mura W vs Koper Obala W" dostawało "ŽNK Mura Nona U13 vs ŠŽNK
+        # Ombla U13", a "Aluminij W vs Primorje W" -> "NK Maribor vs NK
+        # Aluminij". Bez sprawdzenia wzięlibyśmy kurs z innego meczu.
+        verdict = _verify_sofascore_event(event_id, home_team, away_team)
+        if verdict is None:
+            out['reason'] = 'sofascore_zle_dopasowanie'
+            return out
+
         res = get_odds_via_api(event_id) or {}
         if not res.get('odds_found'):
             out['reason'] = 'sofascore_bez_kursow'
             return out
 
-        out['home_odds'] = res.get('home_odds')
+        home_odds = res.get('home_odds')
+        away_odds = res.get('away_odds')
+        if verdict == 'reversed':
+            # SofaScore ma odwrotne strony niż Forebet. Zamieniamy tutaj, bo
+            # późniejsza korekta orientacji dotyczy wyłącznie Livesport.
+            home_odds, away_odds = away_odds, home_odds
+            print("      🔄 SofaScore ma odwrócone strony — zamieniam kursy")
+
+        out['home_odds'] = home_odds
         out['draw_odds'] = res.get('draw_odds')
-        out['away_odds'] = res.get('away_odds')
+        out['away_odds'] = away_odds
         out['bookmaker'] = res.get('bookmaker') or 'SofaScore'
         out['odds_source'] = 'sofascore'
         print(f"      💰 SofaScore ({out['bookmaker']}): {out['home_odds']}/"
@@ -1149,6 +1228,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             print(f"   🔎 Po Groq: {len(url_by_pair)}/{len(survivors)} dopasowanych")
 
     rows: List[Dict[str, Any]] = []
+    ai_analysed = 0
 
     for i, m in enumerate(survivors, 1):
         home, away = m['home_team'], m['away_team']
@@ -1273,12 +1353,22 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             except Exception as e:
                 print(f"      ⚠️ Fan Vote wrapper błąd: {e}")
 
-        # AI — krótka analiza
+        # AI — krótka analiza, tylko dla ograniczonej liczby meczów.
+        # Budżet Groq jest wspólny z dopasowaniem meczów, a dopasowanie jest
+        # ważniejsze: ono decyduje o dostępności kursów.
         if use_ai and not row['skip_reason']:
-            row.update(run_ai_analysis(row))
-            if row.get('gemini_recommendation'):
-                print(f"      🤖 AI: {row['gemini_recommendation']} "
-                      f"({row.get('gemini_confidence')}%)")
+            if ai_analysed < AI_ANALYSIS_MAX_PER_SPORT:
+                row.update(run_ai_analysis(row))
+                ai_analysed += 1
+                if row.get('gemini_recommendation'):
+                    print(f"      🤖 AI: {row['gemini_recommendation']} "
+                          f"({row.get('gemini_confidence')}%)")
+            else:
+                row['ai_skipped_budget'] = True
+                if ai_analysed == AI_ANALYSIS_MAX_PER_SPORT:
+                    print(f"      ℹ️ Limit analiz AI ({AI_ANALYSIS_MAX_PER_SPORT}) "
+                          f"wyczerpany — oszczędzam budżet Groq na dopasowania")
+                    ai_analysed += 1  # komunikat tylko raz
 
         score_row(row)
         apply_qualification(row, min_score, min_sources)
