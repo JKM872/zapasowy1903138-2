@@ -1,0 +1,327 @@
+{
+  "meta": {
+    "generated_at": "2026-09-14T18:14:05.147319+02:00",
+    "target_date": "2026-09-14",
+    "filter": {
+      "min_odds": 1.6,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 4,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 4
+    },
+    "elapsed_seconds": 62.4,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International Clubs - EHF Champions League",
+      "match_url": "https://www.oddssafari.com/matches/handball/ehf-champions-league/gog-vs-pick-szeged/2321392?MarketTypeID=601",
+      "match_id": "2321392",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "GOG",
+      "away_team": "Pick Szeged",
+      "event_date": "16/09",
+      "event_time": "16:45",
+      "outcome": "1",
+      "open_odds": 5.0,
+      "current_odds": 3.62,
+      "drop_pct": 28.0,
+      "max_odds": 3.85,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Denmark - Herre Handbold Ligaen",
+      "match_url": "https://www.oddssafari.com/matches/handball/denmark/herre-handbold-ligaen/ringsted-vs-mors-thy/2323959?MarketTypeID=601",
+      "match_id": "2323959",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Ringsted",
+      "away_team": "Mors-Thy",
+      "event_date": "19/09",
+      "event_time": "13:00",
+      "outcome": "1",
+      "open_odds": 4.0,
+      "current_odds": 3.04,
+      "drop_pct": 24.0,
+      "max_odds": 3.15,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Denmark - Herre Handbold Ligaen",
+      "match_url": "https://www.oddssafari.com/matches/handball/denmark/herre-handbold-ligaen/ribe-esbjerg-vs-bjerringbro-silkeborg/2323909?MarketTypeID=601",
+      "match_id": "2323909",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Ribe Esbjerg",
+      "away_team": "Bjerringbro-Silkeborg",
+      "event_date": "17/09",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 3.0,
+      "current_odds": 2.36,
+      "drop_pct": 21.0,
+      "max_odds": 2.42,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "D",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "D",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "D",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "D",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16524485,
+        "sofascore_home_team_id": 74013,
+        "sofascore_away_team_id": 4087,
+        "home_team": "Ribe Esbjerg",
+        "away_team": "Bjerringbro-Silkeborg",
+        "sport": "handball",
+        "league": "Denmark - Herre Handbold Ligaen",
+        "match_time": "18:00",
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "07.08.26",
+            "home": "Bjerringbro-Silkeborg",
+            "away": "Ribe-Esbjerg HH",
+            "score": "31:34",
+            "winner": "away"
+          },
+          {
+            "date": "09.12.25",
+            "home": "Bjerringbro-Silkeborg",
+            "away": "Ribe-Esbjerg HH",
+            "score": "36:27",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "07.08.26",
+        "last_h2h_score": "31:34",
+        "last_h2h_home": "Bjerringbro-Silkeborg",
+        "last_h2h_away": "Ribe-Esbjerg HH",
+        "sofascore_home_win_prob": 40,
+        "sofascore_draw_prob": 7,
+        "sofascore_away_win_prob": 53,
+        "sofascore_total_votes": 15
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "International Clubs - EHF Champions League",
+      "match_url": "https://www.oddssafari.com/matches/handball/ehf-champions-league/gog-vs-pick-szeged/2321392?MarketTypeID=601",
+      "match_id": "2321392",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "GOG",
+      "away_team": "Pick Szeged",
+      "event_date": "16/09",
+      "event_time": "16:45",
+      "outcome": "X",
+      "open_odds": 11.0,
+      "current_odds": 9.27,
+      "drop_pct": 16.0,
+      "max_odds": 10.75,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "X",
+      "focus_team": "draw",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Denmark - Herre Handbold Ligaen",
+      "match_url": "https://www.oddssafari.com/matches/handball/denmark/herre-handbold-ligaen/ribe-esbjerg-vs-bjerringbro-silkeborg/2323909?MarketTypeID=601",
+      "match_id": "2323909",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Ribe Esbjerg",
+      "away_team": "Bjerringbro-Silkeborg",
+      "event_date": "17/09",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 3.0,
+      "current_odds": 2.36,
+      "drop_pct": 21.0,
+      "max_odds": 2.42,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "D",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "D",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "D",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "D",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16524485,
+        "sofascore_home_team_id": 74013,
+        "sofascore_away_team_id": 4087,
+        "home_team": "Ribe Esbjerg",
+        "away_team": "Bjerringbro-Silkeborg",
+        "sport": "handball",
+        "league": "Denmark - Herre Handbold Ligaen",
+        "match_time": "18:00",
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "07.08.26",
+            "home": "Bjerringbro-Silkeborg",
+            "away": "Ribe-Esbjerg HH",
+            "score": "31:34",
+            "winner": "away"
+          },
+          {
+            "date": "09.12.25",
+            "home": "Bjerringbro-Silkeborg",
+            "away": "Ribe-Esbjerg HH",
+            "score": "36:27",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "07.08.26",
+        "last_h2h_score": "31:34",
+        "last_h2h_home": "Bjerringbro-Silkeborg",
+        "last_h2h_away": "Ribe-Esbjerg HH",
+        "sofascore_home_win_prob": 40,
+        "sofascore_draw_prob": 7,
+        "sofascore_away_win_prob": 53,
+        "sofascore_total_votes": 15
+      },
+      "enrichment_error": null
+    }
+  ]
+}
