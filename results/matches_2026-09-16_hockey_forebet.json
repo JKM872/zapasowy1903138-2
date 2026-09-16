@@ -1,0 +1,4609 @@
+{
+  "date": "2026-09-16",
+  "sport": "hockey",
+  "source": "forebet",
+  "generatedAt": "2026-09-16T09:19:19.089376+00:00",
+  "matches": [
+    {
+      "homeTeam": "Torpedo",
+      "awayTeam": "Kulager",
+      "time": "1:30",
+      "league": "KZ1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kazzinc-torpedo-O4OFe0rO/kulager-MBVvIzk3/?mid=bgbyhXXO",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/championship/torpedo-kulager/381925",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu",
+        "score_53.6<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 63.0,
+        "homeProb": 63,
+        "drawProb": null,
+        "awayProb": 37,
+        "exactScore": "4-2",
+        "avgGoals": 5.9,
+        "favorite": "home",
+        "gap": 26
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "12.04.26",
+        "lastScore": "1-3"
+      },
+      "form": {
+        "home": [
+          "D",
+          "L",
+          "D",
+          "L",
+          "W"
+        ],
+        "away": [
+          "D",
+          "D",
+          "D",
+          "W",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "D",
+          "D",
+          "L",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.48,
+        "draw": 4.5,
+        "away": 4.4,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 53.6,
+        "ev": -0.206,
+        "edge": -13.9,
+        "sources": 4,
+        "components": {
+          "forebet": 0.63,
+          "h2h": 0.4,
+          "form": 0.433,
+          "odds": 0.676
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -13.968,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Magnitogorsk",
+      "awayTeam": "Spartak Moscow",
+      "time": "2:00",
+      "league": "RU1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/magnitogorsk-QcJ1rpaL/sp-moscow-vkRSHRYi/?mid=2irnylDt",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/khl/magnitogorsk-spartak-moscow/374456",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_48.4<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 57.0,
+        "homeProb": 57,
+        "drawProb": null,
+        "awayProb": 43,
+        "exactScore": "5-3",
+        "avgGoals": 5.7,
+        "favorite": "home",
+        "gap": 14
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "05.10.25",
+        "lastScore": "2-6"
+      },
+      "form": {
+        "home": [
+          "D",
+          "D",
+          "D",
+          "W",
+          "D"
+        ],
+        "away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "D"
+        ],
+        "homeAtHome": [
+          "D",
+          "W",
+          "D",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "W",
+          "D",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 438,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.85,
+        "draw": 4.2,
+        "away": 3.5,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 48.4,
+        "ev": -0.105,
+        "edge": -5.7,
+        "sources": 5,
+        "components": {
+          "forebet": 0.57,
+          "h2h": 0.2,
+          "form": 0.4,
+          "sofascore": 0.78,
+          "odds": 0.541
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": -5.654,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Pavlodar",
+      "awayTeam": "Gornyak Rudny",
+      "time": "2:00",
+      "league": "KZ1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/gornyak-rudny-GWnXnLuH/pavlodar-YgqLMzUs/?mid=Qu0Tgg3C",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/championship/pavlodar-gornyak-rudny/381926",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu",
+        "score_51.9<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 73.0,
+        "homeProb": 27,
+        "drawProb": null,
+        "awayProb": 73,
+        "exactScore": "3-5",
+        "avgGoals": 7.8,
+        "favorite": "away",
+        "gap": 46
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "17.08.26",
+        "lastScore": "8-2"
+      },
+      "form": {
+        "home": [
+          "D",
+          "D",
+          "L",
+          "D",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "D",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "D",
+          "W",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "D",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.03,
+        "draw": 10.0,
+        "away": 20.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 51.9,
+        "ev": 9.377,
+        "edge": 46.9,
+        "sources": 4,
+        "components": {
+          "forebet": 0.73,
+          "h2h": 0.6,
+          "form": 0.333,
+          "odds": 0.05
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": -45.187,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Beibarys Atyrau",
+      "awayTeam": "Kokshetau",
+      "time": "2:00",
+      "league": "KZ1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/arlan-kokshetau-KG2E5laq/beibarys-atyrau-lOPcNztU/?mid=KrcLeFYa",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/championship/beibarys-atyrau-kokshetau/381927",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 77.0,
+        "homeProb": 23,
+        "drawProb": null,
+        "awayProb": 77,
+        "exactScore": "1-3",
+        "avgGoals": 4.6,
+        "favorite": "away",
+        "gap": 54
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "15.09.26",
+        "lastScore": "1-3"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "W",
+          "D",
+          "W"
+        ],
+        "away": [
+          "L",
+          "W",
+          "W",
+          "D",
+          "L"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "D",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 33,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.7,
+        "draw": 4.2,
+        "away": 3.45,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Beibarys Atyrau should edge Kokshetau at home, leveraging their excellent home form (8.0/10) and strong overall rating (8.7/10) despite a poor recent H2H record.",
+        "confidence": 68,
+        "recommendation": "MEDIUM",
+        "reasoning": "Kokshetau dominates the recent head‑to‑head (4 wins vs 1) and enjoys a 77% away‑win probability from Forebet, but those signals clash with the venue‑specific data where Beibarys scores an 8.0/10 at home while Kokshetau manages only 0.7/10 away. Beibarys’ overall form (8.7/10) is markedly higher than Kokshetau’s (4.7/10), and the bookmaker odds (1.7 for home vs 3.45 for away) also favor the home side. The fan vote (82% for Kokshetau) suggests public bias toward the visitors, yet the quantitative home advantage and recent performance tilt the balance toward Atyrau. Overall risk is moderate due to the contradictory H2H and model predictions."
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 64.1,
+        "ev": 1.213,
+        "edge": 35.2,
+        "sources": 5,
+        "components": {
+          "forebet": 0.77,
+          "h2h": 0.8,
+          "form": 0.3,
+          "sofascore": 0.82,
+          "odds": 0.29
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 5.276,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Almaty",
+      "awayTeam": "Karaganda",
+      "time": "2:30",
+      "league": "KZ1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/almaty-A5gcqlK7/saryarka-karaganda-8xxP0iar/?mid=CIgDcy4m",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/championship/almaty-karaganda/381928",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 73.0,
+        "homeProb": 27,
+        "drawProb": null,
+        "awayProb": 73,
+        "exactScore": "2-4",
+        "avgGoals": 5.9,
+        "favorite": "away",
+        "gap": 46
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 0,
+        "awayWins": 5,
+        "lastDate": "20.01.26",
+        "lastScore": "4-5"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "D",
+          "W",
+          "L"
+        ],
+        "away": [
+          "D",
+          "W",
+          "W",
+          "W",
+          "D"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "L",
+          "D",
+          "L"
+        ],
+        "awayAtAway": [
+          "D",
+          "D",
+          "L",
+          "D",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 10.0,
+        "draw": 6.5,
+        "away": 1.16,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 81.8,
+        "ev": -0.051,
+        "edge": -4.4,
+        "sources": 4,
+        "components": {
+          "forebet": 0.73,
+          "h2h": 1.0,
+          "form": 0.733,
+          "odds": 0.862
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 71.8,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Kremenchuk",
+      "awayTeam": "Dnipro Kherson",
+      "time": "2:30",
+      "league": "UaC",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/dnipro-kherson-SWAdbPbL/kremenchuk-xYKSB9DI/?mid=YsVpRi2N",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/ukrainian-cup/kremenchuk-dnipro-kherson/383956",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 85.0,
+        "homeProb": 85,
+        "drawProb": null,
+        "awayProb": 15,
+        "exactScore": "7-1",
+        "avgGoals": 7.3,
+        "favorite": "home",
+        "gap": 70
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "25.09.25",
+        "lastScore": "0-7"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 75.0,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.85,
+          "h2h": 0.8,
+          "form": 0.5
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Lokomotiv Orsha",
+      "awayTeam": "Soligorsk",
+      "time": "2:55",
+      "league": "EXL",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/lokomotiv-orsha-SboRsSFC/soligorsk-rocS3hSt/?mid=IkLWVsh2",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraleague/lokomotiv-orsha-soligorsk/383539",
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
+      "forebet": {
+        "prediction": "2",
+        "probability": 66.0,
+        "homeProb": 34,
+        "drawProb": null,
+        "awayProb": 66,
+        "exactScore": "2-3",
+        "avgGoals": 5.1,
+        "favorite": "away",
+        "gap": 32
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "24.12.25",
+        "lastScore": "2-3"
+      },
+      "form": {
+        "home": [
+          "D",
+          "W",
+          "L",
+          "D",
+          "L"
+        ],
+        "away": [
+          "W",
+          "W",
+          "D",
+          "W",
+          "D"
+        ],
+        "homeAtHome": [
+          "D",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "D",
+          "D",
+          "W",
+          "D",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 51,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 3.65,
+        "draw": 4.3,
+        "away": 1.65,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 62.3,
+        "ev": 0.028,
+        "edge": 1.7,
+        "sources": 5,
+        "components": {
+          "forebet": 0.66,
+          "h2h": 0.4,
+          "form": 0.7,
+          "sofascore": 0.8,
+          "odds": 0.606
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 34.903,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "K-Vantaa",
+      "awayTeam": "Kiekko-Pojat",
+      "time": "3:30",
+      "league": "FI2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/k-vantaa-A5vJriqG/kiekko-pojat-2VitoZqi/?mid=lSOWPGQh",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/mestis/k-vantaa-kiekko-pojat/373949",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_52.0<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 61.0,
+        "homeProb": 61,
+        "drawProb": null,
+        "awayProb": 39,
+        "exactScore": "4-3",
+        "avgGoals": 5.9,
+        "favorite": "home",
+        "gap": 22
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "04.09.26",
+        "lastScore": "1-4"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "L",
+          "D",
+          "L"
+        ],
+        "away": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "W",
+          "D",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 42,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.85,
+        "draw": 4.1,
+        "away": 2.95,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 52.0,
+        "ev": -0.039,
+        "edge": -2.1,
+        "sources": 5,
+        "components": {
+          "forebet": 0.61,
+          "h2h": 0.2,
+          "form": 0.5,
+          "sofascore": 0.81,
+          "odds": 0.541
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": -2.054,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "IFK Helsinki",
+      "awayTeam": "Jukurit",
+      "time": "3:30",
+      "league": "FI1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ifk-helsinki-Ige43GcN/jukurit-vmuCbWr3/?mid=zJZe4tcD",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/liiga/ifk-helsinki-jukurit/376767",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_48.0<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 58.0,
+        "homeProb": 58,
+        "drawProb": null,
+        "awayProb": 42,
+        "exactScore": "2-1",
+        "avgGoals": 4.2,
+        "favorite": "home",
+        "gap": 16
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "09.09.26",
+        "lastScore": "3-1"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "L",
+          "L",
+          "D",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 204,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.58,
+        "draw": 4.5,
+        "away": 4.5,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 48.0,
+        "ev": -0.241,
+        "edge": -15.3,
+        "sources": 5,
+        "components": {
+          "forebet": 0.58,
+          "h2h": 0.2,
+          "form": 0.4,
+          "sofascore": 0.65,
+          "odds": 0.633
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": -15.291,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Karpat",
+      "awayTeam": "Ilves",
+      "time": "3:30",
+      "league": "FI1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ilves-Oh5uGzDT/karpat-fPJxL2x2/?mid=rwSCMNCs",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/liiga/karpat-ilves/376768",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_52.5<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 57.0,
+        "homeProb": 43,
+        "drawProb": null,
+        "awayProb": 57,
+        "exactScore": "2-3",
+        "avgGoals": 5.5,
+        "favorite": "away",
+        "gap": 14
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "26.08.26",
+        "lastScore": "2-0"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "D"
+        ],
+        "away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "W",
+          "D",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "D",
+          "D",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 192,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.45,
+        "draw": 3.9,
+        "away": 2.45,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 52.5,
+        "ev": 0.287,
+        "edge": 11.7,
+        "sources": 5,
+        "components": {
+          "forebet": 0.57,
+          "h2h": 0.6,
+          "form": 0.3,
+          "sofascore": 0.69,
+          "odds": 0.408
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 11.684,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Ceske Budejovice",
+      "awayTeam": "Mlada Boleslav",
+      "time": "3:30",
+      "league": "CEX",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/czeskie-budziejowice-UTfYWeKA/mlada-boleslav-YeGlkuUb/?mid=AFnjk8aB",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraliga-cz/ceske-budejovice-mlada-boleslav/377758",
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
+      "forebet": {
+        "prediction": "1",
+        "probability": 61.0,
+        "homeProb": 61,
+        "drawProb": null,
+        "awayProb": 39,
+        "exactScore": "4-1",
+        "avgGoals": 5.1,
+        "favorite": "home",
+        "gap": 22
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "01.03.26",
+        "lastScore": "3-0"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away": [
+          "L",
+          "L",
+          "W",
+          "D",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "W",
+          "D",
+          "W"
+        ],
+        "awayAtAway": [
+          "W",
+          "D",
+          "D",
+          "W",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 99,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.9,
+        "draw": 4.0,
+        "away": 3.2,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 64.8,
+        "ev": 0.231,
+        "edge": 12.2,
+        "sources": 5,
+        "components": {
+          "forebet": 0.61,
+          "h2h": 0.6,
+          "form": 0.633,
+          "sofascore": 0.94,
+          "odds": 0.526
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 12.168,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Litvinov",
+      "awayTeam": "Kometa Brno",
+      "time": "3:30",
+      "league": "CEX",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kometa-brno-AusK09zk/litvinov-rgfiJkOs/?mid=8tNOjLzG",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraliga-cz/litvinov-kometa-brno/377762",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_46.8<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 58.0,
+        "homeProb": 58,
+        "drawProb": null,
+        "awayProb": 42,
+        "exactScore": "3-2",
+        "avgGoals": 5.2,
+        "favorite": "home",
+        "gap": 16
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "09.01.26",
+        "lastScore": "7-2"
+      },
+      "form": {
+        "home": [
+          "L",
+          "D",
+          "D",
+          "L",
+          "W"
+        ],
+        "away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "homeAtHome": [
+          "D",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 100,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.3,
+        "draw": 4.1,
+        "away": 2.5,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 46.8,
+        "ev": 0.077,
+        "edge": 3.4,
+        "sources": 5,
+        "components": {
+          "forebet": 0.58,
+          "h2h": 0.2,
+          "form": 0.467,
+          "sofascore": 0.65,
+          "odds": 0.435
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 3.322,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Almetyevsk",
+      "awayTeam": "Olympia",
+      "time": "3:30",
+      "league": "RU2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/almetyevsk-OjLH0pat/olympia-vhl-pnCj1vQn/?mid=tSl6tNkK",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/vhl/almetyevsk-olympia/382299",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 70.0,
+        "homeProb": 70,
+        "drawProb": null,
+        "awayProb": 30,
+        "exactScore": "4-1",
+        "avgGoals": 5.1,
+        "favorite": "home",
+        "gap": 40
+      },
+      "h2h": {
+        "total": 4,
+        "homeWins": 2,
+        "awayWins": 2,
+        "lastDate": "13.02.26",
+        "lastScore": "3-4"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "D",
+          "D",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "D",
+          "L",
+          "W",
+          "D",
+          "D"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "D",
+          "D",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.45,
+        "draw": 4.7,
+        "away": 5.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 66.1,
+        "ev": -0.041,
+        "edge": -2.8,
+        "sources": 4,
+        "components": {
+          "forebet": 0.7,
+          "h2h": 0.5,
+          "form": 0.767,
+          "odds": 0.69
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 4,
+        "consensus_strength": "weak",
+        "market_model_gap": -2.866,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "MHC Spartak MAH",
+      "awayTeam": "SKA-Akademiya",
+      "time": "3:30",
+      "league": "RU4",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/mhc-spartak-mah-mhl-v9ClqKEr/ska-akademiya-mhl-n9QPhwWh/?mid=616jW2jA",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/mhl/mhc-spartak-mah-ska-akademiya/383253",
+      "qualifies": true,
+      "channelQualifies": false,
+      "emailQualifies": true,
+      "skipReasons": [],
+      "forebet": {
+        "prediction": "2",
+        "probability": 60.0,
+        "homeProb": 40,
+        "drawProb": null,
+        "awayProb": 60,
+        "exactScore": "2-3",
+        "avgGoals": 5.2,
+        "favorite": "away",
+        "gap": 20
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "15.09.26",
+        "lastScore": "1-3"
+      },
+      "form": {
+        "home": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "D"
+        ],
+        "away": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "D"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "L",
+          "D",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": false,
+        "votes": 0,
+        "unavailable": false,
+        "skipReason": "no_vote"
+      },
+      "odds": {
+        "home": 1.8,
+        "draw": 4.2,
+        "away": 3.25,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 55.2,
+        "ev": 0.795,
+        "edge": 24.5,
+        "sources": 4,
+        "components": {
+          "forebet": 0.6,
+          "h2h": 0.6,
+          "form": 0.567,
+          "odds": 0.308
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": -0.356,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Skalica",
+      "awayTeam": "Trnava",
+      "time": "3:30",
+      "league": "SK2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/skalica-0MQvXxfF/trnava-YeavWiY8/?mid=67JLiAjn",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/1-liga/skalica-trnava/383255",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 76.0,
+        "homeProb": 76,
+        "drawProb": null,
+        "awayProb": 24,
+        "exactScore": "6-2",
+        "avgGoals": 7.4,
+        "favorite": "home",
+        "gap": 52
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "16.01.26",
+        "lastScore": "4-2"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "L",
+          "D",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 33,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.5,
+        "draw": 4.5,
+        "away": 4.3,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 59.4,
+        "ev": -0.109,
+        "edge": -7.3,
+        "sources": 5,
+        "components": {
+          "forebet": 0.76,
+          "h2h": 0.4,
+          "form": 0.2,
+          "sofascore": 0.94,
+          "odds": 0.667
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": -7.267,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Martin",
+      "awayTeam": "Dubnica",
+      "time": "3:30",
+      "league": "SK2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/martin-UmRF9eXe/spartak-dubnica-dY16usoc/?mid=jkh2i1d3",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/1-liga/martin-dubnica/383256",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 68.0,
+        "homeProb": 68,
+        "drawProb": null,
+        "awayProb": 32,
+        "exactScore": "5-2",
+        "avgGoals": 6.8,
+        "favorite": "home",
+        "gap": 36
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "23.01.26",
+        "lastScore": "4-1"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "W",
+          "W",
+          "W",
+          "D",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "L",
+          "D",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 37,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.2,
+        "draw": 4.0,
+        "away": 2.45,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 65.7,
+        "ev": 0.444,
+        "edge": 20.2,
+        "sources": 5,
+        "components": {
+          "forebet": 0.68,
+          "h2h": 0.8,
+          "form": 0.367,
+          "sofascore": 0.92,
+          "odds": 0.455
+        }
+      },
+      "predictionGrade": "A",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 20.245,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Mogilev",
+      "awayTeam": "Yunost Minsk",
+      "time": "3:30",
+      "league": "EXL",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/mogilev-OYagKE4J/yunost-minsk-WYaSKhRh/?mid=AcNHgop9",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraleague/mogilev-yunost-minsk/383540",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_52.1<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 66.0,
+        "homeProb": 34,
+        "drawProb": null,
+        "awayProb": 66,
+        "exactScore": "2-4",
+        "avgGoals": 5.8,
+        "favorite": "away",
+        "gap": 32
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "01.03.26",
+        "lastScore": "2-5"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "D"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "D"
+        ],
+        "awayAtAway": [
+          "D",
+          "L",
+          "L",
+          "D",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 46,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.65,
+        "draw": 4.2,
+        "away": 2.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 52.1,
+        "ev": 0.042,
+        "edge": 2.1,
+        "sources": 5,
+        "components": {
+          "forebet": 0.66,
+          "h2h": 0.4,
+          "form": 0.267,
+          "sofascore": 0.72,
+          "odds": 0.5
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 14.364,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Pardubice",
+      "awayTeam": "Mountfield HK",
+      "time": "4:00",
+      "league": "CEX",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/mountfield-hk-xdNp4YNk/pardubice-UDlHJ9wl/?mid=GY4Hhs63",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraliga-cz/pardubice-mountfield-hk/377763",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_50.8<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "homeProb": 65,
+        "drawProb": null,
+        "awayProb": 35,
+        "exactScore": "3-2",
+        "avgGoals": 5.3,
+        "favorite": "home",
+        "gap": 30
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "09.01.26",
+        "lastScore": "4-3"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 224,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 4.5,
+        "draw": 4.7,
+        "away": 1.53,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 50.8,
+        "ev": 1.284,
+        "edge": 28.5,
+        "sources": 5,
+        "components": {
+          "forebet": 0.65,
+          "h2h": 0.2,
+          "form": 0.5,
+          "sofascore": 0.9,
+          "odds": 0.222
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 28.578,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Olomouc",
+      "awayTeam": "Sparta Prague",
+      "time": "4:00",
+      "league": "CEX",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/olomouc-zVrB6irF/sparta-praha-zcG9U7N6/?mid=CxC2qwTk",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraliga-cz/olomouc-sparta-prague/377764",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_48.8<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 74.0,
+        "homeProb": 74,
+        "drawProb": null,
+        "awayProb": 26,
+        "exactScore": "4-3",
+        "avgGoals": 6.3,
+        "favorite": "home",
+        "gap": 48
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "26.01.26",
+        "lastScore": "6-3"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away": [
+          "D",
+          "W",
+          "D",
+          "W",
+          "W"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "W",
+          "D",
+          "W"
+        ],
+        "awayAtAway": [
+          "D",
+          "W",
+          "D",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 151,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 4.1,
+        "draw": 4.5,
+        "away": 1.6,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 48.8,
+        "ev": 1.002,
+        "edge": 24.4,
+        "sources": 5,
+        "components": {
+          "forebet": 0.74,
+          "h2h": 0.6,
+          "form": 0.333,
+          "sofascore": 0.11,
+          "odds": 0.244
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 24.41,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "SKA-VMF St. Petersburg",
+      "awayTeam": "Magnitka Magnitogorsk",
+      "time": "4:00",
+      "league": "RU2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/magnitka-magnitogorsk-SUbQa1o3/ska-vmf-st-petersburg-vhl-UmOPbOTh/?mid=rewpZvrf",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/vhl/ska-vmf-st-petersburg-magnitka-magnitogorsk/382301",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_38.5<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 56.0,
+        "homeProb": 44,
+        "drawProb": null,
+        "awayProb": 56,
+        "exactScore": "2-4",
+        "avgGoals": 5.8,
+        "favorite": "away",
+        "gap": 12
+      },
+      "h2h": {
+        "total": 4,
+        "homeWins": 4,
+        "awayWins": 0,
+        "lastDate": "09.02.26",
+        "lastScore": "0-3"
+      },
+      "form": {
+        "home": [
+          "W",
+          "D",
+          "D",
+          "L",
+          "L"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "D",
+          "W"
+        ],
+        "homeAtHome": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "D",
+          "L",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 39,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.9,
+        "draw": 3.75,
+        "away": 2.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 38.5,
+        "ev": -0.23,
+        "edge": -11.5,
+        "sources": 5,
+        "components": {
+          "forebet": 0.56,
+          "h2h": 0.0,
+          "form": 0.467,
+          "sofascore": 0.36,
+          "odds": 0.5
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 4,
+        "consensus_strength": "weak",
+        "market_model_gap": 4.017,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "HC 19 Humenne",
+      "awayTeam": "HK Detva",
+      "time": "4:00",
+      "league": "SK2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/hc-19-humenne-MXvpP2Xo/hk-detva-rDLpq3ZP/?mid=Ioc8VJZq",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/1-liga/hc-19-humenne-hk-detva/383257",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 83.0,
+        "homeProb": 83,
+        "drawProb": null,
+        "awayProb": 17,
+        "exactScore": "5-2",
+        "avgGoals": 7.0,
+        "favorite": "home",
+        "gap": 66
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "23.01.26",
+        "lastScore": "5-4"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "D"
+        ],
+        "away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.28,
+        "draw": 5.25,
+        "away": 6.75,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 66.5,
+        "ev": -0.149,
+        "edge": -11.6,
+        "sources": 4,
+        "components": {
+          "forebet": 0.83,
+          "h2h": 0.4,
+          "form": 0.6,
+          "odds": 0.781
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -11.625,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Nove Zamky",
+      "awayTeam": "Topolcany",
+      "time": "4:00",
+      "league": "SK2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/nove-zamky-bH2j7Ei8/topolcany-KOPy8lt2/?mid=nazylSkB",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/1-liga/nove-zamky-topolcany/383258",
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "homeProb": 65,
+        "drawProb": null,
+        "awayProb": 35,
+        "exactScore": "4-3",
+        "avgGoals": 7.1,
+        "favorite": "home",
+        "gap": 30
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "28.01.26",
+        "lastScore": "6-1"
+      },
+      "form": {
+        "home": [
+          "D",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "homeAtHome": [
+          "D",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "D",
+          "L",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 22,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.0,
+        "draw": 4.2,
+        "away": 2.7,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 62.9,
+        "ev": 0.258,
+        "edge": 12.9,
+        "sources": 5,
+        "components": {
+          "forebet": 0.65,
+          "h2h": 0.6,
+          "form": 0.6,
+          "sofascore": 0.77,
+          "odds": 0.5
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 12.9,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Ziar nad Hronom",
+      "awayTeam": "Povazska Bystrica",
+      "time": "4:00",
+      "league": "SK2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/pov-bystrica-p6XOAjdq/ziar-nad-hronom-pSuWxLaf/?mid=vZWSklLb",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/1-liga/ziar-nad-hronom-povazska-bystrica/383259",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu",
+        "score_40.6<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 72.0,
+        "homeProb": 72,
+        "drawProb": null,
+        "awayProb": 28,
+        "exactScore": "4-2",
+        "avgGoals": 6.2,
+        "favorite": "home",
+        "gap": 44
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "13.02.26",
+        "lastScore": "1-2"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 5.0,
+        "draw": 4.8,
+        "away": 1.4,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 40.6,
+        "ev": 1.028,
+        "edge": 20.6,
+        "sources": 4,
+        "components": {
+          "forebet": 0.72,
+          "h2h": 0.2,
+          "form": 0.2,
+          "odds": 0.2
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 20.6,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Milevsko",
+      "awayTeam": "Pribram",
+      "time": "4:00",
+      "league": "WCF",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/milevsko-8fCTpA6g/przybram-dtGt83Su/?mid=EPdQJSo9",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/club-friendly/milevsko-pribram/383271",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_48.8<55.0"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 58.0,
+        "homeProb": 42,
+        "drawProb": null,
+        "awayProb": 58,
+        "exactScore": "3-6",
+        "avgGoals": 7.4,
+        "favorite": "away",
+        "gap": 16
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "25.08.26",
+        "lastScore": "7-5"
+      },
+      "form": {
+        "home": [
+          "L",
+          "D",
+          "D",
+          "L",
+          "L"
+        ],
+        "away": [
+          "D",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 48.8,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.58,
+          "h2h": 0.2,
+          "form": 0.667
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Baranavichy",
+      "awayTeam": "Slavutych",
+      "time": "4:00",
+      "league": "EXL",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/aviator-baranavichy-69rhh7G5/slavutych-smolensk-vhl-Uuo43O7S/?mid=nHkkiuB4",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraleague/baranavichy-slavutych/383541",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu",
+        "score_51.4<55.0"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 58.0,
+        "homeProb": 42,
+        "drawProb": null,
+        "awayProb": 58,
+        "exactScore": "3-4",
+        "avgGoals": 6.8,
+        "favorite": "away",
+        "gap": 16
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "17.12.25",
+        "lastScore": "4-3"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "L",
+          "L",
+          "D",
+          "W",
+          "D"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "D"
+        ],
+        "awayAtAway": [
+          "W",
+          "D",
+          "D",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 4.4,
+        "draw": 4.7,
+        "away": 1.48,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 51.4,
+        "ev": -0.239,
+        "edge": -16.1,
+        "sources": 4,
+        "components": {
+          "forebet": 0.58,
+          "h2h": 0.2,
+          "form": 0.667,
+          "odds": 0.676
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 28.673,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Vitebsk",
+      "awayTeam": "Novopolotsk",
+      "time": "4:00",
+      "league": "EXL",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/novopolotsk-2PbcJYJP/vitebsk-WfejbXs0/?mid=INQPiPEL",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/extraleague/vitebsk-novopolotsk/383542",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu",
+        "score_52.5<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 66.0,
+        "homeProb": 66,
+        "drawProb": null,
+        "awayProb": 34,
+        "exactScore": "4-2",
+        "avgGoals": 5.3,
+        "favorite": "home",
+        "gap": 32
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "11.08.26",
+        "lastScore": "3-2"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "L",
+          "D",
+          "W"
+        ],
+        "away": [
+          "W",
+          "D",
+          "D",
+          "D",
+          "D"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "W",
+          "D",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "D",
+          "D",
+          "W",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 5.25,
+        "draw": 4.7,
+        "away": 1.4,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 52.5,
+        "ev": 1.755,
+        "edge": 33.4,
+        "sources": 4,
+        "components": {
+          "forebet": 0.66,
+          "h2h": 0.6,
+          "form": 0.4,
+          "odds": 0.19
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 33.452,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Kyiv Capitals",
+      "awayTeam": "Punks Vilnius",
+      "time": "4:15",
+      "league": "LV1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kyiv-capitals-zFWjMVLQ/punks-vilnius-hUMYAVkd/?mid=boz5vcZO",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/optibet-hokeja-liga/kyiv-capitals-punks-vilnius/383538",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 75.0,
+        "homeProb": 75,
+        "drawProb": null,
+        "awayProb": 25,
+        "exactScore": "7-3",
+        "avgGoals": 9.2,
+        "favorite": "home",
+        "gap": 50
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "21.02.26",
+        "lastScore": "10-3"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "D"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.08,
+        "draw": 8.5,
+        "away": 14.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 71.2,
+        "ev": -0.231,
+        "edge": -21.4,
+        "sources": 4,
+        "components": {
+          "forebet": 0.75,
+          "h2h": 0.6,
+          "form": 0.633,
+          "odds": 0.926
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -21.393,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Sochi",
+      "awayTeam": "CSKA Moscow",
+      "time": "4:30",
+      "league": "RU1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/cska-moscow-pGuexlkn/soczi-zu1IGfCr/?mid=nu8xHpSO",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/khl/sochi-cska-moscow/374459",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 66.0,
+        "homeProb": 34,
+        "drawProb": null,
+        "awayProb": 66,
+        "exactScore": "2-3",
+        "avgGoals": 4.7,
+        "favorite": "away",
+        "gap": 32
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "11.03.26",
+        "lastScore": "1-2"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 367,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.55,
+        "draw": 4.6,
+        "away": 5.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 56.3,
+        "ev": 1.816,
+        "edge": 36.3,
+        "sources": 5,
+        "components": {
+          "forebet": 0.66,
+          "h2h": 0.6,
+          "form": 0.3,
+          "sofascore": 0.92,
+          "odds": 0.2
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": -8.216,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "TEBS Bratislava",
+      "awayTeam": "HK Levice",
+      "time": "4:30",
+      "league": "SK2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/levice-jsD6BqmM/tebs-bratislava-OrgXtg2t/?mid=QB0GTc4d",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/1-liga/tebs-bratislava-hk-levice/383260",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_52.1<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 63.0,
+        "homeProb": 37,
+        "drawProb": null,
+        "awayProb": 63,
+        "exactScore": "3-4",
+        "avgGoals": 6.9,
+        "favorite": "away",
+        "gap": 26
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "20.02.26",
+        "lastScore": "9-3"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "D",
+          "D",
+          "L"
+        ],
+        "away": [
+          "L",
+          "L",
+          "D",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "L",
+          "D",
+          "L",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 28,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.35,
+        "draw": 4.3,
+        "away": 2.2,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 52.1,
+        "ev": 0.145,
+        "edge": 6.6,
+        "sources": 5,
+        "components": {
+          "forebet": 0.63,
+          "h2h": 0.4,
+          "form": 0.467,
+          "sofascore": 0.57,
+          "odds": 0.455
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 9.547,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Maribor",
+      "awayTeam": "Triglav",
+      "time": "4:30",
+      "league": "SKL",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/maribor-xhzfmsB4/triglav-kranj-ldy3DLS4/?mid=hKTNK9Dr",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/hokejska-liga/maribor-triglav/383267",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_50.2<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 58.0,
+        "homeProb": 58,
+        "drawProb": null,
+        "awayProb": 42,
+        "exactScore": "4-2",
+        "avgGoals": 6.8,
+        "favorite": "home",
+        "gap": 16
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "27.09.25",
+        "lastScore": "11-2"
+      },
+      "form": {
+        "home": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "D",
+          "W",
+          "D",
+          "D",
+          "W"
+        ],
+        "homeAtHome": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "D",
+          "D",
+          "W",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_brak_eventu",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 50.2,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.58,
+          "h2h": 0.6,
+          "form": 0.233
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Vaxjo U20",
+      "awayTeam": "Malmo U20",
+      "time": "5:00",
+      "league": "SEU",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/malmo-MozoUXmm/vaxjo-tWpdgjhq/?mid=xWyx7Nvo",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/superelit-u20/vaxjo-u20-malmo-u20/374169",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_41.4<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 59.0,
+        "homeProb": 59,
+        "drawProb": null,
+        "awayProb": 41,
+        "exactScore": "5-2",
+        "avgGoals": 6.6,
+        "favorite": "home",
+        "gap": 18
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "28.08.26",
+        "lastScore": "2-1"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "D"
+        ],
+        "away": [
+          "W",
+          "D",
+          "L",
+          "W",
+          "W"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "D"
+        ],
+        "awayAtAway": [
+          "W",
+          "D",
+          "L",
+          "W",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 10,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 3.05,
+        "draw": 4.3,
+        "away": 1.83,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 41.4,
+        "ev": 0.263,
+        "edge": 8.6,
+        "sources": 5,
+        "components": {
+          "forebet": 0.59,
+          "h2h": 0.4,
+          "form": 0.4,
+          "sofascore": 0.1,
+          "odds": 0.328
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 8.613,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Frölunda W",
+      "awayTeam": "Brynas W",
+      "time": "5:00",
+      "league": "SEW",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/brynas-OIWm2Yxt/frolunda-6izO5QfD/?mid=CnaJMMp3",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/sdhl-women/frölunda-w-brynas-w/377583",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_40.1<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 65.0,
+        "homeProb": 35,
+        "drawProb": null,
+        "awayProb": 65,
+        "exactScore": "1-2",
+        "avgGoals": 3.7,
+        "favorite": "away",
+        "gap": 30
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "27.03.26",
+        "lastScore": "6-2"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 15,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.4,
+        "draw": 3.9,
+        "away": 2.25,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 40.1,
+        "ev": -0.099,
+        "edge": -4.4,
+        "sources": 5,
+        "components": {
+          "forebet": 0.65,
+          "h2h": 0.2,
+          "form": 0.2,
+          "sofascore": 0.33,
+          "odds": 0.444
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -1.567,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Valerenga",
+      "awayTeam": "Stavanger",
+      "time": "5:00",
+      "league": "NO1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/stavanger-AJ64KC5t/valerenga-rHMTGU45/?mid=EHz20WeS",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/fjordkraft-ligaen/valerenga-stavanger/378122",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_49.1<55.0"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 61.0,
+        "homeProb": 61,
+        "drawProb": null,
+        "awayProb": 39,
+        "exactScore": "4-2",
+        "avgGoals": 5.9,
+        "favorite": "home",
+        "gap": 22
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "14.02.26",
+        "lastScore": "1-2"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "D",
+          "L",
+          "W",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": true,
+        "votes": 101,
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.5,
+        "draw": 4.1,
+        "away": 2.15,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 49.1,
+        "ev": 0.227,
+        "edge": 9.1,
+        "sources": 5,
+        "components": {
+          "forebet": 0.61,
+          "h2h": 0.2,
+          "form": 0.667,
+          "sofascore": 0.51,
+          "odds": 0.4
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 9.1,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Enkoping",
+      "awayTeam": "Norrtalje",
+      "time": "5:00",
+      "league": "WCF",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/enkoping-4IpRUsW2/norrtalje-ik-KC0gNkC2/?mid=fTNzrUKt",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/club-friendly/enkoping-norrtalje/383272",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_38.8<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 58.0,
+        "homeProb": 42,
+        "drawProb": null,
+        "awayProb": 58,
+        "exactScore": "3-4",
+        "avgGoals": 6.0,
+        "favorite": "away",
+        "gap": 16
+      },
+      "h2h": {
+        "total": 3,
+        "homeWins": 3,
+        "awayWins": 0,
+        "lastDate": "03.09.26",
+        "lastScore": "3-1"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "D"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_zle_dopasowanie",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 38.8,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.58,
+          "h2h": 0.0,
+          "form": 0.5
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 3,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Halmstad",
+      "awayTeam": "Tyringe",
+      "time": "5:00",
+      "league": "WCF",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/halmstad-djtRxGO4/tyringe-INJWlRTD/?mid=KfFwpHjR",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/club-friendly/halmstad-tyringe/383273",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 90.0,
+        "homeProb": 90,
+        "drawProb": null,
+        "awayProb": 10,
+        "exactScore": "3-2",
+        "avgGoals": 4.4,
+        "favorite": "home",
+        "gap": 80
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "30.11.25",
+        "lastScore": "7-1"
+      },
+      "form": {
+        "home": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 73.8,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.9,
+          "h2h": 0.6,
+          "form": 0.6
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Mjolby",
+      "awayTeam": "Lindloven",
+      "time": "5:00",
+      "league": "WCF",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/lindloven-bVbyNwgk/mjolby-SS1XPvet/?mid=jw69veEl",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/club-friendly/mjolby-lindloven/383274",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_53.0<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 78.0,
+        "homeProb": 22,
+        "drawProb": null,
+        "awayProb": 78,
+        "exactScore": "2-4",
+        "avgGoals": 4.2,
+        "favorite": "away",
+        "gap": 56
+      },
+      "h2h": {
+        "total": 4,
+        "homeWins": 3,
+        "awayWins": 1,
+        "lastDate": "07.12.24",
+        "lastScore": "4-2"
+      },
+      "form": {
+        "home": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "D",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "D",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "D",
+          "W",
+          "D",
+          "W",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_brak_eventu",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 53.0,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.78,
+          "h2h": 0.25,
+          "form": 0.4
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 4,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Morrums GoIS",
+      "awayTeam": "Kristianstad",
+      "time": "5:00",
+      "league": "WCF",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kristianstad-niaZJEgU/morrums-gois-ERjMwd9b/?mid=dz9HxZr1",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/club-friendly/morrums-gois-kristianstad/383275",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 67.0,
+        "homeProb": 33,
+        "drawProb": null,
+        "awayProb": 67,
+        "exactScore": "1-3",
+        "avgGoals": 4.1,
+        "favorite": "away",
+        "gap": 34
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 3,
+        "lastDate": "06.12.23",
+        "lastScore": "2-4"
+      },
+      "form": {
+        "home": [
+          "L",
+          "D",
+          "L",
+          "W",
+          "D"
+        ],
+        "away": [
+          "D",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "homeAtHome": [
+          "D",
+          "D",
+          "D",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_zle_dopasowanie",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 60.0,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.67,
+          "h2h": 0.6,
+          "form": 0.467
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Sollentuna",
+      "awayTeam": "Arlanda",
+      "time": "5:00",
+      "league": "WCF",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/arlanda-pn1mKyw8/sollentuna-pWovn1vC/?mid=Um7PzDDD",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/club-friendly/sollentuna-arlanda/383276",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu",
+        "score_45.0<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 82.0,
+        "homeProb": 82,
+        "drawProb": null,
+        "awayProb": 18,
+        "exactScore": "6-3",
+        "avgGoals": 9.0,
+        "favorite": "home",
+        "gap": 64
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "01.03.26",
+        "lastScore": "1-5"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "W",
+          "D",
+          "L"
+        ],
+        "away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "D",
+          "L",
+          "D"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 5.5,
+        "draw": 5.75,
+        "away": 1.28,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 45.0,
+        "ev": 1.473,
+        "edge": 26.8,
+        "sources": 4,
+        "components": {
+          "forebet": 0.82,
+          "h2h": 0.2,
+          "form": 0.233,
+          "odds": 0.182
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.8,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 26.818,
+        "skip_reason": null
+      }
+    },
+    {
+      "homeTeam": "Neuwied",
+      "awayTeam": "Fuchse Duisburg",
+      "time": "6:00",
+      "league": "DEN",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ehc-neuwied-lvH4bNIQ/fuchse-duisburg-jTtWLDyf/?mid=O6McqhWQ",
+      "forebetUrl": "https://www.forebet.com/en/hockey/matches/oberliga-north/neuwied-fuchse-duisburg/371159",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_42.0<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 59.0,
+        "homeProb": 41,
+        "drawProb": null,
+        "awayProb": 59,
+        "exactScore": "3-6",
+        "avgGoals": 6.8,
+        "favorite": "away",
+        "gap": 18
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "04.03.16",
+        "lastScore": "13-4"
+      },
+      "form": {
+        "home": [
+          "D",
+          "W",
+          "W",
+          "L",
+          "D"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "D",
+          "W"
+        ],
+        "homeAtHome": [
+          "D",
+          "W",
+          "D",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "D",
+          "L",
+          "W",
+          "D"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 42.0,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.59,
+          "h2h": 0.2,
+          "form": 0.367
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    }
+  ]
+}
