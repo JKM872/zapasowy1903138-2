@@ -2359,11 +2359,26 @@ def get_event_team_ids(event_id: int) -> Optional[Dict[str, Any]]:
     away = event.get('awayTeam') or {}
     if not home.get('id') and not away.get('id'):
         return None
+    # v10.6: oddajemy takze termin zdarzenia. Bez niego wywolujacy moze
+    # potwierdzic tylko NAZWY druzyn — a to nie wystarcza przy dwumeczach
+    # (CAF, eliminacje), gdzie ta sama para gra dwa razy i obie nazwy zgadzaja
+    # sie idealnie dla NIEWLASCIWEGO meczu.
+    start_ts = event.get('startTimestamp')
+    start_date = None
+    if isinstance(start_ts, (int, float)):
+        try:
+            start_date = datetime.fromtimestamp(
+                start_ts, timezone.utc).strftime('%Y-%m-%d')
+        except (OSError, OverflowError, ValueError):
+            start_date = None
+
     return {
         'home_team_id': home.get('id'),
         'away_team_id': away.get('id'),
         'home_team': home.get('name'),
         'away_team': away.get('name'),
+        'start_timestamp': start_ts,
+        'start_date': start_date,
     }
 
 
