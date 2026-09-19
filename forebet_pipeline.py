@@ -645,16 +645,41 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
     return out
 
 
+def _short_tokens(name: str) -> Set[str]:
+    """Jak ``_tokens``, ale dopuszcza tokeny 2–3 znakowe.
+
+    Osobna funkcja, bo ``_tokens`` (próg 4 znaków) służy też dopasowaniu do
+    URL-i Livesport, gdzie krótkie tokeny rodzą fałszywe trafienia. Tutaj
+    używamy jej tylko jako zapasu dla nazw, które inaczej dają pustkę.
+    """
+    clean = _strip_accents((name or '').lower())
+    clean = re.sub(r'[^a-z0-9\s-]', ' ', clean)
+    parts = re.split(r'[\s-]+', clean)
+    return {p for p in parts if len(p) >= 2 and p not in _GENERIC_TOKENS}
+
+
 def _name_overlap(a: str, b: str) -> float:
-    """Udział wspólnych tokenów w krótszej z nazw (0..1)."""
+    """Udział wspólnych tokenów w krótszej z nazw (0..1).
+
+    Zapas dla krótkich nazw: ``_tokens`` wymaga tokenów ≥4 znaków, więc
+    „KVZ", „Lyn" czy „AIK" dawały PUSTY zbiór, a funkcja zwracała 0.0 nawet
+    dla nazw identycznych. Weryfikacja SofaScore odrzucała wtedy poprawne
+    dopasowania: w runie z 13.09 „Lyn W vs Brann W" dostało prawidłowe
+    „SK Brann Kvinner vs Lyn" (odwrócone strony) i poszło do kosza ze
+    „zgodność 0.00". To samo trafiało „KVZ FC".
+    """
     ta, tb = _tokens(a), _tokens(b)
+    if not ta or not tb:
+        ta, tb = _short_tokens(a), _short_tokens(b)
     if not ta or not tb:
         return 0.0
     return len(ta & tb) / min(len(ta), len(tb))
 
 
 def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
-                            min_overlap: float = 0.5) -> Optional[str]:
+                            date_str: Optional[str] = None,
+                            min_overlap: float = 0.5,
+                            max_days_off: int = 1) -> Optional[str]:
     """Sprawdź, czy zdarzenie SofaScore to naprawdę TEN mecz.
 
     Returns:
@@ -665,6 +690,16 @@ def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
     Wymagamy, by ZGADZAŁY SIĘ OBIE drużyny. Jedna trafiona nazwa nie wystarcza:
     tak właśnie powstawały dopasowania w rodzaju „Aluminij W vs Primorje W" ->
     „NK Maribor vs NK Aluminij".
+
+    Sprawdzamy TAKŻE termin. Same nazwy nie wystarczają przy dwumeczach — w
+    CAF Champions League i Confederations Cup ta sama para gra dwa razy, więc
+    wyszukiwarka potrafi oddać rewanż z idealną zgodnością nazw (1.00), a my
+    wzięlibyśmy kurs z niewłaściwego meczu. Cena wyglądałaby wiarygodnie, więc
+    nic by tego nie wyłapało.
+
+    ``max_days_off`` = 1, bo data Forebet jest lokalna, a SofaScore podaje UTC:
+    mecz o 1:00 bywa opisany dniem wcześniejszym. Rewanże są od siebie
+    odległe o tydzień, więc tolerancja jednego dnia ich nie przepuszcza.
     """
     try:
         from sofascore_scraper import get_event_team_ids
@@ -690,6 +725,22 @@ def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
         print(f"      ⛔ SofaScore zwrócił inny mecz: '{ss_home} vs {ss_away}' "
               f"(zgodność {best:.2f} < {min_overlap})")
         return None
+
+    # Kontrola terminu — łapie rewanże, których nazwy nie odróżniają.
+    ss_date = info.get('start_date')
+    if date_str and ss_date:
+        try:
+            want = datetime.strptime(date_str, '%Y-%m-%d').date()
+            got = datetime.strptime(ss_date, '%Y-%m-%d').date()
+            days_off = abs((got - want).days)
+        except (TypeError, ValueError):
+            days_off = None
+        if days_off is not None and days_off > max_days_off:
+            print(f"      ⛔ SofaScore: zgodne nazwy, ale INNY termin "
+                  f"({ss_date} vs oczekiwany {date_str}, różnica {days_off} dni)"
+                  f" — prawdopodobnie rewanż, odrzucam")
+            return None
+
     return 'direct' if direct >= reverse else 'reversed'
 
 
@@ -725,7 +776,8 @@ def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
         # "ŽNK Mura W vs Koper Obala W" dostawało "ŽNK Mura Nona U13 vs ŠŽNK
         # Ombla U13", a "Aluminij W vs Primorje W" -> "NK Maribor vs NK
         # Aluminij". Bez sprawdzenia wzięlibyśmy kurs z innego meczu.
-        verdict = _verify_sofascore_event(event_id, home_team, away_team)
+        verdict = _verify_sofascore_event(event_id, home_team, away_team,
+                                          date_str=date_str)
         if verdict is None:
             out['reason'] = 'sofascore_zle_dopasowanie'
             return out
