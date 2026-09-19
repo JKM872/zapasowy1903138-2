@@ -2,7 +2,7 @@
   "date": "2026-09-19",
   "sport": "handball",
   "source": "forebet",
-  "generatedAt": "2026-09-19T06:29:23.386264+00:00",
+  "generatedAt": "2026-09-19T09:50:53.286093+00:00",
   "matches": [
     {
       "homeTeam": "Donbas Mariupol",
@@ -197,7 +197,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_zle_dopasowanie",
         "forebet": {
           "home": null,
           "draw": null,
@@ -485,7 +485,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_47.8<55.0"
+        "score_47.5<55.0"
       ],
       "forebet": {
         "prediction": "1",
@@ -537,14 +537,14 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 23,
+        "votes": 26,
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.4,
-        "draw": 8.5,
-        "away": 1.75,
+        "home": 2.45,
+        "draw": 8.0,
+        "away": 1.7,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -562,16 +562,16 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 47.8,
-        "ev": 0.146,
-        "edge": 6.1,
+        "prob": 47.5,
+        "ev": 0.164,
+        "edge": 6.7,
         "sources": 5,
         "components": {
           "forebet": 0.54,
           "h2h": 0.2,
           "form": 0.567,
-          "sofascore": 0.7,
-          "odds": 0.417
+          "sofascore": 0.69,
+          "odds": 0.408
         }
       },
       "predictionGrade": "B",
@@ -586,7 +586,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 6.133,
+        "market_model_gap": 6.684,
         "skip_reason": null
       }
     },
@@ -1352,14 +1352,14 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 9,
+        "votes": 15,
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.15,
-        "draw": 8.0,
-        "away": 1.95,
+        "home": 2.2,
+        "draw": 7.0,
+        "away": 1.9,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -1377,16 +1377,16 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 64.6,
-        "ev": 0.39,
-        "edge": 18.1,
+        "prob": 65.8,
+        "ev": 0.447,
+        "edge": 20.3,
         "sources": 5,
         "components": {
           "forebet": 0.71,
           "h2h": 0.6,
           "form": 0.6,
-          "sofascore": 0.78,
-          "odds": 0.465
+          "sofascore": 0.87,
+          "odds": 0.455
         }
       },
       "predictionGrade": "A",
@@ -1401,7 +1401,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 18.088,
+        "market_model_gap": 20.345,
         "skip_reason": null
       }
     },
@@ -1765,8 +1765,8 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "score_46.6<55.0",
+        "kurs_ponizej_progu",
+        "score_42.6<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -1824,12 +1824,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
+        "home": 5.5,
+        "draw": 10.0,
+        "away": 1.2,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -1844,30 +1844,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 46.6,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 42.6,
+        "ev": 1.345,
+        "edge": 24.4,
+        "sources": 4,
         "components": {
           "forebet": 0.52,
           "h2h": 0.6,
-          "form": 0.2
+          "form": 0.2,
+          "odds": 0.182
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": 24.418,
+        "skip_reason": null
       }
     },
     {
@@ -1884,7 +1885,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_46.6<55.0"
+        "score_45.7<55.0"
       ],
       "forebet": {
         "prediction": "2",
@@ -1941,9 +1942,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.35,
+        "home": 1.23,
         "draw": 9.0,
-        "away": 3.8,
+        "away": 5.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -1961,15 +1962,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 46.6,
-        "ev": 0.772,
-        "edge": 20.3,
+        "prob": 45.7,
+        "ev": 1.287,
+        "edge": 25.7,
         "sources": 4,
         "components": {
           "forebet": 0.51,
           "h2h": 0.4,
           "form": 0.6,
-          "odds": 0.263
+          "odds": 0.2
         }
       },
       "predictionGrade": "D",
@@ -1984,7 +1985,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -27.474,
+        "market_model_gap": -35.601,
         "skip_reason": null
       }
     },
@@ -2230,7 +2231,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -2287,12 +2288,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_zle_dopasowanie",
+        "home": 1.16,
+        "draw": 12.0,
+        "away": 6.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -2307,30 +2308,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 68.1,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 70.6,
+        "ev": -0.181,
+        "edge": -15.6,
+        "sources": 4,
         "components": {
           "forebet": 0.84,
           "h2h": 0.5,
-          "form": 0.6
+          "form": 0.6,
+          "odds": 0.862
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -15.607,
+        "skip_reason": null
       }
     },
     {
@@ -2462,7 +2464,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -2519,12 +2521,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "home": 1.14,
+        "draw": 11.0,
+        "away": 7.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -2539,30 +2541,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 68.3,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 71.0,
+        "ev": -0.191,
+        "edge": -16.7,
+        "sources": 4,
         "components": {
           "forebet": 0.78,
           "h2h": 0.6,
-          "form": 0.6
+          "form": 0.6,
+          "odds": 0.877
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -16.719,
+        "skip_reason": null
       }
     },
     {
@@ -2638,7 +2641,7 @@
       "odds": {
         "home": 1.2,
         "draw": 11.0,
-        "away": 5.25,
+        "away": 5.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2696,7 +2699,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -2753,12 +2756,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
+        "home": 1.35,
+        "draw": 8.0,
+        "away": 3.75,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -2773,30 +2776,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 66.0,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 67.1,
+        "ev": -0.094,
+        "edge": -7.0,
+        "sources": 4,
         "components": {
           "forebet": 0.73,
           "h2h": 0.6,
-          "form": 0.6
+          "form": 0.6,
+          "odds": 0.741
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -6.974,
+        "skip_reason": null
       }
     },
     {
@@ -3386,7 +3390,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -3443,12 +3447,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
+        "home": 1.0,
+        "draw": 25.0,
+        "away": 25.0,
+        "source": "livesport",
+        "bookmaker": "Nordicbet",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -3464,8 +3468,8 @@
       "scoring": {
         "pick": "1",
         "prob": 58.3,
-        "ev": null,
-        "edge": null,
+        "ev": -0.417,
+        "edge": 58.3,
         "sources": 3,
         "components": {
           "forebet": 0.58,
@@ -4063,7 +4067,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_41.9<55.0"
+        "score_41.6<55.0"
       ],
       "forebet": {
         "prediction": "1",
@@ -4115,14 +4119,14 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 65,
+        "votes": 85,
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 1.68,
+        "home": 1.65,
         "draw": 7.75,
-        "away": 2.55,
+        "away": 2.65,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -4140,16 +4144,16 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 41.9,
-        "ev": -0.296,
-        "edge": -17.6,
+        "prob": 41.6,
+        "ev": -0.313,
+        "edge": -19.0,
         "sources": 5,
         "components": {
           "forebet": 0.53,
           "h2h": 0.0,
           "form": 0.667,
-          "sofascore": 0.34,
-          "odds": 0.595
+          "sofascore": 0.31,
+          "odds": 0.606
         }
       },
       "predictionGrade": "C",
@@ -4164,7 +4168,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -17.624,
+        "market_model_gap": -19.006,
         "skip_reason": null
       }
     },
@@ -5704,9 +5708,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.07,
+        "home": 1.06,
         "draw": 16.0,
-        "away": 9.5,
+        "away": 10.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -5724,15 +5728,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 65.7,
-        "ev": -0.297,
-        "edge": -27.7,
+        "prob": 65.8,
+        "ev": -0.302,
+        "edge": -28.5,
         "sources": 4,
         "components": {
           "forebet": 0.65,
           "h2h": 0.4,
           "form": 0.8,
-          "odds": 0.935
+          "odds": 0.943
         }
       },
       "predictionGrade": "C",
@@ -5747,7 +5751,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -27.758,
+        "market_model_gap": -28.54,
         "skip_reason": null
       }
     },
@@ -5884,7 +5888,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_53.2<55.0",
+        "score_53.3<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -5942,9 +5946,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.16,
-        "draw": 11.0,
-        "away": 5.75,
+        "home": 1.2,
+        "draw": 10.0,
+        "away": 5.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -5962,15 +5966,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 53.2,
-        "ev": 2.059,
-        "edge": 35.8,
+        "prob": 53.3,
+        "ev": 1.932,
+        "edge": 35.1,
         "sources": 4,
         "components": {
           "forebet": 0.59,
           "h2h": 0.8,
           "form": 0.333,
-          "odds": 0.174
+          "odds": 0.182
         }
       },
       "predictionGrade": "D",
@@ -5985,7 +5989,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -33.007,
+        "market_model_gap": -30.033,
         "skip_reason": null
       }
     },
@@ -6170,14 +6174,14 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 7,
+        "votes": 9,
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 1.85,
+        "home": 1.8,
         "draw": 7.5,
-        "away": 2.25,
+        "away": 2.3,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -6195,16 +6199,16 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 56.5,
-        "ev": 0.272,
-        "edge": 12.1,
+        "prob": 57.4,
+        "ev": 0.32,
+        "edge": 13.9,
         "sources": 5,
         "components": {
           "forebet": 0.56,
           "h2h": 0.6,
           "form": 0.5,
-          "sofascore": 0.71,
-          "odds": 0.444
+          "sofascore": 0.78,
+          "odds": 0.435
         }
       },
       "predictionGrade": "C",
@@ -6219,7 +6223,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 2.446,
+        "market_model_gap": 1.844,
         "skip_reason": null
       }
     },
@@ -6403,7 +6407,7 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 29,
+        "votes": 37,
         "unavailable": false,
         "skipReason": null
       },
@@ -6428,15 +6432,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 66.3,
-        "ev": 0.081,
-        "edge": 5.0,
+        "prob": 65.5,
+        "ev": 0.067,
+        "edge": 4.1,
         "sources": 5,
         "components": {
           "forebet": 0.55,
           "h2h": 0.8,
           "form": 0.667,
-          "sofascore": 0.76,
+          "sofascore": 0.7,
           "odds": 0.613
         }
       },
@@ -6452,7 +6456,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 28.564,
+        "market_model_gap": 27.764,
         "skip_reason": null
       }
     },
@@ -6469,7 +6473,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_47.1<55.0"
+        "score_46.8<55.0"
       ],
       "forebet": {
         "prediction": "2",
@@ -6521,14 +6525,14 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 20,
+        "votes": 33,
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.45,
-        "draw": 8.0,
-        "away": 1.7,
+        "home": 2.5,
+        "draw": 8.5,
+        "away": 1.68,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -6539,23 +6543,23 @@
         }
       },
       "ai": {
-        "prediction": "Runar is predicted to secure an away victory, leveraging their superior recent form and stronger away performance against a struggling Follo side, despite the historical head-to-head dominance of the home team.",
-        "confidence": 70,
-        "recommendation": "MEDIUM",
-        "reasoning": "Follo holds a perfect 100% home H2H win rate against Runar, having won all 5 of their last meetings, which is a significant historical pattern. However, Runar exhibits significantly better overall form (8.0/10 vs Follo's 6.0/10) and superior away performance (6.0/10) compared to Follo's exceptionally poor home form (2.0/10). Bookmakers strongly favor Runar with odds of 1.7, contrasting Follo's 2.45, and Forebet predicts a 51% away win. Furthermore, 85% of fans polled also anticipate an away win, indicating strong market and public sentiment aligning with Runar's current strength."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "2",
-        "prob": 47.1,
-        "ev": -0.199,
-        "edge": -11.7,
+        "prob": 46.8,
+        "ev": -0.214,
+        "edge": -12.8,
         "sources": 5,
         "components": {
           "forebet": 0.51,
           "h2h": 0.0,
           "form": 0.6,
-          "sofascore": 0.85,
-          "odds": 0.588
+          "sofascore": 0.82,
+          "odds": 0.595
         }
       },
       "predictionGrade": "C",
@@ -6570,7 +6574,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 6.284,
+        "market_model_gap": 6.8,
         "skip_reason": null
       }
     },
@@ -6991,13 +6995,13 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 17,
+        "votes": 25,
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
         "home": 1.58,
-        "draw": 8.5,
+        "draw": 8.0,
         "away": 2.7,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -7016,15 +7020,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 65.5,
-        "ev": 0.035,
-        "edge": 2.2,
+        "prob": 66.5,
+        "ev": 0.051,
+        "edge": 3.2,
         "sources": 5,
         "components": {
           "forebet": 0.63,
           "h2h": 1.0,
           "form": 0.3,
-          "sofascore": 0.65,
+          "sofascore": 0.72,
           "odds": 0.633
         }
       },
@@ -7040,7 +7044,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 2.209,
+        "market_model_gap": 3.209,
         "skip_reason": null
       }
     },
@@ -7157,6 +7161,124 @@
         "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Multi Esens",
+      "awayTeam": "Eurofarm Pelister 2",
+      "time": "2:30",
+      "league": "MK1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/eurofarm-pelister-2LlgsSFm/rk-multi-esens-424wayAS/?mid=hM2iojQa",
+      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/multi-esens-eurofarm-pelister-2/187970",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_52.8<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 56.0,
+        "homeProb": 41,
+        "drawProb": 3,
+        "awayProb": 56,
+        "exactScore": "24-31",
+        "avgGoals": 53.0,
+        "favorite": "away",
+        "gap": 15
+      },
+      "h2h": {
+        "total": 3,
+        "homeWins": 0,
+        "awayWins": 2,
+        "lastDate": "27.04.24",
+        "lastScore": "30-21"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "W",
+          "W",
+          "D",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 52.8,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.56,
+          "h2h": 0.667,
+          "form": 0.3
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 3,
         "consensus_strength": "none",
         "market_model_gap": null,
         "skip_reason": "no_odds"
@@ -8097,6 +8219,122 @@
       }
     },
     {
+      "homeTeam": "Butel Skopje",
+      "awayTeam": "Ohrid",
+      "time": "3:00",
+      "league": "MK1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/butel-skopje-8Oa01Lv7/ohrid-WrdN2B8B/?mid=4O8KWjB6",
+      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/butel-skopje-ohrid/187971",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 74.0,
+        "homeProb": 22,
+        "drawProb": 4,
+        "awayProb": 74,
+        "exactScore": "22-31",
+        "avgGoals": 53.4,
+        "favorite": "away",
+        "gap": 52
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "28.04.26",
+        "lastScore": "31-26"
+      },
+      "form": {
+        "home": [
+          "L",
+          "D",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "W",
+          "D",
+          "W",
+          "W",
+          "W"
+        ],
+        "homeAtHome": [
+          "D",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 67.8,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.74,
+          "h2h": 0.4,
+          "form": 0.9
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
       "homeTeam": "Atl. Valladolid",
       "awayTeam": "Villa de Aranda",
       "time": "3:00",
@@ -8634,7 +8872,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_47.7<55.0",
+        "score_47.9<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -8693,8 +8931,8 @@
       },
       "odds": {
         "home": 1.07,
-        "draw": 14.0,
-        "away": 11.0,
+        "draw": 15.0,
+        "away": 9.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -8712,15 +8950,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 47.7,
-        "ev": 4.243,
-        "edge": 38.6,
+        "prob": 47.9,
+        "ev": 3.547,
+        "edge": 37.3,
         "sources": 4,
         "components": {
           "forebet": 0.65,
           "h2h": 0.4,
           "form": 0.5,
-          "odds": 0.091
+          "odds": 0.105
         }
       },
       "predictionGrade": "D",
@@ -8735,7 +8973,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -45.758,
+        "market_model_gap": -45.558,
         "skip_reason": null
       }
     },
@@ -10132,7 +10370,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_48.9<55.0",
+        "score_49.4<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -10185,7 +10423,7 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 15,
+        "votes": 21,
         "unavailable": false,
         "skipReason": null
       },
@@ -10210,15 +10448,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 48.9,
-        "ev": -0.07,
-        "edge": -3.7,
+        "prob": 49.4,
+        "ev": -0.062,
+        "edge": -3.3,
         "sources": 5,
         "components": {
           "forebet": 0.5,
           "h2h": 0.4,
           "form": 0.367,
-          "sofascore": 0.73,
+          "sofascore": 0.76,
           "odds": 0.526
         }
       },
@@ -10234,126 +10472,8 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": -3.732,
+        "market_model_gap": -3.232,
         "skip_reason": null
-      }
-    },
-    {
-      "homeTeam": "A.S.E. Douka",
-      "awayTeam": "Aris",
-      "time": "3:00",
-      "league": "GR1",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/a-s-e-douka-zNjoW4Re/aris-2eIuojIF/?mid=xOHvh1NH",
-      "forebetUrl": "https://www.forebet.com/en/handball/matches/a1/ase-douka-aris/191445",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "score_38.2<55.0",
-        "forma_gorsza_od_przeciwnika"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 49.0,
-        "homeProb": 47,
-        "drawProb": 4,
-        "awayProb": 49,
-        "exactScore": "26-27",
-        "avgGoals": 49.1,
-        "favorite": "away",
-        "gap": 2
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 1,
-        "lastDate": "21.11.21",
-        "lastScore": "21-21"
-      },
-      "form": {
-        "home": [
-          "L",
-          "L",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "L",
-          "W",
-          "W",
-          "L"
-        ],
-        "homeAtHome": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "awayAtAway": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "W"
-        ]
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_zle_dopasowanie",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 38.2,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
-        "components": {
-          "forebet": 0.49,
-          "h2h": 0.2,
-          "form": 0.4
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
       }
     },
     {
@@ -10873,7 +10993,7 @@
       },
       "odds": {
         "home": 1.2,
-        "draw": 12.0,
+        "draw": 11.0,
         "away": 5.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -11404,10 +11524,10 @@
         }
       },
       "ai": {
-        "prediction": "Kuwait is likely to win, driven by their superior recent form and dominant head‑to‑head record over Iran.",
+        "prediction": "Kuwait is likely to win this match given their strong recent form and historical advantage over Iran. Kuwait's 6.7/10 recent form and 50% Forebet prediction for an away win support this prediction.",
         "confidence": 70,
         "recommendation": "MEDIUM",
-        "reasoning": "Iran has won only 1 of the last 5 meetings (20% home H2H win rate) while Kuwait has taken 4. Iran’s overall and home form sit at 4.0/10, far below Kuwait’s 6.7/10 both overall and away. The bookmaker odds (Iran 2.83, Kuwait 1.61) and Forebet’s 50% away‑win forecast both favor Kuwait. Although Iran enjoys home advantage, the data gap in form and H2H outweighs it, leaving some uncertainty. Overall risk is moderate due to possible home‑field uplift for Iran."
+        "reasoning": "Kuwait has a significant historical advantage with 4 wins out of the last 5 head‑to‑head meetings. Their recent form (6.7/10) and away form (6.7/10) are considerably better than Iran's home form (4.0/10). The bookmaker odds (1.61 for Kuwait) and Forebet prediction (50% away win) also favor Kuwait. However, Iran's 20% home H2H win rate and the relatively close odds suggest some uncertainty. Overall, the data point to Kuwait as the more likely victor, but the match is not a foregone conclusion."
       },
       "scoring": {
         "pick": "2",
@@ -12185,7 +12305,7 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.1,
+        "home": 1.09,
         "draw": 14.0,
         "away": 7.75,
         "source": "pinnacle",
@@ -12205,15 +12325,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 78.5,
-        "ev": -0.137,
-        "edge": -12.4,
+        "prob": 78.6,
+        "ev": -0.143,
+        "edge": -13.1,
         "sources": 4,
         "components": {
           "forebet": 0.8,
           "h2h": 0.6,
           "form": 0.9,
-          "odds": 0.909
+          "odds": 0.917
         }
       },
       "predictionGrade": "C",
@@ -12228,7 +12348,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -12.409,
+        "market_model_gap": -13.143,
         "skip_reason": null
       }
     },
@@ -12303,8 +12423,8 @@
       },
       "odds": {
         "home": 1.06,
-        "draw": 16.0,
-        "away": 9.5,
+        "draw": 17.0,
+        "away": 10.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -12421,7 +12541,7 @@
       "odds": {
         "home": 1.01,
         "draw": 23.0,
-        "away": 14.0,
+        "away": 15.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -12583,97 +12703,6 @@
       }
     },
     {
-      "homeTeam": "Prilep",
-      "awayTeam": "Tikvesh",
-      "time": "4:00",
-      "league": "MK1",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/prilep-tikvesh/187967",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 78.0,
-        "homeProb": 78,
-        "drawProb": 0,
-        "awayProb": 22,
-        "exactScore": "34-24",
-        "avgGoals": 57.8,
-        "favorite": "home",
-        "gap": 56
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": []
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 78.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.78
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      }
-    },
-    {
       "homeTeam": "Trojka Ostroleka",
       "awayTeam": "Konin",
       "time": "4:00",
@@ -12772,122 +12801,6 @@
           "forebet": 0.78,
           "h2h": 0.4,
           "form": 0.3
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      }
-    },
-    {
-      "homeTeam": "Alkaloid",
-      "awayTeam": "Kumanovo",
-      "time": "4:00",
-      "league": "MK1",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/alkaloid-xxrOWMM2/kumanovo-ShlJfrhm/?mid=K84qmCem",
-      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/alkaloid-kumanovo/187972",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 77.0,
-        "homeProb": 77,
-        "drawProb": 1,
-        "awayProb": 22,
-        "exactScore": "37-25",
-        "avgGoals": 61.7,
-        "favorite": "home",
-        "gap": 55
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 2,
-        "lastDate": "12.12.25",
-        "lastScore": "42-25"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "away": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "awayAtAway": [
-          "L",
-          "L",
-          "W",
-          "L",
-          "W"
-        ]
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 70.2,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
-        "components": {
-          "forebet": 0.77,
-          "h2h": 0.6,
-          "form": 0.7
         }
       },
       "predictionGrade": "D",
@@ -13134,122 +13047,6 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      }
-    },
-    {
-      "homeTeam": "Butel Skopje",
-      "awayTeam": "Ohrid",
-      "time": "4:00",
-      "league": "MK1",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/butel-skopje-8Oa01Lv7/ohrid-WrdN2B8B/?mid=4O8KWjB6",
-      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/butel-skopje-ohrid/187971",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 74.0,
-        "homeProb": 22,
-        "drawProb": 4,
-        "awayProb": 74,
-        "exactScore": "22-31",
-        "avgGoals": 53.4,
-        "favorite": "away",
-        "gap": 52
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 2,
-        "lastDate": "28.04.26",
-        "lastScore": "31-26"
-      },
-      "form": {
-        "home": [
-          "L",
-          "D",
-          "L",
-          "L",
-          "L"
-        ],
-        "away": [
-          "W",
-          "D",
-          "W",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [
-          "D",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "awayAtAway": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ]
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 67.8,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
-        "components": {
-          "forebet": 0.74,
-          "h2h": 0.4,
-          "form": 0.9
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       }
@@ -13717,124 +13514,6 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      }
-    },
-    {
-      "homeTeam": "Struga",
-      "awayTeam": "Eurofarm Pelister",
-      "time": "4:00",
-      "league": "MK1",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/eurofarm-pelister-xCZCiVLU/struga-2B8pMN2N/?mid=db5CYCtf",
-      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/struga-eurofarm-pelister/187969",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "score_45.7<55.0",
-        "forma_gorsza_od_przeciwnika"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 70.0,
-        "homeProb": 27,
-        "drawProb": 3,
-        "awayProb": 70,
-        "exactScore": "25-34",
-        "avgGoals": 58.6,
-        "favorite": "away",
-        "gap": 43
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 2,
-        "lastDate": "05.12.25",
-        "lastScore": "22-42"
-      },
-      "form": {
-        "home": [
-          "W",
-          "D",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [
-          "D",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "awayAtAway": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ]
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 45.7,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
-        "components": {
-          "forebet": 0.7,
-          "h2h": 0.4,
-          "form": 0.067
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       }
@@ -14438,7 +14117,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_54.0<55.0",
+        "score_53.4<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -14491,7 +14170,7 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 20,
+        "votes": 24,
         "unavailable": false,
         "skipReason": null
       },
@@ -14509,22 +14188,22 @@
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": "Jeruzalem Ormoz should edge a narrow victory at home, backed by a 63% Forebet win probability and strong fan support.",
+        "confidence": 62,
+        "recommendation": "MEDIUM",
+        "reasoning": "The head‑to‑head record is evenly split (2‑2 with 1 draw) giving Jeruzalem a modest 40% home H2H win rate. Jeruzalem’s overall form (4.7/10) is slightly lower than Skofljica’s (6.0/10), but both teams share identical venue‑specific ratings of 4.0/10, indicating no clear away advantage. Forebet assigns a 63% chance to a home win and the fan vote is 71% for Jeruzalem, reinforcing the home bias. Bookmaker odds favor the visitors (1.85) over the hosts (2.2), suggesting the market sees Skofljica as slightly stronger, which adds uncertainty. Overall, the mixed signals keep confidence moderate."
       },
       "scoring": {
         "pick": "1",
-        "prob": 54.0,
-        "ev": 0.187,
-        "edge": 8.5,
+        "prob": 53.4,
+        "ev": 0.175,
+        "edge": 8.0,
         "sources": 5,
         "components": {
           "forebet": 0.63,
           "h2h": 0.4,
           "form": 0.433,
-          "sofascore": 0.75,
+          "sofascore": 0.71,
           "odds": 0.455
         }
       },
@@ -14540,7 +14219,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 8.545,
+        "market_model_gap": 7.945,
         "skip_reason": null
       }
     },
@@ -15242,124 +14921,6 @@
       }
     },
     {
-      "homeTeam": "Multi Esens",
-      "awayTeam": "Eurofarm Pelister 2",
-      "time": "4:00",
-      "league": "MK1",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/eurofarm-pelister-2LlgsSFm/rk-multi-esens-424wayAS/?mid=hM2iojQa",
-      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/multi-esens-eurofarm-pelister-2/187970",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "score_52.8<55.0",
-        "forma_gorsza_od_przeciwnika"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 56.0,
-        "homeProb": 41,
-        "drawProb": 3,
-        "awayProb": 56,
-        "exactScore": "24-31",
-        "avgGoals": 53.0,
-        "favorite": "away",
-        "gap": 15
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 0,
-        "awayWins": 2,
-        "lastDate": "27.04.24",
-        "lastScore": "30-21"
-      },
-      "form": {
-        "home": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "awayAtAway": [
-          "L",
-          "W",
-          "W",
-          "D",
-          "W"
-        ]
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 52.8,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
-        "components": {
-          "forebet": 0.56,
-          "h2h": 0.667,
-          "form": 0.3
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      }
-    },
-    {
       "homeTeam": "Waiblingen W",
       "awayTeam": "Fuchse Berlin W",
       "time": "4:00",
@@ -15373,7 +14934,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_49.6<55.0",
+        "score_49.3<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -15431,9 +14992,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.14,
+        "home": 1.11,
         "draw": 13.0,
-        "away": 6.0,
+        "away": 6.75,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -15451,15 +15012,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 49.6,
-        "ev": 1.975,
-        "edge": 32.9,
+        "prob": 49.3,
+        "ev": 2.329,
+        "edge": 34.5,
         "sources": 4,
         "components": {
           "forebet": 0.56,
           "h2h": 0.6,
           "form": 0.467,
-          "odds": 0.167
+          "odds": 0.148
         }
       },
       "predictionGrade": "D",
@@ -15474,7 +15035,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -38.119,
+        "market_model_gap": -40.79,
         "skip_reason": null
       }
     },
@@ -15491,7 +15052,8 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_49.8<55.0",
+        "kurs_ponizej_progu",
+        "score_44.6<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -15543,15 +15105,15 @@
         ]
       },
       "sofascore": {
-        "found": true,
-        "votes": 27,
-        "unavailable": false,
+        "found": null,
+        "votes": null,
+        "unavailable": null,
         "skipReason": null
       },
       "odds": {
-        "home": 2.85,
-        "draw": 8.5,
-        "away": 1.55,
+        "home": 3.3,
+        "draw": 9.0,
+        "away": 1.43,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -15562,38 +15124,37 @@
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "1",
-        "prob": 49.8,
-        "ev": 0.42,
-        "edge": 14.7,
-        "sources": 5,
+        "prob": 44.6,
+        "ev": 0.471,
+        "edge": 14.3,
+        "sources": 4,
         "components": {
           "forebet": 0.55,
           "h2h": 0.4,
           "form": 0.4,
-          "sofascore": 0.78,
-          "odds": 0.351
+          "odds": 0.303
         }
       },
-      "predictionGrade": "B",
+      "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
+        "sources_available": 2,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": 14.712,
+        "consensus_strength": "weak",
+        "market_model_gap": 14.297,
         "skip_reason": null
       }
     },
@@ -15611,7 +15172,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_47.8<55.0",
+        "score_47.9<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -15669,9 +15230,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 6.0,
-        "draw": 13.0,
-        "away": 1.13,
+        "home": 5.75,
+        "draw": 12.0,
+        "away": 1.15,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -15689,15 +15250,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 47.8,
-        "ev": 1.867,
-        "edge": 31.1,
+        "prob": 47.9,
+        "ev": 1.754,
+        "edge": 30.5,
         "sources": 4,
         "components": {
           "forebet": 0.55,
           "h2h": 0.6,
           "form": 0.4,
-          "odds": 0.167
+          "odds": 0.174
         }
       },
       "predictionGrade": "C",
@@ -15712,7 +15273,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 31.133,
+        "market_model_gap": 30.509,
         "skip_reason": null
       }
     },
@@ -15779,7 +15340,7 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 23,
+        "votes": 30,
         "unavailable": false,
         "skipReason": null
       },
@@ -15804,15 +15365,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 56.7,
-        "ev": 0.445,
-        "edge": 17.5,
+        "prob": 56.8,
+        "ev": 0.449,
+        "edge": 17.6,
         "sources": 5,
         "components": {
           "forebet": 0.55,
           "h2h": 0.8,
           "form": 0.567,
-          "sofascore": 0.39,
+          "sofascore": 0.4,
           "odds": 0.392
         }
       },
@@ -15828,7 +15389,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 17.484,
+        "market_model_gap": 17.584,
         "skip_reason": null
       }
     },
@@ -15846,7 +15407,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_50.4<55.0",
+        "score_53.1<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -15904,9 +15465,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 4.1,
-        "draw": 8.5,
-        "away": 1.33,
+        "home": 10.0,
+        "draw": 13.0,
+        "away": 1.06,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -15924,15 +15485,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 50.4,
-        "ev": -0.329,
-        "edge": -24.7,
+        "prob": 53.1,
+        "ev": -0.437,
+        "edge": -41.2,
         "sources": 4,
         "components": {
           "forebet": 0.54,
           "h2h": 0.4,
           "form": 0.4,
-          "odds": 0.752
+          "odds": 0.943
         }
       },
       "predictionGrade": "C",
@@ -15947,7 +15508,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 26.01,
+        "market_model_gap": 43.1,
         "skip_reason": null
       }
     },
@@ -16400,6 +15961,215 @@
       }
     },
     {
+      "homeTeam": "Struga",
+      "awayTeam": "Eurofarm Pelister",
+      "time": "4:30",
+      "league": "MK1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/eurofarm-pelister-xCZCiVLU/struga-2B8pMN2N/?mid=db5CYCtf",
+      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/struga-eurofarm-pelister/187969",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "score_45.7<55.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 70.0,
+        "homeProb": 27,
+        "drawProb": 3,
+        "awayProb": 70,
+        "exactScore": "25-34",
+        "avgGoals": 58.6,
+        "favorite": "away",
+        "gap": 43
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "05.12.25",
+        "lastScore": "22-42"
+      },
+      "form": {
+        "home": [
+          "W",
+          "D",
+          "W",
+          "W",
+          "W"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [
+          "D",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 45.7,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.7,
+          "h2h": 0.4,
+          "form": 0.067
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      }
+    },
+    {
+      "homeTeam": "Japan W",
+      "awayTeam": "Uzbekistan W",
+      "time": "4:30",
+      "league": "AGW",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/handball/matches/asian-games-women/japan-w-uzbekistan-w/192484",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "zrodla_1<2"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 67.0,
+        "homeProb": 67,
+        "drawProb": 2,
+        "awayProb": 31,
+        "exactScore": "34-24",
+        "avgGoals": 58.7,
+        "favorite": "home",
+        "gap": 36
+      },
+      "h2h": {
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null
+      },
+      "form": {
+        "home": [],
+        "away": [],
+        "homeAtHome": [],
+        "awayAtAway": []
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_brak_eventu",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 67.0,
+        "ev": null,
+        "edge": null,
+        "sources": 1,
+        "components": {
+          "forebet": 0.67
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 1,
+        "quality_score": 0.2,
+        "h2h_available": false,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": false,
+        "h2h_count": 0,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "insufficient_data"
+      }
+    },
+    {
       "homeTeam": "Casalgrande Padana W",
       "awayTeam": "Jomi Salerno W",
       "time": "4:30",
@@ -16580,7 +16350,7 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 25,
+        "votes": 35,
         "unavailable": false,
         "skipReason": null
       },
@@ -16598,38 +16368,38 @@
         }
       },
       "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
+        "prediction": "Fuchse should win at home, backed by a perfect 5‑0 H2H record and dominant home form.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "Fuchse have won all five recent meetings against Krems, giving them a 100% home H2H win rate. Their overall form (4.0/10) is twice that of Krems (2.0/10), and their venue‑specific rating (6.7/10) dwarfs Krems' away rating (0.7/10). The Forebet model assigns a 62% probability to a home win, aligning with the bookmaker odds that price Fuchse at 1.73. While the odds are not extremely short, the convergence of H2H dominance, superior form, and home advantage makes a Fuchse win the most likely outcome. The remaining risk is modest, as Krems could surprise if they improve sharply in the short term."
       },
       "scoring": {
         "pick": "1",
-        "prob": 68.1,
-        "ev": 0.178,
-        "edge": 10.3,
+        "prob": 68.8,
+        "ev": 0.19,
+        "edge": 11.0,
         "sources": 5,
         "components": {
           "forebet": 0.62,
           "h2h": 1.0,
           "form": 0.6,
-          "sofascore": 0.52,
+          "sofascore": 0.57,
           "odds": 0.578
         }
       },
       "predictionGrade": "A",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.95,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": true,
-        "gemini_available": false,
+        "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": 10.297,
+        "consensus_strength": "strong",
+        "market_model_gap": 10.997,
         "skip_reason": null
       }
     },
@@ -16698,7 +16468,7 @@
       },
       "sofascore": {
         "found": true,
-        "votes": 32,
+        "votes": 42,
         "unavailable": false,
         "skipReason": null
       },
@@ -16723,15 +16493,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 56.2,
-        "ev": -0.045,
-        "edge": -2.6,
+        "prob": 57.2,
+        "ev": -0.028,
+        "edge": -1.6,
         "sources": 5,
         "components": {
           "forebet": 0.59,
           "h2h": 0.6,
           "form": 0.4,
-          "sofascore": 0.62,
+          "sofascore": 0.69,
           "odds": 0.588
         }
       },
@@ -16747,7 +16517,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": -2.624,
+        "market_model_gap": -1.624,
         "skip_reason": null
       }
     },
@@ -16828,7 +16598,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_bez_kursow",
         "forebet": {
           "home": null,
           "draw": null,
@@ -16958,6 +16728,213 @@
         "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "insufficient_data"
+      }
+    },
+    {
+      "homeTeam": "Vietnam W",
+      "awayTeam": "Hong Kong W",
+      "time": "4:30",
+      "league": "AGW",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/handball/matches/asian-games-women/vietnam-w-hong-kong-w/192486",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "zrodla_1<2"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 55.0,
+        "homeProb": 55,
+        "drawProb": 2,
+        "awayProb": 43,
+        "exactScore": "34-24",
+        "avgGoals": 58.0,
+        "favorite": "home",
+        "gap": 12
+      },
+      "h2h": {
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null
+      },
+      "form": {
+        "home": [],
+        "away": [],
+        "homeAtHome": [],
+        "awayAtAway": []
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_brak_eventu",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 55.0,
+        "ev": null,
+        "edge": null,
+        "sources": 1,
+        "components": {
+          "forebet": 0.55
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 1,
+        "quality_score": 0.2,
+        "h2h_available": false,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": false,
+        "h2h_count": 0,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "insufficient_data"
+      }
+    },
+    {
+      "homeTeam": "Alkaloid",
+      "awayTeam": "Kumanovo",
+      "time": "5:00",
+      "league": "MK1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/alkaloid-xxrOWMM2/kumanovo-ShlJfrhm/?mid=K84qmCem",
+      "forebetUrl": "https://www.forebet.com/en/handball/matches/superleague/alkaloid-kumanovo/187972",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 77.0,
+        "homeProb": 77,
+        "drawProb": 1,
+        "awayProb": 22,
+        "exactScore": "37-25",
+        "avgGoals": 61.7,
+        "favorite": "home",
+        "gap": 55
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "12.12.25",
+        "lastScore": "42-25"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ]
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 70.2,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.77,
+          "h2h": 0.6,
+          "form": 0.7
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.55,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
       }
     },
     {
@@ -17704,8 +17681,8 @@
       "sofascore": {
         "found": false,
         "votes": 0,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "unavailable": false,
+        "skipReason": "no_vote"
       },
       "odds": {
         "home": 1.55,
@@ -17832,7 +17809,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_bez_kursow",
         "forebet": {
           "home": null,
           "draw": null,
@@ -17883,7 +17860,7 @@
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/aguas-santas-GIkIKotH/maritimo-madeira-p8K23qJp/?mid=bPKD4tvK",
       "forebetUrl": "https://www.forebet.com/en/handball/matches/andebol-1/aguas-santas-maritimo/192471",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -17935,15 +17912,15 @@
         ]
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 32,
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
         "home": 2.4,
         "draw": 8.0,
-        "away": 1.73,
+        "away": 1.7,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -17961,30 +17938,31 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 58.6,
-        "ev": 0.013,
-        "edge": 0.8,
-        "sources": 4,
+        "prob": 58.3,
+        "ev": -0.009,
+        "edge": -0.5,
+        "sources": 5,
         "components": {
           "forebet": 0.63,
           "h2h": 0.4,
           "form": 0.733,
-          "odds": 0.578
+          "sofascore": 0.56,
+          "odds": 0.588
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "B",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
+        "sources_available": 3,
+        "quality_score": 0.95,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 16.933,
+        "market_model_gap": 16.633,
         "skip_reason": null
       }
     },
@@ -18065,7 +18043,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_bez_kursow",
         "forebet": {
           "home": null,
           "draw": null,
@@ -18395,7 +18373,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_zle_dopasowanie",
         "forebet": {
           "home": null,
           "draw": null,
@@ -18502,8 +18480,8 @@
       "sofascore": {
         "found": false,
         "votes": 0,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "unavailable": false,
+        "skipReason": "no_vote"
       },
       "odds": {
         "home": 1.88,
@@ -18741,7 +18719,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_zle_dopasowanie",
         "forebet": {
           "home": null,
           "draw": null,
@@ -18858,7 +18836,7 @@
         "away": null,
         "source": null,
         "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "note": "brak_kursow|sofascore_bez_kursow",
         "forebet": {
           "home": null,
           "draw": null,
@@ -19083,13 +19061,13 @@
       "sofascore": {
         "found": false,
         "votes": 0,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "unavailable": false,
+        "skipReason": "no_vote"
       },
       "odds": {
-        "home": 2.0,
+        "home": 1.83,
         "draw": 8.0,
-        "away": 2.0,
+        "away": 2.2,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -19107,15 +19085,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 62.8,
-        "ev": 0.255,
-        "edge": 12.8,
+        "prob": 63.4,
+        "ev": 0.161,
+        "edge": 8.8,
         "sources": 4,
         "components": {
           "forebet": 0.57,
           "h2h": 1.0,
           "form": 0.367,
-          "odds": 0.5
+          "odds": 0.546
         }
       },
       "predictionGrade": "C",
@@ -19130,7 +19108,7 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "weak",
-        "market_model_gap": 12.8,
+        "market_model_gap": 8.755,
         "skip_reason": null
       }
     },
@@ -20593,9 +20571,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.15,
-        "draw": 12.0,
-        "away": 7.0,
+        "home": 1.08,
+        "draw": 15.0,
+        "away": 8.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -20613,15 +20591,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 60.4,
-        "ev": -0.306,
-        "edge": -26.6,
+        "prob": 61.2,
+        "ev": -0.339,
+        "edge": -31.4,
         "sources": 4,
         "components": {
           "forebet": 0.56,
           "h2h": 0.4,
           "form": 0.758,
-          "odds": 0.87
+          "odds": 0.926
         }
       },
       "predictionGrade": "D",
@@ -20636,7 +20614,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -26.557,
+        "market_model_gap": -31.393,
         "skip_reason": null
       }
     },
@@ -20861,6 +20839,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "brak_kursow",
+        "score_49.7<55.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -20876,9 +20855,9 @@
       },
       "h2h": {
         "total": 5,
-        "homeWins": 2,
-        "awayWins": 3,
-        "lastDate": "18.09.26",
+        "homeWins": 1,
+        "awayWins": 4,
+        "lastDate": "19.09.26",
         "lastScore": "44-32"
       },
       "form": {
@@ -20891,8 +20870,8 @@
         ],
         "away": [
           "W",
-          "L",
           "W",
+          "L",
           "W",
           "W"
         ],
@@ -20905,8 +20884,8 @@
         ],
         "awayAtAway": [
           "W",
-          "L",
           "W",
+          "L",
           "W",
           "W"
         ]
@@ -20938,17 +20917,17 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 55.7,
+        "prob": 49.7,
         "ev": null,
         "edge": null,
         "sources": 3,
         "components": {
           "forebet": 0.9,
-          "h2h": 0.4,
+          "h2h": 0.2,
           "form": 0.1
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "F",
       "dataQuality": {
         "sources_available": 2,
         "quality_score": 0.55,
@@ -21295,8 +21274,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "score_54.0<55.0",
+        "kurs_ponizej_progu",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -21354,12 +21332,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "home": 1.08,
+        "draw": 15.0,
+        "away": 9.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -21374,30 +21352,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 54.0,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 59.4,
+        "ev": -0.358,
+        "edge": -33.2,
+        "sources": 4,
         "components": {
           "forebet": 0.67,
           "h2h": 0.4,
-          "form": 0.467
+          "form": 0.467,
+          "odds": 0.926
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -33.193,
+        "skip_reason": null
       }
     },
     {
@@ -22125,7 +22104,7 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 1.58,
+        "home": 1.6,
         "draw": 8.0,
         "away": 2.7,
         "source": "pinnacle",
@@ -22145,15 +22124,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 56.4,
-        "ev": -0.109,
-        "edge": -6.9,
+        "prob": 56.3,
+        "ev": -0.1,
+        "edge": -6.2,
         "sources": 4,
         "components": {
           "forebet": 0.55,
           "h2h": 0.6,
           "form": 0.5,
-          "odds": 0.633
+          "odds": 0.625
         }
       },
       "predictionGrade": "D",
@@ -22168,7 +22147,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -6.891,
+        "market_model_gap": -6.2,
         "skip_reason": null
       }
     },
