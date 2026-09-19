@@ -58,18 +58,40 @@ SUPPORTED_SPORTS = [
 # ── Progi selekcji Forebet ─────────────────────────────────────────────────
 # Sporty z remisem: faworyt musi mieć sensowną przewagę, bo przy trzech wynikach
 # 40% nie znaczy jeszcze "wskazany zwycięzca".
-THREE_WAY_MIN_FAV_PROB = 45.0
-THREE_WAY_MIN_GAP = 12.0
-
-# Sporty bez remisu: BEZ progu prawdopodobieństwa.
+# Przy trzech wynikach faworytem jest się już od ~34% (100/3 = 33,3), a remisy
+# odsiewa wcześniej `pred == 'X'`. Próg 45% wyrzucał 304 z 930 meczów piłki
+# (13.09) tylko za to, że prawdopodobieństwo dzieliło się na trzy wyniki — choć
+# Forebet jasno wskazywał stronę i była nad kim mieć przewagę.
 #
-# Wcześniej było tu 60% i 20 pp, co odsiewało większość stawki (w jednym runie
-# 10 z 15 meczów koszykówki). To był mój dobór, nie wymóg — przy dwóch wynikach
-# każde wskazanie powyżej 50% jest już wskazaniem zwycięzcy, a Forebet i tak
-# podaje stronę. Zamiast progu obowiązuje wymóg LEPSZEJ FORMY faworyta
-# (patrz REQUIRE_FORM_ADVANTAGE), który mówi o meczu więcej niż sam procent.
-TWO_WAY_MIN_FAV_PROB = 0.0
-TWO_WAY_MIN_GAP = 0.0
+# Przewaga: liczona jako |home - away|, więc remis jej nie rozcieńcza. Wymóg
+# 12pp odrzucał kolejne 14 meczów. Zdjęty — wystarczy, że Forebet wskazuje
+# stronę z wyższym prawdopodobieństwem (pilnuje tego `pred == expected`),
+# a o jakości meczu decydują dalej: lepsza forma faworyta, próg kursu i scoring.
+#
+# UWAGA co do skutku: dla piłki, tenisa i piłki ręcznej to zmiana prawie
+# bezskutkowa, bo te sporty i tak uderzają w limit 200/sport i wypełniają go
+# najlepszymi kandydatami. Realnie zyskują sporty z MAŁĄ pulą, gdzie limit nie
+# jest wąskim gardłem — 13.09 było ich sporo: koszykówka 4 zdarzenia,
+# siatkówka 13, rugby 10, baseball 15, hokej 22.
+THREE_WAY_MIN_FAV_PROB = float(os.getenv('FOREBET_MIN_FAV_3WAY', '34'))
+THREE_WAY_MIN_GAP = float(os.getenv('FOREBET_MIN_GAP_3WAY', '0'))
+
+# Sporty bez remisu (tenis, koszykówka, siatkówka, baseball): próg 52%.
+#
+# Historia tego progu: najpierw 60% (mój dobór, odsiewał 10 z 15 meczów
+# koszykówki), potem zdjęty do 0. Teraz 52% — i to NIE jest zaostrzenie
+# w praktyce, a podłoga dla powiększonej puli.
+#
+# Dlaczego: przy limicie 60/sport tenis i tak brał tylko najlepszych, a
+# najsłabszy faworyt w puli 60 z 13.09 miał 55% — próg 0 nic nie wnosił, bo
+# obcinał go limit. Po podniesieniu limitu do 200 pula sięga niżej, aż do
+# okolic 50%, czyli do rzutu monetą. 52% wpuszcza „ryzykowne, ale realne"
+# (48/52), a zatrzymuje 50/50.
+#
+# Przy dwóch wynikach 52% to automatycznie 4 pp przewagi, więc osobny próg
+# przewagi jest zbędny.
+TWO_WAY_MIN_FAV_PROB = float(os.getenv('FOREBET_MIN_FAV_2WAY', '52'))
+TWO_WAY_MIN_GAP = float(os.getenv('FOREBET_MIN_GAP_2WAY', '0'))
 
 # Faworyt musi być w lepszej formie niż przeciwnik.
 #
@@ -201,6 +223,7 @@ def _implied_prob(odds: Optional[float]) -> Optional[float]:
 def select_forebet_matches(matches: List[Dict[str, Any]], sport: str,
                            min_fav_prob: Optional[float] = None,
                            min_gap: Optional[float] = None,
+                           top_up_to: Optional[int] = None,
                            ) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     """Odsiej remisy i mecze bez wyraźnej przewagi jednej ze stron.
 
@@ -214,6 +237,7 @@ def select_forebet_matches(matches: List[Dict[str, Any]], sport: str,
         min_gap = TWO_WAY_MIN_GAP if two else THREE_WAY_MIN_GAP
 
     selected: List[Dict[str, Any]] = []
+    near_misses: List[Dict[str, Any]] = []
     rejected: Dict[str, int] = {}
 
     def _reject(reason: str) -> None:
@@ -248,18 +272,42 @@ def select_forebet_matches(matches: List[Dict[str, Any]], sport: str,
             _reject('predykcja_niespojna_z_prawdopodobienstwami')
             continue
 
+        m['favorite'] = 'home' if pred == '1' else 'away'
+        m['forebet_fav_prob'] = fav_prob
+        m['forebet_gap'] = gap
+
+        # Progi sprawdzamy NA KOŃCU, żeby odrzucone dało się jeszcze odzyskać:
+        # mecz jest poprawny, tylko słabszy od progu.
         if fav_prob < min_fav_prob:
             _reject(f'faworyt_ponizej_{min_fav_prob:.0f}%')
+            near_misses.append(m)
             continue
 
         if gap < min_gap:
             _reject(f'przewaga_ponizej_{min_gap:.0f}pp')
+            near_misses.append(m)
             continue
 
-        m['favorite'] = 'home' if pred == '1' else 'away'
-        m['forebet_fav_prob'] = fav_prob
-        m['forebet_gap'] = gap
         selected.append(m)
+
+    # Miękka podłoga. Próg ma chronić od rzutów monetą, gdy kandydatów jest
+    # NADMIAR i i tak wybieramy najlepszych. Gdy jest ich mało, odrzucenie
+    # marginalnego meczu niczego nie kupuje — tylko zabiera zdarzenie.
+    #
+    # Powód: podaż Forebet bardzo się różni między sportami. 13.09 piłka dała
+    # 930 meczów, a koszykówka 4, siatkówka 13, rugby 10. Sztywny próg 52% przy
+    # puli 4 meczów mógłby ją zredukować niemal do zera, choć nie ma z czego
+    # wybierać. Dlatego gdy po progu zostaje mniej niż `top_up_to`, dopełniamy
+    # najlepszymi z odrzuconych.
+    if top_up_to and len(selected) < top_up_to and near_misses:
+        need = top_up_to - len(selected)
+        extra = sorted(near_misses,
+                       key=lambda x: -(x.get('forebet_fav_prob') or 0))[:need]
+        if extra:
+            worst = min(e.get('forebet_fav_prob') or 0 for e in extra)
+            selected.extend(extra)
+            rejected['_odzyskane_maly_wybor'] = len(extra)
+            rejected['_odzyskane_prog_faworyta'] = round(worst, 1)
 
     return selected, rejected
 
@@ -1172,10 +1220,21 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
 
     # ── FAZA 2: selekcja (bez remisów, z przewagą) ──
     print("\n[2/6] Selekcja Forebet (bez remisów, wymagana przewaga)")
-    selected, rejected = select_forebet_matches(all_matches, sport)
+    # top_up_to = cap: gdy po progach zostaje mniej meczów, niż i tak
+    # zmieścimy, odzyskujemy najlepsze z odrzuconych. Próg ma odsiewać nadmiar,
+    # nie zawężać i tak małej puli (koszykówka miała 13.09 tylko 4 zdarzenia).
+    pre_cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
+    selected, rejected = select_forebet_matches(all_matches, sport,
+                                                top_up_to=pre_cap)
+    recovered = rejected.pop('_odzyskane_maly_wybor', 0)
+    recovered_floor = rejected.pop('_odzyskane_prog_faworyta', None)
     print(f"   ✅ Wybrane: {len(selected)}/{len(all_matches)}")
     for reason, count in sorted(rejected.items(), key=lambda kv: -kv[1]):
         print(f"      ↳ odrzucone [{reason}]: {count}")
+    if recovered:
+        print(f"      ↻ odzyskane {recovered} meczów poniżej progu "
+              f"(faworyt ≥ {recovered_floor}%) — pula mniejsza niż limit "
+              f"{pre_cap}, więc próg nie miał czego odsiewać")
 
     cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
     if len(selected) > cap:
