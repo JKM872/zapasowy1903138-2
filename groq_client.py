@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from typing import List, Optional
 
 MODELS_ENDPOINT = 'https://api.groq.com/openai/v1/models'
@@ -81,6 +82,48 @@ _resolved_model: Optional[str] = None
 
 
 MAX_NUMBERED_KEYS = 10
+
+# Cooldown dla par (klucz, model), które właśnie oddały 429.
+#
+# Po co: rotacja po 4 kluczach × 7 modelach to 28 żądań na JEDNO logiczne
+# zapytanie, gdy wszystko jest na limicie. Przy 12 analizach na sport i ośmiu
+# sportach dawałoby to tysiące żądań, o których z góry wiemy, że zostaną
+# odrzucone — a odrzucone żądania też liczą się do limitu. Rotacja zaczęłaby
+# wtedy pogłębiać problem, który ma rozwiązywać.
+#
+# Zamiast tego pamiętamy, co odmówiło, i pomijamy to przez chwilę.
+# Okna są różne, bo Groq ma limity minutowe (TPM/RPM) i dobowe (RPD/TPD):
+#   * zwykłe 429            -> 60 s (tyle trwa okno minutowe)
+#   * 429 z wzmianką o dniu -> do końca doby UTC, bo minutowy reset nie pomoże
+_MINUTE_COOLDOWN = 60.0
+_DAILY_COOLDOWN = 6 * 3600.0
+_cooldowns: dict = {}
+
+
+def _cooldown_left(key: str, model: str) -> float:
+    """Ile sekund zostało do końca cooldownu tej pary. 0 = można próbować."""
+    until = _cooldowns.get((key, model))
+    if not until:
+        return 0.0
+    left = until - time.time()
+    if left <= 0:
+        _cooldowns.pop((key, model), None)
+        return 0.0
+    return left
+
+
+def _set_cooldown(key: str, model: str, body: str = '') -> float:
+    """Zapisz cooldown po 429. Dłuższy, gdy odmowa dotyczy limitu dobowego."""
+    daily = bool(re.search(r'per\s+day|daily|RPD|TPD|tokens per day',
+                           body or '', re.I))
+    span = _DAILY_COOLDOWN if daily else _MINUTE_COOLDOWN
+    _cooldowns[(key, model)] = time.time() + span
+    return span
+
+
+def reset_cooldowns() -> None:
+    """Wyczyść cooldowny — do testów i do wymuszenia ponownej próby."""
+    _cooldowns.clear()
 
 # Kursor po kluczach. Gdy klucz wyczerpie limity, kolejne wywołania w tym samym
 # procesie startują od następnego — inaczej każde zapytanie znów przepalałoby
@@ -358,9 +401,15 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
     # sensu znów o niego pytać. Pełne kółko, żeby żadnego nie pominąć.
     order = [keys[(_key_cursor + i) % len(keys)] for i in range(len(keys))]
 
+    skipped = 0
     for key_no, current in enumerate(order, 1):
         rate_limited_all = True
         for model in candidates:
+            # Ta para już odmówiła i okno limitu jeszcze nie minęło — nie ma
+            # sensu płacić kolejnym odrzuconym żądaniem.
+            if _cooldown_left(current, model) > 0:
+                skipped += 1
+                continue
             try:
                 resp = requests.post(
                     CHAT_ENDPOINT,
@@ -397,10 +446,11 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
                     continue
 
             if is_rate_limited(resp.status_code):
+                span = _set_cooldown(current, model, resp.text or '')
                 suffix = (f" [klucz {key_no}/{len(order)}]"
                           if len(order) > 1 else "")
                 log(f"      ⚠️ Groq [{model}]{suffix}: limit (429) — "
-                    f"próbuję kolejnego modelu")
+                    f"pauza {span / 60:.0f} min, próbuję kolejnego modelu")
                 continue
 
             rate_limited_all = False
@@ -425,9 +475,14 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
                     f"{len(candidates)} modelach — przechodzę na klucz "
                     f"{key_no + 1}/{len(order)}")
 
+    # `skipped` pokazuje, ile par pominęliśmy dzięki cooldownowi. Gdy równa się
+    # liczbie wszystkich kombinacji, to znaczy że nie wysłaliśmy ANI JEDNEGO
+    # żądania — cały budżet jest w pauzie i nie przepalamy go dalej.
+    saved = f", pominięto {skipped} par na pauzie" if skipped else ""
     if len(order) > 1:
         log(f"      ⛔ Groq: {len(order)} kluczy × {len(candidates)} modeli — "
-            f"nic nie odpowiedziało")
+            f"nic nie odpowiedziało{saved}")
     else:
-        log(f"      ⛔ Groq: żaden z {len(candidates)} modeli nie odpowiedział")
+        log(f"      ⛔ Groq: żaden z {len(candidates)} modeli nie odpowiedział"
+            f"{saved}")
     return None
