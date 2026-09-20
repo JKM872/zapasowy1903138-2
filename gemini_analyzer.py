@@ -291,7 +291,8 @@ def _analyze_with_groq(prompt: str) -> Optional[Dict[str, Any]]:
         _warn_groq_unavailable(f'brak modułu ({e})')
         return None
 
-    key = groq_client.api_key()
+    keys = groq_client.api_keys()
+    key = keys[0] if keys else None
     if not key:
         # Silence here is what hid the outage: with Gemini's quota gone and no
         # Groq key, every match recorded 'Błąd API' and nothing said why. In CI
@@ -300,60 +301,31 @@ def _analyze_with_groq(prompt: str) -> Optional[Dict[str, Any]]:
         _warn_groq_unavailable('GROQ_API_KEY nie ustawiony')
         return None
 
-    model = groq_client.resolve_model(key)
-
-    def _post(model_id: str):
-        return requests.post(
-            groq_client.CHAT_ENDPOINT,
-            headers={'Authorization': f'Bearer {key}',
-                     'Content-Type': 'application/json'},
-            json={
-                'model': model_id,
-                'messages': [{'role': 'user', 'content': prompt}],
-                'temperature': 0.2,
-                'max_tokens': 700,
-            },
-            timeout=groq_client.REQUEST_TIMEOUT,
-        )
-
-    for attempt in range(MAX_RETRIES + 1):
-        try:
-            resp = _post(model)
-        except Exception as e:
-            if attempt < MAX_RETRIES:
-                time.sleep(2)
-                continue
-            print(f"   ⚠️ Groq AI error: {type(e).__name__}: {str(e)[:80]}")
-            return None
-
-        # Retired model → re-resolve once and retry.
-        if groq_client.is_decommissioned_error(resp.status_code, resp.text):
-            groq_client.reset_resolved_model()
-            new_model = groq_client.resolve_model(key, force=True)
-            if new_model != model:
-                print(f"   ↻ Groq: model '{model}' wycofany → '{new_model}'")
-                model = new_model
-                continue
-
-        if resp.status_code == 200:
-            try:
-                text = resp.json()['choices'][0]['message']['content']
-            except (KeyError, IndexError, ValueError) as e:
-                print(f"   ⚠️ Groq: nieczytelna odpowiedź ({e})")
-                return None
-            result = _parse_gemini_response(text)
-            result['ai_provider'] = f'groq:{model}'
-            return result
-
-        # 429 / 5xx are worth one retry; anything else is terminal.
-        if resp.status_code == 429 or resp.status_code >= 500:
-            if attempt < MAX_RETRIES:
-                time.sleep(2)
-                continue
-        print(f"   ⚠️ Groq API {resp.status_code}: {resp.text[:100]}")
+    # Delegujemy do groq_client.chat(), bo ono rotuje PO WSZYSTKICH kluczach i
+    # PO WSZYSTKICH modelach. Poprzednia wersja miała własną pętlę na JEDNYM
+    # kluczu (api_key()) i JEDNYM modelu (resolve_model()) — dlatego w runie
+    # z 13.09 każdy mecz kończył się „Groq API 429" i „AI: SKIP (0%)", mimo że
+    # pozostałe modele miały zapas. Dodanie kolejnych kluczy nic by tu nie
+    # dało, bo ta ścieżka i tak brała tylko pierwszy.
+    #
+    # Prompt, parser i kształt wyniku bez zmian — różni się tylko sposób
+    # wykonania zapytania.
+    meta: Dict[str, Any] = {}
+    text = groq_client.chat(
+        prompt,
+        max_tokens=700,
+        temperature=0.2,
+        meta=meta,
+    )
+    if not text:
         return None
 
-    return None
+    result = _parse_gemini_response(text)
+    model_used = meta.get('model') or 'nieznany'
+    result['ai_provider'] = f'groq:{model_used}'
+    if meta.get('key_count', 1) > 1:
+        result['ai_key_index'] = meta.get('key_index')
+    return result
 
 
 # ============================================

@@ -309,7 +309,7 @@ def probe_key(key: str, timeout: int = 15) -> dict:
 
 def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
          key: Optional[str] = None, timeout: Optional[int] = None,
-         log=print) -> Optional[str]:
+         log=print, meta: Optional[dict] = None) -> Optional[str]:
     """Zapytaj Groq, przechodząc na kolejny model gdy bieżący odmawia.
 
     Po co: limity Groq są liczone **per model**, a nie na całe konto. Do tej
@@ -383,6 +383,12 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
                     # Zapamiętaj klucz, który zadziałał, żeby następne
                     # wywołanie zaczęło od niego, a nie od wyczerpanego.
                     _key_cursor = keys.index(current)
+                    if meta is not None:
+                        # Kto odpowiedział — wywołujący potrzebuje tego do
+                        # oznaczenia wyniku (np. ai_provider='groq:model').
+                        meta['model'] = model
+                        meta['key_index'] = keys.index(current) + 1
+                        meta['key_count'] = len(keys)
                     return out.strip()
                 except Exception as e:
                     log(f"      ⚠️ Groq [{model}]: zła odpowiedź "
