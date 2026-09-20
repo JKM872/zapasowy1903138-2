@@ -644,6 +644,44 @@ def _url_team_slugs(match_url: str) -> Optional[Tuple[str, str]]:
     return home, away
 
 
+# Kadry narodowe: Livesport używa polskich nazw w URL-ach, Forebet angielskich.
+#
+# Bez tego mapowania orientacja stron dla meczów kadr była NIEROZSTRZYGALNA
+# (oba wyniki dopasowania 0.0), a pipeline traktował „nie wiem" jak „zgodne"
+# i zapisywał kurs gospodarza do gościa. Pomiar na 2358 zdarzeniach: siatkówka
+# 38% meczów nierozstrzygniętych, koszykówka 6% — i wśród nich realnie
+# odwrócone, np. „USA W vs Costa Rica W" przy URL-u ``kostaryka/usa``.
+#
+# Tylko kraje, bo klubów to nie dotyczy (ich nazwy własne są takie same).
+_EN_BY_PL = {
+    'kostaryka': 'costa', 'meksyk': 'mexico', 'szwecja': 'sweden',
+    'szwajcaria': 'switzerland', 'francja': 'france', 'wlochy': 'italy',
+    'niemcy': 'germany', 'chiny': 'china', 'filipiny': 'philippines',
+    'bahrajn': 'bahrain', 'kazachstan': 'kazakhstan', 'rumunia': 'romania',
+    'turcja': 'turkey', 'grecja': 'greece', 'nikaragua': 'nicaragua',
+    'slowacja': 'slovakia', 'slowenia': 'slovenia', 'lotwa': 'latvia',
+    'wenezuela': 'venezuela', 'hiszpania': 'spain', 'polska': 'poland',
+    'wegry': 'hungary', 'czechy': 'czechia', 'holandia': 'netherlands',
+    'belgia': 'belgium', 'dania': 'denmark', 'norwegia': 'norway',
+    'finlandia': 'finland', 'islandia': 'iceland', 'irlandia': 'ireland',
+    'anglia': 'england', 'szkocja': 'scotland', 'walia': 'wales',
+    'portugalia': 'portugal', 'austria': 'austria', 'chorwacja': 'croatia',
+    'serbia': 'serbia', 'bulgaria': 'bulgaria', 'ukraina': 'ukraine',
+    'litwa': 'lithuania', 'estonia': 'estonia', 'bialorus': 'belarus',
+    'brazylia': 'brazil', 'argentyna': 'argentina', 'kanada': 'canada',
+    'japonia': 'japan', 'korea': 'korea', 'tajlandia': 'thailand',
+    'indie': 'india', 'egipt': 'egypt', 'tunezja': 'tunisia',
+    'maroko': 'morocco', 'algieria': 'algeria', 'rosja': 'russia',
+    'izrael': 'israel', 'katar': 'qatar', 'iran': 'iran', 'irak': 'iraq',
+    'jordania': 'jordan', 'kuba': 'cuba', 'chile': 'chile', 'peru': 'peru',
+    'kolumbia': 'colombia', 'urugwaj': 'uruguay', 'paragwaj': 'paraguay',
+    'boliwia': 'bolivia', 'ekwador': 'ecuador', 'australia': 'australia',
+    'indonezja': 'indonesia', 'wietnam': 'vietnam', 'singapur': 'singapore',
+    'mongolia': 'mongolia', 'kambodza': 'cambodia', 'tajwan': 'taiwan',
+}
+_PL_BY_EN = {v: k for k, v in _EN_BY_PL.items()}
+
+
 def is_livesport_reversed(match_url: str, forebet_home: str,
                           forebet_away: str) -> Optional[bool]:
     """Czy Livesport ma drużyny w odwrotnej kolejności niż Forebet?
@@ -669,6 +707,19 @@ def is_livesport_reversed(match_url: str, forebet_home: str,
         name_tokens = _tokens(name)
         slug_norm = _strip_accents(slug.lower()).replace('-', ' ')
         slug_tokens = {t for t in slug_norm.split() if len(t) >= 4}
+        # Krótkie nazwy: „E. Lys vs G. Ce" dawało puste zbiory po obu stronach,
+        # więc orientacji nie dało się ustalić i kursy szły bez zamiany.
+        if not name_tokens:
+            name_tokens = _short_tokens(name)
+        if not slug_tokens:
+            slug_tokens = {t for t in slug_norm.split() if len(t) >= 2}
+        # Kadry narodowe: Livesport ma slugi PO POLSKU (kostaryka, francja,
+        # wlochy), a Forebet nazwy po angielsku. Bez tłumaczenia oba wyniki
+        # wychodziły 0.0, funkcja zwracała None i kursy trafiały do złej strony.
+        name_tokens = name_tokens | {_PL_BY_EN[t] for t in name_tokens
+                                     if t in _PL_BY_EN}
+        slug_tokens = slug_tokens | {_EN_BY_PL[t] for t in slug_tokens
+                                     if t in _EN_BY_PL}
         if not name_tokens or not slug_tokens:
             return 0.0
         # Jaccard po tokenach + premia za podciąg (nazwy bywają skracane).
@@ -1341,6 +1392,13 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                 },
                 'predictionGrade': r.get('prediction_grade'),
                 'dataQuality': r.get('data_quality'),
+                # Orientacja stron — jawnie w wyniku, żeby dało się sprawdzić
+                # „czy kurs trafił do właściwej drużyny" bez czytania logów.
+                # Brak tych pól był powodem, dla którego zgłoszenia o
+                # odwróconych kursach nie dało się zaudytować.
+                'sidesReversed': r.get('sides_reversed'),
+                'oddsOrientationUnknown': r.get('odds_orientation_unknown',
+                                                False),
             }
             for r in rows
         ],
@@ -1643,7 +1701,29 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                 print(f"      🔄 Livesport ma odwrócone strony — zamieniam kursy/formę/H2H "
                       f"(H={row.get('home_odds')}, A={row.get('away_odds')})")
             elif reversed_sides is None:
-                print("      ⚠️ Nie mogę ustalić orientacji stron w Livesport")
+                # „Nie wiem" NIE może znaczyć „zgodne". Dotąd taki mecz
+                # przechodził dalej z kursami, które mogły być po złej stronie,
+                # i trafiał do maila jako pewny typ. To właśnie widać było jako
+                # „kursy są odwrotnie".
+                row['odds_orientation_unknown'] = True
+                print("      ⚠️ Nie mogę ustalić orientacji stron w Livesport "
+                      "— odrzucam te kursy, żeby nie podać ceny złej strony")
+                for key in ('home_odds', 'draw_odds', 'away_odds',
+                            'odds_source', 'bookmaker'):
+                    row[key] = None
+                # Druga szansa: SofaScore szuka po nazwach i weryfikuje OBIE
+                # drużyny, więc nie ma tu problemu orientacji.
+                if use_sofascore:
+                    alt = resolve_odds_sofascore(home, away, sport,
+                                                 date_str=date_str)
+                    for key in ('home_odds', 'draw_odds', 'away_odds',
+                                'odds_source', 'bookmaker'):
+                        row[key] = alt.get(key)
+                    if alt.get('home_odds') or alt.get('away_odds'):
+                        print(f"      ↻ Kursy z SofaScore (orientacja "
+                              f"potwierdzona po nazwach): "
+                              f"H={row.get('home_odds')}, "
+                              f"A={row.get('away_odds')}")
 
         # Próg kursowy na kursach Pinnacle/Livesport. Brak kursów = skip:
         # bez ceny nie ma EV ani ROI, wiec typ jest nierozliczalny.
