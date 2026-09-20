@@ -275,10 +275,27 @@ TOP_UP_TARGET = int(os.getenv('FOREBET_TOP_UP_TARGET', '200'))
 # przechodzimy do zapisu + maila z tym, co już mamy. Lepiej wysłać 150 meczów
 # niż stracić 200 na timeoucie.
 #
-# 3,5 h zostawia ~2,5 h zapasu na: pobranie Forebet, indeks Livesport,
-# scoring, zapis i wysyłkę — te etapy są przed/po pętli i też trwają.
+# Wartość skalibrowana na realnym runie (2026-09-20, piłka):
+#
+#   wybranych kandydatów ......... 746
+#   przetworzonych w 3,5 h ....... 521   -> 24,2 s/mecz
+#   pominiętych przez hamulec ..... 225
+#
+# 746 × 24,2 s = 5,01 h. Poprzednie 3,5 h było więc o godzinę i pół za małe i
+# ucinało 30% stawki — w tym mecze z czołowych lig, bo kolejność jest po
+# jakości, ale ogon też zawiera dobre zdarzenia.
+#
+# Rachunek bezpieczeństwa do 6-godzinnego limitu GitHuba:
+#   pobranie Forebet + indeks Livesport .... ~11 min (przed pętlą)
+#   zapis, scoring, mail, commit ........... ~10 min (po pętli)
+#   budżet pętli ........................... 5,0 h
+#   RAZEM .................................. ~5,35 h, zapas ~39 min
+#
+# Gdyby pula Forebet urosła powyżej ~750 kandydatów, sam budżet nie wystarczy —
+# trzeba będzie skrócić czas jednego meczu (dominują ładowania stron Livesport
+# po H2H i formę, nie AI ani SofaScore).
 ENRICH_TIME_BUDGET_SECONDS = int(
-    os.getenv('FOREBET_ENRICH_BUDGET_SECONDS', str(int(3.5 * 3600)))
+    os.getenv('FOREBET_ENRICH_BUDGET_SECONDS', str(int(5.0 * 3600)))
 )
 
 _GENERIC_TOKENS = {
