@@ -900,6 +900,42 @@ def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
     return 'direct' if direct >= reverse else 'reversed'
 
 
+def _orient_fan_vote(vote: Dict[str, Any], home_team: str,
+                     away_team: str) -> None:
+    """Ustaw Fan Vote względem NASZYCH stron. Modyfikuje ``vote`` w miejscu.
+
+    Po co: ``get_sofascore_prediction`` zwraca głosy w kolejności SofaScore,
+    a NIE w kolejności przekazanych argumentów. Dowód z testu symetrii na
+    „C. Tabur vs H. Mayot": przekazanie Mayota jako gospodarza dało te same
+    ``home=62, away=38`` co przekazanie Tabura. Czyli gdy nasza kolejność różni
+    się od SofaScore, procenty trafiają do złego gracza.
+
+    To nie jest kosmetyka: Fan Vote jest składnikiem scoringu, więc odwrócony
+    głos PODBIJA ocenę błędnego typu i wypycha go do maila. Tak powstawały
+    tenisowe „VALUE BET" na zawodnika, którego rynek wyceniał jako outsidera,
+    a mail pokazywał obok 82% głosów kibiców „za nim".
+    """
+    if not vote.get('sofascore_found'):
+        return
+    hp = vote.get('sofascore_home_win_prob')
+    ap = vote.get('sofascore_away_win_prob')
+    if hp is None or ap is None:
+        return
+
+    url = vote.get('sofascore_url') or ''
+    m = re.search(r'/match/(\d+)', str(url))
+    if not m:
+        vote['sofascore_orientation'] = 'unknown'
+        return
+    verdict = _verify_sofascore_event(int(m.group(1)), home_team, away_team)
+    vote['sofascore_orientation'] = verdict or 'unknown'
+    if verdict == 'reversed':
+        vote['sofascore_home_win_prob'] = ap
+        vote['sofascore_away_win_prob'] = hp
+        print(f"      🔄 Fan Vote miał odwrócone strony — zamieniam "
+              f"({hp}% / {ap}% → {ap}% / {hp}%)")
+
+
 def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
                            date_str: Optional[str] = None) -> Dict[str, Any]:
     """Kursy z SofaScore — trzecie źródło, szukane po NAZWACH drużyn.
@@ -1739,6 +1775,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             try:
                 import sofascore_fanvote as fanvote
                 vote = fanvote.get_fan_vote(home, away, sport, date_str)
+                _orient_fan_vote(vote, home, away)
                 row.update(vote)
                 if vote.get('sofascore_found'):
                     print(f"      🗳️ Fan Vote: {vote['sofascore_home_win_prob']}% / "
