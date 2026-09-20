@@ -94,6 +94,14 @@ jobs:
 
     steps:
       # Ręczne uruchomienie z wybranym jednym sportem pomija pozostałe joby.
+      # Moment startu joba. Pipeline liczy od niego twardy termin zakonczenia
+      # petli: JOB_START_TS + 6 h - rezerwa na zapis. Dzieki temu wykorzystujemy
+      # KAZDA dostepna minute (liczac od realnego startu, a nie od wejscia w
+      # petle), nie ryzykujac ubicia joba w trakcie zapisu wynikow i maila.
+      # Musi byc PIERWSZYM krokiem, zeby objac takze setup (checkout, pip, Tor).
+      - name: Record job start
+        run: echo "JOB_START_TS=$(date +%s)" >> $GITHUB_ENV
+
       - name: Check if this sport should run
         id: gate
         run: |
@@ -211,6 +219,12 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          # Twardy termin zakonczenia petli wzbogacania liczony od startu joba.
+          # JOB_START_TS ustawia krok "Record job start". Rezerwa 12 min na
+          # zapis, scoring, mail i commit — te etapy sa PO petli.
+          JOB_START_TS: ${{ env.JOB_START_TS }}
+          FOREBET_JOB_LIMIT_SECONDS: "21600"
+          FOREBET_OUTPUT_RESERVE_SECONDS: "720"
           # Rotacja kluczy Groq przy 429 — patrz komentarz w kroku sprawdzania
           # backendu AI. Puste sekrety nie szkodza.
           GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
