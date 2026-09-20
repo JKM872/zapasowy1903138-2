@@ -249,7 +249,27 @@ H2H_MIN_MATCHES = 2
 # tylko dlatego, że niżej pilnuje go ENRICH_TIME_BUDGET_SECONDS — bez hamulca
 # job zginąłby na 6-godzinnym timeoucie GitHuba, tracąc CAŁY dorobek: zapis
 # wyników i mail są po pętli.
-DEFAULT_MAX_PER_SPORT = int(os.getenv('FOREBET_MAX_PER_SPORT_DEFAULT', '200'))
+# 0 = BEZ LIMITU (domyślnie). Zasięg wyznacza czas, nie arbitralna liczba.
+#
+# Historia: 60 -> 200 -> 0. Limit był potrzebny, dopóki jedynym ogranicznikiem
+# był 6-godzinny timeout GitHuba — przekroczenie go zabijało joba, a zapis
+# wyników i mail są PO pętli, więc run nie zostawiał niczego.
+#
+# Odkąd pętli pilnuje ENRICH_TIME_BUDGET_SECONDS (przerywa i przechodzi do
+# zapisu), limit przestał chronić cokolwiek, a zaczął po prostu ucinać mecze.
+# Przy ~723 kandydatach piłki i ~40 s/mecz cała pula to ~8 h, czyli i tak nie
+# zmieści się w 6 h — ale to CZAS ma o tym decydować, nie liczba 200.
+#
+# Warunek konieczny tej zmiany: pętla musi iść od NAJLEPSZYCH kandydatów.
+# Inaczej hamulec ucinałby mecze wieczorne zamiast najsłabszych. Chronologia
+# jest przywracana dopiero przy zapisie i mailu.
+DEFAULT_MAX_PER_SPORT = int(os.getenv('FOREBET_MAX_PER_SPORT_DEFAULT', '0'))
+
+# Do czego celuje miękka podłoga progu, gdy limitu nie ma. Podłoga odzyskuje
+# mecze spod progu tylko wtedy, gdy pula jest MNIEJSZA niż to, co i tak
+# przetworzymy — a bez limitu nie ma z czym tego porównać. 200 to liczba,
+# którą realnie wyrabiamy w budżecie czasu.
+TOP_UP_TARGET = int(os.getenv('FOREBET_TOP_UP_TARGET', '200'))
 
 # Twardy budżet czasu na wzbogacanie. Po jego przekroczeniu przerywamy pętlę i
 # przechodzimy do zapisu + maila z tym, co już mamy. Lepiej wysłać 150 meczów
@@ -1376,7 +1396,11 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     # top_up_to = cap: gdy po progach zostaje mniej meczów, niż i tak
     # zmieścimy, odzyskujemy najlepsze z odrzuconych. Próg ma odsiewać nadmiar,
     # nie zawężać i tak małej puli (koszykówka miała 13.09 tylko 4 zdarzenia).
-    pre_cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
+    # Gdy limitu nie ma (0), podłoga celuje w TOP_UP_TARGET — bo „mniej niż
+    # zmieścimy" trzeba z czymś porównać, a bez limitu nie ma z czym.
+    # Bez tego top_up_to=0 cicho wyłączyłoby podłogę i próg 52% znów obciąłby
+    # małe sporty (koszykówka miała 13.09 tylko 4 zdarzenia).
+    pre_cap = (max_matches or DEFAULT_MAX_PER_SPORT) or TOP_UP_TARGET
     selected, rejected = select_forebet_matches(all_matches, sport,
                                                 top_up_to=pre_cap)
     recovered = rejected.pop('_odzyskane_maly_wybor', 0)
@@ -1389,11 +1413,19 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
               f"(faworyt ≥ {recovered_floor}%) — pula mniejsza niż limit "
               f"{pre_cap}, więc próg nie miał czego odsiewać")
 
-    cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
-    if len(selected) > cap:
-        # Najpierw wybierz najlepszych kandydatów, potem przywróć kolejność
-        # po godzinie — mail i JSON mają być chronologiczne.
-        #
+    # Przetwarzamy WSZYSTKIE wybrane mecze, ale zawsze w kolejności JAKOŚCI.
+    #
+    # Wcześniej po wybraniu najlepszych kandydatów kolejność była przywracana
+    # chronologicznie i pętla szła po godzinach. Przy limicie 60 nie miało to
+    # znaczenia, bo cała lista i tak się mieściła. Po zdjęciu limitu miałoby
+    # fatalne: hamulec czasu ucinałby OGON, czyli mecze wieczorne — niezależnie
+    # od tego, jak dobre. Tracilibyśmy La Ligę o 21:00, a przetwarzali mecz
+    # rezerw o 11:00.
+    #
+    # Dlatego pętla idzie od najlepszych, a chronologię przywracamy dopiero
+    # przy zapisie i mailu. Gdy czas się skończy, odpada realnie najsłabszy
+    # ogon, a nie najpóźniejszy.
+    if True:
         # Kolejność: NAJPIERW mecze, które Forebet zdołał wycenić, potem
         # reszta; w obu grupach malejąco po sile faworyta.
         #
@@ -1416,16 +1448,31 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             has_market = bool(m.get('home_odds') or m.get('away_odds'))
             return (0 if has_market else 1, -(m.get('forebet_fav_prob') or 0))
 
-        by_quality = sorted(selected, key=_priority)[:cap]
+        # cap = 0 (domyślnie) oznacza BRAK limitu — o zasięgu decyduje czas,
+        # nie arbitralna liczba. Limit zostaje dostępny przez --max-matches
+        # i FOREBET_MAX_PER_SPORT_DEFAULT, gdy ktoś chce świadomie przyciąć.
+        cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
+        ordered = sorted(selected, key=_priority)
+        by_quality = ordered[:cap] if cap else ordered
         dropped = len(selected) - len(by_quality)
         worst = min((m.get('forebet_fav_prob') or 0) for m in by_quality)
         with_market = sum(1 for m in by_quality
                           if m.get('home_odds') or m.get('away_odds'))
-        selected = sorted(by_quality, key=lambda m: (m.get('match_time') or '99:99'))
-        print(f"   ✂️ Limit {cap}/sport: wzbogacam {len(selected)} najlepszych "
-              f"kandydatów (odrzucono {dropped}, próg faworyta ≥ {worst}%)")
+        # BEZ przywracania chronologii — patrz komentarz wyżej.
+        selected = by_quality
+        if cap:
+            print(f"   ✂️ Limit {cap}/sport: wzbogacam {len(selected)} "
+                  f"najlepszych kandydatów (odrzucono {dropped}, "
+                  f"próg faworyta ≥ {worst}%)")
+        else:
+            print(f"   ♾️ Bez limitu: wzbogacam WSZYSTKIE {len(selected)} "
+                  f"wybrane mecze, od najlepszych "
+                  f"(budżet czasu {ENRICH_TIME_BUDGET_SECONDS / 3600:.1f} h "
+                  f"decyduje, gdzie się zatrzymamy)")
         print(f"      ↳ z rynkiem (kursy Forebet): {with_market}/{len(selected)}"
               f" — pierwszeństwo, bo 87% z nich ma realny kurs vs 44% bez")
+        print(f"      ↳ kolejność: jakość, nie godzina — hamulec czasu ucina "
+              f"najsłabszy ogon, nie mecze wieczorne")
 
     if not selected:
         paths = write_outputs([], sport, date_str)
@@ -1663,6 +1710,12 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             pass
 
     # ── FAZA 5: wyjście ──
+    # Chronologia DOPIERO tutaj. Pętla szła od najlepszych kandydatów, żeby
+    # hamulec czasu ucinał najsłabszy ogon, ale mail i JSON mają być
+    # uporządkowane po godzinie rozpoczęcia — tak się je czyta.
+    rows.sort(key=lambda r: (str(r.get('match_date') or ''),
+                             str(r.get('match_time') or '99:99')))
+
     print("\n[5/6] Zapis wyników")
     paths = write_outputs(rows, sport, date_str)
     print(f"   💾 {paths['csv']}")
