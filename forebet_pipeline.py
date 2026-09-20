@@ -101,6 +101,21 @@ TWO_WAY_MIN_GAP = float(os.getenv('FOREBET_MIN_GAP_2WAY', '0'))
 # `form_unknown`, żeby dało się policzyć, jak często to się zdarza.
 REQUIRE_FORM_ADVANTAGE = True
 
+# Minimalny score, by mecz wszedł do maila.
+#
+# Było 55 — liczba wzięta przeze mnie z powietrza, nigdy nie ustalana. Pomiar
+# na 1571 meczach z 4 najnowszych dni pokazał, że to NAJWIĘKSZE wąskie gardło:
+# 190 meczów przechodziło WSZYSTKIE pozostałe reguły i ginęło wyłącznie na tym
+# progu (mediana ich score: 48,9).
+#
+# Obniżone do 50. Odzyskuje 84 z tych 190 (~21/dzień), a grupa trzyma jakość:
+# 67% ma dodatnie EV, średnio 3,9 źródła, 48 z 84 ma ≥4 źródła.
+#
+# Dlaczego nie niżej: przy 45 odzyskalibyśmy 148, ale sięgnęlibyśmy w przedział
+# 36–45, czyli poniżej rzutu monetą. 50 jest granicą, poniżej której model nie
+# ma już nic do powiedzenia.
+DEFAULT_MIN_SCORE = float(os.getenv('FOREBET_MIN_SCORE', '50'))
+
 # Ile meczów na sport dostaje krótką analizę AI.
 #
 # Limit istnieje, bo analiza konkurowała o ten sam budżet Groq co DOPASOWANIE
@@ -1243,7 +1258,7 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
 
 def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         min_odds: float = 0.0, max_odds: float = 0.0,
-        min_score: float = 55.0, min_sources: int = 2,
+        min_score: Optional[float] = None, min_sources: int = 2,
         use_sofascore: bool = True, use_ai: bool = True,
         use_ai_matching: bool = True,
         use_livesport: bool = True, headless: bool = True,
@@ -1253,9 +1268,16 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         load_more_clicks: int = 25) -> Dict[str, Any]:
     """Przejdź cały pipeline dla jednego sportu."""
     sport = sport.lower()
+    # None = weź domyślny próg (nadpisywalny przez FOREBET_MIN_SCORE). Trzymamy
+    # to tutaj, a nie w sygnaturze, żeby zmiana env działała też dla wywołań
+    # programowych, nie tylko z linii poleceń.
+    if min_score is None:
+        min_score = DEFAULT_MIN_SCORE
     print('=' * 70)
     print(f"🎯 FOREBET PIPELINE — {sport.upper()} — {date_str}")
     print('=' * 70)
+    print(f"   ⚙️ próg score ≥ {min_score}, min. źródeł {min_sources}, "
+          f"limit {max_matches or DEFAULT_MAX_PER_SPORT}/sport")
 
     # ── FAZA 1: lista meczów z Forebet ──
     print("\n[1/6] Forebet — lista meczów dnia")
@@ -1672,7 +1694,7 @@ def main() -> None:
                     help='Dodatkowy dolny próg kursu (0 = tylko próg per sport)')
     ap.add_argument('--max-odds', type=float, default=0.0,
                     help='Górne ograniczenie kursu (0 = wyłączone)')
-    ap.add_argument('--min-score', type=float, default=55.0,
+    ap.add_argument('--min-score', type=float, default=DEFAULT_MIN_SCORE,
                     help='Minimalny score, by mecz się kwalifikował')
     ap.add_argument('--min-sources', type=int, default=2,
                     help='Minimalna liczba źródeł w scoringu')
