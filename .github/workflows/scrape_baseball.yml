@@ -95,6 +95,13 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          # Dodatkowe klucze Groq — rotacja przy 429. Puste sekrety sa
+          # nieszkodliwe. Sens maja WYLACZNIE klucze z OSOBNYCH kont:
+          # klucze jednego konta dziela limit i nic nie dodaja.
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          GROQ_API_KEY_3: ${{ secrets.GROQ_API_KEY_3 }}
+          GROQ_API_KEY_4: ${{ secrets.GROQ_API_KEY_4 }}
+          GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
         run: python tools/check_ai_backend.py
 
       # ── Run baseball scraper ──
@@ -103,6 +110,13 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          # Dodatkowe klucze Groq — rotacja przy 429. Puste sekrety sa
+          # nieszkodliwe. Sens maja WYLACZNIE klucze z OSOBNYCH kont:
+          # klucze jednego konta dziela limit i nic nie dodaja.
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          GROQ_API_KEY_3: ${{ secrets.GROQ_API_KEY_3 }}
+          GROQ_API_KEY_4: ${{ secrets.GROQ_API_KEY_4 }}
+          GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
