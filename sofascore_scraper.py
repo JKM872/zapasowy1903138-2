@@ -5397,6 +5397,12 @@ def _model_chain_from_env(var: str, default: List[str]) -> List[str]:
 
 _GROQ_VISION_MODEL_CHAIN = _model_chain_from_env(
     'SOFASCORE_GROQ_VISION_MODELS', _GROQ_VISION_MODEL_CHAIN_DEFAULT)
+
+# Wyłącznik ścieżki AI Vision — patrz komentarz w _extract_votes_via_ai_vision.
+_ai_vision_failures: int = 0
+_ai_vision_disabled: bool = False
+_AI_VISION_MAX_FAILURES: int = int(
+    os.getenv('SOFASCORE_AI_VISION_MAX_FAILURES', '3'))
 _GROQ_TEXT_MODEL_CHAIN = _model_chain_from_env(
     'SOFASCORE_GROQ_TEXT_MODELS', _GROQ_TEXT_MODEL_CHAIN_DEFAULT)
 _groq_active_vision_model: Optional[str] = None
@@ -5772,6 +5778,19 @@ def extract_fan_vote_via_ai_vision(
     Returns:
         Dict z sofascore_* kluczami lub None
     """
+    global _ai_vision_failures, _ai_vision_disabled
+
+    # Wyłącznik. W logu realnego runu KAŻDA próba kończyła się tak samo:
+    # Gemini Vision — 3 modele (quota / NotFound), Groq Vision — 404 na modelu.
+    # To screenshot plus cztery zapytania sieciowe, około 20 s na mecz, przy
+    # 746 meczach ponad 4 godziny na ścieżkę, która nie zwróciła nic ani raz.
+    #
+    # Po _AI_VISION_MAX_FAILURES nieudanych próbach pod rząd wyłączamy ją do
+    # końca procesu. Sukces zeruje licznik, więc środowisko, w którym Vision
+    # działa, nie jest karane.
+    if _ai_vision_disabled:
+        return None
+
     print(f"   🤖 SofaScore AI Vision: Próbuję ekstrakcję ze screenshota...")
 
     # 1. Zrób screenshot
@@ -5782,14 +5801,21 @@ def extract_fan_vote_via_ai_vision(
     # 2. Próbuj Gemini Vision
     result = _extract_votes_via_gemini_vision(screenshot, home_team, away_team, sport)
     if result:
+        _ai_vision_failures = 0
         return result
 
     # 3. Fallback: Groq Vision
     result = _extract_votes_via_groq_vision(screenshot, home_team, away_team, sport)
     if result:
+        _ai_vision_failures = 0
         return result
 
+    _ai_vision_failures += 1
     print(f"   ⚠️ SofaScore AI Vision: Żadne AI nie wyekstraktowało fan vote")
+    if _ai_vision_failures >= _AI_VISION_MAX_FAILURES:
+        _ai_vision_disabled = True
+        print(f"   ⛔ SofaScore AI Vision: {_ai_vision_failures} porażek pod "
+              f"rząd — wyłączam do końca runu (oszczędza ~20 s na mecz)")
     return None
 
 
