@@ -23,6 +23,7 @@ Precedence for the model:
 from __future__ import annotations
 
 import os
+import re
 from typing import List, Optional
 
 MODELS_ENDPOINT = 'https://api.groq.com/openai/v1/models'
@@ -79,19 +80,62 @@ RATE_LIMIT_DELAY = 0.5
 _resolved_model: Optional[str] = None
 
 
-def api_key() -> Optional[str]:
-    """Return the Groq key from the environment, or a local config override."""
-    key = os.environ.get('GROQ_API_KEY')
-    if key:
-        return key
-    try:
-        import groq_config  # type: ignore[import-not-found]
+MAX_NUMBERED_KEYS = 10
 
-        if getattr(groq_config, 'GROQ_ENABLED', True):
-            return getattr(groq_config, 'GROQ_API_KEY', None)
-    except ImportError:
-        pass
-    return None
+# Kursor po kluczach. Gdy klucz wyczerpie limity, kolejne wywołania w tym samym
+# procesie startują od następnego — inaczej każde zapytanie znów przepalałoby
+# pierwszy klucz na 429 i tracilibyśmy czas na pewną odmowę.
+_key_cursor = 0
+
+
+def api_keys() -> List[str]:
+    """Wszystkie dostępne klucze Groq, w kolejności użycia.
+
+    Źródła (łączone, bez duplikatów):
+      * ``GROQ_API_KEYS`` — kilka kluczy oddzielonych przecinkiem, średnikiem
+        lub białym znakiem,
+      * ``GROQ_API_KEY``, ``GROQ_API_KEY_2`` … ``GROQ_API_KEY_10``,
+      * ``groq_config.GROQ_API_KEY`` jako zapas lokalny.
+
+    Po co wiele kluczy: limity Groq są liczone na konto ORAZ na model. Gdy
+    wszystkie modele jednego konta oddadzą 429, drugi klucz daje świeżą pulę.
+    Uwaga: dwa klucze z TEGO SAMEGO konta dzielą ten sam limit i nic nie dają.
+    """
+    found: List[str] = []
+
+    def _add(value: Optional[str]) -> None:
+        if not value:
+            return
+        for part in re.split(r'[,;\s]+', str(value)):
+            part = part.strip()
+            if part and part not in found:
+                found.append(part)
+
+    _add(os.environ.get('GROQ_API_KEYS'))
+    _add(os.environ.get('GROQ_API_KEY'))
+    for i in range(2, MAX_NUMBERED_KEYS + 1):
+        _add(os.environ.get(f'GROQ_API_KEY_{i}'))
+
+    if not found:
+        try:
+            import groq_config  # type: ignore[import-not-found]
+
+            if getattr(groq_config, 'GROQ_ENABLED', True):
+                _add(getattr(groq_config, 'GROQ_API_KEY', None))
+                _add(getattr(groq_config, 'GROQ_API_KEYS', None))
+        except ImportError:
+            pass
+    return found
+
+
+def api_key() -> Optional[str]:
+    """Pierwszy dostępny klucz Groq.
+
+    Zachowane dla zgodności — wywołania, które chcą jednego klucza, dostają
+    ten sam co dotąd. Rotację po wszystkich kluczach robi :func:`chat`.
+    """
+    keys = api_keys()
+    return keys[0] if keys else None
 
 
 def list_available_models(key: Optional[str] = None, timeout: int = 10) -> List[str]:
@@ -227,56 +271,97 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
         log(f"      ⚠️ Groq: brak requests ({type(e).__name__})")
         return None
 
-    if key is None:
-        key = api_key()
-    if not key:
+    global _key_cursor
+
+    # Jawnie podany klucz = używamy tylko jego (wywołujący wie, co robi).
+    # Bez niego bierzemy wszystkie skonfigurowane i rotujemy po nich.
+    if key is not None:
+        keys = [key] if key else []
+    else:
+        keys = api_keys()
+    if not keys:
         log("      ⚠️ Groq: brak GROQ_API_KEY")
         return None
 
     if timeout is None:
         timeout = REQUEST_TIMEOUT
 
-    candidates = model_candidates(key)
+    # Listę modeli ustalamy RAZ, pierwszym działającym kluczem, i używamy dla
+    # wszystkich. Odpytywanie /models osobno dla każdego klucza to dodatkowe
+    # żądania, a konta darmowe widzą ten sam zestaw modeli.
+    candidates = model_candidates(keys[0])
     if not candidates:
         return None
 
     tried_reset = False
-    for model in candidates:
-        try:
-            resp = requests.post(
-                CHAT_ENDPOINT,
-                headers={'Authorization': f'Bearer {key}',
-                         'Content-Type': 'application/json'},
-                json={'model': model,
-                      'messages': [{'role': 'user', 'content': prompt}],
-                      'temperature': temperature,
-                      'max_tokens': max_tokens},
-                timeout=timeout,
-            )
-        except Exception as e:
-            log(f"      ⚠️ Groq [{model}]: {type(e).__name__}: {e}")
-            continue
+    # Start od kursora: jeśli klucz #1 już się wyczerpał w tym procesie, nie ma
+    # sensu znów o niego pytać. Pełne kółko, żeby żadnego nie pominąć.
+    order = [keys[(_key_cursor + i) % len(keys)] for i in range(len(keys))]
 
-        if resp.status_code == 200:
+    for key_no, current in enumerate(order, 1):
+        rate_limited_all = True
+        for model in candidates:
             try:
-                return resp.json()['choices'][0]['message']['content'].strip()
+                resp = requests.post(
+                    CHAT_ENDPOINT,
+                    headers={'Authorization': f'Bearer {current}',
+                             'Content-Type': 'application/json'},
+                    json={'model': model,
+                          'messages': [{'role': 'user', 'content': prompt}],
+                          'temperature': temperature,
+                          'max_tokens': max_tokens},
+                    timeout=timeout,
+                )
             except Exception as e:
-                log(f"      ⚠️ Groq [{model}]: zła odpowiedź ({type(e).__name__})")
+                log(f"      ⚠️ Groq [{model}]: {type(e).__name__}: {e}")
+                rate_limited_all = False
                 continue
 
-        if is_rate_limited(resp.status_code):
-            log(f"      ⚠️ Groq [{model}]: limit (429) — próbuję kolejnego modelu")
-            continue
+            if resp.status_code == 200:
+                try:
+                    out = resp.json()['choices'][0]['message']['content']
+                    # Zapamiętaj klucz, który zadziałał, żeby następne
+                    # wywołanie zaczęło od niego, a nie od wyczerpanego.
+                    _key_cursor = keys.index(current)
+                    return out.strip()
+                except Exception as e:
+                    log(f"      ⚠️ Groq [{model}]: zła odpowiedź "
+                        f"({type(e).__name__})")
+                    rate_limited_all = False
+                    continue
 
-        if is_decommissioned_error(resp.status_code, resp.text) and not tried_reset:
-            tried_reset = True
-            reset_resolved_model()
-            resolve_model(key, force=True)
-            log(f"      ⚠️ Groq [{model}]: model wycofany — odświeżam listę")
-            continue
+            if is_rate_limited(resp.status_code):
+                suffix = (f" [klucz {key_no}/{len(order)}]"
+                          if len(order) > 1 else "")
+                log(f"      ⚠️ Groq [{model}]{suffix}: limit (429) — "
+                    f"próbuję kolejnego modelu")
+                continue
 
-        log(f"      ⚠️ Groq [{model}]: HTTP {resp.status_code} "
-            f"{(resp.text or '')[:100]}")
+            rate_limited_all = False
 
-    log(f"      ⛔ Groq: żaden z {len(candidates)} modeli nie odpowiedział")
+            if (is_decommissioned_error(resp.status_code, resp.text)
+                    and not tried_reset):
+                tried_reset = True
+                reset_resolved_model()
+                resolve_model(current, force=True)
+                log(f"      ⚠️ Groq [{model}]: model wycofany — odświeżam listę")
+                continue
+
+            log(f"      ⚠️ Groq [{model}]: HTTP {resp.status_code} "
+                f"{(resp.text or '')[:100]}")
+
+        # Wszystkie modele tego klucza na limicie — przesuń kursor, żeby
+        # kolejne wywołania nie zaczynały od niego, i spróbuj następnego.
+        if rate_limited_all and len(order) > 1:
+            _key_cursor = (keys.index(current) + 1) % len(keys)
+            if key_no < len(order):
+                log(f"      ↻ Groq: klucz {key_no} wyczerpany na wszystkich "
+                    f"{len(candidates)} modelach — przechodzę na klucz "
+                    f"{key_no + 1}/{len(order)}")
+
+    if len(order) > 1:
+        log(f"      ⛔ Groq: {len(order)} kluczy × {len(candidates)} modeli — "
+            f"nic nie odpowiedziało")
+    else:
+        log(f"      ⛔ Groq: żaden z {len(candidates)} modeli nie odpowiedział")
     return None
