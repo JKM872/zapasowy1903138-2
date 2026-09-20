@@ -298,6 +298,55 @@ ENRICH_TIME_BUDGET_SECONDS = int(
     os.getenv('FOREBET_ENRICH_BUDGET_SECONDS', str(int(5.0 * 3600)))
 )
 
+# ── Hamulec liczony od REALNEGO deadline'u joba ─────────────────────────────
+#
+# Stały budżet pętli jest z natury albo za ostrożny, albo groźny. Żądanie
+# „5 h 50 min na pętlę" przekroczyłoby limit GitHuba: 11 min przed + 5 h 50 min
+# + 10 min po = 6 h 11 min. Job zostałby ubity W TRAKCIE zapisu, a zapis i mail
+# są PO pętli — stracilibyśmy cały dorobek.
+#
+# Dlatego liczymy inaczej: workflow zapisuje moment startu joba do JOB_START_TS,
+# a my wyznaczamy twardy termin zakończenia pętli:
+#
+#     deadline = JOB_START_TS + JOB_LIMIT - OUTPUT_RESERVE
+#
+# To wykorzystuje KAŻDĄ dostępną minutę (bo liczy od faktycznego startu, a nie
+# od momentu wejścia w pętlę), a jednocześnie gwarantuje rezerwę na zapis.
+# Gdy JOB_START_TS nie ma (uruchomienie lokalne), zostaje stały budżet.
+JOB_LIMIT_SECONDS = int(os.getenv('FOREBET_JOB_LIMIT_SECONDS', str(6 * 3600)))
+OUTPUT_RESERVE_SECONDS = int(
+    os.getenv('FOREBET_OUTPUT_RESERVE_SECONDS', str(12 * 60)))
+
+
+def enrich_deadline(now: Optional[float] = None) -> Tuple[float, str]:
+    """Kiedy najpóźniej przerwać pętlę wzbogacania.
+
+    Returns:
+        (timestamp, źródło) — źródło to 'deadline joba' albo 'staly budzet'.
+    """
+    now = now if now is not None else time.time()
+
+    raw = os.getenv('JOB_START_TS', '').strip()
+    if not raw.isdigit():
+        # Brak informacji o starcie joba (uruchomienie lokalne) — zostaje
+        # stały budżet jako jedyne zabezpieczenie.
+        return now + ENRICH_TIME_BUDGET_SECONDS, 'staly budzet'
+
+    by_job = int(raw) + JOB_LIMIT_SECONDS - OUTPUT_RESERVE_SECONDS
+
+    # Deadline joba jest mechanizmem GŁÓWNYM: wykorzystuje cały pozostały czas,
+    # więc gdy setup był krótki, pętla dostaje więcej niż stałe 5 h. Stały
+    # budżet NIE może go tu skracać — inaczej marnowalibyśmy różnicę (przy
+    # 11-minutowym setupie to 37 minut, czyli ~90 meczów).
+    #
+    # Stały budżet przycina tylko wtedy, gdy ktoś ŚWIADOMIE go ustawił przez
+    # env — wtedy jest to jawna decyzja, a nie przypadkowy sufit.
+    if 'FOREBET_ENRICH_BUDGET_SECONDS' in os.environ:
+        by_budget = now + ENRICH_TIME_BUDGET_SECONDS
+        if by_budget < by_job:
+            return by_budget, 'staly budzet (jawnie ustawiony)'
+    return by_job, 'deadline joba'
+
 _GENERIC_TOKENS = {
     'fc', 'sc', 'ac', 'as', 'if', 'ff', 'sk', 'bk', 'cf', 'cd', 'ca', 'club',
     'team', 'city', 'united', 'women', 'men', 'youth', 'reserve', 'academy',
@@ -1658,18 +1707,21 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     ai_analysed = 0
     enrich_started = time.time()
     budget_hit = False
+    deadline, deadline_src = enrich_deadline(enrich_started)
+    print(f"   ⏱️ Pętla ma czas do {datetime.fromtimestamp(deadline, timezone.utc).strftime('%H:%M:%S')} UTC "
+          f"({(deadline - enrich_started) / 3600:.2f} h, źródło: {deadline_src})")
 
     for i, m in enumerate(survivors, 1):
         # Hamulec czasu. Zapis wyników i mail są PO tej pętli, więc job ubity
         # na 6-godzinnym timeoucie GitHuba nie zostawia niczego. Lepiej oddać
         # niepełną listę niż stracić całość.
-        elapsed = time.time() - enrich_started
-        if elapsed > ENRICH_TIME_BUDGET_SECONDS:
+        now = time.time()
+        if now > deadline:
             budget_hit = True
             remaining = len(survivors) - i + 1
-            print(f"\n   ⏳ Budżet czasu wyczerpany "
-                  f"({elapsed / 3600:.1f} h > "
-                  f"{ENRICH_TIME_BUDGET_SECONDS / 3600:.1f} h) — przerywam po "
+            print(f"\n   ⏳ Czas wyczerpany "
+                  f"({(now - enrich_started) / 3600:.2f} h, limit z "
+                  f"{deadline_src}) — przerywam po "
                   f"{i - 1}/{len(survivors)} meczach, pomijam {remaining}.")
             print("      ↳ przechodzę do zapisu i maila z tym, co już mam")
             break
