@@ -3559,6 +3559,22 @@ _BROWSER_API_MAX_FAILURES: int = 5  # v7.6: raised from 3 — daj UC więcej sza
 _browser_api_last_failure_time: float = 0.0  # v7.7: timestamp ostatniej porażki
 _BROWSER_API_RESET_INTERVAL: int = 180  # v7.7: po 3 min reset countera
 
+# v10.7 — czy ścieżka przeglądarkowa KIEDYKOLWIEK zadziałała w tym procesie.
+#
+# Reset licznika porażek (v7.7) miał chronić przed sytuacją, w której jeden zły
+# shard wyłącza ścieżkę na cały run. W CI działa jednak odwrotnie: Cloudflare
+# blokuje każdą próbę, mecze w pipeline są od siebie oddalone o ponad
+# _BROWSER_API_RESET_INTERVAL, więc licznik zeruje się bez końca i przy KAŻDYM
+# meczu płacimy pełną kaskadę: 2 sesje przeglądarki po 12 s, AI Vision na
+# screenshocie, dedykowany driver 30 s — razem 60–80 s za nic.
+#
+# Dlatego reset przysługuje tylko wtedy, gdy mamy dowód, że ta ścieżka
+# w tym środowisku w ogóle działa: choć raz się udała. Jeśli nigdy nie
+# zadziałała, wyłączamy ją na stałe dla tego procesu — bo kolejne próby są
+# przewidywalnie bezowocne, a kosztują najdroższy zasób, czyli czas joba.
+_browser_api_ever_succeeded: bool = False
+_browser_api_gave_up_logged: bool = False  # komunikat o rezygnacji raz na proces
+
 # v7.1 — Specific Change 1: gate the browser-fetch path on CI by default.
 # Local runs (neither GITHUB_ACTIONS nor CI set, and no explicit opt-in) keep
 # the curl_cffi fast path as primary so clause 3.1 holds bit-for-bit.
@@ -3801,13 +3817,15 @@ def _get_browser_api_session():
     """
     global _browser_api_session_driver, _browser_api_session_ready
     global _browser_api_failed_count, _browser_api_reuse_counter
-    global _browser_api_last_failure_time
+    global _browser_api_last_failure_time, _browser_api_ever_succeeded
 
-    # v7.7: reset countera failures po _BROWSER_API_RESET_INTERVAL sek
-    # nieaktywności — bez tego pojedynczy zły shard wyłącza ścieżkę
-    # browser dla całej reszty runu.
+    # v7.7 + v10.7: reset licznika porażek po okresie bezczynności, ALE tylko
+    # gdy ścieżka choć raz zadziałała w tym procesie. Patrz komentarz przy
+    # _browser_api_ever_succeeded — bez tego warunku w CI resetujemy się
+    # w nieskończoność i palimy 60–80 s na mecz na z góry przegraną kaskadę.
     if (
         _browser_api_failed_count > 0
+        and _browser_api_ever_succeeded
         and _browser_api_last_failure_time > 0
         and (time.time() - _browser_api_last_failure_time) > _BROWSER_API_RESET_INTERVAL
     ):
@@ -3818,6 +3836,15 @@ def _get_browser_api_session():
         _browser_api_failed_count = 0
 
     if _browser_api_failed_count >= _BROWSER_API_MAX_FAILURES:
+        if not _browser_api_ever_succeeded:
+            global _browser_api_gave_up_logged
+            if not _browser_api_gave_up_logged:
+                _browser_api_gave_up_logged = True
+                print(
+                    f"   ⛔ SofaScore Browser API: {_browser_api_failed_count} "
+                    f"porażek i ANI JEDNEGO sukcesu — wyłączam tę ścieżkę do "
+                    f"końca runu (oszczędza ~60 s na mecz)"
+                )
         return None, False
 
     # v7.1 — Specific Change 6: recycle the singleton after MAX_REUSE successful uses.
@@ -3895,6 +3922,9 @@ def _get_browser_api_session():
         time.sleep(1)
         _browser_api_session_driver = driver
         _browser_api_session_ready = True
+        # Dowód, że ścieżka działa w tym środowisku — dopiero teraz reset
+        # licznika porażek ma sens (global zadeklarowany na początku funkcji).
+        _browser_api_ever_succeeded = True
         _browser_api_reuse_counter = 1
         print(f"   ✅ SofaScore Browser API: Sesja gotowa")
         return driver, True
