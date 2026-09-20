@@ -247,6 +247,66 @@ def is_rate_limited(status_code: int) -> bool:
     return status_code == 429
 
 
+def probe_key(key: str, timeout: int = 15) -> dict:
+    """Sprawdź jeden klucz: czy działa i ile zostało mu limitu.
+
+    Po co: przy kilku kluczach trzeba wiedzieć, czy naprawdę dają osobne pule.
+    Klucze z TEGO SAMEGO konta Groq dzielą limit, więc pokażą identyczne
+    pozostałe wartości — i wtedy dodanie ich niczego nie kupuje. Bez takiego
+    raportu wygląda to jak działająca rotacja, a jest jednym kontem w kółko.
+
+    ``organization`` udaje się odczytać tylko z treści odmowy 429 — Groq podaje
+    tam ``... in organization org_xxx``. Przy 200 zostaje None.
+
+    Returns:
+        {'ok', 'status', 'models', 'remaining_requests', 'remaining_tokens',
+         'organization', 'error'}
+    """
+    out = {'ok': False, 'status': None, 'models': 0,
+           'remaining_requests': None, 'remaining_tokens': None,
+           'organization': None, 'error': None}
+    if not key:
+        out['error'] = 'pusty klucz'
+        return out
+    try:
+        import requests
+    except Exception as e:  # pragma: no cover
+        out['error'] = f'brak requests ({type(e).__name__})'
+        return out
+
+    out['models'] = len(list_available_models(key, timeout=timeout))
+
+    # Minimalne zapytanie czatu — nagłówki limitów przychodzą dopiero tutaj,
+    # endpoint /models ich nie zwraca.
+    model = (model_candidates(key) or ['llama-3.3-70b-versatile'])[0]
+    try:
+        resp = requests.post(
+            CHAT_ENDPOINT,
+            headers={'Authorization': f'Bearer {key}',
+                     'Content-Type': 'application/json'},
+            json={'model': model, 'messages': [{'role': 'user', 'content': 'hi'}],
+                  'max_tokens': 1},
+            timeout=timeout,
+        )
+    except Exception as e:
+        out['error'] = f'{type(e).__name__}: {str(e)[:60]}'
+        return out
+
+    out['status'] = resp.status_code
+    hdr = {k.lower(): v for k, v in (resp.headers or {}).items()}
+    out['remaining_requests'] = hdr.get('x-ratelimit-remaining-requests')
+    out['remaining_tokens'] = hdr.get('x-ratelimit-remaining-tokens')
+    out['ok'] = resp.status_code in (200, 429)  # 429 = klucz WAŻNY, tylko zajęty
+
+    body = resp.text or ''
+    m = re.search(r'in organization\s+(org_[A-Za-z0-9]+)', body)
+    if m:
+        out['organization'] = m.group(1)
+    if resp.status_code not in (200, 429):
+        out['error'] = f'HTTP {resp.status_code} {body[:70]}'
+    return out
+
+
 def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
          key: Optional[str] = None, timeout: Optional[int] = None,
          log=print) -> Optional[str]:
