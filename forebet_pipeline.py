@@ -829,7 +829,23 @@ def _name_overlap(a: str, b: str) -> float:
         ta, tb = _short_tokens(a), _short_tokens(b)
     if not ta or not tb:
         return 0.0
-    return len(ta & tb) / min(len(ta), len(tb))
+
+    # Dopasowanie po PRZEDROSTKU, nie tylko po równości. Serwisy odmieniają
+    # i skracają nazwy: „Sint-Truiden II" vs „K. St.-Truidense V.V. B" to ten
+    # sam klub, ale `truiden` != `truidense`, więc zgodność wychodziła 0.00
+    # i weryfikacja odrzucała poprawne dopasowanie. Tak samo „Anagni" vs
+    # „Città di Anagni".
+    #
+    # Wymagamy co najmniej 5 znaków wspólnego przedrostka, żeby nie zlepiać
+    # przypadkowo krótkich słów.
+    def _matches(x: str, ys: set) -> bool:
+        if x in ys:
+            return True
+        return any((len(x) >= 5 and y.startswith(x))
+                   or (len(y) >= 5 and x.startswith(y)) for y in ys)
+
+    hits = sum(1 for t in ta if _matches(t, tb))
+    return hits / min(len(ta), len(tb))
 
 
 def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
