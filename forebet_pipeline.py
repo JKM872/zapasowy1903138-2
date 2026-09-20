@@ -116,6 +116,76 @@ REQUIRE_FORM_ADVANTAGE = True
 # ma już nic do powiedzenia.
 DEFAULT_MIN_SCORE = float(os.getenv('FOREBET_MIN_SCORE', '50'))
 
+# ── Marża bukmachera jako miara powagi rynku ───────────────────────────────
+#
+# Odpowiedź na „widzę jakieś losowe ligi". Nie robimy listy lig — byłaby
+# ułomna (setki lig, ciągłe zmiany) i subiektywna. Zamiast tego pytamy rynek:
+# bukmacher rozszerza marżę dokładnie tam, gdzie ma mało pewności i płynności,
+# czyli w ligach egzotycznych. To sygnał obiektywny, darmowy (mamy już kursy)
+# i działa dla każdego kraju i sportu bez utrzymywania czegokolwiek.
+#
+# Pomiar na zakwalifikowanych meczach z 4 dni (marża = suma 1/kurs - 1):
+#     4.3%  EFL Cup            13.0%  Prva Liga (Serbia)
+#     4.7%  La Liga            13.2%  Division 2 Norrland (Szwecja)
+#     6.1%  Premiership (SCO)  13.3%  Primera C Metropolitana (Argentyna)
+#     7.1%  Championship       13.6%  Prva Liga RS (Bośnia)
+#     7.4%  3. Liga (GER)      16.3%  Serie D Group I (Włochy)
+#
+# PROGI SĄ PER SPORT, bo naturalna marża zależy i od liczby wyników, i od
+# rynku. Zaczynałem od dwóch progów (2-way / 3-way) i to był błąd: wspólny próg
+# 12% dla rynków dwuwynikowych wyrzucał MLB, NPB i KBO — najlepsze ligi
+# baseballu na świecie — bo moneyline w baseballu ma marże 10–14%, znacznie
+# szersze niż tenis (3,4–9,2%). Kalibracja z realnych danych, per sport.
+#
+# Dlaczego dla piłki 13%, a nie 12%: próg 12% ucinał ją z 32 do 14 i zabierał
+# ligi, które NIE są losowe — TFF 1. Lig (12,2%), czeską Division A (12,2%),
+# izraelską Liga Leumit (12,6%), kazachską Premier League (12,6%). Granica
+# egzotyki leży wyżej: od 13% w górę to już Serie D, Landesliga Burgenland,
+# szwedzka Division 2 i bośniacka Prva Liga RS.
+#
+# Baseball ma 16%, czyli praktycznie wyłączone: w danych nie było ANI JEDNEJ
+# egzotycznej ligi baseballu (wszystko to MLB/NPB/KBO), więc nie ma tu czego
+# odsiewać i lepiej nie udawać, że jest.
+#
+# 0 = wyłączone dla danego sportu.
+MAX_MARGIN_BY_SPORT = {
+    'football': 13.0,    # egzotyka realnie występuje — Serie D, Landesliga
+    'hockey': 13.0,      # odsiewa ligi juniorskie (ELJ 13,3%)
+    'handball': 13.0,
+    'rugby': 13.0,
+    'tennis': 11.0,      # obserwowane 3,4–9,2%, więc próg z zapasem
+    'basketball': 10.0,  # obserwowane 1,0–8,0%
+    'volleyball': 11.0,  # obserwowane 8,2–9,8%
+    'baseball': 16.0,    # MLB/NPB/KBO siegaja 14% — nie karzemy ich
+}
+MAX_MARGIN_DEFAULT = float(os.getenv('FOREBET_MAX_MARGIN_DEFAULT', '13'))
+
+
+def max_margin_for(sport: str) -> float:
+    """Próg marży dla sportu. Env ``FOREBET_MAX_MARGIN_<SPORT>`` nadpisuje."""
+    sport = (sport or '').lower()
+    env = os.getenv(f'FOREBET_MAX_MARGIN_{sport.upper()}')
+    if env:
+        try:
+            return float(env)
+        except ValueError:
+            pass
+    return MAX_MARGIN_BY_SPORT.get(sport, MAX_MARGIN_DEFAULT)
+
+
+def bookmaker_margin(row: Dict[str, Any]) -> Optional[float]:
+    """Marża bukmachera w punktach procentowych (overround).
+
+    ``suma(1/kurs) - 1``. Dla uczciwego rynku bez marży dałoby 0%.
+    None, gdy mamy mniej niż dwa kursy — wtedy nie ma czego liczyć i mecz NIE
+    jest za to karany.
+    """
+    odds = [row.get('home_odds'), row.get('draw_odds'), row.get('away_odds')]
+    vals = [v for v in odds if isinstance(v, (int, float)) and v > 1]
+    if len(vals) < 2:
+        return None
+    return (sum(1.0 / v for v in vals) - 1.0) * 100.0
+
 # Ile meczów na sport dostaje krótką analizę AI.
 #
 # Limit istnieje, bo analiza konkurowała o ten sam budżet Groq co DOPASOWANIE
@@ -1112,6 +1182,15 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
         elif verdict is None:
             # Brak danych o formie nie odrzuca meczu, ale jest odnotowany.
             row['form_unknown'] = True
+
+    # Rynek egzotyczny — szeroka marża bukmachera. Liczona z kursów, które i
+    # tak mamy, więc nic nie kosztuje. Mecze bez policzalnej marży (mniej niż
+    # dwa kursy) przechodzą: brak danych to nie dowód przeciw.
+    margin = bookmaker_margin(row)
+    row['bookmaker_margin'] = round(margin, 1) if margin is not None else None
+    limit = max_margin_for(row.get('sport') or '')
+    if limit and margin is not None and margin > limit:
+        reasons.append(f'rynek_egzotyczny_marza_{margin:.1f}%>{limit:.0f}%')
 
     # H2H nie ma tu osobnej bramki: wchodzi do score z wagą WEIGHTS['h2h'],
     # więc odrzucanie po nim drugi raz karałoby ten sam sygnał dwukrotnie.
