@@ -1,15 +1,15 @@
 {
   "date": "2026-09-25",
   "sport": "basketball",
-  "generatedAt": "2026-09-25T04:21:31.465206",
+  "generatedAt": "2026-09-25T08:54:53.412773",
   "stats": {
     "total": 70,
-    "qualifying": 34,
-    "formAdvantage": 17
+    "qualifying": 12,
+    "formAdvantage": 12
   },
   "matches": [
     {
-      "id": 6685944701720687253,
+      "id": 3124065192806937688,
       "homeTeam": "Besiktas",
       "awayTeam": "Valencia",
       "time": "25.09.2026 17:00",
@@ -31,7 +31,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 40
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -43,7 +43,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -55,7 +55,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6329407943592625490,
+      "id": -4151846347074986371,
       "homeTeam": "Fenerbahce",
       "awayTeam": "Virtus Bologna",
       "time": "25.09.2026 17:45",
@@ -64,10 +64,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/fenerbahce-rDhoZR1l/virtus-bologna-YwDFycYd/?mid=nHiCMHgA",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -77,104 +77,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.2,
-        "draw": null,
-        "away": 5.0,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 82.3,
-        "ev": -0.013,
-        "edge": -1.1,
-        "kelly": 0.0,
-        "confidence": 55.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 88,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.033,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 82%"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -1.1,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5346227238305244176,
+      "id": 6171337968437993438,
       "homeTeam": "Partizan",
       "awayTeam": "Milano",
       "time": "25.09.2026 18:45",
@@ -196,19 +123,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "D",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "D",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -220,7 +171,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6400163562836460034,
+      "id": 7242121482892542309,
       "homeTeam": "Brisbane Bullets",
       "awayTeam": "Illawarra Hawks",
       "time": "25.09.2026 09:30",
@@ -229,122 +180,30 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/brisbane-bullets-zHGDrK3i/illawarra-hawks-W21MSYWs/?mid=xh7K2V9t",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 0,
-        "draw": 0,
-        "away": 5,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -8526693831368476479,
-      "homeTeam": "Korea Południowa K",
-      "awayTeam": "Chiny K",
-      "time": "25.09.2026 07:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/chiny-GGfwCbL2/korea-poludniowa-rTof8GKR/?mid=4Obs1FZA",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 0,
-        "draw": 0,
-        "away": 5,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -6113726501483439478,
-      "homeTeam": "Japonia K",
-      "awayTeam": "Chińskie Tajpej K",
-      "time": "25.09.2026 10:20",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/chinskie-tajpej-2BhEgw5E/japonia-lUhoAxjF/?mid=QX5UNRw2",
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 5,
+        "home": 0,
         "draw": 0,
-        "away": 0,
+        "away": 5,
         "total": 5,
         "winRate": 100
       },
       "homeForm": [
         "W",
-        "W",
-        "W",
-        "W",
+        "L",
+        "L",
+        "L",
         "L"
       ],
       "awayForm": [
-        "W",
+        "L",
         "L",
         "W",
         "W",
@@ -352,55 +211,64 @@
       ],
       "homeFormHome": [
         "W",
-        "W",
-        "W",
         "L",
-        "W"
+        "L",
+        "L",
+        "L"
       ],
       "awayFormAway": [
         "L",
+        "L",
         "W",
-        "L",
-        "L",
-        "W"
+        "W",
+        "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 1.05,
+        "home": 1.8,
         "draw": null,
-        "away": 11.0,
+        "away": 2.15,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 65.0,
+        "exactScore": "84-103",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 92.8,
-        "ev": -0.026,
-        "edge": -2.4,
-        "kelly": 0.0,
-        "confidence": 63.0,
-        "dataQuality": 0.64
+        "pick": "2",
+        "prob": 49.0,
+        "ev": 0.054,
+        "edge": 2.5,
+        "kelly": 1.2,
+        "confidence": 38.0,
+        "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 90,
-      "value_bet": false,
+      "confidence": 78,
+      "value_bet": true,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.438,
+        "consensus_strength": "moderate",
+        "market_model_gap": 2.488,
         "skip_reason": null
       },
       "availability": {
@@ -417,22 +285,139 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 93%",
+          "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": -2.4,
-        "consensus_note": "weak (1 sources agree)"
+        "expected_edge": 2.5,
+        "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 4446859584696978032,
+      "id": -7181566432015710709,
+      "homeTeam": "Korea Południowa K",
+      "awayTeam": "Chiny K",
+      "time": "25.09.2026 07:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/chiny-GGfwCbL2/korea-poludniowa-rTof8GKR/?mid=4Obs1FZA",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 5,
+        "total": 5,
+        "winRate": 100
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 3113621714247964780,
+      "homeTeam": "Japonia K",
+      "awayTeam": "Chińskie Tajpej K",
+      "time": "25.09.2026 10:20",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/chinskie-tajpej-2BhEgw5E/japonia-lUhoAxjF/?mid=QX5UNRw2",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 5,
+        "draw": 0,
+        "away": 0,
+        "total": 5,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -7655344120463031424,
       "homeTeam": "Filipiny 3x3",
       "awayTeam": "Korea Południowa 3x3",
       "time": "25.09.2026 04:50",
@@ -455,19 +440,43 @@
         "draw": 0,
         "away": 2,
         "total": 3,
-        "winRate": 33
+        "winRate": 66
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -479,7 +488,7 @@
       "predictionGrade": null
     },
     {
-      "id": 725625952450314073,
+      "id": 7966515833362173151,
       "homeTeam": "Katar 3x3",
       "awayTeam": "Iran 3x3",
       "time": "25.09.2026 05:15",
@@ -514,7 +523,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -526,7 +535,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7241437285087745718,
+      "id": -3818701443441137837,
       "homeTeam": "Korea Południowa 3x3 W",
       "awayTeam": "Japonia 3x3 W",
       "time": "25.09.2026 04:00",
@@ -549,6 +558,77 @@
         "draw": 0,
         "away": 2,
         "total": 2,
+        "winRate": 100
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -7372140607695534365,
+      "homeTeam": "Tajlandia 3x3 W",
+      "awayTeam": "Filipiny 3x3 W",
+      "time": "25.09.2026 04:25",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/philippines-KWjEjBWT/tajlandia-S4O6MCvU/?mid=29aG6JfS",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 0,
+        "total": 1,
         "winRate": 0
       },
       "homeForm": [],
@@ -561,7 +641,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -573,120 +653,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6449011722133932311,
-      "homeTeam": "Tajlandia 3x3 W",
-      "awayTeam": "Filipiny 3x3 W",
-      "time": "25.09.2026 04:25",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/philippines-KWjEjBWT/tajlandia-S4O6MCvU/?mid=29aG6JfS",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 1,
-        "winRate": 100
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 53.5,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 31.0,
-        "dataQuality": 0.55
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 62,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.4,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Low data quality: 40%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 40%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
-    },
-    {
-      "id": 7244407311980062077,
+      "id": 970612713790614196,
       "homeTeam": "Borisfen",
       "awayTeam": "Gomel",
       "time": "25.09.2026 17:30",
@@ -695,9 +662,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/borisfen-CEytZ1iE/gomel-8tVlXuMQ/?mid=nu6JPIzH",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -706,101 +675,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "D"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "L",
-        "D",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 92.9,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 64.0,
-        "dataQuality": 0.55
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 78,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 93%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -563065081965646570,
+      "id": 7687152591218662272,
       "homeTeam": "Zlin",
       "awayTeam": "Vysoka",
       "time": "25.09.2026 16:30",
@@ -809,9 +708,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/vysoka-nad-labem-8xiEnHzm/zlin-pd3ivTBa/?mid=fyQyFpXF",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -820,102 +721,31 @@
         "draw": 0,
         "away": 1,
         "total": 4,
-        "winRate": 75
+        "winRate": 25
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 2.25,
-        "draw": null,
-        "away": 1.58,
-        "bookmaker": "oddssafari_coupon"
-      },
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 43.0,
-        "ev": -0.033,
-        "edge": -1.5,
-        "kelly": 0.0,
-        "confidence": 29.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 65,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 4,
-        "consensus_strength": "none",
-        "market_model_gap": -1.444,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -1.5,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -7036902593248987651,
+      "id": -7941654925915810862,
       "homeTeam": "Olomouc",
       "awayTeam": "SK Zabovresky",
       "time": "25.09.2026 17:00",
@@ -924,9 +754,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/basketbal-olomouc-fRngbbdN/sk-zabovresky-IouFbzrP/?mid=6cIN5tf2",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -935,100 +767,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 80
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "D",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "D",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.57,
-        "draw": null,
-        "away": 2.3,
-        "bookmaker": "oddssafari_coupon"
-      },
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 62.0,
-        "ev": -0.026,
-        "edge": -1.7,
-        "kelly": 0.0,
-        "confidence": 39.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 72,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -1.694,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -1.7,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 4949550309137040012,
+      "id": 2868515734194434896,
       "homeTeam": "CZ.ACADEMY",
       "awayTeam": "Sokol Prazsky",
       "time": "25.09.2026 17:30",
@@ -1037,9 +800,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/cz-academy-GW04yHvA/sokol-prazsky-6kyOCSHH/?mid=2FrMxIa3",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1048,111 +813,31 @@
         "draw": 0,
         "away": 1,
         "total": 4,
-        "winRate": 75
+        "winRate": 25
       },
-      "homeForm": [
-        "W",
-        "W",
-        "D",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 3.0,
-        "draw": null,
-        "away": 1.382,
-        "bookmaker": "oddssafari_coupon"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 56.0,
-        "exactScore": "76-72",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "odds": null,
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 35.3,
-        "ev": 0.059,
-        "edge": 2.0,
-        "kelly": 0.7,
-        "confidence": 36.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 62,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": 1.967,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 2.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -4607073271371922133,
+      "id": 5461257642305838091,
       "homeTeam": "Slavia Prague Tygri",
       "awayTeam": "Litomerice",
       "time": "25.09.2026 17:30",
@@ -1186,7 +871,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1198,7 +883,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2273824602623328440,
+      "id": -7339345321737895275,
       "homeTeam": "Pardubice 2",
       "awayTeam": "Opawa 2",
       "time": "25.09.2026 18:00",
@@ -1207,9 +892,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/opava-jmD6wCDm/pardubice-4UuauL3B/?mid=bi59Tqn9",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1218,47 +905,93 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -2090439614048631747,
+      "homeTeam": "Brandys nad Labem K",
+      "awayTeam": "USK Prague K",
+      "time": "25.09.2026 16:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/brandys-nad-labem-0SsjynFH/usk-prague-nkfOdF36/?mid=d4hGjFGl",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 5,
+        "total": 5,
+        "winRate": 100
       },
       "homeForm": [
         "L",
         "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
         "W",
-        "L",
         "L",
         "L"
       ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
       "homeFormHome": [
         "L",
-        "L",
         "W",
+        "L",
         "L",
         "L"
       ],
       "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 1.32,
+        "home": 8.5,
         "draw": null,
-        "away": 3.1,
+        "away": 1.02,
         "bookmaker": "oddssafari_coupon"
       },
       "forebet": {
-        "prediction": "X",
-        "probability": null,
-        "exactScore": null,
+        "prediction": "2",
+        "probability": 93.0,
+        "exactScore": "61-111",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
@@ -1268,19 +1001,19 @@
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 70.4,
-        "ev": -0.071,
-        "edge": -5.3,
+        "pick": "2",
+        "prob": 90.6,
+        "ev": -0.076,
+        "edge": -7.4,
         "kelly": 0.0,
-        "confidence": 32.0,
-        "dataQuality": 0.64
+        "confidence": 51.0,
+        "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 68,
+      "confidence": 92,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 3,
@@ -1292,8 +1025,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -5.358,
+        "consensus_strength": "moderate",
+        "market_model_gap": -7.439,
         "skip_reason": null
       },
       "availability": {
@@ -1310,29 +1043,30 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 70%"
+          "Model probability: 91%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
         "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": -5.3,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -7.4,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "B"
     },
     {
-      "id": -3474652183108395192,
-      "homeTeam": "Brandys nad Labem K",
-      "awayTeam": "USK Prague K",
-      "time": "25.09.2026 16:00",
+      "id": 81344877009504186,
+      "homeTeam": "Trutnov K",
+      "awayTeam": "Slovanka K",
+      "time": "25.09.2026 16:30",
       "date": "2026-09-25",
       "league": null,
       "country": "",
       "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/brandys-nad-labem-0SsjynFH/usk-prague-nkfOdF36/?mid=d4hGjFGl",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/slovanka-WpE31u1K/trutnov-0Mc9wx9D/?mid=Q1BjzfW7",
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -1342,9 +1076,9 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 5,
         "draw": 0,
-        "away": 5,
+        "away": 0,
         "total": 5,
         "winRate": 0
       },
@@ -1358,7 +1092,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1370,127 +1104,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8095288315181951178,
-      "homeTeam": "Trutnov K",
-      "awayTeam": "Slovanka K",
-      "time": "25.09.2026 16:30",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/slovanka-WpE31u1K/trutnov-0Mc9wx9D/?mid=Q1BjzfW7",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 5,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 100
-      },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.02,
-        "draw": null,
-        "away": 12.5,
-        "bookmaker": "oddssafari_coupon"
-      },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 93.8,
-        "ev": -0.043,
-        "edge": -4.2,
-        "kelly": 0.0,
-        "confidence": 62.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 78,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -4.239,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 94%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -4.2,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": -3093244335668323974,
+      "id": -3943781653572890886,
       "homeTeam": "Buducnost",
       "awayTeam": "Cibona",
       "time": "25.09.2026 16:00",
@@ -1499,10 +1113,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/buducnost-6s1E9IqE/cibona-pYaI8xaK/?mid=8jYkaz3s",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -1512,104 +1126,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.18,
-        "draw": null,
-        "away": 6.0,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 84.5,
-        "ev": -0.002,
-        "edge": -0.2,
-        "kelly": 0.0,
-        "confidence": 50.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 78,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -0.246,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 84%"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -0.2,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -1982172160292932044,
+      "id": 3006863894261468524,
       "homeTeam": "Zadar",
       "awayTeam": "KK Bosna",
       "time": "25.09.2026 16:30",
@@ -1631,6 +1172,76 @@
         "draw": 0,
         "away": 4,
         "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -8711568438328333760,
+      "homeTeam": "Valmiera Glass Via",
+      "awayTeam": "Ventspils",
+      "time": "25.09.2026 16:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/valmiera-glass-via-jNVGYmuC/ventspils-0xtayA03/?mid=CYcYSQ63",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -1643,7 +1254,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1655,93 +1266,107 @@
       "predictionGrade": null
     },
     {
-      "id": 4190405022637788461,
-      "homeTeam": "Valmiera Glass Via",
-      "awayTeam": "Ventspils",
-      "time": "25.09.2026 16:00",
+      "id": 8342888455152741806,
+      "homeTeam": "Keila Coolbet",
+      "awayTeam": "Rigas Zelli",
+      "time": "25.09.2026 16:30",
       "date": "2026-09-25",
       "league": null,
       "country": "",
       "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/valmiera-glass-via-jNVGYmuC/ventspils-0xtayA03/?mid=CYcYSQ63",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/keila-coolbet-tfEDLM7J/rigas-zelli-bkm7qMiE/?mid=vBflauPr",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold"
       ],
+      "channelSkipWarnings": [],
       "h2h": {
-        "home": 4,
+        "home": 0,
         "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
+        "away": 4,
+        "total": 4,
+        "winRate": 100
       },
       "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "D"
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
       ],
       "awayForm": [
+        "W",
+        "W",
         "L",
         "L",
-        "L",
-        "D",
         "W"
       ],
       "homeFormHome": [
+        "L",
+        "L",
+        "L",
         "W",
-        "D",
-        "W",
-        "W",
-        "W"
+        "L"
       ],
       "awayFormAway": [
+        "W",
         "L",
-        "D",
-        "W",
-        "W",
+        "L",
+        "L",
         "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 1.45,
+        "home": 20.0,
         "draw": null,
-        "away": 2.9,
+        "away": 1.01,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "forebet": {
+        "prediction": "2",
+        "probability": 79.0,
+        "exactScore": "80-100",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 17,
+        "draw": null,
+        "away": 83,
+        "votes": 117
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 68.4,
-        "ev": -0.008,
-        "edge": -0.6,
+        "pick": "2",
+        "prob": 95.9,
+        "ev": -0.032,
+        "edge": -3.1,
         "kelly": 0.0,
-        "confidence": 53.0,
-        "dataQuality": 0.55
+        "confidence": 59.0,
+        "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 53.0,
+      "confidence": 92,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
+        "forebet_available": true,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -0.566,
+        "h2h_count": 4,
+        "consensus_strength": "strong",
+        "market_model_gap": -3.11,
         "skip_reason": null
       },
       "availability": {
@@ -1758,29 +1383,30 @@
       },
       "explanation": {
         "primary_factors": [
+          "Model probability: 96%",
+          "Source consensus: strong (3/4)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -0.6,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -3.1,
+        "consensus_note": "strong (3 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "A"
     },
     {
-      "id": -7973543741770183713,
-      "homeTeam": "Keila Coolbet",
-      "awayTeam": "Rigas Zelli",
-      "time": "25.09.2026 16:30",
+      "id": -7648917001955149876,
+      "homeTeam": "Elitzur Ramla K",
+      "awayTeam": "Proteas Voulas K",
+      "time": "25.09.2026 17:30",
       "date": "2026-09-25",
       "league": null,
       "country": "",
       "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/keila-coolbet-tfEDLM7J/rigas-zelli-bkm7qMiE/?mid=vBflauPr",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/elitzur-ramla-noHrKJxr/proteas-voulas-E3s1FX2E/?mid=6BBLfgmA",
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -1790,10 +1416,10 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 1,
         "draw": 0,
-        "away": 4,
-        "total": 4,
+        "away": 0,
+        "total": 1,
         "winRate": 0
       },
       "homeForm": [],
@@ -1806,7 +1432,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1818,121 +1444,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2887922363235430470,
-      "homeTeam": "Elitzur Ramla K",
-      "awayTeam": "Proteas Voulas K",
-      "time": "25.09.2026 17:30",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/elitzur-ramla-noHrKJxr/proteas-voulas-E3s1FX2E/?mid=6BBLfgmA",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 0,
-        "total": 1,
-        "winRate": 100
-      },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "D",
-        "D",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "D",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 71.2,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 54.0,
-        "dataQuality": 0.55
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 70,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.4,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 71%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Low data quality: 40%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 40%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
-    },
-    {
-      "id": -4228676866429822846,
+      "id": 3860681403587138190,
       "homeTeam": "Valenzuela City Darkhorse",
       "awayTeam": "Quezon City",
       "time": "25.09.2026 09:00",
@@ -1941,9 +1453,12 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/quezon-city-C8IB6SnS/valenzuela-city-darkhorse-zV1Yv8tO/?mid=tMaVea66",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1952,100 +1467,31 @@
         "draw": 0,
         "away": 0,
         "total": 2,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 73.6,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 40.0,
-        "dataQuality": 0.55
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 65,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.4,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 74%"
-        ],
-        "risk_factors": [
-          "Low data quality: 40%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 40%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -8805372209562624942,
+      "id": 3585584711388338761,
       "homeTeam": "Bataan Risers",
       "awayTeam": "Pasig City",
       "time": "25.09.2026 11:00",
@@ -2067,19 +1513,43 @@
         "draw": 0,
         "away": 2,
         "total": 3,
-        "winRate": 33
+        "winRate": 66
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2091,7 +1561,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4980632325394514102,
+      "id": 8665008077124357654,
       "homeTeam": "Dijon",
       "awayTeam": "Strasbourg",
       "time": "25.09.2026 18:00",
@@ -2100,9 +1570,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/dijon-U1rSU248/strasbourg-Srews2dH/?mid=dAFNjHq4",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2111,104 +1583,31 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.55,
-        "draw": null,
-        "away": 2.5,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 64.7,
-        "ev": 0.003,
-        "edge": 0.2,
-        "kelly": 0.1,
-        "confidence": 61.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 80,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 0.184,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": 0.2,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -8934618066271607710,
+      "id": -724814837121286470,
       "homeTeam": "Caen",
       "awayTeam": "Aix-Maurienne",
       "time": "25.09.2026 18:00",
@@ -2217,9 +1616,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/aix-maurienne-YN9Grh9O/caen-calvados-IuOSB1Vo/?mid=x2jArdcC",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2228,104 +1629,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.53,
-        "draw": null,
-        "away": 2.6,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 37.6,
-        "ev": -0.021,
-        "edge": -0.8,
-        "kelly": 0.0,
-        "confidence": 15.0,
-        "dataQuality": 0.55
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 15.0,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -27.759,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -0.8,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -3817193243161812357,
+      "id": -7138264933714634711,
       "homeTeam": "Denain-Voltaire",
       "awayTeam": "Ada Blois",
       "time": "25.09.2026 18:00",
@@ -2347,19 +1675,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2371,7 +1723,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6665487909772052010,
+      "id": 5847569502297928721,
       "homeTeam": "La Rochelle",
       "awayTeam": "ASA",
       "time": "25.09.2026 18:00",
@@ -2380,11 +1732,9 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/alliance-sport-alsace-j1X0O5zg/la-rochelle-fH1upDio/?mid=SzgVVID6",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2393,31 +1743,113 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "homeForm": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "D",
+        "L",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.6,
+        "draw": null,
+        "away": 2.4,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 60.0,
+        "exactScore": "81-85",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "2",
+        "prob": 43.0,
+        "ev": 0.031,
+        "edge": 1.3,
+        "kelly": 0.6,
+        "confidence": 36.0,
+        "dataQuality": 0.73
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 65,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 1.333,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 1.3,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
     },
     {
-      "id": 2008123135269846733,
+      "id": 1895687431873404047,
       "homeTeam": "Le Havre",
       "awayTeam": "St. Chamond",
       "time": "25.09.2026 18:00",
@@ -2451,7 +1883,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2463,7 +1895,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3218027905932804381,
+      "id": 7049401509410643848,
       "homeTeam": "Poitiers",
       "awayTeam": "Evreux",
       "time": "25.09.2026 18:00",
@@ -2472,10 +1904,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/evreux-SEd32ZOh/poitiers-MX45Mxd7/?mid=tbqPi0zQ",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -2485,105 +1917,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "D",
-        "W",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.2,
-        "draw": null,
-        "away": 4.8,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 80.3,
-        "ev": -0.037,
-        "edge": -3.1,
-        "kelly": 0.0,
-        "confidence": 50.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 90,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -3.033,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 80%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -3.1,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -9005589440214620324,
+      "id": 6130623447056473878,
       "homeTeam": "Quimper",
       "awayTeam": "Levallois",
       "time": "25.09.2026 18:00",
@@ -2605,7 +1963,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 20
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -2617,7 +1975,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2629,7 +1987,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3335374314197332854,
+      "id": 32812870643173102,
       "homeTeam": "Rouen",
       "awayTeam": "Vichy",
       "time": "25.09.2026 18:00",
@@ -2638,9 +1996,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/rouen-MLXYm14j/vichy-basket-K0K1w4z3/?mid=xUUfnvbm",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2649,73 +2009,126 @@
         "draw": 0,
         "away": 2,
         "total": 5,
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -6048250086208859675,
+      "homeTeam": "Fos-sur-Mer",
+      "awayTeam": "Hyeres-Toulon",
+      "time": "25.09.2026 18:30",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/fos-sur-mer-2ii6aDg5/hyeres-toulon-8hsWTMJE/?mid=84XZbHsg",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 3,
+        "total": 5,
         "winRate": 60
       },
       "homeForm": [
+        "W",
         "L",
+        "D",
         "W",
-        "W",
-        "W",
-        "W"
+        "L"
       ],
       "awayForm": [
+        "W",
         "L",
-        "L",
-        "L",
-        "L",
+        "W",
+        "W",
         "L"
       ],
       "homeFormHome": [
         "W",
-        "W",
         "L",
-        "W",
-        "W"
+        "D",
+        "L",
+        "L"
       ],
       "awayFormAway": [
+        "W",
         "L",
-        "L",
-        "L",
+        "W",
         "L",
         "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 1.43,
+        "home": 2.35,
         "draw": null,
-        "away": 2.95,
+        "away": 1.6,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 54.0,
+        "exactScore": "73-74",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 68.9,
-        "ev": -0.014,
-        "edge": -1.0,
+        "pick": "2",
+        "prob": 59.7,
+        "ev": -0.044,
+        "edge": -2.8,
         "kelly": 0.0,
-        "confidence": 47.0,
-        "dataQuality": 0.64
+        "confidence": 42.0,
+        "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 90,
+      "confidence": 68,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -1.03,
+        "consensus_strength": "weak",
+        "market_model_gap": -2.8,
         "skip_reason": null
       },
       "availability": {
@@ -2738,61 +2151,15 @@
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": -1.0,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -2.8,
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "C"
     },
     {
-      "id": -2416877220130644048,
-      "homeTeam": "Fos-sur-Mer",
-      "awayTeam": "Hyeres-Toulon",
-      "time": "25.09.2026 18:30",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/fos-sur-mer-2ii6aDg5/hyeres-toulon-8hsWTMJE/?mid=84XZbHsg",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 3,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -8056792195998411119,
+      "id": 2550551074284391388,
       "homeTeam": "Palmer Basket",
       "awayTeam": "Fibwi Palma",
       "time": "25.09.2026 18:00",
@@ -2814,19 +2181,43 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2838,7 +2229,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2261667420969308755,
+      "id": -6155979705762335920,
       "homeTeam": "Hapoel Jerusalem",
       "awayTeam": "Bnei Herzliya",
       "time": "25.09.2026 11:00",
@@ -2847,10 +2238,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bnei-herzliya-QBvnpKKH/hapoel-jerusalem-Emu0IzI2/?mid=St0bdBNh",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -2860,105 +2251,31 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.18,
-        "draw": null,
-        "away": 4.8,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 81.9,
-        "ev": -0.034,
-        "edge": -2.9,
-        "kelly": 0.0,
-        "confidence": 57.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 90,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.846,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 82%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -2.9,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -7354900549519609227,
+      "id": -8553966590328353469,
       "homeTeam": "Kyoto",
       "awayTeam": "Shiga",
       "time": "25.09.2026 09:35",
@@ -2967,9 +2284,12 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/kyoto-IwjEPzpA/shiga-6J8jpLBp/?mid=GIfqTBje",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2977,217 +2297,6 @@
         "home": 3,
         "draw": 0,
         "away": 2,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "D"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.5,
-        "draw": null,
-        "away": 2.65,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 37.0,
-        "ev": -0.021,
-        "edge": -0.8,
-        "kelly": 0.0,
-        "confidence": 16.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 80,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -29.667,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -0.8,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": -1352870245473974372,
-      "homeTeam": "Saga",
-      "awayTeam": "Hiroshima D.",
-      "time": "25.09.2026 09:45",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/hiroshima-dragonflies-O2zklv01/saga-ballooners-pvq1BzRr/?mid=lWhiRkL7",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 4,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 1607179951304527015,
-      "homeTeam": "Ibaraki Robots",
-      "awayTeam": "NeoPhoenix",
-      "time": "25.09.2026 10:05",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/ibaraki-robots-Wjny0Yyb/neophoenix-0xWNl13T/?mid=fTuwkgDE",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 4,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 3307811174338516327,
-      "homeTeam": "Nagasaki",
-      "awayTeam": "Shimane",
-      "time": "25.09.2026 10:05",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/nagasaki-OnJVHUCs/shimane-QgfOpNX2/?mid=Yu6IUORa",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 3,
         "total": 5,
         "winRate": 40
       },
@@ -3201,7 +2310,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3213,7 +2322,281 @@
       "predictionGrade": null
     },
     {
-      "id": 4564445868402092,
+      "id": -3790233904083218749,
+      "homeTeam": "Saga",
+      "awayTeam": "Hiroshima D.",
+      "time": "25.09.2026 09:45",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/hiroshima-dragonflies-O2zklv01/saga-ballooners-pvq1BzRr/?mid=lWhiRkL7",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 4,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 5562289527327532223,
+      "homeTeam": "Ibaraki Robots",
+      "awayTeam": "NeoPhoenix",
+      "time": "25.09.2026 10:05",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/ibaraki-robots-Wjny0Yyb/neophoenix-0xWNl13T/?mid=fTuwkgDE",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 4,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "D",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 4292740049290107379,
+      "homeTeam": "Nagasaki",
+      "awayTeam": "Shimane",
+      "time": "25.09.2026 10:05",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/nagasaki-OnJVHUCs/shimane-QgfOpNX2/?mid=Yu6IUORa",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "fan_vote_below_threshold:51/55",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 3,
+        "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "D",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 3.0,
+        "draw": null,
+        "away": 1.4,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "exactScore": "93-84",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 49,
+        "draw": null,
+        "away": 51,
+        "votes": 272
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "1",
+        "prob": 33.7,
+        "ev": 0.012,
+        "edge": 0.4,
+        "kelly": 0.2,
+        "confidence": 27.0,
+        "dataQuality": 0.82
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 65,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -37.729,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 100%)",
+        "availability_note": "",
+        "expected_edge": 0.4,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": -6366944322499718792,
       "homeTeam": "Tokyo Sunrockers",
       "awayTeam": "Chiba",
       "time": "25.09.2026 10:05",
@@ -3225,7 +2608,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -3235,19 +2619,43 @@
         "draw": 0,
         "away": 5,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3259,7 +2667,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7866877723758367603,
+      "id": 8959087045280773546,
       "homeTeam": "Tryhoop Okayama",
       "awayTeam": "Koshigaya Alphas",
       "time": "25.09.2026 10:05",
@@ -3268,44 +2676,119 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/koshigaya-alphas-UXm0eDo1/tryhoop-okayama-Usi6ZKFl/?mid=YNv2hPCU",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "odds_below_threshold",
+        "fan_vote_below_threshold:51/55",
+        "match_already_started"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
         "home": 0,
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 0
+        "winRate": 60
       },
       "homeForm": [],
-      "awayForm": [],
+      "awayForm": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
       "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "D"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 4.7,
+        "draw": null,
+        "away": 1.18,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 58.0,
+        "exactScore": "72-86",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 51,
+        "draw": null,
+        "away": 49,
+        "votes": 153
+      },
+      "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "1",
+        "prob": 21.6,
+        "ev": 0.017,
+        "edge": 0.4,
+        "kelly": 0.1,
+        "confidence": 23.0,
+        "dataQuality": 0.64
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 78,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 0.95,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": false,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": -63.146,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 0,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Source consensus: moderate (2/4)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 95%)",
+        "availability_note": "",
+        "expected_edge": 0.4,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
     },
     {
-      "id": 2641903253988952194,
+      "id": 7524755738707298969,
       "homeTeam": "KCC Egis",
       "awayTeam": "LG Sakers",
       "time": "25.09.2026 05:00",
@@ -3328,19 +2811,43 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3352,7 +2859,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3763530920844135885,
+      "id": -5668552972262869693,
       "homeTeam": "Anyang JungKwanJang",
       "awayTeam": "Suwon KT",
       "time": "25.09.2026 07:30",
@@ -3361,9 +2868,12 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/anyang-jungkwanjang-E7zW2PzK/suwon-kt-8UZZ1qjQ/?mid=0OVVnoX0",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -3372,102 +2882,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 2.75,
-        "draw": null,
-        "away": 1.53,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 37.0,
-        "ev": 0.017,
-        "edge": 0.6,
-        "kelly": 0.2,
-        "confidence": 30.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 72,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 0.636,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": 0.6,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -3067993156043741137,
+      "id": 1411281432599235005,
       "homeTeam": "Phoenix Hagen",
       "awayTeam": "Ulm",
       "time": "25.09.2026 16:30",
@@ -3489,19 +2928,43 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3513,7 +2976,7 @@
       "predictionGrade": null
     },
     {
-      "id": 6914483796423761770,
+      "id": 2425016019320068666,
       "homeTeam": "Trier",
       "awayTeam": "Bonn",
       "time": "25.09.2026 16:30",
@@ -3535,19 +2998,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3559,7 +3046,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3617234161383824938,
+      "id": -8747823097728390940,
       "homeTeam": "Hamburg",
       "awayTeam": "Chemnitz",
       "time": "25.09.2026 18:00",
@@ -3581,19 +3068,43 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "D"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "D",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3605,7 +3116,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3060724822460789657,
+      "id": 2767442950232430796,
       "homeTeam": "Syntainics MBC",
       "awayTeam": "Jena",
       "time": "25.09.2026 18:00",
@@ -3627,19 +3138,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "D",
+        "L",
+        "D"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3651,7 +3186,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6033390999675658819,
+      "id": 726367814296980388,
       "homeTeam": "Wurzburg",
       "awayTeam": "Oldenburg",
       "time": "25.09.2026 18:00",
@@ -3660,6 +3195,135 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/oldenburg-fRK1cKIQ/wurzburg-0bukcrmo/?mid=OW7Ii5dn",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 3,
+        "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "D",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.45,
+        "draw": null,
+        "away": 2.8,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 55.0,
+        "exactScore": "80-75",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 78,
+        "draw": null,
+        "away": 22,
+        "votes": 346
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "2",
+        "prob": 35.5,
+        "ev": -0.007,
+        "edge": -0.2,
+        "kelly": 0.0,
+        "confidence": 22.0,
+        "dataQuality": 0.82
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 62,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": -0.214,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 100%)",
+        "availability_note": "",
+        "expected_edge": -0.2,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "D"
+    },
+    {
+      "id": 4188163952299373868,
+      "homeTeam": "Giessen",
+      "awayTeam": "Artland",
+      "time": "25.09.2026 18:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/artland-EkSjlHm3/giessen-EyiykxB0/?mid=fy4S7cZ1",
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -3669,9 +3333,9 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 2,
+        "home": 3,
         "draw": 0,
-        "away": 3,
+        "away": 2,
         "total": 5,
         "winRate": 40
       },
@@ -3685,7 +3349,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3697,124 +3361,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7460822882128283804,
-      "homeTeam": "Giessen",
-      "awayTeam": "Artland",
-      "time": "25.09.2026 18:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/artland-EkSjlHm3/giessen-EyiykxB0/?mid=fy4S7cZ1",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.25,
-        "draw": null,
-        "away": 3.75,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 25.3,
-        "ev": -0.05,
-        "edge": -1.3,
-        "kelly": 0.0,
-        "confidence": 12.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 78,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -54.7,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -1.3,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
-    },
-    {
-      "id": 6408754883920670064,
+      "id": -7105192704037387777,
       "homeTeam": "Mid-North Whai K",
       "awayTeam": "Northern Kahu K",
       "time": "25.09.2026 07:30",
@@ -3823,9 +3370,12 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/mid-north-whai-UBfHVYh4/northern-kahu-tjEM9iWp/?mid=4MPFP6Lq",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -3834,113 +3384,31 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.43,
-        "draw": null,
-        "away": 3.0,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 67.0,
-        "exactScore": "89-87",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 69.2,
-        "ev": -0.011,
-        "edge": -0.7,
-        "kelly": 0.0,
-        "confidence": 55.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 85,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": -0.73,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": -0.7,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -6489135327821162737,
+      "id": 4039619556448039165,
       "homeTeam": "Zenit Petersburg",
       "awayTeam": "Uralmash Ekaterinburg",
       "time": "25.09.2026 17:00",
@@ -3949,10 +3417,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/uralmash-ekaterinburg-vDLOnJ58/zenit-petersburg-z3T8GEnF/?mid=n70LiJBa",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -3962,111 +3430,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.28,
-        "draw": null,
-        "away": 4.0,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "2",
-        "probability": 69.0,
-        "exactScore": "84-91",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "odds": null,
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 25.7,
-        "ev": 0.03,
-        "edge": 0.7,
-        "kelly": 0.2,
-        "confidence": 33.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 70,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -52.425,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 0.7,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 1879851170529003985,
+      "id": -5809706821900171620,
       "homeTeam": "Norrkoping",
       "awayTeam": "Umeå IK",
       "time": "25.09.2026 16:00",
@@ -4075,10 +3463,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/norrkoping-bNWZHDLg/umea-bskt-vsHvIec0/?mid=OdP836up",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -4088,105 +3476,31 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "D",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.01,
-        "draw": null,
-        "away": 15.0,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 94.6,
-        "ev": -0.044,
-        "edge": -4.4,
-        "kelly": 0.0,
-        "confidence": 62.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 85,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -4.41,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 95%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -4.4,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5704461546357406650,
+      "id": -4004635509987906171,
       "homeTeam": "Borås",
       "awayTeam": "Nassjo",
       "time": "25.09.2026 17:04",
@@ -4195,10 +3509,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/boras-6LewNFrQ/kfum-nassjo-xWebSOwU/?mid=dANG1pAd",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -4208,105 +3522,31 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.1,
-        "draw": null,
-        "away": 7.0,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 88.5,
-        "ev": -0.027,
-        "edge": -2.5,
-        "kelly": 0.0,
-        "confidence": 61.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 85,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.409,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 88%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -2.5,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -7180780932266467732,
+      "id": -4302908539342073503,
       "homeTeam": "Sodertalje",
       "awayTeam": "Sloga Uppsala",
       "time": "25.09.2026 17:04",
@@ -4315,10 +3555,10 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/sloga-uppsala-fNghZAsR/sodertalje-ldcfFB5C/?mid=hEYx9SHM",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -4328,105 +3568,31 @@
         "draw": 0,
         "away": 0,
         "total": 3,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.1,
-        "draw": null,
-        "away": 6.75,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 87.8,
-        "ev": -0.034,
-        "edge": -3.1,
-        "kelly": 0.0,
-        "confidence": 60.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 85,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -3.109,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 88%",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -3.1,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 5451077424196298190,
+      "id": -8205933168913293275,
       "homeTeam": "Uppsala",
       "awayTeam": "Jamtland",
       "time": "25.09.2026 17:04",
@@ -4448,6 +3614,76 @@
         "draw": 0,
         "away": 3,
         "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -5717404681344345001,
+      "homeTeam": "BC Lulea",
+      "awayTeam": "Koping Stars",
+      "time": "25.09.2026 18:04",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bc-lulea-A5bjGij6/koping-stars-8zSaFFbR/?mid=OGF2Pm23",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
         "winRate": 40
       },
       "homeForm": [],
@@ -4460,7 +3696,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -4472,134 +3708,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8722044582430046910,
-      "homeTeam": "BC Lulea",
-      "awayTeam": "Koping Stars",
-      "time": "25.09.2026 18:04",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bc-lulea-A5bjGij6/koping-stars-8zSaFFbR/?mid=OGF2Pm23",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.28,
-        "draw": null,
-        "away": 3.7,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 56.0,
-        "exactScore": "76-72",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 25.9,
-        "ev": -0.043,
-        "edge": -1.2,
-        "kelly": 0.0,
-        "confidence": 14.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 85,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": -52.225,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Source consensus: moderate (2/3)"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": -1.2,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": -2995627512522762973,
+      "id": 210119477613384127,
       "homeTeam": "AEK (CYP)",
       "awayTeam": "Keravnos S. (CYP)",
       "time": "25.09.2026 12:15",
@@ -4608,9 +3717,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/aek-OKMODPrB/keravnos-s-Ykv7ZmVF/?mid=nuOlRjyJ",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4619,219 +3730,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
-      "odds": {
-        "home": 1.78,
-        "draw": null,
-        "away": 2.05,
-        "bookmaker": "Pinnacle"
-      },
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 46.5,
-        "ev": -0.047,
-        "edge": -2.3,
-        "kelly": 0.0,
-        "confidence": 21.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 85,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -9.68,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -2.3,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -8232349771973737991,
-      "homeTeam": "AEL (CYP)",
-      "awayTeam": "Apollon (CYP)",
-      "time": "25.09.2026 13:30",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/ael-EHPiWQDr/apollon-AFw1fyrj/?mid=AH16qYjm",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "L",
-        "D",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "D",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.38,
-        "draw": null,
-        "away": 3.0,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 69.8,
-        "ev": -0.037,
-        "edge": -2.7,
-        "kelly": 0.0,
-        "confidence": 41.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 80,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.664,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": -2.7,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": 6343236446282500978,
+      "id": -3710651303925642408,
       "homeTeam": "Botev 2012 (BUL)",
       "awayTeam": "CSKA Sofia (BUL)",
       "time": "25.09.2026 15:00",
@@ -4853,6 +3776,52 @@
         "draw": 0,
         "away": 0,
         "total": 5,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -4473144093578204419,
+      "homeTeam": "AEL (CYP)",
+      "awayTeam": "Apollon (CYP)",
+      "time": "25.09.2026 15:30",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/ael-EHPiWQDr/apollon-AFw1fyrj/?mid=AH16qYjm",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -4865,7 +3834,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -4877,7 +3846,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7932321092164574127,
+      "id": -665878535771110825,
       "homeTeam": "Twarde Pierniki Toruń (POL)",
       "awayTeam": "Arka Gdynia (POL)",
       "time": "25.09.2026 16:00",
@@ -4886,9 +3855,11 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/asseco-gdynia-OUk4IU6S/polski-cukier-torun-v3KjOOa7/?mid=6s86ZToT",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -4897,82 +3868,262 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -8221033231170581767,
+      "homeTeam": "Oliveirense (POR)",
+      "awayTeam": "Esgueira (POR)",
+      "time": "25.09.2026 20:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/esgueira-jVymXFu2/oliveirense-GjUUcSsj/?mid=pQd8jyuB",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -3927466657574076445,
+      "homeTeam": "Tofas",
+      "awayTeam": "Bordo Bandirma",
+      "time": "25.09.2026 16:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bordo-bandirma-vyggx7kG/tofas-ljIF1MyG/?mid=K8xXaer4",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 0,
+        "total": 5,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -3536598725918248939,
+      "homeTeam": "Minnesota Lynx K",
+      "awayTeam": "Indiana Fever K",
+      "time": "25.09.2026 00:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/indiana-fever-lzsyuNYf/minnesota-lynx-AeUcuq4r/?mid=6acQ0Bcd",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -4138922696229001985,
+      "homeTeam": "Los Angeles Sparks K",
+      "awayTeam": "Golden State Valkyries K",
+      "time": "25.09.2026 02:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/golden-state-valkyries-jJ2zZYLs/los-angeles-sparks-Ia6UdBZF/?mid=bgpCOEk3",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold",
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 5,
+        "total": 5,
+        "winRate": 100
       },
       "homeForm": [
         "L",
         "L",
         "W",
         "L",
-        "L"
+        "W"
       ],
       "awayForm": [
         "W",
-        "L",
+        "D",
         "W",
-        "L",
+        "W",
         "W"
       ],
       "homeFormHome": [
         "L",
-        "L",
+        "W",
         "W",
         "L",
-        "L"
+        "W"
       ],
       "awayFormAway": [
         "W",
-        "L",
+        "D",
         "W",
-        "L",
-        "L"
+        "W",
+        "W"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 2.1,
+        "home": 4.9,
         "draw": null,
-        "away": 1.85,
+        "away": 1.16,
         "bookmaker": "Pinnacle"
       },
-      "forebet": {
-        "prediction": "2",
-        "probability": 69.0,
-        "exactScore": "84-91",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
+      "forebet": null,
+      "sofascore": {
+        "home": 21,
+        "draw": null,
+        "away": 79,
+        "votes": 3317
       },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 53.2,
-        "ev": -0.015,
-        "edge": -0.8,
+        "prob": 82.3,
+        "ev": -0.045,
+        "edge": -3.9,
         "kelly": 0.0,
-        "confidence": 37.0,
+        "confidence": 50.0,
         "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 75,
+      "confidence": 88,
       "value_bet": false,
       "dataQuality": {
         "sources_available": 3,
-        "quality_score": 0.9,
+        "quality_score": 0.85,
         "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
+        "forebet_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 5.581,
+        "consensus_strength": "moderate",
+        "market_model_gap": -3.907,
         "skip_reason": null
       },
       "availability": {
@@ -4988,117 +4139,124 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+        "primary_factors": [
+          "Model probability: 82%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
         ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 85%)",
         "availability_note": "",
-        "expected_edge": -0.8,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": -3.9,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "B"
     },
     {
-      "id": -4368018096693960566,
-      "homeTeam": "Oliveirense (POR)",
-      "awayTeam": "Esgueira (POR)",
-      "time": "25.09.2026 20:00",
+      "id": -4692987491758542308,
+      "homeTeam": "Phoenix Mercury K",
+      "awayTeam": "Las Vegas Aces K",
+      "time": "25.09.2026 02:00",
       "date": "2026-09-25",
       "league": null,
       "country": "",
       "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/esgueira-jVymXFu2/oliveirense-GjUUcSsj/?mid=pQd8jyuB",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/las-vegas-aces-nZjYLTCd/phoenix-mercury-Mmuqw137/?mid=pArKMhKF",
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "odds_below_threshold",
+        "match_already_started"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
-        "home": 4,
+        "home": 1,
         "draw": 0,
-        "away": 1,
+        "away": 4,
         "total": 5,
         "winRate": 80
       },
       "homeForm": [
+        "L",
         "W",
         "L",
-        "L",
-        "L",
+        "W",
         "W"
       ],
       "awayForm": [
         "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
         "W",
-        "L",
         "W",
         "W",
         "W"
       ],
-      "awayFormAway": [
-        "L",
-        "L",
+      "homeFormHome": [
         "L",
         "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "W",
+        "L",
         "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 1.16,
+        "home": 4.4,
         "draw": null,
-        "away": 5.0,
+        "away": 1.2,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "2",
-        "probability": 70.0,
-        "exactScore": "72-76",
+        "prediction": "1",
+        "probability": 55.0,
+        "exactScore": "82-72",
         "overUnder": null,
         "btts": null,
         "homeProb": null,
         "drawProb": null,
         "awayProb": null
       },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "sofascore": {
+        "home": 32,
+        "draw": null,
+        "away": 68,
+        "votes": 2120
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
       "scoring": {
-        "pick": "2",
-        "prob": 19.5,
-        "ev": -0.026,
-        "edge": -0.5,
+        "pick": "1",
+        "prob": 22.7,
+        "ev": -0.003,
+        "edge": -0.1,
         "kelly": 0.0,
-        "confidence": 19.0,
+        "confidence": 18.0,
         "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 80,
+      "confidence": 18.0,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -66.707,
+        "market_model_gap": -60.633,
         "skip_reason": null
       },
       "availability": {
@@ -5121,359 +4279,15 @@
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": -0.5,
+        "expected_edge": -0.1,
         "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": 1784455101302210041,
-      "homeTeam": "Tofas",
-      "awayTeam": "Bordo Bandirma",
-      "time": "25.09.2026 16:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bordo-bandirma-vyggx7kG/tofas-ljIF1MyG/?mid=K8xXaer4",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.35,
-        "draw": null,
-        "away": 3.0,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "X",
-        "probability": null,
-        "exactScore": null,
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 69.5,
-        "ev": -0.061,
-        "edge": -4.5,
-        "kelly": 0.0,
-        "confidence": 27.0,
-        "dataQuality": 0.64
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 62,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -4.574,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": -4.5,
-        "consensus_note": "none (0 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": -2679811343462035678,
-      "homeTeam": "Minnesota Lynx K",
-      "awayTeam": "Indiana Fever K",
-      "time": "25.09.2026 00:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/indiana-fever-lzsyuNYf/minnesota-lynx-AeUcuq4r/?mid=6acQ0Bcd",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 2.55,
-        "draw": null,
-        "away": 1.5,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "2",
-        "probability": 69.0,
-        "exactScore": "84-91",
-        "overUnder": null,
-        "btts": null,
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 37.7,
-        "ev": -0.04,
-        "edge": -1.6,
-        "kelly": 0.0,
-        "confidence": 17.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 66,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -1.516,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": -1.6,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": -5966406562543152398,
-      "homeTeam": "Los Angeles Sparks K",
-      "awayTeam": "Golden State Valkyries K",
-      "time": "25.09.2026 02:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/golden-state-valkyries-jJ2zZYLs/los-angeles-sparks-Ia6UdBZF/?mid=bgpCOEk3",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed",
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 0,
-        "draw": 0,
-        "away": 5,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -7102084536101287874,
-      "homeTeam": "Phoenix Mercury K",
-      "awayTeam": "Las Vegas Aces K",
-      "time": "25.09.2026 02:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/las-vegas-aces-nZjYLTCd/phoenix-mercury-Mmuqw137/?mid=pArKMhKF",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed",
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 1,
-        "draw": 0,
-        "away": 4,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 3141801425436674136,
+      "id": 1180282158741217529,
       "homeTeam": "Alba Fehervar",
       "awayTeam": "Kormend",
       "time": "25.09.2026 16:00",
@@ -5482,69 +4296,21 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/alba-fehervar-prZgOiIs/kormend-Cd56mTzF/?mid=80XOKlYb",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 3,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 6000963387233590816,
-      "homeTeam": "Szolnoki Olaj",
-      "awayTeam": "OSE Lions",
-      "time": "25.09.2026 16:00",
-      "date": "2026-09-25",
-      "league": null,
-      "country": "",
-      "sport": "basketball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/ose-lions-AkZ16Pjm/szolnoki-olaj-lG5tQ2w5/?mid=4phi6kJ5",
       "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
         "odds_below_threshold"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
-        "home": 3,
+        "home": 2,
         "draw": 0,
-        "away": 2,
+        "away": 3,
         "total": 5,
         "winRate": 60
       },
       "homeForm": [
-        "L",
+        "W",
         "L",
         "W",
         "L",
@@ -5553,14 +4319,14 @@
       "awayForm": [
         "W",
         "W",
-        "L",
         "W",
-        "W"
+        "L",
+        "L"
       ],
       "homeFormHome": [
-        "L",
-        "L",
         "W",
+        "W",
+        "L",
         "W",
         "W"
       ],
@@ -5571,43 +4337,57 @@
         "L",
         "L"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 1.01,
+        "home": 1.16,
         "draw": null,
-        "away": 13.0,
+        "away": 5.0,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "forebet": {
+        "prediction": "1",
+        "probability": 69.0,
+        "exactScore": "93-78",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 81,
+        "draw": null,
+        "away": 19,
+        "votes": 109
+      },
+      "sofascoreFound": true,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 8.6,
-        "ev": 0.12,
-        "edge": 0.9,
+        "prob": 20.7,
+        "ev": 0.036,
+        "edge": 0.7,
         "kelly": 0.2,
-        "confidence": 24.0,
-        "dataQuality": 0.64
+        "confidence": 27.0,
+        "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 68,
+      "confidence": 27.0,
       "value_bet": true,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
+        "forebet_available": true,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -90.41,
+        "market_model_gap": 0.7,
         "skip_reason": null
       },
       "availability": {
@@ -5624,21 +4404,67 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.12"
+          "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "4/4 sources available (quality: 100%)",
         "availability_note": "",
-        "expected_edge": 0.9,
+        "expected_edge": 0.7,
         "consensus_note": "none (0 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "C"
     },
     {
-      "id": 6843844024444251874,
+      "id": 8631754930417293933,
+      "homeTeam": "Szolnoki Olaj",
+      "awayTeam": "OSE Lions",
+      "time": "25.09.2026 16:00",
+      "date": "2026-09-25",
+      "league": null,
+      "country": "",
+      "sport": "basketball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/ose-lions-AkZ16Pjm/szolnoki-olaj-lG5tQ2w5/?mid=4phi6kJ5",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 441573498288261093,
       "homeTeam": "Soproni KC",
       "awayTeam": "DEAC",
       "time": "25.09.2026 17:00",
@@ -5660,19 +4486,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -5684,7 +4534,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1698829328831721936,
+      "id": -754686318060685099,
       "homeTeam": "Newcastle Eagles",
       "awayTeam": "Bristol Flyers",
       "time": "25.09.2026 18:30",
@@ -5693,41 +4543,126 @@
       "country": "",
       "sport": "basketball",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bristol-flyers-EFD6g2Ie/newcastle-eagles-dr6g4o9A/?mid=Kh4lfiHF",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "fan_vote_below_threshold:51/55"
       ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
+      "channelSkipWarnings": [],
       "h2h": {
         "home": 2,
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "D",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.83,
+        "draw": null,
+        "away": 2.05,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 62.0,
+        "exactScore": "85-88",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": {
+        "home": 51,
+        "draw": null,
+        "away": 49,
+        "votes": 118
+      },
+      "sofascoreFound": true,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "2",
+        "prob": 47.4,
+        "ev": -0.028,
+        "edge": -1.4,
+        "kelly": 0.0,
+        "confidence": 24.0,
+        "dataQuality": 0.73
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
+      "confidence": 24.0,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": -1.38,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "4/4 sources available (quality: 100%)",
+        "availability_note": "",
+        "expected_edge": -1.4,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
     }
   ]
 }
