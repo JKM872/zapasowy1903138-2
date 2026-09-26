@@ -1,0 +1,108 @@
+name: Forebet Audit (wyniki typow + zdrowie danych)
+
+# Codzienny audyt pipeline'u Forebet:
+#   1. rozlicza zakwalifikowane typy z minionych dni wynikami z SofaScore
+#      (weryfikacja: obie druzyny + termin) -> results/forebet_settled.json
+#   2. liczy trafnosc i ROI wg sportu, formy, faworyt/underdog, EV, klasy rynku
+#   3. automatycznie wykrywa znane klasy bledow danych
+#
+# Raport: zakladka Summary tego runu + results/forebet_audit.md na main.
+#
+# SofaScore odrzuca IP runnerow GitHuba (403 "challenge"), dlatego rozliczanie
+# idzie przez Tora — tak samo jak Fan Vote w scrape_forebet.yml. Gdy mimo to
+# SofaScore jest odciete, audyt NIE zapisuje falszywych "nie znaleziono", tylko
+# przerywa rozliczanie i sprobuje nastepnego dnia.
+
+on:
+  schedule:
+    # 06:30 UTC — po nocnych meczach (Ameryki, Azja), przed porannym scrapem.
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Ile dni wstecz audytowac'
+        required: false
+        default: '30'
+      max_settle:
+        description: 'Maks. typow do rozliczenia w tym przebiegu'
+        required: false
+        default: '600'
+
+concurrency:
+  group: forebet-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          pip install curl-cffi 'requests[socks]' 'PySocks>=1.7.1'
+
+      - name: Setup Tor (SOCKS5 on :9050)
+        continue-on-error: true
+        env:
+          SOFASCORE_XRW: ${{ secrets.SOFASCORE_XRW }}
+        run: bash tools/setup_tor.sh
+
+      - name: Run audit
+        env:
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
+          SOFASCORE_XRW: ${{ secrets.SOFASCORE_XRW }}
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+        run: |
+          python tools/forebet_audit.py \
+            --days "${{ github.event.inputs.days || '30' }}" \
+            --max-settle "${{ github.event.inputs.max_settle || '600' }}" \
+            --settle-budget 3600
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forebet-audit-${{ github.run_id }}
+          path: |
+            results/forebet_audit.md
+            results/forebet_settled.json
+          if-no-files-found: ignore
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/forebet_settled.json results/forebet_audit.md 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ Brak zmian w audycie"
+            exit 0
+          fi
+          git commit -m "data: forebet audit $(date -u +%Y-%m-%d) [skip ci]"
+          # Race-safe push — inne workflow tez pushuja na main.
+          for attempt in 1 2 3 4 5 6; do
+            if git push origin HEAD:main; then
+              echo "✅ Audyt zacommitowany (proba $attempt)"
+              exit 0
+            fi
+            echo "⚠️ Push odrzucony (proba $attempt) — rebase na origin/main..."
+            git fetch origin main || true
+            git rebase origin/main || git rebase --abort 2>/dev/null || true
+            sleep $(( (RANDOM % 6) + 2 ))
+          done
+          echo "::warning::Nie udalo sie wypushowac audytu"
