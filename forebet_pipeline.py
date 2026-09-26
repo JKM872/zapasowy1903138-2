@@ -1474,6 +1474,13 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                 'sofascore': {
                     'found': r.get('sofascore_found'),
                     'votes': r.get('sofascore_total_votes'),
+                    # Procenty i orientacja — do automatycznego audytu
+                    # (tools/forebet_audit.py). Bez nich nie da się sprawdzić,
+                    # czy głosy trafiły do właściwej strony.
+                    'homeProb': r.get('sofascore_home_win_prob'),
+                    'awayProb': r.get('sofascore_away_win_prob'),
+                    'url': r.get('sofascore_url'),
+                    'orientation': r.get('sofascore_orientation'),
                     'unavailable': r.get('sofascore_unavailable'),
                     'skipReason': r.get('sofascore_skip_reason'),
                 },
@@ -1809,42 +1816,25 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         row['bookmaker'] = odds.get('bookmaker')
         row['odds_note'] = odds.get('reason')
 
-        # Livesport bywa listuje mecz z odwróconymi stronami. Kursy, forma i
-        # H2H są względne do stron LIVESPORT, a nasze pola do stron FOREBET —
-        # bez tej korekty kurs gospodarza dostawał cenę gościa.
-        # Kursy z SofaScore są szukane po naszych nazwach, więc ich nie ruszamy.
+        # BEZ zamiany stron na podstawie URL-a Livesport.
+        #
+        # Wcześniej tu stała korekta „Livesport ma odwrócone strony", oparta na
+        # założeniu, że kolejność drużyn w URL-u to gospodarz/gość. To założenie
+        # było FAŁSZYWE: Livesport układa slugi w URL-u ALFABETYCZNIE —
+        # sprawdzone na 4766/4766 URL-ach. Korekta „wykrywała odwrócenie" w
+        # mniej więcej połowie meczów i ZAMIENIAŁA poprawne kursy, formę i H2H.
+        #
+        # Dowód (mecze z przewagą Forebet >= 20 pp, wszystkie sporty):
+        #                      kursy zgodne z Forebet   faworyt ma lepszą formę
+        #   nie zamienione              93%                      81%
+        #   zamienione                   5%                      16%
+        #
+        # Dane z LivesportOddsAPI i ze stron H2H/formy są już względne do
+        # rzeczywistych gospodarza i gościa, zgodnie z Forebet. Nic nie trzeba
+        # zamieniać. Odwrócenia, które SĄ realne, dotyczą SofaScore (inna
+        # kolejność w ich API) i są obsługiwane osobno w
+        # _verify_sofascore_event / _orient_fan_vote, po NAZWACH drużyn.
         row['sides_reversed'] = False
-        if row.get('match_url') and row.get('odds_source') != 'sofascore':
-            reversed_sides = is_livesport_reversed(row['match_url'], home, away)
-            if reversed_sides:
-                _swap_sides(row)
-                row['sides_reversed'] = True
-                print(f"      🔄 Livesport ma odwrócone strony — zamieniam kursy/formę/H2H "
-                      f"(H={row.get('home_odds')}, A={row.get('away_odds')})")
-            elif reversed_sides is None:
-                # „Nie wiem" NIE może znaczyć „zgodne". Dotąd taki mecz
-                # przechodził dalej z kursami, które mogły być po złej stronie,
-                # i trafiał do maila jako pewny typ. To właśnie widać było jako
-                # „kursy są odwrotnie".
-                row['odds_orientation_unknown'] = True
-                print("      ⚠️ Nie mogę ustalić orientacji stron w Livesport "
-                      "— odrzucam te kursy, żeby nie podać ceny złej strony")
-                for key in ('home_odds', 'draw_odds', 'away_odds',
-                            'odds_source', 'bookmaker'):
-                    row[key] = None
-                # Druga szansa: SofaScore szuka po nazwach i weryfikuje OBIE
-                # drużyny, więc nie ma tu problemu orientacji.
-                if use_sofascore:
-                    alt = resolve_odds_sofascore(home, away, sport,
-                                                 date_str=date_str)
-                    for key in ('home_odds', 'draw_odds', 'away_odds',
-                                'odds_source', 'bookmaker'):
-                        row[key] = alt.get(key)
-                    if alt.get('home_odds') or alt.get('away_odds'):
-                        print(f"      ↻ Kursy z SofaScore (orientacja "
-                              f"potwierdzona po nazwach): "
-                              f"H={row.get('home_odds')}, "
-                              f"A={row.get('away_odds')}")
 
         # Próg kursowy na kursach Pinnacle/Livesport. Brak kursów = skip:
         # bez ceny nie ma EV ani ROI, wiec typ jest nierozliczalny.
