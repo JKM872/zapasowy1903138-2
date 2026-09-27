@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-09-27T09:15:14.309072+02:00",
+    "target_date": "2026-09-27",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 0.9,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Friendlies",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/friendlies/australia-vs-south-africa/3340936?MarketTypeID=1301",
+      "match_id": "3340936",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Australia",
+      "away_team": "South Africa",
+      "event_date": "27/09",
+      "event_time": "09:45",
+      "outcome": "1",
+      "open_odds": 4.33,
+      "current_odds": 2.96,
+      "drop_pct": 32.0,
+      "max_odds": 3.1,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": []
+}
