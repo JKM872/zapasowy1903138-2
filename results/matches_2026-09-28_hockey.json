@@ -1,15 +1,15 @@
 {
   "date": "2026-09-28",
   "sport": "hockey",
-  "generatedAt": "2026-09-28T04:31:28.866077",
+  "generatedAt": "2026-09-28T09:31:04.728355",
   "stats": {
     "total": 41,
-    "qualifying": 17,
-    "formAdvantage": 11
+    "qualifying": 5,
+    "formAdvantage": 5
   },
   "matches": [
     {
-      "id": 2421163765534670916,
+      "id": -3209448273228969351,
       "homeTeam": "Sparta Praga",
       "awayTeam": "Karlowe Wary",
       "time": "28.09.2026 14:00",
@@ -31,19 +31,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "L",
+        "D",
+        "W",
+        "D"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "D"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "D"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -55,7 +79,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8509721105024982372,
+      "id": -5595945597819394539,
       "homeTeam": "Mogilev",
       "awayTeam": "Vitebsk",
       "time": "28.09.2026 15:30",
@@ -64,10 +88,10 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/mogilev-OYagKE4J/vitebsk-WfejbXs0/?mid=lAVE0EEj",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "odds_below_threshold"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -77,31 +101,114 @@
         "draw": 0,
         "away": 5,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "homeForm": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "D",
+        "D",
+        "L",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 4.5,
+        "draw": 4.6,
+        "away": 1.45,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 71.0,
+        "exactScore": "2-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "2",
+        "prob": 80.0,
+        "ev": 0.16,
+        "edge": 11.0,
+        "kelly": 5.0,
+        "confidence": 68.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 90,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 11.034,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 80%",
+          "Positive expected value: 0.16",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 11.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "A"
     },
     {
-      "id": 166630455389120018,
+      "id": -2272520392532764256,
       "homeTeam": "Baranavichy",
       "awayTeam": "Yunost Minsk",
       "time": "28.09.2026 16:00",
@@ -123,6 +230,76 @@
         "draw": 0,
         "away": 4,
         "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "D",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "D"
+      ],
+      "homeFormHome": [
+        "W",
+        "D",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "D",
+        "L",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 4331618083828430439,
+      "homeTeam": "Slavutych",
+      "awayTeam": "Soligorsk",
+      "time": "28.09.2026 16:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/slavutych-smolensk-vhl-Uuo43O7S/soligorsk-rocS3hSt/?mid=jopM5vQc",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -135,7 +312,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -147,131 +324,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4957960035032655076,
-      "homeTeam": "Slavutych",
-      "awayTeam": "Soligorsk",
-      "time": "28.09.2026 16:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/slavutych-smolensk-vhl-Uuo43O7S/soligorsk-rocS3hSt/?mid=jopM5vQc",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "D",
-        "D",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "D",
-        "D",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 2.2,
-        "draw": 3.9,
-        "away": 2.45,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "2",
-        "probability": 53.0,
-        "exactScore": "2-4",
-        "overUnder": "Under 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 48.2,
-        "ev": 0.061,
-        "edge": 2.8,
-        "kelly": 1.3,
-        "confidence": 34.0,
-        "dataQuality": 0.82
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 68,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 2.745,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 2.8,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
-    },
-    {
-      "id": -2698476662083276818,
+      "id": 606126578499846117,
       "homeTeam": "Trebic",
       "awayTeam": "Chomutov",
       "time": "28.09.2026 13:00",
@@ -293,19 +346,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "D",
+        "D",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -317,7 +394,7 @@
       "predictionGrade": null
     },
     {
-      "id": -332095874296318018,
+      "id": -7388828737752378092,
       "homeTeam": "Kolin",
       "awayTeam": "Przerów",
       "time": "28.09.2026 14:00",
@@ -326,9 +403,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kolin-zsELnWys/prerov-UojIAB6n/?mid=K08Gzsw8",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -337,47 +416,91 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 3056825656279014771,
+      "homeTeam": "AZ Hawierzów",
+      "awayTeam": "Jihlava",
+      "time": "28.09.2026 15:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/hawierzow-fc2rKlsR/jihlava-OUaeDQl7/?mid=6Va7tXQQ",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 3,
+        "total": 5,
+        "winRate": 60
       },
       "homeForm": [
         "L",
         "D",
-        "W",
         "L",
-        "D"
+        "L",
+        "L"
       ],
       "awayForm": [
+        "W",
+        "D",
         "L",
-        "W",
-        "W",
-        "W",
-        "L"
+        "L",
+        "W"
       ],
       "homeFormHome": [
         "D",
-        "L",
         "D",
+        "L",
         "W",
-        "D"
+        "W"
       ],
       "awayFormAway": [
-        "W",
+        "D",
         "L",
         "L",
         "W",
         "W"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 1.75,
+        "home": 3.25,
         "draw": 4.2,
-        "away": 3.2,
+        "away": 1.75,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "2",
-        "probability": 84.0,
-        "exactScore": "1-5",
+        "prediction": "1",
+        "probability": 67.0,
+        "exactScore": "5-3",
         "overUnder": "Over 5.5",
         "btts": "Yes",
         "homeProb": null,
@@ -387,19 +510,19 @@
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "2",
-        "prob": 35.8,
-        "ev": 0.145,
-        "edge": 4.5,
-        "kelly": 1.6,
-        "confidence": 36.0,
+        "pick": "1",
+        "prob": 32.3,
+        "ev": 0.048,
+        "edge": 1.5,
+        "kelly": 0.5,
+        "confidence": 25.0,
         "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 66,
+      "confidence": 78,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 3,
@@ -411,8 +534,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -21.343,
+        "consensus_strength": "weak",
+        "market_model_gap": -24.843,
         "skip_reason": null
       },
       "availability": {
@@ -429,7 +552,7 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.14"
+          "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high",
@@ -437,59 +560,13 @@
         ],
         "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 4.5,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 1.5,
+        "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "D"
     },
     {
-      "id": -8985752852855888714,
-      "homeTeam": "AZ Hawierzów",
-      "awayTeam": "Jihlava",
-      "time": "28.09.2026 15:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/hawierzow-fc2rKlsR/jihlava-OUaeDQl7/?mid=6Va7tXQQ",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 3,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 4051323283382509765,
+      "id": -3392346888737468566,
       "homeTeam": "Litomerice",
       "awayTeam": "Slavia Praga",
       "time": "28.09.2026 15:00",
@@ -511,19 +588,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayForm": [
+        "D",
+        "D",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "D",
+        "D",
+        "D"
+      ],
+      "awayFormAway": [
+        "D",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -535,7 +636,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3366101848482964476,
+      "id": -4488430124403940907,
       "homeTeam": "Pardubice B",
       "awayTeam": "Zlin",
       "time": "28.09.2026 15:00",
@@ -557,19 +658,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "D",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "D",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -581,7 +706,7 @@
       "predictionGrade": null
     },
     {
-      "id": 244074056230590774,
+      "id": 9201989738491315697,
       "homeTeam": "Sokolov",
       "awayTeam": "Frydek-Mistek",
       "time": "28.09.2026 15:00",
@@ -603,19 +728,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "D"
+      ],
+      "awayForm": [
+        "W",
+        "D",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "D",
+        "D",
+        "D",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -627,7 +776,7 @@
       "predictionGrade": null
     },
     {
-      "id": 296876331337004762,
+      "id": 3000792880017648541,
       "homeTeam": "Vsetin",
       "awayTeam": "Tabor",
       "time": "28.09.2026 15:00",
@@ -661,7 +810,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -673,7 +822,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5111213400808864414,
+      "id": 6247827590984310062,
       "homeTeam": "Czeskie Budziejowice U20",
       "awayTeam": "Jihlava U20",
       "time": "28.09.2026 11:00",
@@ -682,9 +831,12 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ceske-budejovice-b772NvfJ/jihlava-zD0Pt2fs/?mid=0jKlwD5c",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed",
+        "match_already_started"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -693,109 +845,31 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "L",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
-      "forebet": {
-        "prediction": "1",
-        "probability": 67.0,
-        "exactScore": "5-3",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 85.1,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 57.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 85,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 85%",
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 3265173539245731911,
+      "id": 8177180981632308663,
       "homeTeam": "Slavia Praha U20",
       "awayTeam": "Pilzno U20",
       "time": "28.09.2026 14:30",
@@ -817,19 +891,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "L",
+        "W",
+        "D",
+        "L"
+      ],
+      "awayForm": [
+        "D",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "D",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "D",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -841,7 +939,7 @@
       "predictionGrade": null
     },
     {
-      "id": -8746948323871354166,
+      "id": -2693375420848360067,
       "homeTeam": "Karlovy Vary U20",
       "awayTeam": "Litvinov U20",
       "time": "28.09.2026 15:00",
@@ -863,19 +961,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "D",
+        "L",
+        "D"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -887,7 +1009,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7313482890261148742,
+      "id": 234272579201998138,
       "homeTeam": "Trzyniec U20",
       "awayTeam": "Vitkovice U20",
       "time": "28.09.2026 15:30",
@@ -909,6 +1031,122 @@
         "draw": 0,
         "away": 4,
         "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "D",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "W",
+        "D",
+        "L"
+      ],
+      "awayFormAway": [
+        "D",
+        "W",
+        "L",
+        "W",
+        "D"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -325738117934157587,
+      "homeTeam": "Kometa Brno U20",
+      "awayTeam": "Poruba U20",
+      "time": "28.09.2026 16:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kometa-brno-GSJhnOWJ/poruba-SUAHlDYI/?mid=d2ZN2WTp",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 1,
+        "total": 3,
+        "winRate": 33
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -1762771125634271359,
+      "homeTeam": "Mlada Bolesław U20",
+      "awayTeam": "Liberec U20",
+      "time": "28.09.2026 16:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/liberec-4W0nZHwP/mlada-boleslav-8QbXvtPg/?mid=O8R9QZLi",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -921,7 +1159,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -933,251 +1171,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8311314398599025169,
-      "homeTeam": "Kometa Brno U20",
-      "awayTeam": "Poruba U20",
-      "time": "28.09.2026 16:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kometa-brno-GSJhnOWJ/poruba-SUAHlDYI/?mid=d2ZN2WTp",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 1,
-        "total": 3,
-        "winRate": 66
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "D",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "W",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": null,
-      "forebet": {
-        "prediction": "1",
-        "probability": 58.0,
-        "exactScore": "4-3",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 76.1,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 52.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 78,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "moderate",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 76%",
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": 7094561340534592490,
-      "homeTeam": "Mlada Bolesław U20",
-      "awayTeam": "Liberec U20",
-      "time": "28.09.2026 16:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/liberec-4W0nZHwP/mlada-boleslav-8QbXvtPg/?mid=O8R9QZLi",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "D",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": null,
-      "forebet": {
-        "prediction": "1",
-        "probability": 67.0,
-        "exactScore": "4-2",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 85.1,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 57.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 78,
-      "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 85%",
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": -3591482097077066647,
+      "id": -4635618813236015903,
       "homeTeam": "Pardubice U20",
       "awayTeam": "Mountfield HK U20",
       "time": "28.09.2026 16:00",
@@ -1199,19 +1193,43 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "D",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1223,7 +1241,7 @@
       "predictionGrade": null
     },
     {
-      "id": -4760414036095388977,
+      "id": 7818737152834504372,
       "homeTeam": "Sparta Praha U20",
       "awayTeam": "Kladno U20",
       "time": "28.09.2026 16:00",
@@ -1232,9 +1250,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kladno-d6cvyv9C/sparta-praha-r5t7xl5n/?mid=UmwPMiLG",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1243,109 +1263,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "L",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "D",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "D",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
-      "forebet": {
-        "prediction": "1",
-        "probability": 82.0,
-        "exactScore": "4-2",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 87.0,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 58.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 80,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 87%",
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 6357916932833599663,
+      "id": -2847782655647456307,
       "homeTeam": "United HK",
       "awayTeam": "BO Ostrava",
       "time": "28.09.2026 17:00",
@@ -1367,19 +1309,43 @@
         "draw": 0,
         "away": 3,
         "total": 4,
-        "winRate": 25
+        "winRate": 75
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "D",
+        "D",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "D",
+        "L",
+        "D",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "D",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "D",
+        "W",
+        "D",
+        "W"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1391,7 +1357,7 @@
       "predictionGrade": null
     },
     {
-      "id": 1547592430686349949,
+      "id": -2909701362793801588,
       "homeTeam": "Black Dogs Budweis",
       "awayTeam": "Masaryk University",
       "time": "28.09.2026 17:30",
@@ -1400,386 +1366,6 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/black-dogs-budweis-G2IjExQC/masaryk-university-8hcRHKQm/?mid=lAiIYS6L",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 5,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 100
-      },
-      "homeForm": [
-        "L",
-        "D",
-        "L",
-        "D",
-        "W"
-      ],
-      "awayForm": [
-        "D",
-        "L",
-        "D",
-        "D",
-        "L"
-      ],
-      "homeFormHome": [
-        "D",
-        "L",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "D",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.2,
-        "draw": 6.75,
-        "away": 7.25,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 73.0,
-        "exactScore": "3-1",
-        "overUnder": "Under 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 86.4,
-        "ev": 0.036,
-        "edge": 3.0,
-        "kelly": 4.5,
-        "confidence": 65.0,
-        "dataQuality": 0.82
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 78,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": 3.067,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 86%",
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 3.0,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "B"
-    },
-    {
-      "id": -1250350888452623426,
-      "homeTeam": "Aalborg",
-      "awayTeam": "Sonderjyske",
-      "time": "28.09.2026 17:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/aalborg-pirates-naGUMO7k/sonderjyske-pduu7bbb/?mid=z5UbJYig",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "L",
-        "D",
-        "L",
-        "D",
-        "D"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "D",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 1.6,
-        "draw": 4.3,
-        "away": 3.95,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 53.0,
-        "exactScore": "3-2",
-        "overUnder": "Under 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 66.0,
-        "ev": 0.056,
-        "edge": 3.5,
-        "kelly": 2.3,
-        "confidence": 54.0,
-        "dataQuality": 0.82
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 70,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 3.5,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 3.5,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": -3138852752222215304,
-      "homeTeam": "Nomad Astana",
-      "awayTeam": "Karaganda",
-      "time": "28.09.2026 12:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/nomad-astana-UojIOSh2/saryarka-karaganda-8xxP0iar/?mid=Wt9JM3fD",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "L",
-        "D",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.83,
-        "draw": 4.3,
-        "away": 2.95,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 70.0,
-        "exactScore": "3-2",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 74.2,
-        "ev": 0.358,
-        "edge": 19.6,
-        "kelly": 5.0,
-        "confidence": 78.0,
-        "dataQuality": 0.82
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 88,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": 19.555,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 74%",
-          "Positive expected value: 0.36",
-          "Source consensus: moderate (2/3)"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 19.6,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "A"
-    },
-    {
-      "id": 1934581290348152065,
-      "homeTeam": "Aktobe",
-      "awayTeam": "Torpedo",
-      "time": "28.09.2026 14:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/aktobe-48Q4yoof/kazzinc-torpedo-O4OFe0rO/?mid=Y3IPXT2E",
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
@@ -1789,9 +1375,9 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 5,
         "draw": 0,
-        "away": 5,
+        "away": 0,
         "total": 5,
         "winRate": 0
       },
@@ -1805,7 +1391,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1817,19 +1403,19 @@
       "predictionGrade": null
     },
     {
-      "id": -1941357205917700908,
-      "homeTeam": "Gornyak Rudny",
-      "awayTeam": "Beibarys Atyrau",
-      "time": "28.09.2026 14:00",
+      "id": 8365738214288667860,
+      "homeTeam": "Aalborg",
+      "awayTeam": "Sonderjyske",
+      "time": "28.09.2026 17:00",
       "date": "2026-09-28",
       "league": null,
       "country": "",
       "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/beibarys-atyrau-lOPcNztU/gornyak-rudny-GWnXnLuH/?mid=OG5BOPP0",
-      "qualifies": true,
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/aalborg-pirates-naGUMO7k/sonderjyske-pduu7bbb/?mid=z5UbJYig",
+      "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "odds_below_threshold"
+        "base_qualification_failed"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -1839,47 +1425,139 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -5393065932413238287,
+      "homeTeam": "Nomad Astana",
+      "awayTeam": "Karaganda",
+      "time": "28.09.2026 12:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/nomad-astana-UojIOSh2/saryarka-karaganda-8xxP0iar/?mid=Wt9JM3fD",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 2396257575462678073,
+      "homeTeam": "Aktobe",
+      "awayTeam": "Torpedo",
+      "time": "28.09.2026 14:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/aktobe-48Q4yoof/kazzinc-torpedo-O4OFe0rO/?mid=Y3IPXT2E",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 5,
+        "total": 5,
+        "winRate": 100
       },
       "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
         "L",
         "L",
         "L",
         "L",
         "L"
       ],
-      "homeFormHome": [
+      "awayForm": [
         "W",
-        "D",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
         "L",
         "W",
         "W",
+        "D"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "D",
+        "L",
         "D",
         "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 1.33,
-        "draw": 5.0,
-        "away": 5.75,
+        "home": 18.0,
+        "draw": 9.5,
+        "away": 1.05,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "1",
-        "probability": 66.0,
-        "exactScore": "3-2",
+        "prediction": "2",
+        "probability": 84.0,
+        "exactScore": "1-5",
         "overUnder": "Over 5.5",
         "btts": "Yes",
         "homeProb": null,
@@ -1889,20 +1567,20 @@
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
-        "pick": "1",
-        "prob": 84.7,
-        "ev": 0.126,
-        "edge": 9.5,
-        "kelly": 5.0,
-        "confidence": 78.0,
+        "pick": "2",
+        "prob": 94.0,
+        "ev": -0.013,
+        "edge": -1.2,
+        "kelly": 0.0,
+        "confidence": 59.0,
         "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 90,
-      "value_bet": true,
+      "confidence": 95,
+      "value_bet": false,
       "dataQuality": {
         "sources_available": 3,
         "quality_score": 0.9,
@@ -1914,7 +1592,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 9.512,
+        "market_model_gap": -1.238,
         "skip_reason": null
       },
       "availability": {
@@ -1931,22 +1609,68 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 85%",
-          "Positive expected value: 0.13",
-          "Source consensus: moderate (2/3)"
+          "Model probability: 94%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high"
         ],
         "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 9.5,
+        "expected_edge": -1.2,
         "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "B"
     },
     {
-      "id": -6957505732633189631,
+      "id": 3545371373500214591,
+      "homeTeam": "Gornyak Rudny",
+      "awayTeam": "Beibarys Atyrau",
+      "time": "28.09.2026 14:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/beibarys-atyrau-lOPcNztU/gornyak-rudny-GWnXnLuH/?mid=OG5BOPP0",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 557501607063919000,
       "homeTeam": "Kokshetau",
       "awayTeam": "Pavlodar",
       "time": "28.09.2026 14:00",
@@ -1955,9 +1679,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/arlan-kokshetau-KG2E5laq/pavlodar-YgqLMzUs/?mid=j373Qoel",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1966,109 +1692,31 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 100
+        "winRate": 0
       },
-      "homeForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
-      "forebet": {
-        "prediction": "1",
-        "probability": 85.0,
-        "exactScore": "5-2",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 94.9,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 62.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 92,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.65,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 95%",
-          "Source consensus: moderate (2/3)",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 65%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "moderate (2 sources agree)"
-      },
-      "predictionGrade": "C"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 2713193708024155958,
+      "id": 3595480382603444665,
       "homeTeam": "Almaty",
       "awayTeam": "Kulager",
       "time": "28.09.2026 14:30",
@@ -2090,6 +1738,122 @@
         "draw": 0,
         "away": 3,
         "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "D"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "D",
+        "L",
+        "D",
+        "D",
+        "D"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -3486110451851336224,
+      "homeTeam": "Omsk",
+      "awayTeam": "Magnitogorsk",
+      "time": "28.09.2026 13:30",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/magnitogorsk-QcJ1rpaL/omsk-6PtiwUZu/?mid=ADB6E6OG",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 5225281952435504792,
+      "homeTeam": "Din. Mińsk",
+      "awayTeam": "Lada",
+      "time": "28.09.2026 16:10",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/dinamo-minsk-nFNz792t/lada-togliatti-t8v1lnZ4/?mid=tbTmv9h2",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
         "winRate": 40
       },
       "homeForm": [],
@@ -2102,7 +1866,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2114,263 +1878,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5421403418937929892,
-      "homeTeam": "Omsk",
-      "awayTeam": "Magnitogorsk",
-      "time": "28.09.2026 13:30",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/magnitogorsk-QcJ1rpaL/omsk-6PtiwUZu/?mid=ADB6E6OG",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "D",
-        "L",
-        "L",
-        "L",
-        "D"
-      ],
-      "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "D",
-        "D",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "D",
-        "D",
-        "W",
-        "L"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 2.55,
-        "draw": 4.0,
-        "away": 2.35,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 58.0,
-        "exactScore": "3-1",
-        "overUnder": "Under 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 48.2,
-        "ev": 0.23,
-        "edge": 9.0,
-        "kelly": 3.7,
-        "confidence": 42.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 42.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 8.984,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.23"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 9.0,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": -8222093055290166300,
-      "homeTeam": "Din. Mińsk",
-      "awayTeam": "Lada",
-      "time": "28.09.2026 16:10",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/dinamo-minsk-nFNz792t/lada-togliatti-t8v1lnZ4/?mid=tbTmv9h2",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "L",
-        "D",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "D",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "D",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "D",
-        "L",
-        "D"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.48,
-        "draw": 4.8,
-        "away": 5.5,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 67.0,
-        "exactScore": "6-2",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 74.7,
-        "ev": 0.105,
-        "edge": 7.1,
-        "kelly": 5.0,
-        "confidence": 64.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 64.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 7.132,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 75%",
-          "Positive expected value: 0.10",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 7.1,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "B"
-    },
-    {
-      "id": -394650846017288133,
+      "id": -9100793291581976770,
       "homeTeam": "Dynamo Moskwa",
       "awayTeam": "Traktor Czelabińsk",
       "time": "28.09.2026 16:30",
@@ -2379,9 +1887,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/dynamo-moskwa-ziMuxxog/traktor-chelyabinsk-C2PzG534/?mid=UZ9jIlPi",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2390,113 +1900,31 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "D",
-        "L",
-        "D",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.95,
-        "draw": 4.0,
-        "away": 3.2,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "2",
-        "probability": 53.0,
-        "exactScore": "3-6",
-        "overUnder": "Over 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "2",
-        "prob": 32.3,
-        "ev": 0.033,
-        "edge": 1.0,
-        "kelly": 0.4,
-        "confidence": 22.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 22.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": -18.982,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 1.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": -2842359060247576531,
+      "id": -6458507572820651530,
       "homeTeam": "Niżny Nowogród",
       "awayTeam": "Ufa",
       "time": "28.09.2026 16:30",
@@ -2518,6 +1946,122 @@
         "draw": 0,
         "away": 4,
         "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "D"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "D"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -3705566243122928706,
+      "homeTeam": "Shanghai",
+      "awayTeam": "Soczi",
+      "time": "28.09.2026 16:30",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/shanghai-dragons-AD9W1ReA/soczi-zu1IGfCr/?mid=8pVutVNk",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -2735647349347551547,
+      "homeTeam": "Orsk",
+      "awayTeam": "Almetyevsk",
+      "time": "28.09.2026 13:30",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/almetyevsk-OjLH0pat/orsk-IDKLa4En/?mid=U3VglQ5l",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -2530,7 +2074,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2542,261 +2086,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4200042952946556635,
-      "homeTeam": "Shanghai",
-      "awayTeam": "Soczi",
-      "time": "28.09.2026 16:30",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/shanghai-dragons-AD9W1ReA/soczi-zu1IGfCr/?mid=8pVutVNk",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "D",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 1.68,
-        "draw": 4.3,
-        "away": 4.2,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "1",
-        "probability": 63.0,
-        "exactScore": "7-2",
-        "overUnder": "Under 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 72.9,
-        "ev": 0.224,
-        "edge": 13.4,
-        "kelly": 5.0,
-        "confidence": 70.0,
-        "dataQuality": 0.82
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 80,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 13.376,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Model probability: 73%",
-          "Positive expected value: 0.22",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 13.4,
-        "consensus_note": "weak (1 sources agree)"
-      },
-      "predictionGrade": "B"
-    },
-    {
-      "id": -3428593065527781536,
-      "homeTeam": "Orsk",
-      "awayTeam": "Almetyevsk",
-      "time": "28.09.2026 13:30",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/almetyevsk-OjLH0pat/orsk-IDKLa4En/?mid=U3VglQ5l",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "W",
-        "D",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "D",
-        "D",
-        "W",
-        "W"
-      ],
-      "awayFormAway": [
-        "W",
-        "W",
-        "D",
-        "D",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": {
-        "home": 3.25,
-        "draw": 3.8,
-        "away": 1.9,
-        "bookmaker": "Pinnacle"
-      },
-      "forebet": {
-        "prediction": "2",
-        "probability": 60.0,
-        "exactScore": "2-3",
-        "overUnder": "Under 5.5",
-        "btts": "Yes",
-        "homeProb": null,
-        "drawProb": null,
-        "awayProb": null
-      },
-      "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
-      "scoring": {
-        "pick": "1",
-        "prob": 36.0,
-        "ev": 0.171,
-        "edge": 5.3,
-        "kelly": 1.9,
-        "confidence": 27.0,
-        "dataQuality": 0.73
-      },
-      "tennis": null,
-      "baseball": null,
-      "confidence": 27.0,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 5.231,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.17"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "3/4 sources available (quality: 90%)",
-        "availability_note": "",
-        "expected_edge": 5.3,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "C"
-    },
-    {
-      "id": 5583715982184678867,
+      "id": 3430436272177678942,
       "homeTeam": "Magnitka Magnitogorsk",
       "awayTeam": "CSK VVS",
       "time": "28.09.2026 14:00",
@@ -2830,7 +2120,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2842,7 +2132,7 @@
       "predictionGrade": null
     },
     {
-      "id": -5694150083165924765,
+      "id": 833351215953990511,
       "homeTeam": "Amurskie Tigry",
       "awayTeam": "Tayfun",
       "time": "28.09.2026 09:00",
@@ -2854,7 +2144,8 @@
       "qualifies": false,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "base_qualification_failed",
+        "match_already_started"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -2864,19 +2155,43 @@
         "draw": 0,
         "away": 5,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "D",
+        "D",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "D",
+        "D",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "D",
+        "D",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "D",
+        "L",
+        "L",
+        "L",
+        "D"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2888,7 +2203,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3856257434260859507,
+      "id": 8261527426169654671,
       "homeTeam": "Loko-76",
       "awayTeam": "Mamonty Yugry",
       "time": "28.09.2026 15:30",
@@ -2897,11 +2212,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/loko-76-mhl-0rCy6Bos/mamonty-yugry-mhl-Q577HnSE/?mid=Ots2TFhJ",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2910,94 +2223,48 @@
         "draw": 0,
         "away": 5,
         "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -958684549829625940,
-      "homeTeam": "Mikhaylov Academy U20",
-      "awayTeam": "Red Mashine Yuniors",
-      "time": "28.09.2026 16:00",
-      "date": "2026-09-28",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/mhl-mikhaylov-academy-mhl-rsAi0Bk6/red-mashine-yuniors-mhl-SvI1HQW9/?mid=GzUmiJpQ",
-      "qualifies": true,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "odds_below_threshold"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 0,
-        "total": 2,
         "winRate": 100
       },
       "homeForm": [
-        "L",
-        "L",
         "W",
         "D",
+        "D",
+        "L",
         "L"
       ],
       "awayForm": [
         "W",
-        "D",
+        "W",
+        "W",
         "L",
-        "L",
-        "W"
+        "L"
       ],
       "homeFormHome": [
+        "D",
         "L",
         "W",
-        "L",
-        "W",
-        "W"
+        "D",
+        "D"
       ],
       "awayFormAway": [
-        "L",
+        "W",
         "L",
         "L",
         "L",
         "L"
       ],
-      "formAdvantage": false,
+      "formAdvantage": true,
       "odds": {
-        "home": 1.03,
-        "draw": 12.0,
-        "away": 20.0,
+        "home": 2.5,
+        "draw": 3.75,
+        "away": 2.25,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
-        "prediction": "1",
-        "probability": 56.0,
-        "exactScore": "5-2",
-        "overUnder": "Over 5.5",
+        "prediction": "2",
+        "probability": 51.0,
+        "exactScore": "1-2",
+        "overUnder": "Under 5.5",
         "btts": "Yes",
         "homeProb": null,
         "drawProb": null,
@@ -3006,32 +2273,32 @@
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": {
         "pick": "2",
-        "prob": 6.8,
-        "ev": 0.359,
-        "edge": 1.8,
-        "kelly": 0.5,
-        "confidence": 31.0,
-        "dataQuality": 0.73
+        "prob": 60.7,
+        "ev": 0.365,
+        "edge": 16.2,
+        "kelly": 5.0,
+        "confidence": 58.0,
+        "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 31.0,
+      "confidence": 88,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 3,
-        "quality_score": 0.85,
+        "quality_score": 0.9,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": -90.287,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 16.256,
         "skip_reason": null
       },
       "availability": {
@@ -3048,21 +2315,68 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.36"
+          "Positive expected value: 0.36",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "3/4 sources available (quality: 85%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 1.8,
-        "consensus_note": "weak (1 sources agree)"
+        "expected_edge": 16.2,
+        "consensus_note": "moderate (2 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "B"
     },
     {
-      "id": 3007056333726183312,
+      "id": 5366552320274049532,
+      "homeTeam": "Mikhaylov Academy U20",
+      "awayTeam": "Red Mashine Yuniors",
+      "time": "28.09.2026 16:00",
+      "date": "2026-09-28",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/mhl-mikhaylov-academy-mhl-rsAi0Bk6/red-mashine-yuniors-mhl-SvI1HQW9/?mid=GzUmiJpQ",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 0,
+        "total": 2,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "away",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -1830790846047864056,
       "homeTeam": "Nybro",
       "awayTeam": "Modo",
       "time": "28.09.2026 17:00",
@@ -3096,7 +2410,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3108,7 +2422,7 @@
       "predictionGrade": null
     },
     {
-      "id": 3402184014633083094,
+      "id": -6098845619448660674,
       "homeTeam": "Vasteras",
       "awayTeam": "Kalmar",
       "time": "28.09.2026 17:00",
@@ -3117,11 +2431,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kalmar-8pkKODjH/vasteras-8Q677EGl/?mid=ARzJpvdf",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -3130,31 +2442,114 @@
         "draw": 0,
         "away": 5,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "homeForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "D"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "D"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 3.5,
+        "draw": 4.2,
+        "away": 1.73,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 67.0,
+        "exactScore": "1-4",
+        "overUnder": "Under 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "home",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "away",
+      "scoring": {
+        "pick": "2",
+        "prob": 75.9,
+        "ev": 0.313,
+        "edge": 18.1,
+        "kelly": 5.0,
+        "confidence": 70.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 90,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 18.097,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 76%",
+          "Positive expected value: 0.31",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 18.1,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "A"
     },
     {
-      "id": 6015300157312804210,
+      "id": -1815983919370002584,
       "homeTeam": "Feha19",
       "awayTeam": "Budapest Akademia",
       "time": "28.09.2026 16:30",
@@ -3176,19 +2571,43 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "D",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -3200,7 +2619,7 @@
       "predictionGrade": null
     },
     {
-      "id": -6870017901656493232,
+      "id": 1760668323011243645,
       "homeTeam": "Budapest Akademia U21",
       "awayTeam": "Gyori ETO",
       "time": "28.09.2026 18:05",
@@ -3234,7 +2653,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "home",
+      "focusTeam": "away",
       "scoring": null,
       "tennis": null,
       "baseball": null,
