@@ -2,7 +2,7 @@
   "date": "2026-10-01",
   "sport": "basketball",
   "source": "forebet",
-  "generatedAt": "2026-10-01T05:27:39.637868+00:00",
+  "generatedAt": "2026-10-01T10:53:53.938511+00:00",
   "matches": [
     {
       "homeTeam": "Leones Quilpue",
@@ -324,10 +324,10 @@
         }
       },
       "ai": {
-        "prediction": "Motilones del Norte are poised to secure a home victory, buoyed by their better recent and venue‑specific performance.",
-        "confidence": 78,
-        "recommendation": "HIGH",
-        "reasoning": "In the last five meetings the home side has only a 40 % win rate (2‑3), but that small sample is outweighed by current form – Motilones sit at 6.0/10 overall and 6.0/10 at home, while Piratas manage just 4.0/10 overall and a poor 2.0/10 away. The Forebet model assigns a 60 % chance to a home win, aligning with the bookmakers’ odds of 1.65 for Motilones versus 2.25 for Piratas, indicating value on the favorite. The combination of a solid home record, a struggling away side, and attractive odds creates a clear edge. Nonetheless, the slight H2H disadvantage (2‑3) introduces a modest risk of an upset."
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "1",
@@ -342,18 +342,18 @@
           "odds": 0.606
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 2,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
-        "gemini_available": true,
+        "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": -5.606,
         "skip_reason": null
       },
@@ -432,7 +432,7 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 3.25,
+        "home": 3.2,
         "draw": null,
         "away": 1.38,
         "source": "pinnacle",
@@ -475,7 +475,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 28.131,
+        "market_model_gap": 27.65,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -539,9 +539,9 @@
         "bookmaker": null,
         "note": "brak_kursow|sofascore_brak_eventu",
         "forebet": {
-          "home": null,
+          "home": 167.0,
           "draw": null,
-          "away": null
+          "away": 109.0
         }
       },
       "ai": {
@@ -587,12 +587,10 @@
       "source": "forebet",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/novosibirsk-veY80CA2/temp-sumz-revda-QLkYNejI/?mid=Q1oAOTNc",
       "forebetUrl": "https://www.forebet.com/en/basketball/matches/super-league-ru/temp-sumz-revda-novosibirsk/294275",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow"
-      ],
+      "emailQualifies": true,
+      "skipReasons": [],
       "forebet": {
         "prediction": "1",
         "probability": 69.0,
@@ -642,22 +640,22 @@
         ]
       },
       "sofascore": {
-        "found": null,
-        "votes": null,
+        "found": false,
+        "votes": 0,
         "homeProb": null,
         "awayProb": null,
         "url": null,
         "orientation": null,
-        "unavailable": null,
-        "skipReason": null
+        "unavailable": true,
+        "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": null,
+        "home": 1.45,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "away": 2.75,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -665,37 +663,38 @@
         }
       },
       "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
-        "prob": 58.2,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 59.7,
+        "ev": -0.134,
+        "edge": -9.3,
+        "sources": 4,
         "components": {
           "forebet": 0.69,
           "h2h": 0.4,
-          "form": 0.6
+          "form": 0.6,
+          "odds": 0.69
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
+        "gemini_available": true,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -9.266,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -785,10 +784,10 @@
         }
       },
       "ai": {
-        "prediction": "Golden State Valkyries are likely to edge out Dallas Wings despite the home advantage, riding their superior recent form and the market’s confidence in an away win.",
-        "confidence": 58,
-        "recommendation": "MEDIUM",
-        "reasoning": "Dallas dominates the recent H2H (4‑1) and enjoys a high home rating (8.7/10), suggesting a strong home edge. However, their overall form (4.7/10) is markedly poorer than Golden State’s (7.3/10), indicating systemic issues. Golden State’s away rating (7.3/10) remains solid and exceeds the league average, and the Forebet model assigns them a 62% chance to win. Bookmaker odds (1.5 for Golden State vs 2.55 for Dallas) also reflect a clear market bias toward the visitors. The clash of home advantage versus form creates moderate uncertainty, keeping confidence in the away win at a modest level."
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "2",
@@ -805,12 +804,12 @@
       },
       "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 2,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
-        "gemini_available": true,
+        "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
@@ -1016,6 +1015,103 @@
       "oddsOrientationUnknown": false
     },
     {
+      "homeTeam": "Caimanes del Llano",
+      "awayTeam": "Capitanes Bogota",
+      "time": "1:30",
+      "league": "CO1",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/basketball/matches/lbp/caimanes-del-llano-capitanes-bogota/295289",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "zrodla_1<2"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 72.0,
+        "homeProb": 72,
+        "drawProb": null,
+        "awayProb": 28,
+        "exactScore": "78-70",
+        "avgGoals": 116.1,
+        "favorite": "home",
+        "gap": 44
+      },
+      "h2h": {
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null
+      },
+      "form": {
+        "home": [],
+        "away": [],
+        "homeAtHome": [],
+        "awayAtAway": []
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_brak_eventu",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 72.0,
+        "ev": null,
+        "edge": null,
+        "sources": 1,
+        "components": {
+          "forebet": 0.72
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 1,
+        "quality_score": 0.2,
+        "h2h_available": false,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": false,
+        "h2h_count": 0,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "insufficient_data"
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
       "homeTeam": "Motilones del Norte",
       "awayTeam": "Piratas de Bogota",
       "time": "1:30",
@@ -1100,10 +1196,10 @@
         }
       },
       "ai": {
-        "prediction": "Motilones del Norte are expected to secure a victory at home, leveraging their significantly stronger recent form and the substantial weakness of Piratas de Bogota on the road.",
-        "confidence": 78,
-        "recommendation": "HIGH",
-        "reasoning": "Although Piratas de Bogota hold a slight edge in the last five head-to-head meetings (3 wins to 2), this historical trend is heavily outweighed by current performance metrics. Motilones del Norte display a robust overall form rating of 6.0/10, which is double that of the visitors (4.0/10), and this advantage is amplified by the venue split where the home team maintains a 6.0/10 rating while the away team struggles with a mere 2.0/10 away form. The bookmaker odds of 1.65 for the home side align closely with the Forebet prediction of a 65% win probability, indicating a clear market consensus on the home advantage. The 30-percentage-point gap in predicted win probability suggests a comfortable margin rather than a tight contest, reducing the risk of an upset despite the H2H history."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
@@ -1129,7 +1225,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": -3.706,
         "skip_reason": null
       },
@@ -1938,9 +2034,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.05,
+        "home": 1.8,
         "draw": null,
-        "away": 1.83,
+        "away": 2.1,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -1951,22 +2047,22 @@
         }
       },
       "ai": {
-        "prediction": "Zalgiris Kaunas 2 are expected to win at home, riding their strong venue‑specific form and better recent results.",
-        "confidence": 72,
-        "recommendation": "MEDIUM",
-        "reasoning": "In the last five meetings the home side has a 60 % win rate (3‑2), and Forebet assigns a 69 % probability to a home victory. Zalgiris’ venue‑specific rating is 6.0/10 versus Vilkaviskis’ away rating of only 2.0/10, highlighting a clear home‑court edge. Recent form also favours Zalgiris (4.0/10) while Vilkaviskis sit at 0.0/10. Bookmaker odds are slightly against the statistical trend (2.05 for home, 1.83 for away), suggesting the market may be undervaluing the home advantage. Overall, the convergence of H2H, form and home metrics outweighs the modest odds discrepancy, but the odds gap introduces some uncertainty."
+        "prediction": "Zalgiris Kaunas 2 is expected to secure a home victory, driven by their significantly superior venue-specific form and the clear statistical edge indicated by both head-to-head records and predictive models.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "The head-to-head record favors the home side with 3 wins in the last 5 meetings, establishing a 60% baseline advantage. More critically, Zalgiris Kaunas 2's home form is robust at 6.0/10, whereas Vilkaviskis struggles away from home with a mere 2.0/10 rating. The overall form gap is stark, with the home team at 4.0/10 compared to the visitors' 0.0/10, suggesting Vilkaviskis is currently in a slump. The Forebet prediction of a 69% home win probability aligns with the bookmaker odds of 1.8 for the home team, indicating a moderate but clear favorite status. While the odds do not offer extreme value, the convergence of strong home performance and weak away opposition creates a reliable betting angle."
       },
       "scoring": {
         "pick": "1",
-        "prob": 64.1,
-        "ev": 0.314,
-        "edge": 15.3,
+        "prob": 65.0,
+        "ev": 0.171,
+        "edge": 9.5,
         "sources": 4,
         "components": {
           "forebet": 0.69,
           "h2h": 0.6,
           "form": 0.7,
-          "odds": 0.488
+          "odds": 0.556
         }
       },
       "predictionGrade": "B",
@@ -1980,8 +2076,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 15.32,
+        "consensus_strength": "moderate",
+        "market_model_gap": 9.444,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2354,6 +2450,103 @@
       "oddsOrientationUnknown": false
     },
     {
+      "homeTeam": "PeKa II W",
+      "awayTeam": "TikS W",
+      "time": "3:30",
+      "league": "FW2",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/basketball/matches/i-divisioona-women/peka-ii-w-tiks-w/295301",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow",
+        "zrodla_1<2"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 79.0,
+        "homeProb": 21,
+        "drawProb": null,
+        "awayProb": 79,
+        "exactScore": "56-76",
+        "avgGoals": 100.2,
+        "favorite": "away",
+        "gap": 58
+      },
+      "h2h": {
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null
+      },
+      "form": {
+        "home": [],
+        "away": [],
+        "homeAtHome": [],
+        "awayAtAway": []
+      },
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_brak_eventu",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 79.0,
+        "ev": null,
+        "edge": null,
+        "sources": 1,
+        "components": {
+          "forebet": 0.79
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 1,
+        "quality_score": 0.2,
+        "h2h_available": false,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": false,
+        "h2h_count": 0,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "insufficient_data"
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
       "homeTeam": "Hapoel Tel-Aviv",
       "awayTeam": "Real Madrid",
       "time": "4:00",
@@ -2425,9 +2618,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.3,
+        "home": 2.35,
         "draw": null,
-        "away": 1.78,
+        "away": 1.75,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2438,22 +2631,22 @@
         }
       },
       "ai": {
-        "prediction": "Real Madrid are likely to edge out Hapoel Tel‑Aviv despite the home‑team’s historical edge.",
-        "confidence": 60,
-        "recommendation": "MEDIUM",
-        "reasoning": "Hapoel dominates the recent head‑to‑head (4‑1, 80% home win rate) and holds a superior overall form rating (6.0 vs 4.7). However, venue‑specific metrics flip the picture: Hapoel’s home rating is only 4.0 while Real’s away rating is 4.7, indicating Madrid adapts better on the road. The bookmaker odds (Real 1.78 vs Hapoel 2.3) also assign a higher implied probability to the visitors. Forebet’s 57% home‑win forecast adds some weight to the home side but is outweighed by the away form and market pricing. Overall, the signals are mixed, giving a moderate edge to Real."
+        "prediction": "Hapoel Tel‑Aviv is likely to win at home, driven by a dominant 4‑1 H2H record and a strong overall form advantage.",
+        "confidence": 70,
+        "recommendation": "SKIP",
+        "reasoning": "The head‑to‑head data shows Hapoel winning 80% of the last five meetings, with 4 wins to Real’s 1, indicating a clear home advantage. Recent overall"
       },
       "scoring": {
         "pick": "1",
-        "prob": 60.9,
-        "ev": 0.401,
-        "edge": 17.4,
+        "prob": 60.8,
+        "ev": 0.429,
+        "edge": 18.2,
         "sources": 4,
         "components": {
           "forebet": 0.57,
           "h2h": 0.8,
           "form": 0.567,
-          "odds": 0.435
+          "odds": 0.426
         }
       },
       "predictionGrade": "B",
@@ -2468,7 +2661,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 17.422,
+        "market_model_gap": 18.247,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2669,9 +2862,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.15,
+        "home": 2.4,
         "draw": null,
-        "away": 1.78,
+        "away": 1.6,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2682,22 +2875,22 @@
         }
       },
       "ai": {
-        "prediction": "Vytis VDU will win away, as their recent form (6.0/10) and strong away performance (6.0/10) far outweigh Ukmerges Stekas’ poor home form (0.7/10).",
-        "confidence": 80,
-        "recommendation": "HIGH",
-        "reasoning": "The head‑to‑head record shows Vytis with 3 wins out of 5, and the home win rate for Ukmerges is only 40%. Ukmerges’ overall form sits at a low 1.3/10, while Vytis is at 6.0/10, indicating a clear performance gap. Venue‑specific stats reinforce this, with Ukmerges at home at 0.7/10 versus Vytis away at 6.0/10. Bookmakers offer odds of 1.78 for Vytis versus 2.15 for Ukmerges, reflecting market confidence in the away side. The Forebet model also predicts a 71% chance of an away win, further supporting the assessment."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "2",
-        "prob": 66.6,
-        "ev": 0.186,
-        "edge": 10.4,
+        "prob": 67.5,
+        "ev": 0.08,
+        "edge": 5.0,
         "sources": 4,
         "components": {
           "forebet": 0.71,
           "h2h": 0.6,
           "form": 0.733,
-          "odds": 0.562
+          "odds": 0.625
         }
       },
       "predictionGrade": "B",
@@ -2711,8 +2904,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 20.088,
+        "consensus_strength": "none",
+        "market_model_gap": 25.833,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2912,9 +3105,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.4,
+        "home": 2.15,
         "draw": null,
-        "away": 1.63,
+        "away": 1.75,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2925,22 +3118,22 @@
         }
       },
       "ai": {
-        "prediction": "Plunges Olimpas is expected to secure a victory over Silute, leveraging their perfect head-to-head record and significantly superior recent form. The home team's dominant performance metrics strongly outweigh the away team's struggles.",
+        "prediction": "Plunges Olimpas is expected to secure a decisive victory at home, leveraging their perfect head-to-head record and significantly superior recent form compared to Silute.",
         "confidence": 82,
         "recommendation": "HIGH",
-        "reasoning": "Plunges Olimpas holds a perfect 5-0 head-to-head record against Silute, indicating a consistent tactical and physical dominance in this specific matchup. Their recent overall form is exceptional at 10.0/10, compared to Silute's weak 4.0/10, highlighting a significant disparity in current team performance. The home advantage is further emphasized by Olimpas' 8.7/10 home form, which remains robust despite being slightly lower than their overall average. Although the bookmaker odds (2.4 vs 1.63) favor Silute, the Forebet prediction of a 64% home win probability suggests the market may be underestimating Olimpas' momentum. The risk lies in the odds implying Silute is the favorite, but the data-driven indicators strongly support the home side."
+        "reasoning": "Plunges Olimpas holds a dominant 5-0 head-to-head record against Silute, indicating a consistent tactical or physical edge in this specific matchup. Their overall form is exceptional at 10.0/10, which is double that of Silute's 4.0/10, suggesting the home team is currently in peak performance while the visitors are struggling. The home advantage is further emphasized by Olimpas' strong 8.7/10 home form versus Silute's weak 4.0/10 away record. Although bookmaker odds favor Silute (1.75 vs 2.15), the Forebet model predicts a 64% probability for the home win, suggesting the market may be overvaluing the away team or undervaluing the home team's current momentum. The 28-point advantage in the predictive model combined with the stark form disparity creates a clear value proposition for the home side despite the odds."
       },
       "scoring": {
         "pick": "1",
-        "prob": 73.4,
-        "ev": 0.763,
-        "edge": 31.8,
+        "prob": 74.1,
+        "ev": 0.594,
+        "edge": 27.6,
         "sources": 4,
         "components": {
           "forebet": 0.64,
           "h2h": 1.0,
           "form": 0.8,
-          "odds": 0.417
+          "odds": 0.465
         }
       },
       "predictionGrade": "A",
@@ -2955,7 +3148,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 31.733,
+        "market_model_gap": 27.588,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2974,7 +3167,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
+        "kurs_ponizej_progu",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -3036,12 +3229,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
+        "home": 1.25,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "away": 3.9,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -3056,30 +3249,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 62.5,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 64.9,
+        "ev": -0.188,
+        "edge": -15.1,
+        "sources": 4,
         "components": {
           "forebet": 0.61,
           "h2h": 0.75,
-          "form": 0.5
+          "form": 0.5,
+          "odds": 0.8
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -15.1,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -3097,8 +3291,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "score_43.2<50.0",
+        "score_41.8<50.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -3144,22 +3337,22 @@
         ]
       },
       "sofascore": {
-        "found": null,
-        "votes": null,
+        "found": false,
+        "votes": 0,
         "homeProb": null,
         "awayProb": null,
         "url": null,
         "orientation": null,
-        "unavailable": null,
-        "skipReason": null
+        "unavailable": true,
+        "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": null,
+        "home": 3.05,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "away": 1.38,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -3174,30 +3367,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 43.2,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 41.8,
+        "ev": 0.274,
+        "edge": 9.0,
+        "sources": 4,
         "components": {
           "forebet": 0.6,
           "h2h": 0.2,
-          "form": 0.4
+          "form": 0.4,
+          "odds": 0.328
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": 9.013,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -3274,9 +3468,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.2,
+        "home": 2.15,
         "draw": null,
-        "away": 1.75,
+        "away": 1.73,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3294,15 +3488,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 53.4,
-        "ev": -0.066,
-        "edge": -3.8,
+        "prob": 53.5,
+        "ev": -0.075,
+        "edge": -4.3,
         "sources": 4,
         "components": {
           "forebet": 0.59,
           "h2h": 0.4,
           "form": 0.567,
-          "odds": 0.571
+          "odds": 0.578
         }
       },
       "predictionGrade": "D",
@@ -3317,7 +3511,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 7.945,
+        "market_model_gap": 6.988,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3395,9 +3589,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.2,
+        "home": 2.6,
         "draw": null,
-        "away": 1.7,
+        "away": 1.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3415,15 +3609,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 51.3,
-        "ev": 0.128,
-        "edge": 5.8,
+        "prob": 50.3,
+        "ev": 0.308,
+        "edge": 11.8,
         "sources": 4,
         "components": {
           "forebet": 0.56,
           "h2h": 0.4,
           "form": 0.6,
-          "odds": 0.455
+          "odds": 0.385
         }
       },
       "predictionGrade": "C",
@@ -3438,7 +3632,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 5.845,
+        "market_model_gap": 11.838,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3457,7 +3651,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_48.9<50.0"
+        "score_48.0<50.0"
       ],
       "forebet": {
         "prediction": "2",
@@ -3518,9 +3712,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 1.7,
+        "home": 1.53,
         "draw": null,
-        "away": 2.25,
+        "away": 2.6,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3538,15 +3732,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 48.9,
-        "ev": 0.099,
-        "edge": 4.4,
+        "prob": 48.0,
+        "ev": 0.248,
+        "edge": 9.6,
         "sources": 4,
         "components": {
           "forebet": 0.52,
           "h2h": 0.4,
           "form": 0.567,
-          "odds": 0.444
+          "odds": 0.385
         }
       },
       "predictionGrade": "D",
@@ -3561,7 +3755,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -9.924,
+        "market_model_gap": -17.359,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3580,8 +3774,8 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "score_38.3<50.0",
+        "kurs_ponizej_progu",
+        "score_35.8<50.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -3635,12 +3829,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
+        "home": 1.18,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "away": 4.9,
+        "source": "livesport",
+        "bookmaker": "Nordicbet",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -3655,30 +3849,154 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 38.3,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 35.8,
+        "ev": 0.754,
+        "edge": 15.4,
+        "sources": 4,
         "components": {
           "forebet": 0.51,
           "h2h": 0.2,
-          "form": 0.367
+          "form": 0.367,
+          "odds": 0.204
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -48.946,
+        "skip_reason": null
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
+      "homeTeam": "Chomutov W",
+      "awayTeam": "Avenir Chartres W",
+      "time": "5:00",
+      "league": "ECW",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/chartres-hA4HsjZd/chomutov-jDtqsERm/?mid=Olc95A1S",
+      "forebetUrl": "https://www.forebet.com/en/basketball/matches/eurocup-women/chomutov-w-avenir-chartres-w/289371",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "score_41.9<50.0",
+        "forma_gorsza_od_przeciwnika"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 53.0,
+        "homeProb": 53,
+        "drawProb": null,
+        "awayProb": 47,
+        "exactScore": "80-75",
+        "avgGoals": 152.7,
+        "favorite": "home",
+        "gap": 6
+      },
+      "h2h": {
+        "total": 1,
+        "homeWins": 1,
+        "awayWins": 0,
+        "lastDate": "24.09.26",
+        "lastScore": "80-66"
+      },
+      "form": {
+        "home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "homeAtHome": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "awayAtAway": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ]
+      },
+      "sofascore": {
+        "found": false,
+        "votes": 0,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": true,
+        "skipReason": "sofascore_unreachable"
+      },
+      "odds": {
+        "home": 3.55,
+        "draw": null,
+        "away": 1.4,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": 230.0,
+          "draw": null,
+          "away": 323.0
+        }
+      },
+      "ai": {
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 41.9,
+        "ev": 0.487,
+        "edge": 13.7,
+        "sources": 3,
+        "components": {
+          "forebet": 0.53,
+          "form": 0.3,
+          "odds": 0.282
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.85,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 1,
+        "consensus_strength": "weak",
+        "market_model_gap": 13.731,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -3692,12 +4010,10 @@
       "source": "forebet",
       "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/bms-herlev-YeHeFEvc/holbaek-stenhus-p0qdP15a/?mid=pQ0I6DvS",
       "forebetUrl": "https://www.forebet.com/en/basketball/matches/basketligaen/holbaek-stenhus-bms-herlev/286641",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_49.6<50.0"
-      ],
+      "emailQualifies": true,
+      "skipReasons": [],
       "forebet": {
         "prediction": "2",
         "probability": 64.0,
@@ -3757,9 +4073,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 1.38,
+        "home": 1.48,
         "draw": null,
-        "away": 3.05,
+        "away": 2.7,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3770,22 +4086,22 @@
         }
       },
       "ai": {
-        "prediction": "BMS Herlev is projected to secure an away victory, driven by their significantly superior recent form (6.0/10 vs 2.0/10) and a strong 64% statistical probability of winning.",
+        "prediction": "BMS Herlev is projected to secure an away victory, driven by their significantly superior recent form (6.0/10 vs 2.0/10) and a strong 64% statistical probability of winning despite the home advantage.",
         "confidence": 68,
         "recommendation": "MEDIUM",
-        "reasoning": "Although Holbaek-Stenhus holds a dominant 4-1 head-to-head record, their current overall form is poor at 2.0/10, contrasting sharply with BMS Herlev's 6.0/10. The home team's venue-specific form is particularly concerning, sitting at 0.0/10, while the away team maintains a respectable 4.0/10 away record. Bookmaker odds favor Holbaek-Stenhus (1.38) over BMS Herlev (3.05), creating a value discrepancy where the statistical model (64% away win) suggests the market may be overvaluing the home side's historical dominance. The 28 percentage point edge in the Forebet prediction for the away team indicates a strong likelihood of an upset against the odds."
+        "reasoning": "Although Holbaek-Stenhus holds a dominant 4-1 head-to-head record with an 80% home win rate in previous meetings, their current trajectory is alarming, evidenced by a poor 2.0/10 overall form and a 0.0/10 home form rating. In contrast, BMS Herlev is in much better shape with a 6.0/10 overall form and a solid 4.0/10 away record, suggesting they are currently the stronger team. The bookmaker odds favor Holbaek-Stenhus (1.48) over BMS Herlev (2.7), which creates a value discrepancy where the statistical model (64% away win) contradicts the market pricing. This divergence indicates that while the home team is favored by the public and odds, the underlying performance data strongly supports the away side. The risk lies in the potential for a home team upset given their historical dominance in this specific fixture."
       },
       "scoring": {
         "pick": "2",
-        "prob": 49.6,
-        "ev": 0.514,
-        "edge": 16.9,
+        "prob": 50.2,
+        "ev": 0.356,
+        "edge": 13.2,
         "sources": 4,
         "components": {
           "forebet": 0.64,
           "h2h": 0.2,
           "form": 0.7,
-          "odds": 0.328
+          "odds": 0.37
         }
       },
       "predictionGrade": "D",
@@ -3800,7 +4116,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -22.864,
+        "market_model_gap": -17.368,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3929,19 +4245,19 @@
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "Chomutov W",
-      "awayTeam": "Avenir Chartres W",
+      "homeTeam": "Oberwart Gunners",
+      "awayTeam": "Vienna Basket",
       "time": "5:00",
-      "league": "ECW",
+      "league": "AT1",
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/chartres-hA4HsjZd/chomutov-jDtqsERm/?mid=Olc95A1S",
-      "forebetUrl": "https://www.forebet.com/en/basketball/matches/eurocup-women/chomutov-w-avenir-chartres-w/289371",
+      "matchUrl": "https://www.livesport.com/pl/mecz/koszykowka/oberwart-pvs57IQk/vienna-pG2944ye/?mid=jTtpvJ8e",
+      "forebetUrl": "https://www.forebet.com/en/basketball/matches/superliga-at/oberwart-gunners-vienna-basket/295359",
       "qualifies": false,
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_41.9<50.0",
+        "kurs_ponizej_progu",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -3950,17 +4266,17 @@
         "homeProb": 53,
         "drawProb": null,
         "awayProb": 47,
-        "exactScore": "80-75",
-        "avgGoals": 152.7,
+        "exactScore": "87-81",
+        "avgGoals": 171.8,
         "favorite": "home",
         "gap": 6
       },
       "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "24.09.26",
-        "lastScore": "80-66"
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 2,
+        "lastDate": "19.05.26",
+        "lastScore": "84-83"
       },
       "form": {
         "home": [
@@ -3968,44 +4284,44 @@
           "L",
           "L",
           "L",
-          "W"
+          "L"
         ],
         "away": [
-          "W",
-          "W",
           "L",
           "L",
-          "W"
+          "W",
+          "L",
+          "D"
         ],
         "homeAtHome": [
           "L",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "awayAtAway": [
-          "W",
           "L",
           "W",
-          "W",
+          "D",
+          "W"
+        ],
+        "awayAtAway": [
+          "L",
+          "L",
+          "L",
+          "D",
           "L"
         ]
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
+        "found": null,
+        "votes": null,
         "homeProb": null,
         "awayProb": null,
         "url": null,
         "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "unavailable": null,
+        "skipReason": null
       },
       "odds": {
-        "home": 3.55,
+        "home": 1.04,
         "draw": null,
-        "away": 1.4,
+        "away": 9.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -4023,29 +4339,30 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 41.9,
-        "ev": 0.487,
-        "edge": 13.7,
-        "sources": 3,
+        "prob": 57.4,
+        "ev": -0.403,
+        "edge": -38.8,
+        "sources": 4,
         "components": {
           "forebet": 0.53,
-          "form": 0.3,
-          "odds": 0.282
+          "h2h": 0.6,
+          "form": 0.367,
+          "odds": 0.962
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.75,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 1,
+        "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 13.731,
+        "market_model_gap": -38.754,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4065,7 +4382,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "rynek_egzotyczny_marza_10.8%>10%"
+        "rynek_egzotyczny_marza_11.6%>10%"
       ],
       "forebet": {
         "prediction": "2",
@@ -4126,9 +4443,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 5.5,
+        "home": 5.8,
         "draw": null,
-        "away": 1.08,
+        "away": 1.06,
         "source": "livesport",
         "bookmaker": "William Hill",
         "note": null,
@@ -4146,15 +4463,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 63.9,
-        "ev": -0.31,
-        "edge": -28.7,
+        "prob": 64.1,
+        "ev": -0.321,
+        "edge": -30.2,
         "sources": 4,
         "components": {
           "forebet": 0.6,
           "h2h": 0.6,
           "form": 0.567,
-          "odds": 0.926
+          "odds": 0.943
         }
       },
       "predictionGrade": "C",
@@ -4169,7 +4486,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 45.718,
+        "market_model_gap": 46.859,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4247,9 +4564,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 1.65,
+        "home": 1.75,
         "draw": null,
-        "away": 2.45,
+        "away": 2.3,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -4260,22 +4577,22 @@
         }
       },
       "ai": {
-        "prediction": "Anadolu Efes should edge out Crvena zvezda, as their strong 8/10 overall form eclipses Zvezda’s dismal 2/10 at home.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "In the last five meetings Zvezda holds a 60 % home win rate (3‑2), but the sample is small and does not reflect current performance. Zvezda’s recent form is the worst in the league (2/10 overall and 2/10 at home), while Efes is solid at 8/10 overall and 4/10 on the road. The away‑team advantage in form outweighs the modest home edge, and Forebet even gives the visitors a 52 % win probability. Bookmaker odds still favor the home side (1.65 vs 2.45), indicating the market sees risk in the upset. Overall, the form differential and away win prediction create a clearer edge for Efes despite the odds."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "2",
-        "prob": 53.2,
-        "ev": 0.304,
-        "edge": 12.4,
+        "prob": 53.6,
+        "ev": 0.233,
+        "edge": 10.1,
         "sources": 4,
         "components": {
           "forebet": 0.52,
           "h2h": 0.4,
           "form": 0.8,
-          "odds": 0.408
+          "odds": 0.435
         }
       },
       "predictionGrade": "D",
@@ -4290,7 +4607,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -7.406,
+        "market_model_gap": -3.543,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4375,16 +4692,16 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 159.0,
+          "home": 162.0,
           "draw": null,
-          "away": 192.0
+          "away": 196.0
         }
       },
       "ai": {
-        "prediction": "Vechta are likely to secure an away victory, riding their strong recent and away performances.",
-        "confidence": 70,
-        "recommendation": "MEDIUM",
-        "reasoning": "Vechta’s recent form (6.0/10) is more than double Jena’s (2.7/10), and their away rating (6.0) far exceeds Jena’s home rating (3.3). The bookmaker odds heavily favor Vechta at 1.55 versus Jena’s 2.65, and Forebet assigns a 51 % chance to the visitors. While Jena holds a modest 60 % home win rate in the last five head‑to‑heads, the sample is small and does not offset Vechta’s overall superiority. The convergence of form, venue performance, and market odds points to an away win, though the H2H edge keeps the certainty below the highest tier."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "2",
@@ -4710,7 +5027,7 @@
       "odds": {
         "home": 2.5,
         "draw": null,
-        "away": 1.68,
+        "away": 1.65,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -4721,22 +5038,22 @@
         }
       },
       "ai": {
-        "prediction": "Zalgiris Kaunas should win on the road, capitalising on their perfect away form and superior recent performance.",
-        "confidence": 80,
+        "prediction": "Zalgiris Kaunas is poised to win, driven by their outstanding away form (10/10) and superior recent performance (8.0/10 vs 6.0/10).",
+        "confidence": 78,
         "recommendation": "SKIP",
-        "reasoning": "The head‑to‑head record (3‑2) gives Paris a modest 60% home win rate, but it is based on only five games and is not decisive. Paris’ recent form (6.0/10) and especially their home form (4.0/10) indicate they are underperforming at home. Zalgiris Kaunas boasts an 8.0/10 overall rating and an immaculate 10.0/10 away rating, showing they thrive on the road. Forebet assigns a 59% probability to an away win and bookmakers price Zalgiris at 1.68, reflecting market confidence. The convergence of strong away metrics, better form, and favorable odds outweighs the slight H2H edge for Paris."
+        "reasoning": "Head‑to‑"
       },
       "scoring": {
         "pick": "2",
-        "prob": 54.4,
-        "ev": -0.086,
-        "edge": -5.1,
+        "prob": 54.6,
+        "ev": -0.1,
+        "edge": -6.0,
         "sources": 4,
         "components": {
           "forebet": 0.59,
           "h2h": 0.4,
           "form": 0.6,
-          "odds": 0.595
+          "odds": 0.606
         }
       },
       "predictionGrade": "C",
@@ -4751,7 +5068,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 14.4,
+        "market_model_gap": 14.6,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4944,35 +5261,35 @@
         "skipReason": "no_vote"
       },
       "odds": {
-        "home": 2.85,
+        "home": 3.05,
         "draw": null,
-        "away": 1.48,
+        "away": 1.4,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 182.0,
+          "home": 194.0,
           "draw": null,
-          "away": 222.0
+          "away": 238.0
         }
       },
       "ai": {
-        "prediction": "Melbourne United are likely to win on the road, leveraging their superior recent and away form.",
-        "confidence": 78,
-        "recommendation": "HIGH",
-        "reasoning": "The JackJumpers have struggled overall (2.7/10) and only a modest home rating (4.7/10), while United post a solid 6.0/10 both overall and away. Head‑to‑head is close (3‑2 in favor of Tasmania), but the sample size is tiny and does not offset United’s consistency. Forebet assigns a 60 % probability to an away win and the bookmaker odds (1.48 for United vs 2.85 for Tasmania) reflect a strong market bias. Combining form, venue performance, and market odds gives United a clear edge, though the recent H2H win for Tasmania adds a slight uncertainty."
+        "prediction": "Melbourne United will win the match, thanks to their superior recent form, better away performance, and strong odds backing.",
+        "confidence": 72,
+        "recommendation": "SKIP",
+        "reasoning": "The head‑to‑head record shows Tasmania winning 3 of 5 games, but the home win rate is only 60%, indicating a relatively narrow edge. Melbourne’s recent form rating of 6.0/10 outpaces Tasmania’s 2.7/10, and their away form (6.0/10) is higher than Tasmania’s home form (4.7/10). Forebet’s 60% probability for an away win aligns with the bookmaker odds, which favor Melbourne at 1.4 versus Tasmania’s 3"
       },
       "scoring": {
         "pick": "2",
-        "prob": 57.3,
-        "ev": -0.151,
-        "edge": -10.2,
+        "prob": 57.9,
+        "ev": -0.19,
+        "edge": -13.6,
         "sources": 4,
         "components": {
           "forebet": 0.6,
           "h2h": 0.4,
           "form": 0.667,
-          "odds": 0.676
+          "odds": 0.714
         }
       },
       "predictionGrade": "B",
@@ -4986,8 +5303,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 22.212,
+        "consensus_strength": "none",
+        "market_model_gap": 25.113,
         "skip_reason": null
       },
       "sidesReversed": false,
