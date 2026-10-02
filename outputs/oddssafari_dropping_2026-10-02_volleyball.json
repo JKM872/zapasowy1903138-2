@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-10-02T07:13:41.671730+02:00",
+    "target_date": "2026-10-02",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 1.7,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - Asian Games",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/asian-games/kazakhstan-vs-chinese-taipei/5932876?MarketTypeID=701",
+      "match_id": "5932876",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Kazakhstan",
+      "away_team": "Chinese Taipei",
+      "event_date": "02/10",
+      "event_time": "07:00",
+      "outcome": "2",
+      "open_odds": 1.52,
+      "current_odds": 1.32,
+      "drop_pct": 13.0,
+      "max_odds": 1.33,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": []
+}
