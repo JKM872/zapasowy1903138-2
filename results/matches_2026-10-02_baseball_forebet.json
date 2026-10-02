@@ -2,7 +2,7 @@
   "date": "2026-10-02",
   "sport": "baseball",
   "source": "forebet",
-  "generatedAt": "2026-10-02T05:25:27.842982+00:00",
+  "generatedAt": "2026-10-02T10:21:36.571716+00:00",
   "matches": [
     {
       "homeTeam": "Fubon Guardians",
@@ -81,7 +81,7 @@
       "odds": {
         "home": 2.0,
         "draw": 7.25,
-        "away": 2.15,
+        "away": 2.1,
         "source": "livesport",
         "bookmaker": "Nordicbet",
         "note": null,
@@ -92,10 +92,10 @@
         }
       },
       "ai": {
-        "prediction": "Wei Chuan Dragons will likely win, as their dominant away form (6.0/10) and perfect H2H record (5‑0) outweigh the modest home advantage and Forebet’s 60% home win prediction.",
-        "confidence": 70,
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
         "recommendation": "SKIP",
-        "reasoning": "The Dragons have won all five recent head‑to‑head encounters and have a strong away form score of 6.0/10, while the Guardians are struggling at home with a"
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
@@ -200,9 +200,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.5,
-        "draw": 8.5,
-        "away": 1.7,
+        "home": 2.65,
+        "draw": 8.25,
+        "away": 1.65,
         "source": "livesport",
         "bookmaker": "Nordicbet",
         "note": null,
@@ -213,22 +213,22 @@
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": "Rakuten Monkeys are expected to secure an away victory, leveraging their superior recent form and consistent performance on the road. The data strongly favors the visitors, with both statistical models and bookmaker odds aligning on a clear edge for the Monkeys.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "Rakuten Monkeys demonstrate significantly better recent form with a 6.0/10 rating compared to TSG Hawks' struggling 2.0/10, indicating a clear momentum shift. While the Hawks have a slight home advantage in head-to-head history (2 wins vs 3), their current poor performance at home (4.0/10) undermines this factor. The bookmaker odds of 1.65 for the away team imply a 60.6% probability of winning, which closely aligns with the Forebet prediction of 58%, confirming the market's confidence in the Monkeys. The 16 percentage point edge in the model prediction further solidifies the away team's status as the favorite. The risk is low given the consistent alignment between form, venue-specific stats, and market pricing."
       },
       "scoring": {
         "pick": "2",
-        "prob": 61.1,
-        "ev": 0.039,
-        "edge": 2.3,
+        "prob": 61.4,
+        "ev": 0.013,
+        "edge": 0.8,
         "sources": 4,
         "components": {
           "forebet": 0.58,
           "h2h": 0.6,
           "form": 0.7,
-          "odds": 0.588
+          "odds": 0.606
         }
       },
       "predictionGrade": "B",
@@ -242,8 +242,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 21.1,
+        "consensus_strength": "weak",
+        "market_model_gap": 23.664,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -903,9 +903,9 @@
         "skipReason": "no_vote"
       },
       "odds": {
-        "home": 2.75,
-        "draw": 9.0,
-        "away": 1.55,
+        "home": 3.15,
+        "draw": 8.5,
+        "away": 1.48,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -916,22 +916,22 @@
         }
       },
       "ai": {
-        "prediction": "Fukuoka S. Hawks will win, driven by their flawless 10/10 recent form and solid 6/10 away performance.",
-        "confidence": 72,
-        "recommendation": "SKIP",
-        "reasoning": "Head‑to‑head shows Marines winning 4 of 5 encounters (80% home win rate), but the Hawks have dominated the last 10 games (10/10) and are performing well on the road (6/10). The Forebet model gives a 62% probability of an away win, and the bookmakers set the odds at 1.55 for Hawks versus 2.75 for"
+        "prediction": "Fukuoka S. Hawks are likely to win, driven by their perfect 10/10 recent form and solid 6/10 away performance, despite Chiba Lotte Marines’ historical home advantage.",
+        "confidence": 65,
+        "recommendation": "MEDIUM",
+        "reasoning": "Head‑to‑head shows Marines win 80% of home games against Hawks (4/5), but their current home form is only 2.0/10, indicating a sharp decline. Hawks boast a flawless 10.0/10 overall form and a respectable 6.0/10 away record, aligning with Forebet’s 62% away win probability. Bookmakers back Hawks with 1.48 odds versus 3.15 for Marines, reinforcing the expectation of an away victory. The risk lies in Marines’ historical dominance at home, yet recent performance trends outweigh this advantage."
       },
       "scoring": {
         "pick": "2",
-        "prob": 55.4,
-        "ev": -0.142,
-        "edge": -9.1,
+        "prob": 55.8,
+        "ev": -0.174,
+        "edge": -11.8,
         "sources": 4,
         "components": {
           "forebet": 0.62,
           "h2h": 0.2,
           "form": 0.8,
-          "odds": 0.645
+          "odds": 0.676
         }
       },
       "predictionGrade": "B",
@@ -946,7 +946,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 19.036,
+        "market_model_gap": 24.054,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1024,9 +1024,9 @@
         "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 2.3,
-        "draw": 7.5,
-        "away": 1.85,
+        "home": 2.25,
+        "draw": 7.0,
+        "away": 1.9,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -1037,22 +1037,22 @@
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": "The Yomiuri Giants are favored to win based on their superior overall form and the significant weakness of the Yakult Swallows at home. The data indicates a clear edge for the visitors despite the home venue.",
+        "confidence": 68,
+        "recommendation": "MEDIUM",
+        "reasoning": "The Yomiuri Giants hold a slight edge in the last five head-to-head meetings (3 wins to 2) and possess a higher overall form rating (4.7/10) compared to Yakult's 4.0/10. Crucially, the venue-specific data reveals a stark contrast: Yakult is struggling at home with a 4.0/10 rating, while the Giants are even weaker away at 2.7/10, suggesting a high-variance matchup where the Giants' overall quality must overcome their poor road performance. The bookmaker odds (1.90 for Giants vs 2.25 for Swallows) and the 60% Forebet prediction align, indicating the market views the Giants as the likely victors. However, the low away form score for the Giants (2.7/10) introduces significant risk, preventing a high-confidence rating despite the statistical favor."
       },
       "scoring": {
         "pick": "2",
-        "prob": 57.8,
-        "ev": 0.069,
-        "edge": 3.7,
+        "prob": 57.6,
+        "ev": 0.094,
+        "edge": 4.9,
         "sources": 4,
         "components": {
           "forebet": 0.6,
           "h2h": 0.6,
           "form": 0.533,
-          "odds": 0.541
+          "odds": 0.526
         }
       },
       "predictionGrade": "C",
@@ -1067,7 +1067,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 14.322,
+        "market_model_gap": 13.156,
         "skip_reason": null
       },
       "sidesReversed": false,
