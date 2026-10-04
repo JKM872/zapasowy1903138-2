@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-10-04T02:42:18.699374+02:00",
+    "target_date": "2026-10-04",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 5.9,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "England - RFL Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/england/rfl-championship/london-broncos-vs-doncaster-rlfc/5565223?MarketTypeID=1401",
+      "match_id": "5565223",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "London Broncos",
+      "away_team": "Doncaster RLFC",
+      "event_date": "04/10",
+      "event_time": "14:00",
+      "outcome": "2",
+      "open_odds": 16.5,
+      "current_odds": 12.0,
+      "drop_pct": 27.0,
+      "max_odds": 12.0,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": []
+}
