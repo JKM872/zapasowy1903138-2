@@ -2889,7 +2889,8 @@ def _extract_player_names_from_soup(soup: BeautifulSoup) -> tuple:
     return player_a, player_b
 
 
-def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
+def process_match_tennis(url: str, driver: webdriver.Chrome,
+                         odds_gate: bool = True) -> Dict:
     """
     Przetwarzanie meczu tenisowego – silnik v5 (Player A / Player B).
 
@@ -3085,7 +3086,9 @@ def process_match_tennis(url: str, driver: webdriver.Chrome) -> Dict:
         # obydwa kursy są już znane i któryś leży poniżej progu, nie ma sensu
         # nawigować do H2H ani ekstrahować last-match/surface form — to
         # oszczędza ~5–15 s na mecz przy niskich kursach typu 1.05/8.0.
-        gate_reason = _tennis_odds_gate_reason(out)
+        # odds_gate=False: wywołujący (pipeline Forebet) sam ocenia kursy i
+        # chce formy dla KAŻDEGO meczu, także z niskim kursem.
+        gate_reason = _tennis_odds_gate_reason(out) if odds_gate else None
         if gate_reason:
             out['tennis_skip_reason'] = gate_reason
             out['tennis_data_warnings'] = ['fast_path_odds_gate']
