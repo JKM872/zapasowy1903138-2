@@ -221,6 +221,19 @@ LIVESPORT_FALLBACK_BOOKMAKERS = [
 ]
 
 # Wagi scoringu — jawne, żeby dało się je zakwestionować i zmienić.
+# Tenis: kolejność ważności ustalona z użytkownikiem —
+#   1) forma ogólna zawodnika, 2) forma na nawierzchni, 3) słabsza forma rywala.
+# Forebet i rynek zostają, ale schodzą niżej. Suma = 1.0.
+TENNIS_WEIGHTS = {
+    'form': 0.30,        # własna forma ogólna typowanego (ostatnie 5)
+    'surface': 0.20,     # jego forma na nawierzchni tego meczu
+    'opponent': 0.14,    # słabość rywala: 1 - forma przeciwnika
+    'forebet': 0.14,
+    'odds': 0.10,
+    'h2h': 0.07,
+    'sofascore': 0.05,
+}
+
 WEIGHTS = {
     'forebet': 0.34,
     'h2h': 0.22,
@@ -850,14 +863,22 @@ def _fetch_tennis_h2h_and_form(driver: Any, match_url: str, home_team: str,
     page_b = str(res.get('away_team') or '')
     swapped = bool(page_a and page_b and
                    _name_overlap(home_team, page_b) > _name_overlap(home_team, page_a))
+    surf_a = res.get('surface_form_a') or []
+    surf_b = res.get('surface_form_b') or []
     if swapped:
         form_a, form_b = form_b, form_a
         wins_a, wins_b = wins_b, wins_a
+        surf_a, surf_b = surf_b, surf_a
 
     out.update({
         'h2h_last5': h2h, 'h2h_count': len(h2h),
         'home_wins_in_h2h_last5': wins_a, 'away_wins_in_h2h_last5': wins_b,
         'home_form': list(form_a), 'away_form': list(form_b),
+        'home_surface_form': list(surf_a), 'away_surface_form': list(surf_b),
+        'surface': res.get('surface'),
+        # True = „forma na nawierzchni" to kopia formy ogólnej (Livesport nie
+        # podaje nawierzchni w H2H) — scoring wtedy jej nie liczy.
+        'surface_form_is_proxy': res.get('surface_form_is_proxy', True),
     })
     if h2h:
         out['last_h2h_date'] = h2h[0].get('date')
@@ -1340,6 +1361,8 @@ def score_row(row: Dict[str, Any]) -> Dict[str, Any]:
     inaczej brak Fan Vote wyglądałby jak głos przeciw.
     """
     fav_home = row.get('favorite') == 'home'
+    tennis = row.get('sport') == 'tennis'
+    weights = TENNIS_WEIGHTS if tennis else WEIGHTS
     parts: Dict[str, float] = {}
 
     fav_prob = row.get('forebet_fav_prob')
@@ -1358,8 +1381,22 @@ def score_row(row: Dict[str, Any]) -> Dict[str, Any]:
         def _pts(form: List[str]) -> float:
             return sum(3 if r == 'W' else (1 if r == 'D' else 0) for r in form) / (3 * len(form))
         fav_pts, dog_pts = _pts(fav_form), _pts(dog_form)
-        # 0.5 = równo; przewaga formy faworyta przesuwa w górę.
-        parts['form'] = max(0.0, min(1.0, 0.5 + (fav_pts - dog_pts) / 2))
+        if tennis:
+            # Osobno: własna forma i słabość rywala, z różnymi wagami.
+            parts['form'] = fav_pts
+            parts['opponent'] = 1.0 - dog_pts
+        else:
+            # 0.5 = równo; przewaga formy faworyta przesuwa w górę.
+            parts['form'] = max(0.0, min(1.0, 0.5 + (fav_pts - dog_pts) / 2))
+
+    # Forma na nawierzchni — tylko prawdziwa. Wersja „proxy" to ta sama lista
+    # co forma ogólna (80% przypadków), liczyłaby ten sam sygnał dwa razy.
+    if tennis and not row.get('surface_form_is_proxy'):
+        sf = (row.get('home_surface_form') if fav_home
+              else row.get('away_surface_form')) or []
+        sp = _form_points(sf)
+        if sp is not None:
+            parts['surface'] = sp
 
     ss_home = row.get('sofascore_home_win_prob')
     ss_away = row.get('sofascore_away_win_prob')
@@ -1375,8 +1412,8 @@ def score_row(row: Dict[str, Any]) -> Dict[str, Any]:
     if imp is not None:
         parts['odds'] = max(0.0, min(1.0, imp / 100.0))
 
-    total_weight = sum(WEIGHTS[k] for k in parts)
-    score = (sum(WEIGHTS[k] * v for k, v in parts.items()) / total_weight) if total_weight else 0.0
+    total_weight = sum(weights.get(k, 0) for k in parts)
+    score = (sum(weights.get(k, 0) * v for k, v in parts.items()) / total_weight) if total_weight else 0.0
 
     row['scoring_components'] = {k: round(v, 3) for k, v in parts.items()}
     row['scoring_sources'] = len(parts)
@@ -1568,6 +1605,11 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                     'away': r.get('away_form'),
                     'homeAtHome': r.get('home_form_home'),
                     'awayAtAway': r.get('away_form_away'),
+                    'surface': r.get('surface'),
+                    'homeSurface': r.get('home_surface_form'),
+                    'awaySurface': r.get('away_surface_form'),
+                    'surfaceIsProxy': r.get('surface_form_is_proxy'),
+                    'source': r.get('form_source'),
                 },
                 'sofascore': {
                     'found': r.get('sofascore_found'),
