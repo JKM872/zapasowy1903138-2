@@ -101,6 +101,12 @@ TWO_WAY_MIN_GAP = float(os.getenv('FOREBET_MIN_GAP_2WAY', '0'))
 # `form_unknown`, żeby dało się policzyć, jak często to się zdarza.
 REQUIRE_FORM_ADVANTAGE = True
 
+# Tenis: forma jako informacja i składnik score, NIE twarda bramka. Do niedawna
+# tenis nie miał formy wcale, więc wszystkie mecze przechodziły bramkę; włączenie
+# jej teraz zmniejszyłoby liczbę zdarzeń, czego użytkownik nie chce.
+# FOREBET_TENNIS_FORM_GATE=1 przywraca twarde odrzucanie.
+TENNIS_FORM_GATE = os.getenv('FOREBET_TENNIS_FORM_GATE', '0') == '1'
+
 # Minimalny score, by mecz wszedł do maila.
 #
 # Było 55 — liczba wzięta przeze mnie z powietrza, nigdy nie ustalana. Pomiar
@@ -829,7 +835,7 @@ def _fetch_tennis_h2h_and_form(driver: Any, match_url: str, home_team: str,
         print(f"      ⚠️ Tenis: procesor niedostępny: {e}")
         return out
     try:
-        res = process_match_tennis(match_url, driver) or {}
+        res = process_match_tennis(match_url, driver, odds_gate=False) or {}
     except Exception as e:
         print(f"      ⚠️ Tenis H2H/forma błąd: {type(e).__name__}: {e}")
         return out
@@ -860,6 +866,37 @@ def _fetch_tennis_h2h_and_form(driver: Any, match_url: str, home_team: str,
           f"{''.join(form_b) or '—'}, H2H {len(h2h)}"
           f"{' (zawodnicy zamienieni po nazwisku)' if swapped else ''}")
     return out
+
+
+def sofascore_player_form(home_team: str, away_team: str, sport: str,
+                          date_str: Optional[str]) -> Tuple[List[str], List[str]]:
+    """Forma obu stron z SofaScore — zapas, gdy Livesport jej nie dał.
+
+    Szuka zdarzenia po nazwach, weryfikuje obie strony i termin (jak kursy),
+    bierze ID zawodników i ich ostatnie wyniki. Zwraca (forma_gosp, forma_gości)
+    względem NASZYCH stron albo ([], []).
+    """
+    try:
+        import sofascore_scraper as ss
+        eid = ss.search_event_via_api(home_team, away_team, sport=sport,
+                                      date_str=date_str)
+        if not eid:
+            return [], []
+        orient = _verify_sofascore_event(eid, home_team, away_team,
+                                         date_str=date_str)
+        if orient is None:
+            return [], []
+        info = ss.get_event_team_ids(eid) or {}
+        fh = ss.get_team_recent_form(info.get('home_team_id'),
+                                     info.get('home_team') or '', limit=5)
+        fa = ss.get_team_recent_form(info.get('away_team_id'),
+                                     info.get('away_team') or '', limit=5)
+        if orient == 'reversed':
+            fh, fa = fa, fh
+        return list(fh or []), list(fa or [])
+    except Exception as e:
+        print(f"      ⚠️ Forma SofaScore błąd: {type(e).__name__}: {e}")
+        return [], []
 
 
 def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
@@ -1421,7 +1458,13 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
     if REQUIRE_FORM_ADVANTAGE:
         verdict = form_advantage(row)
         row['form_advantage'] = verdict
-        if verdict is False:
+        if verdict is False and row.get('sport') == 'tennis' \
+                and not TENNIS_FORM_GATE:
+            # Tenis: forma jest pokazywana i wchodzi do score (gorsza forma
+            # obniża ocenę), ale sama NIE odrzuca meczu — żądanie użytkownika:
+            # forma przy każdym meczu, bez zmniejszania liczby zdarzeń.
+            row['form_worse_soft'] = True
+        elif verdict is False:
             reasons.append('forma_gorsza_od_przeciwnika')
         elif verdict is None:
             # Brak danych o formie nie odrzuca meczu, ale jest odnotowany.
@@ -1856,6 +1899,19 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
 
             else:
                 print("      ⚠️ Brak dopasowania w Livesport (bez H2H/formy)")
+
+        # Tenis: forma ma być przy KAŻDYM meczu. Gdy Livesport jej nie dał
+        # (brak dopasowania, pusta strona), bierzemy ją z SofaScore.
+        if sport == 'tennis' and not (row.get('home_form') and row.get('away_form')):
+            fh, fa = sofascore_player_form(home, away, sport, date_str)
+            if fh and not row.get('home_form'):
+                row['home_form'] = fh
+            if fa and not row.get('away_form'):
+                row['away_form'] = fa
+            if fh or fa:
+                row['form_source'] = 'sofascore'
+                print(f"      🎾 Forma z SofaScore: {''.join(fh) or '—'} / "
+                      f"{''.join(fa) or '—'}")
 
         # Kursy: Pinnacle → pozostali bukmacherzy Livesport → SofaScore.
         # Poza pętlą `if ls_url`, bo SofaScore szuka po nazwach drużyn i nie
