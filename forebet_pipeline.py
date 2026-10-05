@@ -815,6 +815,53 @@ def _swap_sides(row: Dict[str, Any]) -> None:
             m['winner'] = 'away' if m['winner'] == 'home' else 'home'
 
 
+def _fetch_tennis_h2h_and_form(driver: Any, match_url: str, home_team: str,
+                               out: Dict[str, Any]) -> Dict[str, Any]:
+    """H2H i forma zawodników tenisa przez process_match_tennis.
+
+    Zawodnik A/B w process_match_tennis to kolejność ze strony meczu. Sprawdzamy
+    po nazwisku, który z nich to nasz gospodarz z Forebet, i w razie potrzeby
+    zamieniamy — porównanie nazw, nie kolejność w URL-u (ta jest alfabetyczna).
+    """
+    try:
+        from livesport_h2h_scraper import process_match_tennis
+    except Exception as e:
+        print(f"      ⚠️ Tenis: procesor niedostępny: {e}")
+        return out
+    try:
+        res = process_match_tennis(match_url, driver) or {}
+    except Exception as e:
+        print(f"      ⚠️ Tenis H2H/forma błąd: {type(e).__name__}: {e}")
+        return out
+
+    form_a = res.get('form_a') or res.get('home_form') or []
+    form_b = res.get('form_b') or res.get('away_form') or []
+    h2h = res.get('h2h_last5') or []
+    wins_a = res.get('home_wins_in_h2h_last5', 0) or 0
+    wins_b = res.get('away_wins_in_h2h_last5', 0) or 0
+
+    page_a = str(res.get('home_team') or '')
+    page_b = str(res.get('away_team') or '')
+    swapped = bool(page_a and page_b and
+                   _name_overlap(home_team, page_b) > _name_overlap(home_team, page_a))
+    if swapped:
+        form_a, form_b = form_b, form_a
+        wins_a, wins_b = wins_b, wins_a
+
+    out.update({
+        'h2h_last5': h2h, 'h2h_count': len(h2h),
+        'home_wins_in_h2h_last5': wins_a, 'away_wins_in_h2h_last5': wins_b,
+        'home_form': list(form_a), 'away_form': list(form_b),
+    })
+    if h2h:
+        out['last_h2h_date'] = h2h[0].get('date')
+        out['last_h2h_score'] = h2h[0].get('score')
+    print(f"      🎾 Tenis: forma {''.join(form_a) or '—'} / "
+          f"{''.join(form_b) or '—'}, H2H {len(h2h)}"
+          f"{' (zawodnicy zamienieni po nazwisku)' if swapped else ''}")
+    return out
+
+
 def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
                        sport: str) -> Dict[str, Any]:
     """H2H (do 5 spotkań) + forma z Livesport dla dopasowanego meczu."""
@@ -825,6 +872,14 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
         'home_form': [], 'away_form': [],
         'home_form_home': [], 'away_form_away': [],
     }
+
+    # Tenis ma własną ścieżkę. Ścieżka drużynowa niżej czyta podstrony formy
+    # „u siebie / na wyjeździe", których w tenisie nie ma — dlatego forma i H2H
+    # tenisa były puste w 100% zdarzeń (164/164) i wymóg lepszej formy w ogóle
+    # nie działał. process_match_tennis ma tenisowy URL H2H i czyta odznaki
+    # formy obu zawodników.
+    if sport == 'tennis':
+        return _fetch_tennis_h2h_and_form(driver, match_url, home_team, out)
 
     try:
         from bs4 import BeautifulSoup
