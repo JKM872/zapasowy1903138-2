@@ -2,7 +2,7 @@
   "date": "2026-10-06",
   "sport": "handball",
   "source": "forebet",
-  "generatedAt": "2026-10-06T04:22:23.474578+00:00",
+  "generatedAt": "2026-10-06T11:12:24.076840+00:00",
   "matches": [
     {
       "homeTeam": "Dinamo Astrakhan",
@@ -470,8 +470,8 @@
       },
       "odds": {
         "home": 1.01,
-        "draw": 23.0,
-        "away": 21.0,
+        "draw": 22.0,
+        "away": 22.0,
         "source": "livesport",
         "bookmaker": "Nordicbet",
         "note": null,
@@ -598,8 +598,8 @@
       },
       "odds": {
         "home": 1.06,
-        "draw": 17.0,
-        "away": 10.0,
+        "draw": 16.0,
+        "away": 9.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -866,10 +866,10 @@
         }
       },
       "ai": {
-        "prediction": "Wybrzeze Gdansk should edge Eurofarm Pelister at home, leveraging their superior home record and recent form.",
-        "confidence": 80,
-        "recommendation": "HIGH",
-        "reasoning": "In the last five meetings the home side has a 60 % win rate (3‑2), indicating a slight H2H edge. Both teams share an identical overall form rating of 8.0, but Wybrzeze’s home-specific rating is 8.0 versus Pelister’s away rating of 6.7, highlighting a clear home‑advantage differential. Forebet assigns a 71 % probability to a home win, and the bookmaker odds (1.55 for home, 2.85 for away) reflect that market confidence. The combination of strong home performance, favorable odds value, and a solid H2H record outweighs Pelister’s respectable away form. Overall risk is moderate, but the data converge on a home victory."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
@@ -895,7 +895,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": -1.616,
         "skip_reason": null
       },
@@ -980,8 +980,8 @@
       },
       "odds": {
         "home": 2.9,
-        "draw": 9.0,
-        "away": 1.5,
+        "draw": 8.5,
+        "away": 1.53,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -992,22 +992,22 @@
         }
       },
       "ai": {
-        "prediction": "Hammarby should edge Nexe at home, leveraging their perfect recent head‑to‑head record and strong home form.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "Hammarby have won all five of the last meetings (100% home H2H win rate) and rate an 8.0/10 at home, indicating they thrive on their own court. Nexe, despite an impressive 8.0/10 overall recent form, struggle away with only a 2.0/10 away rating, suggesting they may not translate their league form to this venue. The bookmaker odds (Hammarby 2.9, Nexe 1.5) and Forebet’s 70 % away‑win forecast reflect market confidence in Nexe, but those odds also offer value if the home advantage holds. The clash of strong home metrics versus superior away form creates uncertainty, keeping confidence in the home win moderate. Overall, the historical dominance and venue advantage tilt the balance toward Hammarby."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "2",
-        "prob": 53.7,
-        "ev": -0.194,
-        "edge": -12.9,
+        "prob": 53.5,
+        "ev": -0.181,
+        "edge": -11.8,
         "sources": 4,
         "components": {
           "forebet": 0.7,
           "h2h": 0.0,
           "form": 0.8,
-          "odds": 0.667
+          "odds": 0.654
         }
       },
       "predictionGrade": "C",
@@ -1022,7 +1022,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 19.217,
+        "market_model_gap": 19.017,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1375,10 +1375,10 @@
         }
       },
       "ai": {
-        "prediction": "Savehof will edge out Bergischer, leveraging their dominant recent form and strong away performance to secure a win.",
-        "confidence": 70,
-        "recommendation": "SKIP",
-        "reasoning": "Head‑to‑head shows Savehof with 3 wins to Bergischer’s 2, and a 40% home win rate for Bergischer indicates a slight disadvantage at home. Savehof’s recent form is flawless at 10.0/10, while Bergischer sits at a low 4.0/10. Venue‑specific stats reinforce this: Savehof scores 8.0/10 away versus Bergischer’s 2.0/10 at home. Forebet’s 52% away win probability and the bookmaker odds (2.7 vs 1.6) reflect a market bias for home, but the data-driven performance metrics outweigh that bias. Overall, the risk is moderate due to the strong home odds, but the form advantage is decisive."
+        "prediction": "Savehof is the clear favorite to win this match, driven by their perfect 10.0/10 recent form and strong 8.0/10 away record, which contrasts sharply with Bergischer's poor 2.0/10 home performance.",
+        "confidence": 82,
+        "recommendation": "HIGH",
+        "reasoning": "Although Bergischer holds a slight edge in head-to-head history (2 wins vs 3), their current form is significantly inferior, with a 4.0/10 overall rating compared to Savehof's perfect 10.0/10. The venue-specific data strongly favors the away side, as Savehof has an 8.0/10 away form while Bergischer struggles at home with only a 2.0/10 rating. Forebet's prediction aligns with this data, giving Savehof a 52% probability of winning, which is a 15 percentage point advantage over the home team. The bookmaker odds (1.6 for home vs 2.7 for away) appear misaligned with the current form data, suggesting value on the away side despite the home favorite status. The risk is low given the stark disparity in recent performance metrics and venue-specific efficiency."
       },
       "scoring": {
         "pick": "2",
@@ -1393,7 +1393,7 @@
           "odds": 0.37
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 3,
         "quality_score": 0.9,
@@ -1404,7 +1404,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
+        "consensus_strength": "weak",
         "market_model_gap": -4.7,
         "skip_reason": null
       },
@@ -1491,7 +1491,7 @@
       },
       "odds": {
         "home": 2.95,
-        "draw": 8.5,
+        "draw": 9.0,
         "away": 1.53,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -1503,10 +1503,10 @@
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": "Chambery Savoie is the clear favorite to secure a victory, supported by significantly stronger bookmaker odds and a superior overall form rating compared to CSM Bucuresti. The data suggests the home team is struggling to convert their venue advantage into wins, as evidenced by their poor recent performance.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "The head-to-head record is neutral with two draws in the last two meetings, offering no decisive historical edge for either side. However, the overall form metrics strongly favor Chambery Savoie, who hold a 2.7/10 rating compared to CSM Bucuresti's 4.0/10, indicating the visitors are currently performing better. While CSM Bucuresti has a strong home form rating of 6.7/10, this is not reflected in the market, where Chambery is priced as a heavy favorite at 1.53 odds versus 2.95 for the home side. The Forebet prediction of a 52% home win probability contradicts the bookmaker consensus, suggesting the algorithm may be overvaluing the home advantage in this specific context. The significant gap in implied probability (approx. 65% for away vs 34% for home) highlights the market's confidence in the visitors' ability to win despite being on the road."
       },
       "scoring": {
         "pick": "1",
@@ -1521,7 +1521,7 @@
           "odds": 0.339
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 3,
         "quality_score": 0.85,
@@ -1532,7 +1532,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 2,
-        "consensus_strength": "weak",
+        "consensus_strength": "moderate",
         "market_model_gap": 3.202,
         "skip_reason": null
       },
@@ -1620,8 +1620,8 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.07,
-        "draw": 16.0,
+        "home": 1.06,
+        "draw": 17.0,
         "away": 9.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -1663,7 +1663,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -61.658,
+        "market_model_gap": -62.54,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1682,8 +1682,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "score_46.9<50.0"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "2",
@@ -1749,12 +1748,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "home": 6.5,
+        "draw": 11.0,
+        "away": 1.15,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -1769,30 +1768,31 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 46.9,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 52.5,
+        "ev": -0.396,
+        "edge": -34.5,
+        "sources": 4,
         "components": {
           "forebet": 0.48,
           "h2h": 0.4,
-          "form": 0.533
+          "form": 0.533,
+          "odds": 0.87
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": 37.115,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -2003,11 +2003,11 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.18,
-        "draw": 12.0,
-        "away": 5.5,
-        "source": "livesport",
-        "bookmaker": "Nordicbet",
+        "home": 1.0,
+        "draw": 23.0,
+        "away": 18.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
           "home": null,
@@ -2023,31 +2023,30 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 60.3,
-        "ev": -0.288,
-        "edge": -24.4,
-        "sources": 4,
+        "prob": 56.4,
+        "ev": -0.436,
+        "edge": 56.4,
+        "sources": 3,
         "components": {
           "forebet": 0.65,
           "h2h": 0.4,
-          "form": 0.6,
-          "odds": 0.847
+          "form": 0.6
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.8,
+        "quality_score": 0.55,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": true,
+        "odds_available": false,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -24.446,
-        "skip_reason": null
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -2132,9 +2131,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.11,
-        "draw": 13.0,
-        "away": 7.75,
+        "home": 1.08,
+        "draw": 15.0,
+        "away": 8.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2152,15 +2151,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 68.8,
-        "ev": -0.236,
-        "edge": -21.3,
+        "prob": 69.2,
+        "ev": -0.253,
+        "edge": -23.4,
         "sources": 4,
         "components": {
           "forebet": 0.77,
           "h2h": 0.6,
           "form": 0.5,
-          "odds": 0.901
+          "odds": 0.926
         }
       },
       "predictionGrade": "C",
@@ -2175,7 +2174,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -21.29,
+        "market_model_gap": -23.393,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2260,8 +2259,8 @@
         "skipReason": null
       },
       "odds": {
-        "home": 4.4,
-        "draw": 10.0,
+        "home": 4.3,
+        "draw": 11.0,
         "away": 1.25,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -2303,7 +2302,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 38.573,
+        "market_model_gap": 38.044,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2517,9 +2516,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 14.0,
-        "draw": 20.0,
-        "away": 1.02,
+        "home": 15.0,
+        "draw": 25.0,
+        "away": 1.01,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2537,15 +2536,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 71.1,
-        "ev": -0.275,
-        "edge": -27.0,
+        "prob": 71.2,
+        "ev": -0.281,
+        "edge": -27.8,
         "sources": 4,
         "components": {
           "forebet": 0.64,
           "h2h": 0.6,
           "form": 0.8,
-          "odds": 0.98
+          "odds": 0.99
         }
       },
       "predictionGrade": "B",
@@ -2560,7 +2559,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": 63.957,
+        "market_model_gap": 64.533,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2647,7 +2646,7 @@
       "odds": {
         "home": 1.75,
         "draw": 8.0,
-        "away": 2.35,
+        "away": 2.4,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2658,10 +2657,10 @@
         }
       },
       "ai": {
-        "prediction": "Sesvete should edge out Presov at home, capitalising on their superior venue form and favourable head‑to‑head record.",
-        "confidence": 82,
-        "recommendation": "HIGH",
-        "reasoning": "In the last five meetings Sesvete have won three times, giving a 60 % home H2H win rate. Both teams sit on identical overall form (6.0/10), but Sesvete’s home rating (6.0) is markedly higher than Presov’s away rating (4.7). Forebet assigns a 62 % probability to a home win, and the bookmaker odds (1.75 for Sesvete vs 2.35 for Presov) translate to implied probabilities of roughly 57 % and 42 % respectively, supporting the home favourite. The convergence of H2H, venue‑specific performance and market odds points to a modest but clear edge for Sesvete. The draw odds (8.0) imply a low 12.5 % chance, making a stalemate unlikely."
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
@@ -2687,7 +2686,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
+        "consensus_strength": "weak",
         "market_model_gap": 1.157,
         "skip_reason": null
       },
@@ -2786,10 +2785,10 @@
         }
       },
       "ai": {
-        "prediction": "CD Bidasoa Irun are poised to win the match, leveraging their superior recent form and the market’s confidence in them despite Maritimo’s home advantage.",
-        "confidence": 58,
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
         "recommendation": "SKIP",
-        "reasoning": "Maritimo have dominated the head‑to‑head (4‑1) and boast a perfect home rating (10.0/10), suggesting a strong home edge. However, Bidasoa’s overall form (10.0/10) far exceeds Maritimo’s (6.0/10) and their away rating (8.0/10) remains high. The bookmaker odds heavily favor the visitors (1.55 ≈ 64% implied probability) while the home odds imply only ~35% chance. Forebet"
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
@@ -2831,12 +2830,10 @@
       "source": "forebet",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-reczna/benfica-lisboa-xrZdNmdb/holstebro-SbWEj29b/?mid=SULQa7kl",
       "forebetUrl": "https://www.forebet.com/en/handball/matches/ehf-european-league/holstebro-benfica/194425",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
+      "emailQualifies": true,
+      "skipReasons": [],
       "forebet": {
         "prediction": "1",
         "probability": 60.0,
@@ -2891,17 +2888,17 @@
         "source": null
       },
       "sofascore": {
-        "found": null,
-        "votes": null,
+        "found": false,
+        "votes": 0,
         "homeProb": null,
         "awayProb": null,
         "url": null,
         "orientation": null,
-        "unavailable": null,
-        "skipReason": null
+        "unavailable": true,
+        "skipReason": "sofascore_unreachable"
       },
       "odds": {
-        "home": 1.43,
+        "home": 1.45,
         "draw": 9.5,
         "away": 3.2,
         "source": "pinnacle",
@@ -2914,37 +2911,37 @@
         }
       },
       "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
+        "prediction": "Błąd API (po 5 modelach)",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
-        "prob": 54.9,
-        "ev": -0.215,
-        "edge": -15.1,
+        "prob": 54.7,
+        "ev": -0.206,
+        "edge": -14.2,
         "sources": 4,
         "components": {
           "forebet": 0.6,
           "h2h": 0.4,
           "form": 0.533,
-          "odds": 0.699
+          "odds": 0.69
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
         "forebet_available": true,
         "sofascore_available": false,
-        "gemini_available": false,
+        "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -15.03,
+        "market_model_gap": -14.266,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3031,7 +3028,7 @@
       "odds": {
         "home": 1.83,
         "draw": 8.0,
-        "away": 2.25,
+        "away": 2.2,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3042,10 +3039,10 @@
         }
       },
       "ai": {
-        "prediction": "St. Raphael should edge Elverum at home, but the match will be tighter than the odds suggest.",
+        "prediction": "Elverum is expected to secure an away victory, as their perfect 10.0/10 recent form significantly outweighs St. Raphael's poor 2.0/10 overall performance, despite the home team's historical dominance.",
         "confidence": 68,
-        "recommendation": "SKIP",
-        "reasoning": "St. Raphael dominate the recent head‑to‑head (4‑1) and enjoy an 80 % home win rate, backed by a strong home rating of 8.0/10. However, their overall form is abysmal at 2.0/10, indicating broader performance issues. Elverum are in peak condition, posting a flawless 10.0/10 overall and away rating, which counters the home advantage. The bookmaker odds (1.83) and Forebet’s 55 % home win probability both favor the hosts, but the narrow gap to the 2.25 away odds reflects the risk from Elverum’s hot streak. Overall, the data tilt slightly toward a home win but with notable uncertainty."
+        "recommendation": "MEDIUM",
+        "reasoning": "While St. Raphael holds a strong head-to-head record with 4 wins in the last 5 meetings and an 80% home H2H win rate, their current overall form is critically low at 2.0/10. In contrast, Elverum is in exceptional form with a perfect 10.0/10 rating both overall and specifically in away matches, suggesting they are currently the superior team. The bookmaker odds (1.83 for home vs 2.2 for away) and Forebet's 55% home win prediction indicate the market still respects the home advantage and H2H history, creating a value opportunity on the away side. The draw odds of 8.0 suggest a decisive result is likely, and given Elverum's momentum, they are the more probable winner. The risk lies in St. Raphael's strong home venue form (8.0/10), which could allow them to break their poor recent streak."
       },
       "scoring": {
         "pick": "1",
@@ -3092,7 +3089,7 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_38.2<50.0",
+        "score_38.1<50.0",
         "forma_gorsza_od_przeciwnika"
       ],
       "forebet": {
@@ -3159,9 +3156,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.23,
+        "home": 1.2,
         "draw": 11.0,
-        "away": 4.7,
+        "away": 5.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3179,15 +3176,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 38.2,
-        "ev": 0.798,
-        "edge": 17.0,
+        "prob": 38.1,
+        "ev": 0.903,
+        "edge": 18.1,
         "sources": 4,
         "components": {
           "forebet": 0.51,
           "h2h": 0.4,
           "form": 0.233,
-          "odds": 0.213
+          "odds": 0.2
         }
       },
       "predictionGrade": "D",
@@ -3202,7 +3199,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "none",
-        "market_model_gap": -43.101,
+        "market_model_gap": -45.233,
         "skip_reason": null
       },
       "sidesReversed": false,
