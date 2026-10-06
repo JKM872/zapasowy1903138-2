@@ -575,6 +575,11 @@ def build_livesport_index(driver: Any, sport: str, date_str: str,
     for link in links:
         slug = _strip_accents(link.lower())
         toks = set(re.findall(r'[a-z]{4,}', slug)) - _GENERIC_TOKENS
+        # Kadry narodowe: slug Livesport jest PO POLSKU (grecja, lotwa,
+        # anglia), Forebet po angielsku. Bez tłumaczenia mecz reprezentacji nie
+        # łączył się z Livesport, nie dostawał kursów Pinnacle i odpadał na
+        # brak_kursow — dlatego reprezentacje nigdy nie trafiały do maila.
+        toks |= {_EN_BY_PL[t] for t in toks if t in _EN_BY_PL}
         if toks:
             index.append({'url': link, 'tokens': toks})
 
@@ -698,8 +703,18 @@ def match_livesport_url(home: str, away: str,
     if not home_tokens or not away_tokens:
         return None
 
+    # Kategoria wiekowa musi się zgadzać. W przerwie reprezentacyjnej
+    # „Greece" i „Greece U21" grają tego samego dnia i mają te same tokeny —
+    # bez tej kontroli kursy seniorów trafiałyby do meczu U21 i odwrotnie.
+    def _age(text: str) -> Optional[str]:
+        m = re.search(r'\bu-?(\d{2})\b', _strip_accents(str(text).lower()))
+        return m.group(1) if m else None
+    want_age = _age(home) or _age(away)
+
     best_url, best_score = None, 0
     for entry in index:
+        if _age(entry['url'].replace('-', ' ')) != want_age:
+            continue
         toks = entry['tokens']
         h_hits = len(home_tokens & toks)
         a_hits = len(away_tokens & toks)
@@ -746,7 +761,8 @@ _EN_BY_PL = {
     'turcja': 'turkey', 'grecja': 'greece', 'nikaragua': 'nicaragua',
     'slowacja': 'slovakia', 'slowenia': 'slovenia', 'lotwa': 'latvia',
     'wenezuela': 'venezuela', 'hiszpania': 'spain', 'polska': 'poland',
-    'wegry': 'hungary', 'czechy': 'czechia', 'holandia': 'netherlands',
+    # 'czech', nie 'czechia' — Forebet pisze „Czech Republic".
+    'wegry': 'hungary', 'czechy': 'czech', 'holandia': 'netherlands',
     'belgia': 'belgium', 'dania': 'denmark', 'norwegia': 'norway',
     'finlandia': 'finland', 'islandia': 'iceland', 'irlandia': 'ireland',
     'anglia': 'england', 'szkocja': 'scotland', 'walia': 'wales',
@@ -763,6 +779,19 @@ _EN_BY_PL = {
     'boliwia': 'bolivia', 'ekwador': 'ecuador', 'australia': 'australia',
     'indonezja': 'indonesia', 'wietnam': 'vietnam', 'singapur': 'singapore',
     'mongolia': 'mongolia', 'kambodza': 'cambodia', 'tajwan': 'taiwan',
+    # Europa — przerwa reprezentacyjna (Liga Narodów, eliminacje, U21)
+    'luksemburg': 'luxembourg', 'cypr': 'cyprus', 'azerbejdzan': 'azerbaijan',
+    'kosowo': 'kosovo', 'czarnogora': 'montenegro', 'moldawia': 'moldova',
+    'gruzja': 'georgia', 'andora': 'andorra', 'macedonia': 'macedonia',
+    'bosnia': 'bosnia', 'albania': 'albania', 'armenia': 'armenia',
+    'malta': 'malta', 'gibraltar': 'gibraltar', 'liechtenstein': 'liechtenstein',
+    'owcze': 'faroe', 'polnocna': 'northern',
+    # Reszta świata
+    'arabia': 'saudi', 'emiraty': 'emirates', 'uzbekistan': 'uzbekistan',
+    'kamerun': 'cameroon', 'nigeria': 'nigeria', 'ghana': 'ghana',
+    'senegal': 'senegal', 'zelandia': 'zealand', 'jamajka': 'jamaica',
+    'honduras': 'honduras', 'gwatemala': 'guatemala', 'salwador': 'salvador',
+    'panama': 'panama', 'belize': 'belize', 'gujana': 'guiana',
 }
 _PL_BY_EN = {v: k for k, v in _EN_BY_PL.items()}
 
