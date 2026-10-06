@@ -56,6 +56,38 @@ SUPERBET_SPORT_ID = {'football': 5, 'tennis': 2, 'basketball': 4,
                      'volleyball': 1, 'hockey': 3, 'handball': 11}
 SUPERBET_OFFER = ('https://production-superbet-offer-pl.freetls.fastly.net/'
                   'v2/pl-PL/events/by-date')
+SUPERBET_SITEMAP = 'https://superbet.pl/sitemap/events.xml'
+SUPERBET_SPORT_SLUG = {'football': 'pilka-nozna', 'tennis': 'tenis',
+                       'basketball': 'koszykowka', 'volleyball': 'siatkowka',
+                       'hockey': 'hokej-na-lodzie', 'handball': 'pilka-reczna'}
+
+
+def superbet_slug(name: str) -> str:
+    """Slug nazwy jak na superbet.pl (zgodność 1033/1036 z sitemapą)."""
+    import unicodedata
+    s = (name.replace('&', ' and ').replace("'", '').replace('’', '')
+         .replace('.', '').replace('/', '').replace('ı', 'i')
+         .replace('ł', 'l').replace('Ł', 'L').replace('ø', 'o').replace('Ø', 'O'))
+    s = unicodedata.normalize('NFD', s)
+    s = ''.join(c for c in s if not unicodedata.combining(c)).lower()
+    return re.sub(r'[^a-z0-9]+', '-', s).strip('-')
+
+
+def superbet_sitemap() -> Dict[str, str]:
+    """eventId -> dokładny adres strony meczu z sitemapy superbet.pl."""
+    from curl_cffi import requests as cr
+    try:
+        x = cr.get(SUPERBET_SITEMAP, impersonate='chrome124', timeout=40).text
+    except Exception as e:
+        print(f'⚠️ Superbet sitemap: {type(e).__name__}')
+        return {}
+    out = {}
+    for loc in re.findall(r'<loc>(https://superbet\.pl/kursy/[^<]+)</loc>', x):
+        m = re.search(r'-(\d+)$', loc)
+        if m:
+            out[m.group(1)] = loc
+    print(f'🗺️ Superbet sitemap: {len(out)} adresów meczów')
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -214,6 +246,7 @@ def superbet_index(date: str) -> Dict[str, List[Dict[str, Any]]]:
 
 
 def attach_superbet(legs: List[Dict[str, Any]], idx) -> None:
+    sitemap = superbet_sitemap()
     for leg in legs:
         th, ta = name_tokens(leg['home']), name_tokens(leg['away'])
         best, best_s, flipped = None, 0.0, False
@@ -226,9 +259,14 @@ def attach_superbet(legs: List[Dict[str, Any]], idx) -> None:
         if not best or best_s < 0.5:
             continue
         side = leg['pick'] if not flipped else {'1': '2', '2': '1'}[leg['pick']]
+        eid = str(best['event_id'])
+        url = sitemap.get(eid) or (
+            f"https://superbet.pl/kursy/{SUPERBET_SPORT_SLUG.get(leg['sport'], leg['sport'])}/"
+            f"{superbet_slug(best['home'])}-vs-{superbet_slug(best['away'])}-{eid}")
         leg['superbet'] = {'code': best['code'], 'event_id': best['event_id'],
                            'price': best['prices'].get(side),
-                           'name': f"{best['home']} – {best['away']}"}
+                           'name': f"{best['home']} – {best['away']}",
+                           'url': url, 'url_exact': eid in sitemap}
 
 
 def odds_of(leg: Dict[str, Any]) -> Optional[float]:
@@ -283,15 +321,23 @@ def build_coupons(legs: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
 # 4. Telegram
 # ---------------------------------------------------------------------------
 
+def _esc(s: Any) -> str:
+    """Telegram wysyła z parse_mode=HTML — nazwy z &, < psułyby wiadomość."""
+    return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+
 def _leg_line(i: int, l: Dict[str, Any]) -> str:
     sb = l.get('superbet') or {}
     src = '🟡SB' if sb.get('price') else '⚪'
-    code = f" kod {sb['code']}" if sb.get('code') else ''
     form = (f"{''.join(l['fav_form'][:5])}/{''.join(l['dog_form'][:5])}"
             if l.get('fav_form') and l.get('dog_form') else 'forma —')
     two = '✅✅' if len(l['sources']) > 1 else ''
-    return (f"{i}. {l['home']} – {l['away']}\n"
-            f"   ➜ {l['pick_team']} @ {odds_of(l):.2f} {src}{code} | {form} {two}")
+    match = f"{_esc(l['home'])} – {_esc(l['away'])}"
+    if sb.get('url'):
+        match = f'<a href="{_esc(sb["url"])}">{match}</a>'   # klik → strona meczu
+    code = f" kod {sb['code']}" if sb.get('code') else ''
+    return (f"{i}. {match}\n"
+            f"   ➜ {_esc(l['pick_team'])} @ {odds_of(l):.2f} {src}{code} | {form} {two}")
 
 
 def message(date: str, coupons, balance: Optional[str]) -> str:
@@ -312,7 +358,8 @@ def message(date: str, coupons, balance: Optional[str]) -> str:
                  f"(pomiar skuteczności — nie do grania)")
     if balance:
         lines += ['', balance]
-    lines += ['', '🟡SB = kurs Superbet, ⚪ = kurs z pipeline (brak w Superbet)',
+    lines += ['', 'Kliknij nazwę meczu → otwiera się na Superbecie.',
+              '🟡SB = kurs Superbet, ⚪ = kurs z pipeline (brak w Superbet)',
               '✅✅ = typ z obu pipeline\'ów | forma typowany/rywal']
     return '\n'.join(lines)
 
