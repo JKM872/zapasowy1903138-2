@@ -1,15 +1,15 @@
 {
   "date": "2026-10-08",
   "sport": "volleyball",
-  "generatedAt": "2026-10-08T02:23:57.727874",
+  "generatedAt": "2026-10-08T05:13:53.770472",
   "stats": {
     "total": 9,
-    "qualifying": 0,
-    "formAdvantage": 0
+    "qualifying": 5,
+    "formAdvantage": 3
   },
   "matches": [
     {
-      "id": 7011560281179525051,
+      "id": 2020367472162949401,
       "homeTeam": "Polkky Kuusamo K",
       "awayTeam": "Nurmon Jymy K",
       "time": "08.10.2026 15:30",
@@ -18,11 +18,9 @@
       "country": "",
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/nurmon-jymy-QiKTgQtQ/polkky-kuusamo-4Op4iqSb/?mid=6LKlYRqC",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -31,31 +29,109 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "formAdvantage": true,
       "odds": null,
-      "forebet": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 90.0,
+        "exactScore": "3-0",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 99.0,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 69.0,
+        "dataQuality": 0.64
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
+      "confidence": 90,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 99%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
     },
     {
-      "id": -8289422591441429754,
+      "id": 2728761457083826309,
       "homeTeam": "Bydgoszcz",
       "awayTeam": "Czarni Radom",
       "time": "08.10.2026 18:30",
@@ -77,43 +153,19 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -125,7 +177,7 @@
       "predictionGrade": null
     },
     {
-      "id": 309712413558678699,
+      "id": 9071274726789981116,
       "homeTeam": "Barnaul",
       "awayTeam": "Akademiya Kazan",
       "time": "08.10.2026 12:00",
@@ -147,122 +199,6 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "L",
-        "W"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -1538079924720099989,
-      "homeTeam": "Novyi Urengoy",
-      "awayTeam": "Chelyabinsk",
-      "time": "08.10.2026 13:00",
-      "date": "2026-10-08",
-      "league": null,
-      "country": "",
-      "sport": "volleyball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/chelyabinsk-2F2lN7j9/novyi-urengoy-K85RJEn0/?mid=Kl4IU2WF",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 2,
-        "draw": 0,
-        "away": 0,
-        "total": 2,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -7951220097261981539,
-      "homeTeam": "Gorky N. Novgorod",
-      "awayTeam": "Jarosław",
-      "time": "08.10.2026 16:00",
-      "date": "2026-10-08",
-      "league": null,
-      "country": "",
-      "sport": "volleyball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/gorky-n-novgorod-bw6M1XcM/yaroslavl-2wzWMRN4/?mid=CO0AWO13",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -275,7 +211,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -287,7 +223,250 @@
       "predictionGrade": null
     },
     {
-      "id": 4203461325036678552,
+      "id": 913087866005587294,
+      "homeTeam": "Novyi Urengoy",
+      "awayTeam": "Chelyabinsk",
+      "time": "08.10.2026 13:00",
+      "date": "2026-10-08",
+      "league": null,
+      "country": "",
+      "sport": "volleyball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/chelyabinsk-2F2lN7j9/novyi-urengoy-K85RJEn0/?mid=Kl4IU2WF",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 2,
+        "draw": 0,
+        "away": 0,
+        "total": 2,
+        "winRate": 100
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 51.0,
+        "exactScore": "3-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 81.0,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 49.0,
+        "dataQuality": 0.64
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 78,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.6,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 2,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 81%",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 60%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": 8893370647382807748,
+      "homeTeam": "Gorky N. Novgorod",
+      "awayTeam": "Jarosław",
+      "time": "08.10.2026 16:00",
+      "date": "2026-10-08",
+      "league": null,
+      "country": "",
+      "sport": "volleyball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/gorky-n-novgorod-bw6M1XcM/yaroslavl-2wzWMRN4/?mid=CO0AWO13",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 68.0,
+        "exactScore": "3-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 94.5,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 66.0,
+        "dataQuality": 0.64
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 90,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 94%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": -2550066271829567704,
       "homeTeam": "Nove Mesto nad Vahom K",
       "awayTeam": "Slavia Bratislava K",
       "time": "08.10.2026 17:00",
@@ -309,76 +488,6 @@
         "draw": 0,
         "away": 5,
         "total": 5,
-        "winRate": 100
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 3762053780058288645,
-      "homeTeam": "Altekma",
-      "awayTeam": "Gaziantep Genclik",
-      "time": "08.10.2026 13:00",
-      "date": "2026-10-08",
-      "league": null,
-      "country": "",
-      "sport": "volleyball",
-      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/altekma-4nBz5M3U/gaziantep-genclik-KloOcygm/?mid=0tD0H5RH",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 0,
-        "total": 3,
         "winRate": 0
       },
       "homeForm": [],
@@ -391,7 +500,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -403,7 +512,134 @@
       "predictionGrade": null
     },
     {
-      "id": 685712086168980244,
+      "id": -828405617975733606,
+      "homeTeam": "Altekma",
+      "awayTeam": "Gaziantep Genclik",
+      "time": "08.10.2026 13:00",
+      "date": "2026-10-08",
+      "league": null,
+      "country": "",
+      "sport": "volleyball",
+      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/altekma-4nBz5M3U/gaziantep-genclik-KloOcygm/?mid=0tD0H5RH",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 0,
+        "total": 3,
+        "winRate": 100
+      },
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.5,
+        "draw": null,
+        "away": 2.35,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 60.0,
+        "exactScore": "3-0",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 81.0,
+        "ev": 0.215,
+        "edge": 14.3,
+        "kelly": 5.0,
+        "confidence": 80.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 85,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 3,
+        "consensus_strength": "moderate",
+        "market_model_gap": 14.333,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 81%",
+          "Positive expected value: 0.21",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 14.3,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "A"
+    },
+    {
+      "id": -6267222600040696655,
       "homeTeam": "Istanbul GSK",
       "awayTeam": "Alanya Bld",
       "time": "08.10.2026 16:00",
@@ -412,11 +648,9 @@
       "country": "",
       "sport": "volleyball",
       "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/alanya-bld-63ZVqQDr/istanbul-gsk-6katO8rK/?mid=OW5HZnsn",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -425,31 +659,112 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 1.55,
+        "draw": null,
+        "away": 2.25,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 59.0,
+        "exactScore": "3-1",
+        "overUnder": null,
+        "btts": null,
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 66.8,
+        "ev": 0.036,
+        "edge": 2.3,
+        "kelly": 1.6,
+        "confidence": 57.0,
+        "dataQuality": 0.73
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 78,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 2.284,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 2.3,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "B"
     },
     {
-      "id": 1134608869232980394,
+      "id": 3019123638223929221,
       "homeTeam": "Sultanbeyli",
       "awayTeam": "Gebze",
       "time": "08.10.2026 16:00",
@@ -471,7 +786,7 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 40
+        "winRate": 0
       },
       "homeForm": [],
       "awayForm": [],
@@ -483,7 +798,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
