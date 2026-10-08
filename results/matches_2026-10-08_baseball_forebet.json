@@ -2,17 +2,17 @@
   "date": "2026-10-08",
   "sport": "baseball",
   "source": "forebet",
-  "generatedAt": "2026-10-08T04:29:44.901789+00:00",
+  "generatedAt": "2026-10-08T11:15:16.603597+00:00",
   "matches": [
     {
-      "homeTeam": "Italy",
-      "awayTeam": "Colombia",
-      "time": "10:00",
-      "league": "WBS",
+      "homeTeam": "Chicago White Sox",
+      "awayTeam": "Cleveland Guardians",
+      "time": "12:00",
+      "league": "MLB",
       "country": null,
       "source": "forebet",
       "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/baseball/matches/wbsc-premier-12/italy-colombia/146508",
+      "forebetUrl": "https://www.forebet.com/en/baseball/matches/mlb/chicago-white-sox-cleveland-guardians/148494",
       "qualifies": false,
       "channelQualifies": false,
       "emailQualifies": false,
@@ -26,8 +26,8 @@
         "homeProb": 47,
         "drawProb": null,
         "awayProb": 53,
-        "exactScore": "4-6",
-        "avgGoals": 9.9,
+        "exactScore": "4-5",
+        "avgGoals": 8.7,
         "favorite": "away",
         "gap": 6
       },
@@ -134,39 +134,39 @@
       },
       "h2h": {
         "total": 5,
-        "homeWins": 5,
-        "awayWins": 0,
-        "lastDate": "07.10.26",
-        "lastScore": "4-3"
+        "homeWins": 4,
+        "awayWins": 1,
+        "lastDate": "08.10.26",
+        "lastScore": "1-3"
       },
       "form": {
         "home": [
+          "L",
           "W",
           "L",
           "L",
-          "W",
           "W"
         ],
         "away": [
-          "L",
           "W",
+          "L",
           "W",
           "W",
           "W"
         ],
         "homeAtHome": [
-          "W",
+          "L",
           "W",
           "W",
           "W",
           "W"
         ],
         "awayAtAway": [
+          "W",
           "L",
           "W",
           "W",
-          "L",
-          "W"
+          "L"
         ],
         "surface": null,
         "homeSurface": null,
@@ -192,27 +192,27 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": null,
+          "home": 110.0,
           "draw": null,
-          "away": null
+          "away": 110.0
         }
       },
       "ai": {
-        "prediction": "Based on the strong head-to-head record (4/5 wins), excellent home form of San Diego Padres, and favorable odds value, I predict that the San Diego Padres will secure a win in this match.",
-        "confidence": 85,
+        "prediction": "Based on the strong home record (4/5 wins), San Diego Padres are expected to put up a competitive fight against the Milwaukee Brewers. Their recent form at home has been impressive, while the Brewers have shown slight improvement but still lag behind in terms of overall performance.",
+        "confidence": 80,
         "recommendation": "HIGH",
         "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 63.9,
-        "ev": 0.277,
-        "edge": 13.9,
+        "prob": 56.7,
+        "ev": 0.133,
+        "edge": 6.7,
         "sources": 4,
         "components": {
           "forebet": 0.58,
-          "h2h": 1.0,
-          "form": 0.4,
+          "h2h": 0.8,
+          "form": 0.3,
           "odds": 0.5
         }
       },
@@ -228,7 +228,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "moderate",
-        "market_model_gap": 13.9,
+        "market_model_gap": 6.7,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -617,35 +617,35 @@
         "skipReason": "no_vote"
       },
       "odds": {
-        "home": 1.5,
-        "draw": 8.0,
-        "away": 3.2,
+        "home": 1.55,
+        "draw": 7.5,
+        "away": 2.9,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 256.0,
+          "home": 189.0,
           "draw": null,
-          "away": 210.0
+          "away": 158.0
         }
       },
       "ai": {
-        "prediction": "Based on the data, I believe the Hanshin Tigers have a higher chance of winning this match due to their strong head-to-head record (4/5 wins), excellent home form, and favorable odds value (Hanshin Tigers at 1.5, Yakult Swallows at 3.2).",
+        "prediction": "Błąd API (po 5 modelach)",
         "confidence": 0,
         "recommendation": "SKIP",
-        "reasoning": ""
+        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
       },
       "scoring": {
         "pick": "1",
-        "prob": 58.1,
-        "ev": -0.129,
-        "edge": -8.6,
+        "prob": 57.8,
+        "ev": -0.104,
+        "edge": -6.7,
         "sources": 4,
         "components": {
           "forebet": 0.64,
           "h2h": 0.4,
           "form": 0.633,
-          "odds": 0.667
+          "odds": 0.645
         }
       },
       "predictionGrade": "C",
@@ -660,7 +660,7 @@
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": -8.567,
+        "market_model_gap": -6.716,
         "skip_reason": null
       },
       "sidesReversed": false,
