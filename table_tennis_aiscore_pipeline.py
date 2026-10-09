@@ -987,6 +987,7 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
         # 🇷🇺 Ligi rosyjskie pomijamy przed pobieraniem kursów.
         import russia_filter
         rows = russia_filter.filter_rows(rows, "league", label="tenis stołowy")
+        # Uwaga: zawodników (osoby) nie filtrujemy po nazwisku — tylko ligi.
 
         # ── FAZA 2.45: Odds fallback (Livesport multi-bookmaker) ──
         # SofaScore odds (LV Bet etc.) were already fetched per-match during the

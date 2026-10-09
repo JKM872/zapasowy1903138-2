@@ -266,6 +266,8 @@ def parse_coupon_payload(payload: Dict[str, Any]) -> List[CouponOdds]:
                     home, away = (p.strip() for p in name.split(' - ', 1))
             if not home or not away:
                 continue
+            if russia_filter.is_russian(home, away):  # 🇷🇺 kluby / reprezentacje
+                continue
 
             raw_date = str(event.get('EventDate') or '')
             date_part, _, time_part = raw_date.partition(' ')

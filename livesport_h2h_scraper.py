@@ -4186,7 +4186,11 @@ def _extract_match_links_from_soup(soup: BeautifulSoup, sport_url: str, existing
             # który poprzedza wiersze meczów na liście dnia.
             if _russia_filter.enabled():
                 header = a.find_previous(class_=_LEAGUE_HEADER_RE)
-                if header is not None and _russia_filter.is_russian(header.get_text(" ", strip=True)):
+                # Liga z nagłówka albo drużyna/reprezentacja ze sluga URL
+                # (np. .../rosja-xYz/ lub .../spartak-moskwa-AbC/).
+                if (_russia_filter.is_russian_url(href)
+                        or (header is not None
+                            and _russia_filter.is_russian(header.get_text(" ", strip=True)))):
                     russian_skipped += 1
                     continue
 
