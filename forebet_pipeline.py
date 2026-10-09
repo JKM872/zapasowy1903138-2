@@ -106,6 +106,10 @@ REQUIRE_FORM_ADVANTAGE = True
 # jej teraz zmniejszyłoby liczbę zdarzeń, czego użytkownik nie chce.
 # FOREBET_TENNIS_FORM_GATE=1 przywraca twarde odrzucanie.
 TENNIS_FORM_GATE = os.getenv('FOREBET_TENNIS_FORM_GATE', '0') == '1'
+# Sporty, w których gorsza forma faworyta ODRZUCA mecz. Domyślnie żaden —
+# decyzja użytkownika: forma jest widoczna i wchodzi do score, ale nie ucina
+# zdarzeń (odcinała 146 meczów koszykówki, 86 hokeja w 7 dni).
+FORM_GATE_SPORTS = {s for s in os.getenv('FOREBET_FORM_GATE_SPORTS', '').split(',') if s}
 
 # Minimalny score, by mecz wszedł do maila.
 #
@@ -125,6 +129,10 @@ MIN_SCORE_BY_SPORT = {
     'tennis': float(os.getenv('FOREBET_MIN_SCORE_TENNIS', '51')),
     'football': float(os.getenv('FOREBET_MIN_SCORE_FOOTBALL', '0')),
 }
+# Pozostałe sporty jak piłka: bez progu score, liczy się typ Forebet.
+for _sp in ('basketball', 'hockey', 'handball', 'volleyball', 'baseball', 'rugby'):
+    MIN_SCORE_BY_SPORT.setdefault(
+        _sp, float(os.getenv(f'FOREBET_MIN_SCORE_{_sp.upper()}', '0')))
 
 # ── Marża bukmachera jako miara powagi rynku ───────────────────────────────
 #
@@ -1674,8 +1682,9 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
     if REQUIRE_FORM_ADVANTAGE:
         verdict = form_advantage(row)
         row['form_advantage'] = verdict
-        if verdict is False and row.get('sport') == 'tennis' \
-                and not TENNIS_FORM_GATE:
+        sp_ = row.get('sport') or ''
+        hard = (TENNIS_FORM_GATE if sp_ == 'tennis' else sp_ in FORM_GATE_SPORTS)
+        if verdict is False and not hard:
             # Tenis: forma jest pokazywana i wchodzi do score (gorsza forma
             # obniża ocenę), ale sama NIE odrzuca meczu — żądanie użytkownika:
             # forma przy każdym meczu, bez zmniejszania liczby zdarzeń.
