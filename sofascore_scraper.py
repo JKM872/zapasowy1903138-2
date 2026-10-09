@@ -1568,25 +1568,45 @@ def _app_client_response(url: str, timeout: int = 10):
     www_url = url.replace('://api.sofascore.com/', '://www.sofascore.com/')
     attempts = [None]
     proxies = _get_sofascore_proxies()
-    if proxies:
+    # Exity Tora są przez SofaScore blokowane (probe w CI: 4/4 × 403) —
+    # nie marnujemy na nie czasu w szybkiej ścieżce.
+    if proxies and not _proxy_is_tor():
         attempts.append(proxies)
-    for px in attempts:
+    # Na runnerach GitHub 403 przychodzi sporadycznie (część zapytań z tego
+    # samego IP przechodzi). Krótki retry z innym profilem TLS i innym hostem
+    # zwykle wystarcza — taniej niż cała stara ścieżka z FlareSolverr/Torem.
+    variants = [('chrome', www_url),
+                ('chrome131', url.replace('://www.sofascore.com/', '://api.sofascore.com/')),
+                ('chrome124', www_url)]
+    plan = [(px, imp, u) for px in attempts for imp, u in variants]
+    for i, (px, imp, target) in enumerate(plan):
+        if i and plan[i - 1][0] is px:
+            time.sleep(0.4 + random.random() * 0.6)
         try:
-            kw = dict(impersonate='chrome', headers=_APP_HEADERS, timeout=timeout)
+            kw = dict(impersonate=imp, headers=_APP_HEADERS, timeout=timeout)
             if px:
                 kw['proxies'] = px
-            r = curl_requests.get(www_url, **kw)
+            try:
+                r = curl_requests.get(target, **kw)
+            except Exception:
+                if imp == 'chrome':
+                    raise
+                kw['impersonate'] = 'chrome'
+                r = curl_requests.get(target, **kw)
             st = r.status_code
             _app_stats[str(st)] = _app_stats.get(str(st), 0) + 1
             if st in (200, 404):
                 _app_client_403_streak = 0
+                if i:
+                    _app_stats['retry_ok'] = _app_stats.get('retry_ok', 0) + 1
                 return r
-            if st == 403:
-                _app_client_403_streak += 1
-                if _app_client_403_streak in (1, 20):
-                    print(f"   ⚠️ SofaScore app-client 403 ({'proxy' if px else 'direct'}) — fallback")
         except Exception:
             _app_stats['error'] = _app_stats.get('error', 0) + 1
+    # Wszystkie warianty dały 403/błąd — log rzadko, żeby nie zalać runu.
+    _app_client_403_streak += 1
+    if _app_client_403_streak in (1, 10, 50) or _app_client_403_streak % 200 == 0:
+        print(f"   ⚠️ SofaScore app-client: 403 po {len(plan)} próbach "
+              f"(seria {_app_client_403_streak}, stat {_app_stats}) — fallback")
     return None
 
 
