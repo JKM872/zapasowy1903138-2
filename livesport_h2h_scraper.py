@@ -4184,7 +4184,10 @@ def _extract_match_links_from_soup(soup: BeautifulSoup, sport_url: str, existing
             
             # 🇷🇺 Pomijamy ligi rosyjskie: kraj jest tylko w nagłówku ligi,
             # który poprzedza wiersze meczów na liście dnia.
-            if _russia_filter.enabled():
+            # Sporty indywidualne (tenis, tenis stołowy, darts…) zostawiamy.
+            if (_russia_filter.enabled()
+                    and not _russia_filter.is_individual_url(href)
+                    and not _russia_filter.is_individual_url(sport_url)):
                 header = a.find_previous(class_=_LEAGUE_HEADER_RE)
                 # Liga z nagłówka albo drużyna/reprezentacja ze sluga URL
                 # (np. .../rosja-xYz/ lub .../spartak-moskwa-AbC/).

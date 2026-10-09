@@ -287,13 +287,7 @@ def scrape_and_send_email(
                             print(f"   ⚠️ Skipping tennis match with missing participant names: {url}")
                             success = True
                             continue
-
-                        import russia_filter  # 🇷🇺 siatka bezpieczeństwa po nagłówku ligi
-                        if russia_filter.is_russian(info.get('league'), info.get('country'),
-                                                    info.get('home_team'), info.get('away_team')):
-                            print(f"   🇷🇺 Pomijam ligę rosyjską: {info.get('league')}")
-                            success = True
-                            continue
+                        # Tenis: Rosjan nie pomijamy (sport indywidualny).
 
                         rows.append(info)
                         
@@ -341,7 +335,7 @@ def scrape_and_send_email(
                             continue
 
                         import russia_filter  # 🇷🇺 siatka bezpieczeństwa po nagłówku ligi
-                        if russia_filter.is_russian(info.get('league'), info.get('country'),
+                        if not russia_filter.is_individual_sport(current_sport) and russia_filter.is_russian(info.get('league'), info.get('country'),
                                                     info.get('home_team'), info.get('away_team')):
                             print(f"   🇷🇺 Pomijam ligę rosyjską: {info.get('league')}")
                             success = True

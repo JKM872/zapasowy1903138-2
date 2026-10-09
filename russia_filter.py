@@ -44,6 +44,26 @@ _CLUBS = (
 _RE = re.compile(rf"\b({_COUNTRY_LEAGUE}|{_CITIES}|{_CLUBS})\b", re.IGNORECASE)
 
 
+# Sporty indywidualne: Rosjan NIE pomijamy (decyzja użytkownika) — ani
+# zawodników, ani turniejów/lig (np. Liga Pro w tenisie stołowym).
+_INDIVIDUAL = {
+    "tennis", "tenis", "table_tennis", "table-tennis", "table tennis", "tenis stolowy",
+    "tenis-stolowy", "darts", "dart", "snooker", "mma", "boxing", "boks", "golf",
+    "badminton", "squash", "cycling", "kolarstwo",
+}
+_INDIVIDUAL_URL_RE = re.compile(
+    r"/(tenis|tennis|tenis-stolowy|table-tennis|dart|darts|snooker|mma|boks|boxing"
+    r"|golf|badminton|squash|kolarstwo|cycling)/", re.IGNORECASE)
+
+
+def is_individual_sport(sport: Any) -> bool:
+    return bool(sport) and _norm(sport).strip() in {_norm(s) for s in _INDIVIDUAL}
+
+
+def is_individual_url(url: Any) -> bool:
+    return bool(url) and bool(_INDIVIDUAL_URL_RE.search(str(url)))
+
+
 def enabled() -> bool:
     return os.environ.get("SKIP_RUSSIA", "1").strip().lower() not in ("0", "false", "no", "off")
 
@@ -70,16 +90,26 @@ def is_russian_url(url: str) -> bool:
     return is_russian(path)
 
 
-def filter_rows(rows: Iterable[Any], *fields: str, label: str = "") -> List[Any]:
-    """Odrzuca wiersze (dict lub obiekt), których pola wskazują Rosję."""
+def filter_rows(rows: Iterable[Any], *fields: str, label: str = "",
+                sport: Any = None) -> List[Any]:
+    """Odrzuca wiersze (dict lub obiekt), których pola wskazują Rosję.
+
+    Sporty indywidualne zostają nietknięte: ``sport`` dla całej listy albo
+    pole ``sport``/``sport_slug`` w wierszu.
+    """
     rows = list(rows or [])
-    if not enabled():
+    if not enabled() or is_individual_sport(sport):
         return rows
 
     def _get(r, f):
         return r.get(f) if isinstance(r, dict) else getattr(r, f, None)
 
-    kept = [r for r in rows if not is_russian(*(_get(r, f) for f in fields))]
+    def _drop(r):
+        if is_individual_sport(_get(r, "sport")) or is_individual_sport(_get(r, "sport_slug")):
+            return False
+        return is_russian(*(_get(r, f) for f in fields))
+
+    kept = [r for r in rows if not _drop(r)]
     dropped = len(rows) - len(kept)
     if dropped:
         print(f"   🇷🇺 Pominięto {dropped} meczów z Rosji{(' (' + label + ')') if label else ''}")

@@ -1900,7 +1900,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     import russia_filter
     all_matches = russia_filter.filter_rows(
         all_matches, 'country', 'league', 'league_name', 'home_team', 'away_team',
-        label=f'Forebet {sport}')
+        label=f'Forebet {sport}', sport=sport)
     if not all_matches:
         print(f"❌ Forebet {sport}: brak meczów — koniec")
         paths = write_outputs([], sport, date_str)
