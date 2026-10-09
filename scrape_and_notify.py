@@ -289,7 +289,8 @@ def scrape_and_send_email(
                             continue
 
                         import russia_filter  # 🇷🇺 siatka bezpieczeństwa po nagłówku ligi
-                        if russia_filter.is_russian(info.get('league'), info.get('country')):
+                        if russia_filter.is_russian(info.get('league'), info.get('country'),
+                                                    info.get('home_team'), info.get('away_team')):
                             print(f"   🇷🇺 Pomijam ligę rosyjską: {info.get('league')}")
                             success = True
                             continue
@@ -340,7 +341,8 @@ def scrape_and_send_email(
                             continue
 
                         import russia_filter  # 🇷🇺 siatka bezpieczeństwa po nagłówku ligi
-                        if russia_filter.is_russian(info.get('league'), info.get('country')):
+                        if russia_filter.is_russian(info.get('league'), info.get('country'),
+                                                    info.get('home_team'), info.get('away_team')):
                             print(f"   🇷🇺 Pomijam ligę rosyjską: {info.get('league')}")
                             success = True
                             continue

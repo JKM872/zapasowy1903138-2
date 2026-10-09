@@ -383,7 +383,8 @@ def parse_dropping_odds_table(
         )
 
     import russia_filter  # 🇷🇺 pomijamy ligi rosyjskie
-    return russia_filter.filter_rows(rows, "league", label="OddsSafari")
+    return russia_filter.filter_rows(rows, "league", "home_team", "away_team",
+                                     "match_url", label="OddsSafari")
 
 
 def parse_dropping_odds_next_data(
@@ -492,7 +493,8 @@ def parse_dropping_odds_next_data(
         )
 
     import russia_filter  # 🇷🇺 pomijamy ligi rosyjskie
-    return russia_filter.filter_rows(rows, "league", label="OddsSafari")
+    return russia_filter.filter_rows(rows, "league", "home_team", "away_team",
+                                     "match_url", label="OddsSafari")
 
 
 def parse_dropping_odds_next_data(
