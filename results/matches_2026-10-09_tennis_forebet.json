@@ -2,123 +2,8 @@
   "date": "2026-10-09",
   "sport": "tennis",
   "source": "forebet",
-  "generatedAt": "2026-10-09T17:35:24.376190+00:00",
+  "generatedAt": "2026-10-09T18:30:37.906160+00:00",
   "matches": [
-    {
-      "homeTeam": "J. Pinnington Jones",
-      "awayTeam": "B. Gojo",
-      "time": "10:05",
-      "league": "EsC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/gojo-borna-px9AXG3g/pinnington-jones-jack-jRDvhb4q/?mid=WjbtM3HG",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/villena/j-pinnington-jones-b-gojo/360818",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 55.0,
-        "homeProb": 55,
-        "drawProb": null,
-        "awayProb": 45,
-        "exactScore": "2-0",
-        "avgGoals": 12.8,
-        "favorite": "home",
-        "gap": 10
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 2,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.15,
-        "draw": null,
-        "away": 1.63,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 110.0,
-          "draw": null,
-          "away": 149.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 57.3,
-        "ev": 0.231,
-        "edge": 10.8,
-        "sources": 5,
-        "components": {
-          "forebet": 0.55,
-          "h2h": 1.0,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.465
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": 10.788,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
     {
       "homeTeam": "N. Djokovic",
       "awayTeam": "H. Hurkacz",
@@ -129,7 +14,7 @@
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/djokovic-novak-AZg49Et9/hurkacz-hubert-zuHOBnY9/?mid=SpW6CIFG",
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/n-djokovic-h-hurkacz/360808",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -168,20 +53,32 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "awaySurface": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 13865,
+        "homeProb": 83,
+        "awayProb": 17,
+        "url": "https://www.sofascore.com/tennis/match/17218879",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
         "home": 1.53,
@@ -197,38 +94,40 @@
         }
       },
       "ai": {
-        "prediction": "Novak Djokovic should prevail at home over Hubert Hurkacz, leveraging his dominant 4‑1 head‑to‑head edge.",
-        "confidence": 78,
+        "prediction": "Novak Djokovic is likely to win, leveraging his dominant 4‑1 head‑to‑head edge and home‑court advantage.",
+        "confidence": 80,
         "recommendation": "HIGH",
-        "reasoning": "Djokovic leads the recent H2H 4‑1 (80% win rate), indicating a clear psychological advantage. Both players share an identical recent form rating of 8.0/10, so form does not offset the H2H edge. The Forebet model assigns a 63% probability to a home win, and the bookmaker odds (1.53) translate to an implied 65% chance, both reinforcing Djokovic’s favoritism. No venue‑specific data are available, but playing at home typically adds a modest boost. Overall, the convergence of H2H dominance, odds value, and predictive model yields a solid edge despite the equal form."
+        "reasoning": "Djokovic leads the recent H2H 4‑1 (80% win rate), indicating a clear psychological edge. Both players share an identical recent form rating of 8.0/10, so form does not differentiate them. The home factor, while not quantified, traditionally adds a few percentage points for top players. Forebet assigns a 63% win probability to Djokovic, and the bookmaker odds (1.53) translate to an implied ~65% chance, both aligning with the H2H signal. The convergence of H2H, odds, and predictive model creates a low‑risk profile for a Djokovic victory."
       },
       "scoring": {
         "pick": "1",
-        "prob": 63.7,
-        "ev": -0.026,
-        "edge": -1.7,
-        "sources": 5,
+        "prob": 67.9,
+        "ev": 0.039,
+        "edge": 2.5,
+        "sources": 7,
         "components": {
           "forebet": 0.63,
           "h2h": 0.8,
           "form": 0.8,
           "opponent": 0.2,
+          "surface": 0.8,
+          "sofascore": 0.83,
           "odds": 0.654
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "A",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": -1.659,
+        "consensus_strength": "strong",
+        "market_model_gap": 2.541,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -285,9 +184,21 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "awaySurface": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
@@ -321,15 +232,16 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 59.4,
-        "ev": -0.299,
-        "edge": -25.3,
-        "sources": 5,
+        "prob": 59.6,
+        "ev": -0.297,
+        "edge": -25.2,
+        "sources": 6,
         "components": {
           "forebet": 0.76,
           "h2h": 0.667,
           "form": 0.6,
           "opponent": 0.2,
+          "surface": 0.6,
           "odds": 0.847
         }
       },
@@ -345,110 +257,8 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "weak",
-        "market_model_gap": -25.346,
+        "market_model_gap": -25.146,
         "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "L. Stefanini",
-      "awayTeam": "P. Iatcenko",
-      "time": "11:45",
-      "league": "TrC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/samsun/l-stefanini-p-iatcenko/360781",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 57.0,
-        "homeProb": 57,
-        "drawProb": null,
-        "awayProb": 43,
-        "exactScore": "2-0",
-        "avgGoals": 10.2,
-        "favorite": "home",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 137.0,
-          "draw": null,
-          "away": 110.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 57.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.57
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -504,9 +314,21 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "awaySurface": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
@@ -540,14 +362,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 55.2,
-        "ev": -0.348,
-        "edge": -29.5,
-        "sources": 4,
+        "prob": 51.8,
+        "ev": -0.389,
+        "edge": -33.0,
+        "sources": 5,
         "components": {
           "forebet": 0.62,
           "form": 0.4,
           "opponent": 0.6,
+          "surface": 0.4,
           "odds": 0.847
         }
       },
@@ -563,351 +386,7 @@
         "form_available": true,
         "h2h_count": 1,
         "consensus_strength": "weak",
-        "market_model_gap": -29.546,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Shelbayh",
-      "awayTeam": "D. Glinka",
-      "time": "11:55",
-      "league": "EsC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/glinka-daniil-bimjKJAE/shelbayh-abedallah-AZ4zdtZb/?mid=KWjTNY5m",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/villena/a-shelbayh-d-glinka/360826",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 52.0,
-        "homeProb": 52,
-        "drawProb": null,
-        "awayProb": 48,
-        "exactScore": "2-0",
-        "avgGoals": 10.6,
-        "favorite": "home",
-        "gap": 4
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 0,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "1-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.2,
-        "draw": null,
-        "away": 1.6,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 120.0,
-          "draw": null,
-          "away": 161.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 52.1,
-        "ev": 0.146,
-        "edge": 6.6,
-        "sources": 4,
-        "components": {
-          "forebet": 0.52,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.455
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": 6.645,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "L. Neumayer",
-      "awayTeam": "M. Alcala Gurri",
-      "time": "12:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/alcala-gurri-max-pISmOkA6/neumayer-lukas-4ffrgw5a/?mid=vu8RBDf2",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/braga/l-neumayer-m-alcala-gurri/360817",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 59.0,
-        "homeProb": 41,
-        "drawProb": null,
-        "awayProb": 59,
-        "exactScore": "1-2",
-        "avgGoals": 10.9,
-        "favorite": "away",
-        "gap": 18
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 3,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-1"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.0,
-        "draw": null,
-        "away": 1.7,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 100.0,
-          "draw": null,
-          "away": 137.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 54.6,
-        "ev": -0.072,
-        "edge": -4.2,
-        "sources": 5,
-        "components": {
-          "forebet": 0.59,
-          "h2h": 0.0,
-          "form": 0.8,
-          "opponent": 0.2,
-          "odds": 0.588
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -4.224,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "M. Moeller",
-      "awayTeam": "M. Dodig",
-      "time": "12:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/dodig-matej-2wbou5PR/moeller-marvin-W4qdFpGM/?mid=O05cTfrQ",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/braga/m-moeller-m-dodig/360824",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 57.0,
-        "homeProb": 57,
-        "drawProb": null,
-        "awayProb": 43,
-        "exactScore": "2-0",
-        "avgGoals": 9.6,
-        "favorite": "home",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 2,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "0-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.6,
-        "draw": null,
-        "away": 1.45,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 162.0,
-          "draw": null,
-          "away": 227.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 53.5,
-        "ev": 0.39,
-        "edge": 15.0,
-        "sources": 5,
-        "components": {
-          "forebet": 0.57,
-          "h2h": 0.667,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.385
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": 15.038,
+        "market_model_gap": -32.946,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -923,7 +402,7 @@
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/bublik-alexander-t0WN9vR6/machac-tomas-S44E7UYr/?mid=hr6BwfJN",
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/a-bublik-t-machac/360768",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -962,20 +441,32 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "awaySurface": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 10303,
+        "homeProb": 91,
+        "awayProb": 9,
+        "url": "https://www.sofascore.com/tennis/match/17218923",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
         "home": 1.43,
@@ -991,152 +482,40 @@
         }
       },
       "ai": {
-        "prediction": "Bublik is likely to win, riding his 3‑0 head‑to‑head advantage and the home‑court edge.",
-        "confidence": 70,
-        "recommendation": "MEDIUM",
-        "reasoning": "Bublik has won all three recent meetings with Machac (100% H2H win rate). Both players share an identical recent form rating of 4.0/10, so there is no clear form advantage. The forebet model assigns a 63 % probability to a home win and the bookmaker odds (1.43 for Bublik vs 2.6 for Machac) reflect a strong market bias toward the home player. With no venue‑specific data to contradict this, the combined signals point to a moderate‑high likelihood of a Bublik victory, though the low form scores keep the upset risk alive."
+        "prediction": "A. Bublik is likely to win at home, leveraging his perfect 3‑0 head‑to‑head record over T. Machac.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "Bublik has never lost to Machac in their three recent meetings, giving him a 100 % H2H win rate. Both players share an identical recent‑form rating of 4.0/10, so form does not differentiate them. The home‑advantage signal is strong: Forebet assigns a 63 % win probability to Bublik and the fan poll is 91 % in his favor. Bookmaker odds (1.43 for Bublik vs 2.60 for Machac) imply a sizable market edge for the home player. While the sample size of H2H matches is limited and there is no specific venue performance data, the convergence of H2H dominance, odds value, and public sentiment tilts the balance toward Bublik."
       },
       "scoring": {
         "pick": "1",
-        "prob": 57.6,
-        "ev": -0.176,
-        "edge": -12.3,
-        "sources": 5,
+        "prob": 55.8,
+        "ev": -0.203,
+        "edge": -14.2,
+        "sources": 7,
         "components": {
           "forebet": 0.63,
           "h2h": 1.0,
           "form": 0.4,
           "opponent": 0.6,
+          "surface": 0.4,
+          "sofascore": 0.91,
           "odds": 0.699
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "B",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -12.33,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "M. Ribecai",
-      "awayTeam": "J. Forejtek",
-      "time": "1:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/forejtek-jonas-A5HTcR5k/ribecai-michele-fNFrUmQq/?mid=zNgaFxGi",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/palermo/m-ribecai-j-forejtek/360776",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 54.0,
-        "homeProb": 46,
-        "drawProb": null,
-        "awayProb": 54,
-        "exactScore": "1-2",
-        "avgGoals": 8.8,
-        "favorite": "away",
-        "gap": 8
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 0,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "1-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.1,
-        "draw": null,
-        "away": 1.65,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 110.0,
-          "draw": null,
-          "away": 149.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 67.7,
-        "ev": 0.117,
-        "edge": 7.1,
-        "sources": 4,
-        "components": {
-          "forebet": 0.54,
-          "form": 0.8,
-          "opponent": 0.6,
-          "odds": 0.606
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": 7.094,
+        "consensus_strength": "strong",
+        "market_model_gap": -14.13,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1152,7 +531,7 @@
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/gaubas-vilius-j3oO3m94/mikrut-luka-Wv7XRRCI/?mid=tCCPivDa",
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/braga/v-gaubas-l-mikrut/360831",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -1191,20 +570,32 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "awaySurface": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 1206,
+        "homeProb": 32,
+        "awayProb": 68,
+        "url": "https://www.sofascore.com/tennis/match/17218974",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
         "home": 2.75,
@@ -1220,600 +611,40 @@
         }
       },
       "ai": {
-        "prediction": "L. Mikrut should take the match, riding his superior recent form and the clear market favoritism.",
+        "prediction": "L. Mikrut is likely to win the match, leveraging his superior recent form and the strong market and model backing.",
         "confidence": 70,
-        "recommendation": "SKIP",
-        "reasoning": "The head‑to‑head is dead‑locked (1‑1), so it offers no decisive edge. Mikrut’s form rating of 8.0 outshines Gaubas’s 6.0, indicating a higher current performance level. The bookmaker odds (Mikrut 1.40, Gaubas 2.75) price Mikrut as a strong favorite, matching the Forebet model’s 69 % away‑win probability. No venue‑specific data are available, but the combination of better form and market consensus outweighs the neutral H2H record. The limited H2H sample and unknown home‑court effect keep the risk moderate."
+        "recommendation": "MEDIUM",
+        "reasoning": "The head‑to‑head record is split 1‑1, offering no clear edge, but Mikrut’s recent form rating of 8.0 outperforms Gaubas’s 6.0, indicating better current performance. The Forebet model assigns a 69 % probability to an away win, and the bookmaker odds (1.40 for Mikrut vs 2.75 for Gaubas) reflect a sizable market bias toward the visitor. No venue‑specific data are available, so any home‑court advantage for Gaubas is unknown, but the odds already price in any such effect. Combining form, predictive model, and odds yields a consistent signal for an away victory, though the even H2H and lack of home data keep the certainty from being higher."
       },
       "scoring": {
         "pick": "2",
-        "prob": 66.5,
-        "ev": -0.068,
-        "edge": -4.9,
-        "sources": 5,
+        "prob": 69.3,
+        "ev": -0.03,
+        "edge": -2.1,
+        "sources": 7,
         "components": {
           "forebet": 0.69,
           "h2h": 0.5,
           "form": 0.8,
           "opponent": 0.4,
+          "surface": 0.8,
+          "sofascore": 0.68,
           "odds": 0.714
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": -4.929,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "S. Waltert",
-      "awayTeam": "H. Sakatsume",
-      "time": "2:00",
-      "league": "TrC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/sakatsume-himeno-zZoU3kJa/waltert-simona-ALs3vJ11/?mid=EHvEukE6",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/samsun/s-waltert-h-sakatsume/360819",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "homeProb": 43,
-        "drawProb": null,
-        "awayProb": 57,
-        "exactScore": "0-2",
-        "avgGoals": 10.3,
-        "favorite": "away",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 0,
-        "awayWins": 3,
-        "lastDate": "09.10.26",
-        "lastScore": "1-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.88,
-        "draw": null,
-        "away": 1.83,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 110.0,
-          "draw": null,
-          "away": 110.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 58.7,
-        "ev": 0.075,
-        "edge": 4.1,
-        "sources": 5,
-        "components": {
-          "forebet": 0.57,
-          "h2h": 1.0,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.546
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": 4.055,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "Z. Bai",
-      "awayTeam": "K. Okamura",
-      "time": "2:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/suzhou/z-bai-k-okamura/360796",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 61.0,
-        "homeProb": 61,
-        "drawProb": null,
-        "awayProb": 39,
-        "exactScore": "2-0",
-        "avgGoals": 9.9,
-        "favorite": "home",
-        "gap": 22
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 61.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.61
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "T. Seyboth Wild",
-      "awayTeam": "F. Meligeni Alves",
-      "time": "2:05",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/meligeni-rodrigues-alves-felipe-rLEXNv74/seyboth-wild-thiago-pO9zJCv1/?mid=rX6toiCC",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/antofagasta/t-seyboth-wild-f-meligeni-alves/360794",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 54.0,
-        "homeProb": 54,
-        "drawProb": null,
-        "awayProb": 46,
-        "exactScore": "2-1",
-        "avgGoals": 9.6,
-        "favorite": "home",
-        "gap": 8
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 1,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.33,
-        "draw": null,
-        "away": 3.0,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 278.0,
-          "draw": null,
-          "away": 200.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 72.2,
-        "ev": -0.039,
-        "edge": -2.9,
-        "sources": 5,
-        "components": {
-          "forebet": 0.54,
-          "h2h": 0.5,
-          "form": 1.0,
-          "opponent": 0.4,
-          "odds": 0.752
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.988,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "Y. Milev",
-      "awayTeam": "C. Sanchez Jover",
-      "time": "2:40",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/milev-yanaki-6HaaZh9U/sanchez-jover-carlos-fLXWkLuE/?mid=z1zbUFve",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/palermo/y-milev-c-sanchez-jover/360825",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 60.0,
-        "homeProb": 60,
-        "drawProb": null,
-        "awayProb": 40,
-        "exactScore": "2-0",
-        "avgGoals": 10.1,
-        "favorite": "home",
-        "gap": 20
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.3,
-        "draw": null,
-        "away": 1.55,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 138.0,
-          "draw": null,
-          "away": 189.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 71.1,
-        "ev": 0.635,
-        "edge": 27.6,
-        "sources": 4,
-        "components": {
-          "forebet": 0.6,
-          "form": 1.0,
-          "opponent": 0.4,
-          "odds": 0.435
         }
       },
       "predictionGrade": "B",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
+        "sofascore_available": true,
+        "gemini_available": true,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": 27.622,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "L. Djere",
-      "awayTeam": "H. Barton",
-      "time": "2:45",
-      "league": "EsC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/barton-hynek-UoDybC2H/djere-laslo-4GGnypTh/?mid=SC44MLsA",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/villena/l-djere-h-barton/360829",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 55.0,
-        "homeProb": 55,
-        "drawProb": null,
-        "awayProb": 45,
-        "exactScore": "2-0",
-        "avgGoals": 10.3,
-        "favorite": "home",
-        "gap": 10
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.5,
-        "draw": null,
-        "away": 2.45,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 189.0,
-          "draw": null,
-          "away": 138.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 64.7,
-        "ev": -0.03,
-        "edge": -2.0,
-        "sources": 4,
-        "components": {
-          "forebet": 0.55,
-          "form": 0.8,
-          "opponent": 0.4,
-          "odds": 0.667
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.967,
+        "h2h_count": 2,
+        "consensus_strength": "moderate",
+        "market_model_gap": -2.129,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1833,7 +664,8 @@
       "emailQualifies": false,
       "skipReasons": [
         "kurs_ponizej_progu",
-        "score_39.3<51.0"
+        "score_44.0<51.0",
+        "kurs_faworyta_3.40>1.28"
       ],
       "forebet": {
         "prediction": "1",
@@ -1871,9 +703,21 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "awaySurface": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
@@ -1907,14 +751,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 39.3,
-        "ev": 0.335,
-        "edge": 9.9,
-        "sources": 4,
+        "prob": 44.0,
+        "ev": 0.495,
+        "edge": 14.6,
+        "sources": 5,
         "components": {
           "forebet": 0.64,
           "form": 0.4,
           "opponent": 0.2,
+          "surface": 0.6,
           "odds": 0.294
         }
       },
@@ -1930,944 +775,7 @@
         "form_available": true,
         "h2h_count": 1,
         "consensus_strength": "weak",
-        "market_model_gap": 9.888,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "M. Frech",
-      "awayTeam": "M. Uchijima",
-      "time": "3:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/m-frech-m-uchijima/360843",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 61.0,
-        "homeProb": 61,
-        "drawProb": null,
-        "awayProb": 39,
-        "exactScore": "2-1",
-        "avgGoals": 9.4,
-        "favorite": "home",
-        "gap": 22
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.392,
-        "draw": null,
-        "away": 3.07,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 250.0,
-          "draw": null,
-          "away": 175.0
-        }
-      },
-      "ai": {
-        "prediction": "Based on the available data, this match appears to be closely balanced, with neither player having a significant edge. M. Frech has no recent H2H record against M. Uchijima, and both players are currently without a win in their last matches. M. Uchijima has shown recent improvement, winning 2 out of their last 3 matches. The odds suggest there is uncertainty in the outcome, with M. Frech being slight favorites due to home advantage.",
-        "confidence": 65,
-        "recommendation": "MEDIUM",
-        "reasoning": ""
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 65.5,
-        "ev": -0.088,
-        "edge": -6.3,
-        "sources": 2,
-        "components": {
-          "forebet": 0.61,
-          "odds": 0.718
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -6.339,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "K. Zavatska",
-      "awayTeam": "R. Zarazua",
-      "time": "3:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/suzhou/k-zavatska-r-zarazua/360804",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 60.0,
-        "homeProb": 60,
-        "drawProb": null,
-        "awayProb": 40,
-        "exactScore": "2-0",
-        "avgGoals": 8.9,
-        "favorite": "home",
-        "gap": 20
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 320.0,
-          "draw": null,
-          "away": 455.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 60.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.6
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Ito",
-      "awayTeam": "A. Parks",
-      "time": "3:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/a-ito-a-parks/360845",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 58.0,
-        "homeProb": 42,
-        "drawProb": null,
-        "awayProb": 58,
-        "exactScore": "0-2",
-        "avgGoals": 8.3,
-        "favorite": "away",
-        "gap": 16
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.28,
-        "draw": null,
-        "away": 1.654,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 138.0,
-          "draw": null,
-          "away": 189.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 59.0,
-        "ev": -0.024,
-        "edge": -1.4,
-        "sources": 2,
-        "components": {
-          "forebet": 0.58,
-          "odds": 0.605
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.459,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "T. Gibson",
-      "awayTeam": "S. Sorribes Tormo",
-      "time": "3:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/t-gibson-s-sorribes-tormo/360844",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_48.6<51.0"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 58.0,
-        "homeProb": 42,
-        "drawProb": null,
-        "awayProb": 58,
-        "exactScore": "0-2",
-        "avgGoals": 9.7,
-        "favorite": "away",
-        "gap": 16
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.448,
-        "draw": null,
-        "away": 2.83,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 189.0,
-          "draw": null,
-          "away": 138.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 48.6,
-        "ev": 0.374,
-        "edge": 13.2,
-        "sources": 2,
-        "components": {
-          "forebet": 0.58,
-          "odds": 0.353
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 13.264,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "D. Kasatkina",
-      "awayTeam": "V. Golubic",
-      "time": "3:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/d-kasatkina-v-golubic/360846",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "homeProb": 43,
-        "drawProb": null,
-        "awayProb": 57,
-        "exactScore": "1-2",
-        "avgGoals": 10.0,
-        "favorite": "away",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.926,
-        "draw": null,
-        "away": 1.909,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 120.0,
-          "draw": null,
-          "away": 120.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 55.1,
-        "ev": 0.051,
-        "edge": 2.7,
-        "sources": 2,
-        "components": {
-          "forebet": 0.57,
-          "odds": 0.524
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 2.717,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "E. Moeller",
-      "awayTeam": "T. Pereira",
-      "time": "3:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/moeller-elmer-SU8MMreH/tiago-pereira-U1XJJHtq/?mid=fa6dOsDc",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/braga/e-moeller-t-pereira/360828",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 57.0,
-        "homeProb": 57,
-        "drawProb": null,
-        "awayProb": 43,
-        "exactScore": "2-0",
-        "avgGoals": 10.0,
-        "favorite": "home",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 4,
-        "homeWins": 3,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "2-1"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.43,
-        "draw": null,
-        "away": 2.65,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 227.0,
-          "draw": null,
-          "away": 162.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 66.4,
-        "ev": -0.05,
-        "edge": -3.5,
-        "sources": 5,
-        "components": {
-          "forebet": 0.57,
-          "h2h": 0.75,
-          "form": 0.8,
-          "opponent": 0.4,
-          "odds": 0.699
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": -3.53,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "K. Saitoh",
-      "awayTeam": "J. D. Hara Friend",
-      "time": "3:00",
-      "league": "Cn3",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/wuning-3/k-saitoh-j-d-hara-friend/360839",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 54.0,
-        "homeProb": 46,
-        "drawProb": null,
-        "awayProb": 54,
-        "exactScore": "1-2",
-        "avgGoals": 10.9,
-        "favorite": "away",
-        "gap": 8
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 4.43,
-        "draw": null,
-        "away": 1.23,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 300.0,
-          "draw": null,
-          "away": 455.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 65.4,
-        "ev": -0.196,
-        "edge": -15.9,
-        "sources": 2,
-        "components": {
-          "forebet": 0.54,
-          "odds": 0.813
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -15.901,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "K. Saitoh",
-      "awayTeam": "A. Santillan",
-      "time": "3:00",
-      "league": "Cn3",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/saitoh-keisuke-fXLWjCZg/santillan-akira-hpXh1pE5/?mid=KKU7Onuo",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/wuning-3/k-saitoh-a-santillan/360759",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 54.0,
-        "homeProb": 54,
-        "drawProb": null,
-        "awayProb": 46,
-        "exactScore": "2-0",
-        "avgGoals": 10.3,
-        "favorite": "home",
-        "gap": 8
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-1"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.25,
-        "draw": null,
-        "away": 1.58,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 125.0,
-          "draw": null,
-          "away": 175.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 74.1,
-        "ev": 0.668,
-        "edge": 29.7,
-        "sources": 4,
-        "components": {
-          "forebet": 0.54,
-          "form": 1.0,
-          "opponent": 0.6,
-          "odds": 0.444
-        }
-      },
-      "predictionGrade": "B",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": 29.656,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "K. Okamura",
-      "awayTeam": "E. Kalieva",
-      "time": "3:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/suzhou/k-okamura-e-kalieva/360836",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_49.5<51.0"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 60.0,
-        "homeProb": 60,
-        "drawProb": null,
-        "awayProb": 40,
-        "exactScore": "2-0",
-        "avgGoals": 9.8,
-        "favorite": "home",
-        "gap": 20
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.88,
-        "draw": null,
-        "away": 1.446,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 175.0,
-          "draw": null,
-          "away": 227.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 49.5,
-        "ev": 0.425,
-        "edge": 14.7,
-        "sources": 2,
-        "components": {
-          "forebet": 0.6,
-          "odds": 0.347
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 14.778,
+        "market_model_gap": 14.588,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2883,7 +791,7 @@
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/giunta-massimo-hQkb3GZ8/moro-canas-alejandro-MkI9xkTq/?mid=Iid8pQK8",
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/palermo/m-giunta-a-moro-canas/360793",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -2922,20 +830,32 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "awaySurface": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 1199,
+        "homeProb": 16,
+        "awayProb": 84,
+        "url": "https://www.sofascore.com/tennis/match/17219016",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
         "home": 2.75,
@@ -2951,37 +871,39 @@
         }
       },
       "ai": {
-        "prediction": "A. Moro Canas is likely to win, leveraging his better recent form and the clear betting market edge.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "The only head‑to‑head meeting (1) was won by Moro Canas, giving him a 100 % record against Giunta. Moro Canas also rates higher in recent form (8.0 vs 6.0), indicating a performance gap. The Forebet model assigns a 62 % probability to an away win, and bookmakers price the away player at 1.4 versus 2.75 for the home side, reflecting strong market confidence. No venue‑specific data are available, so any home‑court advantage for Giunta is unknown, adding uncertainty. Overall, the convergence of form, H2H, and odds points to an away victory, but the limited data set tempers certainty."
+        "prediction": "A. Moro Canas is likely to win, as his recent form (8.0/10) outpaces Giunta’s (6.0/10) and Forebet gives a 62 % chance for the away side.",
+        "confidence": 72,
+        "recommendation": "SKIP",
+        "reasoning": "The head‑to‑head record shows Moro Canas winning the only previous meeting, and the home win rate for Giunta is 0 %. Moro Canas enjoys a clear odds advantage (1.4 vs 2.75) and a 62 % probability from Forebet, reinforcing the away edge. Giunta’s overall form is decent but not as strong, and there is no venue‑specific data to offset the away advantage. Fan support is heavily skewed toward Moro Canas (84 % of 1,199 votes). Overall, the statistical signals favor an away"
       },
       "scoring": {
         "pick": "2",
-        "prob": 66.8,
-        "ev": -0.065,
-        "edge": -4.6,
-        "sources": 4,
+        "prob": 70.6,
+        "ev": -0.012,
+        "edge": -0.9,
+        "sources": 6,
         "components": {
           "forebet": 0.62,
           "form": 0.8,
           "opponent": 0.4,
+          "surface": 0.8,
+          "sofascore": 0.84,
           "odds": 0.714
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "B",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -4.629,
+        "consensus_strength": "moderate",
+        "market_model_gap": -0.829,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3042,9 +964,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.153,
+        "home": 1.158,
         "draw": null,
-        "away": 6.04,
+        "away": 5.91,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3062,13 +984,13 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 78.1,
-        "ev": -0.099,
-        "edge": -8.6,
+        "prob": 78.0,
+        "ev": -0.097,
+        "edge": -8.4,
         "sources": 2,
         "components": {
           "forebet": 0.72,
-          "odds": 0.867
+          "odds": 0.864
         }
       },
       "predictionGrade": "D",
@@ -3083,7 +1005,7 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -8.63,
+        "market_model_gap": -8.356,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3102,8 +1024,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -3124,15 +1045,27 @@
         "lastScore": null
       },
       "form": {
-        "home": [],
-        "away": [],
+        "home": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": null,
         "homeSurface": null,
         "awaySurface": null,
         "surfaceIsProxy": null,
-        "source": null
+        "source": "sofascore"
       },
       "sofascore": {
         "found": null,
@@ -3145,12 +1078,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
+        "home": 1.25,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "away": 3.75,
+        "source": "sofascore",
+        "bookmaker": "SofaScore",
+        "note": null,
         "forebet": {
           "home": 303.0,
           "draw": null,
@@ -3165,28 +1098,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 69.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
+        "prob": 60.7,
+        "ev": -0.242,
+        "edge": -19.3,
+        "sources": 4,
         "components": {
-          "forebet": 0.69
+          "forebet": 0.69,
+          "form": 0.6,
+          "opponent": 0.4,
+          "odds": 0.8
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 1,
-        "quality_score": 0.2,
+        "quality_score": 0.55,
         "h2h_available": false,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
+        "odds_available": true,
+        "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
+        "market_model_gap": -19.3,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -3201,7 +1137,7 @@
       "matchUrl": null,
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/j-lehecka-n-borges/360797",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -3234,14 +1170,14 @@
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 100,
+        "homeProb": 66,
+        "awayProb": 34,
+        "url": "https://www.sofascore.com/tennis/match/17289984",
+        "orientation": "unknown",
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
         "home": 1.395,
@@ -3257,1609 +1193,36 @@
         }
       },
       "ai": {
-        "prediction": "J. Lehecka is expected to win the match, backed by a strong implied probability from both the bookmaker and the Forebet model.",
-        "confidence": 71,
+        "prediction": "J. Lehecka is expected to win the match, leveraging the strong home‑win probability indicated by both the forebet model and the betting market.",
+        "confidence": 66,
         "recommendation": "MEDIUM",
-        "reasoning": "There is no head‑to‑head history or recent form data for either player, so the analysis relies on market and model signals. The bookmaker odds of 1.395 translate to an implied win probability of about 72%, closely matching Forebet’s 67% home‑win forecast. Both sources therefore place Lehecka as the clear favorite despite the lack of concrete performance metrics. The absence of any data on surface preference or recent results adds uncertainty, but the convergence of odds and model probability provides a reasonable edge. Overall risk is moderate given the limited information."
+        "reasoning": "There is no head‑to‑head history or recent form data to inform the analysis, so the assessment relies on market signals. The forebet model assigns a 67 % chance to a home victory, closely matching the implied probability from the bookmaker odds (1.395 ≈ 72 % implied win probability). The odds also reflect a clear price advantage for Lehecka, with the away odds at 3.2 indicating the market views him as the stronger contender. While the lack of performance data introduces uncertainty, the convergence of the predictive model and betting odds provides a modest edge. Overall risk remains moderate due to the data gaps."
       },
       "scoring": {
         "pick": "1",
-        "prob": 69.0,
-        "ev": -0.038,
-        "edge": -2.7,
-        "sources": 2,
+        "prob": 68.4,
+        "ev": -0.045,
+        "edge": -3.2,
+        "sources": 3,
         "components": {
           "forebet": 0.67,
+          "sofascore": 0.66,
           "odds": 0.717
         }
       },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.685,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "T. A. Tirante",
-      "awayTeam": "R. Jodar",
-      "time": "4:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/t-a-tirante-r-jodar/360806",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 52.0,
-        "homeProb": 48,
-        "drawProb": null,
-        "awayProb": 52,
-        "exactScore": "0-2",
-        "avgGoals": 10.8,
-        "favorite": "away",
-        "gap": 4
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 3.15,
-        "draw": null,
-        "away": 1.407,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 190.0,
-          "draw": null,
-          "away": 250.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 59.9,
-        "ev": -0.157,
-        "edge": -11.1,
-        "sources": 2,
-        "components": {
-          "forebet": 0.52,
-          "odds": 0.711
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -11.173,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "C. Ugo Carabelli",
-      "awayTeam": "F. Auger-Aliassime",
-      "time": "4:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/c-ugo-carabelli-f-auger-aliassime/360801",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 68.0,
-        "homeProb": 32,
-        "drawProb": null,
-        "awayProb": 68,
-        "exactScore": "0-2",
-        "avgGoals": 7.7,
-        "favorite": "away",
-        "gap": 36
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 14.86,
-        "draw": null,
-        "away": 1.038,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 79.8,
-        "ev": -0.172,
-        "edge": -16.5,
-        "sources": 2,
-        "components": {
-          "forebet": 0.68,
-          "odds": 0.963
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -16.539,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "E. Ribeiro",
-      "awayTeam": "L. Midon",
-      "time": "4:05",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/midon-lautaro-t6jmJKD3/ribeiro-eduardo-ObAxbvT5/?mid=Yo9Hg0rm",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/antofagasta/e-ribeiro-l-midon/360832",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 56.0,
-        "homeProb": 44,
-        "drawProb": null,
-        "awayProb": 56,
-        "exactScore": "1-2",
-        "avgGoals": 9.4,
-        "favorite": "away",
-        "gap": 12
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 1,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "0-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.55,
-        "draw": null,
-        "away": 1.45,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 150.0,
-          "draw": null,
-          "away": 200.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 67.5,
-        "ev": -0.021,
-        "edge": -1.5,
-        "sources": 5,
-        "components": {
-          "forebet": 0.56,
-          "h2h": 0.5,
-          "form": 0.8,
-          "opponent": 0.6,
-          "odds": 0.69
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.466,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Mannarino",
-      "awayTeam": "F. Cobolli",
-      "time": "4:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/cobolli-flavio-zDtaCcPe/mannarino-adrian-fLOdtByM/?mid=YXVtR0It",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/a-mannarino-f-cobolli/360761",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_40.0<51.0"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 62.0,
-        "homeProb": 38,
-        "drawProb": null,
-        "awayProb": 62,
-        "exactScore": "0-2",
-        "avgGoals": 9.7,
-        "favorite": "away",
-        "gap": 24
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-1"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "away": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.5,
-        "draw": null,
-        "away": 1.45,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 160.0,
-          "draw": null,
-          "away": 200.0
-        }
-      },
-      "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 40.0,
-        "ev": -0.421,
-        "edge": -29.0,
-        "sources": 4,
-        "components": {
-          "forebet": 0.62,
-          "form": 0.2,
-          "opponent": 0.4,
-          "odds": 0.69
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -28.966,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Gea",
-      "awayTeam": "U. Humbert",
-      "time": "4:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/a-gea-u-humbert/360762",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 58.0,
-        "homeProb": 58,
-        "drawProb": null,
-        "awayProb": 42,
-        "exactScore": "2-0",
-        "avgGoals": 10.3,
-        "favorite": "home",
-        "gap": 16
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 125.0,
-          "draw": null,
-          "away": 100.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 58.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.58
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "B. Shelton",
-      "awayTeam": "D. Altmaier",
-      "time": "4:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/altmaier-daniel-IPR8h9gM/shelton-ben-QNuG0Gzb/?mid=YulYzuJ8",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/b-shelton-d-altmaier/360786",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 57.0,
-        "homeProb": 57,
-        "drawProb": null,
-        "awayProb": 43,
-        "exactScore": "2-0",
-        "avgGoals": 9.7,
-        "favorite": "home",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 1,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.08,
-        "draw": null,
-        "away": 6.75,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 909.0,
-          "draw": null,
-          "away": 550.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 58.6,
-        "ev": -0.367,
-        "edge": -34.0,
-        "sources": 5,
-        "components": {
-          "forebet": 0.57,
-          "h2h": 0.5,
-          "form": 0.4,
-          "opponent": 0.8,
-          "odds": 0.926
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": -33.993,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "R. Sakamoto",
-      "awayTeam": "A. Rublev",
-      "time": "4:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/r-sakamoto-a-rublev/360766",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 51.0,
-        "homeProb": 49,
-        "drawProb": null,
-        "awayProb": 51,
-        "exactScore": "0-2",
-        "avgGoals": 10.0,
-        "favorite": "away",
-        "gap": 2
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 210.0,
-          "draw": null,
-          "away": 278.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 51.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.51
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "P. Llamas Ruiz",
-      "awayTeam": "P. Martinez",
-      "time": "4:25",
-      "league": "EsC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/llamas-ruiz-pablo-QTqDJ1gP/martinez-pedro-WtiN88eD/?mid=hjWPTXPG",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/villena/p-llamas-ruiz-p-martinez/360833",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 62.0,
-        "homeProb": 38,
-        "drawProb": null,
-        "awayProb": 62,
-        "exactScore": "0-2",
-        "avgGoals": 10.0,
-        "favorite": "away",
-        "gap": 24
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 0,
-        "awayWins": 2,
-        "lastDate": "19.01.24",
-        "lastScore": "0-2"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "away": [
-          "W",
-          "W",
-          "L",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.63,
-        "draw": null,
-        "away": 2.15,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 161.0,
-          "draw": null,
-          "away": 120.0
-        }
-      },
-      "ai": {
-        "prediction": "Martinez will win, as the 2‑0 H2H advantage and the 62% forebet probability for the away side outweigh the home odds edge.",
-        "confidence": 65,
-        "recommendation": "SKIP",
-        "reasoning": "The head‑to‑head record shows Martinez winning both of the last two meetings,"
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 58.6,
-        "ev": 0.259,
-        "edge": 12.1,
-        "sources": 5,
-        "components": {
-          "forebet": 0.62,
-          "h2h": 1.0,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.465
-        }
-      },
       "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
+        "quality_score": 0.7,
+        "h2h_available": false,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": 12.088,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "T. Preston",
-      "awayTeam": "A. Krueger",
-      "time": "4:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/t-preston-a-krueger/360848",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 61.0,
-        "homeProb": 39,
-        "drawProb": null,
-        "awayProb": 61,
-        "exactScore": "0-2",
-        "avgGoals": 8.8,
-        "favorite": "away",
-        "gap": 22
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.4,
-        "draw": null,
-        "away": 1.595,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 120.0,
-          "draw": null,
-          "away": 161.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 61.7,
-        "ev": -0.016,
-        "edge": -1.0,
-        "sources": 2,
-        "components": {
-          "forebet": 0.61,
-          "odds": 0.627
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
         "form_available": false,
         "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -0.996,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Kachmazov",
-      "awayTeam": "O. Jasika",
-      "time": "4:30",
-      "league": "Cn3",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/wuning-3/a-kachmazov-o-jasika/360838",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 58.0,
-        "homeProb": 58,
-        "drawProb": null,
-        "awayProb": 42,
-        "exactScore": "2-0",
-        "avgGoals": 10.2,
-        "favorite": "home",
-        "gap": 16
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.461,
-        "draw": null,
-        "away": 2.83,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 227.0,
-          "draw": null,
-          "away": 162.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 62.4,
-        "ev": -0.089,
-        "edge": -6.1,
-        "sources": 2,
-        "components": {
-          "forebet": 0.58,
-          "odds": 0.684
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -6.046,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "S. Kenin",
-      "awayTeam": "K. Rakhimova",
-      "time": "4:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/s-kenin-k-rakhimova/360847",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "homeProb": 43,
-        "drawProb": null,
-        "awayProb": 57,
-        "exactScore": "0-2",
-        "avgGoals": 10.0,
-        "favorite": "away",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.26,
-        "draw": null,
-        "away": 1.667,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 120.0,
-          "draw": null,
-          "away": 161.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 58.2,
-        "ev": -0.029,
-        "edge": -1.7,
-        "sources": 2,
-        "components": {
-          "forebet": 0.57,
-          "odds": 0.6
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -1.788,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "G. Ruse",
-      "awayTeam": "Y. Putintseva",
-      "time": "4:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/g-ruse-y-putintseva/360849",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 51.0,
-        "homeProb": 51,
-        "drawProb": null,
-        "awayProb": 49,
-        "exactScore": "2-1",
-        "avgGoals": 9.9,
-        "favorite": "home",
-        "gap": 2
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.662,
-        "draw": null,
-        "away": 2.27,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 161.0,
-          "draw": null,
-          "away": 120.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 54.8,
-        "ev": -0.089,
-        "edge": -5.3,
-        "sources": 2,
-        "components": {
-          "forebet": 0.51,
-          "odds": 0.602
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -5.368,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "P. Stearns",
-      "awayTeam": "H. Shi",
-      "time": "4:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/wuhan/p-stearns-h-shi/360850",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu",
-        "score_40.2<51.0"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 51.0,
-        "homeProb": 49,
-        "drawProb": null,
-        "awayProb": 51,
-        "exactScore": "0-2",
-        "avgGoals": 10.4,
-        "favorite": "away",
-        "gap": 2
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.262,
-        "draw": null,
-        "away": 3.98,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 40.2,
-        "ev": 0.601,
-        "edge": 15.1,
-        "sources": 2,
-        "components": {
-          "forebet": 0.51,
-          "odds": 0.251
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 15.074,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "F. Sun",
-      "awayTeam": "A. Kachmazov",
-      "time": "4:40",
-      "league": "Cn3",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/wuning-3/f-sun-a-kachmazov/360809",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 58.0,
-        "homeProb": 42,
-        "drawProb": null,
-        "awayProb": 58,
-        "exactScore": "0-2",
-        "avgGoals": 10.5,
-        "favorite": "away",
-        "gap": 16
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 120.0,
-          "draw": null,
-          "away": 161.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 58.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.58
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "B. V. Andreescu",
-      "awayTeam": "A. Blinkova",
-      "time": "4:55",
-      "league": "TrC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/samsun/b-v-andreescu-a-blinkova/360827",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 60.0,
-        "homeProb": 40,
-        "drawProb": null,
-        "awayProb": 60,
-        "exactScore": "0-2",
-        "avgGoals": 10.1,
-        "favorite": "away",
-        "gap": 20
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.833,
-        "draw": null,
-        "away": 2.01,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 105.0,
-          "draw": null,
-          "away": 118.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 55.7,
-        "ev": 0.12,
-        "edge": 6.0,
-        "sources": 2,
-        "components": {
-          "forebet": 0.6,
-          "odds": 0.498
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 5.949,
+        "consensus_strength": "moderate",
+        "market_model_gap": -3.285,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4875,7 +1238,7 @@
       "matchUrl": null,
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/suzhou/r-sramkova-r-zarazua/360840",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -4908,14 +1271,14 @@
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
+        "found": true,
+        "votes": 797,
+        "homeProb": 13,
+        "awayProb": 87,
+        "url": "https://www.sofascore.com/tennis/match/17219159",
+        "orientation": "unknown",
         "unavailable": false,
-        "skipReason": "no_vote"
+        "skipReason": null
       },
       "odds": {
         "home": 1.84,
@@ -4931,149 +1294,36 @@
         }
       },
       "ai": {
-        "prediction": "I expect the match to end with a draw, considering the lack of clear head-to-head patterns and the absence of recent form data for both players. The odds value leans towards an undecided outcome.",
-        "confidence": 0,
+        "prediction": "R. Sramkova is likely to win at home, backed by the 70% forebet win probability and slightly shorter odds.",
+        "confidence": 62,
         "recommendation": "MEDIUM",
-        "reasoning": ""
+        "reasoning": "There is no head‑to‑head record or recent form data for either player, so the analysis leans on the available market signals. The bookmaker odds of 1.84 for Sramkova translate to an implied probability of about 54%, while forebet assigns a 70% win chance, suggesting the market undervalues the home player. The home venue typically confers a modest advantage, and no contrary performance metrics are present. Fan voting heavily favors Zarazua (87%), but fan sentiment rarely predicts match outcomes in tennis. Overall, the home side has a modest edge but uncertainty remains due to the lack of concrete performance data."
       },
       "scoring": {
         "pick": "1",
-        "prob": 63.5,
-        "ev": 0.168,
-        "edge": 9.1,
-        "sources": 2,
+        "prob": 54.8,
+        "ev": 0.008,
+        "edge": 0.4,
+        "sources": 3,
         "components": {
           "forebet": 0.7,
+          "sofascore": 0.13,
           "odds": 0.543
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.55,
+        "sources_available": 3,
+        "quality_score": 0.7,
         "h2h_available": false,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": 9.152,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "J. D. Hara Friend",
-      "awayTeam": "R. Seggerman",
-      "time": "5:25",
-      "league": "Cn3",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/friend-jay-dylan-hara-IDWtGL8C/seggerman-ryan-YqIc03QP/?mid=2i884lak",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/wuning-3/j-d-hara-friend-r-seggerman/360800",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 62.0,
-        "homeProb": 62,
-        "drawProb": null,
-        "awayProb": 38,
-        "exactScore": "2-0",
-        "avgGoals": 10.6,
-        "favorite": "home",
-        "gap": 24
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.5,
-        "draw": null,
-        "away": 2.4,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 189.0,
-          "draw": null,
-          "away": 138.0
-        }
-      },
-      "ai": {
-        "prediction": "J. D. Hara Friend has a strong head-to-head record against R. Seggerman, winning 4 out of 5 matches. J. D. Hara Friend is in excellent form, having won their last 3 matches at home, while R. Seggerman has not won a match away from home in the last 3 attempts. The odds suggest a clear value for picking J. D. Hara Friend at 1.5, indicating a low probability of an away win.",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": ""
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 62.0,
-        "ev": -0.07,
-        "edge": -4.7,
-        "sources": 4,
-        "components": {
-          "forebet": 0.62,
-          "form": 0.8,
-          "opponent": 0.2,
-          "odds": 0.667
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -4.667,
+        "market_model_gap": 0.452,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -5082,16 +1332,18 @@
     {
       "homeTeam": "E. Dalla Valle",
       "awayTeam": "F. Passaro",
-      "time": "5:30",
+      "time": "5:50",
       "league": null,
       "country": null,
       "source": "forebet",
       "matchUrl": "https://www.livesport.com/pl/mecz/tenis/dalla-valle-enrico-be9jPNnl/passaro-francesco-6iHVMexn/?mid=tUZ2MkIj",
       "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/palermo/e-dalla-valle-f-passaro/360830",
-      "qualifies": true,
+      "qualifies": false,
       "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_faworyta_2.40>1.50"
+      ],
       "forebet": {
         "prediction": "1",
         "probability": 67.0,
@@ -5128,25 +1380,37 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "awaySurface": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
+        "found": true,
+        "votes": 1499,
+        "homeProb": 31,
+        "awayProb": 69,
+        "url": "https://www.sofascore.com/tennis/match/17219018",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
       },
       "odds": {
-        "home": 2.3,
+        "home": 2.4,
         "draw": null,
-        "away": 1.53,
+        "away": 1.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -5157,503 +1421,40 @@
         }
       },
       "ai": {
-        "prediction": "E. Dalla Valle is likely to win, riding his 4‑0 head‑to‑head edge and superior recent form despite the market odds favoring Passaro.",
-        "confidence": 70,
-        "recommendation": "MEDIUM",
-        "reasoning": "Dalla Valle has a perfect 4‑0 record against Passaro, giving him a 100 % H2H win rate. His overall recent form rating (8.0/10) is notably higher than Passaro’s 6.0/10. The Forebet model also assigns a 67 % probability to a home win. However, bookmaker odds (2.3 for Dalla Valle vs 1.53 for Passaro) imply the market sees Passaro as the stronger player, suggesting factors like ranking, surface preference, or unseen injuries may be at play. The lack of venue‑specific data for both players adds uncertainty. Balancing the strong direct record and form against the odds discrepancy yields a moderate‑high confidence in a home win."
+        "prediction": "E. Dalla Valle is strongly indicated to win based on a dominant head-to-head record and superior recent form, despite surprising bookmaker odds favoring Passaro.",
+        "confidence": 75,
+        "recommendation": "HIGH",
+        "reasoning": "E. Dalla Valle holds a commanding 4-0 head-to-head advantage over F. Passaro in their last four meetings, indicating a clear historical dominance in this specific matchup. Dalla Valle also boasts significantly better recent form, rated at 8.0/10 compared to Passaro's 6.0/10. Further supporting this, the Forebet prediction gives Dalla Valle a 67% chance of victory as the home player. However, bookmaker odds are notably skewed in favor of Passaro at 1.5, implying a 66.6% win probability, directly contradicting the statistical and historical data. This significant discrepancy, coupled with a fan vote of 69% for Passaro, suggests a potential mispricing in the market, creating a strong value opportunity on Dalla Valle at odds of 2.4."
       },
       "scoring": {
         "pick": "1",
-        "prob": 67.1,
-        "ev": 0.543,
-        "edge": 23.6,
-        "sources": 5,
+        "prob": 67.7,
+        "ev": 0.625,
+        "edge": 26.0,
+        "sources": 7,
         "components": {
           "forebet": 0.67,
           "h2h": 1.0,
           "form": 0.8,
           "opponent": 0.4,
-          "odds": 0.435
+          "surface": 0.8,
+          "sofascore": 0.31,
+          "odds": 0.417
         }
       },
-      "predictionGrade": "B",
+      "predictionGrade": "A",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": 23.622,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "M. Pucinelli de Almeida",
-      "awayTeam": "J. Reis Da Silva",
-      "time": "5:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/pucinelli-de-almeida-matheus-6J1eXqaF/reis-da-silva-joao-lucas-0fnJ8Cja/?mid=hpTClHaL",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/antofagasta/m-pucinelli-de-almeida-j-reis-da-silva/360792",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 57.0,
-        "homeProb": 57,
-        "drawProb": null,
-        "awayProb": 43,
-        "exactScore": "2-0",
-        "avgGoals": 10.6,
-        "favorite": "home",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 4,
-        "homeWins": 4,
-        "awayWins": 0,
-        "lastDate": "30.09.26",
-        "lastScore": "1-2"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "away": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.5,
-        "draw": null,
-        "away": 2.45,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 189.0,
-          "draw": null,
-          "away": 138.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 68.3,
-        "ev": 0.025,
-        "edge": 1.7,
-        "sources": 5,
-        "components": {
-          "forebet": 0.57,
-          "h2h": 1.0,
-          "form": 0.8,
-          "opponent": 0.4,
-          "odds": 0.667
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 4,
-        "consensus_strength": "weak",
-        "market_model_gap": 1.633,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "M. Berrettini",
-      "awayTeam": "B. Nakashima",
-      "time": "5:50",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/berrettini-matteo-OhwtM7N8/nakashima-brandon-ETGnbrpH/?mid=AehP8J2C",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/m-berrettini-b-nakashima/360763",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_44.0<51.0"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 53.0,
-        "homeProb": 53,
-        "drawProb": null,
-        "awayProb": 47,
-        "exactScore": "2-0",
-        "avgGoals": 10.2,
-        "favorite": "home",
-        "gap": 6
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 1,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "0-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "away": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.25,
-        "draw": null,
-        "away": 1.55,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 130.0,
-          "draw": null,
-          "away": 161.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 44.0,
-        "ev": -0.011,
-        "edge": -0.5,
-        "sources": 5,
-        "components": {
-          "forebet": 0.53,
-          "h2h": 0.5,
-          "form": 0.4,
-          "opponent": 0.4,
-          "odds": 0.444
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": -0.444,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Falei",
-      "awayTeam": "R. Sramkova",
-      "time": "6:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/falei-aliona-xIMFUBN3/sramkova-rebecca-WUQY7p9b/?mid=6a7fxQGk",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/suzhou/a-falei-r-sramkova/360805",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_47.6<51.0"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 56.0,
-        "homeProb": 56,
-        "drawProb": null,
-        "awayProb": 44,
-        "exactScore": "2-0",
-        "avgGoals": 9.7,
-        "favorite": "home",
-        "gap": 12
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 0,
-        "awayWins": 2,
-        "lastDate": "09.10.26",
-        "lastScore": "1-2"
-      },
-      "form": {
-        "home": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.35,
-        "draw": null,
-        "away": 1.5,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 150.0,
-          "draw": null,
-          "away": 189.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 47.6,
-        "ev": 0.118,
-        "edge": 5.0,
-        "sources": 5,
-        "components": {
-          "forebet": 0.56,
-          "h2h": 0.0,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.426
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
-        "market_model_gap": 5.047,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "Q. Halys",
-      "awayTeam": "A. Blockx",
-      "time": "6:15",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/blockx-alexander-xll0TzGG/halys-quentin-EDve8Ljh/?mid=jJ9iq2q9",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/q-halys-a-blockx/360772",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "score_47.1<51.0"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 62.0,
-        "homeProb": 38,
-        "drawProb": null,
-        "awayProb": 62,
-        "exactScore": "0-2",
-        "avgGoals": 11.2,
-        "favorite": "away",
-        "gap": 24
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 1,
-        "awayWins": 0,
-        "lastDate": "09.10.26",
-        "lastScore": "2-1"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "away": [
-          "L",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.95,
-        "draw": null,
-        "away": 1.75,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 100.0,
-          "draw": null,
-          "away": 125.0
-        }
-      },
-      "ai": {
-        "prediction": "Based on the strong home record (4/5 wins) and Q. Halys' recent superior form, I predict a Q. Halys victory. Q. Halys has won their last two matches, while A. Blockx has not won a match in the last three.",
-        "confidence": 80,
-        "recommendation": "MEDIUM",
-        "reasoning": ""
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 47.1,
-        "ev": -0.177,
-        "edge": -10.1,
-        "sources": 4,
-        "components": {
-          "forebet": 0.62,
-          "form": 0.4,
-          "opponent": 0.4,
-          "odds": 0.571
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.85,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -10.043,
+        "consensus_strength": "moderate",
+        "market_model_gap": 26.033,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -5672,8 +1473,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -5694,15 +1494,27 @@
         "lastScore": null
       },
       "form": {
-        "home": [],
-        "away": [],
+        "home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": null,
         "homeSurface": null,
         "awaySurface": null,
         "surfaceIsProxy": null,
-        "source": null
+        "source": "sofascore"
       },
       "sofascore": {
         "found": null,
@@ -5715,12 +1527,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
+        "home": 1.1,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
+        "away": 7.0,
+        "source": "sofascore",
+        "bookmaker": "SofaScore",
+        "note": null,
         "forebet": {
           "home": 909.0,
           "draw": null,
@@ -5735,28 +1547,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 64.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
+        "prob": 70.1,
+        "ev": -0.229,
+        "edge": -20.8,
+        "sources": 4,
         "components": {
-          "forebet": 0.64
+          "forebet": 0.64,
+          "form": 0.8,
+          "opponent": 0.4,
+          "odds": 0.909
         }
       },
-      "predictionGrade": "F",
+      "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 1,
-        "quality_score": 0.2,
+        "quality_score": 0.55,
         "h2h_available": false,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
+        "odds_available": true,
+        "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
+        "market_model_gap": -20.809,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -5812,9 +1627,21 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "awaySurface": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
@@ -5848,15 +1675,16 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 67.1,
-        "ev": -0.107,
-        "edge": -8.1,
-        "sources": 5,
+        "prob": 65.6,
+        "ev": -0.127,
+        "edge": -9.6,
+        "sources": 6,
         "components": {
           "forebet": 0.64,
           "h2h": 0.667,
           "form": 0.6,
           "opponent": 0.8,
+          "surface": 0.6,
           "odds": 0.752
         }
       },
@@ -5872,774 +1700,7 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "weak",
-        "market_model_gap": -8.088,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "Q. Zheng",
-      "awayTeam": "E. Svitolina",
-      "time": "7:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/beijing/q-zheng-e-svitolina/360785",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "homeProb": 43,
-        "drawProb": null,
-        "awayProb": 57,
-        "exactScore": "0-2",
-        "avgGoals": 9.7,
-        "favorite": "away",
-        "gap": 14
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 110.0,
-          "draw": null,
-          "away": 137.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 57.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.57
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "J. C. Prado Angelo",
-      "awayTeam": "M. Tobon",
-      "time": "7:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/prado-angelo-juan-carlos-0vH8F28D/tobon-miguel-jr-xpSwNcad/?mid=0fKkfRZj",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/antofagasta/j-c-prado-angelo-m-tobon/360834",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 52.0,
-        "homeProb": 52,
-        "drawProb": null,
-        "awayProb": 48,
-        "exactScore": "2-1",
-        "avgGoals": 10.0,
-        "favorite": "home",
-        "gap": 4
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "clay",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.33,
-        "draw": null,
-        "away": 3.1,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 278.0,
-          "draw": null,
-          "away": 200.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 61.7,
-        "ev": -0.18,
-        "edge": -13.5,
-        "sources": 2,
-        "components": {
-          "forebet": 0.52,
-          "odds": 0.752
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.45,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -13.488,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. De Minaur",
-      "awayTeam": "A. Molcan",
-      "time": "7:30",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/de-minaur-alex-EZgZ9Xfh/molcan-alex-drgiRTl7/?mid=fLqHmk5b",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/a-de-minaur-a-molcan/360767",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 51.0,
-        "homeProb": 51,
-        "drawProb": null,
-        "awayProb": 48,
-        "exactScore": "2-0",
-        "avgGoals": 12.1,
-        "favorite": "home",
-        "gap": 3
-      },
-      "h2h": {
-        "total": 1,
-        "homeWins": 0,
-        "awayWins": 1,
-        "lastDate": "20.05.22",
-        "lastScore": "0-2"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.3,
-        "draw": null,
-        "away": 3.15,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 278.0,
-          "draw": null,
-          "away": 210.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 65.3,
-        "ev": -0.151,
-        "edge": -11.6,
-        "sources": 4,
-        "components": {
-          "forebet": 0.51,
-          "form": 0.8,
-          "opponent": 0.4,
-          "odds": 0.769
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": -11.623,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Davidovich Fokina",
-      "awayTeam": "J. Brooksby",
-      "time": "8:00",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/brooksby-jenson-MoOtVkbN/davidovich-fokina-alejandro-0zQXLfz4/?mid=tWr7bGXi",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/a-davidovich-fokina-j-brooksby/360802",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 54.0,
-        "homeProb": 54,
-        "drawProb": null,
-        "awayProb": 46,
-        "exactScore": "2-0",
-        "avgGoals": 12.4,
-        "favorite": "home",
-        "gap": 8
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 2,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "W"
-        ],
-        "away": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.38,
-        "draw": null,
-        "away": 2.8,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 250.0,
-          "draw": null,
-          "away": 190.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 65.4,
-        "ev": -0.097,
-        "edge": -7.0,
-        "sources": 5,
-        "components": {
-          "forebet": 0.54,
-          "h2h": 0.667,
-          "form": 0.8,
-          "opponent": 0.4,
-          "odds": 0.725
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -7.064,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "K. Khachanov",
-      "awayTeam": "A. Fery",
-      "time": "8:50",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/k-khachanov-a-fery/360782",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow",
-        "zrodla_1<2"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 53.0,
-        "homeProb": 53,
-        "drawProb": null,
-        "awayProb": 47,
-        "exactScore": "2-0",
-        "avgGoals": 10.7,
-        "favorite": "home",
-        "gap": 6
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null
-      },
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_brak_eventu",
-        "forebet": {
-          "home": 227.0,
-          "draw": null,
-          "away": 175.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 53.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
-        "components": {
-          "forebet": 0.53
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.2,
-        "h2h_available": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "insufficient_data"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "A. Aksu",
-      "awayTeam": "F. Crawley",
-      "time": "9:05",
-      "league": "TrC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/aksu-ayla-rDEdDdEe/crawley-fiona-UJuILIk9/?mid=YyCaUafo",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/samsun/a-aksu-f-crawley/360814",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 56.0,
-        "homeProb": 44,
-        "drawProb": null,
-        "awayProb": 56,
-        "exactScore": "1-2",
-        "avgGoals": 10.3,
-        "favorite": "away",
-        "gap": 12
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 2,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "2-1"
-      },
-      "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 2.75,
-        "draw": null,
-        "away": 1.4,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 175.0,
-          "draw": null,
-          "away": 227.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 54.6,
-        "ev": -0.236,
-        "edge": -16.9,
-        "sources": 5,
-        "components": {
-          "forebet": 0.56,
-          "h2h": 0.333,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.714
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -16.829,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "F. Cerundolo",
-      "awayTeam": "R. Safiullin",
-      "time": "9:10",
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/cerundolo-francisco-lWQ3G6gB/safiullin-roman-IBpggNog/?mid=88kiYSHO",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/shanghai/f-cerundolo-r-safiullin/360770",
-      "qualifies": true,
-      "channelQualifies": false,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "2",
-        "probability": 52.0,
-        "homeProb": 48,
-        "drawProb": null,
-        "awayProb": 52,
-        "exactScore": "0-2",
-        "avgGoals": 11.4,
-        "favorite": "away",
-        "gap": 4
-      },
-      "h2h": {
-        "total": 3,
-        "homeWins": 2,
-        "awayWins": 1,
-        "lastDate": "09.10.26",
-        "lastScore": "2-0"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "L"
-        ],
-        "away": [
-          "L",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
-        "source": null
-      },
-      "sofascore": {
-        "found": false,
-        "votes": 0,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": true,
-        "skipReason": "sofascore_unreachable"
-      },
-      "odds": {
-        "home": 1.85,
-        "draw": null,
-        "away": 1.85,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 110.0,
-          "draw": null,
-          "away": 110.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 51.5,
-        "ev": -0.047,
-        "edge": -2.6,
-        "sources": 5,
-        "components": {
-          "forebet": 0.52,
-          "h2h": 0.333,
-          "form": 0.6,
-          "opponent": 0.4,
-          "odds": 0.541
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -2.554,
+        "market_model_gap": -9.588,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -6696,9 +1757,21 @@
         "homeAtHome": [],
         "awayAtAway": [],
         "surface": "hard",
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": true,
+        "homeSurface": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "awaySurface": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surfaceIsProxy": null,
         "source": null
       },
       "sofascore": {
@@ -6732,19 +1805,20 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 69.1,
-        "ev": -0.115,
-        "edge": -9.0,
-        "sources": 5,
+        "prob": 63.0,
+        "ev": -0.194,
+        "edge": -15.1,
+        "sources": 6,
         "components": {
           "forebet": 0.76,
           "h2h": 1.0,
           "form": 0.6,
           "opponent": 0.6,
+          "surface": 0.4,
           "odds": 0.781
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "D",
       "dataQuality": {
         "sources_available": 2,
         "quality_score": 0.8,
@@ -6756,7 +1830,7 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "weak",
-        "market_model_gap": -9.025,
+        "market_model_gap": -15.125,
         "skip_reason": null
       },
       "sidesReversed": false,
