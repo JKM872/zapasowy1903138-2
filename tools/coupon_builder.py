@@ -233,7 +233,7 @@ def superbet_index(date: str) -> Dict[str, List[Dict[str, Any]]]:
             prices = {}
             for od in ev.get('odds') or []:
                 # Rynek „Mecz" / „Zwycięzca": kody 1/2 (piłka ma też X).
-                if od.get('code') in ('1', '2') and od.get('status') == 'active' \
+                if od.get('code') in ('1', 'X', '2') and od.get('status') == 'active' \
                         and re.search(r'mecz|zwyci', str(od.get('marketName')), re.I):
                     prices.setdefault(od['code'], od.get('price'))
             rows.append({'home': parts[0].strip(), 'away': parts[1].strip(),

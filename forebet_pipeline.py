@@ -1224,6 +1224,43 @@ def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
     return out
 
 
+_SUPERBET_CACHE: Dict[str, Any] = {}
+
+
+def superbet_odds(home: str, away: str, sport: str,
+                  date_str: Optional[str]) -> Optional[Dict[str, Any]]:
+    """Kursy 1/X/2 z publicznej oferty Superbetu, względem NASZYCH stron."""
+    if not date_str:
+        return None
+    try:
+        from tools import coupon_builder as cb
+    except Exception:
+        return None
+    if date_str not in _SUPERBET_CACHE:
+        try:
+            _SUPERBET_CACHE[date_str] = cb.superbet_index(date_str)
+        except Exception as e:
+            print(f"      ⚠️ Superbet niedostępny: {type(e).__name__}")
+            _SUPERBET_CACHE[date_str] = {}
+    th, ta = cb.name_tokens(home), cb.name_tokens(away)
+    best, best_s, flip = None, 0.0, False
+    for ev in _SUPERBET_CACHE[date_str].get(sport, []):
+        d = min(cb._overlap(th, ev['th']), cb._overlap(ta, ev['ta']))
+        r = min(cb._overlap(th, ev['ta']), cb._overlap(ta, ev['th']))
+        s, f = (d, False) if d >= r else (r, True)
+        if s > best_s:
+            best, best_s, flip = ev, s, f
+    # Wymagamy zgodności OBU stron (min), jak przy SofaScore.
+    if not best or best_s < 0.5:
+        return None
+    p = best['prices']
+    h, a = (p.get('2'), p.get('1')) if flip else (p.get('1'), p.get('2'))
+    if not h or not a:
+        return None
+    return {'home_odds': h, 'draw_odds': p.get('X'), 'away_odds': a,
+            'bookmaker': 'Superbet', 'odds_source': 'superbet', 'reason': None}
+
+
 def resolve_odds(match_url: Optional[str], sport: str,
                  home_team: Optional[str] = None,
                  away_team: Optional[str] = None,
@@ -1258,6 +1295,15 @@ def resolve_odds(match_url: Optional[str], sport: str,
         """
         if not (home_team and away_team):
             out['reason'] = reason_if_fail
+            return out
+
+        # Superbet przed SofaScore: publiczna oferta bez blokad IP (SofaScore
+        # z runnerów GitHuba często daje 403), ~375 meczów tenisa dziennie.
+        sb = superbet_odds(home_team, away_team, sport, date_str)
+        if sb:
+            out.update(sb)
+            print(f"      💰 Superbet: {sb['home_odds']}/{sb['draw_odds'] or '-'}/"
+                  f"{sb['away_odds']}")
             return out
 
         print(f"      ↻ Pytam SofaScore o kursy ({home_team} vs {away_team})")
