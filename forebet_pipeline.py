@@ -176,6 +176,8 @@ MAX_MARGIN_BY_SPORT = {
     'volleyball': 11.0,  # obserwowane 8,2–9,8%
     'baseball': 16.0,    # MLB/NPB/KBO siegaja 14% — nie karzemy ich
 }
+# Kurs na faworyta Forebet nie może być wyższy niż na przeciwnika.
+FAV_ODDS_GATE = os.getenv('FOREBET_FAV_ODDS_GATE', '1').strip().lower() not in ('0', 'false', 'no')
 MAX_MARGIN_DEFAULT = float(os.getenv('FOREBET_MAX_MARGIN_DEFAULT', '13'))
 
 
@@ -188,6 +190,11 @@ def max_margin_for(sport: str) -> float:
             return float(env)
         except ValueError:
             pass
+    # Decyzja użytkownika (2026-10): filtr marży wyłączony domyślnie — nie
+    # odrzucamy lig po marży. Włączenie: FOREBET_MARGIN_FILTER=1 (wtedy
+    # obowiązują progi z MAX_MARGIN_BY_SPORT).
+    if os.getenv('FOREBET_MARGIN_FILTER', '0').strip().lower() not in ('1', 'true', 'yes'):
+        return 0.0
     return MAX_MARGIN_BY_SPORT.get(sport, MAX_MARGIN_DEFAULT)
 
 
@@ -1703,6 +1710,21 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
     limit = max_margin_for(row.get('sport') or '')
     if limit and margin is not None and margin > limit:
         reasons.append(f'rynek_egzotyczny_marza_{margin:.1f}%>{limit:.0f}%')
+
+    # Rynek musi zgadzać się z Forebet: kurs na faworyta Forebet ≤ kurs na
+    # przeciwnika (równe kursy kwalifikują). Gdy bukmacherzy widzą faworyta
+    # po drugiej stronie, typ jest pod prąd rynku. Brak kursów → nie oceniamy
+    # tutaj (to łapie odds_gate). Wyłączenie: FOREBET_FAV_ODDS_GATE=0.
+    if FAV_ODDS_GATE:
+        fav = row.get('favorite')
+        try:
+            ho, ao = float(row.get('home_odds')), float(row.get('away_odds'))
+        except (TypeError, ValueError):
+            ho = ao = None
+        if fav in ('home', 'away') and ho and ao:
+            fav_o, opp_o = (ho, ao) if fav == 'home' else (ao, ho)
+            if fav_o > opp_o:
+                reasons.append(f'kurs_faworyta_{fav_o:.2f}>{opp_o:.2f}')
 
     # H2H nie ma tu osobnej bramki: wchodzi do score z wagą WEIGHTS['h2h'],
     # więc odrzucanie po nim drugi raz karałoby ten sam sygnał dwukrotnie.
