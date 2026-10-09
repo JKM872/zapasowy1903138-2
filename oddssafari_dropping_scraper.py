@@ -382,7 +382,117 @@ def parse_dropping_odds_table(
             )
         )
 
-    return rows
+    import russia_filter  # 🇷🇺 pomijamy ligi rosyjskie
+    return russia_filter.filter_rows(rows, "league", label="OddsSafari")
+
+
+def parse_dropping_odds_next_data(
+    html: str,
+    *,
+    base_url: str = "https://www.oddssafari.com",
+    sport_page_id: Optional[str] = None,
+) -> List[DroppingOddsRow]:
+    """Parse **every** dropping-odds row out of the embedded SSR payload.
+
+    The rendered table is paginated *client side* — OddsSafari ships the whole
+    result set in ``__NEXT_DATA__.props.pageProps.markets`` and the ``Page:
+    n / m`` control only slices it in the browser. ``?page=N`` is ignored by
+    the server (it re-serves page 1), so scraping the table markup caps out at
+    the first ~70 rows while the payload holds the full set (300+ for soccer).
+
+    Reading ``markets`` therefore replaces pagination entirely: one request per
+    sport returns every row, in the same order the table renders them.
+    """
+    match = _NEXT_DATA_RE.search(html or "")
+    if not match:
+        return []
+
+    try:
+        import json
+
+        data = json.loads(match.group(1))
+        markets = (
+            data.get("props", {}).get("pageProps", {}).get("markets") or []
+        )
+    except Exception as exc:
+        logger.warning("failed to parse __NEXT_DATA__ markets: %s", exc)
+        return []
+
+    rows: List[DroppingOddsRow] = []
+    for entry in markets:
+        if not isinstance(entry, dict):
+            continue
+
+        urls = entry.get("EventUrls") or {}
+        path = ""
+        if isinstance(urls, dict):
+            path = urls.get("en") or next(
+                (v for v in urls.values() if isinstance(v, str) and v), ""
+            )
+        if not path:
+            continue
+
+        # The table links to /matches + the event path, carrying the market
+        # type as a query arg. Rebuilding it identically keeps match_url (and
+        # therefore dedup keys and downstream lookups) byte-for-byte stable.
+        relative = f"/matches{path}"
+        market_type_id = entry.get("MarketTypeID")
+        if market_type_id is not None:
+            relative = f"{relative}?MarketTypeID={market_type_id}"
+
+        slug, match_id = _parse_match_url(relative)
+
+        event_date: Optional[str] = None
+        event_time: Optional[str] = None
+        raw_date = entry.get("EventDate")
+        if isinstance(raw_date, str) and raw_date.strip():
+            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+                try:
+                    parsed = datetime.strptime(raw_date.strip()[:19], fmt)
+                except ValueError:
+                    continue
+                event_date = parsed.strftime("%d/%m")
+                event_time = parsed.strftime("%H:%M")
+                break
+
+        open_odds = _parse_float(entry.get("OpenQuote"))
+        # AvgQuote is the post-drop price the table shows as "current"; MaxQuote
+        # is the best bookmaker quote rendered in the colMaxOdd column.
+        current_odds = _parse_float(entry.get("AvgQuote"))
+        max_odds = _parse_float(entry.get("MaxQuote"))
+
+        drop_pct = _parse_percent(str(entry.get("BetDiffPerc")))
+        if drop_pct is None and open_odds and current_odds and open_odds > 0:
+            drop_pct = round(abs(current_odds - open_odds) / open_odds * 100, 1)
+
+        outcome = (
+            entry.get("OutcomeShortName") or entry.get("OutcomeName") or ""
+        )
+
+        rows.append(
+            DroppingOddsRow(
+                league=(entry.get("LeagueName") or "").strip(),
+                match_url=urljoin(base_url, relative),
+                match_id=match_id or (
+                    str(entry.get("EventID")) if entry.get("EventID") else None
+                ),
+                sport_slug=slug,
+                sport=map_slug_to_internal(slug),
+                home_team=(entry.get("EventParticipant1_Name") or "").strip(),
+                away_team=(entry.get("EventParticipant2_Name") or "").strip(),
+                event_date=event_date,
+                event_time=event_time,
+                outcome=str(outcome).strip(),
+                open_odds=open_odds,
+                current_odds=current_odds,
+                drop_pct=drop_pct,
+                max_odds=max_odds,
+                sport_page_id=sport_page_id,
+            )
+        )
+
+    import russia_filter  # 🇷🇺 pomijamy ligi rosyjskie
+    return russia_filter.filter_rows(rows, "league", label="OddsSafari")
 
 
 def parse_dropping_odds_next_data(

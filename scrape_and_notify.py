@@ -288,6 +288,12 @@ def scrape_and_send_email(
                             success = True
                             continue
 
+                        import russia_filter  # 🇷🇺 siatka bezpieczeństwa po nagłówku ligi
+                        if russia_filter.is_russian(info.get('league'), info.get('country')):
+                            print(f"   🇷🇺 Pomijam ligę rosyjską: {info.get('league')}")
+                            success = True
+                            continue
+
                         rows.append(info)
                         
                         if info['qualifies']:
@@ -330,6 +336,12 @@ def scrape_and_send_email(
                         # Validate: skip rows with missing participant names
                         if not info.get('home_team') or not info.get('away_team'):
                             print(f"   ⚠️ Skipping {current_sport} match with missing team names: {url}")
+                            success = True
+                            continue
+
+                        import russia_filter  # 🇷🇺 siatka bezpieczeństwa po nagłówku ligi
+                        if russia_filter.is_russian(info.get('league'), info.get('country')):
+                            print(f"   🇷🇺 Pomijam ligę rosyjską: {info.get('league')}")
                             success = True
                             continue
 

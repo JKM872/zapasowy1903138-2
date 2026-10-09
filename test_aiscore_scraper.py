@@ -403,7 +403,7 @@ def test_collect_sofascore_league_matches_setka(monkeypatch):
 
     events = [
         {"event_id": 111, "home_team": "Player A", "away_team": "Player B",
-         "home_id": 1, "away_id": 2, "tournament": "Setka Cup", "category": "Russia",
+         "home_id": 1, "away_id": 2, "tournament": "Setka Cup", "category": "Ukraine",
          "start_timestamp": 1780000000, "status": "notstarted"},
         # Different league -> must be ignored.
         {"event_id": 222, "home_team": "X", "away_team": "Y", "home_id": 3, "away_id": 4,
@@ -411,7 +411,7 @@ def test_collect_sofascore_league_matches_setka(monkeypatch):
          "status": "notstarted"},
         # Setka but favourite (home) only 1/4 -> below 60% -> dropped.
         {"event_id": 333, "home_team": "Weak", "away_team": "Strong", "home_id": 5,
-         "away_id": 6, "tournament": "Setka Cup (K)", "category": "Russia",
+         "away_id": 6, "tournament": "Setka Cup (K)", "category": "Ukraine",
          "start_timestamp": 1780000000, "status": "notstarted"},
     ]
     monkeypatch.setattr(ss, "list_scheduled_events", lambda sport, date: events)
@@ -443,7 +443,7 @@ def test_collect_sofascore_dedupes_existing(monkeypatch):
     from aiscore_scraper import normalize_name
 
     events = [{"event_id": 111, "home_team": "Player A", "away_team": "Player B",
-               "home_id": 1, "away_id": 2, "tournament": "Setka Cup", "category": "Russia",
+               "home_id": 1, "away_id": 2, "tournament": "Setka Cup", "category": "Ukraine",
                "start_timestamp": 1780000000, "status": "notstarted"}]
     monkeypatch.setattr(ss, "list_scheduled_events", lambda sport, date: events)
     monkeypatch.setattr(ss, "get_event_h2h", lambda eid: {"home_wins": 5, "away_wins": 1, "draws": 0, "total": 6})

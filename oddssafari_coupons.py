@@ -249,6 +249,11 @@ def parse_coupon_payload(payload: Dict[str, Any]) -> List[CouponOdds]:
         league = str(group.get('LeagueNameShow') or group.get('LeagueName') or '')
         league_url = ((group.get('LeagueUrls') or {}).get('en') or '')
 
+        # 🇷🇺 Ligi rosyjskie pomijamy w całości.
+        import russia_filter
+        if russia_filter.is_russian(league, league_url, group.get('LeagueName')):
+            continue
+
         for event in group.get('Events') or []:
             if not isinstance(event, dict):
                 continue
