@@ -1353,6 +1353,12 @@ def _retry_request_with_session(url: str, timeout: int = 10, **kwargs):
     # kazdym zapytaniem, inaczej po pol godziny wysylalibysmy przestarzaly.
     refresh_xrw()
 
+    # v12: klient "aplikacji" (UA okhttp) — omija 403 "challenge".
+    # Zwracamy odpowiedź 200/404; 403/błąd → dotychczasowa ścieżka.
+    app_resp = _app_client_response(url, timeout=timeout)
+    if app_resp is not None:
+        return app_resp
+
     session = _get_api_session()
     if session is None:
         return None
@@ -1528,7 +1534,166 @@ def _try_alt_domain_url(url: str) -> Optional[str]:
     return None
 
 
+# ============================================================================
+# v12 — "APP CLIENT": szybka ścieżka bez 403
+# ============================================================================
+# Pomiar 2026-10: WAF SofaScore daje 403 "challenge" TYLKO gdy request udaje
+# przeglądarkę (User-Agent Chrome/Safari). Ten sam request z TLS Chrome, ale
+# z UA klienta mobilnego (okhttp — tak łączy się aplikacja SofaScore), dostaje
+# 200 bez cookies, FlareSolverr i proxy. To była przyczyna serii 403, nie IP.
+#
+# Drugi problem: ``/sport/{slug}/scheduled-events/{date}`` zwraca teraz 404
+# dla każdej daty. Lista dnia jest składana z ``scheduled-tournaments``
+# (kategorie) + ``/category/{id}/scheduled-events/{date}`` — patrz niżej.
+_APP_UA = os.getenv('SOFASCORE_APP_UA', 'okhttp/4.12.0')
+_APP_HEADERS = {'User-Agent': _APP_UA, 'Accept': 'application/json'}
+_APP_CLIENT_ENABLED = os.getenv('SOFASCORE_APP_CLIENT', '1').strip().lower() not in ('0', 'false', 'no')
+_SCHEDULED_RE = re.compile(r'/api/v1/sport/([a-z\-]+)/scheduled-events/(\d{4}-\d{2}-\d{2})/?$')
+_scheduled_cache: Dict[Tuple[str, str], Optional[Dict[str, Any]]] = {}
+_app_stats: Dict[str, int] = {}
+
+
+_app_client_403_streak = 0
+
+
+def _app_client_response(url: str, timeout: int = 10):
+    """GET przez klienta "aplikacji". Zwraca odpowiedź 200/404 albo None.
+
+    Najpierw direct, potem (jeśli ustawione) przez SOFASCORE_PROXY.
+    Tylko dla API SofaScore (``/api/v1/``) — strony HTML idą starą ścieżką.
+    """
+    global _app_client_403_streak
+    if not (_APP_CLIENT_ENABLED and CURL_CFFI_AVAILABLE) or '/api/v1/' not in url:
+        return None
+    www_url = url.replace('://api.sofascore.com/', '://www.sofascore.com/')
+    attempts = [None]
+    proxies = _get_sofascore_proxies()
+    if proxies:
+        attempts.append(proxies)
+    for px in attempts:
+        try:
+            kw = dict(impersonate='chrome', headers=_APP_HEADERS, timeout=timeout)
+            if px:
+                kw['proxies'] = px
+            r = curl_requests.get(www_url, **kw)
+            st = r.status_code
+            _app_stats[str(st)] = _app_stats.get(str(st), 0) + 1
+            if st in (200, 404):
+                _app_client_403_streak = 0
+                return r
+            if st == 403:
+                _app_client_403_streak += 1
+                if _app_client_403_streak in (1, 20):
+                    print(f"   ⚠️ SofaScore app-client 403 ({'proxy' if px else 'direct'}) — fallback")
+        except Exception:
+            _app_stats['error'] = _app_stats.get('error', 0) + 1
+    return None
+
+
+def _app_client_get(url: str, timeout: int = 10) -> Tuple[Optional[int], Optional[Any]]:
+    """Jak ``_app_client_response``, ale zwraca (status, json|None)."""
+    r = _app_client_response(url, timeout)
+    if r is None:
+        return None, None
+    if r.status_code != 200:
+        return r.status_code, None
+    try:
+        return 200, r.json()
+    except Exception:
+        return 200, None
+
+
+def _scheduled_events_via_categories(sport_slug: str, date_str: str,
+                                     timeout: int = 10) -> Optional[Dict[str, Any]]:
+    """Odtwarza dawne ``/sport/{slug}/scheduled-events/{date}``.
+
+    1) ``/sport/{slug}/scheduled-tournaments/{date}/page/N`` → id kategorii,
+    2) ``/category/{id}/scheduled-events/{date}`` równolegle → eventy.
+    Wynik w tym samym kształcie co stary endpoint: {'events': [...]}.
+    Cache per (sport, data) — robimy to raz na run.
+    """
+    key = (sport_slug, date_str)
+    if key in _scheduled_cache:
+        return _scheduled_cache[key]
+    base = 'https://www.sofascore.com/api/v1'
+    cat_ids: List[int] = []
+    seen = set()
+    for page in range(1, 60):
+        st, data = _app_client_get(
+            f'{base}/sport/{sport_slug}/scheduled-tournaments/{date_str}/page/{page}', timeout)
+        if st != 200 or not isinstance(data, dict):
+            break
+        for s in data.get('scheduled') or []:
+            cid = ((s.get('tournament') or {}).get('category') or {}).get('id')
+            if cid and cid not in seen:
+                seen.add(cid)
+                cat_ids.append(cid)
+        if not data.get('hasNextPage'):
+            break
+    if not cat_ids:
+        _scheduled_cache[key] = None
+        return None
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    def _one(cid):
+        st, d = _app_client_get(f'{base}/category/{cid}/scheduled-events/{date_str}', timeout)
+        return (d or {}).get('events') or [] if st == 200 and isinstance(d, dict) else []
+
+    # Endpoint kategorii zwraca szersze okno niż jeden dzień — zawężamy do
+    # doby (UTC) z marginesem 3 h na strefy czasowe, jak stary endpoint.
+    try:
+        day0 = datetime.strptime(date_str, '%Y-%m-%d').replace(tzinfo=timezone.utc).timestamp()
+    except ValueError:
+        day0 = None
+    lo, hi = (day0 - 3 * 3600, day0 + 27 * 3600) if day0 else (None, None)
+
+    events: List[Dict[str, Any]] = []
+    ids = set()
+    with ThreadPoolExecutor(max_workers=int(os.getenv('SOFASCORE_CATEGORY_WORKERS', '8'))) as ex:
+        for evs in ex.map(_one, cat_ids):
+            for e in evs:
+                eid = e.get('id')
+                if eid in ids:
+                    continue
+                ts = e.get('startTimestamp')
+                if lo is not None and isinstance(ts, (int, float)) and not (lo <= ts < hi):
+                    continue
+                ids.add(eid)
+                events.append(e)
+    print(f"   📅 SofaScore {sport_slug} {date_str}: {len(events)} meczów z {len(cat_ids)} kategorii")
+    out = {'events': events}
+    _scheduled_cache[key] = out
+    return out
+
+
 def _api_get_json(url: str, timeout: int = 10) -> Optional[Any]:
+    """Pobierz JSON z SofaScore API.
+
+    v12: najpierw klient "aplikacji" (bez 403). Lista dnia
+    (``scheduled-events``) jest odtwarzana z kategorii. Dopiero gdy to
+    zawiedzie — stara wielostopniowa ścieżka poniżej.
+    """
+    if _APP_CLIENT_ENABLED and CURL_CFFI_AVAILABLE:
+        m = _SCHEDULED_RE.search(url.split('?', 1)[0])
+        if m:
+            data = _scheduled_events_via_categories(m.group(1), m.group(2), timeout)
+            if data is not None:
+                _api_cb_record_success()
+                return data
+        else:
+            st, data = _app_client_get(url, timeout)
+            if st == 200:
+                _api_cb_record_success()
+                return data
+            if st == 404:
+                # API odpowiada — po prostu brak zasobu. Nie męczymy fallbacków.
+                _api_cb_record_success()
+                return None
+    return _api_get_json_legacy(url, timeout)
+
+
+def _api_get_json_legacy(url: str, timeout: int = 10) -> Optional[Any]:
     """Pobierz JSON z SofaScore API z wielostopniową ścieżką klientów.
 
     v8.2 — kolejność prób:
@@ -2130,7 +2295,12 @@ def get_odds_via_api(event_id: int) -> Optional[Dict]:
             
             # Szukaj rynku 1X2 (Full Time Result)
             for market in markets:
-                if market.get('marketName') in ['Full Time', '1X2', 'Match Winner', 'Full Time Result']:
+                # SofaScore zmienił wielkość liter ("Full time") — porównujemy
+                # bez wielkości liter; marketId 1 = główny rynek zwycięzcy.
+                mname = str(market.get('marketName') or '').strip().lower()
+                if (market.get('marketId') == 1 and not market.get('isLive')) or mname in (
+                        'full time', '1x2', 'match winner', 'full time result',
+                        'home/away', 'winner'):
                     choices = market.get('choices', [])
                     
                     for choice in choices:
