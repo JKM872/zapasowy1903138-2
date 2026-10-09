@@ -165,9 +165,6 @@ def collect_sofascore_league_matches(date_str: str, focus: str,
 
     def _matches_league(e: Dict[str, Any]) -> bool:
         hay = f"{e.get('tournament','')} {e.get('category','')}".lower()
-        import russia_filter  # 🇷🇺 pomijamy ligi rosyjskie
-        if russia_filter.is_russian(e.get('tournament'), e.get('category')):
-            return False
         return any(f in hay for f in league_filters)
 
     matched = [e for e in events if _matches_league(e)
@@ -983,11 +980,6 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 print(f"   ➕ Dodano {len(extra)} meczów z lig SofaScore (Setka Cup itd.)")
         except Exception as e:
             print(f"   ⚠️ SofaScore leagues supplement błąd: {e}")
-
-        # 🇷🇺 Ligi rosyjskie pomijamy przed pobieraniem kursów.
-        import russia_filter
-        rows = russia_filter.filter_rows(rows, "league", label="tenis stołowy")
-        # Uwaga: zawodników (osoby) nie filtrujemy po nazwisku — tylko ligi.
 
         # ── FAZA 2.45: Odds fallback (Livesport multi-bookmaker) ──
         # SofaScore odds (LV Bet etc.) were already fetched per-match during the

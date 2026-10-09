@@ -61,3 +61,22 @@ def test_livesport_url_slugs():
         "https://www.livesport.com/pl/mecz/hokej/ak-bars-kazan-Ab12/ska-Cd34/")
     assert not russia_filter.is_russian_url(
         "https://www.livesport.com/pl/mecz/pilka-nozna/legia-Ab12/lech-Cd34/")
+
+
+def test_individual_sports_are_kept():
+    rows = [{"sport": "tennis", "league": "ATP Moscow", "home_team": "Rublev"},
+            {"sport": "table_tennis", "league": "Russia - Liga Pro"},
+            {"sport": "football", "league": "Russia - Premier League"}]
+    kept = russia_filter.filter_rows(rows, "league", "home_team")
+    assert [r["sport"] for r in kept] == ["tennis", "table_tennis"]
+    assert russia_filter.filter_rows(rows[:1], "league", sport="tennis") == rows[:1]
+
+
+def test_livesport_tennis_links_kept():
+    html = """
+    <div class="headerLeague__wrapper"><span>ROSJA:</span><a>Kazan Challenger</a></div>
+    <div class="event__match"><a href="/pl/mecz/tenis/rublev-Ab12/medvedev-Cd34/">m</a></div>
+    """
+    links, _ = _extract_match_links_from_soup(
+        BeautifulSoup(html, "html.parser"), "https://www.livesport.com/pl/tenis/", set())
+    assert len(links) == 1

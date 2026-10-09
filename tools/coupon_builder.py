@@ -170,7 +170,8 @@ def collect(date: str) -> List[Dict[str, Any]]:
             legs.append(_leg('forebet', sport, r, pick, f.get('home'), f.get('away')))
     # 🇷🇺 Siatka bezpieczeństwa: ligi rosyjskie nie trafiają na kupony.
     import russia_filter
-    legs = [l for l in legs if not russia_filter.is_russian(
+    legs = [l for l in legs if russia_filter.is_individual_sport(l.get('sport'))
+            or not russia_filter.is_russian(
         l.get('league'), l.get('home'), l.get('away'))]
     return merge(legs)
 

@@ -241,8 +241,13 @@ def _iter_event_groups(payload: Dict[str, Any]) -> Iterator[Dict[str, Any]]:
             yield group
 
 
-def parse_coupon_payload(payload: Dict[str, Any]) -> List[CouponOdds]:
-    """Turn the ``/api/coupons`` payload into odds rows."""
+def parse_coupon_payload(payload: Dict[str, Any], sport: str = '') -> List[CouponOdds]:
+    """Turn the ``/api/coupons`` payload into odds rows.
+
+    Rosyjskie ligi/kluby są pomijane, z wyjątkiem sportów indywidualnych.
+    """
+    import russia_filter
+    skip_ru = russia_filter.enabled() and not russia_filter.is_individual_sport(sport)
     out: List[CouponOdds] = []
 
     for group in _iter_event_groups(payload):
@@ -250,8 +255,7 @@ def parse_coupon_payload(payload: Dict[str, Any]) -> List[CouponOdds]:
         league_url = ((group.get('LeagueUrls') or {}).get('en') or '')
 
         # 🇷🇺 Ligi rosyjskie pomijamy w całości.
-        import russia_filter
-        if russia_filter.is_russian(league, league_url, group.get('LeagueName')):
+        if skip_ru and russia_filter.is_russian(league, league_url, group.get('LeagueName')):
             continue
 
         for event in group.get('Events') or []:
@@ -266,7 +270,7 @@ def parse_coupon_payload(payload: Dict[str, Any]) -> List[CouponOdds]:
                     home, away = (p.strip() for p in name.split(' - ', 1))
             if not home or not away:
                 continue
-            if russia_filter.is_russian(home, away):  # 🇷🇺 kluby / reprezentacje
+            if skip_ru and russia_filter.is_russian(home, away):  # 🇷🇺 kluby / reprezentacje
                 continue
 
             raw_date = str(event.get('EventDate') or '')
@@ -362,7 +366,7 @@ def fetch_coupon_odds(sport: str, date: Optional[str] = None,
         if not html or '404 | OddsSafari' in html[:4000]:
             continue
         payload = extract_payload_from_html(html)
-        for row in parse_coupon_payload(payload):
+        for row in parse_coupon_payload(payload, sport):
             key = (row.home_team.lower(), row.away_team.lower(), row.event_date)
             if key in seen:
                 continue
@@ -530,7 +534,7 @@ def fetch_coupon_board(sport: str, dates: Optional[List[str]] = None,
                                                    session=session)
                 if not payload:
                     continue
-                parsed = parse_coupon_payload(payload)
+                parsed = parse_coupon_payload(payload, sport)
                 api_worked = api_worked or bool(parsed)
                 for row in parsed:
                     _keep(row)
