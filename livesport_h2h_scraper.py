@@ -4133,9 +4133,16 @@ def _count_match_links_in_page(driver: webdriver.Chrome) -> int:
         return 0
 
 
+import russia_filter as _russia_filter
+
+# Nagłówki lig na liście dnia Livesport (stary i nowy layout).
+_LEAGUE_HEADER_RE = re.compile(r"(event__header|headerLeague__wrapper|headerLeague\b|wclLeagueHeader)")
+
+
 def _extract_match_links_from_soup(soup: BeautifulSoup, sport_url: str, existing_links: set, leagues: List[str] = None) -> List[str]:
     """Wyciąga linki do meczów z BeautifulSoup. Zwraca unikalne nowe linki."""
     sport_links = []
+    russian_skipped = 0
     # Rozszerzone wzorce URL — Livesport zmienia endpointy
     patterns = ['/match/', '/mecz/', '/#/match/', '/#id/', '/event/', '/detail/']
     debug_patterns_found = {p: 0 for p in patterns}
@@ -4175,10 +4182,20 @@ def _extract_match_links_from_soup(soup: BeautifulSoup, sport_url: str, existing
                     if not any(league.lower() in link_text for league in leagues):
                         continue
             
+            # 🇷🇺 Pomijamy ligi rosyjskie: kraj jest tylko w nagłówku ligi,
+            # który poprzedza wiersze meczów na liście dnia.
+            if _russia_filter.enabled():
+                header = a.find_previous(class_=_LEAGUE_HEADER_RE)
+                if header is not None and _russia_filter.is_russian(header.get_text(" ", strip=True)):
+                    russian_skipped += 1
+                    continue
+
             if href not in existing_links:
                 existing_links.add(href)
                 sport_links.append(href)
     
+    if russian_skipped:
+        print(f"   🇷🇺 Pominięto {russian_skipped} linków z lig rosyjskich")
     return sport_links, debug_patterns_found
 
 

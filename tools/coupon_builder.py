@@ -168,6 +168,9 @@ def collect(date: str) -> List[Dict[str, Any]]:
                 continue
             f = r.get('form') or {}
             legs.append(_leg('forebet', sport, r, pick, f.get('home'), f.get('away')))
+    # 🇷🇺 Siatka bezpieczeństwa: ligi rosyjskie nie trafiają na kupony.
+    import russia_filter
+    legs = [l for l in legs if not russia_filter.is_russian(l.get('league'))]
     return merge(legs)
 
 
