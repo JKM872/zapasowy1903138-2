@@ -1234,7 +1234,7 @@ _PINNACLE_API = 'https://guest.api.arcadia.pinnacle.com/0.1'
 # Publiczny klucz gościa, którego używa strona pinnacle.com (bez konta).
 _PINNACLE_KEY = os.getenv('PINNACLE_GUEST_KEY', 'CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R')
 _PINNACLE_SPORT = {'football': 29, 'tennis': 33, 'basketball': 4, 'hockey': 19,
-                   'handball': 18, 'volleyball': 34, 'baseball': 3}
+                   'handball': 18, 'volleyball': 34, 'baseball': 3, 'rugby': 27}
 
 
 def _american_to_decimal(p: Any) -> Optional[float]:
