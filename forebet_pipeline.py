@@ -121,6 +121,10 @@ TENNIS_FORM_GATE = os.getenv('FOREBET_TENNIS_FORM_GATE', '0') == '1'
 # 36–45, czyli poniżej rzutu monetą. 50 jest granicą, poniżej której model nie
 # ma już nic do powiedzenia.
 DEFAULT_MIN_SCORE = float(os.getenv('FOREBET_MIN_SCORE', '50'))
+MIN_SCORE_BY_SPORT = {
+    'tennis': float(os.getenv('FOREBET_MIN_SCORE_TENNIS', '51')),
+    'football': float(os.getenv('FOREBET_MIN_SCORE_FOOTBALL', '0')),
+}
 
 # ── Marża bukmachera jako miara powagi rynku ───────────────────────────────
 #
@@ -1225,6 +1229,88 @@ def resolve_odds_sofascore(home_team: str, away_team: str, sport: str,
 
 
 _SUPERBET_CACHE: Dict[str, Any] = {}
+_PINNACLE_CACHE: Dict[str, Any] = {}
+_PINNACLE_API = 'https://guest.api.arcadia.pinnacle.com/0.1'
+# Publiczny klucz gościa, którego używa strona pinnacle.com (bez konta).
+_PINNACLE_KEY = os.getenv('PINNACLE_GUEST_KEY', 'CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R')
+_PINNACLE_SPORT = {'football': 29, 'tennis': 33, 'basketball': 4, 'hockey': 19,
+                   'handball': 18, 'volleyball': 34, 'baseball': 3}
+
+
+def _american_to_decimal(p: Any) -> Optional[float]:
+    try:
+        p = float(p)
+    except (TypeError, ValueError):
+        return None
+    return round(1 + (p / 100 if p > 0 else 100 / -p), 3) if p else None
+
+
+def _pinnacle_index(sport: str) -> List[Dict[str, Any]]:
+    """Mecze Pinnacle z kursami moneyline (1/X/2), raz na sport i proces."""
+    if sport in _PINNACLE_CACHE:
+        return _PINNACLE_CACHE[sport]
+    sid = _PINNACLE_SPORT.get(sport)
+    rows: List[Dict[str, Any]] = []
+    if sid:
+        try:
+            from curl_cffi import requests as cr
+            hdr = {'X-API-Key': _PINNACLE_KEY, 'Referer': 'https://www.pinnacle.com/'}
+            mus = cr.get(f'{_PINNACLE_API}/sports/{sid}/matchups?withSpecials=false',
+                         headers=hdr, impersonate='chrome124', timeout=40).json()
+            mks = cr.get(f'{_PINNACLE_API}/sports/{sid}/markets/straight?primaryOnly=true',
+                         headers=hdr, impersonate='chrome124', timeout=40).json()
+            prices: Dict[int, Dict[str, float]] = {}
+            for mk in mks:
+                if mk.get('type') != 'moneyline' or mk.get('period') != 0 \
+                        or mk.get('isAlternate'):
+                    continue
+                pr = {p['designation']: _american_to_decimal(p.get('price'))
+                      for p in mk.get('prices', []) if p.get('designation')}
+                if pr.get('home') and pr.get('away'):
+                    prices[mk['matchupId']] = pr
+            from tools import coupon_builder as cb
+            for mu in mus:
+                pr = prices.get(mu.get('id'))
+                parts = {p.get('alignment'): p.get('name') for p in mu.get('participants') or []}
+                h, a = parts.get('home'), parts.get('away')
+                # „(Games)", „(Sets)" itp. to rynki pochodne, nie sam mecz.
+                if not pr or not h or not a or '(' in h:
+                    continue
+                rows.append({'home': h, 'away': a, 'th': cb.name_tokens(h),
+                             'ta': cb.name_tokens(a), 'start': str(mu.get('startTime'))[:10],
+                             'prices': pr})
+            print(f"   📌 Pinnacle {sport}: {len(rows)} meczów z kursami")
+        except Exception as e:
+            print(f"   ⚠️ Pinnacle {sport} niedostępny: {type(e).__name__}")
+    _PINNACLE_CACHE[sport] = rows
+    return rows
+
+
+def pinnacle_odds(home: str, away: str, sport: str,
+                  date_str: Optional[str]) -> Optional[Dict[str, Any]]:
+    """Kursy Pinnacle bezpośrednio z ich API — gdy Livesport ich nie dał."""
+    try:
+        from tools import coupon_builder as cb
+    except Exception:
+        return None
+    th, ta = cb.name_tokens(home), cb.name_tokens(away)
+    best, best_s, flip = None, 0.0, False
+    for ev in _pinnacle_index(sport):
+        if date_str and ev['start'] and abs(
+                (datetime.strptime(ev['start'], '%Y-%m-%d')
+                 - datetime.strptime(date_str, '%Y-%m-%d')).days) > 1:
+            continue
+        d = min(cb._overlap(th, ev['th']), cb._overlap(ta, ev['ta']))
+        r = min(cb._overlap(th, ev['ta']), cb._overlap(ta, ev['th']))
+        s, f = (d, False) if d >= r else (r, True)
+        if s > best_s:
+            best, best_s, flip = ev, s, f
+    if not best or best_s < 0.5:
+        return None
+    p = best['prices']
+    h, a = (p['away'], p['home']) if flip else (p['home'], p['away'])
+    return {'home_odds': h, 'draw_odds': p.get('draw'), 'away_odds': a,
+            'bookmaker': 'Pinnacle', 'odds_source': PRIMARY_BOOKMAKER, 'reason': None}
 
 
 def superbet_odds(home: str, away: str, sport: str,
@@ -1299,6 +1385,13 @@ def resolve_odds(match_url: Optional[str], sport: str,
 
         # Superbet przed SofaScore: publiczna oferta bez blokad IP (SofaScore
         # z runnerów GitHuba często daje 403), ~375 meczów tenisa dziennie.
+        pin = pinnacle_odds(home_team, away_team, sport, date_str)
+        if pin:
+            out.update(pin)
+            print(f"      💰 Pinnacle (API): {pin['home_odds']}/"
+                  f"{pin['draw_odds'] or '-'}/{pin['away_odds']}")
+            return out
+
         sb = superbet_odds(home_team, away_team, sport, date_str)
         if sb:
             out.update(sb)
@@ -1338,6 +1431,14 @@ def resolve_odds(match_url: Optional[str], sport: str,
             (PRIMARY_BOOKMAKER, [PRIMARY_BOOKMAKER]),
             ('livesport', LIVESPORT_FALLBACK_BOOKMAKERS),
         ):
+            # Zanim weźmiemy innego bukmachera z Livesport — Pinnacle z API.
+            if label != PRIMARY_BOOKMAKER and home_team and away_team:
+                pin = pinnacle_odds(home_team, away_team, sport, date_str)
+                if pin:
+                    out.update(pin)
+                    print(f"      💰 Pinnacle (API): {pin['home_odds']}/"
+                          f"{pin['draw_odds'] or '-'}/{pin['away_odds']}")
+                    return out
             res = api.get_odds_from_multiple_bookmakers(
                 event_id, sport=sport, bookmakers=bookmakers
             ) or {}
@@ -1559,6 +1660,9 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
         reasons.append(row['skip_reason'])
 
     score = row.get('scoring_prob') or 0
+    # Próg per sport (ustalenie użytkownika): tenis min. 51; piłka bez progu
+    # score — liczy się drużyna wskazana przez Forebet jako zwycięzca.
+    min_score = MIN_SCORE_BY_SPORT.get(row.get('sport') or '', min_score)
     if score < min_score:
         reasons.append(f'score_{score}<{min_score}')
 
