@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-10-10T06:59:37.296615+02:00",
+    "target_date": "2026-10-10",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 1.4,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "South Korea - KBO",
+      "match_url": "https://www.oddssafari.com/matches/baseball/south-korea/kbo/kia-tigers-vs-ssg-landers/7336379?MarketTypeID=901",
+      "match_id": "7336379",
+      "sport_slug": "baseball",
+      "sport": "baseball",
+      "home_team": "KIA Tigers",
+      "away_team": "SSG Landers",
+      "event_date": "10/10",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.6,
+      "current_odds": 1.25,
+      "drop_pct": 22.0,
+      "max_odds": 1.28,
+      "sport_page_id": "90",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": []
+}
