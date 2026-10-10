@@ -97,20 +97,86 @@ def _parse_teams(row) -> tuple[Optional[str], Optional[str]]:
     return None, None
 
 
+_TIME_RE = re.compile(r'(\d{1,2}):(\d{2})\s*([ap]\.?\s*m\.?)?', re.IGNORECASE)
+
+
+def _norm_time(raw: Any) -> Optional[str]:
+    """Godzina z tekstu Forebet → 24h 'HH:MM'.
+
+    Forebet (wersja /en/) podaje godziny w formacie 12h z am/pm
+    ('10/10/2026 1:10 pm'). Wcześniej regex brał samo '1:10', przez co mecz
+    o 13:10 lądował przed meczem o 10:05, a sortowanie tekstowe ('1:10' vs
+    '10:05') mieszało kolejność. Zawsze dopełniamy zerem: '09:05'.
+    """
+    if raw is None:
+        return None
+    m = _TIME_RE.search(str(raw))
+    if not m:
+        return None
+    h, mi = int(m.group(1)), int(m.group(2))
+    ap = (m.group(3) or '').lower().replace('.', '').replace(' ', '')
+    if ap == 'pm' and h < 12:
+        h += 12
+    elif ap == 'am' and h == 12:
+        h = 0
+    if not (0 <= h < 24 and 0 <= mi < 60):
+        return None
+    return f'{h:02d}:{mi:02d}'
+
+
+def _repair_12h_clock(html_matches: List[Dict[str, Any]],
+                      json_matches: List[Dict[str, Any]]) -> int:
+    """Naprawia godziny 12h bez am/pm w wierszach HTML (w kolejności strony).
+
+    1) Gdy ten sam mecz (forebet_id) jest w getrs.php z godziną 24h — bierzemy ją.
+    2) Gdy na stronie nie ma żadnej godziny ≥ 13:00 (czyli zegar 12h), a lista
+       jest chronologiczna, każdy „cofnięty" czas (np. 1:10 po 12:40) to PM.
+    Zwraca liczbę poprawionych meczów.
+    """
+    fixed = 0
+    by_id = {m.get('forebet_id'): m.get('match_time') for m in json_matches
+             if m.get('forebet_id') and m.get('match_time')}
+    for m in html_matches:
+        jt = by_id.get(m.get('forebet_id'))
+        if jt and jt != m.get('match_time'):
+            m['match_time'] = jt
+            fixed += 1
+
+    def _mins(t):
+        try:
+            h, mi = t.split(':')
+            return int(h) * 60 + int(mi)
+        except (AttributeError, ValueError):
+            return None
+
+    times = [_mins(m.get('match_time')) for m in html_matches]
+    if any(t is not None and t >= 13 * 60 for t in times):
+        return fixed  # zegar 24h — nic nie zgadujemy
+    prev = None
+    for m, t in zip(html_matches, times):
+        if t is None:
+            continue
+        if prev is not None and t + 60 < prev and t + 720 < 24 * 60:
+            t += 720
+            m['match_time'] = f'{t // 60:02d}:{t % 60:02d}'
+            fixed += 1
+        prev = t
+    return fixed
+
+
 def _parse_datetime(row) -> tuple[Optional[str], Optional[str]]:
-    """Zwraca (date YYYY-MM-DD, time HH:MM) ze span.date_bah / <time datetime>."""
+    """Zwraca (date YYYY-MM-DD, time HH:MM 24h) ze span.date_bah / <time datetime>."""
     date_str = None
     time_str = None
 
-    raw = _text(row.find('span', class_='date_bah'))  # '05/01/2026 19:30'
+    raw = _text(row.find('span', class_='date_bah'))  # '05/01/2026 19:30' / '... 1:10 pm'
     if raw:
-        try:
-            parsed = datetime.strptime(raw, '%d/%m/%Y %H:%M')
-            return parsed.strftime('%Y-%m-%d'), parsed.strftime('%H:%M')
-        except (ValueError, TypeError):
-            m = re.search(r'(\d{1,2}:\d{2})', raw)
-            if m:
-                time_str = m.group(1)
+        md = re.search(r'(\d{2})/(\d{2})/(\d{4})', raw)
+        time_str = _norm_time(raw[md.end():] if md else raw)
+        if md:
+            date_str = f'{md.group(3)}-{md.group(2)}-{md.group(1)}'
+            if time_str:
+                return date_str, time_str
 
     time_el = row.find('time')
     if time_el and time_el.get('datetime'):
@@ -532,10 +598,10 @@ def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
         date_str = f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
         time_str = f'{m.group(4)}:{m.group(5)}'
     else:
-        m = re.search(r'(\d{2})/(\d{2})/(\d{4})\s+(\d{1,2}:\d{2})', raw_dt)
+        m = re.search(r'(\d{2})/(\d{2})/(\d{4})\s+(\d{1,2}:\d{2}.*)', raw_dt)
         if m:
             date_str = f'{m.group(3)}-{m.group(2)}-{m.group(1)}'
-            time_str = m.group(4)
+            time_str = _norm_time(m.group(4))
 
     home_prob = _int_or_none(_first(obj, ['Pred_1', 'pred_1']))
     draw_prob = _int_or_none(_first(obj, ['Pred_X', 'pred_X', 'Pred_x']))
@@ -960,7 +1026,9 @@ def list_forebet_matches(sport: str, match_date: Optional[str] = None,
         matches.append(data)
         added_json += 1
 
-    matches.sort(key=lambda m: (m.get('match_time') or '99:99'))
+    _repair_12h_clock(matches[:from_html], parsed_json)
+    matches.sort(key=lambda m: (m.get('match_date') or match_date or '',
+                                m.get('match_time') or '99:99'))
 
     priced = sum(1 for m in matches if m.get('odds_source') == 'forebet')
     print(f"   📋 Forebet {sport} {match_date}: {len(matches)} meczów "
