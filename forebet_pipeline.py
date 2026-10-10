@@ -1333,6 +1333,16 @@ def _pinnacle_index(sport: str) -> List[Dict[str, Any]]:
     return rows
 
 
+def livesport_bulk_odds(home: str, away: str, sport: str,
+                        date_str: Optional[str]) -> Optional[Dict[str, Any]]:
+    """Kursy z zakładki „Kursy" Livesport (jeden feed na sport i dzień)."""
+    try:
+        import livesport_bulk_odds as _lb
+        return _lb.lookup(home, away, sport, date_str)
+    except Exception:
+        return None
+
+
 _PIN_LOOKUP_CACHE: Dict[Tuple[str, str, str, Optional[str]], Optional[Dict[str, Any]]] = {}
 
 
@@ -1460,6 +1470,13 @@ def resolve_odds(match_url: Optional[str], sport: str,
             out.update(sb)
             print(f"      💰 Superbet: {sb['home_odds']}/{sb['draw_odds'] or '-'}/"
                   f"{sb['away_odds']}")
+            return out
+
+        lb = livesport_bulk_odds(home_team, away_team, sport, date_str)
+        if lb:
+            out.update(lb)
+            print(f"      💰 {lb['bookmaker']}: {lb['home_odds']}/{lb['draw_odds'] or '-'}/"
+                  f"{lb['away_odds']}")
             return out
 
         # SofaScore zablokowany w tym runie (same 403) — nie tracimy czasu
@@ -2047,6 +2064,8 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             try:
                 if pinnacle_odds(m['home_team'], m['away_team'], sport, date_str):
                     return 0
+                if livesport_bulk_odds(m['home_team'], m['away_team'], sport, date_str):
+                    return 1
                 if superbet_odds(m['home_team'], m['away_team'], sport, date_str):
                     return 1
             except Exception:
@@ -2226,23 +2245,30 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         pre_reject = None
         if PRE_ODDS_GATE:
             pre = pinnacle_odds(home, away, sport, date_str)
+            # Bez Pinnacle: kursy z zakładki „Kursy" Livesport (inny bukmacher),
+            # więc z zapasem 5% — odrzucamy tylko wyraźne przypadki, żeby
+            # różnica między bukmacherami nie zmieniła wyniku.
+            tol = 1.0
+            if not (pre and pre.get('home_odds') and pre.get('away_odds')):
+                pre = livesport_bulk_odds(home, away, sport, date_str)
+                tol = 1.05
             if pre and pre.get('home_odds') and pre.get('away_odds'):
-                ok_pre, why = odds_gate(sport, pre['home_odds'], pre['away_odds'],
-                                        min_odds, max_odds)
+                ok_pre, why = odds_gate(sport, float(pre['home_odds']) * tol,
+                                        float(pre['away_odds']) * tol, min_odds, max_odds)
                 if not ok_pre:
                     pre_reject = why
                 elif FAV_ODDS_GATE and row.get('favorite') in ('home', 'away'):
                     fo, oo = ((pre['home_odds'], pre['away_odds'])
                               if row['favorite'] == 'home'
                               else (pre['away_odds'], pre['home_odds']))
-                    if float(fo) > float(oo):
+                    if float(fo) > float(oo) * tol:
                         pre_reject = f'kurs_faworyta_{float(fo):.2f}>{float(oo):.2f}'
                 if pre_reject:
                     for k in ('home_odds', 'draw_odds', 'away_odds', 'odds_source', 'bookmaker'):
                         row[k] = pre.get(k)
                     row['skip_reason'] = pre_reject
                     row['pre_gate'] = True
-                    print(f"      ⚡ {pre_reject} (Pinnacle {pre['home_odds']}/{pre['away_odds']}) "
+                    print(f"      ⚡ {pre_reject} ({pre.get('bookmaker')} {pre['home_odds']}/{pre['away_odds']}) "
                           f"— pomijam pobieranie H2H/formy")
 
         # Livesport: dopasowanie + H2H/forma/kursy
@@ -2416,10 +2442,12 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                 # Bez kursu nie ma EV ani ROI, więc typ jest nierozliczalny.
                 skip_no_odds=True,
                 min_odds_threshold=min_odds,
-                grade_filter={'A', 'B'},
-                fallback_grades={'C', 'D'},
+                # Decyzja użytkownika: w mailu WSZYSTKIE zakwalifikowane A–D
+                # (wcześniej C/D szły tylko, gdy w sporcie nie było A/B).
+                grade_filter={'A', 'B', 'C', 'D'},
+                fallback_grades=None,
             )
-            print("   ✅ E-mail wysłany (Grade A/B → C/D)")
+            print("   ✅ E-mail wysłany (Grade A–D)")
         except Exception as e:
             print(f"   ⚠️ E-mail błąd: {e}")
     elif send_email:
