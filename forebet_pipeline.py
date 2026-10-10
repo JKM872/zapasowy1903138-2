@@ -2429,27 +2429,29 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     qualified = sum(1 for r in rows if r.get('qualifies'))
 
     if send_email and email_cfg and email_cfg.get('to') and email_cfg.get('from'):
-        try:
-            from email_notifier import send_email_notification
-            send_email_notification(
-                csv_file=paths['csv'],
-                to_email=email_cfg['to'],
-                from_email=email_cfg['from'],
-                password=email_cfg.get('password', ''),
-                provider=email_cfg.get('provider', 'gmail'),
-                subject=f"🎯 Forebet {sport.title()} — {date_str}",
-                date=date_str,
-                # Bez kursu nie ma EV ani ROI, więc typ jest nierozliczalny.
-                skip_no_odds=True,
-                min_odds_threshold=min_odds,
-                # Decyzja użytkownika: w mailu WSZYSTKIE zakwalifikowane A–D
-                # (wcześniej C/D szły tylko, gdy w sporcie nie było A/B).
-                grade_filter={'A', 'B', 'C', 'D'},
-                fallback_grades=None,
-            )
-            print("   ✅ E-mail wysłany (Grade A–D)")
-        except Exception as e:
-            print(f"   ⚠️ E-mail błąd: {e}")
+        from email_notifier import send_email_notification
+        # Decyzja użytkownika: dwa osobne maile — A/B oraz C/D. Pusty tier
+        # nie wysyła nic (send_email_notification kończy przy 0 meczach).
+        for tier in ({'A', 'B'}, {'C', 'D'}):
+            label = '/'.join(sorted(tier))
+            try:
+                send_email_notification(
+                    csv_file=paths['csv'],
+                    to_email=email_cfg['to'],
+                    from_email=email_cfg['from'],
+                    password=email_cfg.get('password', ''),
+                    provider=email_cfg.get('provider', 'gmail'),
+                    subject=f"🎯 Forebet {sport.title()} — {date_str}",
+                    date=date_str,
+                    # Bez kursu nie ma EV ani ROI, więc typ jest nierozliczalny.
+                    skip_no_odds=True,
+                    min_odds_threshold=min_odds,
+                    grade_filter=tier,
+                    fallback_grades=None,
+                )
+                print(f"   ✅ E-mail Grade {label} — gotowe")
+            except Exception as e:
+                print(f"   ⚠️ E-mail Grade {label} błąd: {e}")
     elif send_email:
         print("   ℹ️ E-mail pominięty (brak --to/--from-email)")
 
