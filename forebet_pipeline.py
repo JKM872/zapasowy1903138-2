@@ -1444,6 +1444,15 @@ def resolve_odds(match_url: Optional[str], sport: str,
                   f"{sb['away_odds']}")
             return out
 
+        # SofaScore zablokowany w tym runie (same 403) — nie tracimy czasu
+        # na 3 strategie wyszukiwania przy każdym meczu bez kursów.
+        try:
+            import sofascore_scraper as _ssmod
+            if _ssmod.is_sofascore_unreachable():
+                out['reason'] = reason_if_fail
+                return out
+        except Exception:
+            pass
         print(f"      ↻ Pytam SofaScore o kursy ({home_team} vs {away_team})")
         ss = resolve_odds_sofascore(home_team, away_team, sport, date_str)
         if ss.get('home_odds') is not None:
