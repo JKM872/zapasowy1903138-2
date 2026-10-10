@@ -253,8 +253,10 @@ def resolve_model(key: Optional[str] = None, force: bool = False) -> str:
 
 def reset_resolved_model() -> None:
     """Clear the cached choice (tests, and after a mid-run decommission)."""
-    global _resolved_model
+    global _resolved_model, _available_cache
     _resolved_model = None
+    _available_cache = None
+    _dead_models.clear()
 
 
 def is_decommissioned_error(status_code: int, body: str) -> bool:
@@ -281,8 +283,25 @@ def model_candidates(key: Optional[str] = None) -> List[str]:
     for candidate in MODEL_PREFERENCES:
         if candidate not in ordered:
             ordered.append(candidate)
+    # Tylko modele, które konto REALNIE widzi (/models, raz na proces).
+    # Run 2026-10-10: groq/compound, compound-mini i qwen3.6-27b dawały 404
+    # „does not exist" przy KAŻDEJ partii dopasowań — trzy zmarnowane żądania.
+    global _available_cache
+    if _available_cache is None:
+        try:
+            _available_cache = set(list_available_models(key))
+        except Exception:
+            _available_cache = set()
+    if _available_cache:
+        ordered = [m for m in ordered if m in _available_cache]
     return [m for m in ordered
-            if m and m not in RETIRED_MODELS and not is_non_chat_model(m)]
+            if m and m not in RETIRED_MODELS and m not in _dead_models
+            and not is_non_chat_model(m)]
+
+
+_available_cache: Optional[set] = None
+# Modele, które w tym procesie odpowiedziały 404 „does not exist".
+_dead_models: set = set()
 
 
 def is_rate_limited(status_code: int) -> bool:
@@ -407,6 +426,8 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
         for model in candidates:
             # Ta para już odmówiła i okno limitu jeszcze nie minęło — nie ma
             # sensu płacić kolejnym odrzuconym żądaniem.
+            if model in _dead_models:
+                continue
             if _cooldown_left(current, model) > 0:
                 skipped += 1
                 continue
@@ -451,6 +472,14 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
                           if len(order) > 1 else "")
                 log(f"      ⚠️ Groq [{model}]{suffix}: limit (429) — "
                     f"pauza {span / 60:.0f} min, próbuję kolejnego modelu")
+                continue
+
+            if resp.status_code == 404 and 'does not exist' in (resp.text or ''):
+                # Model niedostępny dla konta — nie pytamy o niego więcej
+                # w tym procesie i nie traktujemy tego jako „klucz działa".
+                if model not in _dead_models:
+                    _dead_models.add(model)
+                    log(f"      ⚠️ Groq [{model}]: brak modelu na koncie — pomijam do końca runu")
                 continue
 
             rate_limited_all = False
