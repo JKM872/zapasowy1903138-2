@@ -1554,6 +1554,7 @@ _app_stats: Dict[str, int] = {}
 
 
 _app_client_403_streak = 0
+_APP_FAIL_LIMIT = int(os.getenv('SOFASCORE_APP_FAIL_LIMIT', '30'))
 
 
 def _app_client_response(url: str, timeout: int = 10):
@@ -1562,8 +1563,10 @@ def _app_client_response(url: str, timeout: int = 10):
     Najpierw direct, potem (jeśli ustawione) przez SOFASCORE_PROXY.
     Tylko dla API SofaScore (``/api/v1/``) — strony HTML idą starą ścieżką.
     """
-    global _app_client_403_streak
+    global _app_client_403_streak, _sofascore_unreachable_for_run
     if not (_APP_CLIENT_ENABLED and CURL_CFFI_AVAILABLE) or '/api/v1/' not in url:
+        return None
+    if _sofascore_unreachable_for_run:
         return None
     www_url = url.replace('://api.sofascore.com/', '://www.sofascore.com/')
     attempts = [None]
@@ -1604,6 +1607,15 @@ def _app_client_response(url: str, timeout: int = 10):
             _app_stats['error'] = _app_stats.get('error', 0) + 1
     # Wszystkie warianty dały 403/błąd — log rzadko, żeby nie zalać runu.
     _app_client_403_streak += 1
+    # Run bez ANI JEDNEGO sukcesu i długa seria 403 = IP runnera zablokowane.
+    # Wyłączamy SofaScore na resztę runu (Fan Vote, kursy, wyszukiwanie),
+    # zamiast płacić ~10 s na mecz za strategie, które i tak padną.
+    if (_app_client_403_streak >= _APP_FAIL_LIMIT
+            and not _app_stats.get('200') and not _app_stats.get('404')
+            and not _sofascore_unreachable_for_run):
+        _sofascore_unreachable_for_run = True
+        print(f"   🚫 SofaScore: {_app_client_403_streak} kolejnych 403 bez żadnego sukcesu "
+              f"— wyłączam SofaScore na resztę runu (kursy: Pinnacle/Livesport/Superbet)")
     if _app_client_403_streak in (1, 10, 50) or _app_client_403_streak % 200 == 0:
         print(f"   ⚠️ SofaScore app-client: 403 po {len(plan)} próbach "
               f"(seria {_app_client_403_streak}, stat {_app_stats}) — fallback")
