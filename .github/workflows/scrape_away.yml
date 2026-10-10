@@ -3,7 +3,8 @@ name: Sports Scraper Pipeline - AWAY FOCUS
 on:
   # Run daily at 3:00 UTC (5:00 CEST summer / 4:00 CET winter)
   schedule:
-    - cron: '0 3 * * *'
+    # 02:00 Europe/Warsaw latem (CEST), 01:00 zimą (CET) — wyniki gotowe rano.
+    - cron: '0 0 * * *'
   
   # Allow manual trigger
   workflow_dispatch:

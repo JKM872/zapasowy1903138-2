@@ -3,6 +3,7 @@ name: Sports Scraper Pipeline
 on:
   # Run daily at 0:00 UTC (2:00 CEST summer / 1:00 CET winter = ~2:00 Polish time)
   schedule:
+    # 02:00 Europe/Warsaw latem (CEST), 01:00 zimą (CET) — wyniki gotowe rano.
     - cron: '0 0 * * *'
   
   # Allow manual trigger
