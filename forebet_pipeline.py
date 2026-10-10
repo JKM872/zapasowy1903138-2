@@ -176,6 +176,8 @@ MAX_MARGIN_BY_SPORT = {
     'volleyball': 11.0,  # obserwowane 8,2–9,8%
     'baseball': 16.0,    # MLB/NPB/KBO siegaja 14% — nie karzemy ich
 }
+# Wstępna bramka kursowa z Pinnacle API przed kosztownym Livesport.
+PRE_ODDS_GATE = os.getenv('FOREBET_PRE_ODDS_GATE', '1').strip().lower() not in ('0', 'false', 'no')
 # Kurs na faworyta Forebet nie może być wyższy niż na przeciwnika.
 FAV_ODDS_GATE = os.getenv('FOREBET_FAV_ODDS_GATE', '1').strip().lower() not in ('0', 'false', 'no')
 MAX_MARGIN_DEFAULT = float(os.getenv('FOREBET_MAX_MARGIN_DEFAULT', '13'))
@@ -1331,9 +1333,25 @@ def _pinnacle_index(sport: str) -> List[Dict[str, Any]]:
     return rows
 
 
+_PIN_LOOKUP_CACHE: Dict[Tuple[str, str, str, Optional[str]], Optional[Dict[str, Any]]] = {}
+
+
 def pinnacle_odds(home: str, away: str, sport: str,
                   date_str: Optional[str]) -> Optional[Dict[str, Any]]:
-    """Kursy Pinnacle bezpośrednio z ich API — gdy Livesport ich nie dał."""
+    """Kursy Pinnacle bezpośrednio z ich API — gdy Livesport ich nie dał.
+
+    Wynik dopasowania jest cache'owany (kolejność + wstępna bramka + resolve
+    pytają o ten sam mecz), zwracamy kopię, żeby wywołujący nie psuł cache.
+    """
+    key = (home, away, sport, date_str)
+    if key not in _PIN_LOOKUP_CACHE:
+        _PIN_LOOKUP_CACHE[key] = _pinnacle_odds_uncached(home, away, sport, date_str)
+    v = _PIN_LOOKUP_CACHE[key]
+    return dict(v) if v else None
+
+
+def _pinnacle_odds_uncached(home: str, away: str, sport: str,
+                            date_str: Optional[str]) -> Optional[Dict[str, Any]]:
     try:
         from tools import coupon_builder as cb
     except Exception:
@@ -1760,7 +1778,8 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
             ho, ao = float(row.get('home_odds')), float(row.get('away_odds'))
         except (TypeError, ValueError):
             ho = ao = None
-        if fav in ('home', 'away') and ho and ao:
+        already = any(str(r).startswith('kurs_faworyta_') for r in reasons)
+        if fav in ('home', 'away') and ho and ao and not already:
             fav_o, opp_o = (ho, ao) if fav == 'home' else (ao, ho)
             if fav_o > opp_o:
                 reasons.append(f'kurs_faworyta_{fav_o:.2f}>{opp_o:.2f}')
@@ -2021,15 +2040,31 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         # To NIE jest użycie kursu Forebet do decyzji — o progu i EV nadal
         # decyduje wyłącznie Pinnacle/Livesport/SofaScore. Tu liczy się tylko
         # SAM FAKT wyceny jako wskaźnik pokrycia rynkowego.
+        # Najpierw mecze, które Pinnacle lub Superbet realnie wyceniają — tylko
+        # takie da się zagrać. Gdy czas się skończy, odpadają mecze bez rynku
+        # (ligi kobiece/rezerwy), a nie te z kursem.
+        def _bookable(m):
+            try:
+                if pinnacle_odds(m['home_team'], m['away_team'], sport, date_str):
+                    return 0
+                if superbet_odds(m['home_team'], m['away_team'], sport, date_str):
+                    return 1
+            except Exception:
+                pass
+            return 2
+
         def _priority(m):
             has_market = bool(m.get('home_odds') or m.get('away_odds'))
-            return (0 if has_market else 1, -(m.get('forebet_fav_prob') or 0))
+            return (_bookable(m), 0 if has_market else 1, -(m.get('forebet_fav_prob') or 0))
 
         # cap = 0 (domyślnie) oznacza BRAK limitu — o zasięgu decyduje czas,
         # nie arbitralna liczba. Limit zostaje dostępny przez --max-matches
         # i FOREBET_MAX_PER_SPORT_DEFAULT, gdy ktoś chce świadomie przyciąć.
         cap = max_matches if max_matches else DEFAULT_MAX_PER_SPORT
+        _t0 = time.time()
         ordered = sorted(selected, key=_priority)
+        print(f"   🏷️ Kolejność: najpierw mecze z rynkiem Pinnacle/Superbet "
+              f"({time.time() - _t0:.1f} s)")
         by_quality = ordered[:cap] if cap else ordered
         dropped = len(selected) - len(by_quality)
         worst = min((m.get('forebet_fav_prob') or 0) for m in by_quality)
@@ -2182,8 +2217,36 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             'skip_reason': None,
         }
 
+        # ⚡ Wstępna bramka kursowa (przed Livesport). Kursy Pinnacle z API są
+        # już w pamięci (jedno zapytanie na sport), a Livesport kosztuje
+        # ~20–30 s na mecz. Gdy Pinnacle ma ten mecz i kurs NIE spełnia progu
+        # albo faworyt Forebet ma wyższy kurs niż rywal — mecz i tak odpadnie,
+        # więc nie pobieramy dla niego H2H/formy. To ta sama cena, którą pipeline
+        # i tak bierze jako pierwszą (Pinnacle), więc wynik się nie zmienia.
+        pre_reject = None
+        if PRE_ODDS_GATE:
+            pre = pinnacle_odds(home, away, sport, date_str)
+            if pre and pre.get('home_odds') and pre.get('away_odds'):
+                ok_pre, why = odds_gate(sport, pre['home_odds'], pre['away_odds'],
+                                        min_odds, max_odds)
+                if not ok_pre:
+                    pre_reject = why
+                elif FAV_ODDS_GATE and row.get('favorite') in ('home', 'away'):
+                    fo, oo = ((pre['home_odds'], pre['away_odds'])
+                              if row['favorite'] == 'home'
+                              else (pre['away_odds'], pre['home_odds']))
+                    if float(fo) > float(oo):
+                        pre_reject = f'kurs_faworyta_{float(fo):.2f}>{float(oo):.2f}'
+                if pre_reject:
+                    for k in ('home_odds', 'draw_odds', 'away_odds', 'odds_source', 'bookmaker'):
+                        row[k] = pre.get(k)
+                    row['skip_reason'] = pre_reject
+                    row['pre_gate'] = True
+                    print(f"      ⚡ {pre_reject} (Pinnacle {pre['home_odds']}/{pre['away_odds']}) "
+                          f"— pomijam pobieranie H2H/formy")
+
         # Livesport: dopasowanie + H2H/forma/kursy
-        if driver is not None:
+        if driver is not None and not pre_reject:
             ls_url = url_by_pair.get(f"{home.lower().strip()}|{away.lower().strip()}")
             row['match_url'] = ls_url
             if ls_url:
@@ -2198,7 +2261,8 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
 
         # Tenis: forma ma być przy KAŻDYM meczu. Gdy Livesport jej nie dał
         # (brak dopasowania, pusta strona), bierzemy ją z SofaScore.
-        if sport == 'tennis' and not (row.get('home_form') and row.get('away_form')):
+        if (sport == 'tennis' and not pre_reject
+                and not (row.get('home_form') and row.get('away_form'))):
             fh, fa = sofascore_player_form(home, away, sport, date_str)
             if fh and not row.get('home_form'):
                 row['home_form'] = fh
@@ -2214,14 +2278,15 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         # potrzebuje URL-a. Wcześniej brak dopasowania w Livesport oznaczał, że
         # nie pytaliśmy o kurs NIGDZIE — i mecz ginął na `brak_kursow`, choć
         # cena mogła istnieć.
-        odds = resolve_odds(row.get('match_url'), sport,
-                            home_team=home, away_team=away, date_str=date_str)
-        row['home_odds'] = odds.get('home_odds')
-        row['draw_odds'] = odds.get('draw_odds')
-        row['away_odds'] = odds.get('away_odds')
-        row['odds_source'] = odds.get('odds_source')
-        row['bookmaker'] = odds.get('bookmaker')
-        row['odds_note'] = odds.get('reason')
+        if not pre_reject:
+            odds = resolve_odds(row.get('match_url'), sport,
+                                home_team=home, away_team=away, date_str=date_str)
+            row['home_odds'] = odds.get('home_odds')
+            row['draw_odds'] = odds.get('draw_odds')
+            row['away_odds'] = odds.get('away_odds')
+            row['odds_source'] = odds.get('odds_source')
+            row['bookmaker'] = odds.get('bookmaker')
+            row['odds_note'] = odds.get('reason')
 
         # BEZ zamiany stron na podstawie URL-a Livesport.
         #
@@ -2247,7 +2312,9 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         # bez ceny nie ma EV ani ROI, wiec typ jest nierozliczalny.
         ok, reason = odds_gate(sport, row.get('home_odds'), row.get('away_odds'),
                                min_odds, max_odds)
-        if not ok:
+        if pre_reject:
+            pass  # powód już ustawiony przez wstępną bramkę
+        elif not ok:
             row['skip_reason'] = reason
             print(f"      ⛔ {reason} (H={row.get('home_odds')}, A={row.get('away_odds')}"
                   f", źródło={row.get('odds_source') or 'brak'})")
