@@ -24,7 +24,8 @@ on:
   # 12 (refresh_qualified_noon), 14 (scrape_baseball), 19 i 22 (raporty).
   # Kolizja oznaczalaby wyscig o push na main miedzy workflow.
   schedule:
-    - cron: '0 4 * * *'
+    # 02:00 Europe/Warsaw latem (CEST), 01:00 zimą (CET) — wyniki gotowe rano.
+    - cron: '0 0 * * *'
 
   workflow_dispatch:
     inputs:
