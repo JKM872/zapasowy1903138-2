@@ -920,22 +920,39 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
             
             # Wyciągnij godzinę z różnych formatów
             # Format: DD.MM.YYYY HH:MM lub HH:MM
-            time_match = re.search(r'(\d{1,2}:\d{2})', match_time)
-            if time_match:
-                return time_match.group(1)
-            return '99:99'
+            # Klucz: (data, HH:MM z zerem). Bez zera '9:30' > '19:30' tekstowo,
+            # a bez daty mecz po północy wskakiwał na początek listy.
+            time_match = re.search(r'(\d{1,2}):(\d{2})', match_time)
+            if not time_match:
+                return '99:99'
+            hhmm = f"{int(time_match.group(1)):02d}:{time_match.group(2)}"
+            date_part = ''
+            dm = re.search(r'(\d{4})-(\d{2})-(\d{2})', match_time) or None
+            if dm:
+                date_part = dm.group(0)
+            else:
+                dm = re.search(r'(\d{2})\.(\d{2})\.(\d{4})', match_time)
+                if dm:
+                    date_part = f"{dm.group(3)}-{dm.group(2)}-{dm.group(1)}"
+            if not date_part:
+                md = match.get('match_date')
+                if isinstance(md, str) and re.match(r'^\d{4}-\d{2}-\d{2}', md):
+                    date_part = md[:10]
+            return f"{date_part} {hhmm}"
         
         sorted_matches = sorted(sorted_matches, key=get_time_key)
 
-        # Grupuj po lidze (alfabetycznie), zachowując kolejność czasową w obrębie
-        # ligi — łatwiej znaleźć zdarzenia z tej samej ligi (np. Setka Cup).
-        # Mecze bez ligi trafiają na koniec.
-        def get_league_key(match: Dict[str, Any]) -> str:
-            lg = match.get('league', '')
-            if not lg or not isinstance(lg, str) or lg.strip().lower() in ('', 'nan', 'none'):
-                return 'zzzzzz'
-            return lg.strip().lower()
-        sorted_matches = sorted(sorted_matches, key=get_league_key)
+        # Grupowanie po lidze tylko dla tenisa stołowego (Setka Cup itp.) —
+        # w pozostałych sportach mail ma iść ściśle po godzinie.
+        def _is_tt(m: Dict[str, Any]) -> bool:
+            return str(m.get('sport') or '').lower().replace('-', '_') in ('table_tennis',)
+        if sorted_matches and all(_is_tt(m) for m in sorted_matches):
+            def get_league_key(match: Dict[str, Any]) -> str:
+                lg = match.get('league', '')
+                if not lg or not isinstance(lg, str) or lg.strip().lower() in ('', 'nan', 'none'):
+                    return 'zzzzzz'
+                return lg.strip().lower()
+            sorted_matches = sorted(sorted_matches, key=get_league_key)
     
     elif sort_by == 'wins':
         # Sortuj po liczbie wygranych (malejąco) - uwzględnij tryb away_team_focus

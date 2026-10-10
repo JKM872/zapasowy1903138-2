@@ -181,6 +181,36 @@ FAV_ODDS_GATE = os.getenv('FOREBET_FAV_ODDS_GATE', '1').strip().lower() not in (
 MAX_MARGIN_DEFAULT = float(os.getenv('FOREBET_MAX_MARGIN_DEFAULT', '13'))
 
 
+FOREBET_SOURCE_TZ = os.getenv('FOREBET_SOURCE_TZ', 'UTC')
+FOREBET_DISPLAY_TZ = os.getenv('FOREBET_DISPLAY_TZ', 'Europe/Warsaw')
+
+
+def localize_forebet_time(row: Dict[str, Any]) -> Dict[str, Any]:
+    """match_date/match_time (UTC z Forebet) → strefa wyświetlania.
+
+    Idempotentne: drugi raz nic nie zmienia (znacznik ``match_time_utc``).
+    Zawsze zwraca godzinę w formacie 'HH:MM'.
+    """
+    if row.get('match_time_utc') is not None:
+        return row
+    t, d = row.get('match_time'), row.get('match_date')
+    row['match_time_utc'] = t or ''
+    row['match_date_utc'] = d or ''
+    if not t or not d:
+        return row
+    try:
+        from zoneinfo import ZoneInfo
+        h, mi = (int(x) for x in str(t).split(':')[:2])
+        src = datetime.strptime(str(d)[:10], '%Y-%m-%d').replace(
+            hour=h, minute=mi, tzinfo=ZoneInfo(FOREBET_SOURCE_TZ))
+        loc = src.astimezone(ZoneInfo(FOREBET_DISPLAY_TZ))
+        row['match_date'] = loc.strftime('%Y-%m-%d')
+        row['match_time'] = loc.strftime('%H:%M')
+    except Exception:
+        pass
+    return row
+
+
 def max_margin_for(sport: str) -> float:
     """Próg marży dla sportu. Env ``FOREBET_MAX_MARGIN_<SPORT>`` nadpisuje."""
     sport = (sport or '').lower()
@@ -2273,6 +2303,11 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     # Chronologia DOPIERO tutaj. Pętla szła od najlepszych kandydatów, żeby
     # hamulec czasu ucinał najsłabszy ogon, ale mail i JSON mają być
     # uporządkowane po godzinie rozpoczęcia — tak się je czyta.
+    # Forebet podaje godziny w UTC (sprawdzone z SofaScore: Djokovic–Hurkacz
+    # Forebet 10:10 = SofaScore 10:00 UTC). Mail czyta się po polsku, więc
+    # godzinę i datę pokazujemy w Europe/Warsaw; oryginał zostaje w *_utc.
+    for r in rows:
+        localize_forebet_time(r)
     rows.sort(key=lambda r: (str(r.get('match_date') or ''),
                              str(r.get('match_time') or '99:99')))
 
