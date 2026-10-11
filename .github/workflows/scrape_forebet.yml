@@ -178,6 +178,12 @@ jobs:
 
       # Tor daje SofaScore inne IP niż spalone IP runnera — to jest główna
       # przyczyna, dla której Fan Vote „działa, ale nie zawsze".
+      # WARP (IP Cloudflare) — SofaScore przepuszcza je z UA aplikacji, a
+      # IP runnera i exity Tora dostaja 403. Przy sukcesie sondy skrypt
+      # ustawia WARP_PROXY; inaczej zostaje Tor.
+      - name: Setup Cloudflare WARP (SOCKS5 on :1080)
+        if: steps.gate.outputs.run == 'true'
+        run: bash tools/setup_warp.sh
       - name: Setup Tor (SOCKS5 on :9050)
         if: steps.gate.outputs.run == 'true'
         continue-on-error: true
@@ -239,7 +245,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
-          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY: ${{ env.WARP_PROXY || 'socks5h://localhost:9050' }}
           SOFASCORE_PROXY_PRIMARY: "1"
           # Token X-Requested-With. Bez przekazania go tutaj sofascore_scraper
           # uzywa zaszytej wartosci '61544a', ktora SofaScore odrzuca po swoim

@@ -28,7 +28,7 @@ set -u
 WARP_MAX_ATTEMPTS="${WARP_MAX_ATTEMPTS:-3}"
 WARP_WAIT_TRIES="${WARP_WAIT_TRIES:-20}"
 WARP_PROXY_PORT="${WARP_PROXY_PORT:-1080}"
-WARP_PROBE_URL="${WARP_PROBE_URL:-https://api.sofascore.com/api/v1/sport/football/events/live}"
+WARP_PROBE_URL="${WARP_PROBE_URL:-https://www.sofascore.com/api/v1/sport/football/events/live}"
 
 start_warp() {
   docker rm -f warp >/dev/null 2>&1 || true
@@ -89,8 +89,10 @@ import time
 xrw = (os.environ.get("SOFASCORE_XRW", "").strip()
        or hashlib.sha256(str(int(time.time() // 1800)).encode()).hexdigest()[:6])
 try:
-    r = cr.get(url, impersonate="chrome124", proxies=proxies, timeout=15,
-               headers={"X-Requested-With": xrw, "Referer": "https://www.sofascore.com/"})
+    # v12: ten sam klient co scraper (UA aplikacji okhttp) — UA przegladarki
+    # dostaje 403 "challenge" niezaleznie od IP, wiec sonda by klamala.
+    r = cr.get(url, impersonate="chrome", proxies=proxies, timeout=15,
+               headers={"User-Agent": "okhttp/4.12.0", "Accept": "application/json"})
     print(f"probe: SofaScore via WARP -> HTTP {r.status_code}")
     sys.exit(0 if r.status_code == 200 else 1)
 except Exception as e:
@@ -113,6 +115,7 @@ for ((attempt = 1; attempt <= WARP_MAX_ATTEMPTS; attempt++)); do
   rc=$?
   if [ "$rc" -eq 0 ]; then
     echo "✅ SofaScore reachable through WARP — IP not flagged."
+    [ -n "${GITHUB_ENV:-}" ] && echo "WARP_PROXY=socks5h://localhost:${WARP_PROXY_PORT}" >> "$GITHUB_ENV"
     OK=true
     break
   elif [ "$rc" -eq 2 ]; then
