@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-10-11T06:08:05.122016+02:00",
+    "target_date": "2026-10-11",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 1.5,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - World Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/world-cup/papua-new-guinea-vs-lebanon/6920432?MarketTypeID=1401",
+      "match_id": "6920432",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Papua New Guinea",
+      "away_team": "Lebanon",
+      "event_date": "17/10",
+      "event_time": "04:25",
+      "outcome": "2",
+      "open_odds": 10.0,
+      "current_odds": 7.28,
+      "drop_pct": 27.0,
+      "max_odds": 8.5,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": []
+}
