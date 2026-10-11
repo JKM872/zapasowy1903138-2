@@ -32,3 +32,11 @@ def test_localize_utc_to_warsaw():
     assert fp.localize_forebet_time(r)['match_time'] == '01:30'  # idempotentne
     r = fp.localize_forebet_time({'match_date': '2026-12-10', 'match_time': '10:00'})
     assert r['match_time'] == '11:00'  # czas zimowy
+
+
+def test_parse_datetime_us_format_with_ampm():
+    from bs4 import BeautifulSoup
+    row = BeautifulSoup('<div><span class="date_bah">10/11/2026 1:10 PM</span></div>', 'html.parser')
+    assert fbl._parse_datetime(row) == ('2026-10-11', '13:10')
+    row = BeautifulSoup('<div><span class="date_bah">11/10/2026 19:30</span></div>', 'html.parser')
+    assert fbl._parse_datetime(row) == ('2026-10-11', '19:30')

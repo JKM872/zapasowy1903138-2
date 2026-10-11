@@ -124,6 +124,23 @@ def _norm_time(raw: Any) -> Optional[str]:
     return f'{h:02d}:{mi:02d}'
 
 
+def _slash_date(md, raw: str) -> str:
+    """'AA/BB/YYYY' → 'YYYY-MM-DD'.
+
+    Forebet /en/ z zegarem 12h (AM/PM) pisze datę po amerykańsku MM/DD/YYYY;
+    zapis 24h to DD/MM/YYYY. 11.10 czytane jako DD/MM dawało 10 listopada
+    i odrzucało CAŁĄ listę dnia („brak HTML — 0 meczów").
+    """
+    a, b, y = int(md.group(1)), int(md.group(2)), md.group(3)
+    us = bool(re.search(r'\b[ap]\.?\s*m\b', raw, re.I))
+    if a > 12:
+        us = False
+    elif b > 12:
+        us = True
+    month, day = (a, b) if us else (b, a)
+    return f'{y}-{month:02d}-{day:02d}'
+
+
 def _repair_12h_clock(html_matches: List[Dict[str, Any]],
                       json_matches: List[Dict[str, Any]]) -> int:
     """Naprawia godziny 12h bez am/pm w wierszach HTML (w kolejności strony).
@@ -169,14 +186,21 @@ def _parse_datetime(row) -> tuple[Optional[str], Optional[str]]:
     date_str = None
     time_str = None
 
-    raw = _text(row.find('span', class_='date_bah'))  # '05/01/2026 19:30' / '... 1:10 pm'
+    raw = _text(row.find('span', class_='date_bah'))  # '05/01/2026 19:30' / '10/11/2026 1:10 PM'
     if raw:
         md = re.search(r'(\d{2})/(\d{2})/(\d{4})', raw)
         time_str = _norm_time(raw[md.end():] if md else raw)
         if md:
-            date_str = f'{md.group(3)}-{md.group(2)}-{md.group(1)}'
-            if time_str:
-                return date_str, time_str
+            date_str = _slash_date(md, raw)
+
+    # <time datetime="YYYY-MM-DD..."> jest jednoznaczne — ma pierwszeństwo.
+    time_el = row.find('time')
+    if time_el and time_el.get('datetime'):
+        dt_attr = time_el['datetime'][:10]
+        if re.match(r'^\d{4}-\d{2}-\d{2}$', dt_attr):
+            date_str = dt_attr
+    if date_str and time_str:
+        return date_str, time_str
 
     time_el = row.find('time')
     if time_el and time_el.get('datetime'):
@@ -600,7 +624,7 @@ def map_json_match(obj: Dict[str, Any], leagues: Dict[str, Any],
     else:
         m = re.search(r'(\d{2})/(\d{2})/(\d{4})\s+(\d{1,2}:\d{2}.*)', raw_dt)
         if m:
-            date_str = f'{m.group(3)}-{m.group(2)}-{m.group(1)}'
+            date_str = _slash_date(m, raw_dt)
             time_str = _norm_time(m.group(4))
 
     home_prob = _int_or_none(_first(obj, ['Pred_1', 'pred_1']))
