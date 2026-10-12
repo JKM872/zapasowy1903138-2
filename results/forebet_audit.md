@@ -1,12 +1,16 @@
 # Audyt Forebet
 
-_wygenerowano 2026-10-11 13:22 UTC_
+_wygenerowano 2026-10-12 15:58 UTC_
 
 ## Kontrole zdrowia danych
 
-- 🟡 **UWAGA** `basketball` — 29/43 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `basketball` — Fan Vote: 0 głosów na 205 meczów — składnik scoringu nie działa
-- 🟡 **UWAGA** `tennis` — 4/6 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `basketball` — 8/13 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `basketball` — Fan Vote: 0 głosów na 48 meczów — składnik scoringu nie działa
+- 🟡 **UWAGA** `football` — 1/1 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `hockey` — 2/10 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `hockey` — Fan Vote: 0 głosów na 29 meczów — składnik scoringu nie działa
+- 🟡 **UWAGA** `tennis` — 16/22 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `tennis` — Fan Vote: 0 głosów na 89 meczów — składnik scoringu nie działa
 
 ## Wyniki typów
 
