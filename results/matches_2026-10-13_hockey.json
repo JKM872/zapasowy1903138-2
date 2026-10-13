@@ -1,15 +1,15 @@
 {
   "date": "2026-10-13",
   "sport": "hockey",
-  "generatedAt": "2026-10-13T04:21:11.659092",
+  "generatedAt": "2026-10-13T06:13:46.612391",
   "stats": {
     "total": 40,
-    "qualifying": 7,
-    "formAdvantage": 7
+    "qualifying": 21,
+    "formAdvantage": 8
   },
   "matches": [
     {
-      "id": -2050546170172342127,
+      "id": 8450902905942497723,
       "homeTeam": "KooKoo",
       "awayTeam": "Mannheim",
       "time": "13.10.2026 15:30",
@@ -31,7 +31,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
@@ -43,7 +43,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -55,7 +55,7 @@
       "predictionGrade": null
     },
     {
-      "id": 612736630286422423,
+      "id": -584218034326593551,
       "homeTeam": "GKS Tychy",
       "awayTeam": "Tappara",
       "time": "13.10.2026 16:00",
@@ -77,7 +77,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
@@ -89,7 +89,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -101,7 +101,7 @@
       "predictionGrade": null
     },
     {
-      "id": -7609799586593545573,
+      "id": 5024945292470055463,
       "homeTeam": "Nitra",
       "awayTeam": "Rogle",
       "time": "13.10.2026 16:00",
@@ -123,7 +123,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
@@ -135,7 +135,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -147,7 +147,7 @@
       "predictionGrade": null
     },
     {
-      "id": 2083337447522157267,
+      "id": 7201015883992286038,
       "homeTeam": "Pardubice",
       "awayTeam": "Vaxjo",
       "time": "13.10.2026 16:00",
@@ -156,11 +156,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/pardubice-UDlHJ9wl/vaxjo-hzXCSnCE/?mid=67qcKreM",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -169,31 +167,114 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "homeForm": [
+        "D",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "D",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.83,
+        "draw": 4.5,
+        "away": 3.35,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "exactScore": "4-1",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 75.9,
+        "ev": 0.388,
+        "edge": 21.2,
+        "kelly": 5.0,
+        "confidence": 78.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 88,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 21.255,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 76%",
+          "Positive expected value: 0.39",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 21.2,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "A"
     },
     {
-      "id": 2362124496600156381,
+      "id": 4411147494496855524,
       "homeTeam": "Frolunda",
       "awayTeam": "Bordeaux",
       "time": "13.10.2026 17:00",
@@ -215,7 +296,7 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 40
       },
       "homeForm": [],
       "awayForm": [],
@@ -227,7 +308,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -239,7 +320,7 @@
       "predictionGrade": null
     },
     {
-      "id": -3551900690581981121,
+      "id": 3422051188610708985,
       "homeTeam": "Skelleftea",
       "awayTeam": "Salzburg",
       "time": "13.10.2026 17:00",
@@ -248,10 +329,10 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/salzburg-GSq0EQUL/skelleftea-8jdWygW7/?mid=buVa6Es1",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed"
+        "odds_below_threshold"
       ],
       "channelSkipWarnings": [
         "fan_vote_missing"
@@ -261,31 +342,113 @@
         "draw": 0,
         "away": 0,
         "total": 2,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "D",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 1.35,
+        "draw": 5.25,
+        "away": 6.5,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "exactScore": "4-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 78.1,
+        "ev": 0.054,
+        "edge": 4.0,
+        "kelly": 3.9,
+        "confidence": 60.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 78,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.85,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 2,
+        "consensus_strength": "moderate",
+        "market_model_gap": 4.026,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 78%",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 85%)",
+        "availability_note": "",
+        "expected_edge": 4.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "B"
     },
     {
-      "id": -1913582681601802875,
+      "id": -4701419624811248217,
       "homeTeam": "Minnesota Wild",
       "awayTeam": "Vegas Golden Knights",
       "time": "13.10.2026 00:00",
@@ -294,10 +457,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/minnesota-wild-j9Ck7BHi/vegas-golden-knights-fTT0TsUg/?mid=2mMHKOBr",
-      "qualifies": false,
+      "qualifies": true,
       "channelQualifies": false,
       "channelSkipReasons": [
-        "base_qualification_failed",
         "match_already_started"
       ],
       "channelSkipWarnings": [
@@ -308,31 +470,113 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 20
+        "winRate": 80
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "D",
+        "D",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
       "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 2.45,
+        "draw": 4.0,
+        "away": 2.5,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 53.0,
+        "exactScore": "3-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 58.1,
+        "ev": 0.424,
+        "edge": 17.3,
+        "kelly": 5.0,
+        "confidence": 66.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 78,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 17.284,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Positive expected value: 0.42",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 17.3,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "B"
     },
     {
-      "id": -4644105190900298883,
+      "id": 5319785175852239059,
       "homeTeam": "Detroit Red Wings",
       "awayTeam": "New Jersey Devils",
       "time": "13.10.2026 22:00",
@@ -354,43 +598,19 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "D",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "D"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "D",
-        "L",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -402,7 +622,7 @@
       "predictionGrade": null
     },
     {
-      "id": 4775694084678224514,
+      "id": -5193362482085355198,
       "homeTeam": "Columbus Blue Jackets",
       "awayTeam": "Florida Panthers",
       "time": "13.10.2026 22:15",
@@ -424,77 +644,7 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "L",
-        "D",
-        "L",
-        "W",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "W",
-        "D",
-        "D"
-      ],
-      "homeFormHome": [
-        "D",
-        "L",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "D",
-        "D",
-        "D"
-      ],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 7991614798949105370,
-      "homeTeam": "Montreal Canadiens",
-      "awayTeam": "Buffalo Sabres",
-      "time": "13.10.2026 22:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/buffalo-sabres-UobjtMIP/montreal-canadiens-nu2G7VWc/?mid=GWqNGGMM",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 40
+        "winRate": 20
       },
       "homeForm": [],
       "awayForm": [],
@@ -506,7 +656,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -518,7 +668,131 @@
       "predictionGrade": null
     },
     {
-      "id": -4907785856737113970,
+      "id": 5896340555000916238,
+      "homeTeam": "Montreal Canadiens",
+      "awayTeam": "Buffalo Sabres",
+      "time": "13.10.2026 22:30",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/buffalo-sabres-UobjtMIP/montreal-canadiens-nu2G7VWc/?mid=GWqNGGMM",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "D",
+        "L",
+        "L",
+        "D",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "D",
+        "W"
+      ],
+      "homeFormHome": [
+        "D",
+        "L",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "L",
+        "D",
+        "L",
+        "W",
+        "W"
+      ],
+      "formAdvantage": false,
+      "odds": {
+        "home": 2.05,
+        "draw": 4.3,
+        "away": 3.05,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "2",
+        "probability": 52.0,
+        "exactScore": "3-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 49.9,
+        "ev": 0.023,
+        "edge": 1.1,
+        "kelly": 0.6,
+        "confidence": 29.0,
+        "dataQuality": 0.82
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 68,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": 1.12,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 1.1,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "D"
+    },
+    {
+      "id": 8663578115591018116,
       "homeTeam": "Carolina Hurricanes",
       "awayTeam": "Washington Capitals",
       "time": "13.10.2026 22:45",
@@ -540,43 +814,19 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "D"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "D",
-        "W",
-        "D"
-      ],
-      "awayFormAway": [
-        "L",
-        "W",
-        "W",
-        "D",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -588,7 +838,7 @@
       "predictionGrade": null
     },
     {
-      "id": 7820603197741594989,
+      "id": -7081027843275092272,
       "homeTeam": "Philadelphia Flyers",
       "awayTeam": "Seattle Kraken",
       "time": "13.10.2026 23:00",
@@ -597,9 +847,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/philadelphia-flyers-QySGG7oT/seattle-kraken-MibYQ5nU/?mid=raTQxOXQ",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -608,48 +860,92 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -5669458260362114419,
+      "homeTeam": "New York Rangers",
+      "awayTeam": "Tampa Bay Lightning",
+      "time": "13.10.2026 23:15",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/new-york-rangers-O4zxeyWN/tampa-bay-lightning-YVE3zk1c/?mid=EsKdX1el",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 80
       },
       "homeForm": [
+        "W",
         "L",
-        "L",
-        "L",
-        "L",
-        "D"
+        "W",
+        "W",
+        "W"
       ],
       "awayForm": [
         "W",
         "W",
-        "L",
+        "W",
         "W",
         "L"
       ],
       "homeFormHome": [
-        "L",
-        "D",
-        "L",
-        "L",
-        "W"
+        "W",
+        "W",
+        "W",
+        "W",
+        "D"
       ],
       "awayFormAway": [
         "W",
-        "W",
         "L",
-        "W",
-        "L"
+        "D",
+        "D",
+        "D"
       ],
-      "formAdvantage": true,
+      "formAdvantage": false,
       "odds": {
-        "home": 2.35,
-        "draw": 4.1,
-        "away": 2.65,
+        "home": 3.15,
+        "draw": 4.2,
+        "away": 2.0,
         "bookmaker": "Pinnacle"
       },
       "forebet": {
         "prediction": "1",
-        "probability": 66.0,
-        "exactScore": "3-2",
-        "overUnder": "Under 5.5",
+        "probability": 54.0,
+        "exactScore": "4-3",
+        "overUnder": "Over 5.5",
         "btts": "Yes",
         "homeProb": null,
         "drawProb": null,
@@ -658,19 +954,19 @@
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": {
-        "pick": "2",
-        "prob": 42.6,
-        "ev": 0.129,
-        "edge": 4.9,
-        "kelly": 2.0,
-        "confidence": 31.0,
+        "pick": "1",
+        "prob": 46.0,
+        "ev": 0.449,
+        "edge": 14.2,
+        "kelly": 5.0,
+        "confidence": 45.0,
         "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 65,
+      "confidence": 68,
       "value_bet": true,
       "dataQuality": {
         "sources_available": 3,
@@ -682,8 +978,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 4.864,
+        "consensus_strength": "weak",
+        "market_model_gap": 14.254,
         "skip_reason": null
       },
       "availability": {
@@ -700,8 +996,7 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.13",
-          "Form advantage confirmed"
+          "Positive expected value: 0.45"
         ],
         "risk_factors": [
           "Fatigue risk: high",
@@ -709,59 +1004,13 @@
         ],
         "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 4.9,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 14.2,
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "D"
+      "predictionGrade": "C"
     },
     {
-      "id": 1633840224606521249,
-      "homeTeam": "New York Rangers",
-      "awayTeam": "Tampa Bay Lightning",
-      "time": "13.10.2026 23:15",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/new-york-rangers-O4zxeyWN/tampa-bay-lightning-YVE3zk1c/?mid=EsKdX1el",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 4416893305061363743,
+      "id": 304983262918792536,
       "homeTeam": "Ottawa Senators",
       "awayTeam": "St. Louis Blues",
       "time": "13.10.2026 23:30",
@@ -783,43 +1032,19 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "D",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "W",
-        "D",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "D",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -831,7 +1056,7 @@
       "predictionGrade": null
     },
     {
-      "id": 8806805941254745218,
+      "id": -1846082325224832557,
       "homeTeam": "New York Islanders",
       "awayTeam": "Vancouver Canucks",
       "time": "13.10.2026 23:45",
@@ -853,43 +1078,19 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "D",
-        "L"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -901,7 +1102,7 @@
       "predictionGrade": null
     },
     {
-      "id": 104967566339500777,
+      "id": 3251126381556690810,
       "homeTeam": "Pilzno U20",
       "awayTeam": "Karlovy Vary U20",
       "time": "13.10.2026 15:00",
@@ -923,76 +1124,6 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
-      },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "W",
-        "L"
-      ],
-      "awayForm": [
-        "W",
-        "L",
-        "W",
-        "D",
-        "W"
-      ],
-      "homeFormHome": [
-        "W",
-        "W",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "W",
-        "D",
-        "D"
-      ],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 459211422362609113,
-      "homeTeam": "BO Ostrava",
-      "awayTeam": "North Wings Usti nad Labem",
-      "time": "13.10.2026 17:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/bo-ostrava-I3KhxkC2/north-wings-usti-nad-labem-lvCDkgJC/?mid=8GRTpWeo",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
         "winRate": 40
       },
       "homeForm": [],
@@ -1005,7 +1136,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1017,93 +1148,104 @@
       "predictionGrade": null
     },
     {
-      "id": 2890210759883377361,
-      "homeTeam": "Salzburg 2",
-      "awayTeam": "Ritten",
-      "time": "13.10.2026 17:15",
+      "id": 7004865454609902242,
+      "homeTeam": "BO Ostrava",
+      "awayTeam": "North Wings Usti nad Labem",
+      "time": "13.10.2026 17:30",
       "date": "2026-10-13",
       "league": null,
       "country": "",
       "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ritten-EsycTlJt/salzburg-fN7NQpf7/?mid=QLHTpREr",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/bo-ostrava-I3KhxkC2/north-wings-usti-nad-labem-lvCDkgJC/?mid=8GRTpWeo",
       "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 0,
+        "home": 3,
         "draw": 0,
-        "away": 5,
+        "away": 2,
         "total": 5,
-        "winRate": 100
+        "winRate": 60
       },
       "homeForm": [
-        "L",
-        "W",
+        "D",
         "L",
         "D",
-        "L"
+        "L",
+        "D"
       ],
       "awayForm": [
-        "W",
-        "W",
-        "W",
-        "W",
+        "L",
+        "L",
+        "L",
+        "L",
         "L"
       ],
       "homeFormHome": [
         "L",
         "D",
-        "W",
         "D",
-        "W"
+        "W",
+        "L"
       ],
       "awayFormAway": [
-        "W",
-        "W",
         "L",
-        "W",
+        "L",
+        "L",
+        "L",
         "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 2.9,
-        "draw": 4.3,
-        "away": 1.85,
+        "home": 1.12,
+        "draw": 7.75,
+        "away": 9.0,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 72.0,
+        "exactScore": "7-1",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": {
-        "pick": "2",
-        "prob": 70.2,
-        "ev": 0.299,
-        "edge": 16.1,
-        "kelly": 5.0,
-        "confidence": 65.0,
-        "dataQuality": 0.73
+        "pick": "1",
+        "prob": 84.8,
+        "ev": -0.05,
+        "edge": -4.4,
+        "kelly": 0.0,
+        "confidence": 54.0,
+        "dataQuality": 0.82
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 90,
-      "value_bet": true,
+      "confidence": 78,
+      "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "weak",
-        "market_model_gap": 16.146,
+        "consensus_strength": "moderate",
+        "market_model_gap": -4.486,
         "skip_reason": null
       },
       "availability": {
@@ -1120,23 +1262,68 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 70%",
-          "Positive expected value: 0.30",
+          "Model probability: 85%",
+          "Source consensus: moderate (2/3)",
           "Form advantage confirmed"
         ],
         "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
+          "Fatigue risk: high"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 16.1,
-        "consensus_note": "weak (1 sources agree)"
+        "expected_edge": -4.4,
+        "consensus_note": "moderate (2 sources agree)"
       },
       "predictionGrade": "B"
     },
     {
-      "id": -9050896437824046759,
+      "id": 4626927775517943802,
+      "homeTeam": "Salzburg 2",
+      "awayTeam": "Ritten",
+      "time": "13.10.2026 17:15",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ritten-EsycTlJt/salzburg-fN7NQpf7/?mid=QLHTpREr",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 5,
+        "total": 5,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -7994322488084605872,
       "homeTeam": "Zeller Eisbaren",
       "awayTeam": "Jesenice",
       "time": "13.10.2026 17:30",
@@ -1145,11 +1332,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/acroni-jesenice-SdtitoOq/ek-zeller-eisbaren-jZIHllnE/?mid=YoLyq5qe",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1158,31 +1343,113 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 2.35,
+        "draw": 3.9,
+        "away": 2.3,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 65.0,
+        "exactScore": "4-3",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 61.2,
+        "ev": 0.438,
+        "edge": 18.6,
+        "kelly": 5.0,
+        "confidence": 52.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 78,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": 18.647,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Positive expected value: 0.44",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 18.6,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "B"
     },
     {
-      "id": -1441503456399520144,
+      "id": 8779166202762844102,
       "homeTeam": "Kitchener Rangers",
       "awayTeam": "London Knights",
       "time": "13.10.2026 23:00",
@@ -1191,11 +1458,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kitchener-rangers-GtFZjLYN/london-knights-vyfdQbJ6/?mid=6c65JMMs",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1204,31 +1469,113 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 100
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "L",
+        "D",
+        "L",
+        "L",
+        "D"
+      ],
+      "awayForm": [
+        "D",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "D"
+      ],
       "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
+      "odds": {
+        "home": 2.35,
+        "draw": 4.1,
+        "away": 2.35,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 53.0,
+        "exactScore": "4-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 55.8,
+        "ev": 0.312,
+        "edge": 13.3,
+        "kelly": 5.0,
+        "confidence": 52.0,
+        "dataQuality": 0.82
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "confidence": 60,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 13.247,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Positive expected value: 0.31"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 13.3,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "B"
     },
     {
-      "id": -6146976292208829994,
+      "id": -6842791639585147815,
       "homeTeam": "Aktobe",
       "awayTeam": "Beibarys Atyrau",
       "time": "13.10.2026 14:00",
@@ -1250,43 +1597,19 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 80
+        "winRate": 20
       },
-      "homeForm": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "W"
-      ],
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
       "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -1298,7 +1621,7 @@
       "predictionGrade": null
     },
     {
-      "id": 5572280253737289151,
+      "id": 6108590108331470861,
       "homeTeam": "Riga Prizma",
       "awayTeam": "HC Panter",
       "time": "13.10.2026 16:00",
@@ -1307,9 +1630,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/hc-panter-xSFuDLsU/riga-prizma-CGbqnDFr/?mid=v1oh0YCr",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1318,105 +1643,31 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "D",
-        "W",
-        "W",
-        "D",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "D",
-        "L",
-        "L",
-        "L"
-      ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 2.05,
-        "draw": 4.0,
-        "away": 2.6,
-        "bookmaker": "Pinnacle"
-      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
-      "scoring": {
-        "pick": "2",
-        "prob": 45.7,
-        "ev": 0.188,
-        "edge": 7.2,
-        "kelly": 2.9,
-        "confidence": 35.0,
-        "dataQuality": 0.73
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 66,
-      "value_bet": true,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 7.238,
-        "skip_reason": null
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Positive expected value: 0.19",
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
-        "availability_note": "",
-        "expected_edge": 7.2,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "D"
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 8678283022957087675,
+      "id": 1312635065153903992,
       "homeTeam": "HC Tigers",
       "awayTeam": "Deggendorf",
       "time": "13.10.2026 17:30",
@@ -1425,11 +1676,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/deggendorf-tMD0kJuD/hc-tigers-n1CQnSGQ/?mid=6eseffeR",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1438,31 +1687,106 @@
         "draw": 0,
         "away": 0,
         "total": 5,
-        "winRate": 0
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
+      "homeForm": [
+        "D",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
       "formAdvantage": false,
       "odds": null,
-      "forebet": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 61.0,
+        "exactScore": "2-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "2",
+        "prob": 47.6,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 18.0,
+        "dataQuality": 0.73
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
+      "confidence": 68,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "F"
     },
     {
-      "id": 3176689651260647548,
+      "id": -1884376095188394426,
       "homeTeam": "Heilbronner",
       "awayTeam": "Passau",
       "time": "13.10.2026 17:30",
@@ -1471,11 +1795,9 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ehf-passau-GCPQ70es/heilbronner-QVonQp6S/?mid=GEC8Bc2D",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1484,31 +1806,108 @@
         "draw": 0,
         "away": 2,
         "total": 5,
-        "winRate": 40
+        "winRate": 60
       },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
+      "homeForm": [
+        "W",
+        "D",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "D",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "formAdvantage": true,
       "odds": null,
-      "forebet": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 57.0,
+        "exactScore": "3-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 68.3,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 40.0,
+        "dataQuality": 0.73
+      },
       "tennis": null,
       "baseball": null,
-      "confidence": 0,
+      "confidence": 78,
       "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
     },
     {
-      "id": 6546840432507971,
+      "id": -7200750180123923075,
       "homeTeam": "Lindau",
       "awayTeam": "Fussen",
       "time": "13.10.2026 17:30",
@@ -1517,9 +1916,11 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ev-fussen-jXKmhLef/lindau-hl1yQmiE/?mid=8l90DJX0",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -1528,100 +1929,31 @@
         "draw": 0,
         "away": 3,
         "total": 5,
-        "winRate": 60
+        "winRate": 40
       },
-      "homeForm": [
-        "L",
-        "L",
-        "D",
-        "L",
-        "L"
-      ],
-      "awayForm": [
-        "L",
-        "L",
-        "L",
-        "D",
-        "W"
-      ],
-      "homeFormHome": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L"
-      ],
-      "awayFormAway": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "formAdvantage": true,
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
       "odds": null,
       "forebet": null,
       "sofascore": null,
-      "sofascoreFound": false,
-      "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
-      "scoring": {
-        "pick": "2",
-        "prob": 55.4,
-        "ev": -999.0,
-        "edge": 0.0,
-        "kelly": 0.0,
-        "confidence": 24.0,
-        "dataQuality": 0.64
-      },
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
       "tennis": null,
       "baseball": null,
-      "confidence": 62,
+      "confidence": 0,
       "value_bet": false,
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
-        "h2h_available": true,
-        "forebet_available": false,
-        "sofascore_available": false,
-        "gemini_available": true,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "availability": {
-        "home_days_since_last": null,
-        "away_days_since_last": null,
-        "home_matches_last_7d": 5,
-        "away_matches_last_7d": 5,
-        "home_retirement_flag": false,
-        "away_retirement_flag": false,
-        "schedule_density_home": "normal",
-        "schedule_density_away": "normal",
-        "fatigue_risk": "high",
-        "availability_impact": 0.0
-      },
-      "explanation": {
-        "primary_factors": [
-          "Form advantage confirmed"
-        ],
-        "risk_factors": [
-          "Low data quality: 45%",
-          "Fatigue risk: high",
-          "Sources disagree on prediction"
-        ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
-        "availability_note": "",
-        "expected_edge": 0.0,
-        "consensus_note": "none (0 sources agree)"
-      },
-      "predictionGrade": "F"
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
     },
     {
-      "id": 800141220208181592,
+      "id": -1140911613000533389,
       "homeTeam": "Selber Wolfe",
       "awayTeam": "Kaufbeuren",
       "time": "13.10.2026 17:30",
@@ -1630,282 +1962,6 @@
       "country": "",
       "sport": "hockey",
       "matchUrl": "https://www.livesport.com/pl/mecz/hokej/kaufbeuren-6aQdMpof/selber-wolfe-tdlk45LD/?mid=vRSJIE9t",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 413623877781662049,
-      "homeTeam": "Tolzer Lowen",
-      "awayTeam": "Peiting",
-      "time": "13.10.2026 17:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ec-peiting-bcOejaQ6/tolzer-lowen-jBKiKpE8/?mid=CvRRGhvg",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 5,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 2353119635345369503,
-      "homeTeam": "Hochstadt",
-      "awayTeam": "Erding",
-      "time": "13.10.2026 18:00",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/erding-gladiators-h2ASPMR7/hochstadter-ec-U3eQFX3m/?mid=K4UZEW85",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -1352198233959150309,
-      "homeTeam": "Stuttgart",
-      "awayTeam": "Riessersee",
-      "time": "13.10.2026 18:00",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/riessersee-zFGnK2b2/stuttgart-rebels-6ojo5bu0/?mid=SUXsDAwI",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 1737316414448551708,
-      "homeTeam": "Brasov",
-      "awayTeam": "Sportul Studentesc",
-      "time": "13.10.2026 15:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/brasov-hGea5hMK/sportul-studentesc-fJpLFrXc/?mid=vNMFgtS7",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 5,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -3744492597813155081,
-      "homeTeam": "Csikszereda",
-      "awayTeam": "CSM Galati",
-      "time": "13.10.2026 15:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/csm-galati-tYPbC8qc/miercurea-ciuc-csikszereda-YNaMFgCa/?mid=E160cOSr",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 5,
-        "draw": 0,
-        "away": 0,
-        "total": 5,
-        "winRate": 0
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 3460861403081013071,
-      "homeTeam": "Steaua Bukareszt",
-      "awayTeam": "Gyergyoi",
-      "time": "13.10.2026 15:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/gyergyoi-hk-Us0iVoTC/steaua-bucharest-As3Hs7a9/?mid=69O7e2ce",
       "qualifies": true,
       "channelQualifies": true,
       "channelSkipReasons": [],
@@ -1913,65 +1969,74 @@
         "fan_vote_missing"
       ],
       "h2h": {
-        "home": 1,
+        "home": 3,
         "draw": 0,
-        "away": 4,
+        "away": 2,
         "total": 5,
-        "winRate": 80
+        "winRate": 60
       },
       "homeForm": [
         "L",
-        "D",
-        "W",
         "L",
+        "W",
+        "W",
         "L"
       ],
       "awayForm": [
-        "L",
+        "W",
+        "D",
         "W",
         "W",
-        "W",
-        "L"
+        "W"
       ],
       "homeFormHome": [
-        "D",
-        "L",
         "L",
         "W",
-        "D"
+        "W",
+        "D",
+        "L"
       ],
       "awayFormAway": [
-        "L",
+        "D",
         "W",
         "W",
         "L",
         "D"
       ],
-      "formAdvantage": true,
+      "formAdvantage": false,
       "odds": null,
-      "forebet": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 54.0,
+        "exactScore": "3-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": {
         "pick": "2",
-        "prob": 71.3,
+        "prob": 56.2,
         "ev": -999.0,
         "edge": 0.0,
         "kelly": 0.0,
-        "confidence": 40.0,
+        "confidence": 28.0,
         "dataQuality": 0.64
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 70,
+      "confidence": 28.0,
       "value_bet": false,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.45,
+        "sources_available": 3,
+        "quality_score": 0.65,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": false,
@@ -1994,37 +2059,153 @@
         "availability_impact": 0.0
       },
       "explanation": {
-        "primary_factors": [
-          "Model probability: 71%",
-          "Form advantage confirmed"
-        ],
+        "primary_factors": [],
         "risk_factors": [
-          "Low data quality: 45%",
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "2/4 sources available (quality: 45%)",
+        "data_quality_note": "3/4 sources available (quality: 65%)",
         "availability_note": "",
         "expected_edge": 0.0,
         "consensus_note": "none (0 sources agree)"
       },
-      "predictionGrade": "F"
+      "predictionGrade": "D"
     },
     {
-      "id": 7819143129369951577,
-      "homeTeam": "Celje",
-      "awayTeam": "Maribor",
-      "time": "13.10.2026 17:00",
+      "id": 2603565011398650214,
+      "homeTeam": "Tolzer Lowen",
+      "awayTeam": "Peiting",
+      "time": "13.10.2026 17:30",
       "date": "2026-10-13",
       "league": null,
       "country": "",
       "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/celje-fqfI5wyI/maribor-xhzfmsB4/?mid=Srs9rvWg",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/ec-peiting-bcOejaQ6/tolzer-lowen-jBKiKpE8/?mid=CvRRGhvg",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
       ],
+      "h2h": {
+        "home": 5,
+        "draw": 0,
+        "away": 0,
+        "total": 5,
+        "winRate": 100
+      },
+      "homeForm": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "D",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "D",
+        "W",
+        "L",
+        "D",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 66.0,
+        "exactScore": "5-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 87.7,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 58.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 85,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 88%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": -1460584971634223264,
+      "homeTeam": "Hochstadt",
+      "awayTeam": "Erding",
+      "time": "13.10.2026 18:00",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/erding-gladiators-h2ASPMR7/hochstadter-ec-U3eQFX3m/?mid=K4UZEW85",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2033,55 +2214,11 @@
         "draw": 0,
         "away": 1,
         "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 7216845956752191846,
-      "homeTeam": "Arosa",
-      "awayTeam": "Thurgau",
-      "time": "13.10.2026 17:30",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/arosa-GUfCjGXm/thurgau-hd8t11u1/?mid=x6hw2HZ0",
-      "qualifies": true,
-      "channelQualifies": true,
-      "channelSkipReasons": [],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 0,
-        "draw": 0,
-        "away": 5,
-        "total": 5,
-        "winRate": 100
+        "winRate": 80
       },
       "homeForm": [
-        "L",
         "W",
+        "D",
         "L",
         "L",
         "L"
@@ -2089,61 +2226,189 @@
       "awayForm": [
         "D",
         "W",
-        "L",
-        "L",
+        "W",
+        "D",
         "D"
       ],
       "homeFormHome": [
+        "D",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "awayFormAway": [
+        "W",
+        "D",
         "W",
         "L",
+        "W"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 51.0,
+        "exactScore": "3-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 50.8,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 23.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 65,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "F"
+    },
+    {
+      "id": -3360001174909026201,
+      "homeTeam": "Stuttgart",
+      "awayTeam": "Riessersee",
+      "time": "13.10.2026 18:00",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/riessersee-zFGnK2b2/stuttgart-rebels-6ojo5bu0/?mid=SUXsDAwI",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "L",
+        "W",
+        "D",
+        "L",
+        "D"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "D",
         "W",
         "L",
         "L"
       ],
       "awayFormAway": [
+        "L",
+        "L",
+        "L",
         "W",
-        "L",
-        "D",
-        "L",
-        "W"
+        "L"
       ],
       "formAdvantage": true,
       "odds": {
-        "home": 4.1,
-        "draw": 4.5,
-        "away": 1.55,
+        "home": 2.1,
+        "draw": 4.2,
+        "away": 2.55,
         "bookmaker": "Pinnacle"
       },
-      "forebet": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 60.0,
+        "exactScore": "3-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": {
-        "pick": "2",
-        "prob": 72.1,
-        "ev": 0.118,
-        "edge": 7.6,
-        "kelly": 5.0,
-        "confidence": 60.0,
+        "pick": "1",
+        "prob": 56.3,
+        "ev": 0.182,
+        "edge": 8.7,
+        "kelly": 4.1,
+        "confidence": 51.0,
         "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 78,
+      "confidence": 51.0,
       "value_bet": true,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
         "consensus_strength": "weak",
-        "market_model_gap": 7.584,
+        "market_model_gap": 8.681,
         "skip_reason": null
       },
       "availability": {
@@ -2160,126 +2425,278 @@
       },
       "explanation": {
         "primary_factors": [
-          "Model probability: 72%",
-          "Positive expected value: 0.12",
+          "Positive expected value: 0.18",
           "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 7.6,
+        "expected_edge": 8.7,
         "consensus_note": "weak (1 sources agree)"
       },
       "predictionGrade": "C"
     },
     {
-      "id": 1191410799672163993,
-      "homeTeam": "Visp",
-      "awayTeam": "Chur",
-      "time": "13.10.2026 17:30",
+      "id": -5225336409812355667,
+      "homeTeam": "Brasov",
+      "awayTeam": "Sportul Studentesc",
+      "time": "13.10.2026 15:30",
       "date": "2026-10-13",
       "league": null,
       "country": "",
       "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/chur-jPho9t1T/visp-zLco0Lf7/?mid=pWeo0e4D",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": 6417731108209853279,
-      "homeTeam": "Sierre",
-      "awayTeam": "Olten",
-      "time": "13.10.2026 17:45",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/olten-E59x2sQf/sierre-tKuxxCIO/?mid=dK2WNbdK",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
-        "winRate": 20
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -4029050384349029405,
-      "homeTeam": "Lions",
-      "awayTeam": "Basel",
-      "time": "13.10.2026 18:00",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/basel-2m6B6YVf/lions-6qEuOOnE/?mid=hjl2IxKs",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/brasov-hGea5hMK/sportul-studentesc-fJpLFrXc/?mid=vNMFgtS7",
       "qualifies": true,
       "channelQualifies": true,
       "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 5,
+        "draw": 0,
+        "away": 0,
+        "total": 5,
+        "winRate": 100
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "D",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "D",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 91.0,
+        "exactScore": "19-1",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 98.0,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 64.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 95,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "moderate",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 98%",
+          "Source consensus: moderate (2/3)",
+          "Form advantage confirmed"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": -7075256563737277980,
+      "homeTeam": "Csikszereda",
+      "awayTeam": "CSM Galati",
+      "time": "13.10.2026 15:30",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/csm-galati-tYPbC8qc/miercurea-ciuc-csikszereda-YNaMFgCa/?mid=E160cOSr",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 5,
+        "draw": 0,
+        "away": 0,
+        "total": 5,
+        "winRate": 100
+      },
+      "homeForm": [
+        "D",
+        "L",
+        "L",
+        "D",
+        "D"
+      ],
+      "awayForm": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
+      "homeFormHome": [
+        "D",
+        "L",
+        "L",
+        "W",
+        "D"
+      ],
+      "awayFormAway": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "D"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 58.0,
+        "exactScore": "3-1",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 78.2,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 43.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 65,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 78%"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "C"
+    },
+    {
+      "id": 4947049290442251776,
+      "homeTeam": "Steaua Bukareszt",
+      "awayTeam": "Gyergyoi",
+      "time": "13.10.2026 15:30",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/gyergyoi-hk-Us0iVoTC/steaua-bucharest-As3Hs7a9/?mid=69O7e2ce",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
       "channelSkipWarnings": [
         "fan_vote_missing"
       ],
@@ -2288,21 +2705,65 @@
         "draw": 0,
         "away": 4,
         "total": 5,
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 421653490403264717,
+      "homeTeam": "Celje",
+      "awayTeam": "Maribor",
+      "time": "13.10.2026 17:00",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/celje-fqfI5wyI/maribor-xhzfmsB4/?mid=Srs9rvWg",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
         "winRate": 80
       },
       "homeForm": [
-        "D",
         "L",
         "L",
-        "W",
+        "L",
+        "L",
         "D"
       ],
       "awayForm": [
+        "L",
+        "L",
         "W",
         "L",
-        "D",
-        "W",
-        "W"
+        "D"
       ],
       "homeFormHome": [
         "L",
@@ -2313,48 +2774,224 @@
       ],
       "awayFormAway": [
         "L",
-        "W",
-        "W",
-        "D",
+        "L",
+        "L",
+        "L",
         "L"
       ],
-      "formAdvantage": true,
-      "odds": {
-        "home": 2.7,
-        "draw": 4.4,
-        "away": 1.95,
-        "bookmaker": "Pinnacle"
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": {
+        "prediction": "1",
+        "probability": 67.0,
+        "exactScore": "3-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
       },
-      "forebet": null,
       "sofascore": null,
       "sofascoreFound": false,
       "sofascoreSkipReason": "not_found",
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": {
-        "pick": "2",
-        "prob": 61.5,
-        "ev": 0.2,
-        "edge": 10.2,
-        "kelly": 5.0,
-        "confidence": 58.0,
+        "pick": "1",
+        "prob": 73.4,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 42.0,
         "dataQuality": 0.73
       },
       "tennis": null,
       "baseball": null,
-      "confidence": 66,
+      "confidence": 68,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 73%"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "weak (1 sources agree)"
+      },
+      "predictionGrade": "D"
+    },
+    {
+      "id": -5409673119633465769,
+      "homeTeam": "Arosa",
+      "awayTeam": "Thurgau",
+      "time": "13.10.2026 17:30",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/arosa-GUfCjGXm/thurgau-hd8t11u1/?mid=x6hw2HZ0",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 0,
+        "draw": 0,
+        "away": 5,
+        "total": 5,
+        "winRate": 0
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": 4616379838057802151,
+      "homeTeam": "Visp",
+      "awayTeam": "Chur",
+      "time": "13.10.2026 17:30",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/chur-jPho9t1T/visp-zLco0Lf7/?mid=pWeo0e4D",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "D",
+        "W",
+        "D",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "awayFormAway": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.6,
+        "draw": 4.3,
+        "away": 3.95,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 61.0,
+        "exactScore": "3-2",
+        "overUnder": "Under 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 74.4,
+        "ev": 0.191,
+        "edge": 11.9,
+        "kelly": 5.0,
+        "confidence": 75.0,
+        "dataQuality": 0.82
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 85,
       "value_bet": true,
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.7,
+        "sources_available": 3,
+        "quality_score": 0.9,
         "h2h_available": true,
-        "forebet_available": false,
+        "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "none",
-        "market_model_gap": 10.218,
+        "consensus_strength": "moderate",
+        "market_model_gap": 11.9,
         "skip_reason": null
       },
       "availability": {
@@ -2371,22 +3008,197 @@
       },
       "explanation": {
         "primary_factors": [
-          "Positive expected value: 0.20",
+          "Model probability: 74%",
+          "Positive expected value: 0.19",
+          "Source consensus: moderate (2/3)"
+        ],
+        "risk_factors": [
+          "Fatigue risk: high"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 90%)",
+        "availability_note": "",
+        "expected_edge": 11.9,
+        "consensus_note": "moderate (2 sources agree)"
+      },
+      "predictionGrade": "B"
+    },
+    {
+      "id": 6067632769156052392,
+      "homeTeam": "Sierre",
+      "awayTeam": "Olten",
+      "time": "13.10.2026 17:45",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/olten-E59x2sQf/sierre-tKuxxCIO/?mid=dK2WNbdK",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "odds_below_threshold"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "homeFormHome": [
+        "W",
+        "W",
+        "D",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "formAdvantage": true,
+      "odds": {
+        "home": 1.23,
+        "draw": 6.0,
+        "away": 7.0,
+        "bookmaker": "Pinnacle"
+      },
+      "forebet": {
+        "prediction": "1",
+        "probability": 78.0,
+        "exactScore": "3-2",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 86.5,
+        "ev": 0.064,
+        "edge": 5.2,
+        "kelly": 5.0,
+        "confidence": 76.0,
+        "dataQuality": 0.82
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 90,
+      "value_bet": true,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "weak",
+        "market_model_gap": 5.199,
+        "skip_reason": null
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [
+          "Model probability: 86%",
           "Form advantage confirmed"
         ],
         "risk_factors": [
           "Fatigue risk: high",
           "Sources disagree on prediction"
         ],
-        "data_quality_note": "2/4 sources available (quality: 70%)",
+        "data_quality_note": "3/4 sources available (quality: 90%)",
         "availability_note": "",
-        "expected_edge": 10.2,
-        "consensus_note": "none (0 sources agree)"
+        "expected_edge": 5.2,
+        "consensus_note": "weak (1 sources agree)"
       },
-      "predictionGrade": "C"
+      "predictionGrade": "B"
     },
     {
-      "id": 7978829162315142127,
+      "id": -464211387917674732,
+      "homeTeam": "Lions",
+      "awayTeam": "Basel",
+      "time": "13.10.2026 18:00",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/basel-2m6B6YVf/lions-6qEuOOnE/?mid=hjl2IxKs",
+      "qualifies": false,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "base_qualification_failed"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 1,
+        "draw": 0,
+        "away": 4,
+        "total": 5,
+        "winRate": 20
+      },
+      "homeForm": [],
+      "awayForm": [],
+      "homeFormHome": [],
+      "awayFormAway": [],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": null,
+      "sofascore": null,
+      "sofascoreFound": null,
+      "sofascoreSkipReason": null,
+      "focusTeam": "home",
+      "scoring": null,
+      "tennis": null,
+      "baseball": null,
+      "confidence": 0,
+      "value_bet": false,
+      "dataQuality": null,
+      "availability": null,
+      "explanation": null,
+      "predictionGrade": null
+    },
+    {
+      "id": -8143215548669467193,
       "homeTeam": "Bellinzona Snakes",
       "awayTeam": "Chaux-de-Fonds",
       "time": "13.10.2026 18:15",
@@ -2408,123 +3220,6 @@
         "draw": 0,
         "away": 4,
         "total": 5,
-        "winRate": 80
-      },
-      "homeForm": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "W"
-      ],
-      "awayForm": [
-        "L",
-        "W",
-        "W",
-        "L",
-        "L"
-      ],
-      "homeFormHome": [
-        "L",
-        "W",
-        "W",
-        "D",
-        "L"
-      ],
-      "awayFormAway": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -6038228868092705098,
-      "homeTeam": "Sioux Falls Stampede",
-      "awayTeam": "Lincoln Stars",
-      "time": "13.10.2026 00:05",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/lincoln-stars-YmfCtqMN/sioux-falls-stampede-KvPQa6Mo/?mid=tAZGkYGb",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed",
-        "match_already_started"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 3,
-        "draw": 0,
-        "away": 2,
-        "total": 5,
-        "winRate": 40
-      },
-      "homeForm": [],
-      "awayForm": [],
-      "homeFormHome": [],
-      "awayFormAway": [],
-      "formAdvantage": false,
-      "odds": null,
-      "forebet": null,
-      "sofascore": null,
-      "sofascoreFound": null,
-      "sofascoreSkipReason": null,
-      "focusTeam": "away",
-      "scoring": null,
-      "tennis": null,
-      "baseball": null,
-      "confidence": 0,
-      "value_bet": false,
-      "dataQuality": null,
-      "availability": null,
-      "explanation": null,
-      "predictionGrade": null
-    },
-    {
-      "id": -4947032024937112226,
-      "homeTeam": "Youngstown Phantoms",
-      "awayTeam": "USA U18",
-      "time": "13.10.2026 23:00",
-      "date": "2026-10-13",
-      "league": null,
-      "country": "",
-      "sport": "hockey",
-      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/usa-j1NQyHkH/youngstown-phantoms-6PMt915G/?mid=ENXOmCoB",
-      "qualifies": false,
-      "channelQualifies": false,
-      "channelSkipReasons": [
-        "base_qualification_failed"
-      ],
-      "channelSkipWarnings": [
-        "fan_vote_missing"
-      ],
-      "h2h": {
-        "home": 4,
-        "draw": 0,
-        "away": 1,
-        "total": 5,
         "winRate": 20
       },
       "homeForm": [],
@@ -2537,7 +3232,7 @@
       "sofascore": null,
       "sofascoreFound": null,
       "sofascoreSkipReason": null,
-      "focusTeam": "away",
+      "focusTeam": "home",
       "scoring": null,
       "tennis": null,
       "baseball": null,
@@ -2547,6 +3242,246 @@
       "availability": null,
       "explanation": null,
       "predictionGrade": null
+    },
+    {
+      "id": 9061254984427432917,
+      "homeTeam": "Sioux Falls Stampede",
+      "awayTeam": "Lincoln Stars",
+      "time": "13.10.2026 00:05",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/lincoln-stars-YmfCtqMN/sioux-falls-stampede-KvPQa6Mo/?mid=tAZGkYGb",
+      "qualifies": true,
+      "channelQualifies": false,
+      "channelSkipReasons": [
+        "match_already_started"
+      ],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 3,
+        "draw": 0,
+        "away": 2,
+        "total": 5,
+        "winRate": 60
+      },
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "awayForm": [
+        "L",
+        "W",
+        "D",
+        "L",
+        "W"
+      ],
+      "homeFormHome": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 52.0,
+        "exactScore": "3-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 46.8,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 17.0,
+        "dataQuality": 0.64
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 17.0,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "F"
+    },
+    {
+      "id": -1134540035330736579,
+      "homeTeam": "Youngstown Phantoms",
+      "awayTeam": "USA U18",
+      "time": "13.10.2026 23:00",
+      "date": "2026-10-13",
+      "league": null,
+      "country": "",
+      "sport": "hockey",
+      "matchUrl": "https://www.livesport.com/pl/mecz/hokej/usa-j1NQyHkH/youngstown-phantoms-6PMt915G/?mid=ENXOmCoB",
+      "qualifies": true,
+      "channelQualifies": true,
+      "channelSkipReasons": [],
+      "channelSkipWarnings": [
+        "fan_vote_missing"
+      ],
+      "h2h": {
+        "home": 4,
+        "draw": 0,
+        "away": 1,
+        "total": 5,
+        "winRate": 80
+      },
+      "homeForm": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "awayForm": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "homeFormHome": [
+        "L",
+        "L",
+        "L",
+        "D",
+        "L"
+      ],
+      "awayFormAway": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "formAdvantage": false,
+      "odds": null,
+      "forebet": {
+        "prediction": "2",
+        "probability": 52.0,
+        "exactScore": "3-4",
+        "overUnder": "Over 5.5",
+        "btts": "Yes",
+        "homeProb": null,
+        "drawProb": null,
+        "awayProb": null
+      },
+      "sofascore": null,
+      "sofascoreFound": false,
+      "sofascoreSkipReason": "not_found",
+      "focusTeam": "home",
+      "scoring": {
+        "pick": "1",
+        "prob": 54.4,
+        "ev": -999.0,
+        "edge": 0.0,
+        "kelly": 0.0,
+        "confidence": 25.0,
+        "dataQuality": 0.73
+      },
+      "tennis": null,
+      "baseball": null,
+      "confidence": 68,
+      "value_bet": false,
+      "dataQuality": {
+        "sources_available": 3,
+        "quality_score": 0.65,
+        "h2h_available": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": true,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 5,
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
+      },
+      "availability": {
+        "home_days_since_last": null,
+        "away_days_since_last": null,
+        "home_matches_last_7d": 5,
+        "away_matches_last_7d": 5,
+        "home_retirement_flag": false,
+        "away_retirement_flag": false,
+        "schedule_density_home": "normal",
+        "schedule_density_away": "normal",
+        "fatigue_risk": "high",
+        "availability_impact": 0.0
+      },
+      "explanation": {
+        "primary_factors": [],
+        "risk_factors": [
+          "Fatigue risk: high",
+          "Sources disagree on prediction"
+        ],
+        "data_quality_note": "3/4 sources available (quality: 65%)",
+        "availability_note": "",
+        "expected_edge": 0.0,
+        "consensus_note": "none (0 sources agree)"
+      },
+      "predictionGrade": "F"
     }
   ]
 }
