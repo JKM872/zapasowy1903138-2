@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-10-15T05:04:32.094345+02:00",
+    "target_date": "2026-10-15",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 1.1,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Italy - Serie A2 (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/italy/serie-a2-w/altafratte-padova-vs-vbc-cremonese/7263379?MarketTypeID=701",
+      "match_id": "7263379",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "AltaFratte Padova",
+      "away_team": "VBC Cremonese",
+      "event_date": "15/10",
+      "event_time": "18:30",
+      "outcome": "2",
+      "open_odds": 4.33,
+      "current_odds": 3.69,
+      "drop_pct": 15.0,
+      "max_odds": 3.69,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": []
+}
