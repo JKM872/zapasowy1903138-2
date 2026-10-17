@@ -1,0 +1,31 @@
+name: SofaScore probe (diagnostyka)
+on:
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q curl_cffi==0.7.4
+      - name: Probe hosts / clients from GitHub IP
+        run: |
+          python - <<'PY'
+          from curl_cffi import requests as cr
+          ev = "/api/v1/sport/football/events/live"
+          hosts = ["https://www.sofascore.com", "https://api.sofascore.com", "https://api.sofascore.app",
+                   "https://widgets.sofascore.com", "https://api.sofascore.com/mobile",
+                   "https://www.sofascore.com/mobile"]
+          uas = {"okhttp": "okhttp/4.12.0", "ios": "SofaScore/24.10.1 (iPhone; iOS 18.0; Scale/3.00)",
+                 "chrome": None}
+          for h in hosts:
+              for n, ua in uas.items():
+                  for imp in ("chrome", "safari_ios", "okhttp4_android" ):
+                      try:
+                          r = cr.get(h + ev, impersonate=imp, timeout=15,
+                                     headers={"User-Agent": ua} if ua else None)
+                          print(f"{h:40} {n:7} {imp:16} {r.status_code} {len(r.content)}")
+                      except Exception as e:
+                          print(f"{h:40} {n:7} {imp:16} ERR {str(e)[:60]}")
+          PY
