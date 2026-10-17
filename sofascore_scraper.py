@@ -1622,6 +1622,24 @@ def _app_client_response(url: str, timeout: int = 10):
     return None
 
 
+def probe_reachable_or_disable(timeout: int = 10) -> bool:
+    """Jedna sonda na starcie runu. 403 → SofaScore wyłączony od razu.
+
+    Bez tego pierwsze mecze płaciły po ~2–3 min (Tor, przeglądarka UC,
+    Groq resolver), zanim breaker po 30× 403 zadziałał.
+    """
+    global _sofascore_unreachable_for_run
+    if not (_APP_CLIENT_ENABLED and CURL_CFFI_AVAILABLE):
+        return True
+    st, _ = _app_client_get('https://www.sofascore.com/api/v1/sport/football/events/live', timeout)
+    if st in (200, 404):
+        print("   ✅ SofaScore osiągalny z tego runnera")
+        return True
+    _sofascore_unreachable_for_run = True
+    print("   🚫 SofaScore zablokowany dla IP runnera (sonda 403) — pomijam go w całym runie")
+    return False
+
+
 def _app_client_get(url: str, timeout: int = 10) -> Tuple[Optional[int], Optional[Any]]:
     """Jak ``_app_client_response``, ale zwraca (status, json|None)."""
     r = _app_client_response(url, timeout)
