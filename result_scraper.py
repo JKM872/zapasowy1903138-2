@@ -423,9 +423,18 @@ def scrape_results_via_api(date: str, sport: str = 'football') -> List[MatchResu
     }
     
     try:
-        response = requests.get(url, headers=headers, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
+        # Przez wspólny klient SofaScore (przekaźnik SOFASCORE_RELAY, lista
+        # dnia z kategorii) — bezpośredni requests dostaje 403 w CI.
+        data = None
+        try:
+            from sofascore_scraper import _api_get_json
+            data = _api_get_json(url, timeout=15)
+        except Exception:
+            data = None
+        if data is None:
+            response = requests.get(url, headers=headers, timeout=10)
+            data = response.json() if response.status_code == 200 else None
+        if isinstance(data, dict):
             events = data.get('events', [])
             
             for event in events:
