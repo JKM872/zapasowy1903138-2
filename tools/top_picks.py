@@ -21,7 +21,9 @@ from typing import Any, Dict, List, Optional
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MIN_ODDS = {'football': float(os.getenv('TOP_MIN_ODDS_FOOTBALL', '2.0'))}
-EXCLUDED_SPORTS = set(os.getenv('TOP_EXCLUDED_SPORTS', 'hockey').split(','))
+# Hokej wraca do TOP: 17.10 trafił 9/12 przy kursach 1.65–2.30.
+EXCLUDED_SPORTS = {s for s in os.getenv('TOP_EXCLUDED_SPORTS', '').split(',') if s}
+MIN_WINS = int(os.getenv('TOP_MIN_WINS', '3'))
 PTS = {'W': 3, 'D': 1, 'L': 0}
 
 
@@ -76,6 +78,24 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         signals['fanvote'] = 1 if fv_me > 55 else (-1 if fv_me < 45 else 0)
     sp = (m.get('scoring') or {}).get('prob')
     signals['model'] = None if sp is None else (1 if sp >= 55 else (-1 if sp < 45 else 0))
+
+    # Wnioski z rozliczenia 17.10:
+    # (a) faworyt musi mieć min. 3 wygrane z 5 — ogólnie I u siebie/na wyjeździe
+    #     (Pribram 1-4 przegrał mimo rywala 0-5),
+    # (b) koszykówka: nie typujemy gości z bilansem wyjazdowym 2-3 lub gorszym,
+    #     chyba że gospodarz u siebie ma 0-5 (Gaziantep, Maia, Oradea, Avenida).
+    def _wins(f):
+        f = [x for x in (f or []) if x in PTS][:5]
+        return sum(1 for x in f if x == 'W') if len(f) >= 3 else None
+    venue_me = form.get('homeAtHome' if me == 'home' else 'awayAtAway')
+    venue_op = form.get('awayAtAway' if me == 'home' else 'homeAtHome')
+    if (_wins(form.get(me)) or 0) < MIN_WINS:
+        return None
+    if _wins(venue_me) is not None and _wins(venue_me) < MIN_WINS:
+        return None
+    if sport == 'basketball' and me == 'away':
+        if (_wins(venue_me) or 0) <= 2 and _wins(venue_op) != 0:
+            return None
 
     have = {k: v for k, v in signals.items() if v is not None}
     if not have or any(v < 0 for v in have.values()):
