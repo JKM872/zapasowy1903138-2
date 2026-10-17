@@ -237,11 +237,43 @@ def ai_summary(day: str, data: Dict[str, List[List[Any]]]) -> str:
               "Napisz po polsku krótkie podsumowanie dnia (5–8 zdań): które TOP wyglądają "
               "najmocniej i dlaczego, na co uważać (niskie kursy, mało danych, ligi kobiece/niższe), "
               "i propozycję 1 kuponu AKO3 z TOP. Bez obietnic wygranej, rzeczowo.")
+    # Najpierw Gemini (darmowy plan, duże limity), potem Groq (4 klucze).
+    txt = gemini_chat(prompt)
+    if txt:
+        return txt
     try:
         txt = groq_client.chat(prompt, max_tokens=700, temperature=0.3)
         return txt or 'AI nie odpowiedziało (limity).'
     except Exception as e:
         return f'AI błąd: {type(e).__name__}'
+
+
+GEMINI_MODELS = os.getenv('GEMINI_MODELS', 'gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite').split(',')
+
+
+def gemini_chat(prompt: str) -> Optional[str]:
+    """Gemini REST, rotacja modeli; klucze GEMINI_API_KEY[_2]."""
+    import requests
+    keys = [k for k in (os.getenv('GEMINI_API_KEY_2'), os.getenv('GEMINI_API_KEY')) if k]
+    for key in keys:
+        for m in GEMINI_MODELS:
+            try:
+                r = requests.post(
+                    f'https://generativelanguage.googleapis.com/v1beta/models/{m.strip()}:generateContent',
+                    headers={'x-goog-api-key': key},
+                    json={'contents': [{'parts': [{'text': prompt}]}],
+                          'generationConfig': {'temperature': 0.3, 'maxOutputTokens': 1200}},
+                    timeout=60)
+                if r.ok:
+                    parts = (r.json().get('candidates') or [{}])[0].get('content', {}).get('parts') or []
+                    txt = ''.join(p.get('text', '') for p in parts).strip()
+                    if txt:
+                        print(f'   🤖 Gemini [{m}] odpowiedział')
+                        return f"{txt}\n\n— Gemini ({m})"
+                print(f'   ⚠️ Gemini [{m}]: HTTP {r.status_code}')
+            except Exception as e:
+                print(f'   ⚠️ Gemini [{m}]: {type(e).__name__}')
+    return None
 
 
 def write_xlsx(day: str, data, summary: str) -> str:
