@@ -2086,7 +2086,8 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
               f"({time.time() - _t0:.1f} s)")
         by_quality = ordered[:cap] if cap else ordered
         dropped = len(selected) - len(by_quality)
-        worst = min((m.get('forebet_fav_prob') or 0) for m in by_quality)
+        # default=0: pusty wybór (0 meczów) wywracał cały job (ValueError).
+        worst = min(((m.get('forebet_fav_prob') or 0) for m in by_quality), default=0)
         with_market = sum(1 for m in by_quality
                           if m.get('home_odds') or m.get('away_odds'))
         # BEZ przywracania chronologii — patrz komentarz wyżej.
