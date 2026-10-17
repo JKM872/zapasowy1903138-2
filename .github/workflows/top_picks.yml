@@ -1,0 +1,44 @@
+name: TOP picks (perełki A/B)
+# Uzupełnienie Forebet: po zakończeniu Forebet wybiera z Grade A/B mecze, w których
+# typowana drużyna dominuje we wszystkich danych (bez hokeja, piłka kurs >= 2.0),
+# dociąga brakujący SofaScore Fan Vote przez przekaźnik i wysyła mail „⭐ TOP”.
+on:
+  workflow_run:
+    workflows: ["Forebet Scraper Pipeline (Forebet-first)"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Data YYYY-MM-DD (puste = dziś UTC)'
+        required: false
+        default: ''
+jobs:
+  top:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -q -r requirements.txt
+      - name: Build TOP + email
+        env:
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          D="${{ github.event.inputs.date }}"
+          [ -z "$D" ] && D=$(date -u +%F)
+          python tools/top_picks.py "$D" --fanvote --email
+      - name: Commit TOP json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/top_*.json || true
+          git diff --cached --quiet || (git commit -m "TOP picks $(date -u +%F)" && git pull --rebase -q && git push -q) || true
