@@ -521,9 +521,27 @@ def _fetch_via_curl(url: str, timeout: int = 25) -> Optional[str]:
     return None
 
 
-def fetch_full_day_json(html: str, match_date: str) -> Optional[tuple]:
+def _default_ltodrows_args(match_date: str) -> List[str]:
+    """Parametry getrs.php, gdy strona nie ma przycisku ltodrows.
+
+    Run 2026-10-16 o 02:12 UTC: Forebet (zegar US, UTC-4) pokazywał jeszcze
+    końcówkę POPRZEDNIEGO dnia — 12 wierszy, bez przycisku „More”, więc
+    piłka miała 1 mecz zamiast ~1400. Odtwarzamy wywołanie tak, jak strona
+    robi to w dzień (zmierzone 10.10): tz=-240, tzs = północ UTC-4 danego
+    dnia, tze = tzs + 30 h.
+    """
+    from datetime import timezone as _tz
+    d0 = datetime.strptime(match_date, '%Y-%m-%d').replace(tzinfo=_tz.utc)
+    tzs = int(d0.timestamp()) + 4 * 3600
+    return ['1x2', match_date, '', '0', '-240', str(tzs), str(tzs + 30 * 3600)]
+
+
+def fetch_full_day_json(html: str, match_date: str, sport: str = 'football') -> Optional[tuple]:
     """Pobierz cały dzień z getrs.php. Zwraca (mecze, ligi) albo None."""
     args = extract_ltodrows_args(html)
+    if not args and sport == 'football' and match_date:
+        args = _default_ltodrows_args(match_date)
+        print("   ℹ️ Brak ltodrows w HTML — buduję parametry getrs.php sam (piłka)")
     if not args:
         print("   ⚠️ Brak wywołania ltodrows w HTML — nie znam parametrów getrs.php")
         return None
@@ -984,7 +1002,7 @@ def list_forebet_matches(sport: str, match_date: Optional[str] = None,
     # bierzemy z getrs.php — endpointu, który stoi za przyciskiem „More".
     parsed_json: List[Dict[str, Any]] = []
     if use_getrs:
-        result = fetch_full_day_json(html, match_date)
+        result = fetch_full_day_json(html, match_date, sport)
         if result:
             raw_matches, leagues = result
             for obj in raw_matches:
