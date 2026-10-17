@@ -127,6 +127,7 @@ jobs:
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           # v9.0: SofaScore via Cloudflare WARP (Docker "warp" na 1080).
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "⚾ Scraping baseball..."

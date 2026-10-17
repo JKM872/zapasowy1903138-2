@@ -96,6 +96,7 @@ jobs:
           # v10.8: SofaScore przez Tor (socks5h = DNS przez Tor). proxy-primary,
           # bo direct (IP GHA) jest blokowane. Fallback w kodzie probuje tez WARP.
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "🏓 Scraping table tennis (AiScore HOME focus)..."

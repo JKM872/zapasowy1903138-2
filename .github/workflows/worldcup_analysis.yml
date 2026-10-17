@@ -114,6 +114,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
           # 📰 News intel breadth (worldcup_news_intel). Puste inputy (np. przy
           # schedule) -> wartości domyślne, żeby CI łapało komplet informacji.

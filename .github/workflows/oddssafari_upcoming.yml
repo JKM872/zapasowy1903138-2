@@ -293,6 +293,7 @@ jobs:
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
