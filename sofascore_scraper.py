@@ -1569,6 +1569,25 @@ def _app_client_response(url: str, timeout: int = 10):
     if _sofascore_unreachable_for_run:
         return None
     www_url = url.replace('://api.sofascore.com/', '://www.sofascore.com/')
+    # v13: darmowy przekaźnik (Google Apps Script, IP Google) — SOFASCORE_RELAY.
+    # IP GitHuba/Tora/WARP dostają 403; przekaźnik pyta SofaScore za nas.
+    relay = os.getenv('SOFASCORE_RELAY', '').strip()
+    if relay:
+        try:
+            import urllib.parse as _up
+            r = curl_requests.get(f"{relay}?url={_up.quote(www_url, safe='')}",
+                                  impersonate='chrome', timeout=max(timeout, 20))
+            body = (r.text or '').lstrip()
+            if r.status_code == 200 and body.startswith('{') and '"code": 403' not in body[:60]:
+                _app_stats['relay_ok'] = _app_stats.get('relay_ok', 0) + 1
+                _app_stats['200'] = _app_stats.get('200', 0) + 1
+                _app_client_403_streak = 0
+                if '"code":404' in body[:40].replace(' ', ''):
+                    r.status_code = 404
+                return r
+            _app_stats['relay_fail'] = _app_stats.get('relay_fail', 0) + 1
+        except Exception:
+            _app_stats['relay_err'] = _app_stats.get('relay_err', 0) + 1
     attempts = [None]
     proxies = _get_sofascore_proxies()
     # Exity Tora są przez SofaScore blokowane (probe w CI: 4/4 × 403) —

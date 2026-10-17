@@ -87,6 +87,7 @@ jobs:
       - name: Backfill ${{ matrix.sport }}
         env:
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
         run: |
           mkdir -p outputs/result_store_shards
           python tools/backfill_results.py \

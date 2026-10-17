@@ -224,6 +224,7 @@ jobs:
           # SofaScore Cloudflare bypass — te same wartości co w scrape.yml.
           # WARP daje czyste CF IP, FlareSolverr to fallback gdy WARP padnie.
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           # Opcjonalny manualny cookie cf_clearance (jeśli kiedyś dodasz).

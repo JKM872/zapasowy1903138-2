@@ -107,6 +107,7 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "📊 Checking results for $TARGET_DATE..."
@@ -136,6 +137,7 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           if [ -f "outputs/telegram_manifest_${TARGET_DATE}.json" ]; then

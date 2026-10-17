@@ -183,6 +183,7 @@ jobs:
           # Daje czyste IP Cloudflare - SofaScore nie blokuje wlasnych IP CF.
           # Tylko SofaScore requesty ida przez WARP, reszta scraperow normalnie.
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "🏃 Scraping ${{ matrix.sport }}..."

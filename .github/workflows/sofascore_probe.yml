@@ -9,6 +9,20 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -q curl_cffi==0.7.4
+      - name: Probe relay (SOFASCORE_RELAY)
+        env:
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+        run: |
+          python - <<'PY'
+          import os, urllib.parse
+          from curl_cffi import requests as cr
+          relay = os.environ.get('SOFASCORE_RELAY', '')
+          if not relay:
+              print('brak sekretu SOFASCORE_RELAY'); raise SystemExit
+          u = 'https://www.sofascore.com/api/v1/sport/football/events/live'
+          r = cr.get(relay + '?url=' + urllib.parse.quote(u, safe=''), impersonate='chrome', timeout=30)
+          print('RELAY', r.status_code, len(r.content), r.text[:120])
+          PY
       - name: Probe hosts / clients from GitHub IP
         run: |
           python - <<'PY'

@@ -128,6 +128,7 @@ jobs:
           # v10.9: SofaScore przez Tor (socks5h = DNS przez Tor). proxy-primary,
           # bo direct (IP datacenter GHA) jest blokowane.
           SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           # Sekrety przez env, nie wklejane do polecenia: haslo aplikacji Gmaila
