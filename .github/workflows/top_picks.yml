@@ -12,6 +12,8 @@ on:
         description: 'Data YYYY-MM-DD (puste = dziś UTC)'
         required: false
         default: ''
+permissions:
+  contents: write
 jobs:
   top:
     runs-on: ubuntu-latest
