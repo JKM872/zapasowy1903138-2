@@ -2164,6 +2164,13 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
     enrich_started = time.time()
     budget_hit = False
     deadline, deadline_src = enrich_deadline(enrich_started)
+    if use_sofascore:
+        try:
+            import sofascore_scraper as _ss_probe
+            if not _ss_probe.probe_reachable_or_disable():
+                use_sofascore = False
+        except Exception as e:
+            print(f"   ⚠️ Sonda SofaScore błąd: {type(e).__name__}")
     print(f"   ⏱️ Pętla ma czas do {datetime.fromtimestamp(deadline, timezone.utc).strftime('%H:%M:%S')} UTC "
           f"({(deadline - enrich_started) / 3600:.2f} h, źródło: {deadline_src})")
 
