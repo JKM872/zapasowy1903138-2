@@ -2295,7 +2295,9 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
 
         # Tenis: forma ma być przy KAŻDYM meczu. Gdy Livesport jej nie dał
         # (brak dopasowania, pusta strona), bierzemy ją z SofaScore.
-        if (sport == 'tennis' and not pre_reject
+        # Forma przy KAŻDYM meczu (wszystkie sporty): gdy Livesport jej nie dał
+        # (brak dopasowania), bierzemy ją z SofaScore (działa przez przekaźnik).
+        if (not pre_reject
                 and not (row.get('home_form') and row.get('away_form'))):
             fh, fa = sofascore_player_form(home, away, sport, date_str)
             if fh and not row.get('home_form'):
@@ -2304,8 +2306,15 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                 row['away_form'] = fa
             if fh or fa:
                 row['form_source'] = 'sofascore'
-                print(f"      🎾 Forma z SofaScore: {''.join(fh) or '—'} / "
+                print(f"      📊 Forma z SofaScore: {''.join(fh) or '—'} / "
                       f"{''.join(fa) or '—'}")
+        # Ostatni zapas: forma z Forebet (getrs.php), żeby mail nie miał „—”.
+        if not row.get('home_form') and row.get('forebet_home_form'):
+            row['home_form'] = list(row['forebet_home_form'])[:5]
+            row.setdefault('form_source', 'forebet')
+        if not row.get('away_form') and row.get('forebet_away_form'):
+            row['away_form'] = list(row['forebet_away_form'])[:5]
+            row.setdefault('form_source', 'forebet')
 
         # Kursy: Pinnacle → pozostali bukmacherzy Livesport → SofaScore.
         # Poza pętlą `if ls_url`, bo SofaScore szuka po nazwach drużyn i nie
