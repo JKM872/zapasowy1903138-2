@@ -158,7 +158,55 @@ def collect_enriched(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
     return sorted(out, key=lambda r: (r['time'] or '99:99'))
 
 
-def send_email(picks: List[Dict[str, Any]], day: str) -> None:
+def _key(r: Dict[str, Any]) -> str:
+    return f"{r['sport']}|{r['match']}"
+
+
+def write_excel(day: str) -> Optional[str]:
+    """results/TOP.xlsx — arkusz „Do gry” (dzisiaj) + „Wszystkie” (historia)."""
+    try:
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill
+    except ImportError:
+        print('   ⚠️ brak openpyxl — pomijam Excel')
+        return None
+    hist = []
+    for p in sorted(glob.glob(os.path.join(ROOT, 'results', 'top_*.json'))):
+        d = os.path.basename(p)[4:-5]
+        try:
+            for r in json.load(open(p, encoding='utf-8-sig')):
+                hist.append({'date': d, **r})
+        except Exception:
+            pass
+    cols = [('date', 'Data'), ('time', 'Godz.'), ('sport', 'Sport'), ('league', 'Liga'),
+            ('match', 'Mecz'), ('pick', 'Typ'), ('odds', 'Kurs'), ('grade', 'Grade'),
+            ('score', 'Score'), ('signals', 'Sygnały za'), ('form', 'Forma'),
+            ('h2h', 'H2H'), ('fanvote', 'Fan Vote'), ('stars', 'Siła')]
+    wb = Workbook()
+    hdr_fill = PatternFill('solid', fgColor='FFD966')
+    for title, rows in (('Do gry', [r for r in hist if r['date'] == day]),
+                        ('Wszystkie', list(reversed(hist)))):
+        ws = wb.active if title == 'Do gry' else wb.create_sheet(title)
+        ws.title = title
+        ws.append([c[1] for c in cols])
+        for c in ws[1]:
+            c.font, c.fill = Font(bold=True), hdr_fill
+        for r in rows:
+            full = str(r.get('signals', '')).split('/')
+            r['stars'] = '⭐⭐⭐' if len(full) == 2 and full[0] == full[1].split()[0] else '⭐⭐'
+            ws.append([r.get(k) for k, _ in cols])
+        ws.freeze_panes = 'A2'
+        ws.auto_filter.ref = ws.dimensions
+        for col, w in zip('ABCDEFGHIJKLMN', (11, 7, 11, 16, 38, 24, 7, 7, 7, 10, 34, 7, 9, 7)):
+            ws.column_dimensions[col].width = w
+    out = os.path.join(ROOT, 'results', 'TOP.xlsx')
+    wb.save(out)
+    print(f"   📊 Excel: {out} ({len(hist)} TOP w historii)")
+    return out
+
+
+def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = None,
+               new_count: Optional[int] = None) -> None:
     import smtplib
     from email.mime.text import MIMEText
     from html import escape
@@ -179,8 +227,16 @@ def send_email(picks: List[Dict[str, Any]], day: str) -> None:
             f"<table border='1' cellpadding='5' style='border-collapse:collapse;font-family:sans-serif'>"
             f"<tr><th>Godz.</th><th>Sport</th><th>Mecz</th><th>Typ</th><th>Grade/score</th>"
             f"<th>Forma</th><th>H2H</th><th>Fan Vote</th><th>Sygnały</th></tr>{rows}</table>")
-    msg = MIMEText(html, 'html', 'utf-8')
-    msg['Subject'] = f"⭐ TOP — {day} ({len(picks)})"
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.application import MIMEApplication
+    msg = MIMEMultipart()
+    msg.attach(MIMEText(html, 'html', 'utf-8'))
+    if attach and os.path.exists(attach):
+        part = MIMEApplication(open(attach, 'rb').read(), Name=os.path.basename(attach))
+        part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attach)}"'
+        msg.attach(part)
+    extra = f", nowe: {new_count}" if new_count is not None else ''
+    msg['Subject'] = f"⭐ TOP — {day} ({len(picks)}{extra})"
     msg['From'], msg['To'] = frm, to
     with smtplib.SMTP('smtp.gmail.com', 587) as s:
         s.starttls()
@@ -198,11 +254,25 @@ if __name__ == '__main__':
         if a.startswith('--grades='):
             grades = tuple(a.split('=', 1)[1].split(','))
     picks = collect_enriched(day, grades) if '--fanvote' in sys.argv else collect(day, grades)
-    if '--email' in sys.argv and picks:
-        send_email(picks, day)
     out_p = os.path.join(ROOT, 'results', f'top_{day}.json')
+    # Tryb równoległy: workflow odpala się co godzinę w trakcie Forebet —
+    # łączymy z tym, co już wysłaliśmy, i mailujemy tylko gdy są NOWE perełki.
+    old = []
+    if os.path.exists(out_p):
+        try:
+            old = json.load(open(out_p, encoding='utf-8-sig'))
+        except Exception:
+            old = []
+    known = {_key(r) for r in old}
+    new = [r for r in picks if _key(r) not in known]
+    merged = old + new
+    merged.sort(key=lambda r: (r.get('time') or '99:99'))
     with open(out_p, 'w', encoding='utf-8') as fh:
-        json.dump(picks, fh, ensure_ascii=False, indent=1)
+        json.dump(merged, fh, ensure_ascii=False, indent=1)
+    print(f"   ➕ nowe TOP w tym przebiegu: {len(new)} (łącznie dziś {len(merged)})")
+    xlsx = write_excel(day)
+    if '--email' in sys.argv and new:
+        send_email(merged, day, attach=xlsx, new_count=len(new))
     print(f"â­ TOP {day} (Grade {'/'.join(grades)}): {len(picks)}")
     for r in picks:
         print(f"{r['time']} {r['sport']:<10} {r['match']} | {r['league']}\n"

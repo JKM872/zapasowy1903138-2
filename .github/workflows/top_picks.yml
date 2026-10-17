@@ -1,8 +1,12 @@
 name: TOP picks (perełki A/B)
-# Uzupełnienie Forebet: po zakończeniu Forebet wybiera z Grade A/B mecze, w których
-# typowana drużyna dominuje we wszystkich danych (bez hokeja, piłka kurs >= 2.0),
-# dociąga brakujący SofaScore Fan Vote przez przekaźnik i wysyła mail „⭐ TOP”.
+# Uzupełnienie Forebet, działa RÓWNOLEGLE: co godzinę (i po zakończeniu Forebet)
+# bierze wyniki sportów, które Forebet już skończył (artefakty trwającego runu),
+# wybiera z Grade A/B mecze, gdzie typ dominuje we wszystkich danych (bez hokeja,
+# piłka kurs >= 2.0), dociąga SofaScore Fan Vote, aktualizuje results/TOP.xlsx
+# i wysyła mail „⭐ TOP” tylko gdy pojawią się NOWE perełki.
 on:
+  schedule:
+    - cron: '15 5-21 * * *'
   workflow_run:
     workflows: ["Forebet Scraper Pipeline (Forebet-first)"]
     types: [completed]
@@ -14,6 +18,10 @@ on:
         default: ''
 permissions:
   contents: write
+  actions: read
+concurrency:
+  group: top-picks
+  cancel-in-progress: false
 jobs:
   top:
     runs-on: ubuntu-latest
@@ -26,21 +34,39 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install -q -r requirements.txt
-      - name: Build TOP + email
+        run: pip install -q -r requirements.txt openpyxl==3.1.5
+      - name: Pobierz wyniki gotowych sportów z dzisiejszych runów Forebet
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          D="${{ github.event.inputs.date }}"; [ -z "$D" ] && D=$(date -u +%F)
+          echo "DAY=$D" >> "$GITHUB_ENV"
+          for id in $(gh run list -R "$GITHUB_REPOSITORY" --workflow scrape_forebet.yml -L 6 \
+                        --json databaseId,createdAt -q ".[] | select(.createdAt | startswith(\"$D\")) | .databaseId"); do
+            mkdir -p "/tmp/art/$id"
+            gh run download "$id" -R "$GITHUB_REPOSITORY" -p 'forebet-*' -D "/tmp/art/$id" 2>/dev/null || true
+          done
+          # najnowszy plik danego sportu wygrywa
+          find /tmp/art -name "matches_${D}_*_forebet.json" -printf '%T@ %p\n' 2>/dev/null | sort -n \
+            | cut -d' ' -f2- | while read f; do cp "$f" results/; done
+          ls results/matches_${D}_*_forebet.json 2>/dev/null || echo "brak wyników Forebet na $D"
+      - name: Build TOP + Excel + email
         env:
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           PYTHONIOENCODING: utf-8
-        run: |
-          D="${{ github.event.inputs.date }}"
-          [ -z "$D" ] && D=$(date -u +%F)
-          python tools/top_picks.py "$D" --fanvote --email
-      - name: Commit TOP json
+        run: python tools/top_picks.py "$DAY" --fanvote --email
+      - name: Commit TOP json + Excel
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results/top_*.json || true
-          git diff --cached --quiet || (git commit -m "TOP picks $(date -u +%F)" && git pull --rebase -q && git push -q) || true
+          git add results/top_*.json results/TOP.xlsx
+          git diff --cached --quiet && exit 0
+          git commit -q -m "TOP picks $DAY"
+          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && break; sleep 5; done
+      - uses: actions/upload-artifact@v7
+        with:
+          name: TOP-${{ github.run_id }}
+          path: results/TOP.xlsx
