@@ -105,6 +105,125 @@ def collect(day: str) -> Dict[str, List[List[Any]]]:
     return out
 
 
+# ---------------------------------------------------------------------------
+# TWIERDZA — wszystkie sporty, wszystkie workflow
+# ---------------------------------------------------------------------------
+# Typowana strona: forma u siebie / na wyjeździe min. 4/5 zwycięstw („twierdza”),
+# forma ogólna min. 3/5, Forebet za tą stroną, SofaScore Fan Vote ≥ 75%.
+TW_VENUE_WINS = int(os.getenv('TW_VENUE_WINS', '4'))
+TW_FORM_WINS = int(os.getenv('TW_FORM_WINS', '3'))
+TW_FANVOTE = float(os.getenv('TW_FANVOTE', '75'))
+
+
+def _wins(f) -> Optional[int]:
+    f = [x for x in (f or []) if x in ('W', 'D', 'L')][:5]
+    return sum(1 for x in f if x == 'W') if len(f) >= 3 else None
+
+
+def _forms(m: Dict[str, Any]):
+    f = m.get('form') if isinstance(m.get('form'), dict) else {}
+    return (f.get('home') or m.get('homeForm'), f.get('away') or m.get('awayForm'),
+            f.get('homeAtHome') or m.get('homeFormHome'), f.get('awayAtAway') or m.get('awayFormAway'))
+
+
+def _fb_side_prob(m: Dict[str, Any], side: str) -> Optional[float]:
+    fb = m.get('forebet') if isinstance(m.get('forebet'), dict) else {}
+    for k in (f'{side}Prob', f'{side}_prob'):
+        if fb.get(k) is not None:
+            return float(fb[k])
+    pred = str(fb.get('prediction') or '')
+    if pred in ('1', '2') and fb.get('probability') is not None:
+        mine = (pred == '1') == (side == 'home')
+        return float(fb['probability']) if mine else 100 - float(fb['probability'])
+    return None
+
+
+def twierdza(day: str) -> List[Dict[str, Any]]:
+    from tools.top_picks import enrich_fanvote
+    R = os.path.join(ROOT, 'results')
+    out, seen = [], set()
+    for p in sorted(glob.glob(os.path.join(R, f'matches_{day}_*.json'))):
+        name = os.path.basename(p)[len(f'matches_{day}_'):-5]
+        if name.startswith('table_tennis'):
+            continue
+        src = 'Forebet' if name.endswith('_forebet') else 'Sports'
+        sport = name[:-8] if src == 'Forebet' else name
+        ms = (_load(p) or {}).get('matches') or []
+        for m in ms:
+            if not m.get('qualifies'):
+                continue
+            key = (sport, m.get('homeTeam'), m.get('awayTeam'))
+            if key in seen:
+                continue
+            fh, fa, fhh, faa = _forms(m)
+            for side, f_me, f_venue in (('home', fh, fhh), ('away', fa, faa)):
+                if (_wins(f_venue) or 0) < TW_VENUE_WINS or (_wins(f_me) or 0) < TW_FORM_WINS:
+                    continue
+                fbp = _fb_side_prob(m, side)
+                if fbp is None or fbp < 50:
+                    continue
+                ss = m.get('sofascore') if isinstance(m.get('sofascore'), dict) else {}
+                if not ss.get('found'):
+                    m['sofascore'] = ss or {}
+                    enrich_fanvote(m, sport, day)
+                    ss = m.get('sofascore') or {}
+                fv = ss.get('homeProb' if side == 'home' else 'awayProb') if ss.get('found') else None
+                if fv is None or fv < TW_FANVOTE:
+                    continue
+                odds = m.get('odds') if isinstance(m.get('odds'), dict) else {}
+                if not odds.get(side):      # bez kursu nie da się zagrać
+                    continue
+                seen.add(key)
+                out.append({'source': src, 'sport': sport, 'time': _time(m.get('time')),
+                            'match': f"{m.get('homeTeam')} vs {m.get('awayTeam')}",
+                            'league': m.get('league'), 'side': side,
+                            'pick': m.get('homeTeam') if side == 'home' else m.get('awayTeam'),
+                            'odds': odds.get(side), 'forebet': round(fbp),
+                            'fanvote': fv, 'form': _f(f_me), 'venue': _f(f_venue),
+                            'grade': m.get('predictionGrade')})
+                break
+    out.sort(key=lambda r: str(r['time'] or '99:99'))
+    with open(os.path.join(R, f'twierdza_{day}.json'), 'w', encoding='utf-8') as fh_:
+        json.dump(out, fh_, ensure_ascii=False, indent=1)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# SKUTECZNOŚĆ — rozliczenie TOP i Twierdzy z poprzednich dni
+# ---------------------------------------------------------------------------
+def accuracy() -> List[List[Any]]:
+    settled = _load(os.path.join(ROOT, 'results', 'forebet_settled.json')) or {}
+    by_match: Dict[tuple, str] = {}
+    for k, v in settled.items():
+        if v.get('status') == 'settled' and v.get('winner'):
+            d, sp, h, a = (k.split('|') + ['', '', '', ''])[:4]
+            by_match[(d, sp, h, a)] = v['winner']
+    rows = []
+    for cat, pattern in (('TOP', 'top_*.json'), ('Twierdza', 'twierdza_*.json')):
+        for p in sorted(glob.glob(os.path.join(ROOT, 'results', pattern))):
+            day = os.path.basename(p).split('_', 1)[1][:-5]
+            picks = _load(p) or []
+            hit = miss = 0
+            for r in picks:
+                h, _, a = str(r.get('match', '')).partition(' vs ')
+                w = by_match.get((day, r.get('sport'), h, a))
+                if not w:
+                    continue
+                side = r.get('side') or ('home' if r.get('pick') == h else 'away')
+                hit += w == side
+                miss += w != side
+            n = hit + miss
+            rows.append([cat, day, len(picks), n, hit, f"{hit / n:.0%}" if n else '—'])
+    tot = {}
+    for r in rows:
+        t = tot.setdefault(r[0], [0, 0])
+        t[0] += r[3]
+        t[1] += r[4]
+    for cat, (n, h) in tot.items():
+        rows.append([cat, 'RAZEM', '', n, h, f"{h / n:.0%}" if n else '—'])
+    return rows
+
+
 def ai_summary(day: str, data: Dict[str, List[List[Any]]]) -> str:
     try:
         import groq_client
@@ -159,9 +278,26 @@ def write_xlsx(day: str, data, summary: str) -> str:
         sh.auto_filter.ref = sh.dimensions
         for i, w in enumerate(widths):
             sh.column_dimensions[chr(65 + i)].width = w
+    acc = globals().get('ACC') or []
+    sh = wb.create_sheet('Skuteczność')
+    sh.append(['Kategoria', 'Dzień', 'Typów', 'Rozliczone', 'Trafione', 'Skuteczność'])
+    for cell in sh[1]:
+        cell.font, cell.fill = Font(bold=True), fill
+    for r in acc:
+        sh.append(r)
+    for col, w in zip('ABCDEF', (12, 12, 8, 11, 9, 12)):
+        sh.column_dimensions[col].width = w
     out = os.path.join(ROOT, 'results', f'digest_{day}.xlsx')
     wb.save(out)
     return out
+
+
+def _acc_html() -> str:
+    tot = [r for r in (globals().get('ACC') or []) if r[1] == 'RAZEM']
+    if not tot:
+        return ''
+    return '<h3>🎯 Skuteczność dotąd</h3>' + ''.join(
+        f"<div><b>{r[0]}</b>: {r[4]}/{r[3]} rozliczonych = <b>{r[5]}</b></div>" for r in tot)
 
 
 def send(day: str, xlsx: str, data, summary: str) -> None:
@@ -177,6 +313,12 @@ def send(day: str, xlsx: str, data, summary: str) -> None:
     rows = ''.join(f"<tr><td>{escape(k)}</td><td>{len(v)}</td></tr>" for k, v in data.items())
     html = (f"<h2>📊 Podsumowanie dnia — {day}</h2><table border='1' cellpadding='5' "
             f"style='border-collapse:collapse'><tr><th>Workflow</th><th>Zakwalifikowane</th></tr>{rows}</table>"
+            + _acc_html()
+            + f"<h3>🏰 Twierdza dziś ({len(data.get('Twierdza', []))})</h3>"
+            + ''.join(f"<div>{escape(str(r[2]))} {escape(str(r[1]))} — {escape(str(r[3]))}: "
+                      f"<b>{escape(str(r[5]))}</b> @ {r[6]} | {escape(str(r[8]))} | FV {escape(str(r[12]))} "
+                      f"| {escape(str(r[10]))}</div>" for r in data.get('Twierdza', []))
+            +
             f"<h3>🤖 Komentarz AI</h3><p style='white-space:pre-wrap'>{escape(summary)}</p>"
             f"<p>Pełna lista we wszystkich zakładkach w załączniku <b>{os.path.basename(xlsx)}</b>.</p>")
     msg = MIMEMultipart()
@@ -198,6 +340,11 @@ if __name__ == '__main__':
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     day = args[0] if args else date.today().isoformat()
     data = collect(day)
+    tw = twierdza(day)
+    data['Twierdza'] = [[r['source'], r['sport'], r['time'], r['match'], r['league'], r['pick'],
+                         r['odds'], r['grade'], f"Forebet {r['forebet']}%", r['form'],
+                         f"dom/wyj {r['venue']}", '', f"{r['fanvote']}%", ''] for r in tw]
+    ACC = accuracy()
     print('📊', {k: len(v) for k, v in data.items()})
     summary = ai_summary(day, data)
     print('🤖', summary[:300])
