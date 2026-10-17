@@ -1,0 +1,50 @@
+name: Podsumowanie dnia (Excel + AI)
+# Jeden mail dziennie: Excel ze wszystkich workflow (TOP, Forebet, Sports HOME/AWAY,
+# Dropping Odds, tenis stołowy) + komentarz AI (Groq, rotacja 4 kluczy).
+on:
+  schedule:
+    - cron: '30 12 * * *'   # 14:30 PL latem / 13:30 zimą — po Forebet i porannym Dropping
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Data YYYY-MM-DD (puste = dziś UTC)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q -r requirements.txt openpyxl==3.1.5
+      - name: Build digest + email
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          GROQ_API_KEY_3: ${{ secrets.GROQ_API_KEY_3 }}
+          GROQ_API_KEY_4: ${{ secrets.GROQ_API_KEY_4 }}
+          GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          D="${{ github.event.inputs.date }}"; [ -z "$D" ] && D=$(date -u +%F)
+          echo "DAY=$D" >> "$GITHUB_ENV"
+          python tools/daily_digest.py "$D" --email
+      - name: Commit digest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/digest_*.xlsx
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Digest $DAY"
+          git reset -q --hard HEAD
+          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && break; sleep 5; done
