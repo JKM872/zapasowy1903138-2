@@ -140,6 +140,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           # Dodatkowe klucze Groq — rotacja przy 429. Puste sekrety sa
           # nieszkodliwe. Sens maja WYLACZNIE klucze z OSOBNYCH kont:
           # klucze jednego konta dziela limit i nic nie dodaja.
@@ -154,6 +155,7 @@ jobs:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           # Dodatkowe klucze Groq — rotacja przy 429. Puste sekrety sa
           # nieszkodliwe. Sens maja WYLACZNIE klucze z OSOBNYCH kont:
           # klucze jednego konta dziela limit i nic nie dodaja.
