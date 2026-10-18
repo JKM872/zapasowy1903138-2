@@ -15,6 +15,7 @@ from __future__ import annotations
 import glob
 import json
 import os
+import re
 import sys
 from datetime import date
 from typing import Any, Dict, List, Optional
@@ -254,7 +255,8 @@ GEMINI_MODELS = os.getenv('GEMINI_MODELS', 'gemini-3.8-flash,gemini-3.6-flash,ge
 def gemini_chat(prompt: str) -> Optional[str]:
     """Gemini REST, rotacja modeli; klucze GEMINI_API_KEY[_2]."""
     import requests
-    keys = [k for k in (os.getenv('GEMINI_API_KEY_2'), os.getenv('GEMINI_API_KEY')) if k]
+    keys = [k for k in re.split(r'[,\s]+', os.getenv('GEMINI_API_KEYS', '')) if k]
+    keys += [k for k in (os.getenv('GEMINI_API_KEY_2'), os.getenv('GEMINI_API_KEY')) if k and k not in keys]
     for key in keys:
         for m in GEMINI_MODELS:
             try:
@@ -274,6 +276,85 @@ def gemini_chat(prompt: str) -> Optional[str]:
             except Exception as e:
                 print(f'   ⚠️ Gemini [{m}]: {type(e).__name__}')
     return None
+
+
+def gemini_elite(day: str, data) -> List[Dict[str, Any]]:
+    """Gemini wybiera TOP 10 Elita z TOP + Twierdza i pisze uzasadnienie.
+
+    Zwraca listę {idx, rank, reason, risk}. Pusta lista = AI niedostępne.
+    """
+    pool = []
+    for name in ('TOP', 'Twierdza'):
+        for r in data.get(name, []):
+            pool.append({'id': len(pool), 'kat': name, 'sport': r[1], 'godz': r[2], 'mecz': r[3],
+                         'liga': r[4], 'typ': r[5], 'kurs': r[6], 'grade': r[7],
+                         'forma': r[9], 'h2h': r[11], 'fanvote': r[12], 'info': r[8] or r[13]})
+    if not pool:
+        return []
+    prompt = ("Jesteś analitykiem zakładów. Z listy kandydatów (JSON) wybierz do 10 NAJPEWNIEJSZYCH "
+              "typów dnia (TOP 10 Elita). Kryteria: dominacja formy, twierdza dom/wyjazd, zgodność "
+              "Forebet+Fan Vote+rynku, rozsądny kurs (1.35–2.40 lepszy niż 1.05), unikaj lig "
+              "z małą liczbą danych. Odpowiedz WYŁĄCZNIE JSON-em: "
+              '[{"id":<id>,"rank":1,"reason":"krótko po polsku","risk":"niskie|średnie|wysokie"}]\n'
+              + json.dumps(pool[:120], ensure_ascii=False))
+    try:
+        import groq_client   # 7 kluczy Gemini (GEMINI_API_KEYS), 3.8 Flash pierwszy
+        txt = groq_client.gemini_chat(prompt, max_tokens=4000, temperature=0.2) or ''
+    except Exception:
+        txt = gemini_chat(prompt) or ''
+    m = re.search(r'\[.*\]', txt, re.S)
+    try:
+        picks = json.loads(m.group(0)) if m else []
+    except Exception:
+        picks = []
+    out = []
+    for p in picks[:10]:
+        if isinstance(p, dict) and isinstance(p.get('id'), int) and 0 <= p['id'] < len(pool):
+            out.append({**pool[p['id']], 'rank': p.get('rank'), 'reason': p.get('reason'),
+                        'risk': p.get('risk')})
+    return out
+
+
+def _style_sheet(sh, header_fill) -> None:
+    """Kolory: forma W/D/L, grade, kurs, sygnały; zebra; ramki."""
+    from openpyxl.styles import Border, Font, PatternFill, Side, Alignment
+    G, Y, R = (PatternFill('solid', fgColor=c) for c in ('C6EFCE', 'FFEB9C', 'FFC7CE'))
+    GRADE = {'A': '63BE7B', 'B': 'A9D08E', 'C': 'FFE699', 'D': 'F4B183', 'F': 'FF7C80'}
+    thin = Side(style='thin', color='BFBFBF')
+    hdr = [c.value for c in sh[1]]
+    for c in sh[1]:
+        c.font = Font(bold=True, color='FFFFFF')
+        c.fill = header_fill
+        c.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+    for i, row in enumerate(sh.iter_rows(min_row=2), start=2):
+        zebra = PatternFill('solid', fgColor='F2F2F2') if i % 2 else None
+        for c in row:
+            c.border = Border(left=thin, right=thin, top=thin, bottom=thin)
+            name = hdr[c.column - 1] if c.column - 1 < len(hdr) else ''
+            v = c.value
+            if zebra:
+                c.fill = zebra
+            if name == 'Grade' and v in GRADE:
+                c.fill = PatternFill('solid', fgColor=GRADE[v])
+                c.font = Font(bold=True)
+            elif name == 'Kurs' and isinstance(v, (int, float)):
+                c.fill = G if 1.5 <= v <= 2.4 else (Y if v >= 1.3 else R)
+            elif name in ('Forma typ', 'Forma rywal', 'Forma') and isinstance(v, str):
+                w = v.count('W')
+                c.fill = G if w >= 4 else (Y if w >= 3 else R)
+                c.font = Font(name='Consolas')
+            elif name in ('Fan Vote',) and isinstance(v, str) and v.endswith('%'):
+                try:
+                    p = float(v[:-1])
+                    c.fill = G if p >= 75 else (Y if p >= 55 else R)
+                except ValueError:
+                    pass
+            elif name == 'Ryzyko' and isinstance(v, str):
+                c.fill = {'niskie': G, 'średnie': Y, 'wysokie': R}.get(v.lower(), c.fill)
+            elif name in ('Sygnały', 'Sygnały za') and isinstance(v, str) and '/' in v:
+                a, b = v.split()[0].split('/')
+                c.fill = G if a == b else Y
+    sh.row_dimensions[1].height = 30
 
 
 def write_xlsx(day: str, data, summary: str) -> str:
@@ -310,6 +391,36 @@ def write_xlsx(day: str, data, summary: str) -> str:
         sh.auto_filter.ref = sh.dimensions
         for i, w in enumerate(widths):
             sh.column_dimensions[chr(65 + i)].width = w
+    # TOP 10 Elita (Gemini) — na drugiej pozycji, zaraz po podsumowaniu.
+    elite = globals().get('ELITE') or []
+    if elite:
+        se = wb.create_sheet('⭐ TOP 10 Elita', 1)
+        se.append(['#', 'Kat.', 'Sport', 'Godz.', 'Mecz', 'Liga', 'Typ', 'Kurs', 'Grade',
+                   'Forma', 'H2H', 'Fan Vote', 'Ryzyko', 'Uzasadnienie AI'])
+        for p in sorted(elite, key=lambda x: x.get('rank') or 99):
+            se.append([p.get('rank'), p['kat'], p['sport'], p['godz'], p['mecz'], p['liga'],
+                       p['typ'], p['kurs'], p['grade'], p['forma'], p['h2h'], p['fanvote'],
+                       p.get('risk'), p.get('reason')])
+        for col, w in zip('ABCDEFGHIJKLMN', (4, 9, 11, 7, 36, 16, 22, 7, 7, 14, 7, 9, 9, 60)):
+            se.column_dimensions[col].width = w
+        se.freeze_panes = 'A2'
+    # TOP per sport — osobna zakładka dla każdego sportu z TOP/Twierdzy.
+    by_sport: Dict[str, List[List[Any]]] = {}
+    for name in ('TOP', 'Twierdza'):
+        for r in data.get(name, []):
+            by_sport.setdefault(str(r[1]), []).append(r)
+    for sp, rows in sorted(by_sport.items()):
+        ss_ = wb.create_sheet(f"{sp[:20]}_TOP_{len(rows)}")
+        ss_.append(COLS[:-1] + ['Sygnały'])
+        for r in rows:
+            ss_.append(r)
+        for i, w in enumerate((12, 11, 7, 38, 18, 24, 7, 7, 10, 22, 14, 7, 9, 12)):
+            ss_.column_dimensions[chr(65 + i)].width = w
+        ss_.freeze_panes = 'A2'
+    hdr_fill = PatternFill('solid', fgColor='1F4E78')
+    for sh_ in wb.worksheets[1:]:
+        _style_sheet(sh_, hdr_fill)
+    ws['A1'].font = Font(bold=True, size=16, color='1F4E78')
     acc = globals().get('ACC') or []
     sh = wb.create_sheet('Skuteczność')
     sh.append(['Kategoria', 'Dzień', 'Typów', 'Rozliczone', 'Trafione', 'Skuteczność'])
@@ -377,6 +488,8 @@ if __name__ == '__main__':
                          r['odds'], r['grade'], f"Forebet {r['forebet']}%", r['form'],
                          f"dom/wyj {r['venue']}", '', f"{r['fanvote']}%", ''] for r in tw]
     ACC = accuracy()
+    ELITE = gemini_elite(day, data)
+    print('⭐ Elita AI:', len(ELITE))
     print('📊', {k: len(v) for k, v in data.items()})
     summary = ai_summary(day, data)
     print('🤖', summary[:300])
