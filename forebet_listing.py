@@ -924,12 +924,25 @@ def fetch_forebet_day_html(sport: str, match_date: Optional[str] = None,
     if match_date is None:
         match_date = datetime.now().strftime('%Y-%m-%d')
 
-    attempts: List[str] = ['puppeteer', 'fast'] if prefer_puppeteer else ['fast', 'puppeteer']
+    # 18.10 koszykówka: Puppeteer dostał pustą stronę (9.5 KB, 0 wierszy —
+    # blokada Cloudflare), a szybkie metody dały 3 mecze zamiast ~330.
+    # Pusta strona to zwykle chwilowy challenge — ponawiamy Puppeteera
+    # po przerwie (świeża sesja CF) zanim zejdziemy do gorszych metod.
+    attempts: List[str] = (['puppeteer', 'puppeteer', 'puppeteer', 'fast'] if prefer_puppeteer
+                           else ['fast', 'puppeteer', 'puppeteer'])
+    tried_pp = 0
 
     best_html = None
     best_fresh = 0
     for method in attempts:
         if method == 'puppeteer':
+            if best_fresh >= 20:      # mamy już pełną listę — nie ponawiamy
+                continue
+            if tried_pp:
+                import time as _t
+                print(f"   🔁 Forebet {sport}: ponawiam Puppeteera (próba {tried_pp + 1}) po 45 s")
+                _t.sleep(45)
+            tried_pp += 1
             html = _html_from_puppeteer(sport, match_date, load_more_clicks)
         else:
             html = _html_from_cache_methods(sport, match_date)
