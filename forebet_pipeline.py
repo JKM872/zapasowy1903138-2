@@ -266,10 +266,11 @@ PRIMARY_BOOKMAKER = 'pinnacle'
 
 # Gdy Pinnacle nie wycenił zdarzenia, pytamy pozostałych bukmacherów Livesport
 # (od najostrzejszych do najpopularniejszych). Pierwszy z ceną wygrywa.
-LIVESPORT_FALLBACK_BOOKMAKERS = [
-    'bet365', 'unibet', 'william_hill', 'bwin',
-    'betfair', '1xbet', 'betway', 'nordicbet',
-]
+# 18.10: 8 bukmacherów × 1 zapytanie = 9 pustych zapytań na mecz bez rynku
+# (ligi kobiece/niższe). Trafienia dają praktycznie tylko pierwsze trzy —
+# reszta to stracone sekundy. Env FOREBET_LS_BOOKMAKERS nadpisuje.
+LIVESPORT_FALLBACK_BOOKMAKERS = [b.strip() for b in os.getenv(
+    'FOREBET_LS_BOOKMAKERS', 'bet365,william_hill,unibet').split(',') if b.strip()]
 
 # Wagi scoringu — jawne, żeby dało się je zakwestionować i zmienić.
 # Tenis: kolejność ważności ustalona z użytkownikiem —
@@ -1203,7 +1204,18 @@ def _orient_fan_vote(vote: Dict[str, Any], home_team: str,
         vote['sofascore_orientation'] = 'unknown'
         return
     verdict = _verify_sofascore_event(int(m.group(1)), home_team, away_team)
-    vote['sofascore_orientation'] = verdict or 'unknown'
+    if verdict is None:
+        # Inny mecz (albo niepotwierdzony) — głosy NIE dotyczą tego spotkania.
+        # Dawniej zostawały w wierszu (np. Throttur W ← „NC Central Eagles”
+        # 100%) i podbijały score oraz filtry TOP/Twierdza.
+        for k in ('sofascore_home_win_prob', 'sofascore_away_win_prob',
+                  'sofascore_draw_win_prob', 'sofascore_total_votes'):
+            vote[k] = None
+        vote['sofascore_found'] = False
+        vote['sofascore_skip_reason'] = 'zly_mecz'
+        vote['sofascore_orientation'] = 'mismatch'
+        return
+    vote['sofascore_orientation'] = verdict
     if verdict == 'reversed':
         vote['sofascore_home_win_prob'] = ap
         vote['sofascore_away_win_prob'] = hp
