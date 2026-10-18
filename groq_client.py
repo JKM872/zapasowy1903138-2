@@ -401,19 +401,20 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
         keys = [key] if key else []
     else:
         keys = api_keys()
-    if not keys:
-        log("      ⚠️ Groq: brak GROQ_API_KEY")
-        return None
-
     if timeout is None:
         timeout = REQUEST_TIMEOUT
+    if not keys:
+        log("      ⚠️ Groq: brak GROQ_API_KEY — próbuję Gemini")
+        return gemini_chat(prompt, max_tokens=max_tokens, temperature=temperature,
+                           timeout=max(timeout, 60), log=log, meta=meta)
 
     # Listę modeli ustalamy RAZ, pierwszym działającym kluczem, i używamy dla
     # wszystkich. Odpytywanie /models osobno dla każdego klucza to dodatkowe
     # żądania, a konta darmowe widzą ten sam zestaw modeli.
     candidates = model_candidates(keys[0])
     if not candidates:
-        return None
+        return gemini_chat(prompt, max_tokens=max_tokens, temperature=temperature,
+                           timeout=max(timeout, 60), log=log, meta=meta)
 
     tried_reset = False
     # Start od kursora: jeśli klucz #1 już się wyczerpał w tym procesie, nie ma
@@ -504,6 +505,12 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
                     f"{len(candidates)} modelach — przechodzę na klucz "
                     f"{key_no + 1}/{len(order)}")
 
+    # Groq wyczerpany → Gemini (7 kluczy z różnych kont, rotacja modeli).
+    gem = gemini_chat(prompt, max_tokens=max_tokens, temperature=temperature,
+                      timeout=timeout or 60, log=log, meta=meta)
+    if gem:
+        return gem
+
     # `skipped` pokazuje, ile par pominęliśmy dzięki cooldownowi. Gdy równa się
     # liczbie wszystkich kombinacji, to znaczy że nie wysłaliśmy ANI JEDNEGO
     # żądania — cały budżet jest w pauzie i nie przepalamy go dalej.
@@ -514,4 +521,77 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
     else:
         log(f"      ⛔ Groq: żaden z {len(candidates)} modeli nie odpowiedział"
             f"{saved}")
+    return None
+
+
+# ===========================================================================
+# GEMINI — zapas dla Groq (wszystkie workflow przez chat())
+# ===========================================================================
+# Klucze: GEMINI_API_KEYS (po przecinku, różne konta Google) + GEMINI_API_KEY,
+# GEMINI_API_KEY_2. Rotacja klucz × model z cooldownem po 429/503, jak w Groq.
+GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent'
+GEMINI_MODELS: List[str] = [m.strip() for m in os.getenv(
+    'GEMINI_MODELS',
+    'gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite'
+).split(',') if m.strip()]
+_gem_cooldowns: dict = {}
+_gem_cursor = 0
+
+
+def gemini_keys() -> List[str]:
+    found: List[str] = []
+    for raw in (os.getenv('GEMINI_API_KEYS', ''), os.getenv('GEMINI_API_KEY', ''),
+                os.getenv('GEMINI_API_KEY_2', '')):
+        for k in re.split(r'[,\s]+', raw or ''):
+            if k and k not in found:
+                found.append(k)
+    return found
+
+
+def gemini_chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
+                timeout: int = 60, log=print, meta: Optional[dict] = None) -> Optional[str]:
+    """Jedno zapytanie do Gemini z rotacją kluczy i modeli. None = brak odpowiedzi."""
+    global _gem_cursor
+    import requests
+    keys = gemini_keys()
+    if not keys:
+        return None
+    order = [keys[(_gem_cursor + i) % len(keys)] for i in range(len(keys))]
+    now = time.time()
+    for ki, key in enumerate(order):
+        for model in GEMINI_MODELS:
+            if _gem_cooldowns.get((key, model), 0) > now:
+                continue
+            try:
+                r = requests.post(
+                    GEMINI_ENDPOINT.format(m=model), headers={'x-goog-api-key': key},
+                    json={'contents': [{'parts': [{'text': prompt}]}],
+                          'generationConfig': {'temperature': temperature,
+                                               'maxOutputTokens': max(max_tokens, 256)}},
+                    timeout=timeout)
+            except Exception as e:
+                log(f"      ⚠️ Gemini [{model}]: {type(e).__name__}")
+                continue
+            if r.status_code == 200:
+                try:
+                    parts = (r.json().get('candidates') or [{}])[0].get('content', {}).get('parts') or []
+                    txt = ''.join(p.get('text', '') for p in parts).strip()
+                except Exception:
+                    txt = ''
+                if txt:
+                    _gem_cursor = keys.index(key)
+                    if meta is not None:
+                        meta.update({'model': f'gemini:{model}', 'key_index': keys.index(key) + 1,
+                                     'key_count': len(keys)})
+                    return txt
+                continue
+            if r.status_code in (429, 503):
+                # 503 = chwilowe przeciążenie modelu; 429 = limit tej pary
+                _gem_cooldowns[(key, model)] = now + (60 if r.status_code == 503 else 600)
+                continue
+            if r.status_code == 404:
+                _gem_cooldowns[(key, model)] = now + 24 * 3600   # brak modelu na koncie
+                continue
+            log(f"      ⚠️ Gemini [{model}] klucz {ki + 1}: HTTP {r.status_code}")
+    log(f"      ⛔ Gemini: {len(keys)} kluczy × {len(GEMINI_MODELS)} modeli — brak odpowiedzi")
     return None
