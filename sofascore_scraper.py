@@ -1553,6 +1553,17 @@ _scheduled_cache: Dict[Tuple[str, str], Optional[Dict[str, Any]]] = {}
 _app_stats: Dict[str, int] = {}
 
 
+_dead_relays: set = set()
+
+
+def _relay_list() -> List[str]:
+    return [x.strip() for x in re.split(r'[,\s]+', os.getenv('SOFASCORE_RELAY', '')) if x.strip()]
+
+
+def _relays() -> List[str]:
+    return [x for x in _relay_list() if x not in _dead_relays]
+
+
 _app_client_403_streak = 0
 _APP_FAIL_LIMIT = int(os.getenv('SOFASCORE_APP_FAIL_LIMIT', '30'))
 
@@ -1571,10 +1582,12 @@ def _app_client_response(url: str, timeout: int = 10):
     www_url = url.replace('://api.sofascore.com/', '://www.sofascore.com/')
     # v13: darmowy przekaźnik (Google Apps Script, IP Google) — SOFASCORE_RELAY.
     # IP GitHuba/Tora/WARP dostają 403; przekaźnik pyta SofaScore za nas.
-    relay = os.getenv('SOFASCORE_RELAY', '').strip()
-    if relay:
+    # SOFASCORE_RELAY = jeden lub wiele adresów /exec (po przecinku, różne konta
+    # Google → każde ma własny limit ~20k zapytań/dobę). Przekaźnik z wyczerpanym
+    # limitem („zbyt wiele razy” / „too many times”) wypada do końca runu.
+    import urllib.parse as _up
+    for relay in _relays():
         try:
-            import urllib.parse as _up
             r = curl_requests.get(f"{relay}?url={_up.quote(www_url, safe='')}",
                                   impersonate='chrome', timeout=max(timeout, 20))
             body = (r.text or '').lstrip()
@@ -1585,6 +1598,11 @@ def _app_client_response(url: str, timeout: int = 10):
                 if '"code":404' in body[:40].replace(' ', ''):
                     r.status_code = 404
                 return r
+            if re.search(r'zbyt wiele razy|too many times|Service invoked', body[:3000], re.I):
+                _dead_relays.add(relay)
+                print(f"   ⚠️ Przekaźnik SofaScore #{_relay_list().index(relay) + 1}: dzienny limit Google "
+                      f"wyczerpany — przełączam na kolejny ({len(_relays())} zostało)")
+                continue
             _app_stats['relay_fail'] = _app_stats.get('relay_fail', 0) + 1
         except Exception:
             _app_stats['relay_err'] = _app_stats.get('relay_err', 0) + 1
