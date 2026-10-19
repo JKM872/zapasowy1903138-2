@@ -1,0 +1,325 @@
+{
+  "meta": {
+    "generated_at": "2026-10-19T05:16:33.689534+02:00",
+    "target_date": "2026-10-19",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 1,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {},
+    "odds_change_counts": {
+      "down": 1,
+      "up": 0,
+      "flat": 0,
+      "new": 0
+    },
+    "elapsed_seconds": 156.7,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/sokol-mogilno-vs-bielsko-biala/7811316?MarketTypeID=701",
+      "match_id": "7811316",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Sokol Mogilno",
+      "away_team": "Bielsko-Biala",
+      "event_date": "19/10",
+      "event_time": "18:30",
+      "outcome": "2",
+      "open_odds": 1.83,
+      "current_odds": 1.46,
+      "drop_pct": 20.0,
+      "max_odds": 1.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 1.51,
+        "prev_seen_at": "2026-10-16T03:05:17+00:00",
+        "current_odds": 1.46,
+        "change_pct": -3.31,
+        "direction": "down",
+        "runs_seen": 2,
+        "first_odds": 1.51,
+        "first_seen_at": "2026-10-16T03:05:17+00:00",
+        "change_from_first_pct": -3.31
+      },
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/bielsko-biala-OObfSDh5/mks-sokol-mogilno-h2kScGYk/?mid=l4WAg5ae",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sokół Mogilno K",
+        "away_team": "Bielsko-Biała K",
+        "match_time": "19.10.2026 18:30",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.75,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_odds": 2.5,
+        "draw_odds": null,
+        "away_odds": 1.45,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 13,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 87,
+        "sofascore_total_votes": 89,
+        "h2h_last5": [
+          {
+            "date": "14.03.26",
+            "home": "Sokół Mogilno K",
+            "away": "Bielsko-Biała K",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "14.03.26 Sokół Mogilno K 3-2 Bielsko-Biała K"
+          },
+          {
+            "date": "15.12.25",
+            "home": "Bielsko-Biała K",
+            "away": "Sokół Mogilno K",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "15.12.25 Bielsko-Biała K 3-1 Sokół Mogilno K"
+          },
+          {
+            "date": "16.12.24",
+            "home": "Bielsko-Biała K",
+            "away": "Sokół Mogilno K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "16.12.24 Bielsko-Biała K 3-0 Sokół Mogilno K"
+          },
+          {
+            "date": "28.09.24",
+            "home": "Sokół Mogilno K",
+            "away": "Bielsko-Biała K",
+            "score": "0-3",
+            "winner": "away",
+            "raw": "28.09.24 Sokół Mogilno K 0-3 Bielsko-Biała K"
+          }
+        ],
+        "last_h2h_date": "14.03.26",
+        "last_h2h_score": "3-2",
+        "last_h2h_home": "Sokół Mogilno K",
+        "last_h2h_away": "Bielsko-Biała K",
+        "form_advantage": true,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/sokol-mogilno-vs-bielsko-biala/7811316?MarketTypeID=701",
+      "match_id": "7811316",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Sokol Mogilno",
+      "away_team": "Bielsko-Biala",
+      "event_date": "19/10",
+      "event_time": "18:30",
+      "outcome": "2",
+      "open_odds": 1.83,
+      "current_odds": 1.46,
+      "drop_pct": 20.0,
+      "max_odds": 1.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 1.51,
+        "prev_seen_at": "2026-10-16T03:05:17+00:00",
+        "current_odds": 1.46,
+        "change_pct": -3.31,
+        "direction": "down",
+        "runs_seen": 2,
+        "first_odds": 1.51,
+        "first_seen_at": "2026-10-16T03:05:17+00:00",
+        "change_from_first_pct": -3.31
+      },
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/bielsko-biala-OObfSDh5/mks-sokol-mogilno-h2kScGYk/?mid=l4WAg5ae",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Sokół Mogilno K",
+        "away_team": "Bielsko-Biała K",
+        "match_time": "19.10.2026 18:30",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.75,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_odds": 2.5,
+        "draw_odds": null,
+        "away_odds": 1.45,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 13,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 87,
+        "sofascore_total_votes": 89,
+        "h2h_last5": [
+          {
+            "date": "14.03.26",
+            "home": "Sokół Mogilno K",
+            "away": "Bielsko-Biała K",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "14.03.26 Sokół Mogilno K 3-2 Bielsko-Biała K"
+          },
+          {
+            "date": "15.12.25",
+            "home": "Bielsko-Biała K",
+            "away": "Sokół Mogilno K",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "15.12.25 Bielsko-Biała K 3-1 Sokół Mogilno K"
+          },
+          {
+            "date": "16.12.24",
+            "home": "Bielsko-Biała K",
+            "away": "Sokół Mogilno K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "16.12.24 Bielsko-Biała K 3-0 Sokół Mogilno K"
+          },
+          {
+            "date": "28.09.24",
+            "home": "Sokół Mogilno K",
+            "away": "Bielsko-Biała K",
+            "score": "0-3",
+            "winner": "away",
+            "raw": "28.09.24 Sokół Mogilno K 0-3 Bielsko-Biała K"
+          }
+        ],
+        "last_h2h_date": "14.03.26",
+        "last_h2h_score": "3-2",
+        "last_h2h_home": "Sokół Mogilno K",
+        "last_h2h_away": "Bielsko-Biała K",
+        "form_advantage": true,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true
+      },
+      "enrichment_error": null
+    }
+  ]
+}
