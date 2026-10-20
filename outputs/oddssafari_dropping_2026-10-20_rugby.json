@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "generated_at": "2026-10-20T05:27:02.002068+02:00",
+    "target_date": "2026-10-20",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 2
+    },
+    "elapsed_seconds": 4.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - WXV Global Series (W)",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/wxv-global-series-w/new-zealand-vs-france/10041215?MarketTypeID=1301",
+      "match_id": "10041215",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "New Zealand",
+      "away_team": "France",
+      "event_date": "24/10",
+      "event_time": "02:05",
+      "outcome": "2",
+      "open_odds": 15.0,
+      "current_odds": 12.33,
+      "drop_pct": 18.0,
+      "max_odds": 13.0,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/ospreys-vs-dragons/10041178?MarketTypeID=1301",
+      "match_id": "10041178",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Ospreys",
+      "away_team": "Dragons",
+      "event_date": "24/10",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 3.75,
+      "current_odds": 3.32,
+      "drop_pct": 11.0,
+      "max_odds": 3.52,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": []
+}
