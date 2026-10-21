@@ -1,0 +1,55 @@
+name: Strażnik (watchdog)
+# Wykrywa „ciche” awarie: zielone runy z pustymi/śmieciowymi danymi
+# (Forebet 0 meczów, Fan Vote 0%, limit Apps Script, Traceback...). Mail tylko
+# gdy są problemy; raport zawsze w results/watchdog_<data>.json.
+on:
+  schedule:
+    - cron: '30 9 * * *'
+    - cron: '30 15 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Data YYYY-MM-DD (puste = dziś UTC)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: watchdog
+  cancel-in-progress: false
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -q requests
+      - name: Strażnik
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          D="${{ github.event.inputs.date }}"; [ -z "$D" ] && D=$(date -u +%F)
+          echo "DAY=$D" >> "$GITHUB_ENV"
+          python tools/watchdog.py "$D" --email
+      - name: Commit raport
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/watchdog_*.json
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Strażnik $DAY"
+          git reset -q --hard HEAD
+          git clean -fdq results/
+          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && break; sleep 5; done
