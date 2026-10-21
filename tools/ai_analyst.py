@@ -248,7 +248,7 @@ def run(day: str, top: List[Dict[str, Any]], twierdza: List[Dict[str, Any]]) -> 
         res = analyse(build_candidates(day, top, twierdza), day)
     except Exception:
         res = []
-    if res:
+    if res and len(res) >= len(load(day)):   # nie nadpisuj pełniejszej oceny gorszą
         save(res, day)
     counts = {v: sum(1 for r in res if r['verdict'] == v) for v in VERDICTS}
     print(f"   🧠 Analityk AI: {len(res)} werdyktów {counts}")

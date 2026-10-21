@@ -314,6 +314,14 @@ def _analyst_html(analyst: Optional[List[Dict[str, Any]]]) -> str:
         return ''
 
 
+def _analyst_saved(day: str) -> List[Dict[str, Any]]:
+    try:
+        from tools.ai_analyst import load
+        return load(day)
+    except Exception:
+        return []
+
+
 def run_analyst(day: str, merged: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Analityk AI na TOP + Twierdza; każdy błąd => []."""
     try:
@@ -406,8 +414,8 @@ if __name__ == '__main__':
     if '--email' in sys.argv and new:
         send_email(merged, day, attach=xlsx, new_count=len(new),
                    analyst=run_analyst(day, merged))
-    elif merged and not os.path.exists(os.path.join(ROOT, 'results', f'ai_analyst_{day}.json')):
-        run_analyst(day, merged)   # pierwszy przebieg dnia bez nowych — tylko zapis
+    elif merged and len(_analyst_saved(day)) < len(merged):
+        run_analyst(day, merged)   # brak/niepełne werdykty bez nowych TOP — tylko zapis
     print(f"â­ TOP {day} (Grade {'/'.join(grades)}): {len(picks)}")
     for r in picks:
         print(f"{r['time']} {r['sport']:<10} {r['match']} | {r['league']}\n"
