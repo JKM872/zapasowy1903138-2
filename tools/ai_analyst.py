@@ -25,7 +25,7 @@ _VERDICT_ALIASES = {'ODPUSC': 'ODPUŚĆ', 'ODPUŚC': 'ODPUŚĆ', 'ODPUSĆ': 'ODP
 # Pola surowego meczu (matches_<day>_*.json) przekazywane modelowi.
 RAW_FIELDS = ('odds', 'forebet', 'form', 'h2h', 'sofascore', 'scoring', 'predictionGrade',
               'earlySeason', 'staleModel', 'seasonFormConflict', 'seasonMatchCount', 'seasonForm', 'season_form',
-              'recency', 'league', 'time')
+              'recency', 'league', 'time', 'injuries', 'injuryCounts', 'injury_risk')
 
 PROMPT = (
     "Jesteś analitykiem zakładów sportowych. Oceń każdy kandydat (typ na zwycięzcę) na podstawie "
@@ -33,6 +33,9 @@ PROMPT = (
     "forma w BIEŻĄCYM sezonie (ważniejsza niż końcówka poprzedniego — transfery), flagi "
     "early_season/season_form_conflict/stale_model, H2H (ważone wiekiem), SofaScore Fan Vote, "
     "grade, score, sygnały. Puchar vs słabszy rywal: dominacja może nie być widoczna w H2H.\n"
+    "Absencje (injuries: home/away, reason kontuzja/zawieszenie/wątpliwy, key=kluczowy; "
+    "injury_risk=typowana strona osłabiona): brak gwiazdy typowanej strony to ryzyko, "
+    "braki u rywala to atut. Brak pola = brak danych, nie brak absencji.\n"
     "Zwróć WYŁĄCZNIE tablicę JSON, bez komentarzy, jeden obiekt na kandydata:\n"
     '[{"key": "<key bez zmian>", "verdict": "GRAJ|ODPUŚĆ|OBSERWUJ", "confidence": 1-5, '
     '"reason": "max 2 zdania po polsku", "risks": ["krótko", "..."]}]\n'
@@ -217,7 +220,8 @@ def analyse(candidates: List[Dict[str, Any]], day: str) -> List[Dict[str, Any]]:
         for r in results:
             c = cands[r['key']]
             r.update({'match': c.get('match'), 'pick': c.get('pick'), 'odds': c.get('odds'),
-                      'sport': c.get('sport'), 'source': c.get('source')})
+                      'sport': c.get('sport'), 'source': c.get('source'),
+                      'injuryLine': c.get('injuryLine') or ''})
         return results
     except Exception as e:
         print(f"   ⚠️ Analityk AI: {type(e).__name__} — pomijam")
@@ -287,6 +291,8 @@ def html_section(results: List[Dict[str, Any]]) -> str:
             f"<span>{escape(str(r.get('pick') or ''))} @ {odds}</span> "
             f"<span style='color:#f9ab00'>{'★' * conf}{'☆' * (5 - conf)}</span><br>"
             f"<span>{escape(str(r.get('reason') or ''))}</span>"
+            + (f"<br><span style='color:#5f6368;font-size:12px'>{escape(str(r['injuryLine']))}</span>"
+               if r.get('injuryLine') else '')
             + (f"<ul style='margin:4px 0 0 18px;padding:0;color:#5f6368;font-size:12px'>{risks}</ul>"
                if risks else '')
             + "</div>")

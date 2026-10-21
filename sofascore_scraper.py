@@ -2639,6 +2639,79 @@ def get_event_team_ids(event_id: int) -> Optional[Dict[str, Any]]:
     }
 
 
+# Kody ``reason`` z /event/{id}/lineups → missingPlayers (sprawdzone 10.2026
+# na PL/LM/NBA): 1 kontuzja (description np. „Hamstring Injury”), 11/12/13
+# zawieszenie (red/yellow card), 3 kara dyscyplinarna, 4 decyzja trenera,
+# 0 bez podanej przyczyny. ``type`` == 'doubtful' => wątpliwy niezależnie od kodu.
+_MISSING_REASON_PL = {1: 'kontuzja', 3: 'zawieszenie', 11: 'zawieszenie',
+                      12: 'zawieszenie', 13: 'zawieszenie'}
+_missing_cache: Dict[int, Dict[str, Any]] = {}
+
+
+def _missing_reason_pl(p: Dict[str, Any]) -> str:
+    if p.get('type') == 'doubtful':
+        return 'wątpliwy'
+    return _MISSING_REASON_PL.get(p.get('reason'), 'inne')
+
+
+def get_missing_players(event_id: int) -> Dict[str, Any]:
+    """Absencje meczu: ``{'home': [...], 'away': [...], 'available': bool}``.
+
+    Jedno zapytanie /event/{id}/lineups (przez _api_get_json → przekaźnik),
+    wynik cache'owany na run. Element listy: name, position, type
+    (missing/doubtful), reason (PL), description, key (bool|None).
+
+    ``key`` — heurystyka z tej samej odpowiedzi: wartość rynkowa zawodnika
+    ≥ mediana wartości zawodników z kadry meczowej drużyny. None, gdy
+    SofaScore nie podaje wartości (np. NBA).
+
+    Pokrycie (próbka 10.2026): piłka nożna i NBA tak; hokej (NHL), piłka
+    ręczna, koszykówka europejska — pusta lista; siatkówka — brak lineups.
+    Każdy błąd => available=False, puste listy.
+    """
+    empty = {'home': [], 'away': [], 'available': False}
+    try:
+        eid = int(event_id)
+    except (TypeError, ValueError):
+        return empty
+    if eid in _missing_cache:
+        return _missing_cache[eid]
+    try:
+        data = _api_get_json(
+            f"https://api.sofascore.com/api/v1/event/{eid}/lineups", timeout=10)
+    except Exception:
+        data = None
+    if not isinstance(data, dict):
+        _missing_cache[eid] = empty
+        return empty
+
+    def _value(pl: Dict[str, Any]) -> Optional[float]:
+        v = (pl.get('proposedMarketValueRaw') or {}).get('value')
+        return float(v) if isinstance(v, (int, float)) and v > 0 else None
+
+    out: Dict[str, Any] = {'available': True}
+    for side in ('home', 'away'):
+        team = data.get(side) or {}
+        vals = sorted(v for v in (_value((x or {}).get('player') or {})
+                                  for x in team.get('players') or []) if v)
+        median = vals[len(vals) // 2] if vals else None
+        rows = []
+        for p in team.get('missingPlayers') or []:
+            pl = (p or {}).get('player') or {}
+            if not pl.get('name'):
+                continue
+            v = _value(pl)
+            rows.append({'name': pl.get('shortName') or pl.get('name'),
+                         'position': pl.get('position'),
+                         'type': p.get('type'),
+                         'reason': _missing_reason_pl(p),
+                         'description': p.get('description'),
+                         'key': (v >= median) if (v and median) else None})
+        out[side] = rows
+    _missing_cache[eid] = out
+    return out
+
+
 def get_event_result(event_id: int) -> Optional[Dict[str, Any]]:
     """Final result of a single event: status, score and winner.
 
