@@ -762,7 +762,7 @@ class TestDailyDigest:
         data = dd.collect('2026-10-20')
         for cat in ('TOP', 'Forebet', 'Dropping'):
             assert data[cat], cat
-            assert all(len(r) == 15 for r in data[cat]), cat
+            assert all(len(r) == 16 for r in data[cat]), cat
         fb = [r for r in data['Forebet'] if r[3] == 'Home FC vs Away FC'][0]
         assert fb[14] == 'WW / L'
         assert fb[9] == 'WWWWD' and fb[10] == 'LLLDW' and fb[11] == ''
@@ -775,7 +775,7 @@ class TestDailyDigest:
         fort = [r for r in tw if r['pick'] == 'Fort FC']
         assert fort and fort[0]['seasonForm'] == 'WWW / L'
         rows = dd.twierdza_rows(tw)
-        assert all(len(r) == 15 for r in rows)
+        assert all(len(r) == 16 for r in rows)
         for flag in ('earlySeason', 'staleModel', 'seasonFormConflict'):
             dd = self._setup(tmp_path / flag, monkeypatch, self._tw(**{flag: True}))
             assert not [r for r in dd.twierdza('2026-10-20') if r['pick'] == 'Fort FC']
@@ -795,12 +795,12 @@ class TestDailyDigest:
         out = dd.write_xlsx('2026-10-20', data, 'x')
         wb = load_workbook(out)
         top = [c.value for c in wb['TOP'][1]]
-        assert top[-2:] == ['Sygnały', 'Forma sezon']
-        assert [c.value for c in wb['Forebet'][1]][-1] == 'Forma sezon'
+        assert top[-3:] == ['Sygnały', 'Forma sezon', 'Forma / Sezon']
+        assert [c.value for c in wb['Forebet'][1]][-2:] == ['Forma sezon', 'Forma / Sezon']
         sport_sheets = [s for s in wb.sheetnames if '_TOP_' in s]
         assert sport_sheets
         for s in sport_sheets:
-            assert [c.value for c in wb[s][1]][-1] == 'Forma sezon'
+            assert [c.value for c in wb[s][1]][-2:] == ['Forma sezon', 'Forma / Sezon']
 
 
 # ---------------------------------------------------------------------------

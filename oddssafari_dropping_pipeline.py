@@ -1231,6 +1231,17 @@ _KEEP_KEYS = (
     "form_a", "form_b",
     "tennis_data_warnings", "tennis_phase_path",
     "ranking_a", "ranking_b",
+    # Wspólny schemat formy (recency + form_schema) — z tej samej strony.
+    "home_season_form", "away_season_form", "season_home_form", "season_away_form",
+    "home_season_match_count", "away_season_match_count", "season_match_count",
+    "early_season", "season_form_conflict",
+    "home_form_nf", "away_form_nf", "home_form_home_nf", "away_form_away_nf",
+    "home_friendlies_excluded", "away_friendlies_excluded",
+    "home_home_friendlies_excluded", "away_away_friendlies_excluded",
+    "friendlies_excluded",
+    "home_cup_form", "away_cup_form", "home_cup_competitions", "away_cup_competitions",
+    "home_form_competitions", "away_form_competitions",
+    "category", "national_friendly",
 )
 
 

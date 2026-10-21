@@ -25,7 +25,8 @@ _VERDICT_ALIASES = {'ODPUSC': 'ODPUŚĆ', 'ODPUŚC': 'ODPUŚĆ', 'ODPUSĆ': 'ODP
 # Pola surowego meczu (matches_<day>_*.json) przekazywane modelowi.
 RAW_FIELDS = ('odds', 'forebet', 'form', 'h2h', 'sofascore', 'scoring', 'predictionGrade',
               'earlySeason', 'staleModel', 'seasonFormConflict', 'seasonMatchCount', 'seasonForm', 'season_form',
-              'recency', 'league', 'time', 'injuries', 'injuryCounts', 'injury_risk')
+              'recency', 'league', 'time', 'injuries', 'injuryCounts', 'injury_risk',
+              'category')
 
 PROMPT = (
     "Jesteś analitykiem zakładów sportowych. Oceń każdy kandydat (typ na zwycięzcę) na podstawie "
@@ -33,6 +34,8 @@ PROMPT = (
     "forma w BIEŻĄCYM sezonie (ważniejsza niż końcówka poprzedniego — transfery), flagi "
     "early_season/season_form_conflict/stale_model, H2H (ważone wiekiem), SofaScore Fan Vote, "
     "grade, score, sygnały. Puchar vs słabszy rywal: dominacja może nie być widoczna w H2H.\n"
+    "formBlock: forma ogólna/u siebie/na wyjeździe/puchary (z nazwami rozgrywek) i sezonowa, "
+    "bez sparingów; category='reprezentacje' = mecz reprezentacji.\n"
     "Absencje (injuries: home/away, reason kontuzja/zawieszenie/wątpliwy, key=kluczowy; "
     "injury_risk=typowana strona osłabiona): brak gwiazdy typowanej strony to ryzyko, "
     "braki u rywala to atut. Brak pola = brak danych, nie brak absencji.\n"
@@ -86,6 +89,16 @@ def build_candidates(day: str, top: List[Dict[str, Any]],
             c['key'] = k
             raw = idx.get((r.get('sport'), r.get('match'))) or {}
             c['data'] = {f: raw[f] for f in RAW_FIELDS if raw.get(f) not in (None, '', {}, [])}
+            if isinstance(raw.get('form'), dict):
+                try:
+                    if ROOT not in sys.path:
+                        sys.path.insert(0, ROOT)
+                    import form_schema
+                    home, _, away = str(r.get('match') or '').partition(' vs ')
+                    c['data']['formBlock'] = form_schema.form_lines(
+                        form_schema.block_from_json(raw['form']), home, away)
+                except Exception:
+                    pass
             out.append(c)
     return out
 
