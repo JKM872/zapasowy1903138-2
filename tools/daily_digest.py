@@ -181,7 +181,8 @@ def _market_gap(m: Dict[str, Any], sport: str, side: str, fbp: float) -> Optiona
 
 
 def twierdza(day: str) -> List[Dict[str, Any]]:
-    from tools.top_picks import enrich_fanvote, recency_flagged, is_flagged
+    from tools.top_picks import enrich_fanvote, enrich_injuries, recency_flagged, is_flagged
+    from tools.injuries import fields as injury_fields
     R = os.path.join(ROOT, 'results')
     out, seen = [], set()
     paths = sorted(glob.glob(os.path.join(R, f'matches_{day}_*.json')))
@@ -228,6 +229,7 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
                     # Model > rynek o >20 pp (każde źródło, także Sports).
                     continue
                 seen.add(key)
+                enrich_injuries(m, sport, day, side)   # tylko pokazujemy, nie odrzucamy
                 out.append({'source': src, 'sport': sport, 'time': _time(m.get('time')),
                             'match': f"{m.get('homeTeam')} vs {m.get('awayTeam')}",
                             'league': m.get('league'), 'side': side,
@@ -236,7 +238,8 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
                             'fanvote': fv, 'form': _f(f_me), 'venue': _f(f_venue),
                             'grade': m.get('predictionGrade'),
                             'seasonForm': _season_str(
-                                m.get('form') if isinstance(m.get('form'), dict) else {}, side)})
+                                m.get('form') if isinstance(m.get('form'), dict) else {}, side),
+                            **injury_fields(m)})
                 break
     out.sort(key=lambda r: str(r['time'] or '99:99'))
     with open(os.path.join(R, f'twierdza_{day}.json'), 'w', encoding='utf-8') as fh_:
@@ -250,6 +253,13 @@ def twierdza_rows(tw: List[Dict[str, Any]]) -> List[List[Any]]:
              r['odds'], r['grade'], f"Forebet {r['forebet']}%", r['form'],
              f"dom/wyj {r['venue']}", '', f"{r['fanvote']}%", '',
              r.get('seasonForm') or ''] for r in tw]
+
+
+def _injury_lines(day: str) -> Dict[str, str]:
+    """mecz -> linia absencji z twierdza_{day}.json (wiersze mają stały układ)."""
+    tw = _load(os.path.join(ROOT, 'results', f'twierdza_{day}.json')) or []
+    return {str(r.get('match')): r['injuryLine'] for r in tw
+            if isinstance(r, dict) and r.get('injuryLine')}
 
 
 # ---------------------------------------------------------------------------
@@ -528,6 +538,7 @@ def send(day: str, xlsx: str, data, summary: str,
         print('   ℹ️ brak EMAIL_* — mail pominięty')
         return
     rows = ''.join(f"<tr><td>{escape(k)}</td><td>{len(v)}</td></tr>" for k, v in data.items())
+    inj = _injury_lines(day)
     try:
         from tools.ai_analyst import html_section
         top_html = html_section(analyst or [])
@@ -542,6 +553,7 @@ def send(day: str, xlsx: str, data, summary: str,
                       f"<b>{escape(str(r[5]))}</b> @ {r[6]} | {escape(str(r[8]))} | FV {escape(str(r[12]))} "
                       f"| {escape(str(r[10]))}"
                       + (f" | sezon {escape(str(r[14]))}" if len(r) > 14 and r[14] else '')
+                      + (f"<br><small>{escape(inj[str(r[3])])}</small>" if str(r[3]) in inj else '')
                       + "</div>" for r in data.get('Twierdza', []))
             +
             f"<h3>🤖 Komentarz AI</h3><p style='white-space:pre-wrap'>{escape(summary)}</p>"

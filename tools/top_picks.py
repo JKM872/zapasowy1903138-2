@@ -116,6 +116,14 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
     if sum(1 for v in have.values() if v > 0) < max(3, round(len(have) * 0.75)):
         return None
 
+    try:
+        from tools import injuries as _inj
+    except Exception:
+        _inj = None
+    # Absencje: odrzucamy tylko gdy typowana strona traci więcej niż rywal.
+    if _inj and _inj.excludes(m, me):
+        return None
+
     team = m.get('homeTeam') if me == 'home' else m.get('awayTeam')
 
     def _f(x):
@@ -134,6 +142,7 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         'fanvote': f"{ss.get('homeProb' if me == 'home' else 'awayProb')}%" if ss.get('found') else 'brak',
         'signals': f"{sum(1 for v in have.values() if v > 0)}/{len(have)} za",
         'seasonForm': season_form,
+        **(_inj.fields(m) if _inj else {}),
     }
 
 
@@ -166,12 +175,36 @@ def enrich_fanvote(m: Dict[str, Any], sport: str, day: str) -> None:
         from forebet_pipeline import _orient_fan_vote
         v = fv.get_fan_vote(m.get('homeTeam'), m.get('awayTeam'), sport, day)
         _orient_fan_vote(v, m.get('homeTeam'), m.get('awayTeam'))
+        _remember_event(v, sport, m)
         if v.get('sofascore_found'):
             m['sofascore'] = {'found': True, 'votes': v.get('sofascore_total_votes'),
                               'homeProb': v.get('sofascore_home_win_prob'),
                               'awayProb': v.get('sofascore_away_win_prob')}
     except Exception as e:
         print(f"   ⚠️ Fan Vote {m.get('homeTeam')}: {type(e).__name__}")
+
+
+def _remember_event(v: Dict[str, Any], sport: str, m: Dict[str, Any]) -> None:
+    """Zweryfikowane zdarzenie Fan Vote -> do pobrania absencji bez szukania."""
+    import re
+    hit = re.search(r'/match/(\d+)', str(v.get('sofascore_url') or ''))
+    if hit and v.get('sofascore_orientation') in ('direct', 'reversed'):
+        from tools import injuries
+        injuries.remember_event(sport, m.get('homeTeam'), m.get('awayTeam'),
+                                int(hit.group(1)), v['sofascore_orientation'])
+
+
+def enrich_injuries(m: Dict[str, Any], sport: str, day: str, side: Optional[str] = None) -> None:
+    """Absencje dla kandydata TOP/Twierdzy; błąd => brak danych."""
+    try:
+        if ROOT not in sys.path:
+            sys.path.insert(0, ROOT)
+        from tools import injuries
+        if side is None:
+            side = 'away' if (m.get('scoring') or {}).get('pick') == '2' else 'home'
+        injuries.attach(m, sport, day, side)
+    except Exception as e:
+        print(f"   ⚠️ Absencje {m.get('homeTeam')}: {type(e).__name__}")
 
 
 def collect_enriched(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
@@ -191,6 +224,7 @@ def collect_enriched(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
             if not evaluate(m, sport):          # bez szans — nie pytamy SofaScore
                 continue
             enrich_fanvote(m, sport, day)
+            enrich_injuries(m, sport, day)
             r = evaluate(m, sport)
             if r:
                 out.append(r)
@@ -353,7 +387,9 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
         return
     rows = ''.join(
         f"<tr><td>{escape(str(r['time']))}</td><td>{escape(r['sport'])}</td>"
-        f"<td>{escape(r['match'])}<br><small>{escape(str(r['league']))}</small></td>"
+        f"<td>{escape(r['match'])}<br><small>{escape(str(r['league']))}</small>"
+        + (f"<br><small>{escape(r['injuryLine'])}{' ⚠️' if r.get('injury_risk') else ''}</small>"
+           if r.get('injuryLine') else '') + "</td>"
         f"<td><b>{escape(str(r['pick']))}</b> @ {r['odds']:.2f}</td>"
         f"<td>{escape(str(r['grade']))} / {r['score']}</td><td>{escape(r['form'])}</td>"
         f"<td>{escape(r['h2h'])}</td><td>{escape(r['fanvote'])}</td><td>{escape(r['signals'])}</td>"
