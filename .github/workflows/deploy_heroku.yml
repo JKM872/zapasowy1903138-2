@@ -46,7 +46,11 @@ jobs:
       - name: Trigger Heroku build from main
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP: pickly-67e87ed00f70
+          # The app NAME, not the hostname. The site lives at
+          # pickly-67e87ed00f70.herokuapp.com, but the Platform API addresses the
+          # app as `pickly`; using the hostname returned "Couldn't find that app"
+          # on every build for months while the step reported success.
+          HEROKU_APP: pickly
           REPO_TARBALL: https://github.com/JKM872/zapasowy1903138-2/tarball/main
         run: |
           set -euo pipefail

@@ -290,7 +290,7 @@ jobs:
             exit 0
           fi
           # Trigger Heroku build from latest commit
-          curl -s -n -X POST https://api.heroku.com/apps/pickly-67e87ed00f70/builds \
+          curl -s -n -X POST https://api.heroku.com/apps/pickly/builds \
             -d '{"source_blob":{"url":"https://github.com/JKM872/zapasowy1903138-2/tarball/main"}}' \
             -H "Content-Type: application/json" \
             -H "Accept: application/vnd.heroku+json; version=3" \
