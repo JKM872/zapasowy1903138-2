@@ -406,6 +406,8 @@ if __name__ == '__main__':
     if '--email' in sys.argv and new:
         send_email(merged, day, attach=xlsx, new_count=len(new),
                    analyst=run_analyst(day, merged))
+    elif merged and not os.path.exists(os.path.join(ROOT, 'results', f'ai_analyst_{day}.json')):
+        run_analyst(day, merged)   # pierwszy przebieg dnia bez nowych — tylko zapis
     print(f"â­ TOP {day} (Grade {'/'.join(grades)}): {len(picks)}")
     for r in picks:
         print(f"{r['time']} {r['sport']:<10} {r['match']} | {r['league']}\n"
