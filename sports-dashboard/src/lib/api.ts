@@ -378,6 +378,20 @@ export interface DroppingOddsEvent {
   forebetProbability: number | null
   enrichmentStatus: string
   scrapedAt: string
+  /** Historical verdict for moves in the same sport and side. */
+  verdict?: DropVerdict
+}
+
+export interface DropVerdict {
+  verdict: 'warto' | 'nie_warto' | 'za_malo_danych'
+  reason?: string
+  segment?: string
+  /** Settled moves the verdict rests on. */
+  n?: number
+  hitRate?: number | null
+  /** ROI at the scraped price, and at a price 5% worse. */
+  roi?: number | null
+  roiRealistic?: number | null
 }
 
 export interface DroppingOddsResponse {
@@ -385,6 +399,8 @@ export interface DroppingOddsResponse {
   events: DroppingOddsEvent[]
   sportCounts: Record<string, number>
   availableDates: string[]
+  /** History the verdicts were built from; null when no model exists yet. */
+  model?: { settled?: number; dateRange?: { from: string; to: string } | null; generatedAt?: string } | null
   summary: {
     count: number
     medianDrop?: number | null

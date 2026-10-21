@@ -96,6 +96,38 @@ def _normalise(event: Dict[str, Any], generated_at: str) -> Dict[str, Any]:
     }
 
 
+_OUTCOME_TO_SIDE = {'1': 'home', '2': 'away', 'X': 'draw', 'x': 'draw'}
+
+
+def _attach_verdicts(events: List[Dict[str, Any]], model: Optional[Dict[str, Any]]) -> None:
+    """Add the advisor's verdict to each event, in place.
+
+    The model is rebuilt daily from settled history by dropping_odds_advisor.
+    Without it every event says "no data" rather than inventing a verdict.
+    """
+    try:
+        from dropping_odds_advisor import verdict_for
+    except Exception:
+        verdict_for = None
+
+    for event in events:
+        side = _OUTCOME_TO_SIDE.get(str(event.get('outcome') or ''))
+        verdict = verdict_for(model, event['sport'], side) if (verdict_for and model and side) else None
+        if not verdict:
+            event['verdict'] = {'verdict': 'za_malo_danych',
+                                'reason': 'brak modelu historycznego', 'n': 0}
+            continue
+        event['verdict'] = {
+            'verdict': verdict.get('verdict'),
+            'reason': verdict.get('reason'),
+            'segment': verdict.get('segment'),
+            'n': verdict.get('n'),
+            'hitRate': verdict.get('hitRate'),
+            'roi': verdict.get('roi'),
+            'roiRealistic': verdict.get('roiRealistic'),
+        }
+
+
 def load_dropping_odds(date: Optional[str] = None,
                        sport: Optional[str] = None,
                        outputs_dir: str = OUTPUTS_DIR) -> Dict[str, Any]:
@@ -142,7 +174,19 @@ def load_dropping_odds(date: Optional[str] = None,
     for event in events:
         sport_counts[event['sport']] = sport_counts.get(event['sport'], 0) + 1
 
+    try:
+        from dropping_odds_advisor import load_model
+        model = load_model(os.path.join(outputs_dir, 'dropping_odds_model.json'))
+    except Exception:
+        model = None
+    _attach_verdicts(events, model)
+
     return {
+        'model': {
+            'settled': model.get('settled'),
+            'dateRange': model.get('dateRange'),
+            'generatedAt': model.get('generatedAt'),
+        } if model else None,
         'date': target,
         'events': events,
         'sportCounts': sport_counts,

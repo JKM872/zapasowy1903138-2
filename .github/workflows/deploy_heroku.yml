@@ -24,7 +24,7 @@ name: Deploy to Heroku (refresh site data)
 
 on:
   schedule:
-    - cron: '0 7 * * *'     # after the overnight + morning block
+    - cron: '30 7 * * *'    # after the overnight block and the 07:00 verdict model
     - cron: '30 12 * * *'   # after the noon refresh and first dropping-odds window
     - cron: '0 15 * * *'    # after the second dropping-odds window
     - cron: '0 18 * * *'    # after the third window and baseball

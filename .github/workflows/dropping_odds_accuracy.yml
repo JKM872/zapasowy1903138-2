@@ -94,6 +94,18 @@ jobs:
           python dropping_odds_accuracy.py $ACC_ARGS 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
+      # Rebuilds the verdict table the website shows next to each price move.
+      # Runs on the full archive regardless of the --days/--sport inputs above:
+      # a verdict built on a filtered slice would be judged on less history
+      # than it claims.
+      - name: Rebuild dropping-odds verdict model
+        if: always()
+        run: |
+          echo "## Werdykty dropping odds" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python dropping_odds_advisor.py 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
       - name: Commit accuracy report
         if: always()
         run: |
@@ -101,6 +113,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add outputs/dropping_odds_accuracy.json 2>/dev/null || true
           git add outputs/dropping_odds_settled.json 2>/dev/null || true
+          git add outputs/dropping_odds_model.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ Brak zmian w raporcie"
           else

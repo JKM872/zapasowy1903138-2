@@ -155,3 +155,27 @@ class TestSummary:
 
     def test_no_events_gives_no_figures(self):
         assert feed.summarise([])['medianDrop'] is None
+
+
+class TestVerdicts:
+    def test_events_carry_the_model_verdict(self, tmp_path):
+        write(tmp_path, '2026-09-12', 'hockey',
+              [event(sport='hockey', outcome='1')], '2026-09-12T09:00:00+02:00')
+        (tmp_path / 'dropping_odds_model.json').write_text(json.dumps({
+            'settled': 349, 'dateRange': {'from': 'a', 'to': 'b'},
+            'segments': {'hockey|home': {'verdict': 'warto', 'reason': 'x',
+                                         'n': 199, 'roi': 21.0, 'roiRealistic': 14.9}},
+        }), encoding='utf-8')
+
+        out = feed.load_dropping_odds(outputs_dir=str(tmp_path))
+        v = out['events'][0]['verdict']
+        assert v['verdict'] == 'warto'
+        assert v['n'] == 199
+        assert out['model']['settled'] == 349
+
+    def test_without_a_model_nothing_is_invented(self, tmp_path):
+        write(tmp_path, '2026-09-12', 'hockey',
+              [event(sport='hockey', outcome='1')], '2026-09-12T09:00:00+02:00')
+        out = feed.load_dropping_odds(outputs_dir=str(tmp_path))
+        assert out['events'][0]['verdict']['verdict'] == 'za_malo_danych'
+        assert out['model'] is None

@@ -16,7 +16,7 @@ import { getSportConfig, PREDICTION_LABELS } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { FormTimeline } from '@/components/charts/FormTimeline'
 import { formatOdds } from '@/lib/format'
-import { getDroppingOdds, type DroppingOddsEvent } from '@/lib/api'
+import { getDroppingOdds, type DroppingOddsEvent, type DropVerdict } from '@/lib/api'
 
 export default function DroppingOddsPage() {
   const [date, setDate] = useState<string | undefined>()
@@ -60,6 +60,19 @@ export default function DroppingOddsPage() {
           bez zgadywania przyczyny. Spadek kursu nie jest rekomendacją.
         </p>
       </div>
+
+      {/* What the verdicts rest on, stated once above the list. */}
+      {data?.model?.settled ? (
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Przy każdym zdarzeniu podajemy, jak historycznie wypadały podobne ruchy
+          (ta sama dyscyplina i strona), na podstawie {data.model.settled.toLocaleString('pl-PL')}{' '}
+          rozstrzygniętych spadków
+          {data.model.dateRange && <> z okresu {data.model.dateRange.from} – {data.model.dateRange.to}</>}.
+          Ocena „zarabiało” wymaga zysku w obu połowach okresu i po obniżeniu kursu o 5%,
+          bo realnie łapie się gorszą cenę niż w chwili odczytu. Ogólnie stawianie na stronę,
+          na którą spadł kurs, traciło.
+        </p>
+      ) : null}
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
@@ -180,6 +193,41 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
   )
 }
 
+const VERDICT_STYLE: Record<DropVerdict['verdict'], { label: string; cls: string }> = {
+  warto: { label: 'Historycznie zarabiało', cls: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-500' },
+  nie_warto: { label: 'Historycznie traciło', cls: 'border-rose-500/40 bg-rose-500/10 text-rose-500' },
+  za_malo_danych: { label: 'Za mało danych', cls: 'border-border bg-muted text-muted-foreground' },
+}
+
+/**
+ * The verdict always travels with the number of settled moves behind it, so a
+ * reader can see how much evidence a "zarabiało" actually rests on.
+ */
+function VerdictLine({ verdict: v }: { verdict: DropVerdict }) {
+  const style = VERDICT_STYLE[v.verdict] ?? VERDICT_STYLE.za_malo_danych
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+      <span className={cn('rounded border px-1.5 py-0.5 font-semibold', style.cls)}>
+        {style.label}
+      </span>
+      {v.n != null && v.n > 0 && (
+        <span className="text-muted-foreground tabular-nums">
+          {v.n} podobnych ruchów
+          {v.hitRate != null && <> · trafność {v.hitRate}%</>}
+          {v.roiRealistic != null && (
+            <> · ROI po realnym kursie{' '}
+              <span className={cn('font-semibold', v.roiRealistic >= 0 ? 'text-emerald-500' : 'text-rose-500')}>
+                {v.roiRealistic > 0 ? '+' : ''}{v.roiRealistic}%
+              </span>
+            </>
+          )}
+        </span>
+      )}
+      {v.reason && <span className="text-muted-foreground/70">({v.reason})</span>}
+    </div>
+  )
+}
+
 function DropRow({ event: e }: { event: DroppingOddsEvent }) {
   const drop = e.dropPct ?? 0
   // 20% is where the archive thins out, so it is the line worth marking.
@@ -224,6 +272,8 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
       {e.league && (
         <p className="mt-1 truncate text-[10px] text-muted-foreground">{e.league}</p>
       )}
+
+      {e.verdict && <VerdictLine verdict={e.verdict} />}
 
       {/* Everything the pipeline already knew about this event. Absent on about
           half the archive, so it is shown only when present. */}
