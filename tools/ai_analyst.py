@@ -103,7 +103,18 @@ def parse_json_list(txt: Optional[str]) -> List[Dict[str, Any]]:
             v = v.get('items') or v.get('results') or [v]
         if isinstance(v, list):
             return [x for x in v if isinstance(x, dict)]
-    return []
+    # Ucięta / zabrudzona odpowiedź: ratujemy każdy kompletny obiekt z polem key.
+    dec, out, i = json.JSONDecoder(), [], s.find('{')
+    while i != -1:
+        try:
+            obj, end = dec.raw_decode(s, i)
+        except Exception:
+            i = s.find('{', i + 1)
+            continue
+        if isinstance(obj, dict) and 'key' in obj:
+            out.append(obj)
+        i = s.find('{', end)
+    return out
 
 
 def _normalise(items: List[Dict[str, Any]], keys: set) -> List[Dict[str, Any]]:
@@ -133,7 +144,7 @@ def _chat(prompt: str, **kw) -> Optional[str]:
     if ROOT not in sys.path:
         sys.path.insert(0, ROOT)
     import groq_client
-    return groq_client.gemini_chat(prompt, max_tokens=8000, temperature=0.2, timeout=90, **kw)
+    return groq_client.gemini_chat(prompt, max_tokens=16000, temperature=0.2, timeout=90, **kw)
 
 
 def _final_ranking(results: List[Dict[str, Any]], cands: Dict[str, Dict[str, Any]],
@@ -187,12 +198,19 @@ def analyse(candidates: List[Dict[str, Any]], day: str) -> List[Dict[str, Any]]:
         items = list(cands.values())
         results: List[Dict[str, Any]] = []
         for i in range(0, len(items), max(1, BATCH)):
-            batch = items[i:i + BATCH]
-            data = json.dumps(batch, ensure_ascii=False, default=str)
-            got = _normalise(parse_json_list(_chat(PROMPT.replace('{day}', day).replace('{data}', data))),
-                             {c['key'] for c in batch})
-            done = {r['key'] for r in results}
-            results += [r for r in got if r['key'] not in done]
+            todo = items[i:i + BATCH]
+            for attempt in range(2):   # druga próba tylko dla brakujących kluczy
+                data = json.dumps(todo, ensure_ascii=False, default=str)
+                got = _normalise(parse_json_list(_chat(PROMPT.replace('{day}', day).replace('{data}', data))),
+                                 {c['key'] for c in todo})
+                done = {r['key'] for r in results}
+                results += [r for r in got if r['key'] not in done]
+                done = {r['key'] for r in results}
+                print(f"   🧠 Analityk AI: partia {i // BATCH + 1} próba {attempt + 1}: "
+                      f"{len(got)}/{len(todo)}")
+                todo = [c for c in todo if c['key'] not in done]
+                if not todo:
+                    break
         if not results:
             return []
         results = _final_ranking(results, cands, day)
@@ -230,7 +248,7 @@ def run(day: str, top: List[Dict[str, Any]], twierdza: List[Dict[str, Any]]) -> 
         res = analyse(build_candidates(day, top, twierdza), day)
     except Exception:
         res = []
-    if res:
+    if res and len(res) >= len(load(day)):   # nie nadpisuj pełniejszej oceny gorszą
         save(res, day)
     counts = {v: sum(1 for r in res if r['verdict'] == v) for v in VERDICTS}
     print(f"   🧠 Analityk AI: {len(res)} werdyktów {counts}")

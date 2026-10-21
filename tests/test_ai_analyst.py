@@ -24,6 +24,21 @@ def test_parse_fenced_and_garbage():
     assert aa.parse_json_list('blah [{"key": "y"}] trailing') == [{'key': 'y'}]
     assert aa.parse_json_list('totally not json') == []
     assert aa.parse_json_list(None) == []
+    # ucięta odpowiedź — ratujemy kompletne obiekty
+    assert aa.parse_json_list('[{"key": "a", "verdict": "GRAJ"}, {"key": "b", "verd') == [
+        {'key': 'a', 'verdict': 'GRAJ'}]
+
+
+def test_retry_missing_keys(monkeypatch):
+    calls = []
+
+    def fake(prompt, **kw):
+        calls.append(prompt)
+        data = json.loads(prompt[prompt.index('Kandydaci:\n') + len('Kandydaci:\n'):])
+        return json.dumps([{'key': data[0]['key'], 'verdict': 'GRAJ', 'confidence': 3}])
+    monkeypatch.setattr(aa, '_chat', fake)
+    res = aa.analyse([_cand(1), _cand(2)], 'd')
+    assert len(calls) == 2 and len(res) == 2
 
 
 def test_normalise_filters_and_clamps():
