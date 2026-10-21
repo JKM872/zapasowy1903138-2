@@ -34,6 +34,10 @@ def _pts(form: Optional[List[str]]) -> Optional[int]:
 
 def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
     """None = nie TOP, inaczej dict z uzasadnieniem."""
+    # Dane z poprzedniego sezonu (recency w forebet_pipeline): mało meczów w
+    # sezonie, model daleko od rynku, albo forma ogólna sprzeczna z sezonową.
+    if m.get('earlySeason') or m.get('staleModel') or m.get('seasonFormConflict'):
+        return None
     pick = (m.get('scoring') or {}).get('pick')
     if pick not in ('1', '2'):
         return None
@@ -70,9 +74,16 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
     v_me = _pts(form.get('homeAtHome' if me == 'home' else 'awayAtAway'))
     v_op = _pts(form.get('awayAtAway' if me == 'home' else 'homeAtHome'))
     signals['forma_dom_wyj'] = _cmp(v_me, v_op)
-    w_me = h2h.get('homeWins' if me == 'home' else 'awayWins') or 0
-    w_op = h2h.get('awayWins' if me == 'home' else 'homeWins') or 0
-    signals['h2h'] = _cmp(w_me, w_op) if h2h.get('total') else None
+    if h2h.get('effectiveTotal') is not None:
+        # H2H ważone wiekiem; same stare spotkania = brak H2H (neutralnie).
+        w_me = h2h.get('homeWinsEff' if me == 'home' else 'awayWinsEff') or 0
+        w_op = h2h.get('awayWinsEff' if me == 'home' else 'homeWinsEff') or 0
+        has_h2h = (h2h.get('effectiveTotal') or 0) > 0
+    else:
+        w_me = h2h.get('homeWins' if me == 'home' else 'awayWins') or 0
+        w_op = h2h.get('awayWins' if me == 'home' else 'homeWins') or 0
+        has_h2h = bool(h2h.get('total'))
+    signals['h2h'] = _cmp(w_me, w_op) if has_h2h else None
     if ss.get('found'):
         fv_me = ss.get('homeProb' if me == 'home' else 'awayProb') or 0
         signals['fanvote'] = 1 if fv_me > 55 else (-1 if fv_me < 45 else 0)
@@ -106,15 +117,23 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         return None
 
     team = m.get('homeTeam') if me == 'home' else m.get('awayTeam')
+
+    def _f(x):
+        return ''.join(x) if isinstance(x, list) else (x or '')
+    season_form = ((_f(form.get('homeSeason' if me == 'home' else 'awaySeason')) + ' / '
+                    + _f(form.get('awaySeason' if me == 'home' else 'homeSeason')))
+                   if (form.get('homeSeason') is not None or form.get('awaySeason') is not None)
+                   else '')
     return {
         'sport': sport, 'time': m.get('time'), 'league': m.get('league'),
         'match': f"{m.get('homeTeam')} vs {m.get('awayTeam')}", 'pick': team,
         'odds': float(o_me), 'grade': m.get('predictionGrade'),
         'score': (m.get('scoring') or {}).get('prob'),
         'form': f"{''.join(form.get(me) or [])} ({p_me} pkt) vs {''.join(form.get(op) or [])} ({p_op} pkt)",
-        'h2h': f"{w_me}-{w_op}" if h2h.get('total') else 'brak',
+        'h2h': f"{w_me}-{w_op}" if has_h2h else 'brak',
         'fanvote': f"{ss.get('homeProb' if me == 'home' else 'awayProb')}%" if ss.get('found') else 'brak',
         'signals': f"{sum(1 for v in have.values() if v > 0)}/{len(have)} za",
+        'seasonForm': season_form,
     }
 
 
@@ -178,6 +197,65 @@ def collect_enriched(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
     return sorted(out, key=lambda r: (r['time'] or '99:99'))
 
 
+RECENCY_FLAGS = ('earlySeason', 'staleModel', 'seasonFormConflict')
+TEAM_MATCH_MIN = 0.5
+
+
+def recency_flagged(day: str) -> List[tuple]:
+    """(sport, home, away) meczów Forebet z flagą recency na dany dzień."""
+    out = []
+    for p in sorted(glob.glob(os.path.join(ROOT, 'results', f'matches_{day}_*_forebet.json'))):
+        sport = os.path.basename(p)[len(f'matches_{day}_'):-len('_forebet.json')]
+        try:
+            ms = json.load(open(p, encoding='utf-8-sig')).get('matches') or []
+        except Exception:
+            continue
+        for m in ms:
+            if any(m.get(k) for k in RECENCY_FLAGS):
+                out.append((sport, m.get('homeTeam') or '', m.get('awayTeam') or ''))
+    return out
+
+
+def _overlap(a: str, b: str) -> float:
+    # Ten sam matcher nazw co pipeline (Forebet vs Livesport: „Sydney” vs
+    # „Sydney Kings”, sufiksy K/W); recency ma zapasowy, gdy import zawiedzie.
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
+    if 'forebet_pipeline' not in sys.modules:
+        try:
+            import forebet_pipeline  # noqa: F401  (rejestruje _name_overlap)
+        except Exception:
+            pass
+    import recency
+    return recency.name_overlap(a or '', b or '')
+
+
+def is_flagged(flagged: List[tuple], sport: str, home: str, away: str) -> bool:
+    """Czy mecz (dowolna nazwa / orientacja) jest na liście flag recency."""
+    for s, fh, fa in flagged:
+        if s != sport:
+            continue
+        if ((_overlap(home, fh) >= TEAM_MATCH_MIN and _overlap(away, fa) >= TEAM_MATCH_MIN)
+                or (_overlap(home, fa) >= TEAM_MATCH_MIN and _overlap(away, fh) >= TEAM_MATCH_MIN)):
+            return True
+    return False
+
+
+def drop_flagged(rows: List[Dict[str, Any]], day: str) -> List[Dict[str, Any]]:
+    """Usuń z zapisanych TOP mecze, które w bieżących danych mają flagę recency."""
+    flagged = recency_flagged(day)
+    if not flagged:
+        return rows
+    out = []
+    for r in rows:
+        home, _, away = str(r.get('match') or '').partition(' vs ')
+        if is_flagged(flagged, r.get('sport'), home, away):
+            print(f"   ➖ TOP usunięty (recency): {r.get('match')}")
+            continue
+        out.append(r)
+    return out
+
+
 def _key(r: Dict[str, Any]) -> str:
     return f"{r['sport']}|{r['match']}"
 
@@ -201,7 +279,8 @@ def write_excel(day: str) -> Optional[str]:
     cols = [('date', 'Data'), ('time', 'Godz.'), ('sport', 'Sport'), ('league', 'Liga'),
             ('match', 'Mecz'), ('pick', 'Typ'), ('odds', 'Kurs'), ('grade', 'Grade'),
             ('score', 'Score'), ('signals', 'Sygnały za'), ('form', 'Forma'),
-            ('h2h', 'H2H'), ('fanvote', 'Fan Vote'), ('stars', 'Siła')]
+            ('h2h', 'H2H'), ('fanvote', 'Fan Vote'), ('stars', 'Siła'),
+            ('seasonForm', 'Forma sezon')]
     wb = Workbook()
     hdr_fill = PatternFill('solid', fgColor='FFD966')
     for title, rows in (('Do gry', [r for r in hist if r['date'] == day]),
@@ -217,7 +296,7 @@ def write_excel(day: str) -> Optional[str]:
             ws.append([r.get(k) for k, _ in cols])
         ws.freeze_panes = 'A2'
         ws.auto_filter.ref = ws.dimensions
-        for col, w in zip('ABCDEFGHIJKLMN', (11, 7, 11, 16, 38, 24, 7, 7, 7, 10, 34, 7, 9, 7)):
+        for col, w in zip('ABCDEFGHIJKLMNO', (11, 7, 11, 16, 38, 24, 7, 7, 7, 10, 34, 7, 9, 7, 14)):
             ws.column_dimensions[col].width = w
     out = os.path.join(ROOT, 'results', 'TOP.xlsx')
     wb.save(out)
@@ -240,13 +319,14 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
         f"<td>{escape(r['match'])}<br><small>{escape(str(r['league']))}</small></td>"
         f"<td><b>{escape(str(r['pick']))}</b> @ {r['odds']:.2f}</td>"
         f"<td>{escape(str(r['grade']))} / {r['score']}</td><td>{escape(r['form'])}</td>"
-        f"<td>{escape(r['h2h'])}</td><td>{escape(r['fanvote'])}</td><td>{escape(r['signals'])}</td></tr>"
+        f"<td>{escape(r['h2h'])}</td><td>{escape(r['fanvote'])}</td><td>{escape(r['signals'])}</td>"
+        f"<td>{escape(r.get('seasonForm') or '')}</td></tr>"
         for r in picks)
     html = (f"<h2>⭐ TOP — {day}</h2><p>Perełki z Grade A/B: typowana drużyna dominuje "
             f"we wszystkich danych (Forebet, forma, dom/wyjazd, H2H, SofaScore, model).</p>"
             f"<table border='1' cellpadding='5' style='border-collapse:collapse;font-family:sans-serif'>"
             f"<tr><th>Godz.</th><th>Sport</th><th>Mecz</th><th>Typ</th><th>Grade/score</th>"
-            f"<th>Forma</th><th>H2H</th><th>Fan Vote</th><th>Sygnały</th></tr>{rows}</table>")
+            f"<th>Forma</th><th>H2H</th><th>Fan Vote</th><th>Sygnały</th><th>Forma sezon</th></tr>{rows}</table>")
     from email.mime.multipart import MIMEMultipart
     from email.mime.application import MIMEApplication
     msg = MIMEMultipart()
@@ -283,6 +363,8 @@ if __name__ == '__main__':
             old = json.load(open(out_p, encoding='utf-8-sig'))
         except Exception:
             old = []
+    # Wcześniejszy przebieg mógł dodać mecz, który teraz ma flagę recency.
+    old = drop_flagged(old, day)
     known = {_key(r) for r in old}
     new = [r for r in picks if _key(r) not in known]
     merged = old + new

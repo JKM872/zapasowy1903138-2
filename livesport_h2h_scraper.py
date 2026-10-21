@@ -816,6 +816,52 @@ def _extract_form_badges(scope) -> List[str]:
     return out
 
 
+_DATED_SAMPLE_LOGGED = False
+
+
+def extract_dated_rows(section, tracked_team: str) -> List[dict]:
+    """Datowane wiersze formy ``[{'date': 'DD.MM.YY', 'result': 'W'}]`` z sekcji.
+
+    Parsuje JUŻ pobraną sekcję (bez nowych ładowań strony). Wiersz bez daty
+    zostaje jako ``{'date': '', ...}``, żeby lista była zgodna z odznakami.
+    Wiersz bez odznaki, którego nie da się przypisać po nazwie, jest pomijany.
+    """
+    global _DATED_SAMPLE_LOGGED
+    out: List[dict] = []
+    try:
+        import recency
+        for row in section.select('a.h2h__row')[:5]:
+            date_txt = _h2h_row_date(row) or ''
+            if not _DATED_SAMPLE_LOGGED:
+                logger.debug(f"extract_dated_rows: przykładowa data {date_txt!r}")
+                _DATED_SAMPLE_LOGGED = True
+            badges = _extract_form_badges(row)
+            if badges:
+                result = badges[0]
+            else:
+                if not tracked_team:
+                    continue
+                oh = recency.name_overlap(_h2h_row_participant(row, 'home'), tracked_team)
+                oa = recency.name_overlap(_h2h_row_participant(row, 'away'), tracked_team)
+                if max(oh, oa) < recency.NAME_MATCH_MIN:
+                    continue
+                tracked = 'home' if oh >= oa else 'away'
+                _score, winner = _h2h_row_score(row)
+                if winner == 'draw':
+                    result = 'D'
+                elif winner in ('home', 'away'):
+                    result = 'W' if winner == tracked else 'L'
+                else:
+                    continue
+            ev = row.select_one('span.h2h__event')
+            out.append({'date': date_txt, 'result': result,
+                        'event': (ev.get('title') or ev.get_text(' ', strip=True)) if ev else ''})
+    except Exception as e:
+        logger.debug(f"extract_dated_rows error: {e}")
+        return []
+    return out
+
+
 # ---------------------------------------------------------------------------
 # H2H helper utilities (module-level so they can be imported & tested)
 # ---------------------------------------------------------------------------
@@ -900,6 +946,25 @@ def build_h2h_overall_url(match_url: str) -> Optional[str]:
     if mid:
         h2h_url += f"?mid={mid}"
     return h2h_url
+
+
+def _apply_season_flags(out: Dict, advanced_form: Dict, away_team_focus: bool) -> None:
+    """Widoki formy sezonowej + flagi recency dla wierszy Sports (bez I/O)."""
+    try:
+        import recency
+        from datetime import date as _date
+        out['home_form_dated'] = advanced_form.get('home_form_overall_dated') or []
+        out['away_form_dated'] = advanced_form.get('away_form_overall_dated') or []
+        out['home_form_home_dated'] = advanced_form.get('home_form_home_dated') or []
+        out['away_form_away_dated'] = advanced_form.get('away_form_away_dated') or []
+        added_fav = 'favorite' not in out
+        if added_fav:
+            out['favorite'] = 'away' if away_team_focus else 'home'
+        recency.apply_season(out, _date.today())
+        if added_fav:
+            out.pop('favorite', None)
+    except Exception as e:
+        logger.debug(f"_apply_season_flags error: {e}")
 
 
 def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = False, require_form_advantage: bool = False, use_forebet: bool = False, use_gemini: bool = False, use_sofascore: bool = False, use_flashscore: bool = False, sport: str = 'football') -> Dict:
@@ -1376,6 +1441,10 @@ def process_match(url: str, driver: webdriver.Chrome, away_team_focus: bool = Fa
             # Dla kompatybilności wstecznej - ustaw starą formę
             out['home_form'] = advanced_form['home_form_overall']
             out['away_form'] = advanced_form['away_form_overall']
+
+            # Flagi sezonu (early_season / season_form_conflict) z datowanych
+            # wierszy tej samej strony — bez dodatkowego ładowania.
+            _apply_season_flags(out, advanced_form, away_team_focus)
             
             # FINALNE KRYTERIUM: H2H ≥60% (podstawowe)
             # Jeśli require_form_advantage=True, forma jest WYMAGANA
@@ -1780,7 +1849,8 @@ def format_form_as_score(form_list: List[str]) -> str:
     return 'N/A'
 
 
-def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict:
+def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome,
+                               home_team: str = '', away_team: str = '') -> Dict:
     """
     Ekstraktuje zaawansowaną formę drużyn z 3 źródeł:
     1. Forma ogólna (ostatnie 5 meczów)
@@ -1801,8 +1871,16 @@ def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict
         'home_form_home': [],
         'away_form_overall': [],
         'away_form_away': [],
-        'form_advantage': False
+        'form_advantage': False,
+        # Datowane wersje (z tych samych, już wczytanych stron).
+        'home_form_overall_dated': [],
+        'away_form_overall_dated': [],
+        'home_form_home_dated': [],
+        'away_form_away_dated': [],
     }
+    ov: Dict[str, List[dict]] = {}
+    hh: List[dict] = []
+    aa: List[dict] = []
     
     try:
         # Konwertuj URL meczu na URL H2H
@@ -1822,18 +1900,24 @@ def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict
             # 1. FORMA OGÓLNA
             h2h_overall_url = f"{base_url}/h2h/ogolem/?mid={mid}"
             result['home_form_overall'], result['away_form_overall'] = _extract_form_from_h2h_page(
-                h2h_overall_url, driver, 'overall'
+                h2h_overall_url, driver, 'overall',
+                dated_out=ov, teams=(home_team, away_team)
             )
+            result['home_form_overall_dated'] = ov.get('home', [])
+            result['away_form_overall_dated'] = ov.get('away', [])
             
             # 2. FORMA U SIEBIE (gospodarze)
             h2h_home_url = f"{base_url}/h2h/u-siebie/?mid={mid}"
             result['home_form_home'] = _extract_venue_form(
-                h2h_home_url, driver, tracked_is_home=True
+                h2h_home_url, driver, tracked_is_home=True,
+                dated_out=hh, tracked_team=home_team
             )
+            result['home_form_home_dated'] = hh
             if not result['home_form_home']:
                 result['home_form_home'], _ = _extract_form_from_h2h_page(
                     h2h_home_url, driver, 'home'
                 )
+                result['home_form_home_dated'] = []
 
             # 3. FORMA NA WYJEŹDZIE (goście)
             # Dedykowana podstrona "/h2h/na-wyjezdzie/" — jej sekcja [0] to mecze
@@ -1844,13 +1928,16 @@ def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict
             # grała u siebie.
             h2h_away_url = f"{base_url}/h2h/na-wyjezdzie/?mid={mid}"
             result['away_form_away'] = _extract_venue_form(
-                h2h_away_url, driver, tracked_is_home=False
+                h2h_away_url, driver, tracked_is_home=False,
+                dated_out=aa, tracked_team=away_team
             )
+            result['away_form_away_dated'] = aa
             if not result['away_form_away']:
                 # Podstrona niedostępna — zachowujemy dotychczasowe zachowanie.
                 result['away_form_away'] = _extract_away_form_from_overall(
                     h2h_overall_url, driver, result['away_form_overall']
                 )
+                result['away_form_away_dated'] = []
             
             # 4. ANALIZA PRZEWAGI FORMY
             result['form_advantage'] = _analyze_form_advantage(result)
@@ -1863,7 +1950,9 @@ def extract_advanced_team_form(match_url: str, driver: webdriver.Chrome) -> Dict
     return result
 
 
-def _extract_form_from_h2h_page(url: str, driver: webdriver.Chrome, context: str) -> tuple:
+def _extract_form_from_h2h_page(url: str, driver: webdriver.Chrome, context: str,
+                                dated_out: Optional[dict] = None,
+                                teams: Tuple[str, str] = ('', '')) -> tuple:
     """
     Pomocnicza funkcja do ekstraktowania formy z konkretnej strony H2H.
     
@@ -1908,6 +1997,13 @@ def _extract_form_from_h2h_page(url: str, driver: webdriver.Chrome, context: str
                 home_form = temp_form
             elif idx == 1:
                 away_form = temp_form
+
+        # Datowane wiersze z tych samych sekcji (tylko gdy forma z METODY 1).
+        if dated_out is not None and (home_form or away_form):
+            if home_form and len(h2h_sections) > 0:
+                dated_out['home'] = extract_dated_rows(h2h_sections[0], teams[0])
+            if away_form and len(h2h_sections) > 1:
+                dated_out['away'] = extract_dated_rows(h2h_sections[1], teams[1])
         
         # FALLBACK METODA 2: Jeśli badges nie zadziałały, analizuj wiersze z wynikami
         if (not home_form and not away_form) or (len(home_form) == 0 and len(away_form) == 0):
@@ -1976,6 +2072,8 @@ def _extract_venue_form(
     url: str,
     driver: webdriver.Chrome,
     tracked_is_home: bool,
+    dated_out: Optional[list] = None,
+    tracked_team: str = '',
 ) -> List[str]:
     """Forma z podstrony venue (``/h2h/u-siebie/`` lub ``/h2h/na-wyjezdzie/``).
 
@@ -2012,6 +2110,8 @@ def _extract_venue_form(
         # Odznaki są najpewniejsze — już z perspektywy śledzonej drużyny.
         form = _extract_form_badges(section)
         if form:
+            if dated_out is not None:
+                dated_out.extend(extract_dated_rows(section, tracked_team))
             return form[:5]
 
         # Zapas: licz z wyniku wiersza, ale ze WŁAŚCIWĄ orientacją.
