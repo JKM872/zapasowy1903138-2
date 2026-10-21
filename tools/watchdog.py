@@ -32,6 +32,7 @@ FANVOTE_MIN_MATCHES = 20      # Fan Vote 0% przy > tylu meczach => ALERT
 
 ALERT, WARN = 'ALERT', 'WARN'
 
+RE_ANSI = re.compile(r'\x1b\[[0-9;]*[A-Za-z]')
 RE_TS = re.compile(r'^\S*\d{4}-\d\d-\d\dT[\d:.]+Z\s?')
 RE_FOREBET = re.compile(r'Forebet (\w+) (\d{4}-\d\d-\d\d): (\d+) meczów \(HTML=')
 RE_FV_SUMMARY = re.compile(r'Fan Vote: (\d+)/(\d+) z głosami')
@@ -91,7 +92,7 @@ def parse_log(text: str, workflow: str, url: str = '') -> List[Dict[str, Any]]:
     fv_seen = False
     quota = blocked = budget = tb = False
     for raw in text.splitlines():
-        line = RE_TS.sub('', raw)
+        line = RE_TS.sub('', RE_ANSI.sub('', raw))
         m = RE_FOREBET.search(line)
         if m:
             sport, n = m.group(1), int(m.group(3))
@@ -162,7 +163,7 @@ def check_workflow(repo: str, wf: str, day: str) -> Dict[str, Any]:
             res['issues'].append(_issue(ALERT, wf, sport, 'job_failed',
                                         f'Job „{job.get("name")}” failure'
                                         + (f' (krok: {", ".join(failed)})' if failed else ''), url))
-        log = gh(['api', f'repos/{repo}/actions/jobs/{job["id"]}/logs'])
+        log = gh(['api', '--allow-escape-sequences', f'repos/{repo}/actions/jobs/{job["id"]}/logs'])
         for it in parse_log(log, wf, url):
             if not it['sport']:
                 it['sport'] = sport

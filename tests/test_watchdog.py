@@ -65,7 +65,7 @@ def _fake_gh(runs, jobs, logs):
     def fake(args):
         if args[0] == 'run':
             return json.dumps(runs.get(args[args.index('--workflow') + 1], []))
-        path = args[1]
+        path = args[-1]
         if path.endswith('/logs'):
             return logs.get(int(path.split('/')[-2]), '')
         return json.dumps({'jobs': jobs})
