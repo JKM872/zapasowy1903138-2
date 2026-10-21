@@ -1,0 +1,279 @@
+{
+  "meta": {
+    "generated_at": "2026-10-21T05:30:22.398499+02:00",
+    "target_date": "2026-10-21",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 2,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 2
+    },
+    "elapsed_seconds": 208.8,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - World Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/world-cup/papua-new-guinea-vs-samoa/10036172?MarketTypeID=1414",
+      "match_id": "10036172",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Papua New Guinea",
+      "away_team": "Samoa",
+      "event_date": "24/10",
+      "event_time": "04:25",
+      "outcome": "1",
+      "open_odds": 14.0,
+      "current_odds": 10.63,
+      "drop_pct": 24.0,
+      "max_odds": 11.0,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/cardiff-rugby-vs-sharks/9826172?MarketTypeID=1301",
+      "match_id": "9826172",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Cardiff Rugby",
+      "away_team": "Sharks",
+      "event_date": "23/10",
+      "event_time": "18:45",
+      "outcome": "2",
+      "open_odds": 2.25,
+      "current_odds": 1.82,
+      "drop_pct": 19.0,
+      "max_odds": 1.85,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16527469,
+        "sofascore_home_team_id": 4215,
+        "sofascore_away_team_id": 4187,
+        "home_team": "Cardiff Rugby",
+        "away_team": "Sharks",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "18:45",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "27.03.26",
+            "home": "Sharks",
+            "away": "Cardiff Rugby",
+            "score": "21:15",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "27.03.26",
+        "last_h2h_score": "21:15",
+        "last_h2h_home": "Sharks",
+        "last_h2h_away": "Cardiff Rugby",
+        "sofascore_home_win_prob": 40,
+        "sofascore_draw_prob": 4,
+        "sofascore_away_win_prob": 56,
+        "sofascore_total_votes": 75,
+        "forebet_prediction": "1",
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "34-19",
+        "forebet_avg_goals": 55.5,
+        "forebet_home_prob": 63,
+        "forebet_away_prob": 37
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/cardiff-rugby-vs-sharks/9826172?MarketTypeID=1301",
+      "match_id": "9826172",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Cardiff Rugby",
+      "away_team": "Sharks",
+      "event_date": "23/10",
+      "event_time": "18:45",
+      "outcome": "2",
+      "open_odds": 2.25,
+      "current_odds": 1.82,
+      "drop_pct": 19.0,
+      "max_odds": 1.85,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16527469,
+        "sofascore_home_team_id": 4215,
+        "sofascore_away_team_id": 4187,
+        "home_team": "Cardiff Rugby",
+        "away_team": "Sharks",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "18:45",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "27.03.26",
+            "home": "Sharks",
+            "away": "Cardiff Rugby",
+            "score": "21:15",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "27.03.26",
+        "last_h2h_score": "21:15",
+        "last_h2h_home": "Sharks",
+        "last_h2h_away": "Cardiff Rugby",
+        "sofascore_home_win_prob": 40,
+        "sofascore_draw_prob": 4,
+        "sofascore_away_win_prob": 56,
+        "sofascore_total_votes": 75,
+        "forebet_prediction": "1",
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "34-19",
+        "forebet_avg_goals": 55.5,
+        "forebet_home_prob": 63,
+        "forebet_away_prob": 37
+      },
+      "enrichment_error": null
+    }
+  ]
+}
