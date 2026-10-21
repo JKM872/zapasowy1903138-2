@@ -1,17 +1,38 @@
 {
   "date": "2026-10-21",
-  "generated_at": "2026-10-21T06:54:31.772911+00:00",
-  "issues": [],
+  "generated_at": "2026-10-21T14:34:33.762913+00:00",
+  "issues": [
+    {
+      "level": "ALERT",
+      "workflow": "daily_digest.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "WARN",
+      "workflow": "SOFASCORE_RELAY",
+      "sport": "",
+      "code": "relay_dead",
+      "problem": "Przekaźnik #1: status 200",
+      "meaning": "Sonda przekaźnika: limit wyczerpany / błąd.",
+      "action": "Wymień lub odciąż ten przekaźnik.",
+      "url": ""
+    }
+  ],
   "workflows": [
     {
       "workflow": "scrape_forebet.yml",
-      "runs_today": 1,
+      "runs_today": 2,
       "issues": [],
       "run": {
-        "databaseId": 39543838284,
+        "databaseId": 39574129153,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39543838284"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39574129153"
       }
     },
     {
@@ -49,19 +70,30 @@
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 3,
+      "runs_today": 7,
       "issues": [],
       "run": {
-        "databaseId": 39558337441,
-        "status": "in_progress",
-        "conclusion": "",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39558337441"
+        "databaseId": 39582127825,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39582127825"
       }
     },
     {
       "workflow": "daily_digest.yml",
       "runs_today": 0,
-      "issues": []
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "daily_digest.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
     }
   ],
   "relays": [
@@ -69,7 +101,7 @@
       "relay": 1,
       "status": 200,
       "exhausted": false,
-      "ok": true
+      "ok": false
     },
     {
       "relay": 2,
@@ -103,7 +135,7 @@
     }
   ],
   "counts": {
-    "ALERT": 0,
-    "WARN": 0
+    "ALERT": 1,
+    "WARN": 1
   }
 }
