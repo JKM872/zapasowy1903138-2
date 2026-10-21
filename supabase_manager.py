@@ -294,9 +294,21 @@ class SupabaseManager:
     
     
     def get_available_dates(self) -> List[str]:
-        """Zwraca listę dat dla których istnieją predykcje (desc)."""
+        """Zwraca listę dat dla których istnieją predykcje (desc).
+
+        Sorted and bounded on the server. A bare ``select('match_date')`` is
+        capped by PostgREST at 1 000 rows in storage order, so the "latest" date
+        was the latest among the oldest thousand predictions — production showed
+        2026-03-10 in October while newer rows sat in the table.
+        """
         try:
-            response = self.client.table('predictions').select('match_date').execute()
+            response = (
+                self.client.table('predictions')
+                .select('match_date')
+                .order('match_date', desc=True)
+                .limit(5000)
+                .execute()
+            )
             rows = cast(List[Dict[str, Any]], response.data)
             dates: List[str] = sorted(set(r['match_date'] for r in rows if r.get('match_date')), reverse=True)
             return dates

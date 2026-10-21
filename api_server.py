@@ -167,6 +167,18 @@ SPORT_INFO = {
 }
 
 
+def _latest_local_date():
+    """Newest YYYY-MM-DD found in a results/ filename, or None."""
+    import re
+    pattern = re.compile(r'(\d{4}-\d{2}-\d{2})')
+    dates = set()
+    for f in glob.glob(os.path.join(RESULTS_DIR, '*.json')):
+        m = pattern.search(os.path.basename(f))
+        if m:
+            dates.add(m.group(1))
+    return max(dates) if dates else None
+
+
 def find_result_files(date_str=None, sport=None):
     """Find result JSON files matching criteria."""
     pattern = os.path.join(RESULTS_DIR, '*.json')
@@ -536,10 +548,14 @@ def get_matches():
     # ── Try Supabase first ──────────────────────────────────────────
     if SUPABASE_AVAILABLE:
         try:
-            # If no date, get latest from Supabase
+            # If no date, take the newest one Supabase holds — but only when it is
+            # not older than the files on disk. The scrapers write results/ every
+            # day while the database can lag, and preferring it unconditionally
+            # pinned the site to a months-old day.
             if not date_str:
                 dates = supabase.get_available_dates()
-                if dates:
+                local_latest = _latest_local_date()
+                if dates and (not local_latest or dates[0] >= local_latest):
                     date_str = dates[0]
             
             if date_str:
