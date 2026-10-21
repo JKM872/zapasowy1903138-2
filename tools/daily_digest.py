@@ -516,7 +516,8 @@ def _acc_html() -> str:
         f"<div><b>{r[0]}</b>: {r[4]}/{r[3]} rozliczonych = <b>{r[5]}</b></div>" for r in tot)
 
 
-def send(day: str, xlsx: str, data, summary: str) -> None:
+def send(day: str, xlsx: str, data, summary: str,
+         analyst: Optional[List[Dict[str, Any]]] = None) -> None:
     import smtplib
     from email.mime.application import MIMEApplication
     from email.mime.multipart import MIMEMultipart
@@ -527,7 +528,13 @@ def send(day: str, xlsx: str, data, summary: str) -> None:
         print('   ℹ️ brak EMAIL_* — mail pominięty')
         return
     rows = ''.join(f"<tr><td>{escape(k)}</td><td>{len(v)}</td></tr>" for k, v in data.items())
-    html = (f"<h2>📊 Podsumowanie dnia — {day}</h2><table border='1' cellpadding='5' "
+    try:
+        from tools.ai_analyst import html_section
+        top_html = html_section(analyst or [])
+    except Exception:
+        top_html = ''
+    html = (top_html
+            + f"<h2>📊 Podsumowanie dnia — {day}</h2><table border='1' cellpadding='5' "
             f"style='border-collapse:collapse'><tr><th>Workflow</th><th>Zakwalifikowane</th></tr>{rows}</table>"
             + _acc_html()
             + f"<h3>🏰 Twierdza dziś ({len(data.get('Twierdza', []))})</h3>"
@@ -568,5 +575,11 @@ if __name__ == '__main__':
     print('🤖', summary[:300])
     xlsx = write_xlsx(day, data, summary)
     print('📁', xlsx)
+    ANALYST: List[Dict[str, Any]] = []
+    try:
+        from tools import ai_analyst
+        ANALYST = ai_analyst.run(day, _load(os.path.join(ROOT, 'results', f'top_{day}.json')) or [], tw)
+    except Exception as e:
+        print(f'   ⚠️ Analityk AI: {type(e).__name__}')
     if '--email' in sys.argv:
-        send(day, xlsx, data, summary)
+        send(day, xlsx, data, summary, analyst=ANALYST)
