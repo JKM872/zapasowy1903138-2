@@ -55,23 +55,41 @@ def _row(src, sport, m, side: Optional[str]) -> List[Any]:
     pick = (home if side == 'home' else away) if side else ''
     o = odds.get(side) if side else None
     fv = ss.get('homeProb' if side == 'home' else 'awayProb') if ss.get('found') else None
-    hw = h2h.get('homeWins' if side == 'home' else 'awayWins')
-    aw = h2h.get('awayWins' if side == 'home' else 'homeWins')
+    if h2h.get('effectiveTotal') is not None:   # H2H ważone wiekiem (jak w TOP)
+        hk, ak, total = 'homeWinsEff', 'awayWinsEff', h2h.get('effectiveTotal')
+    else:
+        hk, ak, total = 'homeWins', 'awayWins', h2h.get('total')
+    hw = h2h.get(hk if side == 'home' else ak)
+    aw = h2h.get(ak if side == 'home' else hk)
+    h2h_txt = (f"{hw:g}-{aw:g}" if isinstance(hw, (int, float)) and isinstance(aw, (int, float))
+               else f"{hw}-{aw}") if total else ('brak' if h2h.get('effectiveTotal') is not None else '')
     return [src, sport, _time(m.get('time')), f"{home} vs {away}", m.get('league'),
             pick, o, m.get('predictionGrade'), sc.get('prob'),
             _f(fh if side == 'home' else fa), _f(fa if side == 'home' else fh),
-            f"{hw}-{aw}" if h2h.get('total') else '', f"{fv}%" if fv is not None else '',
-            m.get('matchUrl') or m.get('forebetUrl')]
+            h2h_txt, f"{fv}%" if fv is not None else '',
+            m.get('matchUrl') or m.get('forebetUrl'), _season_str(form, side)]
+
+
+def _season_str(form: Dict[str, Any], side: Optional[str]) -> str:
+    """Forma z bieżącego sezonu: typowana strona / rywal ('' gdy brak dat)."""
+    if side not in ('home', 'away') or (form.get('homeSeason') is None
+                                        and form.get('awaySeason') is None):
+        return ''
+    me, op = ('homeSeason', 'awaySeason') if side == 'home' else ('awaySeason', 'homeSeason')
+    return _f(form.get(me)) + ' / ' + _f(form.get(op))
 
 
 def collect(day: str) -> Dict[str, List[List[Any]]]:
     R = os.path.join(ROOT, 'results')
     out: Dict[str, List[List[Any]]] = {'TOP': [], 'Forebet': [], 'Sports': [],
                                        'Dropping': [], 'Tenis stołowy': []}
-    for r in _load(os.path.join(R, f'top_{day}.json')) or []:
+    from tools.top_picks import drop_flagged
+    # Zapisany TOP mógł powstać przed dodaniem flag recency w Forebet.
+    for r in drop_flagged(_load(os.path.join(R, f'top_{day}.json')) or [], day):
         out['TOP'].append(['TOP', r.get('sport'), r.get('time'), r.get('match'), r.get('league'),
                            r.get('pick'), r.get('odds'), r.get('grade'), r.get('score'),
-                           r.get('form'), '', r.get('h2h'), r.get('fanvote'), r.get('signals')])
+                           r.get('form'), '', r.get('h2h'), r.get('fanvote'), r.get('signals'),
+                           r.get('seasonForm') or ''])
     for p in sorted(glob.glob(os.path.join(R, f'matches_{day}_*.json'))):
         name = os.path.basename(p)[len(f'matches_{day}_'):-5]
         d = _load(p) or {}
@@ -100,7 +118,7 @@ def collect(day: str) -> Dict[str, List[List[Any]]]:
                                     (m.get('away_team') if m.get('outcome') == '2' else 'X'),
                                     m.get('current_odds'), '', '',
                                     f"spadek {m.get('open_odds')}→{m.get('current_odds')} ({m.get('drop_pct')}%)",
-                                    '', '', '', m.get('match_url')])
+                                    '', '', '', m.get('match_url'), ''])
     for k in out:
         out[k].sort(key=lambda r: str(r[2] or '99:99'))
     return out
@@ -139,11 +157,38 @@ def _fb_side_prob(m: Dict[str, Any], side: str) -> Optional[float]:
     return None
 
 
+TW_STALE_PP = 20.0
+
+
+def _market_gap(m: Dict[str, Any], sport: str, side: str, fbp: float) -> Optional[float]:
+    """Forebet (pp) − rynek bez marży dla strony; None gdy brak kursów.
+
+    Remis w normalizacji tylko gdy Forebet podaje remis (jak recency).
+    """
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
+    import recency
+    odds = m.get('odds') if isinstance(m.get('odds'), dict) else {}
+    fb = m.get('forebet') if isinstance(m.get('forebet'), dict) else {}
+    draw_p = fb.get('drawProb', fb.get('draw_prob'))
+    row = {'home_odds': odds.get('home'), 'draw_odds': odds.get('draw'),
+           'away_odds': odds.get('away'), 'forebet_draw_prob': draw_p,
+           'sport': sport}
+    imp = recency.implied_probs(row)
+    if imp is None:
+        return None
+    return fbp - 100.0 * imp[side]
+
+
 def twierdza(day: str) -> List[Dict[str, Any]]:
-    from tools.top_picks import enrich_fanvote
+    from tools.top_picks import enrich_fanvote, recency_flagged, is_flagged
     R = os.path.join(ROOT, 'results')
     out, seen = [], set()
-    for p in sorted(glob.glob(os.path.join(R, f'matches_{day}_*.json'))):
+    paths = sorted(glob.glob(os.path.join(R, f'matches_{day}_*.json')))
+    # Flagi recency liczy tylko Forebet — blokują też kopię meczu z Sports
+    # (dopasowanie po nazwach w obu orientacjach: Livesport ≠ Forebet).
+    flagged = recency_flagged(day)
+    for p in paths:
         name = os.path.basename(p)[len(f'matches_{day}_'):-5]
         if name.startswith('table_tennis'):
             continue
@@ -153,8 +198,12 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
         for m in ms:
             if not m.get('qualifies'):
                 continue
+            # Dane z poprzedniego sezonu (recency) — poza Twierdzą.
+            if m.get('earlySeason') or m.get('staleModel') or m.get('seasonFormConflict'):
+                continue
             key = (sport, m.get('homeTeam'), m.get('awayTeam'))
-            if key in seen:
+            if key in seen or is_flagged(flagged, sport, m.get('homeTeam') or '',
+                                         m.get('awayTeam') or ''):
                 continue
             fh, fa, fhh, faa = _forms(m)
             for side, f_me, f_venue in (('home', fh, fhh), ('away', fa, faa)):
@@ -174,6 +223,10 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
                 odds = m.get('odds') if isinstance(m.get('odds'), dict) else {}
                 if not odds.get(side):      # bez kursu nie da się zagrać
                     continue
+                gap = _market_gap(m, sport, side, fbp)
+                if gap is not None and gap > TW_STALE_PP:
+                    # Model > rynek o >20 pp (każde źródło, także Sports).
+                    continue
                 seen.add(key)
                 out.append({'source': src, 'sport': sport, 'time': _time(m.get('time')),
                             'match': f"{m.get('homeTeam')} vs {m.get('awayTeam')}",
@@ -181,12 +234,22 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
                             'pick': m.get('homeTeam') if side == 'home' else m.get('awayTeam'),
                             'odds': odds.get(side), 'forebet': round(fbp),
                             'fanvote': fv, 'form': _f(f_me), 'venue': _f(f_venue),
-                            'grade': m.get('predictionGrade')})
+                            'grade': m.get('predictionGrade'),
+                            'seasonForm': _season_str(
+                                m.get('form') if isinstance(m.get('form'), dict) else {}, side)})
                 break
     out.sort(key=lambda r: str(r['time'] or '99:99'))
     with open(os.path.join(R, f'twierdza_{day}.json'), 'w', encoding='utf-8') as fh_:
         json.dump(out, fh_, ensure_ascii=False, indent=1)
     return out
+
+
+def twierdza_rows(tw: List[Dict[str, Any]]) -> List[List[Any]]:
+    """Wiersze Twierdzy w układzie COLS (+ 'Forma sezon' na końcu)."""
+    return [[r['source'], r['sport'], r['time'], r['match'], r['league'], r['pick'],
+             r['odds'], r['grade'], f"Forebet {r['forebet']}%", r['form'],
+             f"dom/wyj {r['venue']}", '', f"{r['fanvote']}%", '',
+             r.get('seasonForm') or ''] for r in tw]
 
 
 # ---------------------------------------------------------------------------
@@ -339,9 +402,18 @@ def _style_sheet(sh, header_fill) -> None:
                 c.font = Font(bold=True)
             elif name == 'Kurs' and isinstance(v, (int, float)):
                 c.fill = G if 1.5 <= v <= 2.4 else (Y if v >= 1.3 else R)
-            elif name in ('Forma typ', 'Forma rywal', 'Forma') and isinstance(v, str):
-                w = v.count('W')
-                c.fill = G if w >= 4 else (Y if w >= 3 else R)
+            elif name in ('Forma typ', 'Forma rywal', 'Forma', 'Forma sezon') and isinstance(v, str) \
+                    and (name != 'Forma sezon' or v.strip()):
+                # 'Forma sezon' = "typ / rywal" — kolor tylko wg typowanej strony.
+                txt = v.split(' / ')[0] if name == 'Forma sezon' else v
+                w = txt.count('W')
+                n = sum(txt.count(x) for x in 'WDL')
+                if name != 'Forma sezon' or n >= 5:
+                    c.fill = G if w >= 4 else (Y if w >= 3 else R)
+                elif n:
+                    # Krótka lista sezonowa — kolor wg udziału zwycięstw.
+                    s = w / n
+                    c.fill = G if s >= 0.8 else (Y if s >= 0.6 else R)
                 c.font = Font(name='Consolas')
             elif name in ('Fan Vote',) and isinstance(v, str) and v.endswith('%'):
                 try:
@@ -379,10 +451,11 @@ def write_xlsx(day: str, data, summary: str) -> str:
     ws.row_dimensions[ws.max_row].height = 260
     ws.column_dimensions['A'].width = 22
     fill = PatternFill('solid', fgColor='FFD966')
-    widths = (12, 11, 7, 38, 18, 24, 7, 7, 7, 30, 12, 7, 9, 40)
+    widths = (12, 11, 7, 38, 18, 24, 7, 7, 7, 30, 12, 7, 9, 40, 14)
     for name, rows in data.items():
         sh = wb.create_sheet(name[:31])
-        sh.append(COLS if name != 'TOP' else COLS[:-1] + ['Sygnały'])
+        sh.append(COLS + ['Forma sezon'] if name != 'TOP'
+                  else COLS[:-1] + ['Sygnały', 'Forma sezon'])
         for cell in sh[1]:
             cell.font, cell.fill = Font(bold=True), fill
         for r in rows:
@@ -411,10 +484,10 @@ def write_xlsx(day: str, data, summary: str) -> str:
             by_sport.setdefault(str(r[1]), []).append(r)
     for sp, rows in sorted(by_sport.items()):
         ss_ = wb.create_sheet(f"{sp[:20]}_TOP_{len(rows)}")
-        ss_.append(COLS[:-1] + ['Sygnały'])
+        ss_.append(COLS[:-1] + ['Sygnały', 'Forma sezon'])
         for r in rows:
             ss_.append(r)
-        for i, w in enumerate((12, 11, 7, 38, 18, 24, 7, 7, 10, 22, 14, 7, 9, 12)):
+        for i, w in enumerate((12, 11, 7, 38, 18, 24, 7, 7, 10, 22, 14, 7, 9, 12, 14)):
             ss_.column_dimensions[chr(65 + i)].width = w
         ss_.freeze_panes = 'A2'
     hdr_fill = PatternFill('solid', fgColor='1F4E78')
@@ -460,7 +533,9 @@ def send(day: str, xlsx: str, data, summary: str) -> None:
             + f"<h3>🏰 Twierdza dziś ({len(data.get('Twierdza', []))})</h3>"
             + ''.join(f"<div>{escape(str(r[2]))} {escape(str(r[1]))} — {escape(str(r[3]))}: "
                       f"<b>{escape(str(r[5]))}</b> @ {r[6]} | {escape(str(r[8]))} | FV {escape(str(r[12]))} "
-                      f"| {escape(str(r[10]))}</div>" for r in data.get('Twierdza', []))
+                      f"| {escape(str(r[10]))}"
+                      + (f" | sezon {escape(str(r[14]))}" if len(r) > 14 and r[14] else '')
+                      + "</div>" for r in data.get('Twierdza', []))
             +
             f"<h3>🤖 Komentarz AI</h3><p style='white-space:pre-wrap'>{escape(summary)}</p>"
             f"<p>Pełna lista we wszystkich zakładkach w załączniku <b>{os.path.basename(xlsx)}</b>.</p>")
@@ -484,9 +559,7 @@ if __name__ == '__main__':
     day = args[0] if args else date.today().isoformat()
     data = collect(day)
     tw = twierdza(day)
-    data['Twierdza'] = [[r['source'], r['sport'], r['time'], r['match'], r['league'], r['pick'],
-                         r['odds'], r['grade'], f"Forebet {r['forebet']}%", r['form'],
-                         f"dom/wyj {r['venue']}", '', f"{r['fanvote']}%", ''] for r in tw]
+    data['Twierdza'] = twierdza_rows(tw)
     ACC = accuracy()
     ELITE = gemini_elite(day, data)
     print('⭐ Elita AI:', len(ELITE))

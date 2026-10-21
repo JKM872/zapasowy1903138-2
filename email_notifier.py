@@ -1084,6 +1084,32 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
             if not form_list:
                 return '—'
             return ''.join([icons.get(str(r).upper(), '⚪') for r in form_list[:limit]])
+
+        # FORMA SEZONOWA (recency) — obok formy ogólnej, tylko gdy są daty.
+        def _season_n(v: Any) -> Optional[int]:
+            try:
+                f = float(v)
+            except (TypeError, ValueError):
+                return None
+            return None if f != f else int(f)
+
+        season_conflict = str(match.get('season_form_conflict')).strip().lower() in ('true', '1')
+        season_fav = match.get('favorite')
+
+        def _season_html(side: str) -> str:
+            lst = parse_form_list(match.get(f'{side}_season_form', []))
+            n = _season_n(match.get(f'{side}_season_match_count'))
+            if not lst and n != 0:
+                return ''
+            txt = f'📅 Sezon: {form_to_icons(lst)}'
+            if n is not None:
+                txt += f' ({n})'
+            if season_conflict and season_fav == side:
+                txt += ' ⚠️'
+            return f'<div style="font-size: 10px; color: #888; margin-top: 3px;">{txt}</div>'
+
+        home_season_html = _season_html('home')
+        away_season_html = _season_html('away')
         
         # H2H - bezpieczne pobieranie liczb
         h2h_count = int(safe_float(match.get('h2h_count', 0)))
@@ -1272,12 +1298,14 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                             <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {home} (ostatnie {len(home_form_overall[:FORM_ICONS_SHOWN]) or '—'})</div>
                             <div style="font-size: 16px;">{form_to_icons(home_form_overall)}</div>
                             {f'<div style="font-size: 10px; color: #888; margin-top: 3px;">🏠 U siebie: {form_to_icons(home_form_home)}</div>' if home_form_home else ''}
+                            {home_season_html}
                             {_render_recent_matches(match.get('home_recent_matches'), f'Ostatnie mecze {home}')}
                         </div>
                         <div style="flex: 1; text-align: center; padding-left: 8px;">
                             <div style="font-size: 11px; color: #666; margin-bottom: 5px;">📊 {away} (ostatnie {len(away_form_overall[:FORM_ICONS_SHOWN]) or '—'})</div>
                             <div style="font-size: 16px;">{form_to_icons(away_form_overall)}</div>
                             {f'<div style="font-size: 10px; color: #888; margin-top: 3px;">✈️ Na wyjeździe: {form_to_icons(away_form_away)}</div>' if away_form_away else ''}
+                            {away_season_html}
                             {_render_recent_matches(match.get('away_recent_matches'), f'Ostatnie mecze {away}')}
                         </div>
                     </div>
@@ -1305,6 +1333,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                             </div>
                             <div style="font-size: 12px; color: #888;">{f'{win_rate*100:.0f}%' if h2h_count > 0 else ''}</div>
                             {f'<div style="font-size: 10px; color: #999; margin-top: 2px;">dla: {h2h_subject}</div>' if h2h_count > 0 and h2h_subject else ''}
+                            {('<div style="font-size: 10px; color: #c62828; margin-top: 2px;">⏳ H2H nieaktualne (&gt;24 mies.) — pominięte</div>' if str(match.get('h2h_all_stale')) == 'True' else (f'<div style="font-size: 10px; color: #999; margin-top: 2px;">⏳ pominięte stare H2H: {int(safe_float(match.get("h2h_stale_ignored", 0)))}</div>' if safe_float(match.get('h2h_stale_ignored', 0)) > 0 else ''))}
                         </div>
                         <div style="flex: 1; text-align: center;">
                             <div style="font-size: 11px; color: #666;">{'🎾 Faworytem' if is_tennis else '📅 Ostatni mecz'}</div>
@@ -1443,6 +1472,15 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     <div style="margin-bottom: 6px;">
                         <span style="display: inline-block; background: {gc}; color: #111; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 4px;">Grade {grade}</span>
                     </div>"""
+        # Bramka rynkowa (recency): Forebet > rynek o >20 pp → ocena obniżona.
+        if str(match.get('stale_model')).strip().lower() in ('true', '1'):
+            gap_pp = safe_float(match.get('market_gap_pp'), None)
+            raw_g = match.get('prediction_grade_raw')
+            raw_g = raw_g if isinstance(raw_g, str) and raw_g in grade_colors else None
+            gap_txt = f' +{gap_pp:.0f} pp' if gap_pp is not None and gap_pp == gap_pp else ''
+            was_txt = f' (było {raw_g})' if raw_g else ''
+            html += f"""
+                    <div style="font-size: 10px; color: #ff8a80; margin-bottom: 3px;">⚠️ model{gap_txt} nad rynkiem{was_txt}</div>"""
         if isinstance(explanation, dict):
             factors = explanation.get('primary_factors', [])
             risks = explanation.get('risk_factors', [])

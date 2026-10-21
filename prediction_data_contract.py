@@ -27,6 +27,7 @@ class DataQualityReport:
     sources_available: int = 0        # How many sources provided data (0-4)
     sources_total: int = 4            # H2H, Forebet, SofaScore, Gemini
     h2h_available: bool = False
+    h2h_neutral: bool = False         # Brak/nieaktualne H2H traktowane neutralnie
     forebet_available: bool = False
     sofascore_available: bool = False
     gemini_available: bool = False
@@ -48,7 +49,7 @@ class DataQualityReport:
     def quality_score(self) -> float:
         """0.0 to 1.0 overall quality."""
         score = 0.0
-        if self.h2h_available:
+        if self.h2h_available or self.h2h_neutral:
             score += 0.2
             if self.h2h_count >= 3:
                 score += 0.05
@@ -78,6 +79,7 @@ class DataQualityReport:
             'sources_available': self.sources_available,
             'quality_score': round(self.quality_score, 2),
             'h2h_available': self.h2h_available,
+            'h2h_neutral': self.h2h_neutral,
             'forebet_available': self.forebet_available,
             'sofascore_available': self.sofascore_available,
             'gemini_available': self.gemini_available,
@@ -265,6 +267,18 @@ def compute_data_quality(row: Dict[str, Any]) -> DataQualityReport:
     dq.h2h_count = h2h_count
     if dq.h2h_available:
         dq.sources_available += 1
+    # Forebet (apply_recency): brak/nieaktualne H2H jest NEUTRALNE — nie
+    # obniża jakości danych ani oceny. Inne pipeline'y nie mają tego klucza.
+    # h2h_available zostaje prawdziwe (są świeże dane), a neutralność daje
+    # osobna flaga h2h_neutral z tym samym kredytem jakości.
+    if 'h2h_neutral' in row:
+        try:
+            dq.h2h_count = int(float(row.get('h2h_effective_count',
+                                             row.get('h2h_count', 0)) or 0))
+        except (TypeError, ValueError):
+            pass
+        dq.h2h_available = dq.h2h_count > 0
+        dq.h2h_neutral = not dq.h2h_available
 
     # Last H2H date (for tennis)
     last_h2h_date = row.get('last_h2h_date')
@@ -348,6 +362,10 @@ def compute_data_quality(row: Dict[str, Any]) -> DataQualityReport:
 
     if scoring_prob is not None and implied is not None:
         dq.market_model_gap = scoring_prob - implied
+        # stale_model (Forebet >20 pp nad rynkiem): bez premii za przewagę,
+        # żeby obniżenie oceny było realną karą (skala bez zmian).
+        if row.get('stale_model') is True:
+            dq.market_model_gap = min(dq.market_model_gap, 0.0)
 
     return dq
 

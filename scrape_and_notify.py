@@ -1155,6 +1155,9 @@ def scrape_and_send_email(
                 'homeFormHome': row.get('home_form_home', []),
                 'awayFormAway': row.get('away_form_away', []),
                 'formAdvantage': row.get('form_advantage', False),
+                # Recency (forma z bieżącego sezonu, bez dodatkowych zapytań)
+                'earlySeason': str(row.get('early_season')) == 'True',
+                'seasonFormConflict': str(row.get('season_form_conflict')) == 'True',
                 # Odds - czyść NaN przed eksportem
                 'odds': {
                     'home': clean_odds_value(row.get('home_odds')),

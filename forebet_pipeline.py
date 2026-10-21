@@ -40,12 +40,13 @@ import re
 import sys
 import time
 import unicodedata
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Any, Dict, List, Optional, Set, Tuple  # noqa: F401
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import forebet_listing as fbl
+import recency
 
 SOURCE = 'forebet'
 
@@ -1002,7 +1003,7 @@ def sofascore_player_form(home_team: str, away_team: str, sport: str,
 
 
 def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
-                       sport: str) -> Dict[str, Any]:
+                       sport: str, away_team: str = '') -> Dict[str, Any]:
     """H2H (do 5 spotkań) + forma z Livesport dla dopasowanego meczu."""
     out: Dict[str, Any] = {
         'h2h_last5': [], 'h2h_count': 0,
@@ -1010,6 +1011,9 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
         'last_h2h_date': None, 'last_h2h_score': None,
         'home_form': [], 'away_form': [],
         'home_form_home': [], 'away_form_away': [],
+        # Datowane wiersze formy (do widoku sezonowego, recency.apply_season).
+        'home_form_dated': [], 'away_form_dated': [],
+        'home_form_home_dated': [], 'away_form_away_dated': [],
     }
 
     # Tenis ma własną ścieżkę. Ścieżka drużynowa niżej czyta podstrony formy
@@ -1050,11 +1054,15 @@ def fetch_h2h_and_form(driver: Any, match_url: str, home_team: str,
     # Forma — ogólna + u siebie / na wyjeździe (to jest ta forma "po
     # naciśnięciu przycisku form": osobne podstrony /h2h/u-siebie/ itd.).
     try:
-        form = extract_advanced_team_form(match_url, driver) or {}
+        form = extract_advanced_team_form(match_url, driver, home_team, away_team) or {}
         out['home_form'] = form.get('home_form_overall') or []
         out['away_form'] = form.get('away_form_overall') or []
         out['home_form_home'] = form.get('home_form_home') or []
         out['away_form_away'] = form.get('away_form_away') or []
+        out['home_form_dated'] = form.get('home_form_overall_dated') or []
+        out['away_form_dated'] = form.get('away_form_overall_dated') or []
+        out['home_form_home_dated'] = form.get('home_form_home_dated') or []
+        out['away_form_away_dated'] = form.get('away_form_away_dated') or []
     except Exception as e:
         print(f"      ⚠️ Forma błąd: {e}")
 
@@ -1630,6 +1638,34 @@ def run_ai_analysis(row: Dict[str, Any]) -> Dict[str, Any]:
 # Scoring i kwalifikacja
 # ---------------------------------------------------------------------------
 
+def apply_recency(row: Dict[str, Any], today: Optional[date] = None) -> Dict[str, Any]:
+    """Ochrona przed danymi z poprzedniego sezonu (addytywnie, idempotentnie).
+
+    H2H ważone wiekiem, widok formy sezonowej obok istniejącej formy oraz
+    bramka rynkowa ``stale_model``. Surowe pola H2H/formy zostają bez zmian.
+    """
+    today = today or date.today()
+    eff = recency.effective_h2h(row, today)
+    if eff is not None:
+        row['h2h_effective_count'] = round(eff['count'], 3)
+        row['h2h_effective_fav_wins'] = eff['fav_wins']
+        row['h2h_effective_home_wins'] = eff['home_wins']
+        row['h2h_effective_away_wins'] = eff['away_wins']
+        row['h2h_stale_ignored'] = eff['ignored']
+        row['h2h_all_stale'] = eff['all_stale']
+        row['h2h_fresh_count'] = eff['fresh']
+    # Próg minimum liczy spotkania (nie wagi) — dwa mecze sprzed 12–24 mies.
+    # wciąż tworzą H2H, waga działa tylko w proporcji.
+    cnt = (row['h2h_fresh_count'] if 'h2h_fresh_count' in row
+           else (row.get('h2h_count') or 0))
+    row['h2h_neutral'] = cnt < H2H_MIN_MATCHES
+    recency.apply_season(row, today)
+    gap = recency.market_gap_pp(row)
+    row['market_gap_pp'] = round(gap, 1) if gap is not None else None
+    row['stale_model'] = gap is not None and gap > recency.STALE_MODEL_PP
+    return row
+
+
 def score_row(row: Dict[str, Any]) -> Dict[str, Any]:
     """Policz wsparcie dla typu Forebet z dostępnych źródeł.
 
@@ -1646,11 +1682,20 @@ def score_row(row: Dict[str, Any]) -> Dict[str, Any]:
     if fav_prob is not None:
         parts['forebet'] = min(1.0, float(fav_prob) / 100.0)
 
-    h2h_total = row.get('h2h_count') or 0
-    if h2h_total >= H2H_MIN_MATCHES:
-        fav_wins = (row.get('home_wins_in_h2h_last5') if fav_home
-                    else row.get('away_wins_in_h2h_last5')) or 0
-        parts['h2h'] = fav_wins / h2h_total
+    if 'h2h_effective_count' in row:
+        # H2H ważone wiekiem (apply_recency). Za mało świeżych spotkań →
+        # komponent pominięty (neutralny), wagi się renormalizują.
+        eff = float(row.get('h2h_effective_count') or 0)
+        fresh = row.get('h2h_fresh_count')
+        n_ok = (fresh if fresh is not None else eff) >= H2H_MIN_MATCHES
+        if eff > 0 and n_ok:
+            parts['h2h'] = (row.get('h2h_effective_fav_wins') or 0) / eff
+    else:
+        h2h_total = row.get('h2h_count') or 0
+        if h2h_total >= H2H_MIN_MATCHES:
+            fav_wins = (row.get('home_wins_in_h2h_last5') if fav_home
+                        else row.get('away_wins_in_h2h_last5')) or 0
+            parts['h2h'] = fav_wins / h2h_total
 
     fav_form = (row.get('home_form') if fav_home else row.get('away_form')) or []
     dog_form = (row.get('away_form') if fav_home else row.get('home_form')) or []
@@ -1767,7 +1812,12 @@ def apply_qualification(row: Dict[str, Any], min_score: float,
     if score < min_score:
         reasons.append(f'score_{score}<{min_score}')
 
-    if (row.get('scoring_sources') or 0) < min_sources:
+    # Brak H2H (nigdy nie grali / same stare spotkania) jest neutralny:
+    # nie zabiera miejsca w minimum źródeł (bez głosu w score).
+    sources = row.get('scoring_sources') or 0
+    if row.get('h2h_neutral') and 'h2h' not in (row.get('scoring_components') or {}):
+        sources += 1
+    if sources < min_sources:
         reasons.append(f"zrodla_{row.get('scoring_sources')}<{min_sources}")
 
     # Wymóg lepszej formy faworyta. Zastąpił próg 60% dla sportów bez remisu:
@@ -1840,7 +1890,10 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
 
     list_cols = ('h2h_last5', 'home_form', 'away_form', 'home_form_home',
                  'away_form_away', 'skip_reasons', 'scoring_components',
-                 'data_quality', 'availability', 'explanation')
+                 'data_quality', 'availability', 'explanation',
+                 'home_form_dated', 'away_form_dated', 'home_form_home_dated',
+                 'away_form_away_dated', 'home_season_form', 'away_season_form',
+                 'season_home_form', 'season_away_form')
     try:
         import pandas as pd
         df = pd.DataFrame(rows)
@@ -1896,6 +1949,11 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                     'awayWins': r.get('away_wins_in_h2h_last5'),
                     'lastDate': r.get('last_h2h_date'),
                     'lastScore': r.get('last_h2h_score'),
+                    # H2H ważone wiekiem (recency): >24 mies. = 0, 12–24 = 0.5.
+                    'effectiveTotal': r.get('h2h_effective_count'),
+                    'homeWinsEff': r.get('h2h_effective_home_wins'),
+                    'awayWinsEff': r.get('h2h_effective_away_wins'),
+                    'allStale': r.get('h2h_all_stale'),
                 },
                 'form': {
                     'home': r.get('home_form'),
@@ -1907,7 +1965,22 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                     'awaySurface': r.get('away_surface_form'),
                     'surfaceIsProxy': r.get('surface_form_is_proxy'),
                     'source': r.get('form_source'),
+                    # Forma z bieżącego sezonu (obok formy ogólnej, nie zamiast).
+                    'homeSeason': r.get('home_season_form'),
+                    'awaySeason': r.get('away_season_form'),
+                    'homeAtHomeSeason': r.get('season_home_form'),
+                    'awayAtAwaySeason': r.get('season_away_form'),
+                    'homeSeasonMatches': r.get('home_season_match_count'),
+                    'awaySeasonMatches': r.get('away_season_match_count'),
+                    'homeSeasonStart': r.get('home_season_start'),
+                    'awaySeasonStart': r.get('away_season_start'),
                 },
+                'seasonMatchCount': r.get('season_match_count'),
+                'earlySeason': r.get('early_season'),
+                'seasonFormConflict': r.get('season_form_conflict'),
+                'staleModel': r.get('stale_model'),
+                'marketGapPp': r.get('market_gap_pp'),
+                'predictionGradeRaw': r.get('prediction_grade_raw'),
                 'sofascore': {
                     'found': r.get('sofascore_found'),
                     'votes': r.get('sofascore_total_votes'),
@@ -2297,7 +2370,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             row['match_url'] = ls_url
             if ls_url:
                 print(f"      🔗 Livesport: {ls_url}")
-                enrich = fetch_h2h_and_form(driver, ls_url, home, sport)
+                enrich = fetch_h2h_and_form(driver, ls_url, home, sport, away_team=away)
                 for key, val in enrich.items():
                     if val:
                         row[key] = val
@@ -2407,6 +2480,10 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                           f"wyczerpany — oszczędzam budżet Groq na dopasowania")
                     ai_analysed += 1  # komunikat tylko raz
 
+        try:
+            apply_recency(row)
+        except Exception as e:
+            print(f"      ⚠️ Recency błąd: {e}")
         score_row(row)
         apply_qualification(row, min_score, min_sources)
 
@@ -2415,6 +2492,11 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             enrich_match_with_contract(row)
         except Exception as e:
             print(f"      ⚠️ Kontrakt danych błąd: {e}")
+
+        try:
+            recency.lower_grade_if_stale(row)
+        except Exception as e:
+            print(f"      ⚠️ Grade stale błąd: {e}")
 
         flag = '✅' if row['qualifies'] else '⛔'
         print(f"      {flag} score={row['scoring_prob']} "
@@ -2429,6 +2511,13 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             driver.quit()
         except Exception:
             pass
+
+    # Podsumowanie recency (widoczność warstwy, która działa fail-open).
+    print(f"   📅 Recency: sezon znany {sum(1 for r in rows if 'season_match_count' in r)}/{len(rows)}"
+          f" | early_season {sum(1 for r in rows if r.get('early_season') is True)}"
+          f" | konflikt formy {sum(1 for r in rows if r.get('season_form_conflict') is True)}"
+          f" | stale_model {sum(1 for r in rows if r.get('stale_model') is True)}"
+          f" | H2H nieaktualne {sum(1 for r in rows if r.get('h2h_all_stale') is True)}")
 
     # ── FAZA 5: wyjście ──
     # Chronologia DOPIERO tutaj. Pętla szła od najlepszych kandydatów, żeby
