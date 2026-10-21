@@ -108,6 +108,9 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         if (_wins(venue_me) or 0) <= 2 and _wins(venue_op) != 0:
             return None
 
+    if m.get('nationalFriendly') is True:    # sparing reprezentacji — pomijamy
+        return None
+
     have = {k: v for k, v in signals.items() if v is not None}
     if not have or any(v < 0 for v in have.values()):
         return None
@@ -142,8 +145,23 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         'fanvote': f"{ss.get('homeProb' if me == 'home' else 'awayProb')}%" if ss.get('found') else 'brak',
         'signals': f"{sum(1 for v in have.values() if v > 0)}/{len(have)} za",
         'seasonForm': season_form,
+        'category': m.get('category'),
+        'formBlock': _form_block(m),
         **(_inj.fields(m) if _inj else {}),
     }
+
+
+def _form_block(m: Dict[str, Any]) -> str:
+    """Wspólny blok 'Forma' / 'Sezon' (form_schema) jako tekst wieloliniowy."""
+    try:
+        if ROOT not in sys.path:
+            sys.path.insert(0, ROOT)
+        import form_schema
+        return '\n'.join(form_schema.form_lines(
+            form_schema.block_from_json(m.get('form')), m.get('homeTeam') or '',
+            m.get('awayTeam') or ''))
+    except Exception:
+        return ''
 
 
 def collect(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
@@ -385,7 +403,8 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
     if not (to and frm and pw):
         print('   ℹ️ Mail TOP pominięty (brak EMAIL_*)')
         return
-    rows = ''.join(
+    def row(r):
+        return (
         f"<tr><td>{escape(str(r['time']))}</td><td>{escape(r['sport'])}</td>"
         f"<td>{escape(r['match'])}<br><small>{escape(str(r['league']))}</small>"
         + (f"<br><small>{escape(r['injuryLine'])}{' ⚠️' if r.get('injury_risk') else ''}</small>"
@@ -393,14 +412,21 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
         f"<td><b>{escape(str(r['pick']))}</b> @ {r['odds']:.2f}</td>"
         f"<td>{escape(str(r['grade']))} / {r['score']}</td><td>{escape(r['form'])}</td>"
         f"<td>{escape(r['h2h'])}</td><td>{escape(r['fanvote'])}</td><td>{escape(r['signals'])}</td>"
-        f"<td>{escape(r.get('seasonForm') or '')}</td></tr>"
-        for r in picks)
+        f"<td>{escape(r.get('seasonForm') or '')}</td>"
+        f"<td style='white-space:pre;font-size:11px'>{escape(r.get('formBlock') or '')}</td></tr>")
+    rows_for = lambda rs: ''.join(row(r) for r in rs)  # noqa: E731
+    clubs = [r for r in picks if r.get('category') != 'reprezentacje']
+    national = [r for r in picks if r.get('category') == 'reprezentacje']
+    rows = rows_for(clubs)
+    if national:
+        rows += ("<tr><th colspan='11' style='text-align:left'>🏳️ Reprezentacje</th></tr>"
+                 + rows_for(national))
     html = (_analyst_html(analyst)
             + f"<h2>⭐ TOP — {day}</h2><p>Perełki z Grade A/B: typowana drużyna dominuje "
             f"we wszystkich danych (Forebet, forma, dom/wyjazd, H2H, SofaScore, model).</p>"
             f"<table border='1' cellpadding='5' style='border-collapse:collapse;font-family:sans-serif'>"
             f"<tr><th>Godz.</th><th>Sport</th><th>Mecz</th><th>Typ</th><th>Grade/score</th>"
-            f"<th>Forma</th><th>H2H</th><th>Fan Vote</th><th>Sygnały</th><th>Forma sezon</th></tr>{rows}</table>")
+            f"<th>Forma</th><th>H2H</th><th>Fan Vote</th><th>Sygnały</th><th>Forma sezon</th><th>Forma / Sezon</th></tr>{rows}</table>")
     from email.mime.multipart import MIMEMultipart
     from email.mime.application import MIMEApplication
     msg = MIMEMultipart()

@@ -325,3 +325,16 @@ def apply_season(row: Dict[str, Any], today: date) -> None:
             row.get(f'{fav}_form') or [], row.get(f'{fav}_season_form'))
     else:
         row['season_form_conflict'] = False
+
+    # Wspólny schemat (bez sparingów, puchary, reprezentacje) z tych samych
+    # datowanych wierszy — niezgodne z formą wiersze odrzucone wyżej.
+    import form_schema
+    saved = {dk: row.get(dk) for dk, _ in _VIEWS}
+    for dk, _ in _VIEWS:
+        row[dk] = raws[dk]
+    form_schema.apply(row)
+    for dk, v in saved.items():
+        if v is None:
+            row.pop(dk, None)
+        else:
+            row[dk] = v

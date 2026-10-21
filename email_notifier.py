@@ -967,6 +967,12 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
     elif sort_by == 'team':
         # Sortuj alfabetycznie po nazwie gospodarzy
         sorted_matches = sorted(sorted_matches, key=lambda x: x.get('home_team', '').lower())
+
+    # Reprezentacje: sparingi pomijane, reszta w osobnej sekcji na końcu
+    # (stabilnie — kolejność w obu grupach jak wyżej).
+    import form_schema
+    sorted_matches = [m for m in sorted_matches if not form_schema.is_national_friendly(m)]
+    sorted_matches = sorted(sorted_matches, key=form_schema.is_national)
     
     html = f"""
     <html>
@@ -1263,6 +1269,12 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         league = safe_value(match.get('league', ''), '')
         if is_nan_or_none(league):
             league = ''
+
+        if form_schema.is_national(match) and (
+                i == 1 or not form_schema.is_national(sorted_matches[i - 2])):
+            html += ('<h2 style="margin: 25px 0 5px; color: #333;">🏳️ Reprezentacje</h2>')
+        form_block_html = '' if is_tennis else form_schema.form_html(
+            form_schema.block_from_row(match), str(home), str(away))
         
         html += f"""
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); overflow: hidden;">
@@ -1309,6 +1321,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                             {_render_recent_matches(match.get('away_recent_matches'), f'Ostatnie mecze {away}')}
                         </div>
                     </div>
+                    {form_block_html}
                     
                     <!-- TENNIS: RANKING SECTION -->
                     {f'''

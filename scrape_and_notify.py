@@ -1070,6 +1070,14 @@ def scrape_and_send_email(
             if row.get('odds_bookmaker') and not row.get('odds_source'):
                 row['odds_source'] = row.get('odds_bookmaker')
         
+        # Reprezentacje (liga znana dopiero tutaj) — bez dodatkowych zapytań.
+        try:
+            import form_schema
+            for row in rows:
+                form_schema.tag_category(row)
+        except Exception as e:
+            print(f"⚠️ form_schema: {e}")
+
         df = pd.DataFrame(rows)
         if 'h2h_last5' in df.columns:
             df['h2h_last5'] = df['h2h_last5'].apply(lambda x: str(x) if x else '')
@@ -1158,6 +1166,29 @@ def scrape_and_send_email(
                 # Recency (forma z bieżącego sezonu, bez dodatkowych zapytań)
                 'earlySeason': str(row.get('early_season')) == 'True',
                 'seasonFormConflict': str(row.get('season_form_conflict')) == 'True',
+                # Wspólny schemat formy (jak Forebet: form_schema/recency).
+                'form': {
+                    'home': row.get('home_form'), 'away': row.get('away_form'),
+                    'homeAtHome': row.get('home_form_home'),
+                    'awayAtAway': row.get('away_form_away'),
+                    'homeClean': row.get('home_form_nf'), 'awayClean': row.get('away_form_nf'),
+                    'homeAtHomeClean': row.get('home_form_home_nf'),
+                    'awayAtAwayClean': row.get('away_form_away_nf'),
+                    'homeCup': row.get('home_cup_form'), 'awayCup': row.get('away_cup_form'),
+                    'homeCupCompetitions': row.get('home_cup_competitions'),
+                    'awayCupCompetitions': row.get('away_cup_competitions'),
+                    'homeCompetitions': row.get('home_form_competitions'),
+                    'awayCompetitions': row.get('away_form_competitions'),
+                    'homeSeason': row.get('home_season_form'),
+                    'awaySeason': row.get('away_season_form'),
+                    'homeAtHomeSeason': row.get('season_home_form'),
+                    'awayAtAwaySeason': row.get('season_away_form'),
+                    'homeSeasonMatches': row.get('home_season_match_count'),
+                    'awaySeasonMatches': row.get('away_season_match_count'),
+                    'friendliesExcluded': row.get('friendlies_excluded'),
+                },
+                'category': row.get('category'),
+                'nationalFriendly': bool(row.get('national_friendly')),
                 # Odds - czyść NaN przed eksportem
                 'odds': {
                     'home': clean_odds_value(row.get('home_odds')),

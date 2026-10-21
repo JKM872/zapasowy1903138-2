@@ -67,7 +67,20 @@ def _row(src, sport, m, side: Optional[str]) -> List[Any]:
             pick, o, m.get('predictionGrade'), sc.get('prob'),
             _f(fh if side == 'home' else fa), _f(fa if side == 'home' else fh),
             h2h_txt, f"{fv}%" if fv is not None else '',
-            m.get('matchUrl') or m.get('forebetUrl'), _season_str(form, side)]
+            m.get('matchUrl') or m.get('forebetUrl'), _season_str(form, side),
+            _form_block(m)]
+
+
+def _form_block(m: Dict[str, Any]) -> str:
+    """Wspólny blok 'Forma' / 'Sezon' (form_schema) jako tekst wieloliniowy."""
+    try:
+        import form_schema
+        return '\n'.join(form_schema.form_lines(
+            form_schema.block_from_json(m.get('form')),
+            m.get('homeTeam') or m.get('home_team') or '',
+            m.get('awayTeam') or m.get('away_team') or ''))
+    except Exception:
+        return ''
 
 
 def _season_str(form: Dict[str, Any], side: Optional[str]) -> str:
@@ -89,7 +102,7 @@ def collect(day: str) -> Dict[str, List[List[Any]]]:
         out['TOP'].append(['TOP', r.get('sport'), r.get('time'), r.get('match'), r.get('league'),
                            r.get('pick'), r.get('odds'), r.get('grade'), r.get('score'),
                            r.get('form'), '', r.get('h2h'), r.get('fanvote'), r.get('signals'),
-                           r.get('seasonForm') or ''])
+                           r.get('seasonForm') or '', r.get('formBlock') or ''])
     for p in sorted(glob.glob(os.path.join(R, f'matches_{day}_*.json'))):
         name = os.path.basename(p)[len(f'matches_{day}_'):-5]
         d = _load(p) or {}
@@ -97,7 +110,7 @@ def collect(day: str) -> Dict[str, List[List[Any]]]:
         if not isinstance(ms, list):
             continue
         for m in ms:
-            if not m.get('qualifies'):
+            if not m.get('qualifies') or m.get('nationalFriendly') is True:
                 continue
             if name.endswith('_forebet'):
                 pick = (m.get('scoring') or {}).get('pick')
@@ -118,7 +131,7 @@ def collect(day: str) -> Dict[str, List[List[Any]]]:
                                     (m.get('away_team') if m.get('outcome') == '2' else 'X'),
                                     m.get('current_odds'), '', '',
                                     f"spadek {m.get('open_odds')}→{m.get('current_odds')} ({m.get('drop_pct')}%)",
-                                    '', '', '', m.get('match_url'), ''])
+                                    '', '', '', m.get('match_url'), '', ''])
     for k in out:
         out[k].sort(key=lambda r: str(r[2] or '99:99'))
     return out
@@ -197,7 +210,7 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
         sport = name[:-8] if src == 'Forebet' else name
         ms = (_load(p) or {}).get('matches') or []
         for m in ms:
-            if not m.get('qualifies'):
+            if not m.get('qualifies') or m.get('nationalFriendly') is True:
                 continue
             # Dane z poprzedniego sezonu (recency) — poza Twierdzą.
             if m.get('earlySeason') or m.get('staleModel') or m.get('seasonFormConflict'):
@@ -239,6 +252,7 @@ def twierdza(day: str) -> List[Dict[str, Any]]:
                             'grade': m.get('predictionGrade'),
                             'seasonForm': _season_str(
                                 m.get('form') if isinstance(m.get('form'), dict) else {}, side),
+                            'formBlock': _form_block(m),
                             **injury_fields(m)})
                 break
     out.sort(key=lambda r: str(r['time'] or '99:99'))
@@ -252,7 +266,7 @@ def twierdza_rows(tw: List[Dict[str, Any]]) -> List[List[Any]]:
     return [[r['source'], r['sport'], r['time'], r['match'], r['league'], r['pick'],
              r['odds'], r['grade'], f"Forebet {r['forebet']}%", r['form'],
              f"dom/wyj {r['venue']}", '', f"{r['fanvote']}%", '',
-             r.get('seasonForm') or ''] for r in tw]
+             r.get('seasonForm') or '', r.get('formBlock') or ''] for r in tw]
 
 
 def _injury_lines(day: str) -> Dict[str, str]:
@@ -464,8 +478,8 @@ def write_xlsx(day: str, data, summary: str) -> str:
     widths = (12, 11, 7, 38, 18, 24, 7, 7, 7, 30, 12, 7, 9, 40, 14)
     for name, rows in data.items():
         sh = wb.create_sheet(name[:31])
-        sh.append(COLS + ['Forma sezon'] if name != 'TOP'
-                  else COLS[:-1] + ['Sygnały', 'Forma sezon'])
+        sh.append(COLS + ['Forma sezon', 'Forma / Sezon'] if name != 'TOP'
+                  else COLS[:-1] + ['Sygnały', 'Forma sezon', 'Forma / Sezon'])
         for cell in sh[1]:
             cell.font, cell.fill = Font(bold=True), fill
         for r in rows:
@@ -494,7 +508,7 @@ def write_xlsx(day: str, data, summary: str) -> str:
             by_sport.setdefault(str(r[1]), []).append(r)
     for sp, rows in sorted(by_sport.items()):
         ss_ = wb.create_sheet(f"{sp[:20]}_TOP_{len(rows)}")
-        ss_.append(COLS[:-1] + ['Sygnały', 'Forma sezon'])
+        ss_.append(COLS[:-1] + ['Sygnały', 'Forma sezon', 'Forma / Sezon'])
         for r in rows:
             ss_.append(r)
         for i, w in enumerate((12, 11, 7, 38, 18, 24, 7, 7, 10, 22, 14, 7, 9, 12, 14)):
