@@ -304,8 +304,37 @@ def write_excel(day: str) -> Optional[str]:
     return out
 
 
+def _analyst_html(analyst: Optional[List[Dict[str, Any]]]) -> str:
+    try:
+        if ROOT not in sys.path:
+            sys.path.insert(0, ROOT)
+        from tools.ai_analyst import html_section
+        return html_section(analyst or [])
+    except Exception:
+        return ''
+
+
+def run_analyst(day: str, merged: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Analityk AI na TOP + Twierdza; każdy błąd => []."""
+    try:
+        if ROOT not in sys.path:
+            sys.path.insert(0, ROOT)
+        from tools import ai_analyst
+        try:
+            from tools.daily_digest import twierdza
+            tw = twierdza(day)
+        except Exception as e:
+            print(f"   ⚠️ Twierdza dla analityka: {type(e).__name__}")
+            tw = []
+        return ai_analyst.run(day, merged, tw)
+    except Exception as e:
+        print(f"   ⚠️ Analityk AI: {type(e).__name__}")
+        return []
+
+
 def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = None,
-               new_count: Optional[int] = None) -> None:
+               new_count: Optional[int] = None,
+               analyst: Optional[List[Dict[str, Any]]] = None) -> None:
     import smtplib
     from email.mime.text import MIMEText
     from html import escape
@@ -322,7 +351,8 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
         f"<td>{escape(r['h2h'])}</td><td>{escape(r['fanvote'])}</td><td>{escape(r['signals'])}</td>"
         f"<td>{escape(r.get('seasonForm') or '')}</td></tr>"
         for r in picks)
-    html = (f"<h2>⭐ TOP — {day}</h2><p>Perełki z Grade A/B: typowana drużyna dominuje "
+    html = (_analyst_html(analyst)
+            + f"<h2>⭐ TOP — {day}</h2><p>Perełki z Grade A/B: typowana drużyna dominuje "
             f"we wszystkich danych (Forebet, forma, dom/wyjazd, H2H, SofaScore, model).</p>"
             f"<table border='1' cellpadding='5' style='border-collapse:collapse;font-family:sans-serif'>"
             f"<tr><th>Godz.</th><th>Sport</th><th>Mecz</th><th>Typ</th><th>Grade/score</th>"
@@ -374,7 +404,8 @@ if __name__ == '__main__':
     print(f"   ➕ nowe TOP w tym przebiegu: {len(new)} (łącznie dziś {len(merged)})")
     xlsx = write_excel(day)
     if '--email' in sys.argv and new:
-        send_email(merged, day, attach=xlsx, new_count=len(new))
+        send_email(merged, day, attach=xlsx, new_count=len(new),
+                   analyst=run_analyst(day, merged))
     print(f"â­ TOP {day} (Grade {'/'.join(grades)}): {len(picks)}")
     for r in picks:
         print(f"{r['time']} {r['sport']:<10} {r['match']} | {r['league']}\n"

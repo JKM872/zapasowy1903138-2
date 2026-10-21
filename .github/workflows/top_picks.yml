@@ -53,6 +53,9 @@ jobs:
       - name: Build TOP + Excel + email
         env:
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
@@ -63,6 +66,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/top_*.json results/TOP.xlsx
+          git add results/ai_analyst_*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "TOP picks $DAY"
           git reset -q --hard HEAD
