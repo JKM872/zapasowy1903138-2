@@ -340,3 +340,66 @@ export async function savePreferences(
     body: JSON.stringify({ sports, leagues, onboarded: true }),
   })
 }
+
+// ---------------------------------------------------------------------------
+// Dropping odds
+// ---------------------------------------------------------------------------
+
+export interface DroppingOddsEvent {
+  matchId: number | string
+  sport: string
+  league: string
+  homeTeam: string
+  awayTeam: string
+  eventDate: string
+  eventTime: string
+  matchUrl: string
+  livesportUrl: string
+  /** Side the price fell on: '1', 'X' or '2'. */
+  outcome: string
+  focusTeam: string
+  openOdds: number | null
+  currentOdds: number | null
+  maxOdds: number | null
+  dropPct: number | null
+  /** Analysis attached by the pipeline; absent on roughly half the archive. */
+  homeForm: string[]
+  awayForm: string[]
+  h2hCount: number | null
+  h2hHomeWins: number | null
+  h2hAwayWins: number | null
+  h2hWinRate: number | null
+  lastH2hDate: string
+  lastH2hScore: string
+  formAdvantage: boolean
+  favorite: string
+  advancedScore: number | null
+  forebetPrediction: string
+  forebetProbability: number | null
+  enrichmentStatus: string
+  scrapedAt: string
+}
+
+export interface DroppingOddsResponse {
+  date: string | null
+  events: DroppingOddsEvent[]
+  sportCounts: Record<string, number>
+  availableDates: string[]
+  summary: {
+    count: number
+    medianDrop?: number | null
+    maxDrop?: number | null
+    bigMoves?: number
+  }
+}
+
+export async function getDroppingOdds(params: {
+  date?: string
+  sport?: string
+} = {}): Promise<DroppingOddsResponse> {
+  const search = new URLSearchParams()
+  if (params.date) search.set('date', params.date)
+  if (params.sport && params.sport !== 'all') search.set('sport', params.sport)
+  const qs = search.toString()
+  return fetchApi<DroppingOddsResponse>(`/api/dropping-odds${qs ? '?' + qs : ''}`)
+}

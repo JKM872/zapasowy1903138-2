@@ -1,0 +1,86 @@
+name: Deploy to Heroku (refresh site data)
+
+# Why a separate workflow instead of a step in each scraper:
+#
+# The API reads match files from disk, and a Heroku dyno's disk comes from the
+# build. A workflow committing to `results/` therefore changes nothing on the
+# site until a rebuild happens — and only `scrape.yml` and `scrape_away.yml`
+# ever triggered one. Everything else (dropping odds, table tennis, baseball,
+# Forebet, coupons, settled results) waited for the next scrape before readers
+# could see it.
+#
+# A push trigger would be the obvious fix, but commits made by
+# `github-actions[bot]` with the default GITHUB_TOKEN deliberately do not start
+# other workflows, so it would never fire. Hence a schedule, placed after the
+# points in the day when data actually lands (UTC):
+#
+#   00:00 scrape · 02:00 backfill · 03:00 scrape_away · 04:00 forebet
+#   05:30/06:30 table tennis · 06:00 check_results · 10:30 coupons
+#   10-17 dropping odds (3 local windows) · 12:00 noon refresh
+#   14:00 baseball · 22:00 check_results
+#
+# A build pulls the whole `main` tarball, so each run picks up everything
+# committed since the last one, whichever workflow wrote it.
+
+on:
+  schedule:
+    - cron: '0 7 * * *'     # after the overnight + morning block
+    - cron: '30 12 * * *'   # after the noon refresh and first dropping-odds window
+    - cron: '0 15 * * *'    # after the second dropping-odds window
+    - cron: '0 18 * * *'    # after the third window and baseball
+    - cron: '0 23 * * *'    # after evening result settling
+  workflow_dispatch:
+
+# One deploy at a time. Overlapping builds of the same commit waste minutes and
+# can leave the dyno restarting repeatedly.
+concurrency:
+  group: heroku-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Trigger Heroku build from main
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP: pickly-67e87ed00f70
+          REPO_TARBALL: https://github.com/JKM872/zapasowy1903138-2/tarball/main
+        run: |
+          set -euo pipefail
+
+          if [ -z "${HEROKU_API_KEY:-}" ]; then
+            # A warning rather than a failure: a missing secret should be
+            # visible in the Actions list without mailing a red run every day.
+            echo "::warning title=Brak HEROKU_API_KEY::Strona nie odswiezy sie automatycznie. Ustaw sekret HEROKU_API_KEY, aby wlaczyc wdrozenia."
+            echo "Pominieto wdrozenie — brak sekretu HEROKU_API_KEY."
+            exit 0
+          fi
+
+          echo "Wyzwalam build Heroku dla $HEROKU_APP…"
+          response=$(mktemp)
+          status=$(curl -s -o "$response" -w '%{http_code}' -X POST \
+            "https://api.heroku.com/apps/${HEROKU_APP}/builds" \
+            -d "{\"source_blob\":{\"url\":\"${REPO_TARBALL}\"}}" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/vnd.heroku+json; version=3" \
+            -H "Authorization: Bearer ${HEROKU_API_KEY}")
+
+          echo "HTTP $status"
+          # The status is checked rather than assumed: the previous version piped
+          # a failure into `echo` and reported success either way, so a rejected
+          # build looked identical to a working one.
+          if [ "$status" != "201" ] && [ "$status" != "200" ]; then
+            echo "Odpowiedz Heroku:"
+            cat "$response"
+            echo "::error title=Wdrozenie odrzucone::Heroku zwrocil HTTP $status — dane nie trafily na strone."
+            exit 1
+          fi
+
+          build_id=$(python3 -c "import json,sys; print(json.load(open('$response')).get('id',''))" 2>/dev/null || echo '')
+          echo "Build przyjety${build_id:+ (id: $build_id)}."
+          echo "### Wdrozenie na Heroku wyzwolone" >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit: \`${GITHUB_SHA:-main}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "Build: \`${build_id:-nieznany}\`" >> "$GITHUB_STEP_SUMMARY"

@@ -1764,6 +1764,32 @@ def get_league_info():
 
 
 # =============================================================================
+# DROPPING ODDS
+#
+# The archive in outputs/ was never served: this file reads only results/, so
+# 1 099 qualified price moves with form and head-to-head attached fed the e-mails
+# and nothing else. Parsing lives in dropping_odds_feed so it stays testable.
+# =============================================================================
+
+@app.route('/api/dropping-odds', methods=['GET'])
+def get_dropping_odds():
+    """Qualified price moves for a date. ?date=YYYY-MM-DD&sport=football"""
+    try:
+        from dropping_odds_feed import load_dropping_odds, summarise
+    except Exception as e:
+        logger.warning('dropping_odds_feed unavailable: %s', e)
+        return jsonify({'date': None, 'events': [], 'sportCounts': {},
+                        'availableDates': [], 'summary': {'count': 0}})
+
+    payload = load_dropping_odds(
+        date=request.args.get('date'),
+        sport=request.args.get('sport'),
+    )
+    payload['summary'] = summarise(payload['events'])
+    return jsonify(payload)
+
+
+# =============================================================================
 # MATCH COMMENTS (migration 004)
 #
 # Readers add context a model cannot see: a missing first-choice setter, a table
