@@ -66,6 +66,9 @@ outputs/*
 # exception the nightly rebuild ran, `git add` was silently skipped, and the
 # site kept serving whatever model the last manual commit carried.
 !outputs/dropping_odds_model.json
+# Which "worth it" moves were already mailed today. Runners are ephemeral, so
+# without this every window would resend the morning's events.
+!outputs/dropping_worth_sent_*.json
 # Odds history: the per-run snapshot of every market's price. Runners are
 # ephemeral, so this has to live in the repo — otherwise every run would look
 # like the first one and could never report a change since the last analysis.

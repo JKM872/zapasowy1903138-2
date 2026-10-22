@@ -1,0 +1,73 @@
+name: "Dropping Odds - mail 'zarabialo'"
+
+# Runs after each dropping-odds window. Those windows fire at 12, 15 and 18
+# local time; GitHub cron has no timezone, so the scrape lands at 10 or 11,
+# 13 or 14, 16 or 17 UTC depending on DST. :30 after the later hour covers both.
+#
+# Only moves the advisor marks "warto" go out, each one once (a per-day ledger
+# in outputs/ remembers what was sent), and a run with nothing new sends nothing.
+on:
+  schedule:
+    - cron: '30 11 * * *'
+    - cron: '30 14 * * *'
+    - cron: '30 17 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Tylko pokaz, nie wysylaj'
+        type: boolean
+        default: false
+
+concurrency:
+  group: dropping-worth-email
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  mail:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Send "worth it" mail
+        env:
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python dropping_odds_worth_email.py --dry-run
+            exit 0
+          fi
+          if [ -z "$EMAIL_RECIPIENT" ] || [ -z "$EMAIL_SENDER" ] || [ -z "$EMAIL_PASSWORD" ]; then
+            echo "::error::Brak sekretow EMAIL_RECIPIENT / EMAIL_SENDER / EMAIL_PASSWORD"
+            exit 1
+          fi
+          python dropping_odds_worth_email.py \
+            --to "$EMAIL_RECIPIENT" --from-email "$EMAIL_SENDER" --password "$EMAIL_PASSWORD"
+
+      - name: Commit sent-ledger
+        if: success() && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/dropping_worth_sent_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Brak nowych wysylek do zapisania"; exit 0
+          fi
+          git commit -m "data: dropping worth-it mail ledger [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main && git rebase origin/main || git rebase --abort || true
+            sleep $(( (RANDOM % 6) + 2 ))
+          done
+          echo "::warning::Nie udalo sie zapisac rejestru - kolejny przebieg moze powtorzyc wysylke"
