@@ -1,0 +1,202 @@
+{
+  "date": "2026-10-22",
+  "generated_at": "2026-10-22T14:35:58.170488+00:00",
+  "issues": [
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "volleyball",
+      "code": "forebet_low",
+      "problem": "Forebet volleyball: 27 meczów (min 30)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020/job/119737632698"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "football",
+      "code": "forebet_low",
+      "problem": "Forebet football: 127 meczów (min 200)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020/job/119737632723"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "handball",
+      "code": "forebet_low",
+      "problem": "Forebet handball: 16 meczów (min 30)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020/job/119737632797"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "daily_digest.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "WARN",
+      "workflow": "SOFASCORE_RELAY",
+      "sport": "",
+      "code": "relay_dead",
+      "problem": "Przekaźnik #1: status 200",
+      "meaning": "Sonda przekaźnika: limit wyczerpany / błąd.",
+      "action": "Wymień lub odciąż ten przekaźnik.",
+      "url": ""
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "scrape_forebet.yml",
+      "runs_today": 2,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "volleyball",
+          "code": "forebet_low",
+          "problem": "Forebet volleyball: 27 meczów (min 30)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020/job/119737632698"
+        },
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "football",
+          "code": "forebet_low",
+          "problem": "Forebet football: 127 meczów (min 200)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020/job/119737632723"
+        },
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "handball",
+          "code": "forebet_low",
+          "problem": "Forebet handball: 16 meczów (min 30)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020/job/119737632797"
+        }
+      ],
+      "run": {
+        "databaseId": 39752914020,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39752914020"
+      }
+    },
+    {
+      "workflow": "scrape.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 39718084559,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39718084559"
+      }
+    },
+    {
+      "workflow": "scrape_away.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 39708936991,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39708936991"
+      }
+    },
+    {
+      "workflow": "oddssafari_dropping.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 39715241457,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39715241457"
+      }
+    },
+    {
+      "workflow": "top_picks.yml",
+      "runs_today": 3,
+      "issues": [],
+      "run": {
+        "databaseId": 39760952880,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39760952880"
+      }
+    },
+    {
+      "workflow": "daily_digest.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "daily_digest.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    }
+  ],
+  "relays": [
+    {
+      "relay": 1,
+      "status": 200,
+      "exhausted": false,
+      "ok": false
+    },
+    {
+      "relay": 2,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 3,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 4,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 5,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 6,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    }
+  ],
+  "counts": {
+    "ALERT": 4,
+    "WARN": 1
+  }
+}
