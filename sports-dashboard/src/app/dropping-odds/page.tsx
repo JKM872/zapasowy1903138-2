@@ -21,6 +21,9 @@ import { getDroppingOdds, type DroppingOddsEvent, type DropVerdict } from '@/lib
 export default function DroppingOddsPage() {
   const [date, setDate] = useState<string | undefined>()
   const [sport, setSport] = useState('all')
+  // Off by default: on a typical day only ~1 in 7 moves sits in a segment that
+  // held up, and hiding the rest without being asked would look like missing data.
+  const [onlyWorth, setOnlyWorth] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dropping-odds', date ?? 'latest', sport],
@@ -31,7 +34,11 @@ export default function DroppingOddsPage() {
     refetchInterval: 300_000,
   })
 
-  const events = data?.events ?? []
+  const allEvents = data?.events ?? []
+  const worthCount = allEvents.filter(e => e.verdict?.verdict === 'warto').length
+  const events = onlyWorth
+    ? allEvents.filter(e => e.verdict?.verdict === 'warto')
+    : allEvents
   const summary = data?.summary
   const sportEntries = Object.entries(data?.sportCounts ?? {})
     .sort((a, b) => b[1] - a[1])
@@ -155,10 +162,46 @@ export default function DroppingOddsPage() {
         </div>
       )}
 
+      {/* Filter by verdict. The count is shown up front so the reader knows
+          what the toggle will leave before pressing it. */}
+      {allEvents.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setOnlyWorth(false)}
+            aria-pressed={!onlyWorth}
+            className={cn(
+              'rounded-md border px-3 py-1.5 text-sm transition-colors',
+              !onlyWorth
+                ? 'border-primary bg-primary text-primary-foreground font-semibold'
+                : 'border-border text-muted-foreground hover:bg-accent',
+            )}
+          >
+            Wszystkie spadki
+            <span className="ml-1.5 text-[10px] tabular-nums opacity-70">{allEvents.length}</span>
+          </button>
+          <button
+            onClick={() => setOnlyWorth(true)}
+            aria-pressed={onlyWorth}
+            disabled={worthCount === 0}
+            className={cn(
+              'rounded-md border px-3 py-1.5 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+              onlyWorth
+                ? 'border-emerald-500 bg-emerald-500 text-white font-semibold'
+                : 'border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10',
+            )}
+          >
+            Tylko te, które historycznie zarabiały
+            <span className="ml-1.5 text-[10px] tabular-nums opacity-80">{worthCount}</span>
+          </button>
+        </div>
+      )}
+
       {!isLoading && events.length === 0 && (
         <Card>
           <CardContent className="py-12 text-center text-sm text-muted-foreground">
-            Brak zdarzeń dla wybranego dnia i dyscypliny.
+            {onlyWorth
+              ? 'Dziś żaden spadek nie należy do segmentu, który historycznie zarabiał. To częsty i uczciwy wynik — nie każdy dzień ma okazję.'
+              : 'Brak zdarzeń dla wybranego dnia i dyscypliny.'}
           </CardContent>
         </Card>
       )}
@@ -166,10 +209,13 @@ export default function DroppingOddsPage() {
       {events.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Lista spadków</CardTitle>
+            <CardTitle>
+              {onlyWorth ? 'Spadki w segmentach, które zarabiały' : 'Lista spadków'}
+            </CardTitle>
             <CardDescription>
-              Największy ruch na górze. Dane z trzech przebiegów dziennie —
-              pokazujemy najświeższy odczyt każdego zdarzenia.
+              {onlyWorth
+                ? 'Historia, nie gwarancja — przy każdym zdarzeniu podajemy, na ilu ruchach opiera się ocena.'
+                : 'Największy ruch na górze. Dane z trzech przebiegów dziennie — pokazujemy najświeższy odczyt każdego zdarzenia.'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
