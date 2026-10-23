@@ -186,6 +186,16 @@ def _sub_dict(match, key):
     return val if isinstance(val, dict) else {}
 
 
+_MATCH_FILE_RE = __import__('re').compile(
+    r'^matches_\d{4}-\d{2}-\d{2}_([a-z_]+?)(?:_forebet|_aiscore_home|_aiscore_away|_aiscore)?\.json$')
+
+
+def _sport_from_filename(path):
+    """Sport key from a results file name, or None for non-match files."""
+    m = _MATCH_FILE_RE.match(os.path.basename(path))
+    return m.group(1) if m else None
+
+
 def find_result_files(date_str=None, sport=None):
     """Find result JSON files matching criteria."""
     pattern = os.path.join(RESULTS_DIR, '*.json')
@@ -537,6 +547,18 @@ def apply_paywall(match: dict, is_subscriber: bool) -> dict:
     return match
 
 
+# Sports clients pay for come first on the board; table tennis is volume, not value.
+_SPORT_ORDER = {'football': 0, 'hockey': 1, 'basketball': 2, 'tennis': 3, 'volleyball': 4,
+                'handball': 5, 'baseball': 6, 'rugby': 7, 'table_tennis': 90}
+
+
+def _richness(m):
+    """How much analysis a match row carries, to pick the best duplicate."""
+    o = m.get('odds') or {}
+    return sum(1 for v in (o.get('home'), o.get('away'), m.get('forebet'), m.get('scoring'),
+                           m.get('homeLogo'), m.get('homeForm')) if v)
+
+
 @app.route('/api/matches', methods=['GET'])
 @optional_auth
 def get_matches():
@@ -552,8 +574,53 @@ def get_matches():
     all_matches = []
     source = 'none'
     
-    # ── Try Supabase first ──────────────────────────────────────────
-    if SUPABASE_AVAILABLE:
+    # ── Local JSON files first: they carry every sport the scrapers wrote ────────────────────────────────
+    if True:
+        # Auto-detect latest date from files when user didn't specify one
+        if not user_date:
+            import re
+            date_pattern = re.compile(r'(\d{4}-\d{2}-\d{2})')
+            all_dates = set()
+            for f in glob.glob(os.path.join(RESULTS_DIR, '*.json')):
+                m = date_pattern.search(os.path.basename(f))
+                if m:
+                    all_dates.add(m.group(1))
+            if all_dates:
+                date_str = sorted(all_dates, reverse=True)[0]
+            elif not date_str:
+                date_str = datetime.now().strftime('%Y-%m-%d')
+        
+        files = find_result_files(date_str, sport if sport != 'all' else None)
+        for f in files:
+            file_sport = _sport_from_filename(f)
+            if file_sport is None:
+                continue  # top_/twierdza_/watchdog_ files are not match lists
+            matches = load_matches_from_file(f)
+            for m in matches:
+                if not isinstance(m, dict):
+                    continue
+                if not m.get('sport'):
+                    # Forebet rows carry no sport; without this they all
+                    # defaulted to football (hockey, basketball... included).
+                    m = {**m, 'sport': file_sport}
+                normalized = normalize_match(m)
+                if not (normalized.get('homeTeam') and normalized.get('awayTeam')):
+                    continue
+                if sport != 'all' and normalized['sport'] != sport:
+                    continue
+                if only_qualifying and not normalized['qualifies']:
+                    continue
+                if search:
+                    text = f"{normalized['homeTeam']} {normalized['awayTeam']} {normalized.get('league','')}".lower()
+                    if search not in text:
+                        continue
+                all_matches.append(normalized)
+        
+        if all_matches:
+            source = 'files'
+    
+    # ── Supabase only when the files had nothing for the day ──────────────────────────────────────────
+    if SUPABASE_AVAILABLE and not all_matches:
         try:
             # If no date, take the newest one Supabase holds — but only when it is
             # not older than the files on disk. The scrapers write results/ every
@@ -586,41 +653,18 @@ def get_matches():
         except Exception as e:
             logger.warning('Supabase fetch failed: %s', e)
     
-    # ── Fallback to local JSON files ────────────────────────────────
-    if not all_matches:
-        # Auto-detect latest date from files when user didn't specify one
-        if not user_date:
-            import re
-            date_pattern = re.compile(r'(\d{4}-\d{2}-\d{2})')
-            all_dates = set()
-            for f in glob.glob(os.path.join(RESULTS_DIR, '*.json')):
-                m = date_pattern.search(os.path.basename(f))
-                if m:
-                    all_dates.add(m.group(1))
-            if all_dates:
-                date_str = sorted(all_dates, reverse=True)[0]
-            elif not date_str:
-                date_str = datetime.now().strftime('%Y-%m-%d')
-        
-        files = find_result_files(date_str, sport if sport != 'all' else None)
-        
-        for f in files:
-            matches = load_matches_from_file(f)
-            for m in matches:
-                normalized = normalize_match(m)
-                if sport != 'all' and normalized['sport'] != sport:
-                    continue
-                if only_qualifying and not normalized['qualifies']:
-                    continue
-                if search:
-                    text = f"{normalized['homeTeam']} {normalized['awayTeam']} {normalized.get('league','')}".lower()
-                    if search not in text:
-                        continue
-                all_matches.append(normalized)
-        
-        if all_matches:
-            source = 'files'
-    
+    # The same fixture can arrive from several scrapers (home/away runs, Forebet
+    # and Livesport); show it once, keeping the richest copy.
+    seen = {}
+    for m in all_matches:
+        key = (m.get('sport'), (m.get('homeTeam') or '').strip().lower(),
+               (m.get('awayTeam') or '').strip().lower(), m.get('time') or '')
+        prev = seen.get(key)
+        if prev is None or _richness(m) > _richness(prev):
+            seen[key] = m
+    all_matches = list(seen.values())
+    all_matches.sort(key=lambda m: (_SPORT_ORDER.get(m.get('sport'), 50), m.get('time') or ''))
+
     # ── Per-sport odds threshold filter (OR condition) ──────────────
     if only_qualifying:
         before = len(all_matches)
