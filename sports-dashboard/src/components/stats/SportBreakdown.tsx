@@ -18,12 +18,12 @@ export function SportBreakdown({ sportStats }: SportBreakdownProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Podział na dyscypliny</CardTitle>
+        <CardTitle>Breakdown by sport</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {sportStats.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-4">
-            Brak danych.
+            No data.
           </p>
         )}
         {sportStats.map((stat) => {
@@ -46,7 +46,7 @@ export function SportBreakdown({ sportStats }: SportBreakdownProps) {
                   <span className="text-sm font-medium">{cfg.name}</span>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-[10px]">
-                      {stat.total} zdarzeń
+                      {stat.total} events
                     </Badge>
                     <span className="text-sm font-mono font-semibold tabular-nums">
                       {hasAccuracy ? `${pct}%` : '—'}
@@ -57,7 +57,7 @@ export function SportBreakdown({ sportStats }: SportBreakdownProps) {
                   <Progress value={pct} className="h-2" />
                 ) : (
                   <p className="text-[10px] text-muted-foreground">
-                    Skuteczność jeszcze nieliczona
+                    Accuracy not calculated yet
                   </p>
                 )}
               </div>

@@ -57,18 +57,18 @@ export function AccuracyChart({ sportStats }: AccuracyChartProps) {
     <Card>
       <CardHeader>
         <CardTitle>
-          {showAccuracy ? 'Skuteczność według dyscypliny' : 'Pokrycie predykcjami'}
+          {showAccuracy ? 'Accuracy by sport' : 'Prediction coverage'}
         </CardTitle>
         <CardDescription>
           {showAccuracy
-            ? 'Na podstawie rozstrzygniętych zdarzeń'
-            : 'Skuteczność nie jest jeszcze liczona, dlatego pokazujemy udział zdarzeń z predykcją'}
+            ? 'Based on settled events'
+            : 'Accuracy is not calculated yet, so we show the share of events with a prediction'}
         </CardDescription>
       </CardHeader>
       <CardContent>
         {data.length === 0 ? (
           <p className="py-6 text-center text-sm text-muted-foreground">
-            Brak danych.
+            No data.
           </p>
         ) : (
           <ResponsiveContainer width="100%" height={300}>
@@ -84,11 +84,11 @@ export function AccuracyChart({ sportStats }: AccuracyChartProps) {
                     <div className="rounded-md border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-lg">
                       <p className="font-semibold">{d.sport}</p>
                       <p>
-                        {showAccuracy ? 'Skuteczność' : 'Pokrycie'}:{' '}
+                        {showAccuracy ? 'Accuracy' : 'Coverage'}:{' '}
                         <span className="font-mono">{d.value}%</span>
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {d.withPredictions} z {d.total} zdarzeń
+                        {d.withPredictions} of {d.total} events
                       </p>
                     </div>
                   )

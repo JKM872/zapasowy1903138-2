@@ -22,14 +22,14 @@ export function PromoBanner() {
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold leading-tight">
-            Odblokuj zdarzenia z oceną A — analizy o najwyższej pewności modelu
+            Unlock Grade A events, where the model is most confident
           </p>
           <p className="text-xs text-muted-foreground">
-            Ocena B jest darmowa. Pełna analiza w Premium za 19 zł tygodniowo.
+            Grade B is free. Full analysis with Premium for $5 / €5 per week.
           </p>
         </div>
         <span className="hidden items-center gap-1 text-xs font-semibold text-primary sm:inline-flex">
-          Kup dostęp
+          Get Premium
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </span>
       </Link>

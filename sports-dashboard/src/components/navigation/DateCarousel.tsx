@@ -19,18 +19,18 @@ import {
   startOfDay,
   isSameDay,
 } from 'date-fns'
-import { pl } from 'date-fns/locale'
+import { enGB } from 'date-fns/locale'
 
 function getDateLabel(date: Date): string {
-  if (isToday(date)) return 'Dziś'
-  if (isTomorrow(date)) return 'Jutro'
-  if (isYesterday(date)) return 'Wczoraj'
-  return format(date, 'd MMM', { locale: pl })
+  if (isToday(date)) return 'Today'
+  if (isTomorrow(date)) return 'Tomorrow'
+  if (isYesterday(date)) return 'Yesterday'
+  return format(date, 'd MMM', { locale: enGB })
 }
 
 function getWeekdayLabel(date: Date): string {
   if (isToday(date)) return ''
-  return format(date, 'EEE', { locale: pl })
+  return format(date, 'EEE', { locale: enGB })
 }
 
 export function DateCarousel() {

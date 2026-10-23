@@ -17,18 +17,18 @@ import { useSubscription } from '@/hooks/useSubscription'
 import * as api from '@/lib/api'
 
 const FREE_FEATURES = [
-  'Wszystkie analizy z oceną B',
-  'Kursy, forma i bilans bezpośrednich spotkań',
-  'Wyniki na żywo i szczegóły zdarzeń',
-  'Zapisywanie typów i statystyki',
+  'All Grade B analyses',
+  'Odds, form and head-to-head record',
+  'Live scores and event details',
+  'Save your picks and track stats',
 ]
 
 const PREMIUM_FEATURES = [
-  'Wszystko z planu darmowego',
-  'Typy TOP przed meczem (wyniki rozliczonych typów są publiczne)',
-  'Analizy z oceną A, o najwyższej pewności modelu',
-  'Pełna analiza modelu, wartość oczekiwana i kryterium Kelly',
-  'Wskazania wartości i poziom pewności',
+  'Everything in Free',
+  'Top Picks before kick-off (settled results stay public)',
+  'Grade A analyses with the highest model confidence',
+  'Full model analysis, expected value and Kelly criterion',
+  'Value signals and confidence levels',
 ]
 
 export default function PricingPage() {
@@ -51,7 +51,7 @@ function PricingContent() {
   // Handle Stripe redirect result
   useEffect(() => {
     if (searchParams.get('success')) {
-      toast.success('Subskrypcja aktywna. Oceny A odblokowane.')
+      toast.success('Subscription active. Grade A unlocked.')
       // Give the webhook a moment, then refresh status
       const t = setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['subscription'] })
@@ -62,7 +62,7 @@ function PricingContent() {
       return () => clearTimeout(t)
     }
     if (searchParams.get('canceled')) {
-      toast('Płatność anulowana. Nie pobrano opłaty.')
+      toast('Payment cancelled. You have not been charged.')
       router.replace('/pricing')
     }
   }, [searchParams, queryClient, refetch, router])
@@ -78,10 +78,10 @@ function PricingContent() {
       if (url) {
         window.location.href = url
       } else {
-        toast.error('Nie udało się rozpocząć płatności. Spróbuj ponownie.')
+        toast.error('Couldn’t start checkout. Please try again.')
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Nie udało się rozpocząć płatności')
+      toast.error(err instanceof Error ? err.message : 'Couldn’t start checkout')
     } finally {
       setLoading(false)
     }
@@ -93,7 +93,7 @@ function PricingContent() {
       const { url } = await api.openBillingPortal()
       if (url) window.location.href = url
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Nie udało się otworzyć panelu płatności')
+      toast.error(err instanceof Error ? err.message : 'Couldn’t open the billing portal')
     } finally {
       setLoading(false)
     }
@@ -104,15 +104,15 @@ function PricingContent() {
       {/* Hero */}
       <div className="text-center mb-10">
         <Badge variant="secondary" className="mb-3 gap-1">
-          <Sparkles className="h-3.5 w-3.5" /> Analizy Premium
+          <Sparkles className="h-3.5 w-3.5" /> Premium Analysis
         </Badge>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-          Odblokuj analizy z oceną A
+          Unlock Grade A analysis
         </h1>
         <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-          Ocena B pozostaje darmowa na stałe. W Premium widzisz zdarzenia z oceną A,
-          o najwyższej pewności modelu, wraz z pełną analizą. 19 zł tygodniowo,
-          rezygnacja w każdej chwili.
+          Grade B stays free forever. Premium shows Grade A events, where the model
+          is most confident, with the full analysis. $5 / €5 per week,
+          cancel anytime.
         </p>
       </div>
 
@@ -120,12 +120,12 @@ function PricingContent() {
         {/* Free plan */}
         <Card className="p-6 flex flex-col">
           <div className="mb-4">
-            <h2 className="text-lg font-semibold">Darmowy</h2>
-            <p className="text-sm text-muted-foreground">Start bez karty płatniczej</p>
+            <h2 className="text-lg font-semibold">Free</h2>
+            <p className="text-sm text-muted-foreground">No card required</p>
           </div>
           <div className="mb-6">
-            <span className="text-3xl font-bold">0 zł</span>
-            <span className="text-muted-foreground">/tydzień</span>
+            <span className="text-3xl font-bold">$0</span>
+            <span className="text-muted-foreground"> forever</span>
           </div>
           <ul className="space-y-2.5 flex-1">
             {FREE_FEATURES.map((f) => (
@@ -136,7 +136,7 @@ function PricingContent() {
             ))}
           </ul>
           <Button variant="outline" className="mt-6 w-full" disabled>
-            Twój obecny plan
+            Your current plan
           </Button>
         </Card>
 
@@ -151,11 +151,12 @@ function PricingContent() {
             <h2 className="text-lg font-semibold flex items-center gap-1.5">
               Premium
             </h2>
-            <p className="text-sm text-muted-foreground">Pełny dostęp do ocen A</p>
+            <p className="text-sm text-muted-foreground">Full access to Grade A</p>
           </div>
           <div className="mb-6">
-            <span className="text-3xl font-bold">19 zł</span>
-            <span className="text-muted-foreground">/tydzień</span>
+            <span className="text-3xl font-bold">$5</span>
+            <span className="text-muted-foreground">/week</span>
+            <p className="text-xs text-muted-foreground">or €5 · billed weekly</p>
           </div>
           <ul className="space-y-2.5 flex-1">
             {PREMIUM_FEATURES.map((f) => (
@@ -169,14 +170,14 @@ function PricingContent() {
           {isSubscriber ? (
             <div className="mt-6 space-y-2">
               <Button className="w-full gap-1.5" disabled>
-                <Crown className="h-4 w-4" /> Subskrypcja aktywna
+                <Crown className="h-4 w-4" /> Subscription active
               </Button>
               <Button variant="outline" className="w-full" onClick={handleManage} disabled={loading}>
-                Zarządzaj subskrypcją lub zrezygnuj
+                Manage or cancel subscription
               </Button>
               {currentPeriodEnd && (
                 <p className="text-xs text-center text-muted-foreground">
-                  Odnowienie {new Date(currentPeriodEnd).toLocaleDateString('pl-PL')}
+                  Renews {new Date(currentPeriodEnd).toLocaleDateString('en-GB')}
                 </p>
               )}
             </div>
@@ -187,16 +188,16 @@ function PricingContent() {
               ) : (
                 <Lock className="h-4 w-4" />
               )}
-              {user ? 'Wykup dostęp za 19 zł tygodniowo' : 'Zaloguj się, aby wykupić dostęp'}
+              {user ? 'Get Premium – $5/week' : 'Sign in to get Premium'}
             </Button>
           )}
         </Card>
       </div>
 
       <p className="mt-8 text-center text-xs text-muted-foreground">
-        Bezpieczną płatność obsługuje Stripe. Rezygnacja w każdej chwili z poziomu konta.
-        Analizy mają charakter informacyjny i nie są gwarancją wyniku. Nie przyjmujemy
-        zakładów. Serwis dla osób powyżej 18 lat.
+        Secure payments by Stripe. Cancel anytime from your account.
+        Analyses are for information only and do not guarantee any result. We do not
+        accept bets. 18+ only.
       </p>
 
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />

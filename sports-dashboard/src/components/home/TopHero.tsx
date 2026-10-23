@@ -41,7 +41,7 @@ function PickCard({ p }: { p: TopPick }) {
       </div>
       <div className="mt-auto flex items-center justify-between">
         <span className="text-sm">
-          Typ: <b>{p.pick}</b>
+          Pick: <b>{p.pick}</b>
         </span>
         <span className="rounded-md bg-primary/15 px-2 py-0.5 text-sm font-bold tabular-nums text-primary">
           {p.odds ? formatOdds(p.odds) : '—'}
@@ -49,12 +49,12 @@ function PickCard({ p }: { p: TopPick }) {
       </div>
       {st === 'won' && (
         <span className="flex items-center gap-1 text-xs font-medium text-emerald-500">
-          <CheckCircle2 className="h-3.5 w-3.5" /> Wygrany {p.result?.score}
+          <CheckCircle2 className="h-3.5 w-3.5" /> Won {p.result?.score}
         </span>
       )}
       {(st === 'lost' || st === 'draw') && (
         <span className="flex items-center gap-1 text-xs font-medium text-rose-500">
-          <XCircle className="h-3.5 w-3.5" /> Przegrany {p.result?.score}
+          <XCircle className="h-3.5 w-3.5" /> Lost {p.result?.score}
         </span>
       )}
     </div>
@@ -81,17 +81,17 @@ export function TopHero() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
-              <Star className="h-5 w-5 text-primary" /> Typy TOP
+              <Star className="h-5 w-5 text-primary" /> Top Picks
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Najmocniejsze typy dnia. Każdy rozliczony typ zostaje publicznie — sprawdź sam.
+              The day’s strongest picks. Every settled pick stays public, so you can check for yourself.
             </p>
           </div>
           <dl className="grid grid-cols-3 gap-2 sm:gap-3">
             {[
-              { k: 'Trafność', v: s.hitRate != null ? `${s.hitRate.toFixed(0)}%` : '—', sub: `${s.won}/${s.settled} typów` },
-              { k: 'ROI', v: signed(s.roi), sub: 'stawka 1 j.', tone: s.roi },
-              { k: 'Zysk', v: signed(s.profitUnits, ' j.'), sub: 'łącznie', tone: s.profitUnits },
+              { k: 'Hit rate', v: s.hitRate != null ? `${s.hitRate.toFixed(0)}%` : '—', sub: `${s.won}/${s.settled} picks` },
+              { k: 'ROI', v: signed(s.roi), sub: '1-unit stake', tone: s.roi },
+              { k: 'Profit', v: signed(s.profitUnits, ' u'), sub: 'all time', tone: s.profitUnits },
             ].map(t => (
               <div key={t.k} className="rounded-lg border border-border bg-card px-3 py-2 sm:px-4">
                 <dt className="text-[11px] text-muted-foreground">{t.k}</dt>
@@ -115,12 +115,12 @@ export function TopHero() {
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-primary/15 p-2"><Lock className="h-5 w-5 text-primary" /></div>
               <div>
-                <div className="font-semibold">Dziś {lockedToday} typów TOP przed meczem</div>
-                <div className="text-sm text-muted-foreground">Odblokuj za 19 zł tygodniowo. Rezygnujesz kiedy chcesz.</div>
+                <div className="font-semibold">{lockedToday} Top Picks today before kick-off</div>
+                <div className="text-sm text-muted-foreground">Unlock for $5 / €5 per week. Cancel anytime.</div>
               </div>
             </div>
             <Button asChild>
-              <Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Odblokuj typy</Link>
+              <Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Get Premium – $5/week</Link>
             </Button>
           </div>
         ) : null}
@@ -128,9 +128,9 @@ export function TopHero() {
         {recentWins.length > 0 && (
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-sm font-semibold">Ostatnio trafione</h2>
+              <h2 className="text-sm font-semibold">Recent winners</h2>
               <Link href="/top" className="flex items-center gap-1 text-xs text-primary hover:underline">
-                Pełna historia <ArrowRight className="h-3 w-3" />
+                Full history <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             <div className="flex gap-3 overflow-x-auto pb-1">

@@ -250,7 +250,7 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
               )}
 
               {!match.forebet && !match.sofascore?.home && !match.scoring && (
-                <EmptyState text="Brak predykcji dla tego zdarzenia." />
+                <EmptyState text="No predictions for this event." />
               )}
 
               {/* Reader-contributed context, kept below the model's own view so

@@ -19,17 +19,17 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  title: 'Pickly — typy sportowe z publicznymi wynikami',
+  title: 'Pickly — sports picks with public results',
   description:
-    'Narzędzie analityczne dla zdarzeń sportowych: kursy, prawdopodobieństwa, wartość oczekiwana i forma drużyn. Nie przyjmujemy zakładów.',
-  keywords: ['analiza', 'sport', 'kursy', 'prawdopodobieństwo', 'wartość oczekiwana', 'statystyki'],
+    'Analytics for sports events: odds, probabilities, expected value and team form. We do not accept bets.',
+  keywords: ['analytics', 'sports', 'odds', 'probability', 'expected value', 'stats'],
 }
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pl" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning

@@ -45,7 +45,7 @@ export default function LeaderboardPage() {
       color: 'text-blue-500',
       coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_predictions ?? 0) / totalMatches) * 100) : 0,
       matchesTracked: stats?.matches_with_predictions ?? 0,
-      description: 'Przewidywania algorytmiczne z prawdopodobieństwem wyniku',
+      description: 'Algorithmic predictions with outcome probabilities',
     },
     {
       rank: 2,
@@ -54,7 +54,7 @@ export default function LeaderboardPage() {
       color: 'text-orange-500',
       coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_sofascore ?? 0) / totalMatches) * 100) : 0,
       matchesTracked: stats?.matches_with_sofascore ?? 0,
-      description: 'Głosy kibiców z serwisu SofaScore',
+      description: 'Fan votes from SofaScore',
     },
     {
       rank: 3,
@@ -66,7 +66,7 @@ export default function LeaderboardPage() {
       // never measured. Unknown is reported as unknown.
       coverage: null,
       matchesTracked: null,
-      description: 'Pogłębiona analiza Google Gemini z uzasadnieniem',
+      description: 'In-depth Google Gemini analysis with reasoning',
     },
     {
       rank: 4,
@@ -75,7 +75,7 @@ export default function LeaderboardPage() {
       color: 'text-emerald-500',
       coverage: totalMatches > 0 ? Math.round(((stats?.matches_with_odds ?? 0) / totalMatches) * 100) : 0,
       matchesTracked: stats?.matches_with_odds ?? 0,
-      description: 'Kursy przedmeczowe od bukmacherów, przez FlashScore',
+      description: 'Pre-match bookmaker odds via FlashScore',
     },
     // Sources without a measured coverage sort last rather than as zero.
   ].sort((a, b) => (b.coverage ?? -1) - (a.coverage ?? -1))
@@ -84,10 +84,10 @@ export default function LeaderboardPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Źródła danych</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Data Sources</h1>
         <p className="text-muted-foreground mt-1">
-          Skąd pochodzą dane i jaka część zdarzeń jest nimi objęta. Podstawa:{' '}
-          {totalMatches.toLocaleString('pl-PL')} zdarzeń z ostatnich 30 dni.
+          Where the data comes from and how many events it covers. Based on{' '}
+          {totalMatches.toLocaleString('en-GB')} events from the last 30 days.
         </p>
       </div>
 
@@ -115,7 +115,7 @@ export default function LeaderboardPage() {
                     <div className="flex items-center justify-between">
                       {getRankIcon(entry.rank)}
                       <Badge variant="secondary" className="text-xs">
-                        {entry.matchesTracked} zdarzeń
+                        {entry.matchesTracked} events
                       </Badge>
                     </div>
                   </CardHeader>
@@ -131,9 +131,9 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="flex items-center justify-between text-sm mb-1">
-                        <span className="text-muted-foreground">Pokrycie</span>
+                        <span className="text-muted-foreground">Coverage</span>
                         <span className="font-mono font-semibold">
-                          {entry.coverage != null ? `${entry.coverage}%` : 'brak danych'}
+                          {entry.coverage != null ? `${entry.coverage}%` : 'no data'}
                         </span>
                       </div>
                       <Progress value={entry.coverage ?? 0} className="h-2" />
@@ -147,8 +147,8 @@ export default function LeaderboardPage() {
           {/* Full source table */}
           <Card>
             <CardHeader>
-              <CardTitle>Wszystkie źródła</CardTitle>
-              <CardDescription>Pokrycie wszystkich śledzonych zdarzeń z ostatnich 30 dni</CardDescription>
+              <CardTitle>All sources</CardTitle>
+              <CardDescription>Coverage of all tracked events in the last 30 days</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -175,8 +175,8 @@ export default function LeaderboardPage() {
                       <div className="w-24 text-right">
                         <span className="text-xs text-muted-foreground">
                           {entry.matchesTracked != null
-                            ? `${entry.matchesTracked} zdarzeń`
-                            : 'brak danych'}
+                            ? `${entry.matchesTracked} events`
+                            : 'no data'}
                         </span>
                       </div>
                     </div>
@@ -190,8 +190,8 @@ export default function LeaderboardPage() {
           {stats?.sport_breakdown && stats.sport_breakdown.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Pokrycie według dyscypliny</CardTitle>
-                <CardDescription>Dostępność predykcji w poszczególnych dyscyplinach</CardDescription>
+                <CardTitle>Coverage by sport</CardTitle>
+                <CardDescription>Prediction availability per sport</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -203,8 +203,8 @@ export default function LeaderboardPage() {
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium">{getSportConfig(sp.sport).name}</p>
                           <p className="text-xs text-muted-foreground">
-                            {sp.total.toLocaleString('pl-PL')} zdarzeń &middot;{' '}
-                            {sp.with_predictions.toLocaleString('pl-PL')} z predykcją
+                            {sp.total.toLocaleString('en-GB')} events &middot;{' '}
+                            {sp.with_predictions.toLocaleString('en-GB')} with predictions
                           </p>
                         </div>
                         <div className="flex shrink-0 items-center gap-2">
@@ -223,26 +223,26 @@ export default function LeaderboardPage() {
           {betStats && betStats.total_bets > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Twoje wyniki</CardTitle>
-                <CardDescription>Statystyki z zapisanych przez Ciebie typów</CardDescription>
+                <CardTitle>Your results</CardTitle>
+                <CardDescription>Stats from the picks you’ve saved</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="text-center">
                     <p className="text-2xl font-bold">{betStats.total_bets}</p>
-                    <p className="text-xs text-muted-foreground">Typy</p>
+                    <p className="text-xs text-muted-foreground">Picks</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-emerald-500">
                       {betStats.win_rate != null ? `${betStats.win_rate.toFixed(1)}%` : '—'}
                     </p>
-                    <p className="text-xs text-muted-foreground">Skuteczność</p>
+                    <p className="text-xs text-muted-foreground">Hit rate</p>
                   </div>
                   <div className="text-center">
                     <p className={cn('text-2xl font-bold tabular-nums', betStats.total_profit >= 0 ? 'text-emerald-500' : 'text-red-500')}>
                       {betStats.total_profit >= 0 ? '+' : ''}{betStats.total_profit.toFixed(2)}
                     </p>
-                    <p className="text-xs text-muted-foreground">Zysk / strata</p>
+                    <p className="text-xs text-muted-foreground">Profit / loss</p>
                   </div>
                   <div className="text-center">
                     <p className={cn('text-2xl font-bold tabular-nums', (betStats.roi ?? 0) >= 0 ? 'text-emerald-500' : 'text-red-500')}>

@@ -30,11 +30,11 @@ export function AuthDialog({ open, onOpenChange }: Props) {
     setError(null)
     setSuccess(null)
     if (!email || !password) {
-      setError('Podaj adres e-mail i hasło')
+      setError('Enter your email and password')
       return
     }
     if (password.length < 6) {
-      setError('Hasło musi mieć co najmniej 6 znaków')
+      setError('Password must be at least 6 characters')
       return
     }
 
@@ -46,7 +46,7 @@ export function AuthDialog({ open, onOpenChange }: Props) {
       const { error: err } = await signUp(email, password)
       if (err) setError(err)
       else {
-        setSuccess('Sprawdź skrzynkę i potwierdź adres e-mail.')
+        setSuccess('Check your inbox to confirm your email.')
       }
     }
   }
@@ -55,7 +55,7 @@ export function AuthDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>{mode === 'login' ? 'Zaloguj się' : 'Utwórz konto'}</DialogTitle>
+          <DialogTitle>{mode === 'login' ? 'Sign in' : 'Create account'}</DialogTitle>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
@@ -71,7 +71,7 @@ export function AuthDialog({ open, onOpenChange }: Props) {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="auth-password">Hasło</Label>
+            <Label htmlFor="auth-password">Password</Label>
             <Input
               id="auth-password"
               type="password"
@@ -87,22 +87,22 @@ export function AuthDialog({ open, onOpenChange }: Props) {
 
           <Button onClick={handleSubmit} disabled={loading} className="w-full">
             {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-            {mode === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
+            {mode === 'login' ? 'Sign in' : 'Sign up'}
           </Button>
 
           <p className="text-xs text-center text-muted-foreground">
             {mode === 'login' ? (
               <>
-                Nie masz konta?{' '}
+                Don’t have an account?{' '}
                 <button className="text-primary underline" onClick={() => { setMode('register'); setError(null); setSuccess(null) }}>
-                  Zarejestruj się
+                  Sign up
                 </button>
               </>
             ) : (
               <>
-                Masz juz konto?{' '}
+                Already have an account?{' '}
                 <button className="text-primary underline" onClick={() => { setMode('login'); setError(null); setSuccess(null) }}>
-                  Zaloguj się
+                  Sign in
                 </button>
               </>
             )}

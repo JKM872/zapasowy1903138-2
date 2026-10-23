@@ -39,16 +39,16 @@ export default function StandingsPage() {
     <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Tabele ligowe</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">League Tables</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Aktualne tabele na podstawie danych Football-Data.org.
+            Current standings based on Football-Data.org data.
           </p>
         </div>
 
         {leagues.length > 0 && (
           <Select value={league} onValueChange={setLeague}>
             <SelectTrigger className="w-[220px]">
-              <SelectValue placeholder="Wybierz ligę" />
+              <SelectValue placeholder="Select league" />
             </SelectTrigger>
             <SelectContent>
               {leagues.map((l) => (
@@ -72,8 +72,8 @@ export default function StandingsPage() {
                 variable, which is our problem, not theirs. */}
             <p className="text-sm text-destructive">
               {(error as Error)?.message?.includes('503')
-                ? 'Tabele są chwilowo niedostępne. Pracujemy nad przywróceniem danych.'
-                : 'Nie udało się pobrać tabeli. Spróbuj ponownie za chwilę.'}
+                ? 'Tables are temporarily unavailable. We are working on restoring the data.'
+                : 'Couldn’t load the table. Please try again shortly.'}
             </p>
           </CardContent>
         </Card>
@@ -87,7 +87,7 @@ export default function StandingsPage() {
               {data.league}
             </CardTitle>
             {data.season && (
-              <CardDescription>Sezon {data.season}</CardDescription>
+              <CardDescription>Season {data.season}</CardDescription>
             )}
           </CardHeader>
           <CardContent className="p-0">
@@ -96,16 +96,16 @@ export default function StandingsPage() {
                 <thead>
                   <tr className="border-b bg-muted/30">
                     <th className="text-left py-2.5 px-3 w-8">#</th>
-                    <th className="text-left py-2.5 px-3">Drużyna</th>
-                    <th className="text-center py-2.5 px-2 w-10" title="Mecze">M</th>
-                    <th className="text-center py-2.5 px-2 w-10" title="Zwycięstwa">Z</th>
-                    <th className="text-center py-2.5 px-2 w-10" title="Remisy">R</th>
-                    <th className="text-center py-2.5 px-2 w-10" title="Porażki">P</th>
-                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell" title="Bramki zdobyte">BZ</th>
-                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell" title="Bramki stracone">BS</th>
-                    <th className="text-center py-2.5 px-2 w-12" title="Różnica bramek">RB</th>
-                    <th className="text-center py-2.5 px-2 w-12 font-bold" title="Punkty">Pkt</th>
-                    <th className="text-center py-2.5 px-2 hidden md:table-cell">Forma</th>
+                    <th className="text-left py-2.5 px-3">Team</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Played">P</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Won">W</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Drawn">D</th>
+                    <th className="text-center py-2.5 px-2 w-10" title="Lost">L</th>
+                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell" title="Goals for">GF</th>
+                    <th className="text-center py-2.5 px-2 w-12 hidden sm:table-cell" title="Goals against">GA</th>
+                    <th className="text-center py-2.5 px-2 w-12" title="Goal difference">GD</th>
+                    <th className="text-center py-2.5 px-2 w-12 font-bold" title="Points">Pts</th>
+                    <th className="text-center py-2.5 px-2 hidden md:table-cell">Form</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,10 +161,10 @@ export default function StandingsPage() {
             {/* Legend */}
             <div className="flex items-center gap-4 text-[10px] text-muted-foreground px-4 py-2 border-t">
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Liga Mistrzów
+                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Champions League
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-red-500" /> Strefa spadkowa
+                <span className="w-2 h-2 rounded-full bg-red-500" /> Relegation zone
               </span>
             </div>
           </CardContent>

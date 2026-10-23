@@ -66,16 +66,16 @@ const newMarkers = [
   { pattern: /SportTabs|sportCounts|sport-tab/i, name: 'SportTabs reference' },
   { pattern: /LeagueGroup|CollapsibleTrigger/i, name: 'LeagueGroup reference' },
   // Three-column bookmaker shell
-  { pattern: /Dyscypliny/i, name: 'SportSidebar heading' },
+  { pattern: /Sports/, name: 'SportSidebar heading' },
   { pattern: /lg:grid-cols-\[232px/i, name: 'EventsShell column template' },
   { pattern: /viewBox/i, name: 'Inline SVG icons' },
   // Text strings that survive minification
-  { pattern: /Typy modelu/i, name: 'CompactFilters: model picks chip' },
-  { pattern: /Warto[śs][ćc]/i, name: 'CompactFilters: value chip' },
+  { pattern: /Model picks/, name: 'CompactFilters: model picks chip' },
+  { pattern: /["']Value["']/, name: 'CompactFilters: value chip' },
   { pattern: /BTTS/i, name: 'Forebet BTTS data' },
   { pattern: /groupMatchesByLeague|sortLeagueGroups/i, name: 'League grouping functions' },
   // Positioning: the bookmaker-style layout must state it is not a bookmaker.
-  { pattern: /nie przyjmujemy zak[łl]ad[óo]w/i, name: 'Footer: not-a-bookmaker notice' },
+  { pattern: /do not accept bets/i, name: 'Footer: not-a-bookmaker notice' },
 ]
 for (const { pattern, name } of newMarkers) {
   assert(pattern.test(content), `Contains: ${name}`)

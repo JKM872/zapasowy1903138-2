@@ -151,8 +151,8 @@ export function MatchList({ matches, liveScores, isLoading, onSelect }: Props) {
   if (filtered.length === 0) {
     return (
       <EmptyState
-        title="Brak zdarzeń"
-        description="Zmień filtry lub wybierz inny dzień."
+        title="No events"
+        description="Change the filters or pick another day."
       />
     )
   }

@@ -57,7 +57,7 @@ export function MatchComments({ matchId }: Props) {
     <div className="space-y-3 rounded-md border border-border bg-card p-4">
       <div className="flex items-center gap-2 text-sm font-medium">
         <MessageSquare className="h-4 w-4 text-sky-400" />
-        Komentarze kibiców
+        Fan comments
         {comments.length > 0 && (
           <span className="text-xs tabular-nums text-muted-foreground">
             {comments.length}
@@ -68,7 +68,7 @@ export function MatchComments({ matchId }: Props) {
       {/* The board has to work without a database, like everything else here. */}
       {data && !data.available && (
         <p className="text-xs text-muted-foreground">
-          Komentarze są chwilowo niedostępne.
+          Comments are temporarily unavailable.
         </p>
       )}
 
@@ -80,7 +80,7 @@ export function MatchComments({ matchId }: Props) {
 
       {isError && (
         <p className="text-xs text-destructive">
-          Nie udało się pobrać komentarzy.
+          Couldn’t load comments.
         </p>
       )}
 
@@ -93,8 +93,8 @@ export function MatchComments({ matchId }: Props) {
               onChange={e => setDraft(e.target.value)}
               rows={3}
               maxLength={MAX_LEN + 200}
-              placeholder="Co warto wiedzieć o tym zdarzeniu? Kontuzje, skład, warunki…"
-              aria-label="Treść komentarza"
+              placeholder="What should others know about this event? Injuries, line-ups, conditions…"
+              aria-label="Comment text"
               className={cn(
                 'w-full resize-y rounded-md border bg-background p-2 text-sm',
                 'placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring',
@@ -108,7 +108,7 @@ export function MatchComments({ matchId }: Props) {
                   tooLong ? 'text-destructive' : 'text-muted-foreground',
                 )}
               >
-                {remaining} znaków
+                {remaining} characters left
               </span>
               <Button
                 size="sm"
@@ -117,21 +117,21 @@ export function MatchComments({ matchId }: Props) {
                 onClick={() => post.mutate()}
               >
                 {post.isPending && <Loader2 className="mr-1 h-3 w-3 animate-spin" />}
-                Dodaj komentarz
+                Post comment
               </Button>
             </div>
             {post.isError && (
               <p className="flex gap-1.5 text-[11px] text-destructive">
                 <TriangleAlert className="mt-px h-3 w-3 shrink-0" />
                 {(post.error as Error)?.message?.includes('429')
-                  ? 'Za dużo komentarzy w krótkim czasie. Odczekaj chwilę.'
-                  : 'Nie udało się dodać komentarza.'}
+                  ? 'Too many comments in a short time. Please wait a moment.'
+                  : 'Couldn’t post your comment.'}
               </p>
             )}
           </div>
         ) : (
           <p className="text-xs text-muted-foreground">
-            Zaloguj się, aby dodać komentarz.
+            Sign in to comment.
           </p>
         )
       )}
@@ -139,7 +139,7 @@ export function MatchComments({ matchId }: Props) {
       {/* Thread */}
       {!isLoading && comments.length === 0 && data?.available && (
         <p className="text-xs text-muted-foreground">
-          Nikt jeszcze nic nie dodał.
+          No comments yet.
         </p>
       )}
 
@@ -158,7 +158,7 @@ export function MatchComments({ matchId }: Props) {
                 <button
                   onClick={() => remove.mutate(c.id)}
                   disabled={remove.isPending}
-                  aria-label="Usuń komentarz"
+                  aria-label="Delete comment"
                   className="ml-auto rounded p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
                 >
                   <Trash2 className="h-3 w-3" />
@@ -174,8 +174,8 @@ export function MatchComments({ matchId }: Props) {
 
       {comments.length > 0 && (
         <p className="border-t border-border/60 pt-2 text-[10px] leading-relaxed text-muted-foreground">
-          Komentarze pochodzą od użytkowników i nie są weryfikowane przez nas.
-          Nie są częścią analizy modelu.
+          Comments come from users and are not verified by us.
+          They are not part of the model’s analysis.
         </p>
       )}
     </div>
@@ -186,7 +186,7 @@ export function MatchComments({ matchId }: Props) {
 function formatWhen(iso: string): string {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return ''
-  return date.toLocaleString('pl-PL', {
+  return date.toLocaleString('en-GB', {
     day: 'numeric',
     month: 'short',
     hour: '2-digit',

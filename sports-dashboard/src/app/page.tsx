@@ -50,7 +50,7 @@ export default function HomePage() {
       >
         {isError && (
           <div className="mb-3 rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-            Nie udało się pobrać zdarzeń: {(error as Error)?.message ?? 'nieznany błąd'}
+            Couldn’t load events: {(error as Error)?.message ?? 'unknown error'}
           </div>
         )}
 

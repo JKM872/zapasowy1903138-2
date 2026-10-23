@@ -23,12 +23,12 @@ import { useSubscription } from '@/hooks/useSubscription'
 // name, and tennis and basketball carry none. The route still exists, but
 // linking to it would send every visitor to an error.
 const NAV_ITEMS = [
-  { href: '/top',           label: 'Typy TOP',     icon: Star         },
-  { href: '/dropping-odds', label: 'Spadki kursów', icon: TrendingDown },
-  { href: '/stats',       label: 'Statystyki',  icon: BarChart3  },
-  { href: '/my-bets',     label: 'Moje typy',   icon: Ticket     },
+  { href: '/top',           label: 'Top Picks',    icon: Star         },
+  { href: '/dropping-odds', label: 'Dropping Odds', icon: TrendingDown },
+  { href: '/stats',       label: 'Stats',       icon: BarChart3  },
+  { href: '/my-bets',     label: 'My Picks',    icon: Ticket     },
   // The page ranks data sources by coverage, not users, so "Ranking" misled.
-  { href: '/leaderboard', label: 'Źródła',      icon: Users      },
+  { href: '/leaderboard', label: 'Sources',     icon: Users      },
 ]
 
 function NavLinks({ mobile, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
@@ -95,7 +95,7 @@ export function Header() {
           <span className="hidden flex-col leading-none sm:flex">
             <span className="text-lg tracking-tight">Pickly</span>
             <span className="hidden text-[10px] font-normal text-muted-foreground xl:block">
-              typy z wynikami
+              picks with results
             </span>
           </span>
           <span className="text-lg tracking-tight sm:hidden">Pickly</span>
@@ -115,10 +115,10 @@ export function Header() {
             variant={isSubscriber ? 'ghost' : 'default'}
             size="sm"
             className={cn('shrink-0 gap-1.5', isSubscriber && 'text-amber-500')}
-            title={isSubscriber ? 'Premium aktywne' : 'Odblokuj ocenę A'}
+            title={isSubscriber ? 'Premium active' : 'Unlock Grade A'}
           >
             <Crown className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">{isSubscriber ? 'Premium' : 'Kup dostęp'}</span>
+            <span className="hidden sm:inline">{isSubscriber ? 'Premium' : 'Get Premium'}</span>
           </Button>
         </Link>
 
@@ -128,14 +128,14 @@ export function Header() {
             <span className="hidden sm:inline text-xs text-muted-foreground truncate max-w-[120px]">
               {user.email}
             </span>
-            <Button variant="ghost" size="icon" onClick={() => signOut()} title="Wyloguj">
+            <Button variant="ghost" size="icon" onClick={() => signOut()} title="Sign out">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
         ) : (
           <Button variant="outline" size="sm" onClick={() => setAuthOpen(true)} className="shrink-0 gap-1.5">
             <LogIn className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Zaloguj</span>
+            <span className="hidden sm:inline">Sign in</span>
           </Button>
         )}
 
@@ -148,7 +148,7 @@ export function Header() {
         >
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Przełącz motyw</span>
+          <span className="sr-only">Toggle theme</span>
         </Button>
       </div>
 

@@ -62,21 +62,21 @@ export function StatsOverview({ data }: StatsOverviewProps) {
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6">
       <StatCard
         icon={BarChart3}
-        label="Zdarzenia"
-        value={data.total_matches.toLocaleString('pl-PL')}
-        subtitle="zebrane łącznie"
+        label="Events"
+        value={data.total_matches.toLocaleString('en-GB')}
+        subtitle="collected in total"
       />
       <StatCard
         icon={Target}
-        label="Z predykcją"
-        value={data.matches_with_predictions.toLocaleString('pl-PL')}
-        subtitle="z Forebet"
+        label="With predictions"
+        value={data.matches_with_predictions.toLocaleString('en-GB')}
+        subtitle="from Forebet"
       />
       <StatCard
         icon={Percent}
-        label="Skuteczność (30 dni)"
+        label="Accuracy (30 days)"
         value={data.accuracy_30d != null ? `${data.accuracy_30d.toFixed(1)}%` : '—'}
-        subtitle={data.accuracy_30d != null ? 'trafione typy' : 'jeszcze nieliczona'}
+        subtitle={data.accuracy_30d != null ? 'picks won' : 'not calculated yet'}
         trend={
           data.accuracy_30d != null
             ? +(data.accuracy_30d - 50).toFixed(1)
@@ -85,21 +85,21 @@ export function StatsOverview({ data }: StatsOverviewProps) {
       />
       <StatCard
         icon={Trophy}
-        label="Najlepsza dyscyplina"
+        label="Best sport"
         value={bestSport ? getSportConfig(bestSport.sport).name : '—'}
-        subtitle={bestSport ? 'najwyższa skuteczność' : 'brak danych o skuteczności'}
+        subtitle={bestSport ? 'highest accuracy' : 'no accuracy data'}
       />
       <StatCard
         icon={TrendingUp}
-        label="Z kursami"
-        value={(data.matches_with_odds ?? 0).toLocaleString('pl-PL')}
-        subtitle="kursy bukmacherskie"
+        label="With odds"
+        value={(data.matches_with_odds ?? 0).toLocaleString('en-GB')}
+        subtitle="bookmaker odds"
       />
       <StatCard
         icon={Clock}
-        label="ROI (30 dni)"
+        label="ROI (30 days)"
         value={data.roi_30d != null ? `${data.roi_30d.toFixed(1)}%` : '—'}
-        subtitle={data.roi_30d != null ? 'zwrot z inwestycji' : 'jeszcze nieliczony'}
+        subtitle={data.roi_30d != null ? 'return on investment' : 'not calculated yet'}
       />
     </div>
   )

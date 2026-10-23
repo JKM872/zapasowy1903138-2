@@ -36,7 +36,7 @@ export function SportTabs({ sportCounts = {}, className }: Props) {
                 : 'text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
-            Wszystkie
+            All
             <span className="text-[10px] tabular-nums opacity-70">{allCount}</span>
           </button>
 

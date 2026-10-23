@@ -19,9 +19,9 @@ interface Props {
 }
 
 const FORM_CONFIG: Record<string, { color: string; label: string; short: string }> = {
-  W: { color: 'bg-emerald-500', label: 'Wygrana', short: 'Z' },
-  D: { color: 'bg-zinc-500', label: 'Remis', short: 'R' },
-  L: { color: 'bg-rose-500', label: 'Porażka', short: 'P' },
+  W: { color: 'bg-emerald-500', label: 'Win', short: 'W' },
+  D: { color: 'bg-zinc-500', label: 'Draw', short: 'D' },
+  L: { color: 'bg-rose-500', label: 'Loss', short: 'L' },
 }
 
 export function FormTimeline({ form, teamName, maxItems = 5, className }: Props) {

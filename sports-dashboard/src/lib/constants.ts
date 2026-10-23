@@ -47,14 +47,14 @@ export interface SportConfig {
  * racket. Everything else maps one to one.
  */
 export const SPORTS: SportConfig[] = [
-  { id: 'football',     name: 'Piłka nożna',   icon: MdSportsSoccer,     color: 'text-emerald-500', hasDraw: true,  order: 1 },
-  { id: 'tennis',       name: 'Tenis',         icon: MdSportsTennis,     color: 'text-violet-500',  hasDraw: false, order: 2 },
-  { id: 'basketball',   name: 'Koszykówka',    icon: MdSportsBasketball, color: 'text-amber-500',   hasDraw: false, order: 3 },
-  { id: 'handball',     name: 'Piłka ręczna',  icon: MdSportsHandball,   color: 'text-teal-500',    hasDraw: true,  order: 4 },
-  { id: 'hockey',       name: 'Hokej',         icon: MdSportsHockey,     color: 'text-sky-500',     hasDraw: true,  order: 5 },
-  { id: 'volleyball',   name: 'Siatkówka',     icon: MdSportsVolleyball, color: 'text-pink-500',    hasDraw: false, order: 6 },
+  { id: 'football',     name: 'Football',      icon: MdSportsSoccer,     color: 'text-emerald-500', hasDraw: true,  order: 1 },
+  { id: 'tennis',       name: 'Tennis',        icon: MdSportsTennis,     color: 'text-violet-500',  hasDraw: false, order: 2 },
+  { id: 'basketball',   name: 'Basketball',    icon: MdSportsBasketball, color: 'text-amber-500',   hasDraw: false, order: 3 },
+  { id: 'handball',     name: 'Handball',      icon: MdSportsHandball,   color: 'text-teal-500',    hasDraw: true,  order: 4 },
+  { id: 'hockey',       name: 'Ice Hockey',    icon: MdSportsHockey,     color: 'text-sky-500',     hasDraw: true,  order: 5 },
+  { id: 'volleyball',   name: 'Volleyball',    icon: MdSportsVolleyball, color: 'text-pink-500',    hasDraw: false, order: 6 },
   { id: 'baseball',     name: 'Baseball',      icon: MdSportsBaseball,   color: 'text-orange-500',  hasDraw: false, order: 7 },
-  { id: 'table_tennis', name: 'Tenis stołowy', icon: MdSportsTennis,     color: 'text-lime-500',    hasDraw: false, order: 8 },
+  { id: 'table_tennis', name: 'Table Tennis',  icon: MdSportsTennis,     color: 'text-lime-500',    hasDraw: false, order: 8 },
 ]
 
 const SPORT_BY_ID = new Map(SPORTS.map(s => [s.id, s]))
@@ -62,7 +62,7 @@ const SPORT_BY_ID = new Map(SPORTS.map(s => [s.id, s]))
 /** Shown for any sport key the registry does not recognise. */
 export const UNKNOWN_SPORT: SportConfig = {
   id: 'unknown',
-  name: 'Inne',
+  name: 'Other',
   icon: MdSportsScore,
   color: 'text-zinc-400',
   hasDraw: false,
@@ -102,12 +102,12 @@ export function sportsFromCounts(
 // Market labels
 // ---------------------------------------------------------------------------
 export const PREDICTION_LABELS: Record<string, string> = {
-  '1': 'Gospodarz',
-  'X': 'Remis',
-  '2': 'Gość',
-  '1X': 'Gospodarz lub remis',
-  'X2': 'Remis lub gość',
-  '12': 'Bez remisu',
+  '1': 'Home',
+  'X': 'Draw',
+  '2': 'Away',
+  '1X': 'Home or draw',
+  'X2': 'Draw or away',
+  '12': 'No draw',
 }
 
 export const PREDICTION_COLORS: Record<string, string> = {
@@ -139,20 +139,20 @@ export const MARKET_COLUMNS_2WAY = ['1', '2'] as const
 // Confidence tiers
 // ---------------------------------------------------------------------------
 export function getConfidenceTier(confidence: number) {
-  if (confidence >= 85) return { label: 'Bardzo wysoka', color: 'text-emerald-400', bg: 'bg-emerald-500' }
-  if (confidence >= 70) return { label: 'Wysoka',        color: 'text-sky-400',     bg: 'bg-sky-500'     }
-  if (confidence >= 55) return { label: 'Średnia',       color: 'text-amber-400',   bg: 'bg-amber-500'   }
-  return { label: 'Niska', color: 'text-zinc-400', bg: 'bg-zinc-500' }
+  if (confidence >= 85) return { label: 'Very high', color: 'text-emerald-400', bg: 'bg-emerald-500' }
+  if (confidence >= 70) return { label: 'High',          color: 'text-sky-400',     bg: 'bg-sky-500'     }
+  if (confidence >= 55) return { label: 'Medium',        color: 'text-amber-400',   bg: 'bg-amber-500'   }
+  return { label: 'Low', color: 'text-zinc-400', bg: 'bg-zinc-500' }
 }
 
 // ---------------------------------------------------------------------------
 // Quick filter presets
 // ---------------------------------------------------------------------------
 export const QUICK_FILTERS = [
-  { label: 'Najwyższa pewność', action: { minConfidence: 85, hasPredictions: true } },
-  { label: 'Z kursami',         action: { hasOdds: true, hasPredictions: true }     },
-  { label: 'Dziś',              action: { date: 'today' as const }                  },
-  { label: 'Jutro',             action: { date: 'tomorrow' as const }               },
+  { label: 'Top confidence'   , action: { minConfidence: 85, hasPredictions: true } },
+  { label: 'With odds',         action: { hasOdds: true, hasPredictions: true }     },
+  { label: 'Today',             action: { date: 'today' as const }                  },
+  { label: 'Tomorrow',          action: { date: 'tomorrow' as const }               },
 ]
 
 // ---------------------------------------------------------------------------

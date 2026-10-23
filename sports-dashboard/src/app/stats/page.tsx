@@ -15,9 +15,9 @@ export default function StatsPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-3 py-6 sm:px-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Statystyki</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Stats</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Pokrycie danymi i skuteczność predykcji w podziale na dyscypliny.
+          Data coverage and prediction accuracy by sport.
         </p>
       </div>
 
@@ -29,7 +29,7 @@ export default function StatsPage() {
 
       {isError && (
         <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-          Nie udało się pobrać statystyk: {(error as Error)?.message ?? 'nieznany błąd'}
+          Couldn’t load stats: {(error as Error)?.message ?? 'unknown error'}
         </div>
       )}
 

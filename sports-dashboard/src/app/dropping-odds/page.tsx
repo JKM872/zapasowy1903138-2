@@ -48,12 +48,12 @@ export default function DroppingOddsPage() {
       <div>
         <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
           <TrendingDown className="h-6 w-6 text-primary" />
-          Spadki kursów
+          Dropping Odds
         </h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Zdarzenia, na których kurs wyraźnie spadł od otwarcia. Spadek oznacza,
-          że pieniądze poszły na tę stronę — pokazujemy ruch i to, co o tym
-          zdarzeniu już wiemy.
+          Events where the odds have dropped sharply since opening. A drop means
+          money came in on that side. We show the move and what we already know
+          about the event.
         </p>
       </div>
 
@@ -61,23 +61,23 @@ export default function DroppingOddsPage() {
       <div className="flex gap-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-xs leading-relaxed text-muted-foreground">
         <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
         <p>
-          <strong className="text-foreground">Nie wiemy, dlaczego kurs spadł.</strong>{' '}
-          Powodem bywa kontuzja, skład, pogoda albo duży zakład — nic z tego nie
-          znajduje się w naszych danych. Pokazujemy sam ruch i dołączone analizy,
-          bez zgadywania przyczyny. Spadek kursu nie jest rekomendacją.
+          <strong className="text-foreground">We don’t know why the odds dropped.</strong>{' '}
+          It may be an injury, a line-up change, the weather or a big bet. None of
+          that is in our data. We show the move and the attached analysis without
+          guessing the cause. A drop in odds is not a recommendation.
         </p>
       </div>
 
       {/* What the verdicts rest on, stated once above the list. */}
       {data?.model?.settled ? (
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Przy każdym zdarzeniu podajemy, jak historycznie wypadały podobne ruchy
-          (ta sama dyscyplina i strona), na podstawie {data.model.settled.toLocaleString('pl-PL')}{' '}
-          rozstrzygniętych spadków
-          {data.model.dateRange && <> z okresu {data.model.dateRange.from} – {data.model.dateRange.to}</>}.
-          Ocena „zarabiało” wymaga zysku w obu połowach okresu i po obniżeniu kursu o 5%,
-          bo realnie łapie się gorszą cenę niż w chwili odczytu. Ogólnie stawianie na stronę,
-          na którą spadł kurs, traciło.
+          For each event we show how similar moves (same sport and side) have performed
+          historically, based on {data.model.settled.toLocaleString('en-GB')}{' '}
+          settled drops
+          {data.model.dateRange && <> from {data.model.dateRange.from} – {data.model.dateRange.to}</>}.
+          A “profitable” rating requires a profit in both halves of the period, even with odds
+          cut by 5%, because in practice you get a worse price than at the time of reading.
+          Overall, backing the side whose odds dropped has lost money.
         </p>
       ) : null}
 
@@ -88,7 +88,7 @@ export default function DroppingOddsPage() {
           onValueChange={value => setDate(value)}
         >
           <SelectTrigger className="w-[170px]">
-            <SelectValue placeholder="Wybierz dzień" />
+            <SelectValue placeholder="Select day" />
           </SelectTrigger>
           <SelectContent>
             {(data?.availableDates ?? []).map(d => (
@@ -106,7 +106,7 @@ export default function DroppingOddsPage() {
               : 'text-muted-foreground hover:bg-accent',
           )}
         >
-          Wszystkie
+          All
         </button>
         {sportEntries.map(([key, count]) => {
           const cfg = getSportConfig(key)
@@ -133,19 +133,19 @@ export default function DroppingOddsPage() {
       {/* Headline numbers */}
       {summary && summary.count > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Stat label="Zdarzenia" value={String(summary.count)} />
+          <Stat label="Events" value={String(summary.count)} />
           <Stat
-            label="Mediana spadku"
+            label="Median drop"
             value={summary.medianDrop != null ? `${summary.medianDrop}%` : '—'}
           />
           <Stat
-            label="Największy spadek"
+            label="Largest drop"
             value={summary.maxDrop != null ? `${summary.maxDrop}%` : '—'}
           />
           <Stat
-            label="Spadki ≥ 20%"
+            label="Drops ≥ 20%"
             value={String(summary.bigMoves ?? 0)}
-            hint="tu rozkład się przerzedza"
+            hint="where the data thins out"
           />
         </div>
       )}
@@ -158,7 +158,7 @@ export default function DroppingOddsPage() {
 
       {isError && (
         <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-          Nie udało się pobrać spadków kursów.
+          Couldn’t load dropping odds.
         </div>
       )}
 
@@ -176,7 +176,7 @@ export default function DroppingOddsPage() {
                 : 'border-border text-muted-foreground hover:bg-accent',
             )}
           >
-            Wszystkie spadki
+            All drops
             <span className="ml-1.5 text-[10px] tabular-nums opacity-70">{allEvents.length}</span>
           </button>
           <button
@@ -190,7 +190,7 @@ export default function DroppingOddsPage() {
                 : 'border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10',
             )}
           >
-            Tylko te, które historycznie zarabiały
+            Historically profitable only
             <span className="ml-1.5 text-[10px] tabular-nums opacity-80">{worthCount}</span>
           </button>
         </div>
@@ -200,8 +200,8 @@ export default function DroppingOddsPage() {
         <Card>
           <CardContent className="py-12 text-center text-sm text-muted-foreground">
             {onlyWorth
-              ? 'Dziś żaden spadek nie należy do segmentu, który historycznie zarabiał. To częsty i uczciwy wynik — nie każdy dzień ma okazję.'
-              : 'Brak zdarzeń dla wybranego dnia i dyscypliny.'}
+              ? 'No drop today falls into a historically profitable segment. That is a common, honest result. Not every day has an edge.'
+              : 'No events for the selected day and sport.'}
           </CardContent>
         </Card>
       )}
@@ -210,12 +210,12 @@ export default function DroppingOddsPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              {onlyWorth ? 'Spadki w segmentach, które zarabiały' : 'Lista spadków'}
+              {onlyWorth ? 'Drops in profitable segments' : 'All drops'}
             </CardTitle>
             <CardDescription>
               {onlyWorth
-                ? 'Historia, nie gwarancja — przy każdym zdarzeniu podajemy, na ilu ruchach opiera się ocena.'
-                : 'Największy ruch na górze. Dane z trzech przebiegów dziennie — pokazujemy najświeższy odczyt każdego zdarzenia.'}
+                ? 'History, not a guarantee. Each event shows how many moves the rating is based on.'
+                : 'Largest move first. Data from three runs a day; we show the latest reading for each event.'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -240,9 +240,9 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 }
 
 const VERDICT_STYLE: Record<DropVerdict['verdict'], { label: string; cls: string }> = {
-  warto: { label: 'Historycznie zarabiało', cls: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-500' },
-  nie_warto: { label: 'Historycznie traciło', cls: 'border-rose-500/40 bg-rose-500/10 text-rose-500' },
-  za_malo_danych: { label: 'Za mało danych', cls: 'border-border bg-muted text-muted-foreground' },
+  warto: { label: 'Historically profitable', cls: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-500' },
+  nie_warto: { label: 'Historically unprofitable', cls: 'border-rose-500/40 bg-rose-500/10 text-rose-500' },
+  za_malo_danych: { label: 'Not enough data', cls: 'border-border bg-muted text-muted-foreground' },
 }
 
 /**
@@ -258,10 +258,10 @@ function VerdictLine({ verdict: v }: { verdict: DropVerdict }) {
       </span>
       {v.n != null && v.n > 0 && (
         <span className="text-muted-foreground tabular-nums">
-          {v.n} podobnych ruchów
-          {v.hitRate != null && <> · trafność {v.hitRate}%</>}
+          {v.n} similar moves
+          {v.hitRate != null && <> · hit rate {v.hitRate}%</>}
           {v.roiRealistic != null && (
-            <> · ROI po realnym kursie{' '}
+            <> · ROI at realistic odds{' '}
               <span className={cn('font-semibold', v.roiRealistic >= 0 ? 'text-emerald-500' : 'text-rose-500')}>
                 {v.roiRealistic > 0 ? '+' : ''}{v.roiRealistic}%
               </span>
@@ -327,7 +327,7 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-border/60 pt-2 text-[11px]">
           {e.homeForm.length > 0 && (
             <span className="flex items-center gap-1.5">
-              <span className="text-muted-foreground">Forma</span>
+              <span className="text-muted-foreground">Form</span>
               <FormTimeline form={e.homeForm} teamName={e.homeTeam} maxItems={5} />
               <span className="text-muted-foreground/50">/</span>
               <FormTimeline form={e.awayForm} teamName={e.awayTeam} maxItems={5} />
@@ -340,10 +340,10 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
               <span className="font-semibold text-foreground tabular-nums">
                 {e.h2hHomeWins ?? 0}–{e.h2hAwayWins ?? 0}
               </span>
-              {e.h2hCount > 0 && <span className="opacity-70"> z {e.h2hCount}</span>}
+              {e.h2hCount > 0 && <span className="opacity-70"> of {e.h2hCount}</span>}
               {e.h2hWinRate != null && (
                 <span className="opacity-70">
-                  {' '}· faworyt {(e.h2hWinRate * 100).toFixed(0)}%
+                  {' '}· favourite {(e.h2hWinRate * 100).toFixed(0)}%
                 </span>
               )}
             </span>
@@ -351,14 +351,14 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
 
           {e.lastH2hScore && (
             <span className="text-muted-foreground">
-              Ostatni: <span className="font-semibold text-foreground">{e.lastH2hScore}</span>
+              Last: <span className="font-semibold text-foreground">{e.lastH2hScore}</span>
               {e.lastH2hDate && <span className="opacity-70"> ({e.lastH2hDate})</span>}
             </span>
           )}
 
           {e.advancedScore != null && (
             <span className="text-muted-foreground">
-              Ocena modelu{' '}
+              Model score{' '}
               <span className="font-semibold text-foreground tabular-nums">
                 {e.advancedScore.toFixed(0)}/100
               </span>
@@ -378,7 +378,7 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
 
           {e.formAdvantage && (
             <Badge variant="secondary" className="px-1 py-0 text-[9px]">
-              przewaga formy
+              form edge
             </Badge>
           )}
         </div>
@@ -386,7 +386,7 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
 
       {!hasAnalysis && (
         <p className="mt-1.5 text-[10px] text-muted-foreground">
-          Brak dołączonej analizy dla tego zdarzenia.
+          No analysis attached to this event.
         </p>
       )}
     </div>

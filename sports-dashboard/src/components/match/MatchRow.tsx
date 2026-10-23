@@ -83,7 +83,7 @@ export function MatchRow({
         {isLive ? (
           <LiveScoreBadge liveScore={liveScore} className="px-1 py-0 text-[10px]" />
         ) : isFinished ? (
-          <span className="text-[11px] font-medium">KOŃ</span>
+          <span className="text-[11px] font-medium">FT</span>
         ) : (
           <span className="text-[11px] font-medium tabular-nums">
             {formatMatchTime(match.time)}
@@ -150,7 +150,7 @@ export function MatchRow({
 
           {pick && (
             <span className="shrink-0 text-[11px] text-muted-foreground">
-              Typ:{' '}
+              Pick:{' '}
               <span className="font-semibold text-foreground">
                 {PREDICTION_LABELS[pick] ?? pick}
               </span>
@@ -169,7 +169,7 @@ export function MatchRow({
               className="shrink-0 gap-0.5 border-amber-400/30 px-1 py-0 text-[9px] text-amber-400"
             >
               <Gem className="h-2.5 w-2.5" />
-              <span className="hidden sm:inline">Wartość</span>
+              <span className="hidden sm:inline">Value</span>
             </Badge>
           )}
 
@@ -223,7 +223,7 @@ export function MatchRow({
         <button
           type="button"
           onClick={e => { e.stopPropagation(); onSelect?.(match) }}
-          aria-label={`Szczegóły: ${match.homeTeam} - ${match.awayTeam}`}
+          aria-label={`Details: ${match.homeTeam} - ${match.awayTeam}`}
           className="rounded p-0.5 text-muted-foreground/30 transition-colors group-hover:text-foreground/60 hover:bg-accent"
         >
           <ChevronRight className="h-4 w-4 shrink-0" />
@@ -262,7 +262,7 @@ function OddsButton({
     <button
       type="button"
       disabled={odds == null}
-      aria-label={`${label}: ${odds != null ? formatOdds(odds) : 'brak kursu'}`}
+      aria-label={`${label}: ${odds != null ? formatOdds(odds) : 'no odds'}`}
       aria-pressed={isSelected}
       onClick={e => {
         e.stopPropagation()

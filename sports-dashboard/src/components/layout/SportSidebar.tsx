@@ -45,7 +45,7 @@ export function SportSidebar({
       counts.set(m.league, (counts.get(m.league) ?? 0) + 1)
     }
     return [...counts.entries()]
-      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pl'))
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'en'))
   }, [matches, activeSport])
 
   function selectSport(id: Sport | 'all') {
@@ -54,9 +54,9 @@ export function SportSidebar({
   }
 
   return (
-    <nav className={cn('flex flex-col gap-1 text-sm', className)} aria-label="Dyscypliny">
+    <nav className={cn('flex flex-col gap-1 text-sm', className)} aria-label="Sports">
       <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-        Dyscypliny
+        Sports
       </p>
 
       <button
@@ -69,7 +69,7 @@ export function SportSidebar({
         )}
       >
         <SportIcon sport="unknown" className="h-[18px] w-[18px]" />
-        <span className="flex-1">Wszystkie</span>
+        <span className="flex-1">All</span>
         <span className="text-xs tabular-nums opacity-70">{total}</span>
       </button>
 
@@ -106,7 +106,7 @@ export function SportSidebar({
                       className="flex w-full items-center gap-1 rounded px-2 py-1 text-left text-xs text-primary hover:bg-panel-hover"
                     >
                       <X className="h-3 w-3" />
-                      Pokaż wszystkie ligi
+                      Show all leagues
                     </button>
                   </li>
                 )}
@@ -135,7 +135,7 @@ export function SportSidebar({
 
       {sports.length === 0 && (
         <p className="px-2 py-4 text-xs text-muted-foreground">
-          Brak zdarzeń dla wybranego dnia.
+          No events for the selected day.
         </p>
       )}
     </nav>

@@ -47,7 +47,7 @@ export function OnboardingDialog({ sportCounts = {}, matches = [] }: Props) {
       counts.set(m.league, (counts.get(m.league) ?? 0) + 1)
     }
     return [...counts.entries()]
-      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pl'))
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'en'))
       .slice(0, MAX_LEAGUE_CHOICES)
   }, [matches, sports])
 
@@ -70,17 +70,17 @@ export function OnboardingDialog({ sportCounts = {}, matches = [] }: Props) {
     <Dialog open={open} onOpenChange={o => !o && finish([], [])}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Co Cię interesuje?</DialogTitle>
+          <DialogTitle>What are you into?</DialogTitle>
           <DialogDescription>
-            Zaznacz dyscypliny i ligi, które śledzisz. Będziemy pokazywać je
-            najwyżej. Zmienisz to później w każdej chwili.
+            Pick the sports and leagues you follow and we’ll show them first.
+            You can change this anytime.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Dyscypliny
+              Sports
             </p>
             <div className="flex flex-wrap gap-1.5">
               {sportOptions.map(({ config, count }) => {
@@ -112,7 +112,7 @@ export function OnboardingDialog({ sportCounts = {}, matches = [] }: Props) {
           {leagueOptions.length > 0 && (
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Ligi {sports.length > 0 && '(z wybranych dyscyplin)'}
+                Leagues {sports.length > 0 && '(from selected sports)'}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {leagueOptions.map(([league, count]) => {
@@ -147,7 +147,7 @@ export function OnboardingDialog({ sportCounts = {}, matches = [] }: Props) {
             onClick={() => finish([], [])}
             disabled={save.isPending}
           >
-            Pomiń
+            Skip
           </Button>
           <Button
             size="sm"
@@ -156,7 +156,7 @@ export function OnboardingDialog({ sportCounts = {}, matches = [] }: Props) {
             disabled={save.isPending}
           >
             {save.isPending && <Loader2 className="mr-1 h-3 w-3 animate-spin" />}
-            Zapisz
+            Save
           </Button>
         </div>
       </DialogContent>

@@ -23,26 +23,26 @@ function fmtPct(v: number | null | undefined, signed = false) {
 }
 
 const STATUS: Record<string, { label: string; cls: string }> = {
-  won: { label: 'Wygrany', cls: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' },
-  lost: { label: 'Przegrany', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
-  draw: { label: 'Remis (przegrany)', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
+  won: { label: 'Won', cls: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' },
+  lost: { label: 'Lost', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
+  draw: { label: 'Draw (lost)', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
 }
 
 function StatusBadge({ pick }: { pick: TopPick }) {
   const st = pick.result?.status
   const meta = st ? STATUS[st] : undefined
   if (!meta) {
-    return <span className="rounded px-2 py-0.5 text-xs bg-muted text-muted-foreground">Oczekuje</span>
+    return <span className="rounded px-2 py-0.5 text-xs bg-muted text-muted-foreground">Pending</span>
   }
   return <span className={cn('rounded px-2 py-0.5 text-xs font-medium', meta.cls)}>{meta.label}</span>
 }
 
 function SummaryTiles({ s }: { s: TopSummary }) {
   const tiles = [
-    { label: 'Rozliczone typy', value: `${s.settled} / ${s.picks}` },
-    { label: 'Trafność', value: fmtPct(s.hitRate) },
-    { label: 'ROI (stawka 1 j.)', value: fmtPct(s.roi, true), tone: s.roi },
-    { label: 'Zysk', value: s.profitUnits === null ? '—' : `${s.profitUnits > 0 ? '+' : ''}${s.profitUnits.toFixed(2)} j.`, tone: s.profitUnits },
+    { label: 'Settled picks', value: `${s.settled} / ${s.picks}` },
+    { label: 'Hit rate', value: fmtPct(s.hitRate) },
+    { label: 'ROI (1-unit stake)', value: fmtPct(s.roi, true), tone: s.roi },
+    { label: 'Profit', value: s.profitUnits === null ? '—' : `${s.profitUnits > 0 ? '+' : ''}${s.profitUnits.toFixed(2)} u`, tone: s.profitUnits },
   ]
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -75,22 +75,22 @@ export default function TopPage() {
       <div>
         <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
           <Star className="h-6 w-6 text-primary" />
-          Typy TOP
+          Top Picks
         </h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Nasze najmocniejsze typy dnia. Każdy rozliczony typ zostaje tu na stałe —
-          z wynikiem, kursem i zyskiem — żebyś mógł sam sprawdzić, jak działają.
+          Our strongest picks of the day. Every settled pick stays here for good,
+          with its result, odds and profit, so you can check the record yourself.
         </p>
       </div>
 
       {isLoading && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie…
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading…
         </div>
       )}
       {isError && (
         <div className="flex items-center gap-2 rounded-md border border-red-500/30 p-3 text-sm text-red-600" role="alert">
-          <TriangleAlert className="h-4 w-4" /> Nie udało się pobrać typów TOP.
+          <TriangleAlert className="h-4 w-4" /> Couldn’t load Top Picks.
         </div>
       )}
 
@@ -98,14 +98,14 @@ export default function TopPage() {
         <>
           <SummaryTiles s={data.summary} />
           <p className="text-xs text-muted-foreground">
-            ROI liczone przy stałej stawce 1 jednostki na typ, po kursie z chwili publikacji.
-            Remis przy typie na zwycięzcę liczymy jako przegraną. Mała próba — wyniki z kilku dni mogą się mocno wahać.
+            ROI assumes a flat 1-unit stake per pick at the odds when published.
+            A draw on a winner pick counts as a loss. Small sample: results over a few days can swing a lot.
           </p>
 
           {Object.keys(data.bySport).length > 0 && (
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Według dyscypliny</CardTitle>
+                <CardTitle className="text-base">By sport</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {Object.entries(data.bySport)
@@ -130,11 +130,11 @@ export default function TopPage() {
                 <CardTitle className="flex flex-wrap items-baseline justify-between gap-2 text-base">
                   <span>{day.date}</span>
                   <span className="text-sm font-normal text-muted-foreground">
-                    {day.summary.won}/{day.summary.settled} trafionych · ROI {fmtPct(day.summary.roi, true)}
+                    {day.summary.won}/{day.summary.settled} won · ROI {fmtPct(day.summary.roi, true)}
                   </span>
                 </CardTitle>
                 {day.summary.pending > 0 && (
-                  <CardDescription>{day.summary.pending} typów czeka na rozliczenie</CardDescription>
+                  <CardDescription>{day.summary.pending} picks awaiting settlement</CardDescription>
                 )}
               </CardHeader>
               <CardContent className="space-y-2">
@@ -148,7 +148,7 @@ export default function TopPage() {
                           <span className="font-medium">{p.match}</span>
                           {p.league && <span className="ml-2 text-xs text-muted-foreground">{p.league}</span>}
                         </span>
-                        <span>Typ: <b>{p.pick}</b></span>
+                        <span>Pick: <b>{p.pick}</b></span>
                         <span className="tabular-nums">@ {p.odds ? formatOdds(p.odds) : '—'}</span>
                         {p.grade && <Badge variant="secondary">{p.grade}</Badge>}
                         {p.result?.score && <span className="tabular-nums text-muted-foreground">{p.result.score}</span>}
@@ -161,10 +161,10 @@ export default function TopPage() {
                   <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-dashed p-3">
                     <span className="flex items-center gap-2 text-sm">
                       <Lock className="h-4 w-4 text-muted-foreground" />
-                      {day.locked} typów TOP przed meczem — dostępne w Premium
+                      {day.locked} Top Picks before kick-off, available in Premium
                     </span>
                     <Button asChild size="sm">
-                      <Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Odblokuj</Link>
+                      <Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Unlock</Link>
                     </Button>
                   </div>
                 )}

@@ -43,12 +43,12 @@ export function EventsShell({
           <SheetTrigger asChild>
             <Button variant="outline" size="sm" className="gap-1.5">
               <PanelLeft className="h-4 w-4" />
-              Dyscypliny
+              Sports
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[280px] overflow-y-auto">
             <SheetHeader>
-              <SheetTitle>Dyscypliny</SheetTitle>
+              <SheetTitle>Sports</SheetTitle>
             </SheetHeader>
             <div className="mt-3">
               <SportSidebar
@@ -65,7 +65,7 @@ export function EventsShell({
             <SheetTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto gap-1.5">
                 <ShoppingCart className="h-4 w-4" />
-                Koszyk
+                Slip
                 {asideCount > 0 && (
                   <span className="rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground tabular-nums">
                     {asideCount}
@@ -75,7 +75,7 @@ export function EventsShell({
             </SheetTrigger>
             <SheetContent side="right" className="w-[340px] overflow-y-auto">
               <SheetHeader>
-                <SheetTitle>Koszyk analityczny</SheetTitle>
+                <SheetTitle>Analysis slip</SheetTitle>
               </SheetHeader>
               <div className="mt-3">{aside}</div>
             </SheetContent>

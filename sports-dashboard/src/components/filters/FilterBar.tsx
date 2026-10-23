@@ -151,12 +151,12 @@ export function FilterBar() {
         </label>
         <label className="flex items-center gap-2 text-sm cursor-pointer">
           <Switch checked={store.hasPredictions} onCheckedChange={store.setHasPredictions} className="scale-90" />
-          Z predykcją
+          With predictions
         </label>
         {SHOW_FAN_VOTE && (
           <label className="flex items-center gap-2 text-sm cursor-pointer">
             <Switch checked={store.hasSofascore} onCheckedChange={store.setHasSofascore} className="scale-90" />
-            Z głosami kibiców
+            With fan votes
           </label>
         )}
       </div>
