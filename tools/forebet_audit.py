@@ -246,6 +246,27 @@ def settle_one(m: Dict[str, Any]) -> Dict[str, Any]:
             'score': f'{sh}-{sa}', 'orientation': orient}
 
 
+def _top_norm(name: Any) -> str:
+    return ' '.join(str(name or '').lower().split())
+
+
+def _published_top_keys() -> set:
+    """(date, home, away) of every pick ever published in results/top_*.json."""
+    keys = set()
+    for path in glob.glob(os.path.join(RESULTS_DIR, 'top_*.json')):
+        day = os.path.basename(path)[4:14]
+        try:
+            with open(path, encoding='utf-8-sig') as fh:
+                raw = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        for r in raw if isinstance(raw, list) else []:
+            parts = str(r.get('match') or '').split(' vs ', 1)
+            if len(parts) == 2:
+                keys.add((day, _top_norm(parts[0]), _top_norm(parts[1])))
+    return keys
+
+
 def settle(matches: List[Dict[str, Any]], store: Dict[str, Any],
            max_settle: int, time_budget: float) -> Dict[str, int]:
     """Rozlicz zakwalifikowane typy z dni zakończonych. Aktualizuje ``store``."""
@@ -262,6 +283,17 @@ def settle(matches: List[Dict[str, Any]], store: Dict[str, Any],
         if rec and rec.get('tries', 0) >= MAX_SETTLE_TRIES:
             continue
         todo.append(m)
+
+    # Order matters because the time budget settles ~110 picks a run against a
+    # backlog of ~3 000. Oldest-first meant the audit spent weeks on September
+    # and never reached the current week, so published TOP picks — the ones a
+    # reader actually acts on — stayed unsettled. Published TOP first, then
+    # newest first; the old backlog still drains in the leftover budget.
+    top_keys = _published_top_keys()
+    todo.sort(key=lambda m: (
+        0 if (m['_date'], _top_norm(m.get('homeTeam')), _top_norm(m.get('awayTeam'))) in top_keys else 1,
+        [-ord(c) for c in m['_date']],
+    ))
 
     stats = defaultdict(int)
     started = time.time()

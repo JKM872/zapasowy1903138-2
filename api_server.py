@@ -179,6 +179,13 @@ def _latest_local_date():
     return max(dates) if dates else None
 
 
+def _sub_dict(match, key):
+    # Nested fields (odds, h2h, sofascore...) are sometimes a number or string;
+    # calling .get on them crashed /api/stats with a 500.
+    val = match.get(key)
+    return val if isinstance(val, dict) else {}
+
+
 def find_result_files(date_str=None, sport=None):
     """Find result JSON files matching criteria."""
     pattern = os.path.join(RESULTS_DIR, '*.json')
@@ -338,7 +345,7 @@ def normalize_match(match):
     # v4: Build forebet with all 3 probabilities
     forebet_data = None
     if match.get('forebet_prediction') or match.get('forebet'):
-        fb = match.get('forebet') or {}
+        fb = _sub_dict(match, 'forebet')
         forebet_data = {
             'prediction': match.get('forebet_prediction') or fb.get('prediction'),
             'probability': safe_value(match.get('forebet_probability')) or safe_value(fb.get('probability')),
@@ -353,7 +360,7 @@ def normalize_match(match):
     # v4: Build gemini from JSON files (was missing before!)
     gemini_data = None
     if match.get('gemini_prediction') or match.get('gemini'):
-        gm = match.get('gemini') or {}
+        gm = _sub_dict(match, 'gemini')
         gemini_data = {
             'prediction': match.get('gemini_prediction') or gm.get('prediction'),
             'confidence': safe_value(match.get('gemini_confidence')) or safe_value(gm.get('confidence')),
@@ -388,11 +395,11 @@ def normalize_match(match):
         'qualifies': match.get('qualifies', False),
         # H2H Data
         'h2h': {
-            'home': match.get('h2h_home_wins') or match.get('home_wins_in_h2h_last5') or (match.get('h2h') or {}).get('home', 0),
-            'draw': match.get('h2h_draws') or (match.get('h2h') or {}).get('draw', 0),
-            'away': match.get('h2h_away_wins') or match.get('away_wins_in_h2h_last5') or (match.get('h2h') or {}).get('away', 0),
-            'total': match.get('h2h_total') or match.get('h2h_count') or (match.get('h2h') or {}).get('total', 5),
-            'winRate': safe_value(match.get('h2h_win_rate')) or safe_value(match.get('win_rate')) or safe_value((match.get('h2h') or {}).get('winRate', 0)),
+            'home': match.get('h2h_home_wins') or match.get('home_wins_in_h2h_last5') or _sub_dict(match, 'h2h').get('home', 0),
+            'draw': match.get('h2h_draws') or _sub_dict(match, 'h2h').get('draw', 0),
+            'away': match.get('h2h_away_wins') or match.get('away_wins_in_h2h_last5') or _sub_dict(match, 'h2h').get('away', 0),
+            'total': match.get('h2h_total') or match.get('h2h_count') or _sub_dict(match, 'h2h').get('total', 5),
+            'winRate': safe_value(match.get('h2h_win_rate')) or safe_value(match.get('win_rate')) or safe_value(_sub_dict(match, 'h2h').get('winRate', 0)),
         },
         # Form Data
         'homeForm': match.get('home_form') or match.get('homeForm', []),
@@ -402,19 +409,19 @@ def normalize_match(match):
         'formAdvantage': match.get('form_advantage') or match.get('formAdvantage', False),
         # Odds - używamy safe_value() aby filtrować NaN
         'odds': {
-            'home': safe_value(match.get('home_odds')) or safe_value((match.get('odds') or {}).get('home')),
-            'draw': safe_value(match.get('draw_odds')) or safe_value((match.get('odds') or {}).get('draw')),
-            'away': safe_value(match.get('away_odds')) or safe_value((match.get('odds') or {}).get('away')),
-            'bookmaker': match.get('odds_bookmaker') or (match.get('odds') or {}).get('bookmaker', 'Unknown'),
+            'home': safe_value(match.get('home_odds')) or safe_value(_sub_dict(match, 'odds').get('home')),
+            'draw': safe_value(match.get('draw_odds')) or safe_value(_sub_dict(match, 'odds').get('draw')),
+            'away': safe_value(match.get('away_odds')) or safe_value(_sub_dict(match, 'odds').get('away')),
+            'bookmaker': match.get('odds_bookmaker') or _sub_dict(match, 'odds').get('bookmaker', 'Unknown'),
         },
         # Forebet - v4: includes all 3 probabilities
         'forebet': forebet_data,
         # SofaScore - używamy safe_value() aby filtrować NaN
         'sofascore': {
-            'home': safe_value(match.get('sofascore_home_win_prob')) or safe_value((match.get('sofascore') or {}).get('home')),
-            'draw': safe_value(match.get('sofascore_draw_prob')) or safe_value((match.get('sofascore') or {}).get('draw')),
-            'away': safe_value(match.get('sofascore_away_win_prob')) or safe_value((match.get('sofascore') or {}).get('away')),
-            'votes': safe_value(match.get('sofascore_total_votes'), 0) or safe_value((match.get('sofascore') or {}).get('votes'), 0),
+            'home': safe_value(match.get('sofascore_home_win_prob')) or safe_value(_sub_dict(match, 'sofascore').get('home')),
+            'draw': safe_value(match.get('sofascore_draw_prob')) or safe_value(_sub_dict(match, 'sofascore').get('draw')),
+            'away': safe_value(match.get('sofascore_away_win_prob')) or safe_value(_sub_dict(match, 'sofascore').get('away')),
+            'votes': safe_value(match.get('sofascore_total_votes'), 0) or safe_value(_sub_dict(match, 'sofascore').get('votes'), 0),
         } if safe_value(match.get('sofascore_home_win_prob')) or match.get('sofascore') else None,
         # Gemini AI - v4: now included for JSON files too!
         'gemini': gemini_data,
@@ -439,14 +446,14 @@ def normalize_match(match):
         # Top-level confidence: gemini > scoring > forebet
         'confidence': (
             safe_value((gemini_data or {}).get('confidence'))
-            or safe_value((match.get('scoring') or {}).get('confidence'))
+            or safe_value(_sub_dict(match, 'scoring').get('confidence'))
             or safe_value(match.get('scoring_confidence'))
             or safe_value((forebet_data or {}).get('probability'))
             or 0
         ),
         # Value bet: scoring EV > 0
         'value_bet': (
-            safe_value((match.get('scoring') or {}).get('ev'))
+            safe_value(_sub_dict(match, 'scoring').get('ev'))
             or safe_value(match.get('scoring_ev'))
             or 0
         ) > 0,
@@ -701,6 +708,8 @@ def get_stats():
         files = find_result_files(date_str)
         for f in files:
             for m in load_matches_from_file(f):
+                if not isinstance(m, dict):
+                    continue  # some result files hold non-match rows (e.g. strings)
                 nm = normalize_match(m)
                 total_matches += 1
                 sport = nm['sport']
@@ -730,12 +739,38 @@ def get_stats():
         'matches_with_predictions': matches_with_predictions,
         'matches_with_sofascore': matches_with_sofascore,
         'matches_with_odds': matches_with_odds,
-        'accuracy_7d': None,
-        'accuracy_30d': None,
-        'roi_7d': None,
-        'roi_30d': None,
+        # Measured on the published TOP record — the picks readers were actually
+        # sent — rather than on every scraped match, which nobody bets.
+        **_top_track_record(),
         'sport_breakdown': sport_breakdown
     })
+
+
+def _top_track_record() -> dict:
+    out = {'accuracy_7d': None, 'accuracy_30d': None, 'roi_7d': None,
+           'roi_30d': None, 'top_settled': 0}
+    try:
+        from top_feed import load_top
+        data = load_top(is_subscriber=True)
+    except Exception as e:
+        logger.warning('TOP track record unavailable: %s', e)
+        return out
+    today = datetime.now().date()
+
+    def window(days):
+        picks = [p for d in data['days'] for p in d['picks']
+                 if (today - datetime.strptime(d['date'], '%Y-%m-%d').date()).days <= days
+                 and p['result']['status'] in ('won', 'lost', 'draw')]
+        if not picks:
+            return None, None
+        won = [p for p in picks if p['result']['status'] == 'won']
+        profit = sum(p['odds'] or 0 for p in won) - len(picks)
+        return round(len(won) / len(picks) * 100, 1), round(profit / len(picks) * 100, 1)
+
+    out['accuracy_7d'], out['roi_7d'] = window(7)
+    out['accuracy_30d'], out['roi_30d'] = window(30)
+    out['top_settled'] = data['summary'].get('settled', 0)
+    return out
 
 
 @app.route('/api/sports', methods=['GET'])
@@ -1803,6 +1838,22 @@ def get_dropping_odds():
     )
     payload['summary'] = summarise(payload['events'])
     return jsonify(payload)
+
+
+# =============================================================================
+# TOP PICKS — published record, settled; unsettled picks only for subscribers
+# =============================================================================
+
+@app.route('/api/top', methods=['GET'])
+@optional_auth
+def get_top():
+    try:
+        from top_feed import load_top
+    except Exception as e:
+        logger.warning('top_feed unavailable: %s', e)
+        return jsonify({'days': [], 'summary': {'picks': 0}, 'bySport': {},
+                        'isSubscriber': False})
+    return jsonify(load_top(is_subscriber=_current_user_is_subscriber()))
 
 
 # =============================================================================
