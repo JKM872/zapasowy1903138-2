@@ -1,17 +1,7 @@
 {
   "date": "2026-10-23",
-  "generated_at": "2026-10-23T14:20:27.296282+00:00",
+  "generated_at": "2026-10-23T19:22:36.401704+00:00",
   "issues": [
-    {
-      "level": "ALERT",
-      "workflow": "daily_digest.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
-    },
     {
       "level": "WARN",
       "workflow": "SOFASCORE_RELAY",
@@ -59,41 +49,36 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 39893939691,
+        "databaseId": 40001277505,
         "status": "completed",
-        "conclusion": "cancelled",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39893939691"
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40001277505"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 2,
+      "runs_today": 4,
       "issues": [],
       "run": {
-        "databaseId": 39936162465,
-        "status": "completed",
-        "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39936162465"
+        "databaseId": 40009415343,
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40009415343"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "daily_digest.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 39994537653,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/39994537653"
+      }
     }
   ],
   "relays": [
@@ -135,7 +120,7 @@
     }
   ],
   "counts": {
-    "ALERT": 1,
+    "ALERT": 0,
     "WARN": 1
   }
 }
