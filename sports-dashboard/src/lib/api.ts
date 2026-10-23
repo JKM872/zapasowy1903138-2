@@ -464,3 +464,8 @@ export interface TopResponse {
 export async function getTopPicks(): Promise<TopResponse> {
   return fetchApi<TopResponse>('/api/top')
 }
+
+// Stripe Customer Portal: cancel or change the card without contacting us.
+export async function openBillingPortal(): Promise<{ url: string }> {
+  return fetchApi('/api/billing-portal', { method: 'POST' })
+}

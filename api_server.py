@@ -1226,6 +1226,29 @@ def create_checkout_session():
         return jsonify({'error': 'Failed to create checkout session'}), 502
 
 
+@app.route('/api/billing-portal', methods=['POST'])
+@require_auth
+def create_billing_portal_session():
+    """Stripe Customer Portal: lets a subscriber cancel or change their card
+    without contacting us (required for a fair recurring weekly charge)."""
+    if not STRIPE_AVAILABLE:
+        return jsonify({'error': 'Payments not configured'}), 503
+    user_id = getattr(request, 'user_id', 'anonymous')
+    if not user_id or user_id == 'anonymous':
+        return jsonify({'error': 'Authentication required'}), 401
+    sub = supabase.get_subscription(user_id) if SUPABASE_AVAILABLE else None
+    customer_id = (sub or {}).get('stripe_customer_id')
+    if not customer_id:
+        return jsonify({'error': 'No subscription found'}), 404
+    try:
+        session = _stripe.billing_portal.Session.create(
+            customer=customer_id, return_url=f'{FRONTEND_URL}/pricing')
+        return jsonify({'url': session.url})
+    except Exception as e:
+        logger.error('Stripe billing portal failed: %s', e)
+        return jsonify({'error': 'Failed to open billing portal'}), 502
+
+
 @app.route('/api/subscription/status', methods=['GET'])
 @require_auth
 def subscription_status():
@@ -1288,8 +1311,18 @@ def _sync_subscription_from_stripe(sub_obj: dict) -> None:
         stripe_customer_id=sub_obj.get('customer'),
         stripe_subscription_id=sub_obj.get('id'),
         status=sub_obj.get('status'),
-        current_period_end=_iso_from_epoch(sub_obj.get('current_period_end')),
+        current_period_end=_iso_from_epoch(_period_end(sub_obj)),
     )
+
+
+def _period_end(sub_obj: dict):
+    """Period end epoch. Newer Stripe API versions moved it from the
+    subscription onto its items; read whichever is present."""
+    if sub_obj.get('current_period_end'):
+        return sub_obj['current_period_end']
+    items = ((sub_obj.get('items') or {}).get('data')) or []
+    ends = [i.get('current_period_end') for i in items if i.get('current_period_end')]
+    return max(ends) if ends else None
 
 
 # Simple in-memory idempotency guard against Stripe event retries.
@@ -1316,6 +1349,8 @@ def stripe_webhook():
 
     try:
         event = _stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+        # stripe>=8 objects no longer support dict-style .get(); work on plain dicts.
+        event = event.to_dict()
     except ValueError:
         return jsonify({'error': 'Invalid payload'}), 400
     except _stripe.error.SignatureVerificationError:
@@ -1339,10 +1374,9 @@ def stripe_webhook():
             user_id = data_object.get('client_reference_id') or (data_object.get('metadata') or {}).get('user_id')
             customer_id = data_object.get('customer')
             if sub_id:
-                sub_obj = _stripe.Subscription.retrieve(sub_id)
+                sub_obj = _stripe.Subscription.retrieve(sub_id).to_dict()
                 # Ensure user_id is present even if metadata was lost.
                 if user_id and not (sub_obj.get('metadata') or {}).get('user_id'):
-                    sub_obj = dict(sub_obj)
                     sub_obj.setdefault('metadata', {})['user_id'] = user_id
                 _sync_subscription_from_stripe(sub_obj)
             elif user_id and SUPABASE_AVAILABLE:
@@ -1358,7 +1392,7 @@ def stripe_webhook():
                     user_id,
                     stripe_subscription_id=data_object.get('id'),
                     status='canceled',
-                    current_period_end=_iso_from_epoch(data_object.get('current_period_end')),
+                    current_period_end=_iso_from_epoch(_period_end(data_object)),
                 )
         # Other event types are acknowledged but ignored.
 

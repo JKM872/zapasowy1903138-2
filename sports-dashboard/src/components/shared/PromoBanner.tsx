@@ -25,7 +25,7 @@ export function PromoBanner() {
             Odblokuj zdarzenia z oceną A — analizy o najwyższej pewności modelu
           </p>
           <p className="text-xs text-muted-foreground">
-            Ocena B jest darmowa. Pełna analiza w Premium za 5 USD tygodniowo.
+            Ocena B jest darmowa. Pełna analiza w Premium za 19 zł tygodniowo.
           </p>
         </div>
         <span className="hidden items-center gap-1 text-xs font-semibold text-primary sm:inline-flex">

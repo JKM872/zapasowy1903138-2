@@ -1,5 +1,5 @@
 // ============================================================================
-// Pricing Page – weekly $5 subscription that unlocks Grade A predictions
+// Pricing Page – weekly 19 zł subscription that unlocks Grade A predictions
 // ============================================================================
 'use client'
 
@@ -25,6 +25,7 @@ const FREE_FEATURES = [
 
 const PREMIUM_FEATURES = [
   'Wszystko z planu darmowego',
+  'Typy TOP przed meczem (wyniki rozliczonych typów są publiczne)',
   'Analizy z oceną A, o najwyższej pewności modelu',
   'Pełna analiza modelu, wartość oczekiwana i kryterium Kelly',
   'Wskazania wartości i poziom pewności',
@@ -77,10 +78,22 @@ function PricingContent() {
       if (url) {
         window.location.href = url
       } else {
-        toast.error('Could not start checkout. Please try again.')
+        toast.error('Nie udało się rozpocząć płatności. Spróbuj ponownie.')
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Nie udało się rozpocząć płatności')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleManage = async () => {
+    setLoading(true)
+    try {
+      const { url } = await api.openBillingPortal()
+      if (url) window.location.href = url
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Nie udało się otworzyć panelu płatności')
     } finally {
       setLoading(false)
     }
@@ -98,7 +111,7 @@ function PricingContent() {
         </h1>
         <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
           Ocena B pozostaje darmowa na stałe. W Premium widzisz zdarzenia z oceną A,
-          o najwyższej pewności modelu, wraz z pełną analizą. 5 USD tygodniowo,
+          o najwyższej pewności modelu, wraz z pełną analizą. 19 zł tygodniowo,
           rezygnacja w każdej chwili.
         </p>
       </div>
@@ -111,7 +124,7 @@ function PricingContent() {
             <p className="text-sm text-muted-foreground">Start bez karty płatniczej</p>
           </div>
           <div className="mb-6">
-            <span className="text-3xl font-bold">$0</span>
+            <span className="text-3xl font-bold">0 zł</span>
             <span className="text-muted-foreground">/tydzień</span>
           </div>
           <ul className="space-y-2.5 flex-1">
@@ -141,7 +154,7 @@ function PricingContent() {
             <p className="text-sm text-muted-foreground">Pełny dostęp do ocen A</p>
           </div>
           <div className="mb-6">
-            <span className="text-3xl font-bold">$5</span>
+            <span className="text-3xl font-bold">19 zł</span>
             <span className="text-muted-foreground">/tydzień</span>
           </div>
           <ul className="space-y-2.5 flex-1">
@@ -158,6 +171,9 @@ function PricingContent() {
               <Button className="w-full gap-1.5" disabled>
                 <Crown className="h-4 w-4" /> Subskrypcja aktywna
               </Button>
+              <Button variant="outline" className="w-full" onClick={handleManage} disabled={loading}>
+                Zarządzaj subskrypcją lub zrezygnuj
+              </Button>
               {currentPeriodEnd && (
                 <p className="text-xs text-center text-muted-foreground">
                   Odnowienie {new Date(currentPeriodEnd).toLocaleDateString('pl-PL')}
@@ -171,7 +187,7 @@ function PricingContent() {
               ) : (
                 <Lock className="h-4 w-4" />
               )}
-              {user ? 'Wykup dostęp za 5 USD tygodniowo' : 'Zaloguj się, aby wykupić dostęp'}
+              {user ? 'Wykup dostęp za 19 zł tygodniowo' : 'Zaloguj się, aby wykupić dostęp'}
             </Button>
           )}
         </Card>
