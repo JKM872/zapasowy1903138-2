@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Trophy, BarChart3, Ticket, Users, Sun, Moon, Menu, LogIn, LogOut, Crown,
-  TrendingDown,
+  TrendingDown, Star,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
@@ -23,6 +23,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 // name, and tennis and basketball carry none. The route still exists, but
 // linking to it would send every visitor to an error.
 const NAV_ITEMS = [
+  { href: '/top',           label: 'Typy TOP',     icon: Star         },
   { href: '/dropping-odds', label: 'Spadki kursów', icon: TrendingDown },
   { href: '/stats',       label: 'Statystyki',  icon: BarChart3  },
   { href: '/my-bets',     label: 'Moje typy',   icon: Ticket     },

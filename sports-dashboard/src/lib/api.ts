@@ -419,3 +419,48 @@ export async function getDroppingOdds(params: {
   const qs = search.toString()
   return fetchApi<DroppingOddsResponse>(`/api/dropping-odds${qs ? '?' + qs : ''}`)
 }
+
+// ============================================================================
+// TOP picks – public track record. Settled picks are public; unsettled ones
+// come back only for subscribers (server-side paywall), the rest as `locked`.
+// ============================================================================
+export interface TopSummary {
+  picks: number
+  settled: number
+  won: number
+  pending: number
+  hitRate: number | null
+  roi: number | null
+  profitUnits: number | null
+}
+
+export interface TopPick {
+  date: string
+  match: string
+  pick: string
+  odds: number | null
+  sport: string
+  time?: string
+  league?: string
+  grade?: string
+  signals?: string
+  result?: { status: string; score?: string } | null
+}
+
+export interface TopDay {
+  date: string
+  summary: TopSummary
+  picks: TopPick[]
+  locked: number
+}
+
+export interface TopResponse {
+  isSubscriber: boolean
+  summary: TopSummary
+  bySport: Record<string, TopSummary>
+  days: TopDay[]
+}
+
+export async function getTopPicks(): Promise<TopResponse> {
+  return fetchApi<TopResponse>('/api/top')
+}
