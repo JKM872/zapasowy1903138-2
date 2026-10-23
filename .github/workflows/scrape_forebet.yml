@@ -26,7 +26,10 @@ on:
   schedule:
     # 04:00 UTC = 06:00 PL latem / 05:00 zimą. O 00:00 UTC Forebet (zegar US)
     # pokazuje jeszcze poprzedni dzień — piłka miała 1 mecz zamiast ~1400.
-    - cron: '0 4 * * *'
+    # GitHub starts scheduled runs late — 04:00 fired at ~09:00 UTC on 20-22.10,
+  # so morning TOP arrived after the first matches. 01:00 lands it before dawn
+  # even with that delay. Moved, not duplicated: a second run would resend mail.
+  - cron: '0 1 * * *'
 
   workflow_dispatch:
     inputs:
