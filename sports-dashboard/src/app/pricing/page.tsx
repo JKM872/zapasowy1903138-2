@@ -144,7 +144,7 @@ function PricingContent() {
         <Card className="p-6 flex flex-col relative border-primary/40 ring-1 ring-primary/20">
           <div className="absolute -top-3 left-6">
             <Badge className="gap-1 bg-primary text-primary-foreground">
-              <Crown className="h-3.5 w-3.5" /> Najczęściej wybierany
+              <Crown className="h-3.5 w-3.5" /> Premium
             </Badge>
           </div>
           <div className="mb-4">

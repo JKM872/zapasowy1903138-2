@@ -69,7 +69,7 @@ export function RadialProgress({
       </svg>
       {showValue && (
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-xs font-bold leading-none" style={{ color: strokeColor }}>
+          <span className="font-bold leading-none tabular-nums" style={{ color: strokeColor, fontSize: Math.max(8, Math.round(size * 0.28)) }}>
             {Math.round(value)}%
           </span>
           {label && (

@@ -11,7 +11,7 @@ export function Footer() {
     <footer className="mt-6 border-t border-border bg-panel">
       <div className="mx-auto max-w-[1700px] space-y-3 px-2 py-5 text-xs text-muted-foreground sm:px-4">
         <p className="max-w-3xl leading-relaxed">
-          <strong className="text-foreground">Analiza Sportowa</strong> to narzędzie
+          <strong className="text-foreground">Pickly</strong> to narzędzie
           analityczne. Nie jesteśmy bukmacherem: nie przyjmujemy zakładów, nie
           prowadzimy rozliczeń i nie wypłacamy wygranych. Prezentowane kursy pochodzą
           od podmiotów zewnętrznych i mają charakter informacyjny. Prawdopodobieństwa

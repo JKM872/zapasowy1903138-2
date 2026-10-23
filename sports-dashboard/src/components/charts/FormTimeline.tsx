@@ -1,5 +1,5 @@
 // ============================================================================
-// FormTimeline – Colored W/D/L boxes (SofaScore style)
+// FormTimeline – recent results as small coloured boxes (Z / R / P)
 // ============================================================================
 'use client'
 
@@ -18,34 +18,34 @@ interface Props {
   className?: string
 }
 
-const FORM_CONFIG: Record<string, { color: string; label: string }> = {
-  W: { color: 'bg-emerald-500', label: 'Win' },
-  D: { color: 'bg-amber-500', label: 'Draw' },
-  L: { color: 'bg-rose-500', label: 'Loss' },
+const FORM_CONFIG: Record<string, { color: string; label: string; short: string }> = {
+  W: { color: 'bg-emerald-500', label: 'Wygrana', short: 'Z' },
+  D: { color: 'bg-zinc-500', label: 'Remis', short: 'R' },
+  L: { color: 'bg-rose-500', label: 'Porażka', short: 'P' },
 }
 
 export function FormTimeline({ form, teamName, maxItems = 5, className }: Props) {
-  if (!form || form.length === 0) return null
-
-  const items = form.slice(-maxItems)
+  // Scrapers send brackets and dashes as separate entries ("[", "-", "]");
+  // rendering them produced empty orange boxes. Keep only real results.
+  const clean = (form ?? []).join('').toUpperCase().replace(/[^WDL]/g, '').split('').filter(Boolean)
+  if (clean.length === 0) return null
+  const items = clean.slice(-maxItems)
 
   return (
     <TooltipProvider>
       <div className={cn('flex items-center gap-0.5', className)}>
         {items.map((result, i) => {
-          const cfg = FORM_CONFIG[result.toUpperCase()] ?? FORM_CONFIG.D
-
+          const cfg = FORM_CONFIG[result]
           return (
             <Tooltip key={i}>
               <TooltipTrigger asChild>
                 <div
                   className={cn(
-                    'flex items-center justify-center rounded-sm text-white font-bold',
-                    'h-5 w-5 text-[9px] leading-none',
+                    'flex h-4 w-4 items-center justify-center rounded-sm text-[8px] font-bold leading-none text-white',
                     cfg.color,
                   )}
                 >
-                  {result.toUpperCase()}
+                  {cfg.short}
                 </div>
               </TooltipTrigger>
               <TooltipContent side="top" className="text-xs">

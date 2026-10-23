@@ -219,7 +219,7 @@ export function MatchRow({
 
       {/* ─── Confidence + the row's keyboard-accessible trigger ─── */}
       <div className="hidden items-center justify-end gap-0.5 border-l border-border/30 pr-1 lg:flex">
-        {conf > 0 ? <RadialProgress value={conf} size={30} strokeWidth={3} /> : <span className="w-[30px]" />}
+        {conf > 0 ? <RadialProgress value={conf} size={34} strokeWidth={3} /> : <span className="w-[30px]" />}
         <button
           type="button"
           onClick={e => { e.stopPropagation(); onSelect?.(match) }}
@@ -269,8 +269,8 @@ function OddsButton({
         if (odds != null) onPick?.(match, outcome, odds)
       }}
       className={cn(
-        'flex flex-col items-center justify-center rounded border font-mono tabular-nums transition-colors',
-        compact ? 'h-7 min-w-[46px] px-1 text-[11px]' : 'h-9 w-full text-xs',
+        'flex flex-col items-center justify-center rounded-md border font-semibold tabular-nums transition-colors',
+        compact ? 'h-8 min-w-[52px] px-1 text-xs' : 'h-9 w-full text-[13px]',
         odds == null
           ? 'cursor-default border-transparent bg-transparent text-muted-foreground/40'
           : isSelected

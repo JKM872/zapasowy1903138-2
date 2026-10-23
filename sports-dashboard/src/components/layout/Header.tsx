@@ -90,16 +90,15 @@ export function Header() {
         </Sheet>
 
         {/* Logo */}
-        {/* Brand name is a placeholder until the real one is chosen. */}
         <Link href="/" className="flex shrink-0 items-center gap-2 whitespace-nowrap font-bold">
           <Trophy className="h-5 w-5 shrink-0 text-primary" />
           <span className="hidden flex-col leading-none sm:flex">
-            <span className="text-base">Analiza Sportowa</span>
+            <span className="text-lg tracking-tight">Pickly</span>
             <span className="hidden text-[10px] font-normal text-muted-foreground xl:block">
-              narzędzie analityczne
+              typy z wynikami
             </span>
           </span>
-          <span className="text-base sm:hidden">AS</span>
+          <span className="text-lg tracking-tight sm:hidden">Pickly</span>
         </Link>
 
         {/* Desktop nav */}

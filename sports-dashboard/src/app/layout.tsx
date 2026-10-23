@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  title: 'Analiza zdarzeń sportowych',
+  title: 'Pickly — typy sportowe z publicznymi wynikami',
   description:
     'Narzędzie analityczne dla zdarzeń sportowych: kursy, prawdopodobieństwa, wartość oczekiwana i forma drużyn. Nie przyjmujemy zakładów.',
   keywords: ['analiza', 'sport', 'kursy', 'prawdopodobieństwo', 'wartość oczekiwana', 'statystyki'],

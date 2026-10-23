@@ -10,7 +10,7 @@ import { EventsShell } from '@/components/layout/EventsShell'
 import { SportTabs } from '@/components/navigation/SportTabs'
 import { DateCarousel } from '@/components/navigation/DateCarousel'
 import { CompactFilters } from '@/components/filters/CompactFilters'
-import { PromoBanner } from '@/components/shared/PromoBanner'
+import { TopHero } from '@/components/home/TopHero'
 import { AnalysisBasket } from '@/components/basket/AnalysisBasket'
 import { OnboardingDialog } from '@/components/shared/OnboardingDialog'
 import { useMatches, useLiveScores } from '@/hooks/useMatches'
@@ -29,6 +29,7 @@ export default function HomePage() {
 
   return (
     <>
+      <TopHero />
       <DateCarousel />
 
       {/* Sports live in the sidebar on desktop; these tabs cover narrow screens. */}
@@ -40,7 +41,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      <PromoBanner />
 
       <EventsShell
         sportCounts={sportCounts}
