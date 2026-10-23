@@ -23,7 +23,17 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MIN_ODDS = {'football': float(os.getenv('TOP_MIN_ODDS_FOOTBALL', '2.0'))}
 # Hokej wraca do TOP: 17.10 trafił 9/12 przy kursach 1.65–2.30.
 EXCLUDED_SPORTS = {s for s in os.getenv('TOP_EXCLUDED_SPORTS', '').split(',') if s}
-MIN_WINS = int(os.getenv('TOP_MIN_WINS', '3'))
+# Backtest 2026-09-12..10-22 (1 714 settled qualified matches, split in halves):
+#   old rules  (A/B, 3 wins of 5): 131 picks, 3.9/day, ROI +24.9% (+18.6% at -5% odds)
+#   relaxed    (A/B/C, 2 of 5)   : 370 picks, 10/day,  ROI +22.9% (+16.7% at -5% odds)
+# The added picks earned on their own in BOTH halves (+43.9% / +15.0%), except
+# basketball, where the extra picks were flat after a realistic price
+# (-0.2%) — so basketball keeps the old, stricter rules.
+MIN_WINS = int(os.getenv('TOP_MIN_WINS', '2'))
+DEFAULT_GRADES = tuple(g for g in os.getenv('TOP_GRADES', 'A,B,C').split(',') if g)
+STRICT_SPORTS = {s for s in os.getenv('TOP_STRICT_SPORTS', 'basketball').split(',') if s}
+STRICT_MIN_WINS = 3
+STRICT_GRADES = ('A', 'B')
 PTS = {'W': 3, 'D': 1, 'L': 0}
 
 
@@ -38,6 +48,10 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
     # sezonie, model daleko od rynku, albo forma ogólna sprzeczna z sezonową.
     if m.get('earlySeason') or m.get('staleModel') or m.get('seasonFormConflict'):
         return None
+    strict = sport in STRICT_SPORTS
+    if strict and (m.get('predictionGrade') or '') not in STRICT_GRADES:
+        return None
+    min_wins = STRICT_MIN_WINS if strict else MIN_WINS
     pick = (m.get('scoring') or {}).get('pick')
     if pick not in ('1', '2'):
         return None
@@ -100,9 +114,9 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         return sum(1 for x in f if x == 'W') if len(f) >= 3 else None
     venue_me = form.get('homeAtHome' if me == 'home' else 'awayAtAway')
     venue_op = form.get('awayAtAway' if me == 'home' else 'homeAtHome')
-    if (_wins(form.get(me)) or 0) < MIN_WINS:
+    if (_wins(form.get(me)) or 0) < min_wins:
         return None
-    if _wins(venue_me) is not None and _wins(venue_me) < MIN_WINS:
+    if _wins(venue_me) is not None and _wins(venue_me) < min_wins:
         return None
     if sport == 'basketball' and me == 'away':
         if (_wins(venue_me) or 0) <= 2 and _wins(venue_op) != 0:
@@ -164,7 +178,7 @@ def _form_block(m: Dict[str, Any]) -> str:
         return ''
 
 
-def collect(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
+def collect(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
     out = []
     for p in sorted(glob.glob(os.path.join(ROOT, 'results', f'matches_{day}_*_forebet.json'))):
         sport = os.path.basename(p)[len(f'matches_{day}_'):-len('_forebet.json')]
@@ -225,7 +239,7 @@ def enrich_injuries(m: Dict[str, Any], sport: str, day: str, side: Optional[str]
         print(f"   ⚠️ Absencje {m.get('homeTeam')}: {type(e).__name__}")
 
 
-def collect_enriched(day: str, grades=('A', 'B')) -> List[Dict[str, Any]]:
+def collect_enriched(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
     """Jak collect(), ale kandydatom bez Fan Vote dociąga go przed oceną."""
     out = []
     for p in sorted(glob.glob(os.path.join(ROOT, 'results', f'matches_{day}_*_forebet.json'))):
@@ -449,7 +463,7 @@ if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     day = args[0] if args else date.today().isoformat()
-    grades = ('A', 'B')
+    grades = DEFAULT_GRADES
     for a in sys.argv[1:]:
         if a.startswith('--grades='):
             grades = tuple(a.split('=', 1)[1].split(','))
