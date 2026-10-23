@@ -22,6 +22,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def build_app(monkeypatch, *, secret=None, port=None, allow_insecure=None):
     """A one-route app with auth_middleware reloaded under given environment."""
+    # Supabase URL/key enable verification by asking Supabase; clear them so
+    # these tests exercise the "nothing configured" path regardless of the
+    # machine's environment.
+    for var in ('SUPABASE_URL', 'SUPABASE_KEY', 'SUPABASE_ANON_KEY',
+                'SUPABASE_SERVICE_ROLE_KEY'):
+        monkeypatch.delenv(var, raising=False)
     for var, value in (('SUPABASE_JWT_SECRET', secret),
                        ('PORT', port),
                        ('ALLOW_INSECURE_AUTH', allow_insecure)):
