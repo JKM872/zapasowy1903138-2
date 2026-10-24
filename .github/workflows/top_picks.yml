@@ -6,7 +6,8 @@ name: TOP picks (perełki A/B)
 # i wysyła mail „⭐ TOP” tylko gdy pojawią się NOWE perełki.
 on:
   schedule:
-    - cron: '15 5-21 * * *'
+    # Every 30 min: the availability agent must see line-ups (~60 min before kick-off).
+    - cron: '15,45 5-21 * * *'
   workflow_run:
     workflows: ["Forebet Scraper Pipeline (Forebet-first)"]
     types: [completed]
@@ -50,6 +51,14 @@ jobs:
           find /tmp/art -name "matches_${D}_*_forebet.json" -printf '%T@ %p\n' 2>/dev/null | sort -n \
             | cut -d' ' -f2- | while read f; do cp "$f" results/; done
           ls results/matches_${D}_*_forebet.json 2>/dev/null || echo "brak wyników Forebet na $D"
+      - name: Availability agent (injuries, suspensions, benched stars)
+        env:
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          PYTHONIOENCODING: utf-8
+        run: python tools/availability_agent.py "$DAY" || echo "availability agent failed – TOP runs without it"
       - name: Build TOP + Excel + email
         env:
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
@@ -66,6 +75,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/top_*.json results/TOP.xlsx
+          git add results/availability_*.json 2>/dev/null || true
           git add results/ai_analyst_*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "TOP picks $DAY"

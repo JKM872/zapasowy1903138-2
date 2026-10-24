@@ -444,7 +444,8 @@ export interface TopPick {
   league?: string
   grade?: string
   signals?: string
-  result?: { status: string; score?: string } | null
+  result?: { status: string; score?: string; reason?: string } | null
+  availabilityNote?: string
 }
 
 export interface TopDay {

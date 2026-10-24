@@ -179,6 +179,14 @@ export interface Match {
   value_bet?: boolean
   /** Overall grade A-F. Basis for the Grade A/B freemium paywall. */
   predictionGrade?: string | null
+  /** Availability agent: injuries, suspensions, stars left on the bench. */
+  availability?: {
+    verdict: 'ok' | 'downgrade' | 'drop'
+    confirmedLineup: boolean
+    note: string
+    source?: string | null
+    gradeBefore?: string | null
+  }
   /** Set by the backend paywall when premium (Grade A) data is masked for non-subscribers. */
   locked?: boolean
 }

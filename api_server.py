@@ -559,6 +559,31 @@ def _richness(m):
                            m.get('homeLogo'), m.get('homeForm')) if v)
 
 
+def _apply_availability(matches: list, date_str) -> None:
+    """Grade A/B after the availability agent: a pick whose stars are out is
+    downgraded or dropped out of A/B, and the reason travels with the match."""
+    if not date_str:
+        return
+    try:
+        from tools.availability_agent import load, apply_grade, note
+    except Exception:
+        return
+    avail = load(date_str)
+    if not avail:
+        return
+    for m in matches:
+        rec = avail.get(f"{m.get('sport')}|{m.get('homeTeam')}|{m.get('awayTeam')}")
+        if not rec or rec.get('unknown'):
+            continue
+        before = m.get('predictionGrade')
+        m['predictionGrade'] = apply_grade(before, rec.get('board'))
+        m['availability'] = {
+            'verdict': rec.get('board'), 'confirmedLineup': bool(rec.get('confirmed')),
+            'note': note(rec), 'source': rec.get('source'),
+            'gradeBefore': before if m['predictionGrade'] != before else None,
+        }
+
+
 @app.route('/api/matches', methods=['GET'])
 @optional_auth
 def get_matches():
@@ -664,6 +689,7 @@ def get_matches():
             seen[key] = m
     all_matches = list(seen.values())
     all_matches.sort(key=lambda m: (_SPORT_ORDER.get(m.get('sport'), 50), m.get('time') or ''))
+    _apply_availability(all_matches, date_str)
 
     # ── Per-sport odds threshold filter (OR condition) ──────────────
     if only_qualifying:

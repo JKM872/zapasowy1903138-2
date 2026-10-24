@@ -88,10 +88,11 @@ def _summary(picks: List[Dict[str, Any]]) -> Dict[str, Any]:
     n = len(settled)
     profit = sum((p['odds'] or 0) for p in won) - n
     return {
-        'picks': len(picks),
+        'picks': sum(1 for p in picks if p['result']['status'] != 'withdrawn'),
         'settled': n,
         'won': len(won),
-        'pending': len(picks) - n,
+        'pending': sum(1 for p in picks if p['result']['status'] == 'pending'),
+        'withdrawn': sum(1 for p in picks if p['result']['status'] == 'withdrawn'),
         'hitRate': round(len(won) / n * 100, 1) if n else None,
         'roi': round(profit / n * 100, 1) if n else None,
         'profitUnits': round(profit, 2) if n else None,
@@ -152,7 +153,9 @@ def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
                 'pick': r.get('pick') or '', 'odds': odds, 'grade': r.get('grade') or '',
                 'form': r.get('form') or '', 'h2h': r.get('h2h') or '',
                 'signals': r.get('signals') or '',
-                'result': settle(day, r, index),
+                'result': ({'status': 'withdrawn', 'reason': r.get('withdrawReason') or ''}
+                           if r.get('withdrawn') else settle(day, r, index)),
+                'availabilityNote': r.get('availabilityNote') or '',
             }
             picks.append(entry)
             everything.append(entry)

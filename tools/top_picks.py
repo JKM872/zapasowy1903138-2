@@ -479,6 +479,33 @@ if __name__ == '__main__':
             old = []
     # Wcześniejszy przebieg mógł dodać mecz, który teraz ma flagę recency.
     old = drop_flagged(old, day)
+    # Availability agent (tools/availability_agent.py): stars missing on the
+    # picked side block a new pick; a published pick is marked withdrawn, which
+    # the site shows and the record excludes (it was called off before kick-off).
+    try:
+        from tools import availability_agent as _av
+        _avail = _av.load(day)
+    except Exception:
+        _av, _avail = None, {}
+
+    def _avail_rec(r):
+        h, _, a = str(r.get('match') or '').partition(' vs ')
+        return _avail.get(f"{r.get('sport')}|{h}|{a}")
+
+    for r in old:
+        rec = _avail_rec(r)
+        if rec and rec.get('top_block') and not r.get('withdrawn'):
+            r['withdrawn'] = True
+            r['withdrawReason'] = _av.note(rec) or 'Key player absences'
+            print(f"   🚑 TOP wycofany (absencje): {r.get('match')} — {r['withdrawReason']}")
+    blocked = [r for r in picks if (_avail_rec(r) or {}).get('top_block')]
+    for r in blocked:
+        print(f"   🚑 TOP zablokowany (absencje): {r.get('match')} — {_av.note(_avail_rec(r))}")
+    picks = [r for r in picks if r not in blocked]
+    for r in picks:
+        n = _av.note(_avail_rec(r)) if _av else ''
+        if n:
+            r['availabilityNote'] = n
     known = {_key(r) for r in old}
     new = [r for r in picks if _key(r) not in known]
     merged = old + new

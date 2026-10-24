@@ -4,7 +4,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronRight, Gem, Lock } from 'lucide-react'
+import { ChevronRight, Gem, Lock, UserX } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { PREDICTION_LABELS } from '@/lib/constants'
@@ -163,6 +163,15 @@ export function MatchRow({
             </span>
           )}
 
+          {match.availability && match.availability.verdict !== 'ok' && (
+            <span
+              title={match.availability.note || 'Key player absences'}
+              className="inline-flex shrink-0 items-center gap-0.5 rounded border border-rose-500/40 bg-rose-500/10 px-1 py-0 text-[9px] font-semibold text-rose-400"
+            >
+              <UserX className="h-2.5 w-2.5" />
+              {match.availability.gradeBefore ? `${match.availability.gradeBefore}→${match.predictionGrade}` : 'Absences'}
+            </span>
+          )}
           {match.value_bet && (
             <Badge
               variant="secondary"

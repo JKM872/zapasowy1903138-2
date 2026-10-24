@@ -26,6 +26,7 @@ const STATUS: Record<string, { label: string; cls: string }> = {
   won: { label: 'Won', cls: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' },
   lost: { label: 'Lost', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
   draw: { label: 'Draw (lost)', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
+  withdrawn: { label: 'Withdrawn – not counted', cls: 'bg-zinc-500/15 text-zinc-500 line-through decoration-transparent' },
 }
 
 function StatusBadge({ pick }: { pick: TopPick }) {
@@ -34,7 +35,12 @@ function StatusBadge({ pick }: { pick: TopPick }) {
   if (!meta) {
     return <span className="rounded px-2 py-0.5 text-xs bg-muted text-muted-foreground">Pending</span>
   }
-  return <span className={cn('rounded px-2 py-0.5 text-xs font-medium', meta.cls)}>{meta.label}</span>
+  return (
+    <span className={cn('rounded px-2 py-0.5 text-xs font-medium', meta.cls)}
+      title={st === 'withdrawn' ? (pick.result as { reason?: string })?.reason : undefined}>
+      {meta.label}
+    </span>
+  )
 }
 
 function SummaryTiles({ s }: { s: TopSummary }) {
