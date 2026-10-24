@@ -1,6 +1,6 @@
 # Audyt Forebet
 
-_wygenerowano 2026-10-23 12:56 UTC_
+_wygenerowano 2026-10-24 12:25 UTC_
 
 ## Kontrole zdrowia danych
 
@@ -16,22 +16,22 @@ _wygenerowano 2026-10-23 12:56 UTC_
 
 ## Wyniki typów
 
-Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
+Rozliczanie w tym przebiegu: `{'settled': 137, 'unfinished': 7, 'mismatch': 15}`
 
-**1085 rozliczonych typów — trafność 58%, ROI +3.6%, wynik +38.6 j.** (stawka 1 j. na typ)
+**1164 rozliczonych typów — trafność 58%, ROI +2.8%, wynik +33.1 j.** (stawka 1 j. na typ)
 
 ### Wg sportu
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| football | 299 | 55% | +3.0% | 1.95 |
-| basketball | 261 | 64% | +3.2% | 1.63 |
-| hockey | 213 | 60% | +18.8% | 2.06 |
-| tennis | 201 | 58% | -1.7% | 1.77 |
-| handball | 46 | 46% | -20.2% | 1.79 |
-| baseball | 39 | 54% | -4.9% | 1.86 |
+| football | 380 | 54% | +1.2% | 1.94 |
+| basketball | 286 | 66% | +5.7% | 1.62 |
+| hockey | 213 | 60% | +18.0% | 2.05 |
+| tennis | 187 | 55% | -8.1% | 1.76 |
+| handball | 38 | 47% | -19.0% | 1.76 |
+| baseball | 33 | 61% | +3.5% | 1.79 |
 | volleyball | 23 | 65% | -4.9% | 1.47 |
-| rugby ⚠️ | 3 | 0% | -100.0% | 1.63 |
+| rugby ⚠️ | 4 | 0% | -100.0% | 1.58 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -39,8 +39,8 @@ Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| poprawne | 983 | 59% | +2.8% | 1.81 |
-| zamienione w mailu | 102 | 55% | +11.2% | 2.15 |
+| poprawne | 1083 | 58% | +2.3% | 1.81 |
+| zamienione w mailu | 81 | 54% | +10.0% | 2.14 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -48,10 +48,10 @@ Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| lepsza | 656 | 61% | +8.1% | 1.84 |
-| gorsza | 213 | 58% | +2.8% | 1.87 |
-| brak | 138 | 56% | +0.6% | 1.88 |
-| rowna | 78 | 46% | -26.9% | 1.68 |
+| lepsza | 726 | 60% | +7.4% | 1.84 |
+| gorsza | 230 | 58% | +3.4% | 1.85 |
+| brak | 119 | 51% | -7.7% | 1.89 |
+| rowna | 89 | 48% | -21.7% | 1.70 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -59,8 +59,8 @@ Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| faworyt rynku | 924 | 61% | +2.8% | 1.72 |
-| underdog rynku | 161 | 44% | +8.2% | 2.52 |
+| faworyt rynku | 1019 | 60% | +2.5% | 1.73 |
+| underdog rynku | 145 | 43% | +5.2% | 2.53 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -68,9 +68,9 @@ Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| ujemne | 527 | 60% | -0.4% | 1.69 |
-| 0-0.2 | 354 | 59% | +5.2% | 1.84 |
-| 0.2+ | 204 | 52% | +11.0% | 2.23 |
+| ujemne | 561 | 59% | -2.6% | 1.68 |
+| 0-0.2 | 391 | 60% | +6.3% | 1.84 |
+| 0.2+ | 212 | 52% | +10.9% | 2.23 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -78,9 +78,9 @@ Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| czolowa | 506 | 60% | +3.4% | 1.75 |
-| srednia | 295 | 55% | -2.1% | 1.88 |
-| nizsza | 284 | 59% | +9.7% | 1.96 |
+| czolowa | 549 | 61% | +4.4% | 1.75 |
+| nizsza | 324 | 58% | +8.2% | 1.94 |
+| srednia | 291 | 53% | -6.1% | 1.87 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -88,9 +88,9 @@ Rozliczanie w tym przebiegu: `{'mismatch': 64, 'unfinished': 12, 'settled': 69}`
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| <55 | 403 | 54% | +2.0% | 1.97 |
-| 55-60 | 290 | 61% | +10.6% | 1.85 |
-| 65+ | 203 | 60% | -5.8% | 1.65 |
-| 60-65 | 189 | 61% | +6.2% | 1.75 |
+| <55 | 445 | 54% | +1.8% | 1.96 |
+| 55-60 | 286 | 61% | +9.9% | 1.86 |
+| 65+ | 232 | 62% | -2.8% | 1.64 |
+| 60-65 | 201 | 59% | +1.6% | 1.75 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
