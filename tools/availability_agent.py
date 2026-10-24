@@ -157,8 +157,18 @@ def parse_lineups(data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     return out
 
 
-def sofascore_check(m: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def sofascore_check(m: Dict[str, Any], sport: str = '', day: str = '') -> Optional[Dict[str, Any]]:
     eid = _event_id(m)
+    orient = (m.get('sofascore') or {}).get('orientation')
+    if not eid and sport and day:
+        try:
+            from tools import injuries as _inj
+            ev = _inj._resolve(sport, m.get('homeTeam') or '', m.get('awayTeam') or '', day)
+        except Exception:
+            ev = None
+        if ev:
+            eid, orient = ev
+            _stat('sofa_resolved')
     if not eid:
         return None
     try:
@@ -169,7 +179,6 @@ def sofascore_check(m: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     res = parse_lineups(data) if isinstance(data, dict) else None
     if res is None:
         return None
-    orient = (m.get('sofascore') or {}).get('orientation')
     if orient == 'reversed':
         res['home'], res['away'] = res['away'], res['home']
     # Without market values SofaScore cannot tell a star from a reserve.
@@ -195,45 +204,72 @@ Answer ONLY with JSON:
 If you find nothing reliable, return empty lists and "confidence":"low"."""
 
 
-def _gemini_grounded(prompt: str) -> Optional[str]:
-    """One grounded Gemini call, rotating the keys groq_client knows about."""
+STATS: Dict[str, int] = {}
+
+
+def _stat(k: str) -> None:
+    STATS[k] = STATS.get(k, 0) + 1
+
+
+def _gemini_grounded(prompt: str):
+    """One grounded Gemini call -> (text, source urls) or (None, []).
+
+    Sources come from groundingMetadata: the model rarely types URLs into its
+    JSON, and the search results it actually used are the better evidence."""
     import requests
     from groq_client import gemini_keys, GEMINI_MODELS, GEMINI_ENDPOINT
-    for key in gemini_keys():
-        for model in GEMINI_MODELS:
+    keys = gemini_keys()
+    if not keys:
+        _stat('no_keys')
+        return None, []
+    models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or GEMINI_MODELS
+    for key in keys:
+        for model in models:
             try:
                 r = requests.post(GEMINI_ENDPOINT.format(m=model), headers={'x-goog-api-key': key},
                                   json={'contents': [{'parts': [{'text': prompt}]}],
                                         'tools': [{'google_search': {}}],
-                                        'generationConfig': {'temperature': 0.0, 'maxOutputTokens': 1200}},
+                                        'generationConfig': {'temperature': 0.0, 'maxOutputTokens': 1500}},
                                   timeout=60)
             except Exception:
+                _stat('net_error')
                 continue
             if r.status_code != 200:
+                _stat(f'http_{r.status_code}')
                 continue
             try:
-                parts = (r.json().get('candidates') or [{}])[0].get('content', {}).get('parts') or []
+                cand = (r.json().get('candidates') or [{}])[0]
+                parts = cand.get('content', {}).get('parts') or []
                 txt = ''.join(p.get('text', '') for p in parts).strip()
+                chunks = (cand.get('groundingMetadata') or {}).get('groundingChunks') or []
+                urls = [c.get('web', {}).get('uri') for c in chunks if c.get('web', {}).get('uri')]
             except Exception:
-                txt = ''
+                txt, urls = '', []
             if txt:
-                return txt
-    return None
+                _stat('answered')
+                return txt, urls
+            _stat('empty')
+    return None, []
 
 
-def parse_llm(txt: Optional[str]) -> Optional[Dict[str, Any]]:
+def parse_llm(txt: Optional[str], grounding: Optional[List[str]] = None) -> Optional[Dict[str, Any]]:
     if not txt:
         return None
     hit = re.search(r'\{.*\}', txt, re.S)
     if not hit:
+        _stat('no_json')
         return None
     try:
         d = json.loads(hit.group(0))
     except Exception:
+        _stat('bad_json')
         return None
-    if not d.get('sources'):
+    sources = [u for u in (d.get('sources') or []) if isinstance(u, str) and u.startswith('http')]
+    sources += [u for u in (grounding or []) if u not in sources]
+    if not sources:
+        _stat('no_sources')
         return None  # unsourced claims are not evidence
-    clean = {'confirmed': False, 'source': 'llm', 'sources': d.get('sources')[:5],
+    clean = {'confirmed': False, 'source': 'llm', 'sources': sources[:5],
              'confidence': d.get('confidence') or 'low'}
     for side in ('home', 'away'):
         rows = []
@@ -259,8 +295,10 @@ def llm_check(m: Dict[str, Any], sport: str, day: str) -> Optional[Dict[str, Any
     prompt = _PROMPT.format(home=m.get('homeTeam'), away=m.get('awayTeam'), sport=sport,
                             league=m.get('league') or '', day=day, time=m.get('time') or '')
     try:
-        return parse_llm(_gemini_grounded(prompt))
+        txt, urls = _gemini_grounded(prompt)
+        return parse_llm(txt, urls)
     except Exception:
+        _stat('exception')
         return None
 
 
@@ -349,7 +387,7 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         prev = store.get(c['key'])
         if not force and not needs_check(prev, ko, now):
             continue
-        res = sofascore_check(m)
+        res = sofascore_check(m, sport, day)
         if res is None and use_llm:
             res = llm_check(m, sport, day)
             llm_calls += 1
@@ -371,7 +409,7 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
     with open(path, 'w', encoding='utf-8') as fh:
         json.dump(store, fh, ensure_ascii=False, indent=1)
     flagged = sum(1 for r in store.values() if r.get('board') != 'ok' or r.get('top_block'))
-    log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)}")
+    log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)} | {STATS}")
     return store
 
 
