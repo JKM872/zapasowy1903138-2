@@ -1,7 +1,17 @@
 {
   "date": "2026-10-24",
-  "generated_at": "2026-10-24T13:27:48.648477+00:00",
+  "generated_at": "2026-10-24T18:15:54.228913+00:00",
   "issues": [
+    {
+      "level": "WARN",
+      "workflow": "scrape_forebet.yml",
+      "sport": "football",
+      "code": "budget",
+      "problem": "Czas wyczerpany podczas wzbogacania",
+      "meaning": "Wzbogacanie przerwane limitem czasu — część meczów bez danych.",
+      "action": "Rozważ węższy zakres lub dłuższy budżet czasu.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40075179638/job/120816880401"
+    },
     {
       "level": "WARN",
       "workflow": "SOFASCORE_RELAY",
@@ -17,11 +27,22 @@
     {
       "workflow": "scrape_forebet.yml",
       "runs_today": 2,
-      "issues": [],
+      "issues": [
+        {
+          "level": "WARN",
+          "workflow": "scrape_forebet.yml",
+          "sport": "football",
+          "code": "budget",
+          "problem": "Czas wyczerpany podczas wzbogacania",
+          "meaning": "Wzbogacanie przerwane limitem czasu — część meczów bez danych.",
+          "action": "Rozważ węższy zakres lub dłuższy budżet czasu.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40075179638/job/120816880401"
+        }
+      ],
       "run": {
         "databaseId": 40075179638,
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40075179638"
       }
     },
@@ -49,30 +70,36 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 40057068972,
+        "databaseId": 40115398312,
         "status": "completed",
-        "conclusion": "cancelled",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40057068972"
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40115398312"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 4,
+      "runs_today": 6,
       "issues": [],
       "run": {
-        "databaseId": 40093069271,
+        "databaseId": 40109412836,
         "status": "completed",
         "conclusion": "cancelled",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40093069271"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40109412836"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
-      "issues": []
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 40110340830,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40110340830"
+      }
     }
   ],
   "relays": [
@@ -115,6 +142,6 @@
   ],
   "counts": {
     "ALERT": 0,
-    "WARN": 1
+    "WARN": 2
   }
 }
