@@ -1,0 +1,3698 @@
+{
+  "meta": {
+    "generated_at": "2026-10-24T06:11:07.518559+02:00",
+    "target_date": "2026-10-24",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 16,
+      "qualified": 13
+    },
+    "enrichment_status_counts": {
+      "enriched": 12,
+      "resolve_failed": 1,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 16
+    },
+    "elapsed_seconds": 3548.5,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "ATP - Vienna",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-vienna/schwaerzler-j.j.-vs-droguet-t./10970688?MarketTypeID=301",
+      "match_id": "10970688",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Schwaerzler J.J.",
+      "away_team": "Droguet T.",
+      "event_date": "24/10",
+      "event_time": "10:40",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.32,
+      "drop_pct": 43.0,
+      "max_odds": 1.36,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "ATP - Lyon",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-lyon/cobolli-f.-vs-musetti-l./10996131?MarketTypeID=301",
+      "match_id": "10996131",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cobolli F.",
+      "away_team": "Musetti L.",
+      "event_date": "24/10",
+      "event_time": "14:00",
+      "outcome": "1",
+      "open_odds": 2.38,
+      "current_odds": 1.9,
+      "drop_pct": 20.0,
+      "max_odds": 2.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/cobolli-flavio-zDtaCcPe/musetti-lorenzo-xtH2ODVI/?mid=AerIZUI8",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Cobolli F.",
+        "away_team": "Musetti L.",
+        "match_time": "24.10.2026 13:30",
+        "sport": "tennis",
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.85,
+        "away_odds": 1.85,
+        "favorite": "player_b",
+        "advanced_score": 40.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "30.08.25",
+            "home": "Musetti L.",
+            "away": "Cobolli F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.08.25 Musetti L. 2-0 Cobolli F."
+          },
+          {
+            "date": "22.06.20",
+            "home": "Musetti L.",
+            "away": "Cobolli F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "22.06.20 Musetti L. 2-0 Cobolli F."
+          }
+        ],
+        "last_h2h_date": "30.08.25",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Musetti L.",
+        "last_h2h_away": "Cobolli F.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Cobolli F.)",
+          "missing_recent_matches_B (Musetti L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 6,
+        "ranking_b": 26,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Tokyo",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-tokyo/wang-xinyu-vs-valentova-t./10899609?MarketTypeID=301",
+      "match_id": "10899609",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Wang Xinyu",
+      "away_team": "Valentova Τ.",
+      "event_date": "24/10",
+      "event_time": "05:00",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.04,
+      "drop_pct": 19.0,
+      "max_odds": 2.05,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/valentova-tereza-hWMZK1VQ/wang-xinyu-2001-8jMJmh84/?mid=pW5gT8tC",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Wang Xin.",
+        "away_team": "Valentova T.",
+        "match_time": "24.10.2026 09:35",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.0,
+        "away_odds": 1.68,
+        "favorite": "player_b",
+        "advanced_score": 0.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "12.10.26",
+            "home": "Wang Xiy.",
+            "away": "Wang Xin.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "12.10.26 Wang Xiy. 2-0 Wang Xin."
+          },
+          {
+            "date": "03.10.26",
+            "home": "Kartal S.",
+            "away": "Wang Xin.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.10.26 Kartal S. 2-0 Wang Xin."
+          },
+          {
+            "date": "25.09.26",
+            "home": "Wang Xin.",
+            "away": "Prozorowa T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "25.09.26 Wang Xin. 1-2 Prozorowa T."
+          },
+          {
+            "date": "24.09.26",
+            "home": "Wang Xin.",
+            "away": "Garland J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "24.09.26 Wang Xin. 2-0 Garland J."
+          },
+          {
+            "date": "22.09.26",
+            "home": "Vekic D.",
+            "away": "Wang Xin.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "22.09.26 Vekic D. 0-2 Wang Xin."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Wang Xin.)",
+          "missing_recent_matches_B (Valentova T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 39,
+        "ranking_b": 88,
+        "forebet_prediction": "1",
+        "forebet_probability": 66.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 8.7,
+        "forebet_home_prob": 66,
+        "forebet_away_prob": 34
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/kovacevic-a.-vs-duckworth-j./10970868?MarketTypeID=301",
+      "match_id": "10970868",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kovacevic A.",
+      "away_team": "Duckworth J.",
+      "event_date": "24/10",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 1.88,
+      "current_odds": 1.53,
+      "drop_pct": 19.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/duckworth-james-2JWHPUUb/kovacevic-aleksandar-AudsF90U/?mid=M79NAbtm",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kovacevic A.",
+        "away_team": "Duckworth J.",
+        "match_time": "24.10.2026 13:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.35,
+        "favorite": "player_a",
+        "advanced_score": 66.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "11.10.22",
+            "home": "Duckworth J.",
+            "away": "Kovacevic A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "11.10.22 Duckworth J. 2-0 Kovacevic A."
+          }
+        ],
+        "last_h2h_date": "11.10.22",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Duckworth J.",
+        "last_h2h_away": "Kovacevic A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Kovacevic A.)",
+          "missing_recent_matches_B (Duckworth J.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 82,
+        "ranking_b": 73,
+        "forebet_prediction": "1",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 55,
+        "forebet_away_prob": 45
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Tokyo",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-tokyo/shibahara-e.-vs-parks-a./10899610?MarketTypeID=301",
+      "match_id": "10899610",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Shibahara E.",
+      "away_team": "Parks A.",
+      "event_date": "24/10",
+      "event_time": "03:10",
+      "outcome": "2",
+      "open_odds": 2.02,
+      "current_odds": 1.66,
+      "drop_pct": 18.0,
+      "max_odds": 1.75,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/parks-alycia-Uwhd6a1e/shibahara-ena-hfzer6K1/?mid=rTnsvQfU",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Shibahara E.",
+        "away_team": "Parks A.",
+        "match_time": "24.10.2026 03:25",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.1,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 44.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "20.10.26",
+            "home": "Uchijima M.",
+            "away": "Shibahara E.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "20.10.26 Uchijima M. 2-1 Shibahara E."
+          },
+          {
+            "date": "11.10.26",
+            "home": "Sato N.",
+            "away": "Shibahara E.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "11.10.26 Sato N. 0-2 Shibahara E."
+          },
+          {
+            "date": "10.10.26",
+            "home": "Wan I W.",
+            "away": "Shibahara E.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "10.10.26 Wan I W. 0-2 Shibahara E."
+          },
+          {
+            "date": "08.10.26",
+            "home": "Shibahara E.",
+            "away": "Uemura M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "08.10.26 Shibahara E. 2-0 Uemura M."
+          },
+          {
+            "date": "07.10.26",
+            "home": "Shibahara E.",
+            "away": "Barry M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "07.10.26 Shibahara E. 2-0 Barry M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Shibahara E.)",
+          "missing_recent_matches_B (Parks A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 492,
+        "ranking_b": 64,
+        "forebet_prediction": "2",
+        "forebet_probability": 83.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 17,
+        "forebet_away_prob": 83
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/cerundolo-j.m.-vs-svajda-z./10970874?MarketTypeID=301",
+      "match_id": "10970874",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cerundolo J.M.",
+      "away_team": "Svajda Z.",
+      "event_date": "24/10",
+      "event_time": "10:10",
+      "outcome": "1",
+      "open_odds": 2.65,
+      "current_odds": 2.2,
+      "drop_pct": 17.0,
+      "max_odds": 2.4,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/cerundolo-juan-manuel-A93TM7BR/svajda-zachary-vynGYhMa/?mid=GAShCj0f",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Cerundolo J. M.",
+        "away_team": "Svajda Z.",
+        "match_time": "24.10.2026 10:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 33.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "22.05.23",
+            "home": "Cerundolo J. M.",
+            "away": "Svajda Z.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "22.05.23 Cerundolo J. M. 2-0 Svajda Z."
+          }
+        ],
+        "last_h2h_date": "22.05.23",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Cerundolo J. M.",
+        "last_h2h_away": "Svajda Z.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Cerundolo J. M.)",
+          "missing_recent_matches_B (Svajda Z.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 53,
+        "ranking_b": 77,
+        "forebet_prediction": "1",
+        "forebet_probability": 60.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 60,
+        "forebet_away_prob": 40
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/faria-j.-vs-brunold-m./10970871?MarketTypeID=301",
+      "match_id": "10970871",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Faria J.",
+      "away_team": "Brunold M.",
+      "event_date": "24/10",
+      "event_time": "10:10",
+      "outcome": "2",
+      "open_odds": 2.5,
+      "current_odds": 2.1,
+      "drop_pct": 16.0,
+      "max_odds": 2.15,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/brunold-mika-AqiRBgj5/faria-jaime-ETojuYQP/?mid=OzW0AUU6",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Faria J.",
+        "away_team": "Brunold M.",
+        "match_time": "24.10.2026 10:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.65,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 51.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.10.26",
+            "home": "Faria J.",
+            "away": "Balshaw F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "19.10.26 Faria J. 1-2 Balshaw F."
+          },
+          {
+            "date": "07.10.26",
+            "home": "Gea A.",
+            "away": "Faria J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "07.10.26 Gea A. 2-1 Faria J."
+          },
+          {
+            "date": "02.10.26",
+            "home": "Munar J.",
+            "away": "Faria J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.10.26 Munar J. 2-0 Faria J."
+          },
+          {
+            "date": "01.10.26",
+            "home": "Faria J.",
+            "away": "Fery A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "01.10.26 Faria J. 2-1 Fery A."
+          },
+          {
+            "date": "29.09.26",
+            "home": "Vallejo D.",
+            "away": "Faria J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "29.09.26 Vallejo D. 2-1 Faria J."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Faria J.)",
+          "missing_recent_matches_B (Brunold M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 56,
+        "ranking_b": 195,
+        "forebet_prediction": "2",
+        "forebet_probability": 69.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 69
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Brussels",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-brussels/fils-a.-vs-struff-j.l./10976820?MarketTypeID=301",
+      "match_id": "10976820",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fils A.",
+      "away_team": "Struff J.L.",
+      "event_date": "24/10",
+      "event_time": "16:30",
+      "outcome": "2",
+      "open_odds": 5.5,
+      "current_odds": 4.59,
+      "drop_pct": 16.0,
+      "max_odds": 4.75,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "ATP - Vienna",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-vienna/marozsan-f.-vs-sorger-s./10970690?MarketTypeID=301",
+      "match_id": "10970690",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Marozsan F.",
+      "away_team": "Sorger S.",
+      "event_date": "24/10",
+      "event_time": "11:50",
+      "outcome": "2",
+      "open_odds": 6.0,
+      "current_odds": 5.18,
+      "drop_pct": 14.0,
+      "max_odds": 6.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/bernet-h.-vs-altmaier-d./10970869?MarketTypeID=301",
+      "match_id": "10970869",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Bernet H.",
+      "away_team": "Altmaier D.",
+      "event_date": "24/10",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.18,
+      "drop_pct": 13.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/altmaier-daniel-IPR8h9gM/bernet-henry-K0wNBLg7/?mid=jPIiGKIP",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Bernet H.",
+        "away_team": "Altmaier D.",
+        "match_time": "24.10.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.1,
+        "away_odds": 1.65,
+        "favorite": "player_b",
+        "advanced_score": 24.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "13.10.26",
+            "home": "Bernet H.",
+            "away": "Tabur C.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.10.26 Bernet H. 1-2 Tabur C."
+          },
+          {
+            "date": "12.10.26",
+            "home": "Bernet H.",
+            "away": "Boogaard T.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "12.10.26 Bernet H. 2-0 Boogaard T."
+          },
+          {
+            "date": "11.10.26",
+            "home": "Bernet H.",
+            "away": "Neuchrist M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "11.10.26 Bernet H. 2-0 Neuchrist M."
+          },
+          {
+            "date": "03.10.26",
+            "home": "Chidekh C.",
+            "away": "Bernet H.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.10.26 Chidekh C. 2-0 Bernet H."
+          },
+          {
+            "date": "02.10.26",
+            "home": "Bernet H.",
+            "away": "Balshaw F.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "02.10.26 Bernet H. 2-1 Balshaw F."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Bernet H.)",
+          "missing_recent_matches_B (Altmaier D.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 364,
+        "ranking_b": 65,
+        "form_source": "sofascore_api",
+        "sofascore_event_id": 17399153,
+        "sofascore_home_team_id": 466210,
+        "sofascore_away_team_id": 127208,
+        "sofascore_home_win_prob": 16,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 84,
+        "sofascore_total_votes": 886,
+        "forebet_prediction": "2",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 11.0,
+        "forebet_home_prob": 47,
+        "forebet_away_prob": 53
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Guangzhou",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-guangzhou/fruhvirtova-l.-vs-kawa-k./10899701?MarketTypeID=301",
+      "match_id": "10899701",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fruhvirtova L.",
+      "away_team": "Kawa K.",
+      "event_date": "24/10",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 2.02,
+      "current_odds": 1.79,
+      "drop_pct": 12.0,
+      "max_odds": 1.85,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/fruhvirtova-linda-WrhNf3At/kawa-katarzyna-2kS2AMrn/?mid=jJ9dt4jB",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Fruhvirtova L.",
+        "away_team": "Kawa K.",
+        "match_time": "24.10.2026 10:00",
+        "sport": "tennis",
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.5,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.93,
+        "away_odds": 1.78,
+        "favorite": "player_b",
+        "advanced_score": 58.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.08.26",
+            "home": "Kawa K.",
+            "away": "Fruhvirtova L.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "03.08.26 Kawa K. 2-1 Fruhvirtova L."
+          },
+          {
+            "date": "16.05.22",
+            "home": "Fruhvirtova L.",
+            "away": "Kawa K.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.05.22 Fruhvirtova L. 2-0 Kawa K."
+          }
+        ],
+        "last_h2h_date": "03.08.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Kawa K.",
+        "last_h2h_away": "Fruhvirtova L.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Fruhvirtova L.)",
+          "missing_recent_matches_B (Kawa K.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 158,
+        "ranking_b": 128,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.8,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Vienna",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-vienna/tirante-t.a.-vs-mannarino-a./10970689?MarketTypeID=301",
+      "match_id": "10970689",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Tirante T.A.",
+      "away_team": "Mannarino A.",
+      "event_date": "24/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 2.02,
+      "current_odds": 1.79,
+      "drop_pct": 12.0,
+      "max_odds": 1.83,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/mannarino-adrian-fLOdtByM/tirante-thiago-agustin-jBkGDj34/?mid=OKVCQX1L",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Tirante T. A.",
+        "away_team": "Mannarino A.",
+        "match_time": "24.10.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.78,
+        "away_odds": 1.93,
+        "favorite": "player_a",
+        "advanced_score": 47.6,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "31.08.26",
+            "home": "Tirante T. A.",
+            "away": "Mannarino A.",
+            "score": "2-3",
+            "winner": "away",
+            "raw": "31.08.26 Tirante T. A. 2-3 Mannarino A."
+          }
+        ],
+        "last_h2h_date": "31.08.26",
+        "last_h2h_score": "2-3",
+        "last_h2h_home": "Tirante T. A.",
+        "last_h2h_away": "Mannarino A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Tirante T. A.)",
+          "missing_recent_matches_B (Mannarino A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 50,
+        "ranking_b": 79,
+        "forebet_prediction": "2",
+        "forebet_probability": 54.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.7,
+        "forebet_home_prob": 46,
+        "forebet_away_prob": 54
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Osaka Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-osaka-doubles/hunter-s.tjen-j.-vs-maleckova-j.skoch-m./10839125?MarketTypeID=301",
+      "match_id": "10839125",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Hunter S./Tjen J.",
+      "away_team": "Maleckova J./Skoch M.",
+      "event_date": "24/10",
+      "event_time": "05:40",
+      "outcome": "1",
+      "open_odds": 1.53,
+      "current_odds": 1.36,
+      "drop_pct": 11.0,
+      "max_odds": 1.4,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/giron-m.-vs-hanfmann-y./10970872?MarketTypeID=301",
+      "match_id": "10970872",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Giron M.",
+      "away_team": "Hanfmann Y.",
+      "event_date": "24/10",
+      "event_time": "09:00",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.23,
+      "drop_pct": 11.0,
+      "max_odds": 2.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/giron-marcos-OWOgryOk/hanfmann-yannick-zLJYYbhm/?mid=8pPpECVs",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Giron M.",
+        "away_team": "Hanfmann Y.",
+        "match_time": "24.10.2026 09:00",
+        "sport": "tennis",
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.6666666666666666,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.2,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 80.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.04.26",
+            "home": "Hanfmann Y.",
+            "away": "Giron M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "23.04.26 Hanfmann Y. 2-1 Giron M."
+          },
+          {
+            "date": "06.11.25",
+            "home": "Giron M.",
+            "away": "Hanfmann Y.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "06.11.25 Giron M. 0-2 Hanfmann Y."
+          },
+          {
+            "date": "14.01.25",
+            "home": "Giron M.",
+            "away": "Hanfmann Y.",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "14.01.25 Giron M. 3-1 Hanfmann Y."
+          }
+        ],
+        "last_h2h_date": "23.04.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Hanfmann Y.",
+        "last_h2h_away": "Giron M.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.0
+        },
+        "surface_stats_b": {
+          "hard": 0.2
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Giron M.)",
+          "missing_recent_matches_B (Hanfmann Y.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 88,
+        "ranking_b": 59,
+        "forebet_prediction": "1",
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 63,
+        "forebet_away_prob": 37
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Florence",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florence/forti-f.-vs-roca-batalla-o./10716156?MarketTypeID=301",
+      "match_id": "10716156",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Forti F.",
+      "away_team": "Roca Batalla O.",
+      "event_date": "24/10",
+      "event_time": "09:30",
+      "outcome": "1",
+      "open_odds": 2.02,
+      "current_odds": 1.8,
+      "drop_pct": 11.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/forti-francesco-MF7nWtCA/roca-batalla-oriol-Auos4BEK/?mid=4E9K2aZ0",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Forti F.",
+        "away_team": "Roca Batalla O.",
+        "match_time": "24.10.2026 09:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L"
+        ],
+        "away_form": [
+          "W"
+        ],
+        "home_form_overall": [
+          "L"
+        ],
+        "away_form_overall": [
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.8,
+        "away_odds": 1.9,
+        "favorite": "player_b",
+        "advanced_score": 67.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "12.06.23",
+            "home": "Roca Batalla O.",
+            "away": "Forti F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "12.06.23 Roca Batalla O. 2-0 Forti F."
+          }
+        ],
+        "last_h2h_date": "12.06.23",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Roca Batalla O.",
+        "last_h2h_away": "Forti F.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Forti F.)",
+          "missing_recent_matches_B (Roca Batalla O.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 329,
+        "ranking_b": 304,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Vienna",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-vienna/molcan-a.-vs-medjedovic-h./10970687?MarketTypeID=301",
+      "match_id": "10970687",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Molcan A.",
+      "away_team": "Medjedovic H.",
+      "event_date": "24/10",
+      "event_time": "11:20",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.67,
+      "drop_pct": 11.0,
+      "max_odds": 1.7,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/medjedovic-hamad-nDcBkcu7/molcan-alex-drgiRTl7/?mid=EXIbHTO7",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Molcan A.",
+        "away_team": "Medjedovic H.",
+        "match_time": "24.10.2026 12:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.1,
+        "away_odds": 1.65,
+        "favorite": "player_b",
+        "advanced_score": 70.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "24.05.21",
+            "home": "Molcan A.",
+            "away": "Medjedovic H.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "24.05.21 Molcan A. 2-0 Medjedovic H."
+          }
+        ],
+        "last_h2h_date": "24.05.21",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Molcan A.",
+        "last_h2h_away": "Medjedovic H.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Molcan A.)",
+          "missing_recent_matches_B (Medjedovic H.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 80,
+        "ranking_b": 76,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 11.4,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "ATP - Lyon",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-lyon/cobolli-f.-vs-musetti-l./10996131?MarketTypeID=301",
+      "match_id": "10996131",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cobolli F.",
+      "away_team": "Musetti L.",
+      "event_date": "24/10",
+      "event_time": "14:00",
+      "outcome": "1",
+      "open_odds": 2.38,
+      "current_odds": 1.9,
+      "drop_pct": 20.0,
+      "max_odds": 2.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/cobolli-flavio-zDtaCcPe/musetti-lorenzo-xtH2ODVI/?mid=AerIZUI8",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Cobolli F.",
+        "away_team": "Musetti L.",
+        "match_time": "24.10.2026 13:30",
+        "sport": "tennis",
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.85,
+        "away_odds": 1.85,
+        "favorite": "player_b",
+        "advanced_score": 40.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "30.08.25",
+            "home": "Musetti L.",
+            "away": "Cobolli F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.08.25 Musetti L. 2-0 Cobolli F."
+          },
+          {
+            "date": "22.06.20",
+            "home": "Musetti L.",
+            "away": "Cobolli F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "22.06.20 Musetti L. 2-0 Cobolli F."
+          }
+        ],
+        "last_h2h_date": "30.08.25",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Musetti L.",
+        "last_h2h_away": "Cobolli F.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Cobolli F.)",
+          "missing_recent_matches_B (Musetti L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 6,
+        "ranking_b": 26,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Tokyo",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-tokyo/wang-xinyu-vs-valentova-t./10899609?MarketTypeID=301",
+      "match_id": "10899609",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Wang Xinyu",
+      "away_team": "Valentova Τ.",
+      "event_date": "24/10",
+      "event_time": "05:00",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.04,
+      "drop_pct": 19.0,
+      "max_odds": 2.05,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/valentova-tereza-hWMZK1VQ/wang-xinyu-2001-8jMJmh84/?mid=pW5gT8tC",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Wang Xin.",
+        "away_team": "Valentova T.",
+        "match_time": "24.10.2026 09:35",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.0,
+        "away_odds": 1.68,
+        "favorite": "player_b",
+        "advanced_score": 0.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "12.10.26",
+            "home": "Wang Xiy.",
+            "away": "Wang Xin.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "12.10.26 Wang Xiy. 2-0 Wang Xin."
+          },
+          {
+            "date": "03.10.26",
+            "home": "Kartal S.",
+            "away": "Wang Xin.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.10.26 Kartal S. 2-0 Wang Xin."
+          },
+          {
+            "date": "25.09.26",
+            "home": "Wang Xin.",
+            "away": "Prozorowa T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "25.09.26 Wang Xin. 1-2 Prozorowa T."
+          },
+          {
+            "date": "24.09.26",
+            "home": "Wang Xin.",
+            "away": "Garland J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "24.09.26 Wang Xin. 2-0 Garland J."
+          },
+          {
+            "date": "22.09.26",
+            "home": "Vekic D.",
+            "away": "Wang Xin.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "22.09.26 Vekic D. 0-2 Wang Xin."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Wang Xin.)",
+          "missing_recent_matches_B (Valentova T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 39,
+        "ranking_b": 88,
+        "forebet_prediction": "1",
+        "forebet_probability": 66.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 8.7,
+        "forebet_home_prob": 66,
+        "forebet_away_prob": 34
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/kovacevic-a.-vs-duckworth-j./10970868?MarketTypeID=301",
+      "match_id": "10970868",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kovacevic A.",
+      "away_team": "Duckworth J.",
+      "event_date": "24/10",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 1.88,
+      "current_odds": 1.53,
+      "drop_pct": 19.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/duckworth-james-2JWHPUUb/kovacevic-aleksandar-AudsF90U/?mid=M79NAbtm",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kovacevic A.",
+        "away_team": "Duckworth J.",
+        "match_time": "24.10.2026 13:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.35,
+        "favorite": "player_a",
+        "advanced_score": 66.9,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "11.10.22",
+            "home": "Duckworth J.",
+            "away": "Kovacevic A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "11.10.22 Duckworth J. 2-0 Kovacevic A."
+          }
+        ],
+        "last_h2h_date": "11.10.22",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Duckworth J.",
+        "last_h2h_away": "Kovacevic A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Kovacevic A.)",
+          "missing_recent_matches_B (Duckworth J.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 82,
+        "ranking_b": 73,
+        "forebet_prediction": "1",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 55,
+        "forebet_away_prob": 45
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Tokyo",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-tokyo/shibahara-e.-vs-parks-a./10899610?MarketTypeID=301",
+      "match_id": "10899610",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Shibahara E.",
+      "away_team": "Parks A.",
+      "event_date": "24/10",
+      "event_time": "03:10",
+      "outcome": "2",
+      "open_odds": 2.02,
+      "current_odds": 1.66,
+      "drop_pct": 18.0,
+      "max_odds": 1.75,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/parks-alycia-Uwhd6a1e/shibahara-ena-hfzer6K1/?mid=rTnsvQfU",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Shibahara E.",
+        "away_team": "Parks A.",
+        "match_time": "24.10.2026 03:25",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.1,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 44.3,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "20.10.26",
+            "home": "Uchijima M.",
+            "away": "Shibahara E.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "20.10.26 Uchijima M. 2-1 Shibahara E."
+          },
+          {
+            "date": "11.10.26",
+            "home": "Sato N.",
+            "away": "Shibahara E.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "11.10.26 Sato N. 0-2 Shibahara E."
+          },
+          {
+            "date": "10.10.26",
+            "home": "Wan I W.",
+            "away": "Shibahara E.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "10.10.26 Wan I W. 0-2 Shibahara E."
+          },
+          {
+            "date": "08.10.26",
+            "home": "Shibahara E.",
+            "away": "Uemura M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "08.10.26 Shibahara E. 2-0 Uemura M."
+          },
+          {
+            "date": "07.10.26",
+            "home": "Shibahara E.",
+            "away": "Barry M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "07.10.26 Shibahara E. 2-0 Barry M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Shibahara E.)",
+          "missing_recent_matches_B (Parks A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 492,
+        "ranking_b": 64,
+        "forebet_prediction": "2",
+        "forebet_probability": 83.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 17,
+        "forebet_away_prob": 83
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/cerundolo-j.m.-vs-svajda-z./10970874?MarketTypeID=301",
+      "match_id": "10970874",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cerundolo J.M.",
+      "away_team": "Svajda Z.",
+      "event_date": "24/10",
+      "event_time": "10:10",
+      "outcome": "1",
+      "open_odds": 2.65,
+      "current_odds": 2.2,
+      "drop_pct": 17.0,
+      "max_odds": 2.4,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/cerundolo-juan-manuel-A93TM7BR/svajda-zachary-vynGYhMa/?mid=GAShCj0f",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Cerundolo J. M.",
+        "away_team": "Svajda Z.",
+        "match_time": "24.10.2026 10:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 33.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "22.05.23",
+            "home": "Cerundolo J. M.",
+            "away": "Svajda Z.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "22.05.23 Cerundolo J. M. 2-0 Svajda Z."
+          }
+        ],
+        "last_h2h_date": "22.05.23",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Cerundolo J. M.",
+        "last_h2h_away": "Svajda Z.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Cerundolo J. M.)",
+          "missing_recent_matches_B (Svajda Z.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 53,
+        "ranking_b": 77,
+        "forebet_prediction": "1",
+        "forebet_probability": 60.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 60,
+        "forebet_away_prob": 40
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/faria-j.-vs-brunold-m./10970871?MarketTypeID=301",
+      "match_id": "10970871",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Faria J.",
+      "away_team": "Brunold M.",
+      "event_date": "24/10",
+      "event_time": "10:10",
+      "outcome": "2",
+      "open_odds": 2.5,
+      "current_odds": 2.1,
+      "drop_pct": 16.0,
+      "max_odds": 2.15,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/brunold-mika-AqiRBgj5/faria-jaime-ETojuYQP/?mid=OzW0AUU6",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Faria J.",
+        "away_team": "Brunold M.",
+        "match_time": "24.10.2026 10:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.65,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 51.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.10.26",
+            "home": "Faria J.",
+            "away": "Balshaw F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "19.10.26 Faria J. 1-2 Balshaw F."
+          },
+          {
+            "date": "07.10.26",
+            "home": "Gea A.",
+            "away": "Faria J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "07.10.26 Gea A. 2-1 Faria J."
+          },
+          {
+            "date": "02.10.26",
+            "home": "Munar J.",
+            "away": "Faria J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.10.26 Munar J. 2-0 Faria J."
+          },
+          {
+            "date": "01.10.26",
+            "home": "Faria J.",
+            "away": "Fery A.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "01.10.26 Faria J. 2-1 Fery A."
+          },
+          {
+            "date": "29.09.26",
+            "home": "Vallejo D.",
+            "away": "Faria J.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "29.09.26 Vallejo D. 2-1 Faria J."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Faria J.)",
+          "missing_recent_matches_B (Brunold M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 56,
+        "ranking_b": 195,
+        "forebet_prediction": "2",
+        "forebet_probability": 69.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.0,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 69
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/bernet-h.-vs-altmaier-d./10970869?MarketTypeID=301",
+      "match_id": "10970869",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Bernet H.",
+      "away_team": "Altmaier D.",
+      "event_date": "24/10",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.18,
+      "drop_pct": 13.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/altmaier-daniel-IPR8h9gM/bernet-henry-K0wNBLg7/?mid=jPIiGKIP",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Bernet H.",
+        "away_team": "Altmaier D.",
+        "match_time": "24.10.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.1,
+        "away_odds": 1.65,
+        "favorite": "player_b",
+        "advanced_score": 24.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "13.10.26",
+            "home": "Bernet H.",
+            "away": "Tabur C.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.10.26 Bernet H. 1-2 Tabur C."
+          },
+          {
+            "date": "12.10.26",
+            "home": "Bernet H.",
+            "away": "Boogaard T.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "12.10.26 Bernet H. 2-0 Boogaard T."
+          },
+          {
+            "date": "11.10.26",
+            "home": "Bernet H.",
+            "away": "Neuchrist M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "11.10.26 Bernet H. 2-0 Neuchrist M."
+          },
+          {
+            "date": "03.10.26",
+            "home": "Chidekh C.",
+            "away": "Bernet H.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.10.26 Chidekh C. 2-0 Bernet H."
+          },
+          {
+            "date": "02.10.26",
+            "home": "Bernet H.",
+            "away": "Balshaw F.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "02.10.26 Bernet H. 2-1 Balshaw F."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Bernet H.)",
+          "missing_recent_matches_B (Altmaier D.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 364,
+        "ranking_b": 65,
+        "form_source": "sofascore_api",
+        "sofascore_event_id": 17399153,
+        "sofascore_home_team_id": 466210,
+        "sofascore_away_team_id": 127208,
+        "sofascore_home_win_prob": 16,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 84,
+        "sofascore_total_votes": 886,
+        "forebet_prediction": "2",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 11.0,
+        "forebet_home_prob": 47,
+        "forebet_away_prob": 53
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Guangzhou",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-guangzhou/fruhvirtova-l.-vs-kawa-k./10899701?MarketTypeID=301",
+      "match_id": "10899701",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fruhvirtova L.",
+      "away_team": "Kawa K.",
+      "event_date": "24/10",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 2.02,
+      "current_odds": 1.79,
+      "drop_pct": 12.0,
+      "max_odds": 1.85,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/fruhvirtova-linda-WrhNf3At/kawa-katarzyna-2kS2AMrn/?mid=jJ9dt4jB",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Fruhvirtova L.",
+        "away_team": "Kawa K.",
+        "match_time": "24.10.2026 10:00",
+        "sport": "tennis",
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.5,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.93,
+        "away_odds": 1.78,
+        "favorite": "player_b",
+        "advanced_score": 58.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "03.08.26",
+            "home": "Kawa K.",
+            "away": "Fruhvirtova L.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "03.08.26 Kawa K. 2-1 Fruhvirtova L."
+          },
+          {
+            "date": "16.05.22",
+            "home": "Fruhvirtova L.",
+            "away": "Kawa K.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.05.22 Fruhvirtova L. 2-0 Kawa K."
+          }
+        ],
+        "last_h2h_date": "03.08.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Kawa K.",
+        "last_h2h_away": "Fruhvirtova L.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Fruhvirtova L.)",
+          "missing_recent_matches_B (Kawa K.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 158,
+        "ranking_b": 128,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.8,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Vienna",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-vienna/tirante-t.a.-vs-mannarino-a./10970689?MarketTypeID=301",
+      "match_id": "10970689",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Tirante T.A.",
+      "away_team": "Mannarino A.",
+      "event_date": "24/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 2.02,
+      "current_odds": 1.79,
+      "drop_pct": 12.0,
+      "max_odds": 1.83,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/mannarino-adrian-fLOdtByM/tirante-thiago-agustin-jBkGDj34/?mid=OKVCQX1L",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Tirante T. A.",
+        "away_team": "Mannarino A.",
+        "match_time": "24.10.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.78,
+        "away_odds": 1.93,
+        "favorite": "player_a",
+        "advanced_score": 47.6,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "31.08.26",
+            "home": "Tirante T. A.",
+            "away": "Mannarino A.",
+            "score": "2-3",
+            "winner": "away",
+            "raw": "31.08.26 Tirante T. A. 2-3 Mannarino A."
+          }
+        ],
+        "last_h2h_date": "31.08.26",
+        "last_h2h_score": "2-3",
+        "last_h2h_home": "Tirante T. A.",
+        "last_h2h_away": "Mannarino A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.2
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Tirante T. A.)",
+          "missing_recent_matches_B (Mannarino A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 50,
+        "ranking_b": 79,
+        "forebet_prediction": "2",
+        "forebet_probability": 54.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.7,
+        "forebet_home_prob": 46,
+        "forebet_away_prob": 54
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Osaka Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-osaka-doubles/hunter-s.tjen-j.-vs-maleckova-j.skoch-m./10839125?MarketTypeID=301",
+      "match_id": "10839125",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Hunter S./Tjen J.",
+      "away_team": "Maleckova J./Skoch M.",
+      "event_date": "24/10",
+      "event_time": "05:40",
+      "outcome": "1",
+      "open_odds": 1.53,
+      "current_odds": 1.36,
+      "drop_pct": 11.0,
+      "max_odds": 1.4,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Basel",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-basel/giron-m.-vs-hanfmann-y./10970872?MarketTypeID=301",
+      "match_id": "10970872",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Giron M.",
+      "away_team": "Hanfmann Y.",
+      "event_date": "24/10",
+      "event_time": "09:00",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.23,
+      "drop_pct": 11.0,
+      "max_odds": 2.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/giron-marcos-OWOgryOk/hanfmann-yannick-zLJYYbhm/?mid=8pPpECVs",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Giron M.",
+        "away_team": "Hanfmann Y.",
+        "match_time": "24.10.2026 09:00",
+        "sport": "tennis",
+        "h2h_count": 3,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.6666666666666666,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.2,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 80.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.04.26",
+            "home": "Hanfmann Y.",
+            "away": "Giron M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "23.04.26 Hanfmann Y. 2-1 Giron M."
+          },
+          {
+            "date": "06.11.25",
+            "home": "Giron M.",
+            "away": "Hanfmann Y.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "06.11.25 Giron M. 0-2 Hanfmann Y."
+          },
+          {
+            "date": "14.01.25",
+            "home": "Giron M.",
+            "away": "Hanfmann Y.",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "14.01.25 Giron M. 3-1 Hanfmann Y."
+          }
+        ],
+        "last_h2h_date": "23.04.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Hanfmann Y.",
+        "last_h2h_away": "Giron M.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.0
+        },
+        "surface_stats_b": {
+          "hard": 0.2
+        },
+        "form_a": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Giron M.)",
+          "missing_recent_matches_B (Hanfmann Y.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 88,
+        "ranking_b": 59,
+        "forebet_prediction": "1",
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 63,
+        "forebet_away_prob": 37
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Florence",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florence/forti-f.-vs-roca-batalla-o./10716156?MarketTypeID=301",
+      "match_id": "10716156",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Forti F.",
+      "away_team": "Roca Batalla O.",
+      "event_date": "24/10",
+      "event_time": "09:30",
+      "outcome": "1",
+      "open_odds": 2.02,
+      "current_odds": 1.8,
+      "drop_pct": 11.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/forti-francesco-MF7nWtCA/roca-batalla-oriol-Auos4BEK/?mid=4E9K2aZ0",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Forti F.",
+        "away_team": "Roca Batalla O.",
+        "match_time": "24.10.2026 09:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L"
+        ],
+        "away_form": [
+          "W"
+        ],
+        "home_form_overall": [
+          "L"
+        ],
+        "away_form_overall": [
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.8,
+        "away_odds": 1.9,
+        "favorite": "player_b",
+        "advanced_score": 67.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "12.06.23",
+            "home": "Roca Batalla O.",
+            "away": "Forti F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "12.06.23 Roca Batalla O. 2-0 Forti F."
+          }
+        ],
+        "last_h2h_date": "12.06.23",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Roca Batalla O.",
+        "last_h2h_away": "Forti F.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Forti F.)",
+          "missing_recent_matches_B (Roca Batalla O.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 329,
+        "ranking_b": 304,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Vienna",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-vienna/molcan-a.-vs-medjedovic-h./10970687?MarketTypeID=301",
+      "match_id": "10970687",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Molcan A.",
+      "away_team": "Medjedovic H.",
+      "event_date": "24/10",
+      "event_time": "11:20",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.67,
+      "drop_pct": 11.0,
+      "max_odds": 1.7,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/medjedovic-hamad-nDcBkcu7/molcan-alex-drgiRTl7/?mid=EXIbHTO7",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Molcan A.",
+        "away_team": "Medjedovic H.",
+        "match_time": "24.10.2026 12:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.1,
+        "away_odds": 1.65,
+        "favorite": "player_b",
+        "advanced_score": 70.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "24.05.21",
+            "home": "Molcan A.",
+            "away": "Medjedovic H.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "24.05.21 Molcan A. 2-0 Medjedovic H."
+          }
+        ],
+        "last_h2h_date": "24.05.21",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Molcan A.",
+        "last_h2h_away": "Medjedovic H.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.0
+        },
+        "form_a": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Molcan A.)",
+          "missing_recent_matches_B (Medjedovic H.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 80,
+        "ranking_b": 76,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 11.4,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    }
+  ]
+}
