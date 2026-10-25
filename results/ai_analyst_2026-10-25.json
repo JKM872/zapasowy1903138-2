@@ -2,10 +2,11 @@
  {
   "key": "tennis|A. Ayeni vs U. Park|A. Ayeni",
   "verdict": "ODPUŚĆ",
-  "confidence": 2,
-  "reason": "Mimo dużej przewagi w formie nad rywalem (Park 5 porażek z rzędu), kurs 1.40 nie oferuje żadnej wartości i generuje ujemne EV.",
+  "confidence": 1,
+  "reason": "Niski kurs 1.40 przy ujemnej wartości oczekiwanej (EV -0.146) czyni ten typ nieopłacalnym. Mimo słabej serii rywala, Ayeni sam prezentuje bardzo niestabilną formę.",
   "risks": [
-   "Ujemna wartość oczekiwana (EV)",
+   "Słaba forma Ayeni (LWLWL)",
+   "Ujemne EV (-14.6%)",
    "Niski kurs"
   ],
   "match": "A. Ayeni vs U. Park",
@@ -19,9 +20,10 @@
   "key": "basketball|Anyang JungKwanJang vs Wonju DB|Anyang JungKwanJang",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Anyang prezentuje bezbłędną formę na własnym parkiecie (5 zwycięstw z rzędu u siebie) i ma lepszy bilans w bieżącym sezonie. Dodatnio wyceniane EV oraz przewaga w H2H przemawiają za gospodarzami.",
+  "reason": "Gospodarze są w znakomitej dyspozycji u siebie (komplet wygranych WWWWW) i dobrze weszli w nowy sezon. Kurs 1.80 w połączeniu z dodatnim EV daje mocny walor analityczny.",
   "risks": [
-   "Wyrównana historia H2H"
+   "Wyrównany bilans H2H",
+   "Wonju DB potrafi groźnie kontrować na wyjazdach"
   ],
   "match": "Anyang JungKwanJang vs Wonju DB",
   "pick": "Anyang JungKwanJang",
@@ -34,10 +36,11 @@
   "key": "tennis|T. Valentova vs S. Zhang|T. Valentova",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Valentova wygrała jedyny bezpośredni pojedynek, jednak kurs 1.43 przy obecnych parametrach modelu daje ujemne EV.",
+  "reason": "Brak wartości w kursie 1.43 przy ujemnym EV (-0.10) oraz małej przewadze w bezpośredniej rywalizacji. Valentova wygrywa, ale jej mecze są bardzo nierówne.",
   "risks": [
-   "Ujemna wartość oczekiwana (EV)",
-   "Niski kurs"
+   "Ujemny EV",
+   "Niski kurs",
+   "Niestabilna forma obu zawodniczek"
   ],
   "match": "T. Valentova vs S. Zhang",
   "pick": "T. Valentova",
@@ -47,12 +50,30 @@
   "injuryLine": ""
  },
  {
+  "key": "football|Azul Claro Numazu vs TIAMO Hirakata|Azul Claro Numazu",
+  "verdict": "OBSERWUJ",
+  "confidence": 2,
+  "reason": "Mimo lepszej formy ogólnej gospodarzy, model Forebet daje tylko 41% szans na wygraną przy braku historii H2H. Ocena C i wysokie ryzyko remisu sugerują powściągliwość.",
+  "risks": [
+   "Ocena C",
+   "Niskie prawdopodobieństwo wygranej (41%)",
+   "Brak meczów H2H"
+  ],
+  "match": "Azul Claro Numazu vs TIAMO Hirakata",
+  "pick": "Azul Claro Numazu",
+  "odds": 2.09,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "basketball|Melbourne United vs Sydney|Sydney",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Sydney wygrało 3 z 4 ostatnich meczów H2H i prezentuje lepszą dyspozycję w sezonie od Melbourne, które u siebie przegrało 3 z 5 meczów. Model Forebet daje gościom 65% szans na zwycięstwo.",
+  "reason": "Wysoka ocena A oraz wyraźna przewaga Sydney w meczach H2H (3.0-1.0) wskazują na gości. Gospodarze znajdują się w dołku formy u siebie (LLLWW).",
   "risks": [
-   "Mecz wyjazdowy"
+   "Słabsza seria wyjazdowa Sydney",
+   "Mecz ligowy wyjazdowy"
   ],
   "match": "Melbourne United vs Sydney",
   "pick": "Sydney",
@@ -65,9 +86,10 @@
   "key": "basketball|Tokyo Sunrockers vs Diamond Dolphins|Diamond Dolphins",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Diamond Dolphins kroczą od zwycięstwa do zwycięstwa (seria 5 wygranych, w tym bezbłędny bilans na wyjazdach) i całkowicie dominują w H2H. Zdecydowane poparcie w głosowaniu fanów (84%) i dodatnie EV wspierają ten typ.",
+  "reason": "Diamond Dolphins idą jak burza z serią 5 wygranych z rzędu, w tym świetnie spisując się na wyjazdach. Zdecydowane wsparcie kibiców (84%) i wysokie wskaźniki modelu uzasadniają typ.",
   "risks": [
-   "Gra na wyjeździe"
+   "Sunrockers wygrali 4 z 5 ostatnich meczów",
+   "Niski kurs (1.48)"
   ],
   "match": "Tokyo Sunrockers vs Diamond Dolphins",
   "pick": "Diamond Dolphins",
@@ -80,10 +102,11 @@
   "key": "hockey|Red Mashine Atlant vs Tayfun|Red Mashine Atlant",
   "verdict": "OBSERWUJ",
   "confidence": 2,
-  "reason": "Wysokie EV zachęca, jednak niska ocena modelu (Grade C) oraz brak poprawnych danych z SofaScore sugerują wstrzymanie się ze stawkami.",
+  "reason": "Mimo wysokiego kursu (2.40) i bardzo dobrego EV, brak potwierdzonych danych z SofaScore oraz niska ocena C nakazują ostrożność. Warto poczekać na rozwój sytuacji rynkowej.",
   "risks": [
-   "Ocena modelu Grade C",
-   "Brak weryfikacji SofaScore (mismatch)"
+   "Niska ocena C",
+   "Brak danych z SofaScore",
+   "Niestabilna forma gospodarzy"
   ],
   "match": "Red Mashine Atlant vs Tayfun",
   "pick": "Red Mashine Atlant",
@@ -96,9 +119,10 @@
   "key": "hockey|Timrå U20 vs MODO U20|MODO U20",
   "verdict": "GRAJ",
   "confidence": 3,
-  "reason": "MODO U20 wygrało 3 ostatnie mecze wyjazdowe, podczas gdy Timrå znajduje się w dołku formy (tylko 1 wygrana w 5 spotkaniach). Typ poparty dodatnim EV i głowami fanów.",
+  "reason": "MODO U20 wygrało 3 z ostatnich 4 meczów wyjazdowych, a Timrå u siebie doznaje ciągłych porażek (LLWWL). Dobre value przy kursie 1.95.",
   "risks": [
-   "Wyrównany szacunek Forebet (51%)"
+   "Niskie prawdopodobieństwo Forebet (51%)",
+   "Kategoria juniorska charakteryzująca się losowością"
   ],
   "match": "Timrå U20 vs MODO U20",
   "pick": "MODO U20",
@@ -111,10 +135,11 @@
   "key": "volleyball|Kuzey Boru Genclik W vs Nilufer Bld. W|Kuzey Boru Genclik W",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Forebet daje gospodyniom zaledwie 53% szans na wygraną, co przy kursie 1.43 tworzy bardzo ujemne EV (-9.5% edge).",
+  "reason": "Zdecydowanie zbyt niski kurs (1.43) w stosunku do prognozowanego prawdopodobieństwa (53%) skutkuje ujemnym EV. Mimo poparcia kibiców, zakłady po tym kursie są nierentowne.",
   "risks": [
-   "Mocno przereklamowany kurs",
-   "Ujemne EV"
+   "Ujemne EV (-13.6%)",
+   "Zbalansowany bilans H2H (2-2)",
+   "Zawyżone kursy u bukmacherów"
   ],
   "match": "Kuzey Boru Genclik W vs Nilufer Bld. W",
   "pick": "Kuzey Boru Genclik W",
@@ -127,9 +152,10 @@
   "key": "hockey|Huddinge U20 vs Luleå U20|Luleå U20",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Luleå U20 cieszy się wysokim prawdopodobieństwem wg Forebet (70%) oraz świetną wartością przy kursie 1.85. Gospodarze slabo radzą sobie na własnym lodowisku.",
+  "reason": "Luleå U20 wykazuje świetną dyspozycję, a Huddinge fatalnie radzi sobie na własnym lodzie (WDLLL). Bardzo wysoki edge (+17.3%) przy atrakcyjnym kursie 1.85.",
   "risks": [
-   "Mała próba głosów w SofaScore"
+   "Wyjazdowy charakter spotkania",
+   "Luleå miewa potknięcia na wyjazdach"
   ],
   "match": "Huddinge U20 vs Luleå U20",
   "pick": "Luleå U20",
@@ -141,10 +167,11 @@
  {
   "key": "basketball|Palmer Basket vs Tizona Burgos|Palmer Basket",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Palmer Basket wygrał 4 z 5 ostatnich meczów i podejmuje rywala będącego w wyraźnym kryzysie (seria porażek). Wysoka prognoza Forebet (71%) potwierdza ich przewagę.",
+  "confidence": 4,
+  "reason": "Palmer Basket prezentuje znakomitą formę u siebie i 4 wygrane w ostatnich 5 meczach, podczas gdy Tizona Burgos przegrała 3 ostatnie mecze. Prawdopodobieństwo 71% w pełni uzasadnia kurs.",
   "risks": [
-   "Niski kurs i wąski margines EV"
+   "Niski kurs 1.45",
+   "Krótka historia bezpośrednich pojedynków"
   ],
   "match": "Palmer Basket vs Tizona Burgos",
   "pick": "Palmer Basket",
@@ -156,10 +183,11 @@
  {
   "key": "hockey|Gornyak Rudny vs Nomad Astana|Nomad Astana",
   "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Nomad Astana ma idealną serię 5 wygranych z rzędu (ogółem i na wyjeździe), podczas gdy Gornyak ugrał zaledwie punkt w 5 meczach. Korzystne H2H oraz dodatnie EV wyraźnie wskazują na gości.",
+  "confidence": 5,
+  "reason": "Zderzenie dwóch skrajnych form: Nomad Astana wygrał 5 meczów z rzędu, a Gornyak Rudny od 5 spotkań nie potrafi wygrać. Kurs 1.65 przy takim zestawieniu ma bardzo dobrą wartość.",
   "risks": [
-   "Gornyak miewał lepsze mecze domowe we wcześniejszej fazie"
+   "Mecz wyjazdowy",
+   "Gornyak u siebie potrafił wygrywać we wcześniejszych miesiącach"
   ],
   "match": "Gornyak Rudny vs Nomad Astana",
   "pick": "Nomad Astana",
@@ -172,10 +200,11 @@
   "key": "tennis|L. Neumayer vs T. Droguet|T. Droguet",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Droguet ma dobrą formę, ale niski kurs 1.35 sprawia, że typ posiada ujemną wartość oczekiwaną i jest nierentowny matematycznie.",
+  "reason": "Forebet szacuje wygraną Drogueta na 59%, co przy kursie 1.35 daje ujemną wartość oczekiwaną. Typ nie niesie ze sobą odpowiedniego marginesu bezpieczeństwa.",
   "risks": [
-   "Ujemne EV",
-   "Niski kurs"
+   "Ujemny EV (-3.6%)",
+   "Niski kurs",
+   "Znikomy edge rynkowy"
   ],
   "match": "L. Neumayer vs T. Droguet",
   "pick": "T. Droguet",
@@ -187,10 +216,11 @@
  {
   "key": "basketball|Caja 87 vs Granada|Caja 87",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Caja 87 u siebie ma komplet 5 zwycięstw i nie przegrała z Granadą w bezpośrednich starciach (3-0). Kurs 1.78 oferuje bardzo dobre EV (+17.2%).",
+  "confidence": 4,
+  "reason": "Caja 87 ma genialny bilans u siebie (WWWWW) oraz bezwzględnie dominuje w historii meczów bezpośrednich z Granadą (3.0-0). Atrakcyjny kurs 1.78 daje wysokie EV.",
   "risks": [
-   "Głosy fanów faworyzują gości"
+   "Słaby wynik w głosowaniu kibiców (47%)",
+   "Ostatnia porażka w lidze ogólnej"
   ],
   "match": "Caja 87 vs Granada",
   "pick": "Caja 87",
@@ -202,10 +232,11 @@
  {
   "key": "hockey|Vaasan Sport U20 vs Karpat U20|Karpat U20",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Kärpät U20 zwyciężyło w 4 z 5 ostatnich meczów, a gospodarze ponieśli w tym czasie 3 porażki. Prognoza Forebet i wartościowe EV uzasadniają typ na gości.",
+  "confidence": 4,
+  "reason": "Karpat U20 wygrał 4 z 5 ostatnich starć, podczas gdy Vaasan Sport przegrał 3 z 5 meczów. Dobre parametry EV i solidne wskazanie rynkowe przemawiają za gośćmi.",
   "risks": [
-   "Brak historii bezpośrednich starć (H2H)"
+   "Brak historii bezpośrednich starć (H2H)",
+   "Mecz wyjazdowy"
   ],
   "match": "Vaasan Sport U20 vs Karpat U20",
   "pick": "Karpat U20",
@@ -218,9 +249,10 @@
   "key": "hockey|Schwenninger vs Eisbaren Berlin|Eisbaren Berlin",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Eisbären Berlin dominuje w bezpośrednich pojedynkach (3.5-0.5) i prezentuje solidną formę, podczas gdy Schwenninger męczy się u siebie (WDLLL). Kurs 1.85 daje aż +16.4% edge.",
+  "reason": "Eisbaren Berlin wygrywa seryjnie i dominuje w bezpośrednich starciach H2H (3.5-0.5), a Schwenninger mocno kuleje u siebie (WDLLL). Kurs 1.85 oferuje aż +16.4% edge.",
   "risks": [
-   "Brak potwierdzenia danych w SofaScore"
+   "Mismatch danych w SofaScore",
+   "Eisbaren ma mocno obciążony kalendarz pucharowy"
   ],
   "match": "Schwenninger vs Eisbaren Berlin",
   "pick": "Eisbaren Berlin",
@@ -230,12 +262,47 @@
   "injuryLine": ""
  },
  {
+  "key": "football|Schalke 04 U19 vs Borussia Dortmund U19|Borussia Dortmund U19",
+  "verdict": "OBSERWUJ",
+  "confidence": 2,
+  "reason": "Dortmund jest w lepszej dyspozycji ogólnej, ale ocena C oraz niskie prawdopodobieństwo Forebet (43%) nakazują ostrożność w derbowym starciu. Lepiej poczekać na mecze na żywo.",
+  "risks": [
+   "Specyfika meczu derbowego U19",
+   "Niskie prawdopodobieństwo wygranej według modelu",
+   "Ocena C"
+  ],
+  "match": "Schalke 04 U19 vs Borussia Dortmund U19",
+  "pick": "Borussia Dortmund U19",
+  "odds": 2.02,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Kamphaengphet FC vs Phichit United|Phichit United",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Phichit United ma komplet wygranych (WWWWW) i ogromne poparcie w głosowaniu kibiców (87%). Kurs 2.05 przy bardzo słabej formie gospodarzy oferuje świetny edge (+15.5%).",
+  "risks": [
+   "Brak rozegranych meczów H2H",
+   "Specyfika niższych lig w Tajlandii"
+  ],
+  "match": "Kamphaengphet FC vs Phichit United",
+  "pick": "Phichit United",
+  "odds": 2.05,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "tennis|F. Marozsan vs T. Machac|T. Machac",
   "verdict": "ODPUŚĆ",
   "confidence": 1,
-  "reason": "Wygrana Machaca jest prawdopodobna, lecz kurs 1.35 przy obecnym zestawieniu danych generuje mocno ujemne EV (-10.0% edge).",
+  "reason": "Kurs 1.35 przy ujemnym EV (-10.0%) jest całkowicie nieopłacalny do grania. Machac ostatnio miewa wahania formy i przegrywa sporo spotkań.",
   "risks": [
-   "Znaczne ujemne EV"
+   "Bardzo ujemny EV (-10.0%)",
+   "Zimny kurs 1.35",
+   "Machac przegrał 3 z 5 ostatnich meczów"
   ],
   "match": "F. Marozsan vs T. Machac",
   "pick": "T. Machac",
@@ -248,9 +315,9 @@
   "key": "tennis|M. Brunold vs R. Bertola|M. Brunold",
   "verdict": "GRAJ",
   "confidence": 5,
-  "reason": "Brunold jest w fenomenalnej formie 5 zwycięstw z rzędu na kortach twardych, a rywal gra słabo (WLLWL). Wybitny rating (84.7) oraz potężne EV (+22.2% edge) przy kursie 1.60 czynią z tego świetny typ.",
+  "reason": "Brunold jest w fenomenalnej formie (WWWWW na kortach twardych), a jego rywal przegrał 3 z ostatnich 4 spotkań. Ocena A i ogromny edge (+22.2%) czynią to najlepszym typem tenisa.",
   "risks": [
-   "Brak aktualnych meczów H2H"
+   "Jeden Stale H2H z przeszłości na korzyść Bertoli"
   ],
   "match": "M. Brunold vs R. Bertola",
   "pick": "M. Brunold",
@@ -260,12 +327,45 @@
   "injuryLine": ""
  },
  {
+  "key": "football|AVS vs CD Tondela|CD Tondela",
+  "verdict": "OBSERWUJ",
+  "confidence": 2,
+  "reason": "Oba zespoły są w świetnej dyspozycji, jednak wygrana Tondeli wyceniana jest przez model zaledwie na 40% z uwagi na wysokie ryzyko remisu. Absencja kluczowego gracza AVS osłabia gospodarzy, ale ocena C nakazuje czujność.",
+  "risks": [
+   "Ocena C",
+   "Niskie prawdopodobieństwo wygranej (40%)",
+   "Duże prawdopodobieństwo remisu"
+  ],
+  "match": "AVS vs CD Tondela",
+  "pick": "CD Tondela",
+  "odds": 2.03,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": "🩺 Absencje: AVS: D. Kerr* (kontuzja)"
+ },
+ {
+  "key": "football|Pobla de Mafumet vs Mollerussa|Pobla de Mafumet",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Mollerussa spisuje się fatalnie na wyjazdach (DLLDL), podczas gdy gospodarze u siebie regularnie punktują. Kurs 2.35 zapewnia bardzo atrakcyjne EV i margines bezpieczeństwa.",
+  "risks": [
+   "Niestabilna forma ogólna gospodarzy",
+   "Brak aktualnych meczów H2H"
+  ],
+  "match": "Pobla de Mafumet vs Mollerussa",
+  "pick": "Pobla de Mafumet",
+  "odds": 2.35,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "hockey|Boro Vetlanda HC vs Tyringe|Boro Vetlanda HC",
   "verdict": "GRAJ",
   "confidence": 5,
-  "reason": "Gospodarze wygrali 4 ostatnie starcia H2H i są w wyraźnie lepszym gazie niż Tyringe (4 mecze bez zwycięstwa). Wynik scoringowy 76.6 i EV +37.9% dają bardzo wysoki priorytet.",
+  "reason": "Ocena A, absolutna dominacja w H2H (4.0-0) i tragiczny bilans wyjazdowy Tyringe (LLLWL) czynią ten typ wyjątkowo pewnym. Bardzo wysoki wskaźnik EV (+37.9%).",
   "risks": [
-   "Przeciętny bilans ostatnich meczów domowych"
+   "Boro zdarzają się remisy w regulaminowym czasie"
   ],
   "match": "Boro Vetlanda HC vs Tyringe",
   "pick": "Boro Vetlanda HC",
@@ -278,9 +378,10 @@
   "key": "hockey|Liberec vs Plzen|Liberec",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Liberec u siebie prezentuje solidny poziom, wygrał ostatnie mecze H2H i dysponuje wyśmienitym wskaźnikiem EV (+22.5% edge) przy kursie 2.15.",
+  "reason": "Wysoki kurs 2.15 na gospodarzy przy ocenie A i kłopotach wyjazdowych Plzeň. Liberec świetnie radzi sobie bezpośrednio z tym rywalem i generuje wybitne EV (+48.3%).",
   "risks": [
-   "Plzen spisywało się groźnie w ostatnich wyjazdach"
+   "Liberec dość często remisuje w lidze",
+   "Oba zespoły grały w Lidze Mistrzów"
   ],
   "match": "Liberec vs Plzen",
   "pick": "Liberec",
@@ -290,12 +391,28 @@
   "injuryLine": ""
  },
  {
+  "key": "football|Rana vs Tromsdalen UIL|Tromsdalen UIL",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Tromsdalen dominuje w H2H i dobrze spisało się w ostatnich meczach wyjazdowych. Rana u siebie zmaga się z poważnym kryzysem formy (WLLLW).",
+  "risks": [
+   "Wyrównany kursowo mecz",
+   "Słabe poparcie w głosowaniu kibiców (46%)"
+  ],
+  "match": "Rana vs Tromsdalen UIL",
+  "pick": "Tromsdalen UIL",
+  "odds": 2.0,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "hockey|Krefeld Pinguine vs Munchen|Munchen",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "München imponuje postawą na wyjazdach (3 wygrane z rzędu), spotykając się z Krefeld, które przegrało 4 z ostatnich 5 spotkań ogółem. Dodatnie EV i wsparcie 80% fanów.",
+  "reason": "Munchen prezentuje wyraźną przewagę formy i dyspozycji wyjazdowej nad Krefeld. Wszystkie modele jednoznacznie wskazują na gości przy atrakcyjnym kursie.",
   "risks": [
-   "Nieaktualne dane H2H"
+   "stale H2H (brak bezpośrednich starć od 2022 roku)"
   ],
   "match": "Krefeld Pinguine vs Munchen",
   "pick": "Munchen",
@@ -308,10 +425,11 @@
   "key": "hockey|Augsburger Panther vs Straubing Tigers|Straubing Tigers",
   "verdict": "OBSERWUJ",
   "confidence": 3,
-  "reason": "Straubing prezentuje się nieco stabilniej, ale Augsburger wygrał 2 ostatnie mecze. Wskaźniki value są dodatnie, lecz umiarkowane.",
+  "reason": "Straubing jest faworytem, ale brak szczegółowych danych dom/wyjazd oraz brak historii H2H nakazują ostrożność.",
   "risks": [
-   "Przebudzenie formy gospodarzy",
-   "Brak danych H2H"
+   "brak danych dom/wyjazd",
+   "brak H2H",
+   "relatywnie niska przewaga wartości (edge 5%)"
   ],
   "match": "Augsburger Panther vs Straubing Tigers",
   "pick": "Straubing Tigers",
@@ -324,9 +442,9 @@
   "key": "basketball|Tofas vs Petkim Spor|Tofas",
   "verdict": "GRAJ",
   "confidence": 5,
-  "reason": "Tofas znakomicie radzi sobie u siebie (4 wygrane w 5 meczach), dominuje w H2H i ma aż 91% poparcia kibiców. Kurs 1.80 gwarantuje wysokie EV (+17.9% edge).",
+  "reason": "Tofas dominuje w H2H, prezentuje znakomitą dyspozycję u siebie i popiera to solidną grą w pucharach. Bardzo silne poparcie modeli i społeczności.",
   "risks": [
-   "Zatłoczony terminarz z pucharami"
+   "obciążenie meczami w Eurocupie"
   ],
   "match": "Tofas vs Petkim Spor",
   "pick": "Tofas",
@@ -338,10 +456,11 @@
  {
   "key": "handball|Frydek-Mistek vs Nove Veseli|Nove Veseli",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Nove Veseli wygrało większość starć H2H, a gospodarze ponieśli 4 porażki w 5 ostatnich meczach przed własną publicznością. Kurs 2.05 daje atrakcyjne EV.",
+  "confidence": 4,
+  "reason": "Nove Veseli ma wyraźną przewagę w bezpośrednich meczach oraz lepszą formę na wyjazdach wobec fatalnej passy domowej gospodarzy.",
   "risks": [
-   "Kratkowana forma wyjazdowa gości"
+   "niska próba głosów społeczności",
+   "ryzyko remisu w piłce ręcznej"
   ],
   "match": "Frydek-Mistek vs Nove Veseli",
   "pick": "Nove Veseli",
@@ -351,14 +470,47 @@
   "injuryLine": ""
  },
  {
+  "key": "football|Korona Kielce U19 vs Gornik Z. U19|Gornik Z. U19",
+  "verdict": "OBSERWUJ",
+  "confidence": 2,
+  "reason": "Rozgrywki juniorskie charakteryzują się dużą zmiennością, a Forebet szacuje prawdopodobieństwo na zaledwie 51%.",
+  "risks": [
+   "duża nieprzewidywalność lig U19",
+   "brak danych H2H i podziału dom/wyjazd"
+  ],
+  "match": "Korona Kielce U19 vs Gornik Z. U19",
+  "pick": "Gornik Z. U19",
+  "odds": 2.0,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Apollon Smyrni vs Ethnikos Pireus|Apollon Smyrni",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Model Forebet daje zaledwie 43% szans gospodarzom, co przy kursie 2.15 nie daje wystarczającego marginesu bezpieczeństwa.",
+  "risks": [
+   "niska prognoza algorytmu (43%)",
+   "niska liga grecka ze skąpą ilością danych",
+   "brak H2H"
+  ],
+  "match": "Apollon Smyrni vs Ethnikos Pireus",
+  "pick": "Apollon Smyrni",
+  "odds": 2.15,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "hockey|Villach vs TWK Innsbruck|Villach",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Choć Villach wygrywa u siebie, ocena Grade C, minimalne EV (+0.7%) oraz mismatch w SofaScore skłaniają do odpuszczenia.",
+  "reason": "Błąd dopasowania danych SofaScore oraz minimalne EV i edge (0.7%) czynią ten typ nieopłacalnym.",
   "risks": [
-   "Ocena Grade C",
-   "Znikome EV",
-   "Brak weryfikacji danych"
+   "błędne dopasowanie danych z SofaScore",
+   "znikome edge",
+   "kurs nieadekwatny do ryzyka"
   ],
   "match": "Villach vs TWK Innsbruck",
   "pick": "Villach",
@@ -368,12 +520,44 @@
   "injuryLine": ""
  },
  {
+  "key": "football|Sarrabus Ogliastra vs Gelbison Cilento|Gelbison Cilento",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Gospodarze nie wygrali meczu w sezonie, lecz Gelbison na wyjazdach ma mieszane wyniki, a liga Serie D bywa remisowa.",
+  "risks": [
+   "wysokie prawdopodobieństwo remisu w Serie D",
+   "forebet poniżej 50%"
+  ],
+  "match": "Sarrabus Ogliastra vs Gelbison Cilento",
+  "pick": "Gelbison Cilento",
+  "odds": 2.35,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Genoa vs Venezia|Genoa",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Genoa ma atut własnego boiska i słabego rywala, jednak brak kluczowego pomocnika D. Sowa może wpłynąć na płynność gry.",
+  "risks": [
+   "absencja kluczowego zawodnika D. Sowa",
+   "niska skuteczność w bieżącym sezonie ligowym"
+  ],
+  "match": "Genoa vs Venezia",
+  "pick": "Genoa",
+  "odds": 2.15,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": "🩺 Absencje: Genoa: D. Sow* (kontuzja), E. Havel (kontuzja); Venezia: B. Franjić (kontuzja), T. Correia (kontuzja)"
+ },
+ {
   "key": "hockey|Bremerhaven vs ERC Ingolstadt|ERC Ingolstadt",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Ingolstadt nie przegrało od 5 spotkań (3 wygrane, 2 remisy), podczas gdy Bremerhaven poniosło 4 porażki w 5 ostatnich meczach. Dobra przewaga w H2H i kurs 2.10 z EV +14.5%.",
+  "reason": "Ingolstadt w znakomitej dyspozycji punktowej, z przewagą w H2H i bardzo dobrymi występami wyjazdowymi.",
   "risks": [
-   "Bremerhaven potrafi sprawić niespodziankę u siebie"
+   "Bremerhaven na własnym lodzie potrafi sprawiać niespodzianki"
   ],
   "match": "Bremerhaven vs ERC Ingolstadt",
   "pick": "ERC Ingolstadt",
@@ -386,10 +570,9 @@
   "key": "tennis|Y. Lalami Laaroussi vs D. Salazar|D. Salazar",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Salazar prezentuje znacznie wyższą formę na nawierzchni ziemnej (4 wygrane w ostatnich 5 meczach) przy kompletnej zapaści rywala (5 porażek z rzędu). Przewaga jest wyraźna i poparta wysokim wsparciem społeczności.",
+  "reason": "Salazar wykazuje wyraźną wyższość formy i umiejętności na mączce na tle rywala, który przegrał 5 ostatnich pojedynków.",
   "risks": [
-   "Umiarkowane prawdopodobieństwo Forebet (55%)",
-   "Brak bezpośrednich pojedynków H2H"
+   "niski poziom turnieju i możliwa niestabilność dyspozycji dnia"
   ],
   "match": "Y. Lalami Laaroussi vs D. Salazar",
   "pick": "D. Salazar",
@@ -399,13 +582,122 @@
   "injuryLine": ""
  },
  {
-  "key": "hockey|Norfolk Admirals vs Trois-Rivieres Lions|Trois-Rivieres Lions",
+  "key": "football|AC Horsens vs Sonderjyske|AC Horsens",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "M mismatch danych w SofaScore oraz relatywnie niska prognoza bazowa modelu uniemożliwiają pewną ocenę.",
+  "risks": [
+   "błędne mapowanie SofaScore",
+   "duża liczba remisów Horsens w sezonie"
+  ],
+  "match": "AC Horsens vs Sonderjyske",
+  "pick": "AC Horsens",
+  "odds": 2.4,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Florgrade vs CD Cinfães|Florgrade",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Bardzo niskie edge (2.1%) i prawdopodobieństwo Forebet na poziomie zaledwie 45% przy wysokim ryzyku remisu.",
+  "risks": [
+   "niska płynność rynkowa",
+   "częste remisy obu drużyn"
+  ],
+  "match": "Florgrade vs CD Cinfães",
+  "pick": "Florgrade",
+  "odds": 2.2,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Sligo Rovers W vs Peamount United W|Sligo Rovers W",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Sligo jest w lepszej formie, ale historia spotkań z Peamount jest wyrównana, a model wskazuje tylko 45% szans na czystą 'jedynkę'.",
+  "risks": [
+   "niska prognoza Forebet",
+   "wysokie ryzyko remisu"
+  ],
+  "match": "Sligo Rovers W vs Peamount United W",
+  "pick": "Sligo Rovers W",
+  "odds": 2.3,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|AD Os Limianos vs Celoricense|AD Os Limianos",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Ujemne wskaźniki wartości (EV -0.014, edge -0.7%) oraz niska prognoza zwycięstwa (39%) wykluczają ten zakład.",
+  "risks": [
+   "ujemna wartość oczekiwana (EV < 0)",
+   "forebet zaledwie 39%"
+  ],
+  "match": "AD Os Limianos vs Celoricense",
+  "pick": "AD Os Limianos",
+  "odds": 2.0,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Assyriska FF vs FC Arlanda|FC Arlanda",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Goście są w serii 4 zwycięstw i pokonali Norfolk na ich terenie zaledwie dzień wcześniej. Przewaga w bezpośrednich starciach H2H oraz wysokie wsparcie sygnałów wskazują na kolejną wygraną Lions.",
+  "reason": "Arlanda regularnie punktuje, zdominowała bilans bezpośredni (2.5-0) i trafia na zespół notujący serię porażek u siebie.",
   "risks": [
-   "Mecz dzień po dniu z tym samym przeciwnikiem",
-   "Niski kurs jak na mecz wyjazdowy w hokeju (1.59)"
+   "niższa liga szwedzka podatna na overowe, nieprzewidywalne zwroty akcji"
+  ],
+  "match": "Assyriska FF vs FC Arlanda",
+  "pick": "FC Arlanda",
+  "odds": 2.15,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Deportivo Maritimo vs FC Cartagena B|FC Cartagena B",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Wartość oczekiwana jest ujemna, zaledwie 4 głosy w społeczności i spore prawdopodobieństwo podziału punktów.",
+  "risks": [
+   "ujemne EV",
+   "niska prognoza wygranej (43%)"
+  ],
+  "match": "Deportivo Maritimo vs FC Cartagena B",
+  "pick": "FC Cartagena B",
+  "odds": 2.15,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Maria da Fonte vs GD Bragança|GD Bragança",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Bragança wygrała 3 ostatnie mecze ligowe, podczas gdy rywal znajduje się w głębokim kryzysie (zwłaszcza na własnym stadionie).",
+  "risks": [
+   "przedawniona historia H2H (sprzed 2023 r.)"
+  ],
+  "match": "Maria da Fonte vs GD Bragança",
+  "pick": "GD Bragança",
+  "odds": 2.05,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "hockey|Norfolk Admirals vs Trois-Rivieres Lions|Trois-Rivieres Lions",
+  "verdict": "GRAJ",
+  "confidence": 5,
+  "reason": "Kompletna dominacja Trois-Rivieres pod kątem formy (seria zwycięstw) oraz znakomity bilans H2H (4.0-1.0). Zdecydowany faworyt.",
+  "risks": [
+   "mecz back-to-back w ECHL"
   ],
   "match": "Norfolk Admirals vs Trois-Rivieres Lions",
   "pick": "Trois-Rivieres Lions",
@@ -415,13 +707,74 @@
   "injuryLine": ""
  },
  {
+  "key": "football|Auxerre vs Le Mans FC|Auxerre",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Auxerre jest w świetnej dyspozycji ligowej, a kluczowe absencje w formacji defensywnej i ataku Le Mans znacząco osłabiają gości.",
+  "risks": [
+   "kilka kontuzji rotacyjnych w zespole gospodarzy"
+  ],
+  "match": "Auxerre vs Le Mans FC",
+  "pick": "Auxerre",
+  "odds": 2.05,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": "🩺 Absencje: Auxerre: A. Dioussé (kontuzja), M. Senaya (kontuzja), R. Lascary (kontuzja), S. Fofana (kontuzja), T. Siwe (kontuzja); Le Mans FC: A. Bourabaa* (kontuzja), E. Colas (kontuzja), H. Voyer (kontuzja), M. Rossignol (kontuzja), T. Eyoum* (kontuzja) +1"
+ },
+ {
+  "key": "football|CA Aldosivi vs Belgrano Córdoba|Belgrano Córdoba",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Belgrano jest w znakomitym rytmie, podczas gdy Aldosivi przegrywa mecz za meczem i traci dwóch kluczowych graczy przez kontuzje.",
+  "risks": [
+   "trudny teren wyjazdowy w lidze argentyńskiej"
+  ],
+  "match": "CA Aldosivi vs Belgrano Córdoba",
+  "pick": "Belgrano Córdoba",
+  "odds": 2.0,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": "🩺 Absencje: CA Aldosivi: A. Sosa* (kontuzja), R. González* (kontuzja)"
+ },
+ {
+  "key": "football|Gazte Berriak vs Valle de Egüés|Gazte Berriak",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Gospodarze mają komplet zwycięstw u siebie i przewagę H2H, ale niska liczba bramek w lidze niesie wysokie ryzyko remisu.",
+  "risks": [
+   "forebet przewiduje tylko 40% na wygraną",
+   "bardzo mała próba głosów fanów (8)"
+  ],
+  "match": "Gazte Berriak vs Valle de Egüés",
+  "pick": "Gazte Berriak",
+  "odds": 2.05,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Kawkab Marrakech vs Difaâ El Jadidi|Kawkab Marrakech",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Prognoza Forebet wynosi zaledwie 37%, a liga marokańska charakteryzuje się bardzo wysokim odsetkiem remisów.",
+  "risks": [
+   "bardzo niska prognoza modelowa (37%)",
+   "duże prawdopodobieństwo remisu"
+  ],
+  "match": "Kawkab Marrakech vs Difaâ El Jadidi",
+  "pick": "Kawkab Marrakech",
+  "odds": 2.39,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "hockey|Edmonton Oil Kings vs Penticton Vees|Edmonton Oil Kings",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Gospodarze dobrze prezentują się u siebie (WWWLD), podczas gdy goście przegrali 4 z ostatnich 5 spotkań. Kurs 1.95 generuje bardzo wysoką wartość oczekiwaną (EV +0.30) przy ocenie Grade A.",
+  "reason": "Edmonton świetnie punktuje u siebie, mierząc się z rywalem będącym w kryzysie (4 porażki w 5 meczach). Solidne poparcie modeli.",
   "risks": [
-   "Przegrana w jedynym dotychczasowym meczu H2H z tym rywalem",
-   "Wysoki kurs wskazujący na wyrównany mecz"
+   "zmienna dyspozycja formacji obronnych w lidze juniorskiej WHL"
   ],
   "match": "Edmonton Oil Kings vs Penticton Vees",
   "pick": "Edmonton Oil Kings",
@@ -431,34 +784,143 @@
   "injuryLine": ""
  },
  {
-  "key": "basketball|Zadar vs Perspektiva Ilirija|Zadar",
-  "verdict": "ODPUŚĆ",
-  "confidence": 2,
-  "reason": "Zakład posiada ujemną wartość oczekiwaną (EV -0.074) oraz niskie prawdopodobieństwo zdarzenia wg Forebet (54%) w stosunku do kursu 1.48. Mimo wysokie fanvote, typ jest nierentowny matematycznie.",
+  "key": "football|Boca Unidos vs Gimnasia Chivilcoy|Boca Unidos",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Boca Unidos ma świetny bilans domowy i H2H, jednak model Forebet szacuje wygraną tylko na 37% z uwagi na tendencję do remisów.",
   "risks": [
-   "Ujemna wartość oczekiwana (EV -0.074)",
-   "Niskie prawdopodobieństwo szans na wygraną wg modelu (54%)",
-   "Niska ocena analityczna (Grade C)"
+   "niska szansa według Forebet (37%)",
+   "underowy charakter rozgrywek Torneo Federal A"
   ],
-  "match": "Zadar vs Perspektiva Ilirija",
-  "pick": "Zadar",
-  "odds": 1.48,
-  "sport": "basketball",
+  "match": "Boca Unidos vs Gimnasia Chivilcoy",
+  "pick": "Boca Unidos",
+  "odds": 2.0,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|UD Santarém vs Vitória Sernache|UD Santarém",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Santarém prezentuje bardzo dobrą formę w sezonie (3 zwycięstwa w 4 meczach) i ma wysokie poparcie społeczności oraz wskaźniki modelu. Rywale przegrali dwa ostatnie mecze i słabo spisują się na wyjazdach.",
+  "risks": [
+   "Średnia forma gospodarzy na własnym stadionie w szerszym ujęciu",
+   "Brak świeżego H2H"
+  ],
+  "match": "UD Santarém vs Vitória Sernache",
+  "pick": "UD Santarém",
+  "odds": 2.0,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Herrera FC vs San Francisco FC|San Francisco FC",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "San Francisco FC błyszczy w meczach wyjazdowych (4 wygrane z rzędu na wyjeździe), podczas gdy Herrera FC u siebie regularnie traci punkty. Dodatkowym atutem jest niedawne bezpośrednie zwycięstwo gości.",
+  "risks": [
+   "Pewna nieregularność formy ogólnej gości (WLWLW)"
+  ],
+  "match": "Herrera FC vs San Francisco FC",
+  "pick": "San Francisco FC",
+  "odds": 1.63,
+  "sport": "football",
+  "source": "Forebet",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Ehime FC vs Fukushima United|Ehime FC",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Ehime FC jest bardzo groźne na własnym terenie (4 wygrane w ostatnich 5 meczach domowych), a Fukushima United wyraźnie dołuje, nie wygrywając od 4 spotkań.",
+  "risks": [
+   "Niski wskaźnik EV",
+   "Brak aktualnych meczów H2H"
+  ],
+  "match": "Ehime FC vs Fukushima United",
+  "pick": "Ehime FC",
+  "odds": 1.6,
+  "sport": "football",
+  "source": "Forebet",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Kravare vs FK Šumperk|Kravare",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Kravare są niepokonani w tym sezonie i dominują u siebie (4 wygrane w 5 meczach), z kolei FK Šumperk pozostaje bez wygranej od 5 spotkań.",
+  "risks": [
+   "Mniejsza liga i niski wolumen głosów społeczności"
+  ],
+  "match": "Kravare vs FK Šumperk",
+  "pick": "Kravare",
+  "odds": 1.787,
+  "sport": "football",
+  "source": "Forebet",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|FC Siena vs Rondinella Marzocco|FC Siena",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Siena świetnie radzi sobie u siebie (4 wygrane, 1 remis), a także wygrała bezpośrednie starcie z tym rywalem zaledwie tydzień temu.",
+  "risks": [
+   "Porażka Sieny w ostatniej kolejce ligowej"
+  ],
+  "match": "FC Siena vs Rondinella Marzocco",
+  "pick": "FC Siena",
+  "odds": 1.55,
+  "sport": "football",
+  "source": "Forebet",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Farul Constanta vs Otelul Galati|Farul Constanta",
+  "verdict": "OBSERWUJ",
+  "confidence": 2,
+  "reason": "Farul znakomicie punktuje na własnym boisku, a Otelul znajduje się w kryzysie (3 porażki z rzędu). Jednak niskie EV oraz słaba skuteczność H2H nakazują ostrożność.",
+  "risks": [
+   "Niski EV (5.3%)",
+   "Przeplatana forma ogólna Farulu",
+   "Bezramkowy remis w ostatnim H2H"
+  ],
+  "match": "Farul Constanta vs Otelul Galati",
+  "pick": "Farul Constanta",
+  "odds": 1.93,
+  "sport": "football",
   "source": "Forebet",
   "injuryLine": ""
  },
  {
   "key": "basketball|Ruvo Di Puglia vs Sassari|Sassari",
-  "verdict": "OBSERWUJ",
+  "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Mimo lepszej ogólnej formy Sassari i wysokich prawdopodobieństw w modelach, kurs 1.50 na wyjeździe niesie ze sobą ryzyko. Zaledwie 4 dni wcześniej Ruvo Di Puglia wysoko pokonało Sassari 93-71.",
+  "reason": "Mimo że Sassari ma lepszą ogólną formę w sezonie, zaledwie 4 dni temu uległo zespołowi Ruvo Di Puglia aż 71-93 w bezpośrednim starciu.",
   "risks": [
-   "Wysoka porażka w bezpośrednim meczu 4 dni temu (71-93)",
-   "Niski kurs (1.50) nie rekompensuje ryzyka meczu wyjazdowego"
+   "Wysoka porażka w bardzo świeżym H2H",
+   "Słabe EV"
   ],
   "match": "Ruvo Di Puglia vs Sassari",
   "pick": "Sassari",
   "odds": 1.5,
+  "sport": "basketball",
+  "source": "Forebet",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Zadar vs Perspektiva Ilirija|Zadar",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Typ posiada ujemną wartość oczekiwaną (EV: -7.4%) oraz negatywny edge przy kursie 1.48, co wyklucza opłacalność zakładu.",
+  "risks": [
+   "Ujemne EV",
+   "Porażki Zadaru w równoległych rozgrywkach pucharu ABA"
+  ],
+  "match": "Zadar vs Perspektiva Ilirija",
+  "pick": "Zadar",
+  "odds": 1.48,
   "sport": "basketball",
   "source": "Forebet",
   "injuryLine": ""
