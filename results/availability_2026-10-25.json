@@ -267,7 +267,7 @@
   "netKey": 0
  },
  "basketball|Espanol Osorno|Ancud": {
-  "checkedAt": "2026-10-25T09:48:26.269803+00:00",
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -501,7 +501,7 @@
   "unknown": true
  },
  "hockey|Wenatchee Wild|Kamloops Blazers": {
-  "checkedAt": "2026-10-25T09:48:26.269803+00:00",
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -510,7 +510,7 @@
   "unknown": true
  },
  "hockey|Winnipeg Jets|Montreal Canadiens": {
-  "checkedAt": "2026-10-25T09:48:26.269803+00:00",
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1867,11 +1867,17 @@
   "unknown": true
  },
  "football|Udinese|Milan": {
-  "checkedAt": "2026-10-25T10:02:16.807639+00:00",
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [
+   {
+    "name": "N. Zaniolo",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
    {
     "name": "D. Alaba",
     "importance": "other",
@@ -1885,22 +1891,22 @@
     "reason": "Ankle Injury"
    },
    {
-    "name": "V. Bayo",
-    "importance": "other",
+    "name": "O. Solet",
+    "importance": "star",
     "status": "out",
     "reason": "Muscle Injury"
    },
    {
-    "name": "O. Solet",
-    "importance": "star",
-    "status": "doubtful",
+    "name": "V. Bayo",
+    "importance": "other",
+    "status": "out",
     "reason": "Muscle Injury"
    }
   ],
   "away": [
    {
     "name": "A. Rabiot",
-    "importance": "other",
+    "importance": "key",
     "status": "out",
     "reason": "Calf Injury"
    },
@@ -1924,7 +1930,7 @@
    },
    {
     "name": "M. Gabbia",
-    "importance": "other",
+    "importance": "key",
     "status": "out",
     "reason": "Tendon Injury"
    },
@@ -1933,49 +1939,83 @@
     "importance": "key",
     "status": "out",
     "reason": "Thigh Injury"
-   },
-   {
-    "name": "R. Loftus-Cheek",
-    "importance": "other",
-    "status": "doubtful",
-    "reason": "Physical Discomfort"
    }
   ],
   "sources": null,
   "board": "downgrade",
   "top_block": true,
-  "netStars": 1,
+  "netStars": -1,
   "netKey": 3
  },
  "football|Mitre SdE|Godoy Cruz": {
-  "checkedAt": "2026-10-25T10:02:16.807639+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "away",
+  "home": [
+   {
+    "name": "S. Rosales",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "away": [
+   {
+    "name": "J. Moran",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "sources": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "football|HFX Wanderers|Supra du Québec": {
-  "checkedAt": "2026-10-25T10:02:16.807639+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "football|UD Santarém|Vitória Sernache": {
-  "checkedAt": "2026-10-25T10:02:16.807639+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "home",
+  "home": [
+   {
+    "name": "S. Diarra",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "away": [
+   {
+    "name": "J. Silva",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "sources": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "football|Delfines Del Este|Salcedo": {
-  "checkedAt": "2026-10-25T10:02:16.807639+00:00",
+  "checkedAt": "2026-10-25T20:49:06.857059+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
