@@ -1,17 +1,7 @@
 {
   "date": "2026-10-25",
-  "generated_at": "2026-10-25T13:49:08.678791+00:00",
+  "generated_at": "2026-10-25T18:29:07.804078+00:00",
   "issues": [
-    {
-      "level": "ALERT",
-      "workflow": "daily_digest.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
-    },
     {
       "level": "WARN",
       "workflow": "SOFASCORE_RELAY",
@@ -59,41 +49,36 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 40156759244,
-        "status": "completed",
-        "conclusion": "cancelled",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40156759244"
+        "databaseId": 40216859272,
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40216859272"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 4,
+      "runs_today": 6,
       "issues": [],
       "run": {
-        "databaseId": 40188446505,
-        "status": "completed",
-        "conclusion": "cancelled",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40188446505"
+        "databaseId": 40218479274,
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40218479274"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "daily_digest.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 40212976895,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40212976895"
+      }
     }
   ],
   "relays": [
@@ -135,7 +120,7 @@
     }
   ],
   "counts": {
-    "ALERT": 1,
+    "ALERT": 0,
     "WARN": 1
   }
 }
