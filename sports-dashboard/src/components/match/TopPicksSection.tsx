@@ -12,7 +12,75 @@ import { SportIcon } from '@/components/shared/SportIcon'
 import { formatMatchTime, formatOdds } from '@/lib/format'
 import { SideAvatar } from '@/components/match/SideAvatar'
 import { RadialProgress } from '@/components/charts/RadialProgress'
+import { StakeChip } from '@/components/top/StakeChip'
 import type { Match } from '@/lib/types'
+import { topStatus, type TopPick } from '@/lib/api'
+
+const SOURCE: Record<string, string> = {
+  pinnacle: 'Pinnacle',
+  oddssafari: 'OddsSafari',
+  livesport: 'Livesport',
+}
+
+function sourceName(s?: string | null) {
+  return s ? SOURCE[s] ?? s : 'unknown source'
+}
+
+/** Line-ups label (R3.3b): only when a pre-kick-off check ran or was missed. */
+function lineupsLabel(p: TopPick): string | null {
+  if ((p.availStatus === 'ok' || p.availStatus === 'block') && typeof p.availMinsToKick === 'number') {
+    return `Line-ups checked ${p.availMinsToKick} min before kick-off`
+  }
+  if (p.finalCheckMissed || p.availStatus === 'unknown' || p.availStatus === 'stale') return 'Line-ups unverified'
+  return null
+}
+
+/**
+ * Detail line of a TOP pick on /top: suggested stake, best price, the minimum
+ * profitable price, closing price + CLV, line-up check and the hockey OT note.
+ * Every field is optional – picks published before these fields existed simply
+ * show fewer items.
+ */
+export function TopPickDetails({ pick: p }: { pick: TopPick }) {
+  const status = topStatus(p)
+  if (status === 'withdrawn') {
+    return (
+      <div className="basis-full pl-7 text-xs text-muted-foreground">
+        Withdrawn: {p.withdrawReason ?? p.result?.reason ?? 'reason not recorded'}
+      </div>
+    )
+  }
+  const lineups = lineupsLabel(p)
+  const showTwoWay = p.oddsMarket === '2way_equiv' && typeof p.odds2 === 'number' && p.odds2 !== p.odds
+  return (
+    <div className="flex basis-full flex-wrap items-center gap-x-3 gap-y-1 pl-7 text-xs text-muted-foreground">
+      <StakeChip stakePct={p.stakePct} />
+      {showTwoWay && <span className="tabular-nums">2-way price {formatOdds(p.odds2)}</span>}
+      {typeof p.bestOdds === 'number' && (
+        <span className="tabular-nums">
+          Best price <b className="text-foreground">{formatOdds(p.bestOdds)}</b> ({sourceName(p.bestOddsSource)}
+          {p.booksCount && p.booksCount > 1 ? `, ${p.booksCount} books` : ''})
+        </span>
+      )}
+      {typeof p.floorOdds === 'number' && p.floorOdds > 1 && (
+        <span className="tabular-nums">Don&apos;t bet below <b className="text-foreground">{formatOdds(p.floorOdds)}</b></span>
+      )}
+      {typeof p.closingOdds === 'number' && (
+        <span className="tabular-nums">
+          Closing {formatOdds(p.closingOdds)} ({sourceName(p.closingSource)}{p.closingApprox ? ', approx.' : ''})
+          {typeof p.clvPct === 'number' && (
+            <> · CLV <b className={cn(
+              p.clvPct > 0 && 'text-emerald-600 dark:text-emerald-400',
+              p.clvPct < 0 && 'text-red-600 dark:text-red-400',
+            )}>{p.clvPct > 0 ? '+' : ''}{p.clvPct.toFixed(1)}%</b></>
+          )}
+        </span>
+      )}
+      {lineups && <span>{lineups}</span>}
+      {p.sport === 'hockey' && <span>Price includes overtime</span>}
+    </div>
+  )
+}
 
 interface Props {
   matches: Match[]

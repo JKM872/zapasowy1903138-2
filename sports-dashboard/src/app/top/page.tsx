@@ -1,12 +1,14 @@
 // ============================================================================
 // TOP – our best picks with a public, settled track record.
-// Settled picks are visible to everyone (the proof); today's open picks are
-// returned by the API only to subscribers, everyone else sees a locked count.
+// Settled and withdrawn picks are visible to everyone (the proof); today's open
+// picks are returned by the API only to subscribers, everyone else sees a
+// locked count. Withdrawn picks show their reason at once and their selection
+// after kick-off.
 // ============================================================================
 'use client'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
-import { Crown, Loader2, Lock, Star, TriangleAlert } from 'lucide-react'
+import { BookOpen, Crown, Loader2, Lock, Star, TriangleAlert } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,7 +16,12 @@ import { cn } from '@/lib/utils'
 import { getSportConfig } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
-import { getTopPicks, type TopPick, type TopSummary } from '@/lib/api'
+import { getTopPicks, topStatus, topWithdrawn, type TopPick, type TopSummary } from '@/lib/api'
+import { TopPickDetails } from '@/components/match/TopPicksSection'
+import { ClvTile } from '@/components/top/ClvTile'
+import { BankrollChart } from '@/components/top/BankrollChart'
+import { WithdrawnList } from '@/components/top/WithdrawnList'
+import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
 
 function fmtPct(v: number | null | undefined, signed = false) {
   if (v === null || v === undefined) return '—'
@@ -22,22 +29,27 @@ function fmtPct(v: number | null | undefined, signed = false) {
   return `${signed && v > 0 ? '+' : ''}${s}%`
 }
 
+function fmtUnits(v: number | null | undefined) {
+  if (v === null || v === undefined) return '—'
+  return `${v > 0 ? '+' : ''}${v.toFixed(2)} u`
+}
+
 const STATUS: Record<string, { label: string; cls: string }> = {
   won: { label: 'Won', cls: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' },
   lost: { label: 'Lost', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
   draw: { label: 'Draw (lost)', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
-  withdrawn: { label: 'Withdrawn – not counted', cls: 'bg-zinc-500/15 text-zinc-500 line-through decoration-transparent' },
+  withdrawn: { label: 'Withdrawn – not counted', cls: 'bg-zinc-500/15 text-zinc-500' },
 }
 
 function StatusBadge({ pick }: { pick: TopPick }) {
-  const st = pick.result?.status
-  const meta = st ? STATUS[st] : undefined
+  const st = topStatus(pick)
+  const meta = STATUS[st]
   if (!meta) {
     return <span className="rounded px-2 py-0.5 text-xs bg-muted text-muted-foreground">Pending</span>
   }
   return (
     <span className={cn('rounded px-2 py-0.5 text-xs font-medium', meta.cls)}
-      title={st === 'withdrawn' ? (pick.result as { reason?: string })?.reason : undefined}>
+      title={st === 'withdrawn' ? (pick.withdrawReason ?? pick.result?.reason) : undefined}>
       {meta.label}
     </span>
   )
@@ -48,10 +60,10 @@ function SummaryTiles({ s }: { s: TopSummary }) {
     { label: 'Settled picks', value: `${s.settled} / ${s.picks}` },
     { label: 'Hit rate', value: fmtPct(s.hitRate) },
     { label: 'ROI (1-unit stake)', value: fmtPct(s.roi, true), tone: s.roi },
-    { label: 'Profit', value: s.profitUnits === null ? '—' : `${s.profitUnits > 0 ? '+' : ''}${s.profitUnits.toFixed(2)} u`, tone: s.profitUnits },
+    { label: 'Profit', value: fmtUnits(s.profitUnits), tone: s.profitUnits },
   ]
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {tiles.map(t => (
         <Card key={t.label}>
           <CardContent className="p-4">
@@ -64,7 +76,24 @@ function SummaryTiles({ s }: { s: TopSummary }) {
           </CardContent>
         </Card>
       ))}
+      <ClvTile clv={s.clv} />
     </div>
+  )
+}
+
+/** Methodology line (K8): headline is 2-way priced, the published-price figure is kept for honesty. */
+function Methodology({ s }: { s: TopSummary }) {
+  const w = topWithdrawn(s)
+  return (
+    <p className="text-xs text-muted-foreground">
+      Flat 1-unit record; withdrawn picks excluded; hockey priced 2-way incl. OT.
+      {s.roiAsStored != null && (
+        <> At the prices as published the record is ROI {fmtPct(s.roiAsStored, true)} ({fmtUnits(s.profitUnitsAsStored)}).</>
+      )}
+      {(s.pricedAsStored ?? 0) > 0 && <> {s.pricedAsStored} settled picks could not be re-priced 2-way and count at the published price.</>}
+      {w.n > 0 && <> {w.n} withdrawn picks are listed below with their reasons.</>}
+      {' '}A draw on a winner pick counts as a loss. Small sample: results over a few days can swing a lot.
+    </p>
   )
 }
 
@@ -78,16 +107,23 @@ export default function TopPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
-      <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
-          <Star className="h-6 w-6 text-primary" />
-          Top Picks
-        </h1>
-        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Our strongest picks of the day. Every settled pick stays here for good,
-          with its result, odds and profit, so you can check the record yourself.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
+            <Star className="h-6 w-6 text-primary" />
+            Top Picks
+          </h1>
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+            Our strongest picks of the day. Every settled and withdrawn pick stays here for good,
+            with its result, odds and profit, so you can check the record yourself.
+          </p>
+        </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/how-to-use"><BookOpen className="mr-1.5 h-4 w-4" /> How to use our picks</Link>
+        </Button>
       </div>
+
+      <RiskDisclaimer />
 
       {isLoading && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -103,10 +139,9 @@ export default function TopPage() {
       {data && (
         <>
           <SummaryTiles s={data.summary} />
-          <p className="text-xs text-muted-foreground">
-            ROI assumes a flat 1-unit stake per pick at the odds when published.
-            A draw on a winner pick counts as a loss. Small sample: results over a few days can swing a lot.
-          </p>
+          <Methodology s={data.summary} />
+
+          <BankrollChart bankroll={data.summary.bankroll} />
 
           {Object.keys(data.bySport).length > 0 && (
             <Card>
@@ -127,8 +162,15 @@ export default function TopPage() {
                     </Badge>
                   ))}
               </CardContent>
+              {data.bySport.hockey && (
+                <CardContent className="pt-0 text-xs text-muted-foreground">
+                  Prices for hockey include overtime (2-way equivalent of the published 3-way price).
+                </CardContent>
+              )}
             </Card>
           )}
+
+          <WithdrawnList days={data.days} totals={topWithdrawn(data.summary)} />
 
           {data.days.map(day => (
             <Card key={day.date}>
@@ -154,11 +196,20 @@ export default function TopPage() {
                           <span className="font-medium">{p.match}</span>
                           {p.league && <span className="ml-2 text-xs text-muted-foreground">{p.league}</span>}
                         </span>
-                        <span>Pick: <b>{p.pick}</b></span>
-                        <span className="tabular-nums">@ {p.odds ? formatOdds(p.odds) : '—'}</span>
+                        {p.selectionLocked || !p.pick ? (
+                          <span className="flex items-center gap-1 text-muted-foreground">
+                            <Lock className="h-3.5 w-3.5" /> Selection hidden until kick-off
+                          </span>
+                        ) : (
+                          <>
+                            <span>Pick: <b>{p.pick}</b></span>
+                            <span className="tabular-nums">@ {p.odds ? formatOdds(p.odds) : '—'}</span>
+                          </>
+                        )}
                         {p.grade && <Badge variant="secondary">{p.grade}</Badge>}
                         {p.result?.score && <span className="tabular-nums text-muted-foreground">{p.result.score}</span>}
                         <StatusBadge pick={p} />
+                        <TopPickDetails pick={p} />
                       </li>
                     ))}
                   </ul>

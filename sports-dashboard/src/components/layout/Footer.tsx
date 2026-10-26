@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Github } from 'lucide-react'
+import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
 
 /**
  * The layout deliberately mirrors a bookmaker, so the footer has to state
@@ -21,7 +22,11 @@ export function Footer() {
           For users aged 18+ only. Gambling involves the risk of losing money and
           can be addictive. Please gamble responsibly.
         </p>
+        <RiskDisclaimer compact className="max-w-3xl" />
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
+          <Link href="/how-to-use" className="transition-colors hover:text-foreground">
+            How to use our picks
+          </Link>
           <Link href="/pricing" className="transition-colors hover:text-foreground">
             Pricing
           </Link>

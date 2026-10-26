@@ -34,6 +34,8 @@ const requiredFiles = [
   'stats.html',
   'my-bets.html',
   'leaderboard.html',
+  'top.html',
+  'how-to-use.html',
   '404.html',
 ]
 for (const file of requiredFiles) {
@@ -79,6 +81,41 @@ const newMarkers = [
 ]
 for (const { pattern, name } of newMarkers) {
   assert(pattern.test(content), `Contains: ${name}`)
+}
+
+// ── 3b. TOP honesty / staking UI (design K5, K8) ──
+section('TOP record, staking and disclaimer')
+const DISCLAIMER = /Pickly provides statistical analysis, not guarantees/
+assert(DISCLAIMER.test(indexHTML), 'Footer: risk disclaimer in index.html')
+assert(/href="\/how-to-use"/.test(indexHTML), 'Footer: link to /how-to-use')
+const topMarkers = [
+  { pattern: /Closing line value/, name: 'ClvTile' },
+  { pattern: /Suggested stakes/, name: 'BankrollChart legend' },
+  { pattern: /of bankroll/, name: 'StakeChip label' },
+  { pattern: /Withdrawn picks/, name: 'WithdrawnList heading' },
+  { pattern: /Best price/, name: 'Best price line' },
+  { pattern: /bet below/, name: "Don't bet below line" },
+  { pattern: /Line-ups unverified/, name: 'Line-ups label' },
+  { pattern: /Price includes overtime/, name: 'Hockey OT note' },
+  { pattern: /Flat 1-unit record; withdrawn picks excluded; hockey priced 2-way incl\. OT/, name: 'Methodology line' },
+]
+for (const { pattern, name } of topMarkers) {
+  assert(pattern.test(allJS), `Contains: ${name}`)
+}
+const howFile = path.join(OUT, 'how-to-use.html')
+const howHTML = fs.existsSync(howFile) ? fs.readFileSync(howFile, 'utf-8') : ''
+for (const [pattern, name] of [
+  [/How to use our picks &amp; responsible gambling/, 'title'],
+  [DISCLAIMER, 'risk disclaimer'],
+  [/id="stake"/, 'stake section'],
+  [/1 000 \$\/€/, 'worked bankroll example'],
+  [/id="clv"/, 'CLV section'],
+  [/begambleaware\.org/i, 'BeGambleAware link'],
+  [/gamcare\.org\.uk/, 'GamCare link'],
+  [/1-800-GAMBLER/, '1-800-GAMBLER'],
+  [/anonimowihazardzisci\.org/, 'Anonimowi Hazardziści link'],
+]) {
+  assert(pattern.test(howHTML), `/how-to-use: ${name}`)
 }
 
 // ── 4. Verify OLD UI artifacts are NOT dominant ──

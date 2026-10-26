@@ -424,21 +424,72 @@ export async function getDroppingOdds(params: {
 // TOP picks – public track record. Settled picks are public; unsettled ones
 // come back only for subscribers (server-side paywall), the rest as `locked`.
 // ============================================================================
+/** Closing line value aggregate. Headline numbers use Pinnacle closes only. */
+export interface TopClv {
+  avgPct: number | null
+  beatClosePct: number | null
+  /** Picks with a Pinnacle closing price and a CLV value. */
+  n: number
+  /** Earliest pick date that has a CLV value. */
+  since?: string | null
+  nOddsSafari?: number
+  avgPctOddsSafari?: number | null
+  /** Closing prices taken from an earlier check (no check in the last 25 min). */
+  nApprox?: number
+}
+
+export interface TopWithdrawn {
+  n: number
+  availability: number
+  price: number
+}
+
+export interface TopBankrollPoint {
+  /** kickoffUtc (ISO) or the pick date when the kickoff is unknown. */
+  t: string
+  /** Bankroll staking stakePct % of the current bankroll. */
+  value: number
+  /** Same scale, flat 1 unit per pick. */
+  flat: number
+}
+
+export interface TopBankroll {
+  start: number
+  points: TopBankrollPoint[]
+  final: number | null
+  maxDrawdownPct: number | null
+}
+
 export interface TopSummary {
   picks: number
   settled: number
   won: number
   pending: number
   hitRate: number | null
+  /** Headline ROI, priced at the 2-way equivalent (hockey incl. OT). */
   roi: number | null
   profitUnits: number | null
+  /** ROI / profit at the published price, for the methodology note. */
+  roiAsStored?: number | null
+  profitUnitsAsStored?: number | null
+  /** Settled picks that could not be re-priced 2-way and are counted as published. */
+  pricedAsStored?: number
+  /** Older API versions returned a plain count. */
+  withdrawn?: TopWithdrawn | number | null
+  clv?: TopClv | null
+  /** Only on the top-level summary. */
+  bankroll?: TopBankroll | null
 }
+
+export type TopOddsMarket = '3way' | '2way' | '2way_equiv'
+export type TopAvailStatus = 'ok' | 'block' | 'unknown' | 'stale'
 
 export interface TopPick {
   date: string
   match: string
-  pick: string
-  odds: number | null
+  /** Missing on withdrawn picks before kick-off for visitors (selectionLocked). */
+  pick?: string
+  odds?: number | null
   sport: string
   time?: string
   league?: string
@@ -446,6 +497,48 @@ export interface TopPick {
   signals?: string
   result?: { status: string; score?: string; reason?: string } | null
   availabilityNote?: string
+  status?: 'won' | 'lost' | 'draw' | 'pending' | 'withdrawn' | null
+  odds2?: number | null
+  oddsMarket?: TopOddsMarket | null
+  kickoffUtc?: string | null
+  kickoffApprox?: boolean | null
+  publishedAt?: string | null
+  stakePct?: number | null
+  floorOdds?: number | null
+  segment?: string | null
+  rulesMode?: string | null
+  learnedDecision?: string | null
+  bestOdds?: number | null
+  bestOddsSource?: string | null
+  bestOddsAt?: string | null
+  booksCount?: number | null
+  closingOdds?: number | null
+  closingSource?: string | null
+  closingAt?: string | null
+  closingApprox?: boolean | null
+  closingMarket?: TopOddsMarket | null
+  clvPct?: number | null
+  withdrawReason?: string | null
+  withdrawKind?: 'availability' | 'price' | null
+  withdrawnAt?: string | null
+  availStatus?: TopAvailStatus | null
+  availMinsToKick?: number | null
+  availAgeMin?: number | null
+  finalCheckMissed?: boolean | null
+  /** Withdrawn pick whose selection stays hidden until kick-off. */
+  selectionLocked?: boolean
+}
+
+/** `withdrawn` used to be a number; normalise both shapes. */
+export function topWithdrawn(s: TopSummary | undefined | null): TopWithdrawn {
+  const w = s?.withdrawn
+  if (typeof w === 'number') return { n: w, availability: w, price: 0 }
+  return { n: w?.n ?? 0, availability: w?.availability ?? 0, price: w?.price ?? 0 }
+}
+
+/** Pick status from the explicit field, else from the settled result. */
+export function topStatus(p: TopPick): string {
+  return p.status ?? p.result?.status ?? 'pending'
 }
 
 export interface TopDay {
