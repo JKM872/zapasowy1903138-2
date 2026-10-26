@@ -28,15 +28,17 @@ import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
 import { H2HBar } from '@/components/charts/H2HBar'
 import { useWeather } from '@/hooks/useMatches'
-import type { Match } from '@/lib/types'
+import type { Match, LiveScore } from '@/lib/types'
 
 interface Props {
   match: Match | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** Live-score row for this match (same team-name key MatchList uses), if any. */
+  liveScore?: LiveScore | null
 }
 
-export function MatchDetails({ match, open, onOpenChange }: Props) {
+export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
   // Weather – guess city from home team name (last word)
   // Hooks must be called unconditionally (rules-of-hooks)
   const weatherCity = match?.homeTeam?.split(/\s+/).pop() ?? match?.homeTeam ?? ''
@@ -116,13 +118,13 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
         {/* ── Tabs ── */}
         <div className="px-5 pb-5">
           <Tabs defaultValue="predictions" className="mt-3">
-            <TabsList className="grid w-full grid-cols-6 h-9">
+            <TabsList className="grid w-full grid-cols-[repeat(5,minmax(0,1fr))_minmax(0,1.6fr)] h-9">
               <TabsTrigger value="predictions" className="text-xs gap-1"><Target className="h-3 w-3" /> Predict</TabsTrigger>
               <TabsTrigger value="odds" className="text-xs gap-1"><TrendingUp className="h-3 w-3" /> Odds</TabsTrigger>
               <TabsTrigger value="h2h" className="text-xs gap-1"><History className="h-3 w-3" /> H2H</TabsTrigger>
               <TabsTrigger value="ai" className="text-xs gap-1"><Brain className="h-3 w-3" /> AI</TabsTrigger>
               <TabsTrigger value="weather" className="text-xs gap-1"><CloudSun className="h-3 w-3" /> Weather</TabsTrigger>
-              <TabsTrigger value="live" className="text-xs gap-1"><Radio className="h-3 w-3" /> Live</TabsTrigger>
+              <TabsTrigger value="centre" className="text-xs gap-1"><Radio className="h-3 w-3" /> Match Centre</TabsTrigger>
             </TabsList>
 
             {/* ── Predictions tab ── */}
@@ -447,14 +449,17 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
                 <EmptyState text="Weather data not available for this location." />
               )}
             </TabsContent>
-            {/* ── Live tab: official SofaScore embeds, mounted only while open + selected ── */}
-            <TabsContent value="live" className="mt-4">
+            {/* ── Match Centre tab: official SofaScore embeds, mounted only while open + selected ── */}
+            <TabsContent value="centre" className="mt-4">
               {open && (
                 <SofascoreWidgets
                   eventId={match.sofascoreEventId}
                   sport={match.sport}
                   homeTeam={match.homeTeam}
                   awayTeam={match.awayTeam}
+                  status={liveScore?.status}
+                  date={match.date}
+                  time={match.time}
                 />
               )}
             </TabsContent>

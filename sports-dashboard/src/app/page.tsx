@@ -66,6 +66,9 @@ export default function HomePage() {
         match={selectedMatch}
         open={!!selectedMatch}
         onOpenChange={(open) => !open && setSelectedMatch(null)}
+        liveScore={selectedMatch ? (liveScores ?? []).find(ls =>
+          ls.homeTeam.toLowerCase() === selectedMatch.homeTeam.toLowerCase() &&
+          ls.awayTeam.toLowerCase() === selectedMatch.awayTeam.toLowerCase()) ?? null : null}
       />
 
       {/* Asked once, right after a reader first signs in. */}
