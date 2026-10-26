@@ -18,11 +18,27 @@ const geistMono = Geist_Mono({
 
 
 
+const SITE_URL = 'https://pickly-dashboard.vercel.app'
+const SITE_TITLE = 'Pickly — sports picks with public results'
+const SITE_DESCRIPTION =
+  'Analytics for sports events: odds, probabilities, expected value and team form. We do not accept bets.'
+
 export const metadata: Metadata = {
-  title: 'Pickly — sports picks with public results',
-  description:
-    'Analytics for sports events: odds, probabilities, expected value and team form. We do not accept bets.',
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: 'Pickly',
   keywords: ['analytics', 'sports', 'odds', 'probability', 'expected value', 'stats'],
+  openGraph: {
+    type: 'website',
+    siteName: 'Pickly',
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: 'en_GB',
+  },
+  twitter: { card: 'summary', title: SITE_TITLE, description: SITE_DESCRIPTION },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({

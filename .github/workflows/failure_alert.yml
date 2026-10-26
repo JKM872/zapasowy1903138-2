@@ -1,0 +1,88 @@
+name: Alert o nieudanym workflow
+# E-mail, gdy którykolwiek z wymienionych workflow zakończy się porażką.
+# Nazwy w `workflows:` muszą być identyczne z polem `name:` w każdym pliku.
+# Strażnik (watchdog) łapie "ciche" awarie zielonych runów; ten plik łapie czerwone runy.
+
+on:
+  workflow_run:
+    workflows:
+      - "Backfill Historical Results"
+      - "Backtest & Calibration"
+      - "Check Results & Accuracy Report"
+      - "Kupony dnia (AKO3 / AKO7 / AKO wszystkich)"
+      - "Podsumowanie dnia (Excel + AI)"
+      - "Daily Report & Notifications"
+      - "Deploy to Heroku (refresh site data)"
+      - "Dropping Odds Accuracy Report"
+      - "Dropping Odds - mail 'zarabialo'"
+      - "Forebet Audit (wyniki typow + zdrowie danych)"
+      - "OddsSafari Dropping Odds Pipeline"
+      - "OddsSafari Upcoming Odds (digest)"
+      - "Noon Refresh — Forebet + SofaScore Update"
+      - "Sports Scraper Pipeline"
+      - "Sports Scraper Pipeline - AWAY FOCUS"
+      - "Baseball Scraper Pipeline (Experimental)"
+      - "Forebet Scraper Pipeline (Forebet-first)"
+      - "Table Tennis (AiScore) - AWAY FOCUS"
+      - "Table Tennis (AiScore) - HOME FOCUS"
+      - "Strona (GitHub Pages)"
+      - "SofaScore probe (diagnostyka)"
+      - "Tests"
+      - "TOP picks (perełki A/B)"
+      - "Strażnik (watchdog)"
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  alert:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'timed_out' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Wyślij e-mail
+        env:
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          WF_NAME: ${{ github.event.workflow_run.name }}
+          WF_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WF_URL: ${{ github.event.workflow_run.html_url }}
+          WF_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          WF_EVENT: ${{ github.event.workflow_run.event }}
+          WF_SHA: ${{ github.event.workflow_run.head_sha }}
+          WF_STARTED: ${{ github.event.workflow_run.run_started_at }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          if [ -z "$EMAIL_RECIPIENT" ] || [ -z "$EMAIL_SENDER" ] || [ -z "$EMAIL_PASSWORD" ]; then
+            echo "::error::Brak sekretow EMAIL_RECIPIENT / EMAIL_SENDER / EMAIL_PASSWORD"
+            exit 1
+          fi
+          python - <<'PY'
+          import os, smtplib
+          from email.mime.text import MIMEText
+          e = os.environ
+          sender = e["EMAIL_SENDER"]
+          host = {"outlook.com": "smtp-mail.outlook.com", "hotmail.com": "smtp-mail.outlook.com",
+                  "yahoo.com": "smtp.mail.yahoo.com"}.get(sender.split("@")[-1].lower(), "smtp.gmail.com")
+          body = (
+              f"Workflow: {e['WF_NAME']}\n"
+              f"Wynik: {e['WF_CONCLUSION']}\n"
+              f"Gałąź: {e['WF_BRANCH']}  Zdarzenie: {e['WF_EVENT']}\n"
+              f"Start: {e['WF_STARTED']}\nCommit: {e['WF_SHA'][:8]}\n\n"
+              f"Logi: {e['WF_URL']}\n"
+          )
+          msg = MIMEText(body, "plain", "utf-8")
+          msg["Subject"] = f"[Pickly] ❌ {e['WF_NAME']} – {e['WF_CONCLUSION']}"
+          msg["From"] = sender
+          msg["To"] = e["EMAIL_RECIPIENT"]
+          with smtplib.SMTP(host, 587, timeout=30) as s:
+              s.starttls()
+              s.login(sender, e["EMAIL_PASSWORD"])
+              s.sendmail(sender, [a.strip() for a in e["EMAIL_RECIPIENT"].split(",")], msg.as_string())
+          print("Alert wysłany")
+          PY
