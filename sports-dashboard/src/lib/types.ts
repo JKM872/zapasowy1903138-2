@@ -156,6 +156,9 @@ export interface Match {
   awayTeam: string
   homeLogo?: string
   awayLogo?: string
+  /** Player/team photo URLs (optional; individual sports render them as avatars). */
+  homePhoto?: string
+  awayPhoto?: string
   time: string
   date: string
   sport: Sport

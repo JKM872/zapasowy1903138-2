@@ -12,7 +12,7 @@ import { SportIcon } from '@/components/shared/SportIcon'
 import { formatMatchTime, formatOdds, formatPct } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
 import { LiveScoreBadge } from './LiveScoreBadge'
-import { TeamLogo } from './TeamLogo'
+import { SideAvatar } from './SideAvatar'
 import { AIPredictionBadge } from './AIPredictionPanel'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
@@ -74,7 +74,7 @@ export function MatchCard({ match, liveScore, onSelect }: Props) {
           <div className="flex-1 space-y-2.5 min-w-0">
             {/* Home team */}
             <div className="flex items-center gap-2.5">
-              <TeamLogo name={match.homeTeam} size="sm" badgeUrl={match.homeLogo} />
+              <SideAvatar match={match} side="home" size="sm" />
               <span className={cn(
                 'font-semibold text-sm leading-tight truncate',
                 forebetPred === '1' && 'text-emerald-600 dark:text-emerald-400',
@@ -87,7 +87,7 @@ export function MatchCard({ match, liveScore, onSelect }: Props) {
             </div>
             {/* Away team */}
             <div className="flex items-center gap-2.5">
-              <TeamLogo name={match.awayTeam} size="sm" badgeUrl={match.awayLogo} />
+              <SideAvatar match={match} side="away" size="sm" />
               <span className={cn(
                 'font-semibold text-sm leading-tight truncate',
                 forebetPred === '2' && 'text-rose-600 dark:text-rose-400',

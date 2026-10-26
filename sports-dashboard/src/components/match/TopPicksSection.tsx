@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { PREDICTION_COLORS } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatMatchTime, formatOdds } from '@/lib/format'
-import { TeamLogo } from '@/components/match/TeamLogo'
+import { SideAvatar } from '@/components/match/SideAvatar'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import type { Match } from '@/lib/types'
 
@@ -54,11 +54,11 @@ function TopPickCard({ match, onSelect }: { match: Match; onSelect?: (m: Match) 
         <div className="flex items-center gap-3">
           <div className="flex-1 space-y-2 min-w-0">
             <div className="flex items-center gap-2">
-              <TeamLogo name={match.homeTeam} size="sm" badgeUrl={match.homeLogo} />
+              <SideAvatar match={match} side="home" size="sm" />
               <span className="font-bold text-sm truncate">{match.homeTeam}</span>
             </div>
             <div className="flex items-center gap-2">
-              <TeamLogo name={match.awayTeam} size="sm" badgeUrl={match.awayLogo} />
+              <SideAvatar match={match} side="away" size="sm" />
               <span className="font-bold text-sm truncate">{match.awayTeam}</span>
             </div>
           </div>

@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { PREDICTION_LABELS } from '@/lib/constants'
 import { formatMatchTime, formatOdds, formatPct } from '@/lib/format'
 import { LiveScoreBadge } from './LiveScoreBadge'
-import { TeamLogo } from './TeamLogo'
+import { SideAvatar } from './SideAvatar'
 import { GradeBadge } from './GradeBadge'
 import { marketLayout } from './marketGrid'
 import { RadialProgress } from '@/components/charts/RadialProgress'
@@ -95,7 +95,6 @@ export function MatchRow({
       <div className="flex min-w-0 flex-col justify-center gap-1 px-2 py-2 text-left">
         {(['home', 'away'] as const).map(side => {
           const name = side === 'home' ? match.homeTeam : match.awayTeam
-          const logo = side === 'home' ? match.homeLogo : match.awayLogo
           const form = side === 'home' ? match.homeForm : match.awayForm
           const score = side === 'home' ? liveScore?.homeScore : liveScore?.awayScore
           const won =
@@ -107,9 +106,9 @@ export function MatchRow({
           return (
             <div
               key={side}
-              className="grid grid-cols-[18px_minmax(0,1fr)_auto_auto] items-center gap-2"
+              className="grid grid-cols-[28px_minmax(0,1fr)_auto_auto] items-center gap-2"
             >
-              <TeamLogo name={name} size="xs" badgeUrl={logo} />
+              <SideAvatar match={match} side={side} size="sm" />
               <span
                 className={cn(
                   'truncate text-[13px] leading-tight',

@@ -11,21 +11,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import {
-  Target, BarChart3, TrendingUp, History, Brain, Clock, Zap, CloudSun,
+  Target, BarChart3, TrendingUp, History, Brain, Zap, CloudSun,
   Thermometer, Wind, Droplets, Lock, Crown, Radio,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PREDICTION_COLORS, SHOW_FAN_VOTE } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { MatchComments } from './MatchComments'
-import { formatFractionPct, formatMatchTime, formatOdds, formatPct, formatVotes } from '@/lib/format'
+import { formatFractionPct, formatOdds, formatPct, formatVotes } from '@/lib/format'
 import { RecommendationBadge } from './RecommendationBadge'
-import { TeamLogo } from './TeamLogo'
+import { MatchHeaderHero } from './MatchHeaderHero'
 import { GradeBadge } from './GradeBadge'
 import { AIPredictionPanel } from './AIPredictionPanel'
 import { SofascoreWidgets } from './SofascoreWidgets'
 import { RadialProgress } from '@/components/charts/RadialProgress'
-import { FormTimeline } from '@/components/charts/FormTimeline'
 import { H2HBar } from '@/components/charts/H2HBar'
 import { useWeather } from '@/hooks/useMatches'
 import type { Match, LiveScore } from '@/lib/types'
@@ -58,39 +57,11 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
               <SportIcon sport={match.sport} colored className="h-[18px] w-[18px]" />
               <span className="text-xs text-muted-foreground">{match.league ?? match.sport}</span>
               <GradeBadge grade={match.predictionGrade} className="ml-1" />
-              <span className="text-xs text-muted-foreground ml-auto flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                {formatMatchTime(match.time)}
-              </span>
             </div>
 
             {/* Teams face-off */}
             <DialogTitle className="sr-only">{match.homeTeam} vs {match.awayTeam}</DialogTitle>
-            <div className="flex items-center justify-between py-3">
-              {/* Home */}
-              <div className="flex flex-col items-center gap-2 flex-1">
-                <TeamLogo name={match.homeTeam} size="xl" badgeUrl={match.homeLogo} />
-                <span className="font-bold text-sm text-center leading-tight">{match.homeTeam}</span>
-                {match.homeForm?.length > 0 && (
-                  <FormTimeline form={match.homeForm} teamName={match.homeTeam} maxItems={5} />
-                )}
-              </div>
-
-              {/* Center: confidence ring */}
-              <div className="flex flex-col items-center gap-1 px-4">
-                <RadialProgress value={conf} size={64} strokeWidth={4} label="conf" />
-                <RecommendationBadge recommendation={match.gemini?.recommendation} size="sm" />
-              </div>
-
-              {/* Away */}
-              <div className="flex flex-col items-center gap-2 flex-1">
-                <TeamLogo name={match.awayTeam} size="xl" badgeUrl={match.awayLogo} />
-                <span className="font-bold text-sm text-center leading-tight">{match.awayTeam}</span>
-                {match.awayForm?.length > 0 && (
-                  <FormTimeline form={match.awayForm} teamName={match.awayTeam} maxItems={5} />
-                )}
-              </div>
-            </div>
+            <MatchHeaderHero match={match} conf={conf} />
           </DialogHeader>
         </div>
 
