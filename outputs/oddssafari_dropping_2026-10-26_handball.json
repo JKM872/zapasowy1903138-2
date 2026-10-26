@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "generated_at": "2026-10-26T04:04:47.126970+01:00",
+    "target_date": "2026-10-26",
+    "filter": {
+      "min_odds": 1.6,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 1,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 1
+    },
+    "elapsed_seconds": 0.7,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Germany - 2. Bundesliga",
+      "match_url": "https://www.oddssafari.com/matches/handball/germany/2.-bundesliga/eintracht-hagen-vs-grosswallstadt/10580298?MarketTypeID=601",
+      "match_id": "10580298",
+      "sport_slug": "handball",
+      "sport": "handball",
+      "home_team": "Eintracht Hagen",
+      "away_team": "Grosswallstadt",
+      "event_date": "26/10",
+      "event_time": "18:30",
+      "outcome": "1",
+      "open_odds": 1.45,
+      "current_odds": 1.29,
+      "drop_pct": 11.0,
+      "max_odds": 1.33,
+      "sport_page_id": "60",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": []
+}
