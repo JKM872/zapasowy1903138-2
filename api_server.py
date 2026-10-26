@@ -287,6 +287,7 @@ def normalize_supabase_match(row):
             'away': safe_value(row.get('sofascore_away_win_prob')),
             'votes': safe_value(row.get('sofascore_total_votes'), 0),
         } if row.get('sofascore_home_win_prob') else None,
+        'sofascoreEventId': _sofa_event_id(row),
         # Gemini AI
         'gemini': {
             'prediction': row.get('gemini_prediction'),
@@ -339,6 +340,34 @@ def _resolve_ai_prediction(match):
         return generate_ai_prediction(match).to_dict()
     except Exception:
         return None
+
+
+def _sofa_event_id(match):
+    """Extract the numeric SofaScore event id from a row's sofascore URL.
+
+    Rows carry e.g. ``sofascore.url = https://www.sofascore.com/football/match/16439225``
+    (or a flat ``sofascore_url``/``sofascore_event_id``). Returns int or None.
+    """
+    import re
+    if not isinstance(match, dict):
+        return None
+    sub = _sub_dict(match, 'sofascore')
+    for raw in (match.get('sofascore_event_id'), sub.get('eventId'), sub.get('event_id')):
+        try:
+            if raw is not None and not (isinstance(raw, float) and math.isnan(raw)):
+                val = int(str(raw).strip())
+                if val > 0:
+                    return val
+        except (TypeError, ValueError):
+            pass
+    for url in (sub.get('url'), match.get('sofascore_url')):
+        if not isinstance(url, str) or 'sofascore' not in url.lower():
+            continue
+        # Prefer the "#id:123" fragment used by newer slug URLs, else trailing number
+        m = re.search(r'#id:(\d+)', url) or re.search(r'/(\d+)/?(?:[?#]|$)', url)
+        if m:
+            return int(m.group(1))
+    return None
 
 
 def normalize_match(match):
@@ -433,6 +462,8 @@ def normalize_match(match):
             'away': safe_value(match.get('sofascore_away_win_prob')) or safe_value(_sub_dict(match, 'sofascore').get('away')),
             'votes': safe_value(match.get('sofascore_total_votes'), 0) or safe_value(_sub_dict(match, 'sofascore').get('votes'), 0),
         } if safe_value(match.get('sofascore_home_win_prob')) or match.get('sofascore') else None,
+        # Official SofaScore widget embeds key off this id (null when unmatched)
+        'sofascoreEventId': _sofa_event_id(match),
         # Gemini AI - v4: now included for JSON files too!
         'gemini': gemini_data,
         # Scoring engine output (passed through from JSON export)

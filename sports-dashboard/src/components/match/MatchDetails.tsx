@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import {
   Target, BarChart3, TrendingUp, History, Brain, Clock, Zap, CloudSun,
-  Thermometer, Wind, Droplets, Lock, Crown,
+  Thermometer, Wind, Droplets, Lock, Crown, Radio,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PREDICTION_COLORS, SHOW_FAN_VOTE } from '@/lib/constants'
@@ -23,6 +23,7 @@ import { RecommendationBadge } from './RecommendationBadge'
 import { TeamLogo } from './TeamLogo'
 import { GradeBadge } from './GradeBadge'
 import { AIPredictionPanel } from './AIPredictionPanel'
+import { SofascoreWidgets } from './SofascoreWidgets'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
 import { H2HBar } from '@/components/charts/H2HBar'
@@ -115,12 +116,13 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
         {/* ── Tabs ── */}
         <div className="px-5 pb-5">
           <Tabs defaultValue="predictions" className="mt-3">
-            <TabsList className="grid w-full grid-cols-5 h-9">
+            <TabsList className="grid w-full grid-cols-6 h-9">
               <TabsTrigger value="predictions" className="text-xs gap-1"><Target className="h-3 w-3" /> Predict</TabsTrigger>
               <TabsTrigger value="odds" className="text-xs gap-1"><TrendingUp className="h-3 w-3" /> Odds</TabsTrigger>
               <TabsTrigger value="h2h" className="text-xs gap-1"><History className="h-3 w-3" /> H2H</TabsTrigger>
               <TabsTrigger value="ai" className="text-xs gap-1"><Brain className="h-3 w-3" /> AI</TabsTrigger>
               <TabsTrigger value="weather" className="text-xs gap-1"><CloudSun className="h-3 w-3" /> Weather</TabsTrigger>
+              <TabsTrigger value="live" className="text-xs gap-1"><Radio className="h-3 w-3" /> Live</TabsTrigger>
             </TabsList>
 
             {/* ── Predictions tab ── */}
@@ -443,6 +445,17 @@ export function MatchDetails({ match, open, onOpenChange }: Props) {
                 </div>
               ) : (
                 <EmptyState text="Weather data not available for this location." />
+              )}
+            </TabsContent>
+            {/* ── Live tab: official SofaScore embeds, mounted only while open + selected ── */}
+            <TabsContent value="live" className="mt-4">
+              {open && (
+                <SofascoreWidgets
+                  eventId={match.sofascoreEventId}
+                  sport={match.sport}
+                  homeTeam={match.homeTeam}
+                  awayTeam={match.awayTeam}
+                />
               )}
             </TabsContent>
           </Tabs>

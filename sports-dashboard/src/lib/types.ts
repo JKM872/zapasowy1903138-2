@@ -165,6 +165,8 @@ export interface Match {
   qualifies: boolean
   forebet: ForebetData | null
   sofascore: SofascoreData | null
+  /** SofaScore event id (from the matched Fan Vote URL); powers official widget embeds */
+  sofascoreEventId?: number | null
   odds: OddsData | null
   h2h: H2HData | null
   homeForm: string[]
