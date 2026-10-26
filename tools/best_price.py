@@ -13,11 +13,12 @@ Every quote is converted with ``pricing.side_price`` (hockey/basketball/baseball
 1X2 -> 2-way equivalent incl. OT) and must lie in 1.01–50. A quote more than
 1.25× the median of the other quotes is ignored as a stale line. Each source is
 fetched once per sport and process (the modules cache their boards); a failing
-or slow source (5 s per HTTP request) is logged as a WARNING and skipped for the
+or slow source (5 s per HTTP request; its module import is not timed) is logged as a WARNING and skipped for the
 rest of the run. Never raises.
 """
 from __future__ import annotations
 
+import importlib
 import os
 import statistics
 import sys
@@ -102,6 +103,13 @@ def _livesport(home: str, away: str, sport: str, day: Optional[str]) -> Optional
 SOURCES: Dict[str, Callable[..., Optional[Dict[str, Any]]]] = {
     'pinnacle': _pinnacle, 'oddssafari': _oddssafari, 'livesport': _livesport,
 }
+# Module each built-in source imports. It is imported before the time budget
+# starts: on a fresh Actions checkout forebet_pipeline compiles and imports for
+# several seconds, which is not an HTTP wait and must not mark Pinnacle dead.
+_MODULES: Dict[Callable[..., Any], str] = {
+    _pinnacle: 'forebet_pipeline', _oddssafari: 'oddssafari_coupons',
+    _livesport: 'livesport_bulk_odds',
+}
 
 
 def _side(pick: Dict[str, Any]) -> Tuple[str, str, str]:
@@ -143,6 +151,8 @@ def best_price(pick: Dict[str, Any], day: Optional[str] = None) -> Dict[str, Any
         if (src, sport) in _DEAD or not home or not away:
             continue
         try:
+            if fn in _MODULES:
+                importlib.import_module(_MODULES[fn])
             raw = _timed(lambda: fn(home, away, sport, day), BUDGET_S.get(src, TIMEOUT_S))
         except Exception as e:          # noqa: BLE001 – any source failure is skipped
             _DEAD.add((src, sport))

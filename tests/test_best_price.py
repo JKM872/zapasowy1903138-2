@@ -110,3 +110,37 @@ def test_hockey_three_way_converted_to_two_way(monkeypatch):
     r = BP.best_price(hk)
     assert r['quotes']['pinnacle'] == 1.8
     assert 1.6 < r['quotes']['livesport'] < 1.9          # 2-way equivalent, not 2.30
+
+
+def test_module_import_not_counted_in_time_budget(monkeypatch):
+    # cold import of forebet_pipeline on a fresh checkout takes seconds; only the call is timed
+    monkeypatch.setattr(BP, 'BUDGET_S', {'pinnacle': 0.3})
+    fake = _src(1.8, 2.1)
+    imported = []
+    monkeypatch.setattr(BP, '_MODULES', {fake: 'slow_module'})
+    monkeypatch.setattr(BP.importlib, 'import_module',
+                        lambda name: (time.sleep(0.6), imported.append(name)))
+    monkeypatch.setattr(BP, 'SOURCES', {'pinnacle': fake})
+    r = BP.best_price(_pick())
+    assert imported == ['slow_module']
+    assert r['bestOdds'] == 1.8 and r['bestOddsSource'] == 'pinnacle'
+
+
+def test_oddssafari_matches_nhl_abbreviations(monkeypatch):
+    import oddssafari_coupons as osc
+    board = [osc.CouponOdds('NY Rangers', 'LA Kings', home_odds=2.25, draw_odds=4.21,
+                            away_odds=2.86, bookmakers=13, kickoff='2026-10-26 23:00:00'),
+             osc.CouponOdds('EDM Oilers', 'DET Red Wings', home_odds=1.97, draw_odds=4.57,
+                            away_odds=3.4, bookmakers=13, kickoff='2026-10-27 01:30:00')]
+    monkeypatch.setattr(osc, 'fetch_coupon_board', lambda sport, dates=None: board)
+    monkeypatch.setattr(BP, 'SOURCES', {'oddssafari': BP._oddssafari})
+    hk = _pick(sport='hockey', match='Edmonton Oilers vs Detroit Red Wings',
+               pick='Edmonton Oilers', market='2way_equiv')
+    r = BP.best_price(hk, '2026-10-26')
+    assert r['bestOddsSource'] == 'oddssafari' and r['booksCount'] == 13
+    assert r['kickoff'] == '2026-10-27 01:30:00'
+    assert 1.4 < r['bestOdds'] < 1.97                  # 2-way equivalent of the 1X2 home price
+    # a fixture missing from the board stays unpriced (coverage, not matching)
+    assert BP.best_price(_pick(sport='hockey', match='Vancouver Canucks vs Minnesota Wild',
+                               pick='Minnesota Wild', market='2way_equiv'),
+                         '2026-10-26')['bestOdds'] is None
