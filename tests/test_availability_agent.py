@@ -115,3 +115,26 @@ def test_all_keys_exhausted_turns_llm_off_and_unknown_never_blocks(monkeypatch, 
     assert len(calls) == 2 and av.STATS['llm_off_quota'] == 2
     rec = {'unknown': True, 'board': 'ok', 'top_block': False}
     assert av.apply_grade('A', rec['board']) == 'A' and not rec['top_block']
+
+
+def test_groq_compound_search_urls_are_sources_and_429_rotates_keys(monkeypatch):
+    import requests
+    import groq_client
+    body = {'choices': [{'message': {
+        'content': '{"home":[{"name":"S","importance":"star","status":"out"}],"away":[],"confidence":"high"}',
+        'executed_tools': [{'type': 'search', 'search_results': {'results': [
+            {'title': 't', 'url': 'https://news.example/inj'}]}}]}}]}
+    seen = []
+
+    def post(url, headers=None, **kw):
+        seen.append(headers['Authorization'])
+        return _R(429, {'error': {'message': 'rate'}}) if 'k1' in headers['Authorization'] else _R(200, body)
+    monkeypatch.setattr(requests, 'post', post)
+    monkeypatch.setattr(groq_client, 'api_keys', lambda: ['k1', 'k2'])
+    monkeypatch.setenv('AVAIL_GROQ_MODELS', 'groq/compound')
+    av._DEAD.clear(); av.ERRORS.clear()
+    txt, urls = av._groq_compound('p')
+    assert seen == ['Bearer k1', 'Bearer k2'] and urls == ['https://news.example/inj']
+    assert av.parse_llm(txt, urls)['home'][0]['status'] == 'out'
+    # no search results -> unsourced -> ignored
+    assert av.parse_llm(txt, av.compound_urls({'executed_tools': []})) is None

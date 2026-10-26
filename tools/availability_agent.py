@@ -268,6 +268,70 @@ def _gemini_grounded(prompt: str):
     return None, []
 
 
+GROQ_COMPOUND_MODELS = ['groq/compound', 'groq/compound-mini']
+
+
+def compound_urls(msg: Dict[str, Any]) -> List[str]:
+    """URLs of the web-search results Groq Compound actually executed."""
+    urls: List[str] = []
+    for t in (msg or {}).get('executed_tools') or []:
+        sr = (t or {}).get('search_results') or {}
+        for res in (sr.get('results') if isinstance(sr, dict) else sr) or []:
+            u = (res or {}).get('url')
+            if isinstance(u, str) and u.startswith('http') and u not in urls:
+                urls.append(u)
+    return urls
+
+
+def _groq_compound(prompt: str):
+    """Groq Compound (server-side web search) -> (text, search-result urls).
+    Used when Gemini gives nothing; keys rotate on 429, exhausted pairs are skipped."""
+    import requests
+    from groq_client import api_keys, CHAT_ENDPOINT
+    keys = api_keys()
+    if not keys:
+        _stat('groq_no_keys')
+        return None, []
+    models = [m.strip() for m in os.getenv('AVAIL_GROQ_MODELS', '').split(',') if m.strip()] or GROQ_COMPOUND_MODELS
+    if all(('groq', k, m) in _DEAD for k in keys for m in models):
+        _stat('groq_off_quota')
+        return None, []
+    for model in models:
+        for key in keys:
+            if ('groq', key, model) in _DEAD:
+                continue
+            try:
+                r = requests.post(CHAT_ENDPOINT, headers={'Authorization': f'Bearer {key}'},
+                                  json={'model': model, 'temperature': 0.0, 'max_tokens': 1500,
+                                        'messages': [{'role': 'user', 'content': prompt}]},
+                                  timeout=90)
+            except Exception:
+                _stat('groq_net_error')
+                continue
+            if r.status_code != 200:
+                _stat(f'groq_http_{r.status_code}')
+                if r.status_code in (401, 403, 429):
+                    _DEAD.add(('groq', key, model))
+                if 'groq:' + model not in ERRORS:
+                    try:
+                        msg = (r.json().get('error') or {}).get('message') or ''
+                    except Exception:
+                        msg = (r.text or '')[:200]
+                    ERRORS['groq:' + model] = f"{r.status_code}: {' '.join(str(msg).split())[:200]}"
+                continue
+            try:
+                msg = ((r.json().get('choices') or [{}])[0]).get('message') or {}
+                txt = (msg.get('content') or '').strip()
+                urls = compound_urls(msg)
+            except Exception:
+                txt, urls = '', []
+            if txt:
+                _stat('groq_answered')
+                return txt, urls
+            _stat('groq_empty')
+    return None, []
+
+
 def parse_llm(txt: Optional[str], grounding: Optional[List[str]] = None) -> Optional[Dict[str, Any]]:
     if not txt:
         return None
@@ -312,6 +376,8 @@ def llm_check(m: Dict[str, Any], sport: str, day: str) -> Optional[Dict[str, Any
                             league=m.get('league') or '', day=day, time=m.get('time') or '')
     try:
         txt, urls = _gemini_grounded(prompt)
+        if not txt:
+            txt, urls = _groq_compound(prompt)
         return parse_llm(txt, urls)
     except Exception:
         _stat('exception')
