@@ -36,6 +36,7 @@ const requiredFiles = [
   'leaderboard.html',
   'top.html',
   'how-to-use.html',
+  'team.html',
   '404.html',
 ]
 for (const file of requiredFiles) {
@@ -117,6 +118,25 @@ for (const [pattern, name] of [
 ]) {
   assert(pattern.test(howHTML), `/how-to-use: ${name}`)
 }
+
+// ── 3c. Team history (design K6) ──
+section('Team history')
+const teamFile = path.join(OUT, 'team.html')
+const teamHTML = fs.existsSync(teamFile) ? fs.readFileSync(teamFile, 'utf-8') : ''
+assert(/Team history — Pickly/.test(teamHTML), '/team: title')
+for (const { pattern, name } of [
+  { pattern: /\/api\/teams\//, name: 'TeamHistoryPanel fetches /api/teams/' },
+  { pattern: /Our Top Picks on this team/, name: 'TeamHistoryPanel: our picks block' },
+  { pattern: /No stored results for this team yet/, name: 'TeamHistoryPanel: not-found state' },
+  { pattern: /Full history/, name: 'TeamHistoryPanel: link to /team' },
+  { pattern: /Team history: /, name: 'Team-name links (title)' },
+  { pattern: /Show history/, name: '/team search form' },
+]) {
+  assert(pattern.test(allJS), `Contains: ${name}`)
+}
+const sitemapFile = path.join(OUT, 'sitemap.xml')
+const sitemap = fs.existsSync(sitemapFile) ? fs.readFileSync(sitemapFile, 'utf-8') : ''
+assert(/\/team</.test(sitemap) && /\/how-to-use</.test(sitemap), 'sitemap lists /team and /how-to-use')
 
 // ── 4. Verify OLD UI artifacts are NOT dominant ──
 section('Old UI patterns (should be absent from page route)')

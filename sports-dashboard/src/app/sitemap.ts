@@ -13,6 +13,8 @@ const ROUTES: { path: string; freq: 'hourly' | 'daily' | 'monthly'; priority: nu
   { path: '/leaderboard', freq: 'daily', priority: 0.6 },
   { path: '/dropping-odds', freq: 'hourly', priority: 0.6 },
   { path: '/standings', freq: 'daily', priority: 0.5 },
+  { path: '/team', freq: 'daily', priority: 0.4 },
+  { path: '/how-to-use', freq: 'monthly', priority: 0.4 },
   { path: '/terms', freq: 'monthly', priority: 0.2 },
   { path: '/privacy', freq: 'monthly', priority: 0.2 },
   { path: '/responsible-gambling', freq: 'monthly', priority: 0.2 },

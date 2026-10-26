@@ -10,6 +10,7 @@ import { SideAvatar } from './SideAvatar'
 import { RecommendationBadge } from './RecommendationBadge'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
+import { teamHref } from '@/lib/api'
 import type { Match } from '@/lib/types'
 
 /** Same pick source as the board row, so the dialog never disagrees with it. */
@@ -43,7 +44,13 @@ export function MatchHeaderHero({ match, conf }: { match: Match; conf: number })
     return (
       <div className="flex min-w-0 flex-1 flex-col items-center gap-2">
         <SideAvatar match={match} side={s} size="xl" />
-        <span className="text-center text-sm font-bold leading-tight">{name}</span>
+        <Link
+          href={teamHref(name, match.sport)}
+          className="text-center text-sm font-bold leading-tight hover:text-primary hover:underline"
+          title={`Team history: ${name}`}
+        >
+          {name}
+        </Link>
         {form?.length > 0 && <FormTimeline form={form} teamName={name} maxItems={5} />}
       </div>
     )

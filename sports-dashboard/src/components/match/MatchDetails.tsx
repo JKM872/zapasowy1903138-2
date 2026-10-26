@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import {
   Target, BarChart3, TrendingUp, History, Brain, Zap, CloudSun,
-  Thermometer, Wind, Droplets, Lock, Crown, Radio,
+  Thermometer, Wind, Droplets, Lock, Crown, Radio, Users,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PREDICTION_COLORS, SHOW_FAN_VOTE } from '@/lib/constants'
@@ -24,6 +24,7 @@ import { MatchHeaderHero } from './MatchHeaderHero'
 import { GradeBadge } from './GradeBadge'
 import { AIPredictionPanel } from './AIPredictionPanel'
 import { SofascoreWidgets } from './SofascoreWidgets'
+import { TeamHistoryPanel } from './TeamHistoryPanel'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { H2HBar } from '@/components/charts/H2HBar'
 import { useWeather } from '@/hooks/useMatches'
@@ -89,10 +90,11 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
         {/* ── Tabs ── */}
         <div className="px-5 pb-5">
           <Tabs defaultValue="predictions" className="mt-3">
-            <TabsList className="grid w-full grid-cols-[repeat(5,minmax(0,1fr))_minmax(0,1.6fr)] h-9">
+            <TabsList className="grid w-full grid-cols-[repeat(6,minmax(0,1fr))_minmax(0,1.6fr)] h-9">
               <TabsTrigger value="predictions" className="text-xs gap-1"><Target className="h-3 w-3" /> Predict</TabsTrigger>
               <TabsTrigger value="odds" className="text-xs gap-1"><TrendingUp className="h-3 w-3" /> Odds</TabsTrigger>
               <TabsTrigger value="h2h" className="text-xs gap-1"><History className="h-3 w-3" /> H2H</TabsTrigger>
+              <TabsTrigger value="teams" className="text-xs gap-1"><Users className="h-3 w-3" /> Teams</TabsTrigger>
               <TabsTrigger value="ai" className="text-xs gap-1"><Brain className="h-3 w-3" /> AI</TabsTrigger>
               <TabsTrigger value="weather" className="text-xs gap-1"><CloudSun className="h-3 w-3" /> Weather</TabsTrigger>
               <TabsTrigger value="centre" className="text-xs gap-1"><Radio className="h-3 w-3" /> Match Centre</TabsTrigger>
@@ -288,6 +290,13 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
                 </div>
               ) : (
                 <EmptyState text="No head-to-head data available." />
+              )}
+            </TabsContent>
+
+            {/* ── Team history tab: stored results per team, fetched only while open + selected ── */}
+            <TabsContent value="teams" className="mt-4">
+              {open && (
+                <TeamHistoryPanel sport={match.sport} homeTeam={match.homeTeam} awayTeam={match.awayTeam} />
               )}
             </TabsContent>
 

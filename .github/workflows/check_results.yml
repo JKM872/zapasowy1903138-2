@@ -161,6 +161,17 @@ jobs:
           python tools/segment_performance.py 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
+      # 6d. Team history index for /api/teams (design K6): result_store plus
+      # settled Supabase predictions. Without the secret it logs
+      # "WARNING supabase skipped" and builds from result_store alone; a
+      # failure never blocks the result commit below.
+      - name: Build team history index
+        if: always()
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python tools/build_team_index.py
       # 7. Commit result summary + the accumulated result store.
       # The store is what makes backtesting possible: it is the only place
       # final scores survive between runs. Previously it lived only on the
@@ -171,6 +182,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add outputs/results_summary_*.json 2>/dev/null || true
           git add outputs/result_store.json 2>/dev/null || true
+          git add outputs/team_index/ outputs/team_aliases.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ No new summaries to commit"
           else

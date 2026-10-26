@@ -1992,6 +1992,28 @@ def get_top():
 
 
 # =============================================================================
+# TEAM HISTORY — stored results (result_store + Supabase) per team, public
+# =============================================================================
+
+@app.route('/api/teams/', defaults={'name': ''}, methods=['GET'])
+@app.route('/api/teams/<path:name>', methods=['GET'])
+def get_team_history(name):
+    """Last results, form, home/away record and our TOP record for one team.
+    Public and read-only (stored match results, no user data)."""
+    try:
+        from team_feed import get_team
+    except Exception as e:
+        logger.warning('team_feed unavailable: %s', e)
+        return jsonify({'error': 'team history unavailable'}), 503
+    status, body = get_team(name, request.args.get('sport'), request.args.get('limit'))
+    resp = jsonify(body)
+    resp.status_code = status
+    if status == 200:
+        resp.headers['Cache-Control'] = 'public, max-age=600'
+    return resp
+
+
+# =============================================================================
 # MATCH COMMENTS (migration 004)
 #
 # Readers add context a model cannot see: a missing first-choice setter, a table

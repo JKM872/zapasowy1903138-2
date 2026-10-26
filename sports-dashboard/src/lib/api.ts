@@ -559,6 +559,64 @@ export async function getTopPicks(): Promise<TopResponse> {
   return fetchApi<TopResponse>('/api/top')
 }
 
+// ---------------------------------------------------------------------------
+// Team history (/api/teams/<name>, stored results, public)
+// ---------------------------------------------------------------------------
+
+export interface TeamGame {
+  date: string
+  opponent: string
+  venue: 'home' | 'away'
+  /** Team's score first. */
+  score: string
+  result: 'W' | 'D' | 'L'
+}
+
+export interface TeamRecord { w: number; d: number; l: number }
+
+export interface TeamPickRow {
+  date: string
+  match: string
+  pick: string | null
+  odds: number | null
+  status: string
+}
+
+export interface TeamHistory {
+  team: string
+  sport: string
+  aliases: string[]
+  games: number
+  last: TeamGame[]
+  /** Newest first. */
+  form: string
+  home: TeamRecord
+  away: TeamRecord
+  ourPicks: { n: number; won: number; roi: number | null; picks: TeamPickRow[] }
+  sources: string[]
+}
+
+export type TeamHistoryResult =
+  | { found: true; data: TeamHistory }
+  | { found: false; suggestions: string[] }
+
+/** 404 is an answer here (unknown team + suggestions), not an error. */
+export async function getTeamHistory(name: string, sport: string, limit = 10): Promise<TeamHistoryResult> {
+  const qs = new URLSearchParams({ sport, limit: String(limit) })
+  const res = await fetch(`${API_BASE_URL}/api/teams/${encodeURIComponent(name)}?${qs}`)
+  if (res.status === 404) {
+    const body = await res.json().catch(() => ({}))
+    return { found: false, suggestions: Array.isArray(body?.suggestions) ? body.suggestions : [] }
+  }
+  if (!res.ok) throw new Error(`API Error ${res.status}`)
+  return { found: true, data: await res.json() }
+}
+
+/** Link to the team page (static export: name and sport travel as query params). */
+export function teamHref(name: string, sport: string): string {
+  return `/team?${new URLSearchParams({ sport, name })}`
+}
+
 // Stripe Customer Portal: cancel or change the card without contacting us.
 export async function openBillingPortal(): Promise<{ url: string }> {
   return fetchApi('/api/billing-portal', { method: 'POST' })

@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 import { getSportConfig } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
-import { getTopPicks, topStatus, topWithdrawn, type TopPick, type TopSummary } from '@/lib/api'
+import { getTopPicks, teamHref, topStatus, topWithdrawn, type TopPick, type TopSummary } from '@/lib/api'
 import { TopPickDetails } from '@/components/match/TopPicksSection'
 import { ClvTile } from '@/components/top/ClvTile'
 import { BankrollChart } from '@/components/top/BankrollChart'
@@ -94,6 +94,24 @@ function Methodology({ s }: { s: TopSummary }) {
       {w.n > 0 && <> {w.n} withdrawn picks are listed below with their reasons.</>}
       {' '}A draw on a winner pick counts as a loss. Small sample: results over a few days can swing a lot.
     </p>
+  )
+}
+
+/** "Home vs Away" with each side linking to its team history. */
+function MatchTeams({ match, sport }: { match: string; sport: string }) {
+  const parts = match.split(/\s+vs\.?\s+/)
+  if (parts.length !== 2) return <span className="font-medium">{match}</span>
+  return (
+    <span className="font-medium">
+      {parts.map((name, i) => (
+        <span key={i}>
+          {i > 0 && <span className="text-muted-foreground"> vs </span>}
+          <Link href={teamHref(name, sport)} className="hover:text-primary hover:underline" title={`Team history: ${name}`}>
+            {name}
+          </Link>
+        </span>
+      ))}
+    </span>
   )
 }
 
@@ -193,7 +211,7 @@ export default function TopPage() {
                         <SportIcon sport={p.sport} className="h-4 w-4 shrink-0" />
                         <span className="w-12 tabular-nums text-muted-foreground">{p.time ?? ''}</span>
                         <span className="min-w-0 flex-1">
-                          <span className="font-medium">{p.match}</span>
+                          <MatchTeams match={p.match} sport={p.sport} />
                           {p.league && <span className="ml-2 text-xs text-muted-foreground">{p.league}</span>}
                         </span>
                         {p.selectionLocked || !p.pick ? (

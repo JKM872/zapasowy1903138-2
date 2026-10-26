@@ -76,6 +76,9 @@ outputs/*
 # TOP rules (tools/top_rules.py, weekly top_rules.yml) – read by top_picks.
 !outputs/top_rules.json
 !outputs/top_rules_report.*
+# Team history index (tools/build_team_index.py, check_results.yml) – read by /api/teams.
+!outputs/team_index/
+!outputs/team_aliases.json
 *.log
 scraper_log.txt
 email_config.py
