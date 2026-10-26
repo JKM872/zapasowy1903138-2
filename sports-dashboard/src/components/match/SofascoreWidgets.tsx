@@ -12,8 +12,8 @@ const WIDGET_HOST = 'https://widgets.sofascore.com/embed'
 /** Widgets SofaScore offers per event, by sport. Football has the richest set. */
 const WIDGETS: Record<string, { key: string; label: string; height: number }[]> = {
   football: [
+    // Lineups embed omitted: it rendered SofaScore's error card for every event tested.
     { key: 'attackMomentum', label: 'Attack momentum', height: 286 },
-    { key: 'lineups', label: 'Lineups', height: 786 },
   ],
 }
 
