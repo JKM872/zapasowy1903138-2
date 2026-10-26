@@ -225,6 +225,9 @@ def _gemini_grounded(prompt: str):
         _stat('no_keys')
         return None, []
     models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or GEMINI_MODELS
+    if all((k, m) in _DEAD for k in keys for m in models):
+        _stat('llm_off_quota')  # every key x model is quota-exhausted: no more requests this run
+        return None, []
     for key in keys:
         for model in models:
             if (key, model) in _DEAD:

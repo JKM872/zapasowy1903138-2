@@ -100,3 +100,18 @@ def test_gemini_429_pair_is_skipped_and_grounding_urls_are_sources(monkeypatch):
     av._gemini_grounded('p')
     assert sum('m1' in u for u in calls) == 1  # exhausted pair not retried
     assert av.parse_llm(txt, urls)['sources'] == ['https://news.example/x']
+
+
+def test_all_keys_exhausted_turns_llm_off_and_unknown_never_blocks(monkeypatch, tmp_path):
+    import requests
+    import groq_client
+    calls = []
+    monkeypatch.setattr(requests, 'post', lambda url, **kw: calls.append(url) or _R(429, {}))
+    monkeypatch.setattr(groq_client, 'gemini_keys', lambda: ['k1', 'k2'])
+    monkeypatch.setenv('AVAIL_GEMINI_MODELS', 'm1')
+    av._DEAD.clear(); av.STATS.clear()
+    for _ in range(3):
+        assert av._gemini_grounded('p') == (None, [])
+    assert len(calls) == 2 and av.STATS['llm_off_quota'] == 2
+    rec = {'unknown': True, 'board': 'ok', 'top_block': False}
+    assert av.apply_grade('A', rec['board']) == 'A' and not rec['top_block']
