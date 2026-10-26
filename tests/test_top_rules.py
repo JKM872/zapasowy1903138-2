@@ -268,11 +268,14 @@ def test_cli_build_report(tmp_path):
     assert rules['tuning']['end'] == TE and rules['holdout']['start'] == '2026-10-11'
     rep = json.load(open(os.path.join(out, 'top_rules_report.json'), encoding='utf-8'))
     u = rep['universes']['candidates']['twoWay']
-    assert set(u) == {'before', 'after', 'perSport'} and u['before']['n'] > 0
+    assert set(u) == {'before', 'after', 'applied', 'perSport'} and u['before']['n'] > 0
     assert {'n', 'hit', 'roiRaw', 'roi5', 'maxDD', 'ci95'} <= set(u['before'])
     assert 'asStored' in rep['universes']['topReplay']
+    assert isinstance(rules['enforcement']['enforce'], bool)
+    assert rep['gateMode'] in ('enforced', 'shadow') and 'status' in rep['safeGateForward']
     md = open(os.path.join(out, 'top_rules_report.md'), encoding='utf-8').read()
     assert 'holdout 2026-10-11..2026-10-26' in md
+    assert 'Caveat (holdout leak)' in md and 'Forward check of the 1.80 cut' in md
 
 
 def test_cli_short_holdout_fails_and_keeps_old_file(tmp_path, capsys):

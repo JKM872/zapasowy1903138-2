@@ -20,6 +20,13 @@ from datetime import date
 from typing import Any, Dict, List, Optional
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+from tools import best_price, league_tier, pricing, staking, top_rules  # noqa: E402
+
+# Learned segment rules (outputs/top_rules.json, tools/top_rules.py); a missing,
+# stale or invalid file logs "WARNING rules fallback" and gives the safe gate.
+RULES = top_rules.load()
 MIN_ODDS = {'football': float(os.getenv('TOP_MIN_ODDS_FOOTBALL', '2.0'))}
 # Hokej wraca do TOP: 17.10 trafił 9/12 przy kursach 1.65–2.30.
 EXCLUDED_SPORTS = {s for s in os.getenv('TOP_EXCLUDED_SPORTS', '').split(',') if s}
@@ -42,8 +49,13 @@ def _pts(form: Optional[List[str]]) -> Optional[int]:
     return sum(PTS[x] for x in f[:5]) if len(f) >= 3 else None
 
 
-def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
-    """None = nie TOP, inaczej dict z uzasadnieniem."""
+def evaluate(m: Dict[str, Any], sport: str, day: Optional[str] = None,
+             apply_rules: bool = True) -> Optional[Dict[str, Any]]:
+    """None = nie TOP, inaczej dict z uzasadnieniem.
+
+    ``apply_rules=False`` gives the pre-rules gates only (tools/top_rules.py
+    replays them as the "before" set); ``day`` lets the pick carry kickoffUtc.
+    """
     # Dane z poprzedniego sezonu (recency w forebet_pipeline): mało meczów w
     # sezonie, model daleko od rynku, albo forma ogólna sprzeczna z sezonową.
     if m.get('earlySeason') or m.get('staleModel') or m.get('seasonFormConflict'):
@@ -149,7 +161,7 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
                     + _f(form.get('awaySeason' if me == 'home' else 'homeSeason')))
                    if (form.get('homeSeason') is not None or form.get('awaySeason') is not None)
                    else '')
-    return {
+    out = {
         'sport': sport, 'time': m.get('time'), 'league': m.get('league'),
         'match': f"{m.get('homeTeam')} vs {m.get('awayTeam')}", 'pick': team,
         'odds': float(o_me), 'grade': m.get('predictionGrade'),
@@ -163,6 +175,91 @@ def evaluate(m: Dict[str, Any], sport: str) -> Optional[Dict[str, Any]]:
         'formBlock': _form_block(m),
         **(_inj.fields(m) if _inj else {}),
     }
+    if not apply_rules:
+        return out
+    return _apply_rules(out, m, sport, me, odds, day)
+
+
+def _apply_rules(out: Dict[str, Any], m: Dict[str, Any], sport: str, me: str,
+                 odds: Dict[str, Any], day: Optional[str]) -> Optional[Dict[str, Any]]:
+    """Rules gate (design K1/K5): None when the segment is excluded, else the
+    pick with odds2/oddsMarket/segment/floorOdds/pCal/stakePct/kickoffUtc."""
+    o2, market = pricing.side_price(odds, sport, me)
+    o2 = float(o2 or out['odds'])
+    grade = m.get('predictionGrade') or ''
+    # Learned rules decide only when outputs/top_rules.json says enforcement.enforce
+    # (holdout >= 3 picks/day and ROI -5% > 0); else the safe gate decides and the
+    # learned decision is just recorded (top_rules.gate, mode shadow/fallback).
+    d = top_rules.gate(RULES, sport, o2, me, grade, league_tier.tier(m, sport))
+    if d['decision'] != 'allow':
+        return None
+    out.update({
+        'odds2': o2, 'oddsMarket': market, 'segment': d['segment'],
+        'rulesMode': d['mode'], 'learnedDecision': d['learnedDecision'],
+        'learnedSegment': d['learnedSegment'],
+        'floorOdds': d['floorOdds'] or 1.0, 'pCal': d['pCal'],
+        'stakePct': staking.stake_pct(grade, d['pCal'], o2),
+        # Forebet time read per sport (pricing.FOREBET_TZ_BY_SPORT); replaced by
+        # an explicit source kickoff when best_price finds one.
+        'kickoffUtc': pricing.parse_kickoff(day, m.get('time'), None, sport) if day else None,
+        'kickoffApprox': True,
+    })
+    return out
+
+
+def _live_withdrawn(day: str) -> set:
+    """Keys withdrawn by the live job (results/top_live_<day>.json); none when missing."""
+    p = os.path.join(ROOT, 'results', f'top_live_{day}.json')
+    if not os.path.exists(p):
+        return set()
+    try:
+        live = json.load(open(p, encoding='utf-8-sig'))
+    except Exception as e:
+        print(f"WARNING top_live_{day}.json unreadable ({type(e).__name__}) – no live withdrawals",
+              file=sys.stderr)
+        return set()
+    if not isinstance(live, dict):
+        return set()
+    return {k for k, v in live.items() if isinstance(v, dict) and v.get('withdrawn')}
+
+
+def select_new(picks: List[Dict[str, Any]], old: List[Dict[str, Any]],
+               day: str) -> List[Dict[str, Any]]:
+    """Picks not yet published today, minus live withdrawals, through the floor gate."""
+    known = {_key(r) for r in old}
+    # Withdrawn by the live job (pre-kickoff check) => never published again.
+    live_out = _live_withdrawn(day)
+    new = []
+    for r in picks:
+        if _key(r) in known:
+            continue
+        if _key(r) in live_out:
+            print(f"   🚫 TOP not re-added (withdrawn live): {r.get('match')}")
+            continue
+        new.append(r)
+    return publish_gate(new, day)
+
+
+def publish_gate(new: List[Dict[str, Any]], day: str) -> List[Dict[str, Any]]:
+    """New picks only: best price, never below floorOdds, stake at the price we get."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    out = []
+    for r in new:
+        bp = best_price.best_price(r, day)
+        price = bp['bestOdds'] or r.get('odds2') or r['odds']
+        floor = r.get('floorOdds') or 1.0
+        if price < floor:
+            print(f"   ⛔ TOP below floor: {r.get('match')} {price:.2f} < {floor:.2f}")
+            continue
+        r.update({k: bp[k] for k in ('bestOdds', 'bestOddsSource', 'bestOddsAt', 'booksCount')})
+        k = pricing.parse_kickoff(day, None, [bp['kickoff']], r.get('sport')) if bp.get('kickoff') else None
+        if k:
+            r['kickoffUtc'], r['kickoffApprox'] = k, False
+        r['stakePct'] = staking.stake_pct(r.get('grade'), r.get('pCal'), price)
+        r['publishedAt'] = now
+        out.append(r)
+    return out
 
 
 def _form_block(m: Dict[str, Any]) -> str:
@@ -190,7 +287,7 @@ def collect(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
             continue
         for m in ms:
             if m.get('qualifies') and (m.get('predictionGrade') or '') in grades:
-                r = evaluate(m, sport)
+                r = evaluate(m, sport, day)
                 if r:
                     out.append(r)
     return sorted(out, key=lambda r: (r['time'] or '99:99'))
@@ -253,11 +350,11 @@ def collect_enriched(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
         for m in ms:
             if not (m.get('qualifies') and (m.get('predictionGrade') or '') in grades):
                 continue
-            if not evaluate(m, sport):          # bez szans — nie pytamy SofaScore
+            if not evaluate(m, sport, day):     # bez szans — nie pytamy SofaScore
                 continue
             enrich_fanvote(m, sport, day)
             enrich_injuries(m, sport, day)
-            r = evaluate(m, sport)
+            r = evaluate(m, sport, day)
             if r:
                 out.append(r)
     return sorted(out, key=lambda r: (r['time'] or '99:99'))
@@ -506,8 +603,7 @@ if __name__ == '__main__':
         n = _av.note(_avail_rec(r)) if _av else ''
         if n:
             r['availabilityNote'] = n
-    known = {_key(r) for r in old}
-    new = [r for r in picks if _key(r) not in known]
+    new = select_new(picks, old, day)
     merged = old + new
     merged.sort(key=lambda r: (r.get('time') or '99:99'))
     with open(out_p, 'w', encoding='utf-8') as fh:

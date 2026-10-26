@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T21:14:07Z",
+ "generatedAt": "2026-10-26T21:41:48Z",
  "rulesFallback": null,
  "tuning": {
   "start": "2026-09-12",
@@ -16,6 +16,43 @@
   "exclude": 39,
   "inherit": 99,
   "allow": 3
+ },
+ "gateMode": "shadow",
+ "enforcement": {
+  "enforce": false,
+  "minPerDay": 3.0,
+  "minRoi5": 0.0,
+  "holdoutTopReplay": {
+   "n": 0,
+   "perDay": 0.0,
+   "roi5": null
+  },
+  "reason": "holdout TOP replay after rules: 0 picks, 0.0/day, ROI -5% n/a (needs >= 3/day and > +0%)"
+ },
+ "safeGateForward": {
+  "launch": "2026-10-27",
+  "end": "2026-11-09",
+  "daysCovered": 0,
+  "status": "pending (0/14 settled days)",
+  "cut": {
+   "n": 0,
+   "hit": null,
+   "roiRaw": null,
+   "roi5": null,
+   "maxDD": 0.0,
+   "perDay": 0.0,
+   "ci95": null
+  },
+  "kept": {
+   "n": 0,
+   "hit": null,
+   "roiRaw": null,
+   "roi5": null,
+   "maxDD": 0.0,
+   "perDay": 0.0,
+   "ci95": null
+  },
+  "cutPerSport": {}
  },
  "universes": {
   "candidates": {
@@ -194,6 +231,18 @@
        "ci95": null
       }
      }
+    },
+    "applied": {
+     "n": 854,
+     "hit": 55.6,
+     "roiRaw": -3.3,
+     "roi5": -5.4,
+     "maxDD": 51.54,
+     "perDay": 53.4,
+     "ci95": [
+      -11.2,
+      0.2
+     ]
     }
    },
    "asStored": {
@@ -380,8 +429,8 @@
      "maxDD": 8.6,
      "perDay": 15.9,
      "ci95": [
-      -8.1,
-      11.2
+      -7.9,
+      11.3
      ]
     },
     "after": {
@@ -546,6 +595,18 @@
        "ci95": null
       }
      }
+    },
+    "applied": {
+     "n": 155,
+     "hit": 64.5,
+     "roiRaw": 8.1,
+     "roi5": 5.9,
+     "maxDD": 5.81,
+     "perDay": 9.7,
+     "ci95": [
+      -6.6,
+      19.4
+     ]
     }
    },
    "asStored": {

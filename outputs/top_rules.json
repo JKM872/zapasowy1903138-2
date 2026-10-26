@@ -1,7 +1,7 @@
 {
  "version": 1,
- "generatedAt": "2026-10-26T21:14:06Z",
- "gitSha": "72fd0af7",
+ "generatedAt": "2026-10-26T21:41:46Z",
+ "gitSha": "efea4506",
  "tuning": {
   "start": "2026-09-12",
   "end": "2026-10-10",
@@ -1449,5 +1449,16 @@
  "defaults": {
   "decision": "exclude",
   "stakePct": 1.0
+ },
+ "enforcement": {
+  "enforce": false,
+  "minPerDay": 3.0,
+  "minRoi5": 0.0,
+  "holdoutTopReplay": {
+   "n": 0,
+   "perDay": 0.0,
+   "roi5": null
+  },
+  "reason": "holdout TOP replay after rules: 0 picks, 0.0/day, ROI -5% n/a (needs >= 3/day and > +0%)"
  }
 }

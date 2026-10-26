@@ -681,6 +681,12 @@ def _top_match(**kw):
 
 
 class TestTopPicks:
+    @pytest.fixture(autouse=True)
+    def _fixed_rules(self, monkeypatch):
+        # These cover the pre-rules gates; the learned rules file changes weekly.
+        from tools import top_picks as tp, top_rules
+        monkeypatch.setattr(tp, 'RULES', top_rules.fallback('test'))
+
     def test_flags_exclude(self):
         from tools import top_picks as tp
         assert tp.evaluate(_top_match(), 'football') is not None

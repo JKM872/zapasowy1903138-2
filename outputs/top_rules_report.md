@@ -1,8 +1,25 @@
 # TOP rules – holdout report
 
-Generated 2026-10-26T21:14:07Z. Tuning 2026-09-12..2026-10-10 (n=1407, halves split at 2026-10-02); holdout 2026-10-11..2026-10-26 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
+Generated 2026-10-26T21:41:48Z. Tuning 2026-09-12..2026-10-10 (n=1407, halves split at 2026-10-02); holdout 2026-10-11..2026-10-26 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
 
 Segment decisions: {'exclude': 39, 'inherit': 99, 'allow': 3}
+
+## Gate in use by TOP
+
+Mode: **shadow**. The learned rules are enforced automatically only when a rebuild keeps >= 3 TOP picks/day on the holdout with ROI −5% > +0% (TOP replay after rules + floor). Otherwise TOP applies the safe gate (tennis and basketball priced below 1.80 excluded, everything else as evaluate()) and each pick records the learned decision (`learnedDecision`, `learnedSegment`).
+
+This build: enforce = False; holdout TOP replay after rules: 0 picks, 0.0/day, ROI -5% n/a (needs >= 3/day and > +0%).
+
+**Caveat (holdout leak):** the 1.80 cut of the safe gate was chosen in the data audit, which also looked at the holdout days, so its holdout numbers below ("as applied") are optimistic. It is re-validated forward on the first 14 settled days from 2026-10-27.
+
+### Forward check of the 1.80 cut (2026-10-27..2026-11-09, TOP replay, 2-way)
+
+Status: **pending (0/14 settled days)**
+
+| set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
+|---|---|---|---|---|---|---|---|
+| removed by the cut | 0 | 0.0 | — | — | — | — | 0.0 |
+| kept | 0 | 0.0 | — | — | — | — | 0.0 |
 
 ## Candidates TOP could publish (structural gates, grade A/B/C)
 
@@ -12,6 +29,7 @@ Segment decisions: {'exclude': 39, 'inherit': 99, 'allow': 3}
 |---|---|---|---|---|---|---|---|
 | before | 1231 | 76.9 | 58.1% | -3.4% | -5.3% | -9.8 .. -0.9 | 78.23 |
 | after (rules + floor) | 0 | 0.0 | — | — | — | — | 0.0 |
+| as applied (shadow) | 854 | 53.4 | 55.6% | -3.3% | -5.4% | -11.2 .. +0.2 | 51.54 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
@@ -48,8 +66,9 @@ Segment decisions: {'exclude': 39, 'inherit': 99, 'allow': 3}
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 255 | 15.9 | 64.3% | +3.3% | +1.4% | -8.1 .. +11.2 | 8.6 |
+| before | 255 | 15.9 | 64.3% | +3.3% | +1.4% | -7.9 .. +11.3 | 8.6 |
 | after (rules + floor) | 0 | 0.0 | — | — | — | — | 0.0 |
+| as applied (shadow) | 155 | 9.7 | 64.5% | +8.1% | +5.9% | -6.6 .. +19.4 | 5.81 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|

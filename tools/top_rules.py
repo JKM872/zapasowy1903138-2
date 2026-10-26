@@ -15,6 +15,11 @@ Usage:
   parent) and ``floorOdds`` = max(break-even after 5% haircut, band lower edge).
 * ``load()`` validates outputs/top_rules.json; on any problem it logs
   ``WARNING rules fallback: <reason>`` once and returns the built-in safe gate.
+* ``--build`` writes ``enforcement.enforce``: the learned rules are enforced by
+  TOP only when the holdout TOP replay after them keeps >= 3 picks/day with
+  ROI -5% > 0; otherwise TOP uses the safe gate and records the learned
+  decision per pick (``gate()``, mode shadow). ``--report`` also re-validates
+  the safe gate's 1.80 cut forward from SAFE_GATE_LAUNCH.
 """
 from __future__ import annotations
 
@@ -201,7 +206,7 @@ def _row(day: str, sport: str, src: str, m: Dict[str, Any], tp) -> Optional[Dict
     top = False
     if src == 'forebet' and tp is not None and g in tp.DEFAULT_GRADES:
         try:
-            top = bool(tp.evaluate(m, sport))
+            top = bool(tp.evaluate(m, sport, apply_rules=False))   # pre-rules gates
         except Exception:
             top = False
     return {'day': day, 'time': m.get('time') or '', 'sport': sport, 'src': src, 'grade': g,
@@ -376,6 +381,91 @@ def decide(rules: Dict[str, Any], sport: str, odds2: Optional[float], side: str,
             'pCal': s.get('pCal'), 'fallback': False}
 
 
+# ── enforcement switch (product decision 2026-10-26, "option B") ──────────
+# The learned segments are ENFORCED only when the weekly rebuild shows they keep
+# a usable, profitable TOP on the holdout: TOP replay after rules + floor has
+# >= ENFORCE_MIN_PER_DAY picks/day AND ROI after the 5% haircut > ENFORCE_MIN_ROI5.
+# The result is written into outputs/top_rules.json as `enforcement.enforce`
+# (a missing block = not enforced). While not enforced TOP runs on the SAFE GATE
+# (= the built-in fallback: tennis/basketball odds2 < 1.80 excluded, everything
+# else as evaluate()) and every pick records the learned decision ("shadow").
+ENFORCE_MIN_PER_DAY = 3.0
+ENFORCE_MIN_ROI5 = 0.0
+# Caveat: the 1.80 cut came from the data audit, which also saw the holdout
+# days, so its holdout numbers are optimistic. It is re-validated forward on the
+# first FORWARD_DAYS settled days from SAFE_GATE_LAUNCH (report section).
+SAFE_GATE_LAUNCH = '2026-10-27'
+FORWARD_DAYS = 14
+
+
+def enforcement(rules: Dict[str, Any], hold: List[Dict[str, Any]], tuning_end: str,
+                holdout_end: str) -> Dict[str, Any]:
+    """Enforce the learned rules iff the holdout TOP replay after them is big and profitable enough."""
+    days = max(1, (date.fromisoformat(holdout_end) - date.fromisoformat(tuning_end)).days)
+    top = [r for r in hold if r['src'] == 'forebet' and r['day'] > tuning_end and r['top']]
+    after = [r for r in top if _allowed(rules, r)]
+    roi5 = _roi(after)
+    per_day = len(after) / days
+    ok = per_day >= ENFORCE_MIN_PER_DAY and roi5 is not None and roi5 > ENFORCE_MIN_ROI5
+    why = (f'holdout TOP replay after rules: {len(after)} picks, {per_day:.1f}/day, ROI -5% '
+           f"{'n/a' if roi5 is None else f'{roi5:+.1f}%'} (needs >= {ENFORCE_MIN_PER_DAY:g}/day "
+           f'and > {ENFORCE_MIN_ROI5:+g}%)')
+    return {'enforce': bool(ok), 'minPerDay': ENFORCE_MIN_PER_DAY, 'minRoi5': ENFORCE_MIN_ROI5,
+            'holdoutTopReplay': {'n': len(after), 'perDay': round(per_day, 1), 'roi5': _rnd(roi5)},
+            'reason': why}
+
+
+def enforced(rules: Dict[str, Any]) -> bool:
+    return not rules.get('fallback') and (rules.get('enforcement') or {}).get('enforce') is True
+
+
+def gate(rules: Dict[str, Any], sport: str, odds2: Optional[float], side: str,
+         grade: str, tier: Optional[str] = None) -> Dict[str, Any]:
+    """Decision TOP actually applies, plus the learned one.
+
+    mode ``enforced`` – learned rules decide; ``shadow`` – safe gate decides, the
+    learned decision is only recorded (its floor/pCal are used when it allows);
+    ``fallback`` – rules file unusable, safe gate.
+    """
+    if rules.get('fallback'):
+        return dict(decide(rules, sport, odds2, side, grade, tier), mode='fallback',
+                    learnedDecision=None, learnedSegment=None)
+    learned = decide(rules, sport, odds2, side, grade, tier)
+    rec = {'learnedDecision': learned['decision'], 'learnedSegment': learned['segment']}
+    if enforced(rules):
+        return dict(learned, mode='enforced', **rec)
+    out = dict(decide(fallback('safe gate'), sport, odds2, side, grade, tier),
+               segment='safe-gate', mode='shadow', **rec)
+    if out['decision'] == 'allow' and learned['decision'] == 'allow':
+        out.update(floorOdds=learned['floorOdds'] or 1.0, pCal=learned['pCal'])
+    return out
+
+
+def safe_gate_forward(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Forward check of the 1.80 cut on TOP replay rows from SAFE_GATE_LAUNCH."""
+    end = (date.fromisoformat(SAFE_GATE_LAUNCH) + timedelta(days=FORWARD_DAYS - 1)).isoformat()
+    win = [r for r in rows if r['src'] == 'forebet' and r['top']
+           and SAFE_GATE_LAUNCH <= r['day'] <= end]
+    cut, kept = [], []
+    for r in win:
+        lim = FALLBACK_EXCLUDE.get(r['sport'])
+        (cut if lim and r['odds2'] < lim else kept).append(r)
+    covered = len({r['day'] for r in win})
+    mc = metrics(cut)
+    if covered < FORWARD_DAYS:
+        status = f'pending ({covered}/{FORWARD_DAYS} settled days)'
+    elif not cut:
+        status = 'no picks removed by the cut in the window'
+    elif mc['roi5'] <= 0:
+        status = 'confirmed: picks removed by the 1.80 cut lost money forward'
+    else:
+        status = 'NOT confirmed: picks removed by the 1.80 cut were profitable forward - review the cut'
+    return {'launch': SAFE_GATE_LAUNCH, 'end': end, 'daysCovered': covered, 'status': status,
+            'cut': mc, 'kept': metrics(kept),
+            'cutPerSport': {sp: metrics([r for r in cut if r['sport'] == sp])
+                            for sp in sorted({r['sport'] for r in cut})}}
+
+
 # ── load + validation ─────────────────────────────────────────────────────
 
 _CACHE: Dict[str, Dict[str, Any]] = {}
@@ -413,6 +503,9 @@ def validate(data: Any, now: Optional[datetime] = None) -> Optional[str]:
         for f, lo, hi in (('floorOdds', 1.01, 20), ('pCal', 0.01, 0.99), ('stakePct', 1, 2)):
             if f in s and not (isinstance(s[f], (int, float)) and lo <= s[f] <= hi):
                 return f'segment {k} {f} out of range'
+    enf = data.get('enforcement')
+    if enf is not None and not (isinstance(enf, dict) and isinstance(enf.get('enforce'), bool)):
+        return 'bad enforcement block'
     dfl = data.get('defaults') or {}
     if dfl.get('decision') not in ('allow', 'exclude'):
         return 'bad defaults.decision'
@@ -487,6 +580,12 @@ def _allowed(rules: Dict[str, Any], r: Dict[str, Any]) -> bool:
     return d['decision'] == 'allow' and r['odds2'] >= (d['floorOdds'] or 1.0)
 
 
+def _applied(rules: Dict[str, Any], r: Dict[str, Any]) -> bool:
+    """What TOP publishes: gate() (enforced rules, or the safe gate in shadow/fallback)."""
+    d = gate(rules, r['sport'], r['odds2'], r['side'], r['grade'], r['tier'])
+    return d['decision'] == 'allow' and r['odds2'] >= (d['floorOdds'] or 1.0)
+
+
 def _published(root: str, lo: str, hold: List[Dict[str, Any]], days: int) -> Dict[str, Any]:
     """Published results/top_<day>.json picks in the holdout window joined to holdout rows."""
     idx = {(r['day'], r['sport'], fold(r['home']), fold(r['away'])): r for r in hold}
@@ -531,7 +630,8 @@ def _supabase_count(lo: str, hi: str) -> Dict[str, Any]:
 
 
 def build_report(rules: Dict[str, Any], learn: List[Dict[str, Any]], hold: List[Dict[str, Any]],
-                 tuning_end: str, holdout_end: str, root: str = ROOT) -> Dict[str, Any]:
+                 tuning_end: str, holdout_end: str, root: str = ROOT,
+                 forward: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     days = (date.fromisoformat(holdout_end) - date.fromisoformat(tuning_end)).days
     rng = random.Random(20261010)
     hold_fb = [r for r in hold if r['src'] == 'forebet' and r['day'] > tuning_end]
@@ -549,7 +649,11 @@ def build_report(rules: Dict[str, Any], learn: List[Dict[str, Any]], hold: List[
             u[label] = {'before': metrics(rs, price, days, rng if price == 'odds2' else None),
                         'after': metrics(after, price, days, rng if price == 'odds2' else None),
                         'perSport': per}
+        u['twoWay']['applied'] = metrics([r for r in rs if _applied(rules, r)], 'odds2', days, rng)
         out[name] = u
+    enf = rules.get('enforcement') or (None if rules.get('fallback')
+                                       else enforcement(rules, hold, tuning_end, holdout_end))
+    mode = 'fallback' if rules.get('fallback') else ('enforced' if enforced(rules) else 'shadow')
     ls = [r for r in learn if r['src'] == 'livesport' and r['day'] <= tuning_end]
     segs = rules.get('segments') or {}
     count = defaultdict(int)
@@ -562,6 +666,8 @@ def build_report(rules: Dict[str, Any], learn: List[Dict[str, Any]], hold: List[
                                                              + timedelta(days=1)).isoformat(),
                                                    'end': holdout_end, 'days': days},
         'decisions': dict(count),
+        'gateMode': mode, 'enforcement': enf,
+        'safeGateForward': safe_gate_forward(hold if forward is None else forward),
         'universes': out,
         'published': _published(root, tuning_end, hold_fb, days),
         'livesportContext': {sp: metrics([r for r in ls if r['sport'] == sp])
@@ -595,13 +701,35 @@ def report_md(rep: Dict[str, Any], rules: Dict[str, Any]) -> str:
         L += [f"**Rules fallback in use: {rep['rulesFallback']}**", '']
     L += [f"Segment decisions: {rep['decisions']}", '']
     hdr = '| set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |\n|---|---|---|---|---|---|---|---|'
+    enf, fw = rep.get('enforcement') or {}, rep.get('safeGateForward') or {}
+    L += ['## Gate in use by TOP', '',
+          f"Mode: **{rep.get('gateMode')}**. The learned rules are enforced automatically only when a "
+          f"rebuild keeps >= {ENFORCE_MIN_PER_DAY:g} TOP picks/day on the holdout with ROI −5% > "
+          f"{ENFORCE_MIN_ROI5:+g}% (TOP replay after rules + floor). Otherwise TOP applies the safe gate "
+          '(tennis and basketball priced below 1.80 excluded, everything else as evaluate()) and each '
+          'pick records the learned decision (`learnedDecision`, `learnedSegment`).', '',
+          f"This build: enforce = {enf.get('enforce')}; {enf.get('reason', '—')}.", '',
+          '**Caveat (holdout leak):** the 1.80 cut of the safe gate was chosen in the data audit, which '
+          'also looked at the holdout days, so its holdout numbers below ("as applied") are optimistic. '
+          f"It is re-validated forward on the first {FORWARD_DAYS} settled days from "
+          f"{fw.get('launch', SAFE_GATE_LAUNCH)}.", '',
+          f"### Forward check of the 1.80 cut ({fw.get('launch')}..{fw.get('end')}, TOP replay, 2-way)", '',
+          f"Status: **{fw.get('status')}**", '', hdr]
+    if fw:
+        L += [_mrow('removed by the cut', fw['cut']), _mrow('kept', fw['kept'])]
+        for sp, m in (fw.get('cutPerSport') or {}).items():
+            L.append(_mrow(f'removed, {sp}', m))
+    L.append('')
     titles = {'candidates': 'Candidates TOP could publish (structural gates, grade A/B/C)',
               'topReplay': 'TOP replay (current evaluate())'}
     for name, u in rep['universes'].items():
         L += [f'## {titles[name]}', '']
         for label, title in (('twoWay', '2-way prices'), ('asStored', 'as stored')):
             L += [f'### {title}', '', hdr, _mrow('before', u[label]['before']),
-                  _mrow('after (rules + floor)', u[label]['after']), '',
+                  _mrow('after (rules + floor)', u[label]['after'])]
+            if 'applied' in u[label]:
+                L.append(_mrow(f"as applied ({rep.get('gateMode')})", u[label]['applied']))
+            L += ['',
                   '| sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |',
                   '|---|---|---|---|---|---|---|---|---|']
             for sp, x in u[label]['perSport'].items():
@@ -683,6 +811,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         except ValueError as e:
             print(f'ERROR {e} – old rules file kept', file=sys.stderr)
             return 1
+        rules['enforcement'] = enforcement(rules, hold, te, he)
         reason = validate(rules)
         if reason:
             print(f'ERROR built rules invalid ({reason}) – old rules file kept', file=sys.stderr)
@@ -694,10 +823,13 @@ def main(argv: Optional[List[str]] = None) -> int:
             c[s['decision']] += 1
         print(f"rules: tuning {rules['tuning']['start']}..{te} n={rules['tuning']['n']}, "
               f"holdout {hs}..{he}, segments {dict(c)} -> {rules_p}")
+        print(f"enforcement: {rules['enforcement']['enforce']} ({rules['enforcement']['reason']})")
     else:
         rules = load(rules_p)
     if a.report:
-        rep = build_report(rules, learn, hold, te, he, root)
+        before_launch = (date.fromisoformat(SAFE_GATE_LAUNCH) - timedelta(days=1)).isoformat()
+        forward = hold if te <= before_launch else load_holdout_rows(before_launch, root)
+        rep = build_report(rules, learn, hold, te, he, root, forward)
         out_dir = os.path.join(root, 'outputs')
         _write_json(os.path.join(out_dir, 'top_rules_report.json'), rep)
         with open(os.path.join(out_dir, 'top_rules_report.md'), 'w', encoding='utf-8') as fh:
