@@ -1,6 +1,6 @@
 {
   "date": "2026-10-26",
-  "generated_at": "2026-10-26T16:14:55.488967+00:00",
+  "generated_at": "2026-10-26T20:39:00.083532+00:00",
   "issues": [
     {
       "level": "ALERT",
@@ -41,16 +41,6 @@
       "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
       "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
       "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40276026751/job/121418846549"
-    },
-    {
-      "level": "ALERT",
-      "workflow": "daily_digest.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
     },
     {
       "level": "WARN",
@@ -140,41 +130,36 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 40262072675,
+        "databaseId": 40389998270,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40262072675"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40389998270"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 2,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 40312150959,
+        "databaseId": 40393187927,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40312150959"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40393187927"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "daily_digest.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 40381230349,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40381230349"
+      }
     }
   ],
   "relays": [
@@ -216,7 +201,7 @@
     }
   ],
   "counts": {
-    "ALERT": 5,
+    "ALERT": 4,
     "WARN": 1
   }
 }
