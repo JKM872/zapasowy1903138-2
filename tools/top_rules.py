@@ -231,12 +231,12 @@ def _load_rows(root: str, lo: Optional[str], hi: Optional[str], settle_max: Opti
             if not isinstance(m, dict):
                 continue
             r = _row(day, sport, src, m, tp)
-            if not r or r['key'] in seen:          # dedupe: first source wins
+            if not r or r['key'] in seen:          # dedupe: first settled source wins
+                continue
+            w = settler.winner(day, m)
+            if w is None:                          # unsettled rows do not claim the key
                 continue
             seen.add(r['key'])
-            w = settler.winner(day, m)
-            if w is None:
-                continue
             r['won'], r['draw'] = (w == r['side']), (w == 'draw')
             rows.append(r)
     return rows

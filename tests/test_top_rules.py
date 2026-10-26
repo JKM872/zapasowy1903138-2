@@ -188,6 +188,24 @@ def test_poisoned_holdout_does_not_change_rules(tmp_path):
     assert min(r['day'] for r in hold) > TE
 
 
+def test_unsettled_forebet_row_does_not_suppress_settled_livesport_duplicate(tmp_path):
+    TR._STORE_CACHE.clear()
+    res, out = tmp_path / 'results', tmp_path / 'outputs'
+    res.mkdir()
+    out.mkdir()
+    day = '2026-10-01'
+    fb = _match(day, 'tennis', 1, 1.7, 2.2, 'fb001')            # no result for this mid
+    ls = dict(fb, matchUrl='https://www.livesport.com/pl/mecz/x/?mid=ls001')
+    (res / f'matches_{day}_tennis_forebet.json').write_text(json.dumps({'matches': [fb]}), encoding='utf-8')
+    (res / f'matches_{day}_tennis.json').write_text(json.dumps({'matches': [ls]}), encoding='utf-8')
+    (out / 'result_store.json').write_text(json.dumps({ls['matchUrl']: {
+        'status': 'finished', 'winner': 'home', 'date': '2026-10-02',
+        'home_team': 'x', 'away_team': 'y'}}), encoding='utf-8')
+    rows = TR.load_learning_rows(TE, str(tmp_path))
+    assert [(r['src'], r['won']) for r in rows] == [('livesport', True)]
+    TR._STORE_CACHE.clear()
+
+
 # ── load(): validation + fallback ─────────────────────────────────────────
 
 def _valid(tmp_path):

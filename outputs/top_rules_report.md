@@ -1,6 +1,6 @@
 # TOP rules – holdout report
 
-Generated 2026-10-26T21:01:52Z. Tuning 2026-09-12..2026-10-10 (n=1407, halves split at 2026-10-02); holdout 2026-10-11..2026-10-26 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
+Generated 2026-10-26T21:14:07Z. Tuning 2026-09-12..2026-10-10 (n=1407, halves split at 2026-10-02); holdout 2026-10-11..2026-10-26 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
 
 Segment decisions: {'exclude': 39, 'inherit': 99, 'allow': 3}
 
@@ -82,7 +82,7 @@ Segment decisions: {'exclude': 39, 'inherit': 99, 'allow': 3}
 
 ## Published TOP files in the holdout window
 
-195 published (not withdrawn), 102 joined to settled holdout rows.
+194 published (not withdrawn), 102 joined to settled holdout rows.
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
