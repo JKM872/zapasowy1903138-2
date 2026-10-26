@@ -69,3 +69,34 @@ def test_note_lists_only_important_players_of_the_picked_side():
     rec = {'side': 'home', 'home': [P('Star', 'star', reason='knee'), P('Kid', 'other')],
            'away': [P('Opp', 'star')]}
     assert av.note(rec) == 'Key absences: Star* (knee)'
+
+
+class _R:
+    def __init__(self, code, body):
+        self.status_code, self._b, self.text = code, body, ''
+
+    def json(self):
+        return self._b
+
+
+def test_gemini_429_pair_is_skipped_and_grounding_urls_are_sources(monkeypatch):
+    import requests
+    import groq_client
+    calls = []
+    ok = {'candidates': [{'content': {'parts': [{'text': '{"home":[],"away":[],"confidence":"high"}'}]},
+                          'groundingMetadata': {'groundingChunks': [{'web': {'uri': 'https://news.example/x'}}]}}]}
+
+    def post(url, **kw):
+        calls.append(url)
+        if 'm1' in url:
+            return _R(429, {'error': {'message': 'Quota exceeded'}})
+        return _R(200, ok)
+    monkeypatch.setattr(requests, 'post', post)
+    monkeypatch.setattr(groq_client, 'gemini_keys', lambda: ['k'])
+    monkeypatch.setenv('AVAIL_GEMINI_MODELS', 'm1,m2')
+    av._DEAD.clear(); av.ERRORS.clear()
+    txt, urls = av._gemini_grounded('p')
+    assert urls == ['https://news.example/x'] and av.ERRORS['m1'].startswith('429: Quota')
+    av._gemini_grounded('p')
+    assert sum('m1' in u for u in calls) == 1  # exhausted pair not retried
+    assert av.parse_llm(txt, urls)['sources'] == ['https://news.example/x']

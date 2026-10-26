@@ -205,6 +205,8 @@ If you find nothing reliable, return empty lists and "confidence":"low"."""
 
 
 STATS: Dict[str, int] = {}
+ERRORS: Dict[str, str] = {}   # model -> first API error message (for the log)
+_DEAD: set = set()            # (key, model) pairs that returned 429 this run
 
 
 def _stat(k: str) -> None:
@@ -225,6 +227,9 @@ def _gemini_grounded(prompt: str):
     models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or GEMINI_MODELS
     for key in keys:
         for model in models:
+            if (key, model) in _DEAD:
+                _stat('skipped_429')
+                continue
             try:
                 r = requests.post(GEMINI_ENDPOINT.format(m=model), headers={'x-goog-api-key': key},
                                   json={'contents': [{'parts': [{'text': prompt}]}],
@@ -236,6 +241,14 @@ def _gemini_grounded(prompt: str):
                 continue
             if r.status_code != 200:
                 _stat(f'http_{r.status_code}')
+                if r.status_code == 429:
+                    _DEAD.add((key, model))
+                if model not in ERRORS:
+                    try:
+                        msg = (r.json().get('error') or {}).get('message') or ''
+                    except Exception:
+                        msg = (r.text or '')[:200]
+                    ERRORS[model] = f"{r.status_code}: {' '.join(str(msg).split())[:200]}"
                 continue
             try:
                 cand = (r.json().get('candidates') or [{}])[0]
@@ -410,6 +423,8 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         json.dump(store, fh, ensure_ascii=False, indent=1)
     flagged = sum(1 for r in store.values() if r.get('board') != 'ok' or r.get('top_block'))
     log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)} | {STATS}")
+    if ERRORS:
+        log(f"   availability gemini errors: {ERRORS}")
     return store
 
 
