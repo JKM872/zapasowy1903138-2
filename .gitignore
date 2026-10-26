@@ -73,6 +73,9 @@ outputs/*
 # ephemeral, so this has to live in the repo — otherwise every run would look
 # like the first one and could never report a change since the last analysis.
 !outputs/oddssafari_odds_history_*.json
+# TOP rules (tools/top_rules.py, weekly top_rules.yml) – read by top_picks.
+!outputs/top_rules.json
+!outputs/top_rules_report.*
 *.log
 scraper_log.txt
 email_config.py

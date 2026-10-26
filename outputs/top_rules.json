@@ -1,0 +1,1453 @@
+{
+ "version": 1,
+ "generatedAt": "2026-10-26T21:01:51Z",
+ "gitSha": "bf3fdf28",
+ "tuning": {
+  "start": "2026-09-12",
+  "end": "2026-10-10",
+  "halfSplit": "2026-10-02",
+  "n": 1407
+ },
+ "holdout": {
+  "start": "2026-10-11",
+  "end": "2026-10-26",
+  "n": 1231
+ },
+ "haircut": 0.05,
+ "minN": 50,
+ "bands": [
+  1.0,
+  1.4,
+  1.6,
+  1.8,
+  2.0,
+  2.5
+ ],
+ "twoWayEquivSports": [
+  "baseball",
+  "basketball",
+  "hockey"
+ ],
+ "segments": {
+  "baseball": {
+   "level": "sport",
+   "n": 79,
+   "hit": 60.8,
+   "roi": -11.0,
+   "roiRaw": -9.5,
+   "h1": -5.3,
+   "h2": -37.1,
+   "decision": "exclude"
+  },
+  "baseball|1.0-1.4": {
+   "level": "sport×band",
+   "n": 21,
+   "hit": 71.4,
+   "roi": -6.6,
+   "roiRaw": -5.5,
+   "h1": 0.2,
+   "h2": -35.7,
+   "decision": "inherit"
+  },
+  "baseball|1.0-1.4|away": {
+   "level": "sport×band×side",
+   "n": 8,
+   "hit": 62.5,
+   "roi": -18.3,
+   "roiRaw": -17.3,
+   "h1": -20.8,
+   "h2": -14.2,
+   "decision": "inherit"
+  },
+  "baseball|1.0-1.4|home": {
+   "level": "sport×band×side",
+   "n": 13,
+   "hit": 76.9,
+   "roi": 0.6,
+   "roiRaw": 1.8,
+   "h1": 9.0,
+   "h2": -100.0,
+   "decision": "inherit"
+  },
+  "baseball|1.4-1.6": {
+   "level": "sport×band",
+   "n": 36,
+   "hit": 55.6,
+   "roi": -18.9,
+   "roiRaw": -17.6,
+   "h1": -20.3,
+   "h2": -10.4,
+   "decision": "inherit"
+  },
+  "baseball|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 17,
+   "hit": 58.8,
+   "roi": -14.6,
+   "roiRaw": -13.2,
+   "h1": -17.2,
+   "h2": -2.2,
+   "decision": "inherit"
+  },
+  "baseball|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 19,
+   "hit": 52.6,
+   "roi": -22.8,
+   "roiRaw": -21.5,
+   "h1": -22.8,
+   "h2": -22.6,
+   "decision": "inherit"
+  },
+  "baseball|1.6-1.8": {
+   "level": "sport×band",
+   "n": 21,
+   "hit": 57.1,
+   "roi": -5.8,
+   "roiRaw": -3.9,
+   "h1": 12.7,
+   "h2": -65.0,
+   "decision": "inherit"
+  },
+  "baseball|1.6-1.8|away": {
+   "level": "sport×band×side",
+   "n": 7,
+   "hit": 42.9,
+   "roi": -31.4,
+   "roiRaw": -30.0,
+   "h1": -4.0,
+   "h2": -100.0,
+   "decision": "inherit"
+  },
+  "baseball|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 14,
+   "hit": 64.3,
+   "roi": 7.0,
+   "roiRaw": 9.2,
+   "h1": 20.3,
+   "h2": -41.7,
+   "decision": "inherit"
+  },
+  "baseball|1.8-2.0": {
+   "level": "sport×band",
+   "n": 1,
+   "hit": 100.0,
+   "roi": 76.1,
+   "roiRaw": 80.1,
+   "h1": 76.1,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "baseball|1.8-2.0|home": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 100.0,
+   "roi": 76.1,
+   "roiRaw": 80.1,
+   "h1": 76.1,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "baseball|grade:A": {
+   "level": "sport×grade",
+   "n": 7,
+   "hit": 85.7,
+   "roi": 34.6,
+   "roiRaw": 37.2,
+   "h1": 27.9,
+   "h2": 75.0,
+   "decision": "inherit"
+  },
+  "baseball|grade:B": {
+   "level": "sport×grade",
+   "n": 40,
+   "hit": 62.5,
+   "roi": -9.7,
+   "roiRaw": -8.2,
+   "h1": -7.2,
+   "h2": -21.3,
+   "decision": "inherit"
+  },
+  "baseball|grade:C": {
+   "level": "sport×grade",
+   "n": 32,
+   "hit": 53.1,
+   "roi": -22.5,
+   "roiRaw": -21.3,
+   "h1": -10.6,
+   "h2": -74.2,
+   "decision": "inherit"
+  },
+  "baseball|tier:T1": {
+   "level": "sport×tier",
+   "n": 72,
+   "hit": 59.7,
+   "roi": -13.2,
+   "roiRaw": -11.8,
+   "h1": -8.0,
+   "h2": -39.4,
+   "decision": "exclude"
+  },
+  "baseball|tier:T2": {
+   "level": "sport×tier",
+   "n": 7,
+   "hit": 71.4,
+   "roi": 12.5,
+   "roiRaw": 14.6,
+   "h1": 26.8,
+   "h2": -23.4,
+   "decision": "inherit"
+  },
+  "basketball": {
+   "level": "sport",
+   "n": 236,
+   "hit": 66.1,
+   "roi": -1.9,
+   "roiRaw": -0.2,
+   "h1": -2.4,
+   "h2": -1.6,
+   "decision": "exclude"
+  },
+  "basketball|1.0-1.4": {
+   "level": "sport×band",
+   "n": 64,
+   "hit": 73.4,
+   "roi": -2.6,
+   "roiRaw": -1.4,
+   "h1": 1.1,
+   "h2": -4.0,
+   "decision": "exclude"
+  },
+  "basketball|1.0-1.4|away": {
+   "level": "sport×band×side",
+   "n": 28,
+   "hit": 78.6,
+   "roi": 4.4,
+   "roiRaw": 5.8,
+   "h1": 18.1,
+   "h2": -2.1,
+   "decision": "inherit"
+  },
+  "basketball|1.0-1.4|home": {
+   "level": "sport×band×side",
+   "n": 36,
+   "hit": 69.4,
+   "roi": -8.1,
+   "roiRaw": -6.9,
+   "h1": -18.1,
+   "h2": -5.2,
+   "decision": "inherit"
+  },
+  "basketball|1.4-1.6": {
+   "level": "sport×band",
+   "n": 91,
+   "hit": 65.9,
+   "roi": -4.4,
+   "roiRaw": -2.9,
+   "h1": -12.7,
+   "h2": 1.3,
+   "decision": "exclude"
+  },
+  "basketball|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 50,
+   "hit": 58.0,
+   "roi": -16.2,
+   "roiRaw": -14.8,
+   "h1": -34.9,
+   "h2": -5.6,
+   "decision": "exclude"
+  },
+  "basketball|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 41,
+   "hit": 75.6,
+   "roi": 9.9,
+   "roiRaw": 11.7,
+   "h1": 8.3,
+   "h2": 11.3,
+   "decision": "inherit"
+  },
+  "basketball|1.6-1.8": {
+   "level": "sport×band",
+   "n": 56,
+   "hit": 66.1,
+   "roi": 8.0,
+   "roiRaw": 10.2,
+   "h1": 7.5,
+   "h2": 8.3,
+   "decision": "allow",
+   "pCal": 0.661,
+   "floorOdds": 1.6
+  },
+  "basketball|1.6-1.8|away": {
+   "level": "sport×band×side",
+   "n": 27,
+   "hit": 66.7,
+   "roi": 9.8,
+   "roiRaw": 12.1,
+   "h1": 27.7,
+   "h2": 0.9,
+   "decision": "inherit"
+  },
+  "basketball|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 29,
+   "hit": 65.5,
+   "roi": 6.2,
+   "roiRaw": 8.3,
+   "h1": -4.7,
+   "h2": 17.8,
+   "decision": "inherit"
+  },
+  "basketball|1.8-2.0": {
+   "level": "sport×band",
+   "n": 25,
+   "hit": 48.0,
+   "roi": -13.0,
+   "roiRaw": -11.0,
+   "h1": 4.9,
+   "h2": -29.5,
+   "decision": "inherit"
+  },
+  "basketball|1.8-2.0|away": {
+   "level": "sport×band×side",
+   "n": 8,
+   "hit": 37.5,
+   "roi": -34.0,
+   "roiRaw": -32.5,
+   "h1": 17.3,
+   "h2": -64.8,
+   "decision": "inherit"
+  },
+  "basketball|1.8-2.0|home": {
+   "level": "sport×band×side",
+   "n": 17,
+   "hit": 52.9,
+   "roi": -3.1,
+   "roiRaw": -0.8,
+   "h1": 0.7,
+   "h2": -7.5,
+   "decision": "inherit"
+  },
+  "basketball|grade:A": {
+   "level": "sport×grade",
+   "n": 3,
+   "hit": 66.7,
+   "roi": 7.2,
+   "roiRaw": 9.3,
+   "h1": -32.0,
+   "h2": 85.5,
+   "decision": "inherit"
+  },
+  "basketball|grade:B": {
+   "level": "sport×grade",
+   "n": 86,
+   "hit": 68.6,
+   "roi": 2.0,
+   "roiRaw": 3.8,
+   "h1": -8.8,
+   "h2": 11.0,
+   "decision": "exclude"
+  },
+  "basketball|grade:C": {
+   "level": "sport×grade",
+   "n": 147,
+   "hit": 64.6,
+   "roi": -4.4,
+   "roiRaw": -2.8,
+   "h1": 4.0,
+   "h2": -8.6,
+   "decision": "exclude"
+  },
+  "basketball|tier:T1": {
+   "level": "sport×tier",
+   "n": 6,
+   "hit": 33.3,
+   "roi": -50.8,
+   "roiRaw": -50.0,
+   "h1": null,
+   "h2": -50.8,
+   "decision": "inherit"
+  },
+  "basketball|tier:T2": {
+   "level": "sport×tier",
+   "n": 192,
+   "hit": 64.6,
+   "roi": -3.9,
+   "roiRaw": -2.2,
+   "h1": -4.5,
+   "h2": -3.4,
+   "decision": "exclude"
+  },
+  "basketball|tier:T3": {
+   "level": "sport×tier",
+   "n": 38,
+   "hit": 78.9,
+   "roi": 15.7,
+   "roiRaw": 17.7,
+   "h1": 9.4,
+   "h2": 19.5,
+   "decision": "inherit"
+  },
+  "football": {
+   "level": "sport",
+   "n": 409,
+   "hit": 53.1,
+   "roi": -5.1,
+   "roiRaw": -2.8,
+   "h1": -4.0,
+   "h2": -5.8,
+   "decision": "exclude"
+  },
+  "football|1.4-1.6": {
+   "level": "sport×band",
+   "n": 63,
+   "hit": 63.5,
+   "roi": -4.0,
+   "roiRaw": -2.2,
+   "h1": -7.9,
+   "h2": 1.3,
+   "decision": "exclude"
+  },
+  "football|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 33,
+   "hit": 60.6,
+   "roi": -7.9,
+   "roiRaw": -6.2,
+   "h1": -23.7,
+   "h2": 1.1,
+   "decision": "inherit"
+  },
+  "football|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 30,
+   "hit": 66.7,
+   "roi": 0.4,
+   "roiRaw": 2.2,
+   "h1": 0.1,
+   "h2": 1.7,
+   "decision": "inherit"
+  },
+  "football|1.6-1.8": {
+   "level": "sport×band",
+   "n": 133,
+   "hit": 57.9,
+   "roi": -4.7,
+   "roiRaw": -2.7,
+   "h1": 3.2,
+   "h2": -11.5,
+   "decision": "exclude"
+  },
+  "football|1.6-1.8|away": {
+   "level": "sport×band×side",
+   "n": 66,
+   "hit": 68.2,
+   "roi": 12.4,
+   "roiRaw": 14.7,
+   "h1": 21.5,
+   "h2": 7.5,
+   "decision": "allow",
+   "pCal": 0.679,
+   "floorOdds": 1.6
+  },
+  "football|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 67,
+   "hit": 47.8,
+   "roi": -21.5,
+   "roiRaw": -19.9,
+   "h1": -7.6,
+   "h2": -40.8,
+   "decision": "exclude"
+  },
+  "football|1.8-2.0": {
+   "level": "sport×band",
+   "n": 82,
+   "hit": 48.8,
+   "roi": -10.9,
+   "roiRaw": -8.8,
+   "h1": -17.0,
+   "h2": -6.3,
+   "decision": "exclude"
+  },
+  "football|1.8-2.0|away": {
+   "level": "sport×band×side",
+   "n": 52,
+   "hit": 51.9,
+   "roi": -5.5,
+   "roiRaw": -3.2,
+   "h1": -14.7,
+   "h2": -0.2,
+   "decision": "exclude"
+  },
+  "football|1.8-2.0|home": {
+   "level": "sport×band×side",
+   "n": 30,
+   "hit": 43.3,
+   "roi": -20.3,
+   "roiRaw": -18.4,
+   "h1": -19.9,
+   "h2": -20.8,
+   "decision": "inherit"
+  },
+  "football|2.0-2.5": {
+   "level": "sport×band",
+   "n": 121,
+   "hit": 45.5,
+   "roi": -4.5,
+   "roiRaw": -1.9,
+   "h1": -5.7,
+   "h2": -4.0,
+   "decision": "exclude"
+  },
+  "football|2.0-2.5|away": {
+   "level": "sport×band×side",
+   "n": 71,
+   "hit": 46.5,
+   "roi": -3.2,
+   "roiRaw": -0.6,
+   "h1": -15.4,
+   "h2": 1.5,
+   "decision": "exclude"
+  },
+  "football|2.0-2.5|home": {
+   "level": "sport×band×side",
+   "n": 50,
+   "hit": 44.0,
+   "roi": -6.3,
+   "roiRaw": -3.7,
+   "h1": 6.4,
+   "h2": -12.3,
+   "decision": "exclude"
+  },
+  "football|2.5+": {
+   "level": "sport×band",
+   "n": 10,
+   "hit": 50.0,
+   "roi": 24.1,
+   "roiRaw": 28.0,
+   "h1": 66.4,
+   "h2": 6.0,
+   "decision": "inherit"
+  },
+  "football|2.5+|away": {
+   "level": "sport×band×side",
+   "n": 8,
+   "hit": 50.0,
+   "roi": 24.8,
+   "roiRaw": 28.7,
+   "h1": 66.4,
+   "h2": -0.2,
+   "decision": "inherit"
+  },
+  "football|2.5+|home": {
+   "level": "sport×band×side",
+   "n": 2,
+   "hit": 50.0,
+   "roi": 21.2,
+   "roiRaw": 25.0,
+   "h1": null,
+   "h2": 21.2,
+   "decision": "inherit"
+  },
+  "football|grade:A": {
+   "level": "sport×grade",
+   "n": 5,
+   "hit": 60.0,
+   "roi": 5.2,
+   "roiRaw": 7.6,
+   "h1": -18.4,
+   "h2": 99.7,
+   "decision": "inherit"
+  },
+  "football|grade:B": {
+   "level": "sport×grade",
+   "n": 110,
+   "hit": 58.2,
+   "roi": 0.3,
+   "roiRaw": 2.5,
+   "h1": -4.1,
+   "h2": 12.1,
+   "decision": "exclude"
+  },
+  "football|grade:C": {
+   "level": "sport×grade",
+   "n": 294,
+   "hit": 51.0,
+   "roi": -7.2,
+   "roiRaw": -5.0,
+   "h1": -3.3,
+   "h2": -8.9,
+   "decision": "exclude"
+  },
+  "football|tier:T1": {
+   "level": "sport×tier",
+   "n": 38,
+   "hit": 47.4,
+   "roi": -12.5,
+   "roiRaw": -10.4,
+   "h1": -10.7,
+   "h2": -13.3,
+   "decision": "inherit"
+  },
+  "football|tier:T2": {
+   "level": "sport×tier",
+   "n": 302,
+   "hit": 55.0,
+   "roi": -1.8,
+   "roiRaw": 0.5,
+   "h1": -4.3,
+   "h2": 0.1,
+   "decision": "exclude"
+  },
+  "football|tier:T3": {
+   "level": "sport×tier",
+   "n": 69,
+   "hit": 47.8,
+   "roi": -15.1,
+   "roiRaw": -13.2,
+   "h1": 0.2,
+   "h2": -26.2,
+   "decision": "exclude"
+  },
+  "handball": {
+   "level": "sport",
+   "n": 82,
+   "hit": 63.4,
+   "roi": 2.4,
+   "roiRaw": 4.5,
+   "h1": 9.0,
+   "h2": -6.4,
+   "decision": "exclude"
+  },
+  "handball|1.4-1.6": {
+   "level": "sport×band",
+   "n": 30,
+   "hit": 63.3,
+   "roi": -5.4,
+   "roiRaw": -3.7,
+   "h1": 9.6,
+   "h2": -31.3,
+   "decision": "inherit"
+  },
+  "handball|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 11,
+   "hit": 63.6,
+   "roi": -7.5,
+   "roiRaw": -6.0,
+   "h1": -9.8,
+   "h2": -1.4,
+   "decision": "inherit"
+  },
+  "handball|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 19,
+   "hit": 63.2,
+   "roi": -4.1,
+   "roiRaw": -2.4,
+   "h1": 23.8,
+   "h2": -42.5,
+   "decision": "inherit"
+  },
+  "handball|1.6-1.8": {
+   "level": "sport×band",
+   "n": 35,
+   "hit": 62.9,
+   "roi": 1.2,
+   "roiRaw": 3.3,
+   "h1": -1.2,
+   "h2": 3.8,
+   "decision": "inherit"
+  },
+  "handball|1.6-1.8|away": {
+   "level": "sport×band×side",
+   "n": 14,
+   "hit": 71.4,
+   "roi": 14.5,
+   "roiRaw": 16.7,
+   "h1": 38.5,
+   "h2": -9.6,
+   "decision": "inherit"
+  },
+  "handball|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 21,
+   "hit": 57.1,
+   "roi": -7.6,
+   "roiRaw": -5.7,
+   "h1": -26.4,
+   "h2": 13.1,
+   "decision": "inherit"
+  },
+  "handball|1.8-2.0": {
+   "level": "sport×band",
+   "n": 15,
+   "hit": 66.7,
+   "roi": 21.3,
+   "roiRaw": 24.2,
+   "h1": 39.8,
+   "h2": -6.5,
+   "decision": "inherit"
+  },
+  "handball|1.8-2.0|away": {
+   "level": "sport×band×side",
+   "n": 9,
+   "hit": 66.7,
+   "roi": 20.8,
+   "roiRaw": 23.7,
+   "h1": 51.1,
+   "h2": -39.7,
+   "decision": "inherit"
+  },
+  "handball|1.8-2.0|home": {
+   "level": "sport×band×side",
+   "n": 6,
+   "hit": 66.7,
+   "roi": 22.1,
+   "roiRaw": 25.0,
+   "h1": 17.3,
+   "h2": 26.8,
+   "decision": "inherit"
+  },
+  "handball|2.0-2.5": {
+   "level": "sport×band",
+   "n": 2,
+   "hit": 50.0,
+   "roi": -2.5,
+   "roiRaw": 0.0,
+   "h1": -100.0,
+   "h2": 95.0,
+   "decision": "inherit"
+  },
+  "handball|2.0-2.5|away": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "handball|2.0-2.5|home": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 100.0,
+   "roi": 95.0,
+   "roiRaw": 100.0,
+   "h1": null,
+   "h2": 95.0,
+   "decision": "inherit"
+  },
+  "handball|grade:A": {
+   "level": "sport×grade",
+   "n": 5,
+   "hit": 40.0,
+   "roi": -39.1,
+   "roiRaw": -38.0,
+   "h1": -23.9,
+   "h2": -100.0,
+   "decision": "inherit"
+  },
+  "handball|grade:B": {
+   "level": "sport×grade",
+   "n": 33,
+   "hit": 69.7,
+   "roi": 11.9,
+   "roiRaw": 14.1,
+   "h1": 16.7,
+   "h2": 0.8,
+   "decision": "inherit"
+  },
+  "handball|grade:C": {
+   "level": "sport×grade",
+   "n": 44,
+   "hit": 61.4,
+   "roi": 0.0,
+   "roiRaw": 2.0,
+   "h1": 6.6,
+   "h2": -5.5,
+   "decision": "inherit"
+  },
+  "handball|tier:T2": {
+   "level": "sport×tier",
+   "n": 62,
+   "hit": 66.1,
+   "roi": 7.6,
+   "roiRaw": 9.8,
+   "h1": 10.8,
+   "h2": 2.4,
+   "decision": "allow",
+   "pCal": 0.66,
+   "floorOdds": 1.55
+  },
+  "handball|tier:T3": {
+   "level": "sport×tier",
+   "n": 20,
+   "hit": 55.0,
+   "roi": -13.7,
+   "roiRaw": -12.1,
+   "h1": 1.0,
+   "h2": -25.7,
+   "decision": "inherit"
+  },
+  "hockey": {
+   "level": "sport",
+   "n": 423,
+   "hit": 67.4,
+   "roi": -3.9,
+   "roiRaw": -2.4,
+   "h1": -8.6,
+   "h2": 1.1,
+   "decision": "exclude"
+  },
+  "hockey|1.0-1.4": {
+   "level": "sport×band",
+   "n": 195,
+   "hit": 74.4,
+   "roi": -4.2,
+   "roiRaw": -3.1,
+   "h1": -8.6,
+   "h2": 1.5,
+   "decision": "exclude"
+  },
+  "hockey|1.0-1.4|away": {
+   "level": "sport×band×side",
+   "n": 76,
+   "hit": 69.7,
+   "roi": -10.0,
+   "roiRaw": -8.9,
+   "h1": -24.5,
+   "h2": 3.1,
+   "decision": "exclude"
+  },
+  "hockey|1.0-1.4|home": {
+   "level": "sport×band×side",
+   "n": 119,
+   "hit": 77.3,
+   "roi": -0.5,
+   "roiRaw": 0.7,
+   "h1": -0.9,
+   "h2": 0.1,
+   "decision": "exclude"
+  },
+  "hockey|1.4-1.6": {
+   "level": "sport×band",
+   "n": 118,
+   "hit": 60.2,
+   "roi": -11.7,
+   "roiRaw": -10.2,
+   "h1": -13.4,
+   "h2": -10.5,
+   "decision": "exclude"
+  },
+  "hockey|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 43,
+   "hit": 55.8,
+   "roi": -17.8,
+   "roiRaw": -16.4,
+   "h1": -13.6,
+   "h2": -21.2,
+   "decision": "inherit"
+  },
+  "hockey|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 75,
+   "hit": 62.7,
+   "roi": -8.2,
+   "roiRaw": -6.7,
+   "h1": -13.3,
+   "h2": -4.5,
+   "decision": "exclude"
+  },
+  "hockey|1.6-1.8": {
+   "level": "sport×band",
+   "n": 96,
+   "hit": 66.7,
+   "roi": 11.0,
+   "roiRaw": 13.3,
+   "h1": -0.1,
+   "h2": 22.9,
+   "decision": "exclude"
+  },
+  "hockey|1.6-1.8|away": {
+   "level": "sport×band×side",
+   "n": 49,
+   "hit": 65.3,
+   "roi": 8.4,
+   "roiRaw": 10.7,
+   "h1": -6.4,
+   "h2": 21.6,
+   "decision": "inherit"
+  },
+  "hockey|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 47,
+   "hit": 68.1,
+   "roi": 13.6,
+   "roiRaw": 16.0,
+   "h1": 5.4,
+   "h2": 24.7,
+   "decision": "inherit"
+  },
+  "hockey|1.8-2.0": {
+   "level": "sport×band",
+   "n": 14,
+   "hit": 35.7,
+   "roi": -36.0,
+   "roiRaw": -34.5,
+   "h1": -41.0,
+   "h2": -32.2,
+   "decision": "inherit"
+  },
+  "hockey|1.8-2.0|away": {
+   "level": "sport×band×side",
+   "n": 9,
+   "hit": 33.3,
+   "roi": -40.5,
+   "roiRaw": -39.2,
+   "h1": -55.9,
+   "h2": -28.2,
+   "decision": "inherit"
+  },
+  "hockey|1.8-2.0|home": {
+   "level": "sport×band×side",
+   "n": 5,
+   "hit": 40.0,
+   "roi": -27.7,
+   "roiRaw": -26.0,
+   "h1": -11.2,
+   "h2": -38.7,
+   "decision": "inherit"
+  },
+  "hockey|grade:A": {
+   "level": "sport×grade",
+   "n": 25,
+   "hit": 68.0,
+   "roi": -3.6,
+   "roiRaw": -2.1,
+   "h1": -13.0,
+   "h2": 20.6,
+   "decision": "inherit"
+  },
+  "hockey|grade:B": {
+   "level": "sport×grade",
+   "n": 166,
+   "hit": 67.5,
+   "roi": -5.0,
+   "roiRaw": -3.6,
+   "h1": -10.9,
+   "h2": 3.9,
+   "decision": "exclude"
+  },
+  "hockey|grade:C": {
+   "level": "sport×grade",
+   "n": 232,
+   "hit": 67.2,
+   "roi": -3.1,
+   "roiRaw": -1.6,
+   "h1": -5.6,
+   "h2": -1.3,
+   "decision": "exclude"
+  },
+  "hockey|tier:T1": {
+   "level": "sport×tier",
+   "n": 35,
+   "hit": 71.4,
+   "roi": 9.5,
+   "roiRaw": 11.5,
+   "h1": 7.0,
+   "h2": 10.4,
+   "decision": "inherit"
+  },
+  "hockey|tier:T2": {
+   "level": "sport×tier",
+   "n": 364,
+   "hit": 67.9,
+   "roi": -3.8,
+   "roiRaw": -2.4,
+   "h1": -8.0,
+   "h2": 0.8,
+   "decision": "exclude"
+  },
+  "hockey|tier:T3": {
+   "level": "sport×tier",
+   "n": 24,
+   "hit": 54.2,
+   "roi": -24.3,
+   "roiRaw": -23.1,
+   "h1": -27.0,
+   "h2": -19.8,
+   "decision": "inherit"
+  },
+  "rugby": {
+   "level": "sport",
+   "n": 6,
+   "hit": 50.0,
+   "roi": -30.8,
+   "roiRaw": -29.8,
+   "h1": -30.8,
+   "h2": null,
+   "decision": "exclude"
+  },
+  "rugby|1.0-1.4": {
+   "level": "sport×band",
+   "n": 3,
+   "hit": 66.7,
+   "roi": -10.2,
+   "roiRaw": -9.0,
+   "h1": -10.2,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|1.0-1.4|home": {
+   "level": "sport×band×side",
+   "n": 3,
+   "hit": 66.7,
+   "roi": -10.2,
+   "roiRaw": -9.0,
+   "h1": -10.2,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|1.4-1.6": {
+   "level": "sport×band",
+   "n": 2,
+   "hit": 50.0,
+   "roi": -27.2,
+   "roiRaw": -26.0,
+   "h1": -27.2,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 100.0,
+   "roi": 45.6,
+   "roiRaw": 48.0,
+   "h1": 45.6,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|1.6-1.8": {
+   "level": "sport×band",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|grade:B": {
+   "level": "sport×grade",
+   "n": 5,
+   "hit": 60.0,
+   "roi": -17.0,
+   "roiRaw": -15.8,
+   "h1": -17.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|grade:C": {
+   "level": "sport×grade",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "rugby|tier:T2": {
+   "level": "sport×tier",
+   "n": 6,
+   "hit": 50.0,
+   "roi": -30.8,
+   "roiRaw": -29.8,
+   "h1": -30.8,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "tennis": {
+   "level": "sport",
+   "n": 137,
+   "hit": 54.0,
+   "roi": -17.9,
+   "roiRaw": -16.4,
+   "h1": -18.4,
+   "h2": -16.9,
+   "decision": "exclude"
+  },
+  "tennis|1.0-1.4": {
+   "level": "sport×band",
+   "n": 20,
+   "hit": 60.0,
+   "roi": -19.3,
+   "roiRaw": -18.2,
+   "h1": -26.5,
+   "h2": -10.5,
+   "decision": "inherit"
+  },
+  "tennis|1.0-1.4|away": {
+   "level": "sport×band×side",
+   "n": 9,
+   "hit": 77.8,
+   "roi": 4.9,
+   "roiRaw": 6.3,
+   "h1": 1.4,
+   "h2": 7.7,
+   "decision": "inherit"
+  },
+  "tennis|1.0-1.4|home": {
+   "level": "sport×band×side",
+   "n": 11,
+   "hit": 45.5,
+   "roi": -39.2,
+   "roiRaw": -38.4,
+   "h1": -42.5,
+   "h2": -33.4,
+   "decision": "inherit"
+  },
+  "tennis|1.4-1.6": {
+   "level": "sport×band",
+   "n": 54,
+   "hit": 59.3,
+   "roi": -14.0,
+   "roiRaw": -12.6,
+   "h1": -14.5,
+   "h2": -12.9,
+   "decision": "exclude"
+  },
+  "tennis|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 15,
+   "hit": 73.3,
+   "roi": 6.1,
+   "roiRaw": 7.9,
+   "h1": -1.9,
+   "h2": 18.2,
+   "decision": "inherit"
+  },
+  "tennis|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 39,
+   "hit": 53.8,
+   "roi": -21.7,
+   "roiRaw": -20.4,
+   "h1": -18.7,
+   "h2": -28.5,
+   "decision": "inherit"
+  },
+  "tennis|1.6-1.8": {
+   "level": "sport×band",
+   "n": 45,
+   "hit": 48.9,
+   "roi": -20.8,
+   "roiRaw": -19.2,
+   "h1": -14.0,
+   "h2": -34.3,
+   "decision": "inherit"
+  },
+  "tennis|1.6-1.8|away": {
+   "level": "sport×band×side",
+   "n": 15,
+   "hit": 46.7,
+   "roi": -24.3,
+   "roiRaw": -22.7,
+   "h1": 0.0,
+   "h2": -52.0,
+   "decision": "inherit"
+  },
+  "tennis|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 30,
+   "hit": 50.0,
+   "roi": -19.0,
+   "roiRaw": -17.4,
+   "h1": -19.1,
+   "h2": -18.8,
+   "decision": "inherit"
+  },
+  "tennis|1.8-2.0": {
+   "level": "sport×band",
+   "n": 18,
+   "hit": 44.4,
+   "roi": -20.5,
+   "roiRaw": -18.7,
+   "h1": -34.6,
+   "h2": 1.7,
+   "decision": "inherit"
+  },
+  "tennis|1.8-2.0|away": {
+   "level": "sport×band×side",
+   "n": 8,
+   "hit": 37.5,
+   "roi": -33.6,
+   "roiRaw": -32.1,
+   "h1": -100.0,
+   "h2": 6.2,
+   "decision": "inherit"
+  },
+  "tennis|1.8-2.0|home": {
+   "level": "sport×band×side",
+   "n": 10,
+   "hit": 50.0,
+   "roi": -10.0,
+   "roiRaw": -7.9,
+   "h1": -10.1,
+   "h2": -9.6,
+   "decision": "inherit"
+  },
+  "tennis|grade:A": {
+   "level": "sport×grade",
+   "n": 1,
+   "hit": 100.0,
+   "roi": 38.0,
+   "roiRaw": 40.0,
+   "h1": null,
+   "h2": 38.0,
+   "decision": "inherit"
+  },
+  "tennis|grade:B": {
+   "level": "sport×grade",
+   "n": 28,
+   "hit": 42.9,
+   "roi": -35.7,
+   "roiRaw": -34.6,
+   "h1": -35.8,
+   "h2": -35.7,
+   "decision": "inherit"
+  },
+  "tennis|grade:C": {
+   "level": "sport×grade",
+   "n": 108,
+   "hit": 56.5,
+   "roi": -13.7,
+   "roiRaw": -12.2,
+   "h1": -15.1,
+   "h2": -10.8,
+   "decision": "exclude"
+  },
+  "tennis|tier:T2": {
+   "level": "sport×tier",
+   "n": 29,
+   "hit": 48.3,
+   "roi": -26.2,
+   "roiRaw": -24.8,
+   "h1": -28.0,
+   "h2": -21.5,
+   "decision": "inherit"
+  },
+  "tennis|tier:T3": {
+   "level": "sport×tier",
+   "n": 5,
+   "hit": 40.0,
+   "roi": -32.5,
+   "roiRaw": -31.0,
+   "h1": -46.1,
+   "h2": -12.0,
+   "decision": "inherit"
+  },
+  "tennis|tier:T?": {
+   "level": "sport×tier",
+   "n": 103,
+   "hit": 56.3,
+   "roi": -14.8,
+   "roiRaw": -13.3,
+   "h1": -13.9,
+   "h2": -16.3,
+   "decision": "exclude"
+  },
+  "volleyball": {
+   "level": "sport",
+   "n": 35,
+   "hit": 68.6,
+   "roi": -1.2,
+   "roiRaw": 0.4,
+   "h1": 4.1,
+   "h2": -6.2,
+   "decision": "exclude"
+  },
+  "volleyball|1.0-1.4": {
+   "level": "sport×band",
+   "n": 15,
+   "hit": 73.3,
+   "roi": -3.7,
+   "roiRaw": -2.5,
+   "h1": 8.8,
+   "h2": -12.0,
+   "decision": "inherit"
+  },
+  "volleyball|1.0-1.4|away": {
+   "level": "sport×band×side",
+   "n": 3,
+   "hit": 66.7,
+   "roi": -11.8,
+   "roiRaw": -10.7,
+   "h1": null,
+   "h2": -11.8,
+   "decision": "inherit"
+  },
+  "volleyball|1.0-1.4|home": {
+   "level": "sport×band×side",
+   "n": 12,
+   "hit": 75.0,
+   "roi": -1.6,
+   "roiRaw": -0.4,
+   "h1": 8.8,
+   "h2": -12.1,
+   "decision": "inherit"
+  },
+  "volleyball|1.4-1.6": {
+   "level": "sport×band",
+   "n": 11,
+   "hit": 63.6,
+   "roi": -7.5,
+   "roiRaw": -6.0,
+   "h1": 12.5,
+   "h2": -19.0,
+   "decision": "inherit"
+  },
+  "volleyball|1.4-1.6|away": {
+   "level": "sport×band×side",
+   "n": 4,
+   "hit": 25.0,
+   "roi": -64.8,
+   "roiRaw": -64.2,
+   "h1": -100.0,
+   "h2": -53.1,
+   "decision": "inherit"
+  },
+  "volleyball|1.4-1.6|home": {
+   "level": "sport×band×side",
+   "n": 7,
+   "hit": 85.7,
+   "roi": 25.2,
+   "roiRaw": 27.3,
+   "h1": 50.0,
+   "h2": 6.6,
+   "decision": "inherit"
+  },
+  "volleyball|1.6-1.8": {
+   "level": "sport×band",
+   "n": 8,
+   "hit": 75.0,
+   "roi": 24.5,
+   "roiRaw": 27.1,
+   "h1": 11.0,
+   "h2": 65.1,
+   "decision": "inherit"
+  },
+  "volleyball|1.6-1.8|home": {
+   "level": "sport×band×side",
+   "n": 8,
+   "hit": 75.0,
+   "roi": 24.5,
+   "roiRaw": 27.1,
+   "h1": 11.0,
+   "h2": 65.1,
+   "decision": "inherit"
+  },
+  "volleyball|1.8-2.0": {
+   "level": "sport×band",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "volleyball|1.8-2.0|away": {
+   "level": "sport×band×side",
+   "n": 1,
+   "hit": 0.0,
+   "roi": -100.0,
+   "roiRaw": -100.0,
+   "h1": -100.0,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "volleyball|grade:A": {
+   "level": "sport×grade",
+   "n": 2,
+   "hit": 50.0,
+   "roi": -26.2,
+   "roiRaw": -25.0,
+   "h1": -26.2,
+   "h2": null,
+   "decision": "inherit"
+  },
+  "volleyball|grade:B": {
+   "level": "sport×grade",
+   "n": 12,
+   "hit": 66.7,
+   "roi": -3.5,
+   "roiRaw": -1.9,
+   "h1": 22.9,
+   "h2": -22.4,
+   "decision": "inherit"
+  },
+  "volleyball|grade:C": {
+   "level": "sport×grade",
+   "n": 21,
+   "hit": 71.4,
+   "roi": 2.5,
+   "roiRaw": 4.1,
+   "h1": 0.7,
+   "h2": 4.2,
+   "decision": "inherit"
+  },
+  "volleyball|tier:T2": {
+   "level": "sport×tier",
+   "n": 17,
+   "hit": 64.7,
+   "roi": -5.7,
+   "roiRaw": -4.2,
+   "h1": -0.8,
+   "h2": -17.6,
+   "decision": "inherit"
+  },
+  "volleyball|tier:T3": {
+   "level": "sport×tier",
+   "n": 18,
+   "hit": 72.2,
+   "roi": 3.1,
+   "roiRaw": 4.7,
+   "h1": 15.7,
+   "h2": -1.8,
+   "decision": "inherit"
+  }
+ },
+ "defaults": {
+  "decision": "exclude",
+  "stakePct": 1.0
+ }
+}
