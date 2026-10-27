@@ -789,10 +789,40 @@ def get_match(match_id):
     return jsonify({'error': 'Match not found'}), 404
 
 
+STATS_DAYS_MAX = 90
+# path -> (mtime, counts). Counts are a few ints, so a result file is parsed once
+# per worker instead of on every /api/stats call (memory spikes caused R14).
+_file_stats_cache = {}
+
+
+def _file_stats(path):
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return {'total': 0, 'with_predictions': 0, 'with_sofascore': 0, 'with_odds': 0, 'sports': {}}
+    hit = _file_stats_cache.get(path)
+    if hit and hit[0] == mtime:
+        return hit[1]
+    c = {'total': 0, 'with_predictions': 0, 'with_sofascore': 0, 'with_odds': 0, 'sports': {}}
+    for m in load_matches_from_file(path):
+        if not isinstance(m, dict):
+            continue  # some result files hold non-match rows (e.g. strings)
+        nm = normalize_match(m)
+        c['total'] += 1
+        tot, preds = c['sports'].get(nm['sport'], (0, 0))
+        has_pred = bool(nm.get('forebet'))
+        c['sports'][nm['sport']] = (tot + 1, preds + has_pred)
+        c['with_predictions'] += has_pred
+        c['with_sofascore'] += bool(nm.get('sofascore'))
+        c['with_odds'] += bool(nm.get('odds', {}).get('home'))
+    _file_stats_cache[path] = (mtime, c)
+    return c
+
+
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
     """Get aggregated statistics for the dashboard."""
-    days = request.args.get('days', 30, type=int)
+    days = max(1, min(request.args.get('days', 30, type=int), STATS_DAYS_MAX))
     
     # Collect matches from recent days
     total_matches = 0
@@ -801,26 +831,20 @@ def get_stats():
     matches_with_odds = 0
     sport_map = {}  # sport -> { total, with_preds }
     
+    all_files = find_result_files()
     for d in range(days):
         date_str = (datetime.now() - timedelta(days=d)).strftime('%Y-%m-%d')
-        files = find_result_files(date_str)
-        for f in files:
-            for m in load_matches_from_file(f):
-                if not isinstance(m, dict):
-                    continue  # some result files hold non-match rows (e.g. strings)
-                nm = normalize_match(m)
-                total_matches += 1
-                sport = nm['sport']
+        for f in (p for p in all_files if date_str in os.path.basename(p)):
+            c = _file_stats(f)
+            total_matches += c['total']
+            matches_with_predictions += c['with_predictions']
+            matches_with_sofascore += c['with_sofascore']
+            matches_with_odds += c['with_odds']
+            for sport, (tot, preds) in c['sports'].items():
                 if sport not in sport_map:
                     sport_map[sport] = {'total': 0, 'with_predictions': 0}
-                sport_map[sport]['total'] += 1
-                if nm.get('forebet'):
-                    matches_with_predictions += 1
-                    sport_map[sport]['with_predictions'] += 1
-                if nm.get('sofascore'):
-                    matches_with_sofascore += 1
-                if nm.get('odds', {}).get('home'):
-                    matches_with_odds += 1
+                sport_map[sport]['total'] += tot
+                sport_map[sport]['with_predictions'] += preds
     
     sport_breakdown = [
         {

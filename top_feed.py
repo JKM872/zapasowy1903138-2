@@ -92,17 +92,69 @@ def _store_index(path: str = STORE_PATH) -> Dict[Tuple[str, str, str], Dict[str,
         return {}
     if _store_cache['mtime'] == mtime and _store_cache.get('path') == path:
         return _store_cache['index']
+    rows = None
     try:
-        with open(path, 'r', encoding='utf-8') as fh:
-            store = json.load(fh)
-    except (OSError, json.JSONDecodeError):
-        return {}
-    index = {}
-    for v in store.values():
-        if isinstance(v, dict) and v.get('status') == 'finished' and v.get('winner'):
-            index[(v.get('date'), _norm(v.get('home_team')), _norm(v.get('away_team')))] = v
+        if os.path.getsize(path) > STORE_SUBPROCESS_BYTES:
+            rows = _slim_rows_subprocess(path, mtime, _first_top_day())
+    except OSError:
+        pass
+    if rows is None:
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                rows = _slim_rows(json.load(fh))
+        except (OSError, json.JSONDecodeError):
+            return {}
+    since = _first_top_day() if len(rows) > STORE_FILTER_ROWS else None
+    index = {(d, h, a): {'winner': w, 'score_home': sh, 'score_away': sa}
+             for d, h, a, w, sh, sa in rows if not since or str(d or '') >= since}
     _store_cache.update(mtime=mtime, index=index, path=path)
     return index
+
+
+# The store is ~80 MB of JSON (~300 MB once parsed). Parsing it inside a web
+# worker pushed the dyno past its 512 MB quota (R14/R15), and CPython keeps the
+# freed arenas, so the slim rows are built in a short-lived child process and
+# shared through a temp file keyed by the store's mtime.
+STORE_SUBPROCESS_BYTES = 5 * 1024 * 1024
+# ~200k finished rows cost ~140 MB as dicts; TOP only settles its own days, so a
+# large store keeps rows from the first published TOP day on.
+STORE_FILTER_ROWS = 20000
+
+
+def _first_top_day() -> Optional[str]:
+    days = [m.group(1) for p in glob.glob(os.path.join(RESULTS_DIR, 'top_*.json'))
+            for m in [re.search(r'top_(\d{4}-\d{2}-\d{2})', os.path.basename(p))] if m]
+    return min(days) if days else None
+
+
+def _slim_rows(store: Any, since: str = '') -> List[List[Any]]:
+    """[date, home, away, winner, score_home, score_away] of finished results."""
+    out = []
+    for v in (store.values() if isinstance(store, dict) else []):
+        if isinstance(v, dict) and v.get('status') == 'finished' and v.get('winner'):
+            out.append([v.get('date'), _norm(v.get('home_team')), _norm(v.get('away_team')),
+                        v.get('winner'), v.get('score_home'), v.get('score_away')])
+    return out
+
+
+def _slim_rows_subprocess(path: str, mtime: float, since: Optional[str]) -> Optional[List[List[Any]]]:
+    import subprocess
+    import tempfile
+    out = os.path.join(tempfile.gettempdir(), f'pickly_store_slim_{int(mtime)}_{since or "all"}.json')
+    if not os.path.exists(out):
+        tmp = f'{out}.{os.getpid()}.tmp'
+        try:
+            subprocess.run([sys.executable, os.path.abspath(__file__), '--slim-store', path, tmp, since or ''],
+                           check=True, timeout=180, capture_output=True)
+            os.replace(tmp, out)
+        except (OSError, subprocess.SubprocessError) as e:
+            logger.warning('slim result_store build failed (%s)', type(e).__name__)
+            return None
+    try:
+        with open(out, 'r', encoding='utf-8') as fh:
+            return json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return None
 
 
 def _split_match(match: str) -> Tuple[str, str]:
@@ -506,3 +558,11 @@ def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
         'bySport': {s: _summary(v) for s, v in sorted(by_sport.items(), key=lambda kv: -len(kv[1]))},
         'isSubscriber': is_subscriber,
     }
+
+
+if __name__ == '__main__' and len(sys.argv) == 5 and sys.argv[1] == '--slim-store':
+    # Child process of _slim_rows_subprocess: parse the big store, write slim rows.
+    with open(sys.argv[2], 'r', encoding='utf-8') as _fh:
+        _rows = _slim_rows(json.load(_fh), sys.argv[4])
+    with open(sys.argv[3], 'w', encoding='utf-8') as _fh:
+        json.dump(_rows, _fh, ensure_ascii=False, separators=(',', ':'))
