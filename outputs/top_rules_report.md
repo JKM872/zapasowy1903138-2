@@ -1,6 +1,6 @@
 # TOP rules – holdout report
 
-Generated 2026-10-26T21:41:48Z. Tuning 2026-09-12..2026-10-10 (n=1407, halves split at 2026-10-02); holdout 2026-10-11..2026-10-26 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
+Generated 2026-10-27T02:11:38Z. Tuning 2026-09-12..2026-10-10 (n=1407, halves split at 2026-10-02); holdout 2026-10-11..2026-10-26 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
 
 Segment decisions: {'exclude': 39, 'inherit': 99, 'allow': 3}
 
@@ -27,14 +27,14 @@ Status: **pending (0/14 settled days)**
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 1231 | 76.9 | 58.1% | -3.4% | -5.3% | -9.8 .. -0.9 | 78.23 |
+| before | 1241 | 77.6 | 58.2% | -3.3% | -5.3% | -9.6 .. -0.9 | 78.23 |
 | after (rules + floor) | 0 | 0.0 | — | — | — | — | 0.0 |
-| as applied (shadow) | 854 | 53.4 | 55.6% | -3.3% | -5.4% | -11.2 .. +0.2 | 51.54 |
+| as applied (shadow) | 854 | 53.4 | 55.6% | -3.3% | -5.4% | -11.6 .. +0.3 | 51.54 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
 | baseball | 24 | 62.5% | +1.7% | -0.2% | 0 | — | — | — |
-| basketball | 272 | 64.0% | -1.3% | -3.0% | 0 | — | — | — |
+| basketball | 282 | 64.2% | -1.0% | -2.7% | 0 | — | — | — |
 | football | 476 | 53.8% | +0.4% | -1.9% | 0 | — | — | — |
 | handball | 39 | 56.4% | -5.4% | -7.3% | 0 | — | — | — |
 | hockey | 232 | 57.3% | -11.1% | -12.7% | 0 | — | — | — |
@@ -46,13 +46,13 @@ Status: **pending (0/14 settled days)**
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 1231 | 76.9 | 58.1% | +1.0% | -1.1% | — | 34.93 |
+| before | 1241 | 77.6 | 58.2% | +1.1% | -1.1% | — | 34.93 |
 | after (rules + floor) | 0 | 0.0 | — | — | — | — | 0.0 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
 | baseball | 24 | 62.5% | +5.0% | +2.8% | 0 | — | — | — |
-| basketball | 272 | 64.0% | -1.3% | -3.0% | 0 | — | — | — |
+| basketball | 282 | 64.2% | -1.0% | -2.7% | 0 | — | — | — |
 | football | 476 | 53.8% | +0.4% | -1.9% | 0 | — | — | — |
 | handball | 39 | 56.4% | -5.4% | -7.3% | 0 | — | — | — |
 | hockey | 232 | 57.3% | +12.0% | +9.3% | 0 | — | — | — |
@@ -66,14 +66,14 @@ Status: **pending (0/14 settled days)**
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 255 | 15.9 | 64.3% | +3.3% | +1.4% | -7.9 .. +11.3 | 8.6 |
+| before | 256 | 16.0 | 64.1% | +2.9% | +1.0% | -7.7 .. +10.4 | 8.6 |
 | after (rules + floor) | 0 | 0.0 | — | — | — | — | 0.0 |
-| as applied (shadow) | 155 | 9.7 | 64.5% | +8.1% | +5.9% | -6.6 .. +19.4 | 5.81 |
+| as applied (shadow) | 155 | 9.7 | 64.5% | +8.1% | +5.9% | -6.3 .. +19.3 | 5.81 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
 | baseball | 4 | 75.0% | +12.8% | +10.9% | 0 | — | — | — |
-| basketball | 33 | 66.7% | +4.2% | +2.3% | 0 | — | — | — |
+| basketball | 34 | 64.7% | +1.1% | -0.7% | 0 | — | — | — |
 | football | 33 | 54.5% | +20.1% | +16.8% | 0 | — | — | — |
 | handball | 10 | 90.0% | +48.5% | +45.6% | 0 | — | — | — |
 | hockey | 84 | 64.3% | -1.5% | -3.2% | 0 | — | — | — |
@@ -85,13 +85,13 @@ Status: **pending (0/14 settled days)**
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 255 | 15.9 | 64.3% | +11.6% | +9.2% | — | 6.64 |
+| before | 256 | 16.0 | 64.1% | +11.1% | +8.8% | — | 6.64 |
 | after (rules + floor) | 0 | 0.0 | — | — | — | — | 0.0 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
 | baseball | 4 | 75.0% | +16.9% | +14.8% | 0 | — | — | — |
-| basketball | 33 | 66.7% | +4.2% | +2.3% | 0 | — | — | — |
+| basketball | 34 | 64.7% | +1.1% | -0.7% | 0 | — | — | — |
 | football | 33 | 54.5% | +20.1% | +16.8% | 0 | — | — | — |
 | handball | 10 | 90.0% | +48.5% | +45.6% | 0 | — | — | — |
 | hockey | 84 | 64.3% | +23.3% | +20.3% | 0 | — | — | — |
@@ -101,12 +101,12 @@ Status: **pending (0/14 settled days)**
 
 ## Published TOP files in the holdout window
 
-194 published (not withdrawn), 102 joined to settled holdout rows.
+194 published (not withdrawn), 103 joined to settled holdout rows.
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| as stored | 102 | 6.4 | 62.7% | +11.0% | +8.6% | — | 5.46 |
-| 2-way | 102 | 6.4 | 62.7% | +4.9% | +2.8% | — | 7.42 |
+| as stored | 103 | 6.4 | 62.1% | +10.0% | +7.6% | — | 5.46 |
+| 2-way | 103 | 6.4 | 62.1% | +3.9% | +1.8% | — | 7.42 |
 
 ## Rules (tuning window, non-inherit segments)
 
