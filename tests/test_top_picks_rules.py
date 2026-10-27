@@ -255,3 +255,23 @@ def test_safe_gate_forward_status():
     # rows before launch or not in TOP replay are ignored
     old = [_hrow('2026-10-20', sport='tennis', odds2=1.5), _hrow(days[0], top=False)]
     assert TR.safe_gate_forward(old)['daysCovered'] == 0
+
+
+def test_published_pick_withdrawn_only_before_kickoff():
+    """Availability block on a published pick: withdrawn before kick-off, kept
+    (counted in the record) once the match has started."""
+    from datetime import datetime, timezone
+    block = {'top_block': True}
+    early = {'sport': 'football', 'match': 'A vs B', 'kickoffUtc': '2026-10-26T19:00:00Z'}
+    late = {'sport': 'football', 'match': 'C vs D', 'kickoffUtc': '2026-10-26T18:00:00Z'}
+    legacy = {'sport': 'football', 'match': 'E vs F', 'time': '22:30'}   # 19:30Z via Forebet time
+    ok = {'sport': 'football', 'match': 'G vs H', 'kickoffUtc': '2026-10-26T19:00:00Z'}
+    old = [early, late, legacy, ok]
+    now = datetime(2026, 10, 26, 18, 20, tzinfo=timezone.utc)
+    tp.withdraw_published(old, DAY, lambda r: None if r is ok else block,
+                          lambda rec: 'Key absences: X (out)', now)
+    assert early['withdrawn'] and early['withdrawKind'] == 'availability'
+    assert early['withdrawReason'] == 'Key absences: X (out)'
+    assert early['withdrawnAt'] == '2026-10-26T18:20:00Z'
+    assert legacy['withdrawn']
+    assert 'withdrawn' not in late and 'withdrawn' not in ok

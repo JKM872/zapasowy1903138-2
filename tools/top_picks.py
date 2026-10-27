@@ -223,6 +223,25 @@ def _live_withdrawn(day: str) -> set:
     return {k for k, v in live.items() if isinstance(v, dict) and v.get('withdrawn')}
 
 
+def withdraw_published(old: List[Dict[str, Any]], day: str, rec_of, note_of, now) -> None:
+    """Mark published picks withdrawn on a top_block availability record, but only
+    before kick-off: after kick-off the pick counts in the record (design K3)."""
+    for r in old:
+        rec = rec_of(r)
+        if not (rec and rec.get('top_block')) or r.get('withdrawn'):
+            continue
+        ko = pricing._parse_ts(r.get('kickoffUtc')
+                               or pricing.parse_kickoff(day, r.get('time'), None, r.get('sport')))
+        if ko is None or now >= ko:
+            print(f"   ⏱ TOP not withdrawn (kick-off passed or unknown): {r.get('match')}")
+            continue
+        r['withdrawn'] = True
+        r['withdrawReason'] = note_of(rec) or 'Key player absences'
+        r['withdrawKind'] = 'availability'
+        r['withdrawnAt'] = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+        print(f"   🚑 TOP wycofany (absencje): {r.get('match')} — {r['withdrawReason']}")
+
+
 def select_new(picks: List[Dict[str, Any]], old: List[Dict[str, Any]],
                day: str) -> List[Dict[str, Any]]:
     """Picks not yet published today, minus live withdrawals, through the floor gate."""
@@ -577,8 +596,8 @@ if __name__ == '__main__':
     # Wcześniejszy przebieg mógł dodać mecz, który teraz ma flagę recency.
     old = drop_flagged(old, day)
     # Availability agent (tools/availability_agent.py): stars missing on the
-    # picked side block a new pick; a published pick is marked withdrawn, which
-    # the site shows and the record excludes (it was called off before kick-off).
+    # picked side block a new pick; a published pick is marked withdrawn only
+    # before its kick-off, which the site shows and the record excludes.
     try:
         from tools import availability_agent as _av
         _avail = _av.load(day)
@@ -589,12 +608,9 @@ if __name__ == '__main__':
         h, _, a = str(r.get('match') or '').partition(' vs ')
         return _avail.get(f"{r.get('sport')}|{h}|{a}")
 
-    for r in old:
-        rec = _avail_rec(r)
-        if rec and rec.get('top_block') and not r.get('withdrawn'):
-            r['withdrawn'] = True
-            r['withdrawReason'] = _av.note(rec) or 'Key player absences'
-            print(f"   🚑 TOP wycofany (absencje): {r.get('match')} — {r['withdrawReason']}")
+    from datetime import datetime, timezone
+    withdraw_published(old, day, _avail_rec, lambda rec: _av.note(rec),
+                       datetime.now(timezone.utc))
     blocked = [r for r in picks if (_avail_rec(r) or {}).get('top_block')]
     for r in blocked:
         print(f"   🚑 TOP zablokowany (absencje): {r.get('match')} — {_av.note(_avail_rec(r))}")
