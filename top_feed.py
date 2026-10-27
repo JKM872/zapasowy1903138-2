@@ -92,33 +92,27 @@ def _store_index(path: str = STORE_PATH) -> Dict[Tuple[str, str, str], Dict[str,
         return {}
     if _store_cache['mtime'] == mtime and _store_cache.get('path') == path:
         return _store_cache['index']
-    rows = None
+    since = _first_top_day() if os.path.getsize(path) > STORE_STREAM_BYTES else ''
+    index = {}
     try:
-        if os.path.getsize(path) > STORE_SUBPROCESS_BYTES:
-            rows = _slim_rows_subprocess(path, mtime, _first_top_day())
-    except OSError:
-        pass
-    if rows is None:
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                rows = _slim_rows(json.load(fh))
-        except (OSError, json.JSONDecodeError):
-            return {}
-    since = _first_top_day() if len(rows) > STORE_FILTER_ROWS else None
-    index = {(d, h, a): {'winner': w, 'score_home': sh, 'score_away': sa}
-             for d, h, a, w, sh, sa in rows if not since or str(d or '') >= since}
+        for v in _iter_store_values(path):
+            if (isinstance(v, dict) and v.get('status') == 'finished' and v.get('winner')
+                    and str(v.get('date') or '') >= (since or '')):
+                index[(v.get('date'), _norm(v.get('home_team')), _norm(v.get('away_team')))] = {
+                    'winner': v.get('winner'), 'score_home': v.get('score_home'),
+                    'score_away': v.get('score_away')}
+    except (OSError, ValueError):
+        return {}
     _store_cache.update(mtime=mtime, index=index, path=path)
     return index
 
 
-# The store is ~80 MB of JSON (~300 MB once parsed). Parsing it inside a web
-# worker pushed the dyno past its 512 MB quota (R14/R15), and CPython keeps the
-# freed arenas, so the slim rows are built in a short-lived child process and
-# shared through a temp file keyed by the store's mtime.
-STORE_SUBPROCESS_BYTES = 5 * 1024 * 1024
-# ~200k finished rows cost ~140 MB as dicts; TOP only settles its own days, so a
-# large store keeps rows from the first published TOP day on.
-STORE_FILTER_ROWS = 20000
+# The store is ~80 MB of JSON. json.load of it took ~300 MB (more in a child
+# process: the dyno quota counts every process), which pushed the 512 MB dyno
+# into R14/R15. Entries are decoded one at a time instead, and only the few
+# fields settle() needs are kept; a large store keeps only rows from the first
+# published TOP day on (TOP settles nothing older).
+STORE_STREAM_BYTES = 5 * 1024 * 1024
 
 
 def _first_top_day() -> Optional[str]:
@@ -127,34 +121,36 @@ def _first_top_day() -> Optional[str]:
     return min(days) if days else None
 
 
-def _slim_rows(store: Any, since: str = '') -> List[List[Any]]:
-    """[date, home, away, winner, score_home, score_away] of finished results."""
-    out = []
-    for v in (store.values() if isinstance(store, dict) else []):
-        if isinstance(v, dict) and v.get('status') == 'finished' and v.get('winner'):
-            out.append([v.get('date'), _norm(v.get('home_team')), _norm(v.get('away_team')),
-                        v.get('winner'), v.get('score_home'), v.get('score_away')])
-    return out
+def _iter_store_values(path: str):
+    """Values of the top-level store object, one entry in memory at a time.
 
-
-def _slim_rows_subprocess(path: str, mtime: float, since: Optional[str]) -> Optional[List[List[Any]]]:
-    import subprocess
-    import tempfile
-    out = os.path.join(tempfile.gettempdir(), f'pickly_store_slim_{int(mtime)}_{since or "all"}.json')
-    if not os.path.exists(out):
-        tmp = f'{out}.{os.getpid()}.tmp'
-        try:
-            subprocess.run([sys.executable, os.path.abspath(__file__), '--slim-store', path, tmp, since or ''],
-                           check=True, timeout=180, capture_output=True)
-            os.replace(tmp, out)
-        except (OSError, subprocess.SubprocessError) as e:
-            logger.warning('slim result_store build failed (%s)', type(e).__name__)
-            return None
-    try:
-        with open(out, 'r', encoding='utf-8') as fh:
-            return json.load(fh)
-    except (OSError, json.JSONDecodeError):
-        return None
+    result_store.py writes ``json.dump(indent=1)``: each entry starts with
+    ``\\n "key": {`` and ends with ``\\n }``. Any other layout falls back to a
+    plain json.load (small test stores)."""
+    with open(path, 'r', encoding='utf-8') as fh:
+        if fh.readline().strip() != '{':
+            fh.seek(0)
+            data = json.load(fh)
+            yield from (data.values() if isinstance(data, dict) else [])
+            return
+        buf: List[str] = []
+        for line in fh:
+            if not buf:
+                if line.startswith(' "'):
+                    _key, sep, rest = line.partition('": ')
+                    if not sep:
+                        raise ValueError('unexpected result_store layout')
+                    if rest.rstrip().endswith('{'):
+                        buf.append(rest)
+                    else:
+                        yield json.loads(rest.rstrip().rstrip(','))
+                elif line.strip() not in ('}', ''):
+                    raise ValueError('unexpected result_store layout')
+                continue
+            buf.append(line)
+            if line.startswith(' }'):
+                yield json.loads(''.join(buf).rstrip().rstrip(','))
+                buf = []
 
 
 def _split_match(match: str) -> Tuple[str, str]:
@@ -558,11 +554,3 @@ def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
         'bySport': {s: _summary(v) for s, v in sorted(by_sport.items(), key=lambda kv: -len(kv[1]))},
         'isSubscriber': is_subscriber,
     }
-
-
-if __name__ == '__main__' and len(sys.argv) == 5 and sys.argv[1] == '--slim-store':
-    # Child process of _slim_rows_subprocess: parse the big store, write slim rows.
-    with open(sys.argv[2], 'r', encoding='utf-8') as _fh:
-        _rows = _slim_rows(json.load(_fh), sys.argv[4])
-    with open(sys.argv[3], 'w', encoding='utf-8') as _fh:
-        json.dump(_rows, _fh, ensure_ascii=False, separators=(',', ':'))
