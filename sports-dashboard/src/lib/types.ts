@@ -150,6 +150,15 @@ export interface AIPrediction {
   doNotBetReasons: string[]
 }
 
+/** Team logo / player photo resolved by the backend (outputs/media_cache.json). */
+export interface MediaInfo {
+  url: string
+  source: 'thesportsdb' | 'wikimedia' | 'espn' | string | null
+  license?: string | null
+  author?: string | null
+  attributionUrl?: string | null
+}
+
 export interface Match {
   id: string | number
   homeTeam: string
@@ -159,6 +168,9 @@ export interface Match {
   /** Player/team photo URLs (optional; individual sports render them as avatars). */
   homePhoto?: string
   awayPhoto?: string
+  /** Backend media records (logo or photo + license/attribution); null when none. */
+  homeMedia?: MediaInfo | null
+  awayMedia?: MediaInfo | null
   time: string
   date: string
   sport: Sport

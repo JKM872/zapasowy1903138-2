@@ -425,6 +425,9 @@ def normalize_match(match):
         'awayTeam': away_team_val,
         'homeLogo': home_logo,
         'awayLogo': away_logo,
+        # {url, source, license, author, attributionUrl}; set by resolve_logos_for_page
+        'homeMedia': None,
+        'awayMedia': None,
         'time': raw_time,
         'date': match.get('date') or match.get('match_date', ''),
         'league': match.get('league') or match.get('tournament', ''),
@@ -516,28 +519,22 @@ def normalize_match(match):
 # cannot be bypassed from the browser.
 # ---------------------------------------------------------------------------
 def resolve_logos_for_page(matches: list) -> list:
-    """Fill missing team logos for the matches we are about to return.
+    """Fill team logos / player photos for the matches we are about to return.
 
-    Deliberately applied to one page rather than the whole day: logo lookups go
-    over the network to TheSportsDB, so doing them during normalisation cost one
-    request per team across every match loaded, not just the ones sent back.
+    Applied to one page rather than the whole day. Reads outputs/media_cache.json
+    (filled by media_cache.yml) and allows at most 3 live TheSportsDB lookups per
+    request, so the API never blocks on image lookups. Adds homeMedia/awayMedia
+    ({url, source, license, author, attributionUrl}) next to homeLogo/awayLogo;
+    URLs outside the host allowlist (e.g. SofaScore) are dropped.
     """
     try:
-        from team_logo_resolver import get_logo_url
+        from team_logo_resolver import media_for_page
     except Exception:
         return matches
-
-    for m in matches:
-        try:
-            # The sport decides whether a badge can exist at all: tennis and
-            # table tennis list people, and the badge index only holds teams.
-            sport = m.get('sport')
-            if not m.get('homeLogo') and m.get('homeTeam'):
-                m['homeLogo'] = get_logo_url(m['homeTeam'], sport) or ''
-            if not m.get('awayLogo') and m.get('awayTeam'):
-                m['awayLogo'] = get_logo_url(m['awayTeam'], sport) or ''
-        except Exception:
-            continue
+    try:
+        media_for_page(matches)
+    except Exception as e:
+        logger.warning('media lookup failed: %s', e)
     return matches
 
 
@@ -1863,7 +1860,7 @@ def get_available_leagues():
 
 
 # =============================================================================
-# THESPORTSDB ENDPOINTS (free test key = "1", logos & metadata)
+# THESPORTSDB ENDPOINTS (free key = "123", logos & metadata)
 # =============================================================================
 
 _tsdb_cache: dict = {}
@@ -1875,7 +1872,7 @@ def _tsdb_fetch(path: str) -> dict | None:
     import time as _time
     import urllib.request, urllib.error
 
-    api_key = os.environ.get('THESPORTSDB_API_KEY', '1')  # free test key
+    api_key = os.environ.get('THESPORTSDB_API_KEY') or '123'  # current free key (1 and 3 are retired)
     now = _time.time()
     cached = _tsdb_cache.get(path)
     if cached and now - cached['ts'] < _TSDB_TTL:

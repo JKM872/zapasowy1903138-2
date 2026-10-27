@@ -23,6 +23,17 @@ export function Footer() {
           can be addictive. Please gamble responsibly.
         </p>
         <RiskDisclaimer compact className="max-w-3xl" />
+        <p className="max-w-3xl leading-relaxed" data-testid="media-credits">
+          Logos via{' '}
+          <a href="https://www.thesportsdb.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+            TheSportsDB
+          </a>
+          ; photos via{' '}
+          <a href="https://commons.wikimedia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+            Wikimedia Commons
+          </a>{' '}
+          under their licenses (author and license on each photo&apos;s info icon); trademarks belong to their owners.
+        </p>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
           <Link href="/how-to-use" className="transition-colors hover:text-foreground">
             How to use our picks

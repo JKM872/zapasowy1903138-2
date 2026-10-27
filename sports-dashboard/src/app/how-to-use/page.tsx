@@ -127,6 +127,14 @@ export default function HowToUsePage() {
         third parties and may change. Past results do not predict future results. You alone decide whether and how
         much to bet.
       </p>
+
+      <h2 id="credits">Image credits</h2>
+      <p>
+        Logos via <a href="https://www.thesportsdb.com" target="_blank" rel="noopener noreferrer">TheSportsDB</a>;
+        photos via <a href="https://commons.wikimedia.org" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>{' '}
+        under their licenses. The info icon on a photo shows its author and license and links to the file page.
+        Trademarks belong to their owners. Where no free image exists we show the team&apos;s or player&apos;s initials.
+      </p>
     </LegalPage>
   )
 }

@@ -1,17 +1,24 @@
 // ============================================================================
-// TeamLogo – Avatar with team badge or initials fallback
+// TeamLogo – Avatar with team badge or initials fallback.
+// The image comes from the backend (`media` = homeMedia/awayMedia, or a plain
+// `badgeUrl`); there are no browser calls to TheSportsDB. Wikimedia images
+// carry a small info link with author and license (attribution required).
 // ============================================================================
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getTeamLogoUrl, getTeamInitials, getTeamColor } from '@/lib/team-logos'
+import { getTeamInitials, getTeamColor } from '@/lib/team-logos'
+import type { MediaInfo } from '@/lib/types'
 
 interface Props {
   name: string
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   className?: string
-  /** Pre-resolved badge URL from the backend (preferred over client-side fetch). */
+  /** Backend media record (preferred). */
+  media?: MediaInfo | null
+  /** Pre-resolved badge URL from the backend (used when no media record). */
   badgeUrl?: string
 }
 
@@ -23,37 +30,59 @@ const SIZES = {
   xl: 'h-16 w-16 text-base',
 }
 
-export function TeamLogo({ name, size = 'md', className, badgeUrl }: Props) {
-  const [fetchedUrl, setFetchedUrl] = useState<string | null>(null)
-  const [failed, setFailed] = useState(false)
+/** "Photo: author, license" for Wikimedia Commons files, else null. */
+export function mediaCreditText(media?: MediaInfo | null): string | null {
+  if (!media || media.source !== 'wikimedia') return null
+  const parts = [media.author || 'Unknown author', media.license].filter(Boolean)
+  return `Photo: ${parts.join(', ')}`
+}
 
-  useEffect(() => {
-    if (badgeUrl) return
-    let cancelled = false
-    getTeamLogoUrl(name).then(url => {
-      if (!cancelled && url) setFetchedUrl(url)
-    })
-    return () => { cancelled = true }
-  }, [name, badgeUrl])
+/** Small info link to the Commons file page, overlaid on the avatar corner. */
+export function MediaCredit({ media, large }: { media?: MediaInfo | null; large?: boolean }) {
+  const text = mediaCreditText(media)
+  if (!text || !media?.attributionUrl) return null
+  return (
+    <a
+      href={media.attributionUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={text}
+      aria-label={`${text} (opens Wikimedia Commons)`}
+      onClick={e => e.stopPropagation()}
+      className={cn(
+        'absolute -bottom-0.5 -right-0.5 z-10 flex items-center justify-center rounded-full',
+        'bg-background/90 text-muted-foreground ring-1 ring-border hover:text-foreground',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        large ? 'h-4 w-4' : 'h-3 w-3',
+      )}
+    >
+      <Info className={large ? 'h-3 w-3' : 'h-2.5 w-2.5'} aria-hidden="true" />
+    </a>
+  )
+}
 
-  const logoUrl = badgeUrl || fetchedUrl
+export function TeamLogo({ name, size = 'md', className, media, badgeUrl }: Props) {
+  const logoUrl = media?.url || badgeUrl || null
+  const [failedUrl, setFailedUrl] = useState<string | null>(null)
   const initials = getTeamInitials(name)
   const color = getTeamColor(name)
   const sizeClass = SIZES[size]
 
-  if (logoUrl && !failed) {
+  if (logoUrl && failedUrl !== logoUrl) {
     return (
-      <div className={cn('relative shrink-0 rounded-full overflow-hidden bg-muted', sizeClass, className)}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={logoUrl}
-          /* Decorative: the team name is always rendered next to the badge, so
-             an alt here would make screen readers announce it twice. */
-          alt=""
-          className="h-full w-full object-contain p-0.5"
-          onError={() => setFailed(true)}
-          loading="lazy"
-        />
+      <div className={cn('relative shrink-0', sizeClass)}>
+        <div className={cn('h-full w-full rounded-full overflow-hidden bg-muted', className)}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoUrl}
+            alt={`${name} logo`}
+            className="h-full w-full object-contain p-0.5"
+            onError={() => setFailedUrl(logoUrl)}
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+        <MediaCredit media={media} large={size === 'lg' || size === 'xl'} />
       </div>
     )
   }

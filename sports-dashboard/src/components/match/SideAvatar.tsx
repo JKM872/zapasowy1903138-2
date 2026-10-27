@@ -7,8 +7,8 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { getTeamInitials, getTeamColor } from '@/lib/team-logos'
-import { TeamLogo } from './TeamLogo'
-import type { Match, Sport } from '@/lib/types'
+import { TeamLogo, MediaCredit } from './TeamLogo'
+import type { Match, MediaInfo, Sport } from '@/lib/types'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl'
 
@@ -35,23 +35,27 @@ export function SideAvatar({ match, side, size = 'sm', className }: Props) {
   const name = side === 'home' ? match.homeTeam : match.awayTeam
   const logo = side === 'home' ? match.homeLogo : match.awayLogo
   const photo = side === 'home' ? match.homePhoto : match.awayPhoto
+  const media = side === 'home' ? match.homeMedia : match.awayMedia
 
   if (!isIndividualSport(match.sport)) {
     return (
       <TeamLogo
         name={name}
         size={size}
+        media={media}
         badgeUrl={photo || logo}
         className={cn('ring-1 ring-border', className)}
       />
     )
   }
-  return <PlayerAvatar name={name} url={photo || logo} size={size} className={className} />
+  return (
+    <PlayerAvatar name={name} url={media?.url || photo || logo} media={media} size={size} className={className} />
+  )
 }
 
 function PlayerAvatar({
-  name, url, size, className,
-}: { name: string; url?: string; size: Size; className?: string }) {
+  name, url, media, size, className,
+}: { name: string; url?: string; media?: MediaInfo | null; size: Size; className?: string }) {
   const [failedUrl, setFailedUrl] = useState<string | null>(null)
   const px = PX[size]
   const box = cn(
@@ -60,17 +64,21 @@ function PlayerAvatar({
   )
   if (url && failedUrl !== url) {
     return (
-      <div className={cn(box, 'bg-muted')} style={{ width: px, height: px }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={url}
-          alt={name}
-          width={px}
-          height={px}
-          loading="lazy"
-          className="h-full w-full object-cover object-top"
-          onError={() => setFailedUrl(url)}
-        />
+      <div className="relative shrink-0" style={{ width: px, height: px }}>
+        <div className={cn(box, 'bg-muted')} style={{ width: px, height: px }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={url}
+            alt={name}
+            width={px}
+            height={px}
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            className="h-full w-full object-cover object-top"
+            onError={() => setFailedUrl(url)}
+          />
+        </div>
+        <MediaCredit media={media?.url === url ? media : null} large={size === 'lg' || size === 'xl'} />
       </div>
     )
   }

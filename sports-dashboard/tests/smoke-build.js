@@ -89,6 +89,9 @@ section('TOP record, staking and disclaimer')
 const DISCLAIMER = /Pickly provides statistical analysis, not guarantees/
 assert(DISCLAIMER.test(indexHTML), 'Footer: risk disclaimer in index.html')
 assert(/href="\/how-to-use"/.test(indexHTML), 'Footer: link to /how-to-use')
+// Media (design K7): credits in the footer, no browser calls to TheSportsDB.
+assert(/Logos via/.test(indexHTML) && /Wikimedia Commons/.test(indexHTML), 'Footer: image credits')
+assert(!/searchteams\.php/.test(content), 'No client-side TheSportsDB lookups')
 const topMarkers = [
   { pattern: /Closing line value/, name: 'ClvTile' },
   { pattern: /Suggested stakes/, name: 'BankrollChart legend' },

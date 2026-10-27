@@ -1,0 +1,55 @@
+name: Media cache (logos / photos)
+# Fills outputs/media_cache.json for today's and tomorrow's competitors (design K7)
+# so the API never blocks on image lookups. Free sources only: TheSportsDB key 123
+# (25 req/min), Wikidata + Wikimedia Commons (1 req/s, license/author stored).
+# ESPN stays off (MEDIA_ALLOW_ESPN unset). Runs before the 07:30 / 15:00 deploys.
+# Commits only outputs/media_cache.json.
+on:
+  schedule:
+    - cron: '30 6,14 * * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'comma-separated YYYY-MM-DD (empty = today + tomorrow UTC)'
+        required: false
+        default: ''
+      budget_sec:
+        description: 'lookup time budget in seconds'
+        required: false
+        default: '300'
+permissions:
+  contents: write
+concurrency:
+  group: media-cache
+  cancel-in-progress: false
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fill media cache
+        env:
+          DAYS_INPUT: ${{ github.event.inputs.days }}
+          BUDGET_INPUT: ${{ github.event.inputs.budget_sec }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          BUDGET="${BUDGET_INPUT:-300}"
+          if ! [[ "$BUDGET" =~ ^[0-9]+$ ]] || [ "$BUDGET" -gt 600 ]; then echo "bad budget_sec"; exit 1; fi
+          if [ -n "$DAYS_INPUT" ] && ! [[ "$DAYS_INPUT" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}(,[0-9]{4}-[0-9]{2}-[0-9]{2})*$ ]]; then echo "bad days"; exit 1; fi
+          python team_logo_resolver.py --fill --budget-sec "$BUDGET" ${DAYS_INPUT:+--days "$DAYS_INPUT"}
+      - name: Commit media cache
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/media_cache.json
+          git diff --cached --quiet && exit 0
+          git commit -q -m "data: media cache (logos/photos) [skip ci]"
+          ok=0
+          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && ok=1 && break; sleep 5; done
+          [ "$ok" = 1 ] || exit 1

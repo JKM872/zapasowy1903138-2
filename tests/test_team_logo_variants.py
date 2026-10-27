@@ -72,33 +72,33 @@ class TestIndividualSports:
         assert tlr.get_logo_url('Putincewa J.', sport) is None
 
     def test_team_sports_still_resolve(self, monkeypatch):
-        monkeypatch.setattr(tlr, '_query_badge', lambda term: 'https://badge.test/a.png')
+        monkeypatch.setattr(tlr, '_query_badge', lambda term, sport=None: 'https://r2.thesportsdb.com/a.png')
         monkeypatch.setattr(tlr, '_load_file_cache', lambda: {})
         monkeypatch.setattr(tlr, '_save_file_cache', lambda: None)
-        assert tlr.get_logo_url('Arsenal', 'football') == 'https://badge.test/a.png'
+        assert tlr.get_logo_url('Arsenal', 'football') == 'https://r2.thesportsdb.com/a.png'
 
 
 class TestVariantOrderIsTriedUntilAHit:
     def test_the_first_matching_variant_wins(self, monkeypatch):
         tried = []
 
-        def _query(term):
+        def _query(term, sport=None):
             tried.append(term)
-            return 'https://badge.test/mx.png' if term == 'Mexico' else None
+            return 'https://r2.thesportsdb.com/mx.png' if term == 'Mexico' else None
 
         monkeypatch.setattr(tlr, '_query_badge', _query)
         monkeypatch.setattr(tlr, '_load_file_cache', lambda: {})
         monkeypatch.setattr(tlr, '_save_file_cache', lambda: None)
 
-        assert tlr.get_logo_url('Meksyk', 'football') == 'https://badge.test/mx.png'
+        assert tlr.get_logo_url('Meksyk', 'football') == 'https://r2.thesportsdb.com/mx.png'
         assert tried == ['Meksyk', 'Mexico'], 'the literal name is tried first'
 
     def test_lookup_stops_once_a_badge_is_found(self, monkeypatch):
         tried = []
 
-        def _query(term):
+        def _query(term, sport=None):
             tried.append(term)
-            return 'https://badge.test/first.png'
+            return 'https://r2.thesportsdb.com/first.png'
 
         monkeypatch.setattr(tlr, '_query_badge', _query)
         monkeypatch.setattr(tlr, '_load_file_cache', lambda: {})

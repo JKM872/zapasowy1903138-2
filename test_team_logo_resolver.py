@@ -22,7 +22,7 @@ from team_logo_resolver import (
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _fake_urlopen(badge_url: str = "https://example.com/badge.png") -> MagicMock:
+def _fake_urlopen(badge_url: str = "https://r2.thesportsdb.com/badge.png") -> MagicMock:
     """Return a mock context-manager for urllib.request.urlopen."""
     resp = MagicMock()
     resp.read.return_value = json.dumps({
@@ -63,9 +63,9 @@ class TestGetLogoUrl:
     @patch("team_logo_resolver._save_file_cache")
     @patch("team_logo_resolver.urllib.request.urlopen")
     def test_returns_badge(self, mock_open: Any, _save: Any) -> None:
-        mock_open.return_value = _fake_urlopen("https://img.com/arsenal.png")
+        mock_open.return_value = _fake_urlopen("https://r2.thesportsdb.com/arsenal.png")
         url = get_logo_url("Arsenal")
-        assert url == "https://img.com/arsenal.png"
+        assert url == "https://r2.thesportsdb.com/arsenal.png"
 
     @patch("team_logo_resolver._save_file_cache")
     @patch("team_logo_resolver.urllib.request.urlopen")
@@ -81,12 +81,12 @@ class TestGetLogoUrl:
     @patch("team_logo_resolver._save_file_cache")
     @patch("team_logo_resolver.urllib.request.urlopen")
     def test_uses_cache_on_second_call(self, mock_open: Any, _save: Any) -> None:
-        mock_open.return_value = _fake_urlopen("https://img.com/a.png")
+        mock_open.return_value = _fake_urlopen("https://r2.thesportsdb.com/a.png")
         get_logo_url("Arsenal")
         # Second call should NOT hit network
         mock_open.reset_mock()
         url2 = get_logo_url("Arsenal")
-        assert url2 == "https://img.com/a.png"
+        assert url2 == "https://r2.thesportsdb.com/a.png"
         mock_open.assert_not_called()
 
     @patch("team_logo_resolver._save_file_cache")
@@ -106,10 +106,10 @@ class TestCachedOnlyLookup:
     @patch("team_logo_resolver._save_file_cache")
     @patch("team_logo_resolver.urllib.request.urlopen")
     def test_returns_cached_value(self, mock_open: Any, _save: Any) -> None:
-        mock_open.return_value = _fake_urlopen("https://img.com/barca.png")
+        mock_open.return_value = _fake_urlopen("https://r2.thesportsdb.com/barca.png")
         get_logo_url("Barcelona")
         url = get_logo_url_cached_only("Barcelona")
-        assert url == "https://img.com/barca.png"
+        assert url == "https://r2.thesportsdb.com/barca.png"
 
     def test_returns_none_when_not_cached(self) -> None:
         assert get_logo_url_cached_only("NeverCached") is None
@@ -119,22 +119,22 @@ class TestEnrichMatches:
     @patch("team_logo_resolver._save_file_cache")
     @patch("team_logo_resolver.urllib.request.urlopen")
     def test_adds_logo_fields(self, mock_open: Any, _save: Any) -> None:
-        mock_open.return_value = _fake_urlopen("https://img.com/x.png")
+        mock_open.return_value = _fake_urlopen("https://r2.thesportsdb.com/x.png")
         matches: list[Dict[str, Any]] = [
             {"home_team": "Arsenal", "away_team": "Chelsea"},
             {"home_team": "Arsenal", "away_team": "Liverpool"},
         ]
         enrich_matches_with_logos(matches)
 
-        assert matches[0]["home_logo_url"] == "https://img.com/x.png"
-        assert matches[0]["away_logo_url"] == "https://img.com/x.png"
-        assert matches[1]["home_logo_url"] == "https://img.com/x.png"
+        assert matches[0]["home_logo_url"] == "https://r2.thesportsdb.com/x.png"
+        assert matches[0]["away_logo_url"] == "https://r2.thesportsdb.com/x.png"
+        assert matches[1]["home_logo_url"] == "https://r2.thesportsdb.com/x.png"
 
     @patch("team_logo_resolver._save_file_cache")
     @patch("team_logo_resolver.urllib.request.urlopen")
     def test_unique_lookups_only(self, mock_open: Any, _save: Any) -> None:
         """Each unique team name should trigger at most one network call."""
-        mock_open.return_value = _fake_urlopen("https://img.com/y.png")
+        mock_open.return_value = _fake_urlopen("https://r2.thesportsdb.com/y.png")
         matches: list[Dict[str, Any]] = [
             {"home_team": "Arsenal", "away_team": "Chelsea"},
             {"home_team": "Arsenal", "away_team": "Chelsea"},
