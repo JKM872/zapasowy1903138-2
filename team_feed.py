@@ -125,6 +125,19 @@ def _suggest(idx: Optional[Dict[str, Any]], key: str) -> List[str]:
     return out[:SUGGEST_N]
 
 
+_top_cache: Dict[str, Any] = {'at': 0.0, 'data': None}
+TOP_TTL_S = 120  # same freshness as top_feed's raw-GitHub cache
+
+
+def _public_top() -> Dict[str, Any]:
+    """Visitor view of the TOP feed, shared by all team requests for TOP_TTL_S."""
+    now = time.time()
+    if _top_cache['data'] is None or now - _top_cache['at'] >= TOP_TTL_S:
+        from top_feed import load_top
+        _top_cache.update(data=load_top(is_subscriber=False), at=now)
+    return _top_cache['data']
+
+
 def _wdl(own: int, opp: int) -> str:
     return 'W' if own > opp else 'L' if own < opp else 'D'
 
@@ -210,9 +223,7 @@ def get_team(name: Any, sport: Any, limit: Any = None, index_dir: str = INDEX_DI
         return 404, {'error': 'team not found', 'suggestions': _suggest(idx, key)}
 
     if top_loader is None:
-        def top_loader():
-            from top_feed import load_top
-            return load_top(is_subscriber=False)
+        top_loader = _public_top
 
     games = [idx['games'][i] for i in idx['byTeam'][key]]
     games.sort(key=lambda g: g[0], reverse=True)
