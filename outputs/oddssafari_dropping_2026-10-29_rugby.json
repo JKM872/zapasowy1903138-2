@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-29T05:38:19.165966+01:00",
+    "generated_at": "2026-10-29T18:48:01.361644+01:00",
     "target_date": "2026-10-29",
     "filter": {
       "min_odds": 1.35,
@@ -8,50 +8,28 @@
       "per_sport_range": true
     },
     "totals": {
-      "events": 6,
-      "qualified": 2
+      "events": 8,
+      "qualified": 5
     },
     "enrichment_status_counts": {
-      "enriched": 2,
+      "enriched": 1,
       "resolve_failed": 0,
-      "process_match_error": 0
+      "process_match_error": 0,
+      "enriched_sofascore_only": 4
     },
     "skip_reason_counts": {
-      "odds_out_of_range": 4
+      "odds_out_of_range": 3
     },
     "odds_change_counts": {
       "down": 0,
       "up": 0,
       "flat": 0,
-      "new": 6
+      "new": 8
     },
-    "elapsed_seconds": 649.9,
+    "elapsed_seconds": 954.8,
     "dry_run": false
   },
   "events": [
-    {
-      "league": "International  - World Cup",
-      "match_url": "https://www.oddssafari.com/matches/rugby-league/world-cup/lebanon-vs-france/11445026?MarketTypeID=1401",
-      "match_id": "11445026",
-      "sport_slug": "rugby-league",
-      "sport": "rugby",
-      "home_team": "Lebanon",
-      "away_team": "France",
-      "event_date": "01/11",
-      "event_time": "06:40",
-      "outcome": "2",
-      "open_odds": 17.5,
-      "current_odds": 12.69,
-      "drop_pct": 28.0,
-      "max_odds": 15.0,
-      "sport_page_id": "140",
-      "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
-      "dropped_outcome": "2",
-      "focus_team": "away",
-      "away_team_focus": true
-    },
     {
       "league": "International Clubs - United Rugby Championship",
       "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/glasgow-warriors-vs-lions/11001781?MarketTypeID=1301",
@@ -64,10 +42,150 @@
       "event_time": "19:45",
       "outcome": "2",
       "open_odds": 6.0,
-      "current_odds": 4.77,
-      "drop_pct": 21.0,
-      "max_odds": 5.5,
+      "current_odds": 3.4,
+      "drop_pct": 43.0,
+      "max_odds": 3.63,
       "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/connacht-vs-leinster/11001780?MarketTypeID=1301",
+      "match_id": "11001780",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Connacht",
+      "away_team": "Leinster",
+      "event_date": "30/10",
+      "event_time": "19:45",
+      "outcome": "1",
+      "open_odds": 2.3,
+      "current_odds": 1.71,
+      "drop_pct": 26.0,
+      "max_odds": 1.73,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 16527481,
+        "sofascore_home_team_id": 8083,
+        "sofascore_away_team_id": 4210,
+        "home_team": "Connacht",
+        "away_team": "Leinster",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "19:45",
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "24.01.26",
+            "home": "Connacht Rugby",
+            "away": "Leinster Rugby",
+            "score": "23:34",
+            "winner": "away"
+          },
+          {
+            "date": "03.01.26",
+            "home": "Leinster Rugby",
+            "away": "Connacht Rugby",
+            "score": "52:17",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "24.01.26",
+        "last_h2h_score": "23:34",
+        "last_h2h_home": "Connacht Rugby",
+        "last_h2h_away": "Leinster Rugby",
+        "sofascore_home_win_prob": 27,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 68,
+        "sofascore_total_votes": 131,
+        "forebet_prediction": "1",
+        "forebet_probability": 82.0,
+        "forebet_exact_score": "48-21",
+        "forebet_avg_goals": 63.4,
+        "forebet_home_prob": 82,
+        "forebet_away_prob": 17
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "International  - World Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/world-cup/lebanon-vs-france/11445026?MarketTypeID=1401",
+      "match_id": "11445026",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Lebanon",
+      "away_team": "France",
+      "event_date": "01/11",
+      "event_time": "06:40",
+      "outcome": "2",
+      "open_odds": 17.5,
+      "current_odds": 12.9,
+      "drop_pct": 26.0,
+      "max_odds": 15.0,
+      "sport_page_id": "140",
       "notes": [],
       "qualifies": false,
       "skip_reason": "odds_out_of_range",
@@ -87,9 +205,9 @@
       "event_time": "20:00",
       "outcome": "2",
       "open_odds": 2.05,
-      "current_odds": 1.77,
-      "drop_pct": 14.0,
-      "max_odds": 1.8,
+      "current_odds": 1.55,
+      "drop_pct": 25.0,
+      "max_odds": 1.58,
       "sport_page_id": "130",
       "notes": [],
       "qualifies": true,
@@ -101,16 +219,16 @@
       "livesport_url": "https://www.livesport.com/pl/mecz/rugby/provence-rugby-4QoTJyfj/us-dax-EmGufdAi/?mid=hCTQRseS",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": null,
-        "away_team": null,
-        "match_time": null,
+        "home_team": "US Dax",
+        "away_team": "Provence Rugby",
+        "match_time": "29.10.2026 20:00",
         "sport": "rugby",
-        "league": null,
-        "h2h_count": 1,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 0,
-        "win_rate": 0.0,
-        "qualifies": false,
+        "league": "PD2",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": true,
         "home_form": [
           "L",
           "W",
@@ -123,41 +241,6 @@
           "W",
           "W",
           "W",
-          "W"
-        ],
-        "home_odds": null,
-        "away_odds": null,
-        "forebet_prediction": null,
-        "forebet_probability": null,
-        "forebet_over_under": null,
-        "forebet_btts": null,
-        "forebet_exact_score": null,
-        "forebet_avg_goals": null,
-        "h2h_last5": [
-          {
-            "date": "20.02.26",
-            "home": "US Dax",
-            "away": "Provence Rugby",
-            "score": "33:21",
-            "winner": "home"
-          }
-        ],
-        "last_h2h_date": null,
-        "last_h2h_score": null,
-        "last_h2h_home": null,
-        "last_h2h_away": null,
-        "home_form_home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "away_form_away": [
-          "L",
-          "W",
-          "W",
-          "L",
           "W"
         ],
         "home_form_overall": [
@@ -174,18 +257,159 @@
           "W",
           "W"
         ],
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "1",
+        "forebet_probability": 58.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "20-14",
+        "forebet_avg_goals": 46.3,
+        "forebet_home_prob": 58,
+        "forebet_draw_prob": null,
+        "forebet_away_prob": 40,
+        "sofascore_home_win_prob": 30,
+        "sofascore_draw_prob": 4,
+        "sofascore_away_win_prob": 66,
+        "sofascore_total_votes": 270,
+        "h2h_last5": [
+          {
+            "date": "20.02.26",
+            "home": "US Dax",
+            "away": "Provence Rugby",
+            "score": "33-21",
+            "winner": "home",
+            "raw": "20.02.26 US Dax 33-21 Provence Rugby"
+          },
+          {
+            "date": "26.09.25",
+            "home": "Provence Rugby",
+            "away": "US Dax",
+            "score": "42-15",
+            "winner": "home",
+            "raw": "26.09.25 Provence Rugby 42-15 US Dax"
+          },
+          {
+            "date": "04.04.25",
+            "home": "Provence Rugby",
+            "away": "US Dax",
+            "score": "57-0",
+            "winner": "home",
+            "raw": "04.04.25 Provence Rugby 57-0 US Dax"
+          },
+          {
+            "date": "12.12.24",
+            "home": "US Dax",
+            "away": "Provence Rugby",
+            "score": "23-22",
+            "winner": "home",
+            "raw": "12.12.24 US Dax 23-22 Provence Rugby"
+          },
+          {
+            "date": "12.01.24",
+            "home": "Provence Rugby",
+            "away": "US Dax",
+            "score": "54-26",
+            "winner": "home",
+            "raw": "12.01.24 Provence Rugby 54-26 US Dax"
+          }
+        ],
+        "last_h2h_date": "20.02.26",
+        "last_h2h_score": "33-21",
+        "last_h2h_home": "US Dax",
+        "last_h2h_away": "Provence Rugby",
+        "form_advantage": true,
+        "home_season_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "season_home_form": [
+          "W",
+          "W",
+          "W"
+        ],
+        "season_away_form": [
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [],
+        "away_cup_form": [],
+        "home_cup_competitions": [],
+        "away_cup_competitions": [],
+        "home_form_competitions": [
+          "Pro D2 (Francja)"
+        ],
+        "away_form_competitions": [
+          "Pro D2 (Francja)"
+        ],
+        "national_friendly": false,
         "venue_form_source": "livesport_h2h_pages",
-        "form_advantage": false,
-        "away_advantage": true,
-        "sofascore_event_id": 16535106,
-        "sofascore_home_team_id": 8081,
-        "sofascore_away_team_id": 78971,
-        "draws_in_h2h_last5": 0,
-        "h2h_source": "sofascore_api",
-        "sofascore_home_win_prob": 36,
-        "sofascore_draw_prob": 5,
-        "sofascore_away_win_prob": 59,
-        "sofascore_total_votes": 119
+        "away_advantage": true
       },
       "enrichment_error": null
     },
@@ -201,16 +425,97 @@
       "event_time": "17:30",
       "outcome": "2",
       "open_odds": 2.88,
-      "current_odds": 2.51,
-      "drop_pct": 13.0,
-      "max_odds": 2.6,
+      "current_odds": 2.2,
+      "drop_pct": 23.0,
+      "max_odds": 2.32,
       "sport_page_id": "130",
       "notes": [],
-      "qualifies": false,
-      "skip_reason": "odds_out_of_range",
+      "qualifies": true,
+      "skip_reason": null,
       "dropped_outcome": "2",
       "focus_team": "away",
-      "away_team_focus": true
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.571,
+        "sofascore_event_id": 16527486,
+        "sofascore_home_team_id": 4203,
+        "sofascore_away_team_id": 4187,
+        "home_team": "Munster Rugby",
+        "away_team": "Sharks",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "17:30",
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "21.03.26",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "45:0",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "21.03.26",
+        "last_h2h_score": "45:0",
+        "last_h2h_home": "Sharks",
+        "last_h2h_away": "Munster",
+        "sofascore_home_win_prob": 54,
+        "sofascore_draw_prob": 2,
+        "sofascore_away_win_prob": 44,
+        "sofascore_total_votes": 84
+      },
+      "enrichment_error": null
     },
     {
       "league": "International  - World Cup (W)",
@@ -224,8 +529,8 @@
       "event_time": "06:45",
       "outcome": "2",
       "open_odds": 1.42,
-      "current_odds": 1.24,
-      "drop_pct": 13.0,
+      "current_odds": 1.22,
+      "drop_pct": 14.0,
       "max_odds": 1.3,
       "sport_page_id": "140",
       "notes": [],
@@ -237,19 +542,19 @@
     },
     {
       "league": "International Clubs - United Rugby Championship",
-      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/benetton-rugby-vs-edinburgh-rugby/11272075?MarketTypeID=1301",
-      "match_id": "11272075",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/ospreys-vs-cardiff-rugby/11271991?MarketTypeID=1301",
+      "match_id": "11271991",
       "sport_slug": "rugby-union",
       "sport": "rugby",
-      "home_team": "Benetton Rugby",
-      "away_team": "Edinburgh Rugby",
+      "home_team": "Ospreys",
+      "away_team": "Cardiff Rugby",
       "event_date": "31/10",
-      "event_time": "15:00",
+      "event_time": "19:45",
       "outcome": "1",
-      "open_odds": 2.05,
-      "current_odds": 1.8,
-      "drop_pct": 12.0,
-      "max_odds": 1.83,
+      "open_odds": 1.62,
+      "current_odds": 1.44,
+      "drop_pct": 11.0,
+      "max_odds": 1.45,
       "sport_page_id": "130",
       "notes": [],
       "qualifies": true,
@@ -257,82 +562,142 @@
       "dropped_outcome": "1",
       "focus_team": "home",
       "away_team_focus": false,
-      "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/provence-rugby-4QoTJyfj/us-dax-EmGufdAi/?mid=hCTQRseS",
-      "livesport_confidence": 0.5,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
       "enrichment": {
-        "home_team": null,
-        "away_team": null,
-        "match_time": null,
-        "sport": "rugby",
-        "league": null,
-        "h2h_count": 2,
-        "home_wins_in_h2h_last5": 0,
-        "away_wins_in_h2h_last5": 2,
-        "win_rate": 0.0,
-        "qualifies": false,
         "home_form": [
-          "L",
+          "W",
+          "W",
           "W",
           "L",
-          "W",
           "L"
         ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16527490,
+        "sofascore_home_team_id": 8082,
+        "sofascore_away_team_id": 4215,
+        "home_team": "Ospreys",
+        "away_team": "Cardiff Rugby",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "19:45",
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "24.04.26",
+            "home": "Cardiff Rugby",
+            "away": "Ospreys",
+            "score": "24:21",
+            "winner": "home"
+          },
+          {
+            "date": "01.01.26",
+            "home": "Ospreys",
+            "away": "Cardiff Rugby",
+            "score": "33:22",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "24.04.26",
+        "last_h2h_score": "24:21",
+        "last_h2h_home": "Cardiff Rugby",
+        "last_h2h_away": "Ospreys",
+        "sofascore_home_win_prob": 62,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 33,
+        "sofascore_total_votes": 61
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Argentina - URBA Top 14",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/argentina/urba-top-14/casi-vs-hindu-club/11272086?MarketTypeID=1301",
+      "match_id": "11272086",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "CASI",
+      "away_team": "Hindu Club",
+      "event_date": "31/10",
+      "event_time": "20:10",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.31,
+      "drop_pct": 11.0,
+      "max_odds": 2.4,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
         "away_form": [
           "W",
           "W",
           "W",
           "W",
           "W"
-        ],
-        "home_odds": null,
-        "away_odds": null,
-        "forebet_prediction": null,
-        "forebet_probability": null,
-        "forebet_over_under": null,
-        "forebet_btts": null,
-        "forebet_exact_score": null,
-        "forebet_avg_goals": null,
-        "h2h_last5": [
-          {
-            "date": "03.01.26",
-            "home": "Benetton Treviso",
-            "away": "Edinburgh Rugby",
-            "score": "14:15",
-            "winner": "away"
-          },
-          {
-            "date": "17.10.25",
-            "home": "Edinburgh Rugby",
-            "away": "Benetton Treviso",
-            "score": "43:0",
-            "winner": "home"
-          }
-        ],
-        "last_h2h_date": null,
-        "last_h2h_score": null,
-        "last_h2h_home": null,
-        "last_h2h_away": null,
-        "home_form_home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "away_form_away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "home_form_overall": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "L"
         ],
         "away_form_overall": [
           "W",
@@ -341,23 +706,181 @@
           "W",
           "W"
         ],
-        "venue_form_source": "livesport_h2h_pages",
-        "form_advantage": false,
-        "away_advantage": true,
-        "sofascore_event_id": 16527487,
-        "sofascore_home_team_id": 21798,
-        "sofascore_away_team_id": 4206,
-        "draws_in_h2h_last5": 0,
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
         "h2h_source": "sofascore_api",
-        "sofascore_home_win_prob": 24,
-        "sofascore_draw_prob": 3,
-        "sofascore_away_win_prob": 72,
-        "sofascore_total_votes": 58
+        "win_rate": 0.3,
+        "sofascore_event_id": 15345703,
+        "sofascore_home_team_id": 197777,
+        "sofascore_away_team_id": 197775,
+        "home_team": "CASI",
+        "away_team": "Hindu Club",
+        "sport": "rugby",
+        "league": "Argentina - URBA Top 14",
+        "match_time": "20:10",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "22.08.26",
+            "home": "Hindú Club",
+            "away": "SIC",
+            "score": "24:18",
+            "winner": "home"
+          },
+          {
+            "date": "25.04.26",
+            "home": "SIC",
+            "away": "Hindú Club",
+            "score": "31:32",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "22.08.26",
+        "last_h2h_score": "24:18",
+        "last_h2h_home": "Hindú Club",
+        "last_h2h_away": "SIC",
+        "sofascore_home_win_prob": 66,
+        "sofascore_draw_prob": 7,
+        "sofascore_away_win_prob": 28,
+        "sofascore_total_votes": 29
       },
       "enrichment_error": null
     }
   ],
   "qualified": [
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/connacht-vs-leinster/11001780?MarketTypeID=1301",
+      "match_id": "11001780",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Connacht",
+      "away_team": "Leinster",
+      "event_date": "30/10",
+      "event_time": "19:45",
+      "outcome": "1",
+      "open_odds": 2.3,
+      "current_odds": 1.71,
+      "drop_pct": 26.0,
+      "max_odds": 1.73,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 16527481,
+        "sofascore_home_team_id": 8083,
+        "sofascore_away_team_id": 4210,
+        "home_team": "Connacht",
+        "away_team": "Leinster",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "19:45",
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "24.01.26",
+            "home": "Connacht Rugby",
+            "away": "Leinster Rugby",
+            "score": "23:34",
+            "winner": "away"
+          },
+          {
+            "date": "03.01.26",
+            "home": "Leinster Rugby",
+            "away": "Connacht Rugby",
+            "score": "52:17",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "24.01.26",
+        "last_h2h_score": "23:34",
+        "last_h2h_home": "Connacht Rugby",
+        "last_h2h_away": "Leinster Rugby",
+        "sofascore_home_win_prob": 27,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 68,
+        "sofascore_total_votes": 131,
+        "forebet_prediction": "1",
+        "forebet_probability": 82.0,
+        "forebet_exact_score": "48-21",
+        "forebet_avg_goals": 63.4,
+        "forebet_home_prob": 82,
+        "forebet_away_prob": 17
+      },
+      "enrichment_error": null
+    },
     {
       "league": "France - Pro D2",
       "match_url": "https://www.oddssafari.com/matches/rugby-union/france/pro-d2/dax-vs-provence-rugby/10795391?MarketTypeID=1301",
@@ -370,9 +893,9 @@
       "event_time": "20:00",
       "outcome": "2",
       "open_odds": 2.05,
-      "current_odds": 1.77,
-      "drop_pct": 14.0,
-      "max_odds": 1.8,
+      "current_odds": 1.55,
+      "drop_pct": 25.0,
+      "max_odds": 1.58,
       "sport_page_id": "130",
       "notes": [],
       "qualifies": true,
@@ -384,16 +907,16 @@
       "livesport_url": "https://www.livesport.com/pl/mecz/rugby/provence-rugby-4QoTJyfj/us-dax-EmGufdAi/?mid=hCTQRseS",
       "livesport_confidence": 1.0,
       "enrichment": {
-        "home_team": null,
-        "away_team": null,
-        "match_time": null,
+        "home_team": "US Dax",
+        "away_team": "Provence Rugby",
+        "match_time": "29.10.2026 20:00",
         "sport": "rugby",
-        "league": null,
-        "h2h_count": 1,
-        "home_wins_in_h2h_last5": 1,
-        "away_wins_in_h2h_last5": 0,
-        "win_rate": 0.0,
-        "qualifies": false,
+        "league": "PD2",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": true,
         "home_form": [
           "L",
           "W",
@@ -406,41 +929,6 @@
           "W",
           "W",
           "W",
-          "W"
-        ],
-        "home_odds": null,
-        "away_odds": null,
-        "forebet_prediction": null,
-        "forebet_probability": null,
-        "forebet_over_under": null,
-        "forebet_btts": null,
-        "forebet_exact_score": null,
-        "forebet_avg_goals": null,
-        "h2h_last5": [
-          {
-            "date": "20.02.26",
-            "home": "US Dax",
-            "away": "Provence Rugby",
-            "score": "33:21",
-            "winner": "home"
-          }
-        ],
-        "last_h2h_date": null,
-        "last_h2h_score": null,
-        "last_h2h_home": null,
-        "last_h2h_away": null,
-        "home_form_home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "away_form_away": [
-          "L",
-          "W",
-          "W",
-          "L",
           "W"
         ],
         "home_form_overall": [
@@ -457,36 +945,281 @@
           "W",
           "W"
         ],
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "1",
+        "forebet_probability": 58.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "20-14",
+        "forebet_avg_goals": 46.3,
+        "forebet_home_prob": 58,
+        "forebet_draw_prob": null,
+        "forebet_away_prob": 40,
+        "sofascore_home_win_prob": 30,
+        "sofascore_draw_prob": 4,
+        "sofascore_away_win_prob": 66,
+        "sofascore_total_votes": 270,
+        "h2h_last5": [
+          {
+            "date": "20.02.26",
+            "home": "US Dax",
+            "away": "Provence Rugby",
+            "score": "33-21",
+            "winner": "home",
+            "raw": "20.02.26 US Dax 33-21 Provence Rugby"
+          },
+          {
+            "date": "26.09.25",
+            "home": "Provence Rugby",
+            "away": "US Dax",
+            "score": "42-15",
+            "winner": "home",
+            "raw": "26.09.25 Provence Rugby 42-15 US Dax"
+          },
+          {
+            "date": "04.04.25",
+            "home": "Provence Rugby",
+            "away": "US Dax",
+            "score": "57-0",
+            "winner": "home",
+            "raw": "04.04.25 Provence Rugby 57-0 US Dax"
+          },
+          {
+            "date": "12.12.24",
+            "home": "US Dax",
+            "away": "Provence Rugby",
+            "score": "23-22",
+            "winner": "home",
+            "raw": "12.12.24 US Dax 23-22 Provence Rugby"
+          },
+          {
+            "date": "12.01.24",
+            "home": "Provence Rugby",
+            "away": "US Dax",
+            "score": "54-26",
+            "winner": "home",
+            "raw": "12.01.24 Provence Rugby 54-26 US Dax"
+          }
+        ],
+        "last_h2h_date": "20.02.26",
+        "last_h2h_score": "33-21",
+        "last_h2h_home": "US Dax",
+        "last_h2h_away": "Provence Rugby",
+        "form_advantage": true,
+        "home_season_form": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "season_home_form": [
+          "W",
+          "W",
+          "W"
+        ],
+        "season_away_form": [
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [],
+        "away_cup_form": [],
+        "home_cup_competitions": [],
+        "away_cup_competitions": [],
+        "home_form_competitions": [
+          "Pro D2 (Francja)"
+        ],
+        "away_form_competitions": [
+          "Pro D2 (Francja)"
+        ],
+        "national_friendly": false,
         "venue_form_source": "livesport_h2h_pages",
-        "form_advantage": false,
-        "away_advantage": true,
-        "sofascore_event_id": 16535106,
-        "sofascore_home_team_id": 8081,
-        "sofascore_away_team_id": 78971,
-        "draws_in_h2h_last5": 0,
-        "h2h_source": "sofascore_api",
-        "sofascore_home_win_prob": 36,
-        "sofascore_draw_prob": 5,
-        "sofascore_away_win_prob": 59,
-        "sofascore_total_votes": 119
+        "away_advantage": true
       },
       "enrichment_error": null
     },
     {
       "league": "International Clubs - United Rugby Championship",
-      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/benetton-rugby-vs-edinburgh-rugby/11272075?MarketTypeID=1301",
-      "match_id": "11272075",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/munster-rugby-vs-sharks/11271992?MarketTypeID=1301",
+      "match_id": "11271992",
       "sport_slug": "rugby-union",
       "sport": "rugby",
-      "home_team": "Benetton Rugby",
-      "away_team": "Edinburgh Rugby",
+      "home_team": "Munster Rugby",
+      "away_team": "Sharks",
       "event_date": "31/10",
-      "event_time": "15:00",
+      "event_time": "17:30",
+      "outcome": "2",
+      "open_odds": 2.88,
+      "current_odds": 2.2,
+      "drop_pct": 23.0,
+      "max_odds": 2.32,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.571,
+        "sofascore_event_id": 16527486,
+        "sofascore_home_team_id": 4203,
+        "sofascore_away_team_id": 4187,
+        "home_team": "Munster Rugby",
+        "away_team": "Sharks",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "17:30",
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "21.03.26",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "45:0",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "21.03.26",
+        "last_h2h_score": "45:0",
+        "last_h2h_home": "Sharks",
+        "last_h2h_away": "Munster",
+        "sofascore_home_win_prob": 54,
+        "sofascore_draw_prob": 2,
+        "sofascore_away_win_prob": 44,
+        "sofascore_total_votes": 84
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/ospreys-vs-cardiff-rugby/11271991?MarketTypeID=1301",
+      "match_id": "11271991",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Ospreys",
+      "away_team": "Cardiff Rugby",
+      "event_date": "31/10",
+      "event_time": "19:45",
       "outcome": "1",
-      "open_odds": 2.05,
-      "current_odds": 1.8,
-      "drop_pct": 12.0,
-      "max_odds": 1.83,
+      "open_odds": 1.62,
+      "current_odds": 1.44,
+      "drop_pct": 11.0,
+      "max_odds": 1.45,
       "sport_page_id": "130",
       "notes": [],
       "qualifies": true,
@@ -494,82 +1227,142 @@
       "dropped_outcome": "1",
       "focus_team": "home",
       "away_team_focus": false,
-      "enrichment_status": "enriched",
-      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/provence-rugby-4QoTJyfj/us-dax-EmGufdAi/?mid=hCTQRseS",
-      "livesport_confidence": 0.5,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
       "enrichment": {
-        "home_team": null,
-        "away_team": null,
-        "match_time": null,
-        "sport": "rugby",
-        "league": null,
-        "h2h_count": 2,
-        "home_wins_in_h2h_last5": 0,
-        "away_wins_in_h2h_last5": 2,
-        "win_rate": 0.0,
-        "qualifies": false,
         "home_form": [
-          "L",
+          "W",
+          "W",
           "W",
           "L",
-          "W",
           "L"
         ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16527490,
+        "sofascore_home_team_id": 8082,
+        "sofascore_away_team_id": 4215,
+        "home_team": "Ospreys",
+        "away_team": "Cardiff Rugby",
+        "sport": "rugby",
+        "league": "International Clubs - United Rugby Championship",
+        "match_time": "19:45",
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "24.04.26",
+            "home": "Cardiff Rugby",
+            "away": "Ospreys",
+            "score": "24:21",
+            "winner": "home"
+          },
+          {
+            "date": "01.01.26",
+            "home": "Ospreys",
+            "away": "Cardiff Rugby",
+            "score": "33:22",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "24.04.26",
+        "last_h2h_score": "24:21",
+        "last_h2h_home": "Cardiff Rugby",
+        "last_h2h_away": "Ospreys",
+        "sofascore_home_win_prob": 62,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 33,
+        "sofascore_total_votes": 61
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Argentina - URBA Top 14",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/argentina/urba-top-14/casi-vs-hindu-club/11272086?MarketTypeID=1301",
+      "match_id": "11272086",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "CASI",
+      "away_team": "Hindu Club",
+      "event_date": "31/10",
+      "event_time": "20:10",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.31,
+      "drop_pct": 11.0,
+      "max_odds": 2.4,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
         "away_form": [
           "W",
           "W",
           "W",
           "W",
           "W"
-        ],
-        "home_odds": null,
-        "away_odds": null,
-        "forebet_prediction": null,
-        "forebet_probability": null,
-        "forebet_over_under": null,
-        "forebet_btts": null,
-        "forebet_exact_score": null,
-        "forebet_avg_goals": null,
-        "h2h_last5": [
-          {
-            "date": "03.01.26",
-            "home": "Benetton Treviso",
-            "away": "Edinburgh Rugby",
-            "score": "14:15",
-            "winner": "away"
-          },
-          {
-            "date": "17.10.25",
-            "home": "Edinburgh Rugby",
-            "away": "Benetton Treviso",
-            "score": "43:0",
-            "winner": "home"
-          }
-        ],
-        "last_h2h_date": null,
-        "last_h2h_score": null,
-        "last_h2h_home": null,
-        "last_h2h_away": null,
-        "home_form_home": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "L"
-        ],
-        "away_form_away": [
-          "L",
-          "W",
-          "W",
-          "L",
-          "W"
-        ],
-        "home_form_overall": [
-          "L",
-          "W",
-          "L",
-          "W",
-          "L"
         ],
         "away_form_overall": [
           "W",
@@ -578,18 +1371,59 @@
           "W",
           "W"
         ],
-        "venue_form_source": "livesport_h2h_pages",
-        "form_advantage": false,
-        "away_advantage": true,
-        "sofascore_event_id": 16527487,
-        "sofascore_home_team_id": 21798,
-        "sofascore_away_team_id": 4206,
-        "draws_in_h2h_last5": 0,
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
         "h2h_source": "sofascore_api",
-        "sofascore_home_win_prob": 24,
-        "sofascore_draw_prob": 3,
-        "sofascore_away_win_prob": 72,
-        "sofascore_total_votes": 58
+        "win_rate": 0.3,
+        "sofascore_event_id": 15345703,
+        "sofascore_home_team_id": 197777,
+        "sofascore_away_team_id": 197775,
+        "home_team": "CASI",
+        "away_team": "Hindu Club",
+        "sport": "rugby",
+        "league": "Argentina - URBA Top 14",
+        "match_time": "20:10",
+        "home_form_home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "22.08.26",
+            "home": "Hindú Club",
+            "away": "SIC",
+            "score": "24:18",
+            "winner": "home"
+          },
+          {
+            "date": "25.04.26",
+            "home": "SIC",
+            "away": "Hindú Club",
+            "score": "31:32",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "22.08.26",
+        "last_h2h_score": "24:18",
+        "last_h2h_home": "Hindú Club",
+        "last_h2h_away": "SIC",
+        "sofascore_home_win_prob": 66,
+        "sofascore_draw_prob": 7,
+        "sofascore_away_win_prob": 28,
+        "sofascore_total_votes": 29
       },
       "enrichment_error": null
     }
