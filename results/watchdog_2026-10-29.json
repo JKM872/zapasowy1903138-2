@@ -1,6 +1,6 @@
 {
   "date": "2026-10-29",
-  "generated_at": "2026-10-29T16:19:03.789804+00:00",
+  "generated_at": "2026-10-29T20:23:23.463948+00:00",
   "issues": [
     {
       "level": "ALERT",
@@ -26,11 +26,21 @@
       "level": "ALERT",
       "workflow": "daily_digest.yml",
       "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
+      "code": "job_failed",
+      "problem": "Job „digest” failure (krok: Build digest + email)",
+      "meaning": "Job zakończył się błędem — część danych nie powstała.",
+      "action": "Otwórz log joba i napraw przyczynę; ewentualnie re-run.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40932458937/job/123654169064"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "daily_digest.yml",
+      "sport": "",
+      "code": "traceback",
+      "problem": "Traceback w logu",
+      "meaning": "W logu jest wyjątek Pythona (run mógł być zielony).",
+      "action": "Zobacz Traceback w logu i popraw kod.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40932458937/job/123654169064"
     },
     {
       "level": "WARN",
@@ -100,41 +110,57 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 40816521596,
+        "databaseId": 40940372820,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40816521596"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40940372820"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 2,
+      "runs_today": 3,
       "issues": [],
       "run": {
-        "databaseId": 40865810507,
+        "databaseId": 40922195248,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40865810507"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40922195248"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
+      "runs_today": 1,
       "issues": [
         {
           "level": "ALERT",
           "workflow": "daily_digest.yml",
           "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
+          "code": "job_failed",
+          "problem": "Job „digest” failure (krok: Build digest + email)",
+          "meaning": "Job zakończył się błędem — część danych nie powstała.",
+          "action": "Otwórz log joba i napraw przyczynę; ewentualnie re-run.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40932458937/job/123654169064"
+        },
+        {
+          "level": "ALERT",
+          "workflow": "daily_digest.yml",
+          "sport": "",
+          "code": "traceback",
+          "problem": "Traceback w logu",
+          "meaning": "W logu jest wyjątek Pythona (run mógł być zielony).",
+          "action": "Zobacz Traceback w logu i popraw kod.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40932458937/job/123654169064"
         }
-      ]
+      ],
+      "run": {
+        "databaseId": 40932458937,
+        "status": "completed",
+        "conclusion": "failure",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/40932458937"
+      }
     }
   ],
   "relays": [
@@ -176,7 +202,7 @@
     }
   ],
   "counts": {
-    "ALERT": 3,
+    "ALERT": 4,
     "WARN": 1
   }
 }
