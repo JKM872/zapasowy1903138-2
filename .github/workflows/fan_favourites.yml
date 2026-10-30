@@ -19,7 +19,7 @@ concurrency:
 jobs:
   board:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       max-parallel: 9
@@ -40,7 +40,7 @@ jobs:
         env:
           PYTHONIOENCODING: utf-8
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
-        run: python tools/fan_favourites.py --sport ${{ matrix.sport }} --refresh --out fan_parts
+        run: python -u tools/fan_favourites.py --sport ${{ matrix.sport }} --refresh --out fan_parts
       - uses: actions/upload-artifact@v4
         with:
           name: fan-${{ matrix.sport }}

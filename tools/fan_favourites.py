@@ -19,6 +19,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
@@ -34,6 +35,9 @@ SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball'
           'baseball', 'rugby', 'table_tennis']
 REFRESH_MAX = 80                     # Fan Vote lookups per sport and run
 REFRESH_AGE_H = 3
+# Wall-clock budget for Fan Vote lookups per sport and day (a lookup can take
+# ~25 s when the SofaScore API path falls back to the browser).
+REFRESH_BUDGET_S = float(os.getenv('FAN_REFRESH_BUDGET_S', '540'))
 
 
 def _now() -> datetime:
@@ -103,8 +107,13 @@ def refresh_votes(rows: List[Dict[str, Any]], sport: str, day: str, stale: bool,
         fs = fan_limits.fan_side(r)
         if fs is None or (stale and fs['fanPct'] >= thr):
             todo.append(r)
-    n = 0
+    n = tried = 0
+    t0 = time.monotonic()
     for r in todo[:REFRESH_MAX]:
+        if time.monotonic() - t0 > REFRESH_BUDGET_S:
+            log(f'   fan vote refresh budget {REFRESH_BUDGET_S:.0f}s used, stopping')
+            break
+        tried += 1
         home, away = r.get('homeTeam') or '', r.get('awayTeam') or ''
         try:
             v = fanvote.get_fan_vote(home, away, sport, day)
@@ -121,7 +130,7 @@ def refresh_votes(rows: List[Dict[str, Any]], sport: str, day: str, stale: bool,
             n += 1
         if fanvote.is_disabled_for_run():
             break
-    log(f'   fan vote refreshed {n}/{min(len(todo), REFRESH_MAX)}')
+    log(f'   fan vote refreshed {n}/{tried} (queued {min(len(todo), REFRESH_MAX)})')
     return n
 
 
