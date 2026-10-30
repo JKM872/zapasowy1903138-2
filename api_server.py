@@ -819,7 +819,6 @@ def _file_stats(path):
     return c
 
 
-@app.route('/api/stats', methods=['GET'])
 def get_stats():
     """Get aggregated statistics for the dashboard."""
     days = max(1, min(request.args.get('days', 30, type=int), STATS_DAYS_MAX))
@@ -2010,7 +2009,32 @@ def get_top():
         return jsonify({'days': [], 'summary': {'picks': 0}, 'bySport': {},
                         'isSubscriber': False})
     return jsonify(load_top(is_subscriber=_current_user_is_subscriber()))
+    return jsonify(load_top(is_subscriber=_current_user_is_subscriber()))
 
+
+# =============================================================================
+# FAN FAVOURITES — SofaScore Fan Vote board; pending picks only for subscribers
+# =============================================================================
+_FAN_SPORTS = {'football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball',
+               'baseball', 'rugby', 'table_tennis'}
+
+
+@app.route('/api/fan-favourites', methods=['GET'])
+@optional_auth
+def get_fan_favourites():
+    import re
+    sport = request.args.get('sport') or None
+    day = request.args.get('date') or None
+    if sport is not None and sport not in _FAN_SPORTS:
+        return jsonify({'error': 'unknown sport'}), 400
+    if day is not None and not re.fullmatch(r'\d{4}-\d{2}-\d{2}', day):
+        return jsonify({'error': 'date must be YYYY-MM-DD'}), 400
+    try:
+        from fan_feed import load_fan
+    except Exception as e:
+        logger.warning('fan_feed unavailable: %s', e)
+        return jsonify({'days': [], 'record': {}, 'isSubscriber': False})
+    return jsonify(load_fan(is_subscriber=_current_user_is_subscriber(), sport=sport, date=day))
 
 # =============================================================================
 # TEAM HISTORY — stored results (result_store + Supabase) per team, public

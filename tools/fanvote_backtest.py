@@ -33,12 +33,9 @@ if ROOT not in sys.path:
 
 from tools import top_rules  # noqa: E402
 from tools.top_rules import Settler, fold, structural  # noqa: E402
-from qualification_gate import SPORT_MIN_ODDS, SPORT_MIN_ODDS_FALLBACK  # noqa: E402
+import fan_limits  # noqa: E402
+from fan_limits import FAN_BANDS, band as fan_band, fan_threshold as fan_min  # noqa: E402,F401
 
-TOP_FLOORS = {'football': 2.0, **top_rules.FALLBACK_EXCLUDE}
-FAN_MIN = {'football': 60.0}
-FAN_MIN_DEFAULT = 70.0
-FAN_BANDS = [(60, 70), (70, 80), (80, 90), (90, 101)]
 VOTE_STEPS = [0, 50, 100, 200, 500, 1000]
 SLIP_SIZES = (3, 4, 5)
 # Rows before the 2026-09-26 side-orientation fix carry odds of the wrong team
@@ -49,19 +46,7 @@ CLEAN_FROM = '2026-09-27'
 
 
 def odds_limit(sport: str) -> float:
-    base = SPORT_MIN_ODDS.get(sport, SPORT_MIN_ODDS_FALLBACK)
-    return max(base, TOP_FLOORS.get(sport, 0.0))
-
-
-def fan_min(sport: str) -> float:
-    return FAN_MIN.get(sport, FAN_MIN_DEFAULT)
-
-
-def fan_band(p: float) -> str:
-    for lo, hi in FAN_BANDS:
-        if lo <= p < hi:
-            return f'{lo}-{hi}' if hi <= 100 else f'{lo}+'
-    return '<60'
+    return fan_limits.odds_limit(sport)['min']
 
 
 def _f(x: Any) -> Optional[float]:

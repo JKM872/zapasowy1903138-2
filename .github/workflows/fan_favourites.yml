@@ -1,0 +1,88 @@
+name: Fan Favourites
+# SofaScore Fan Vote board (tools/fan_favourites.py). One matrix job per sport
+# builds today + tomorrow in parallel (Fan Vote refresh via SOFASCORE_RELAY,
+# best price across Pinnacle / OddsSafari / Livesport) and uploads its part;
+# the publish job merges the parts into results/fanvote_<day>.json, settles the
+# last 3 days and commits once (no parallel pushes).
+on:
+  schedule:
+    - cron: '0 6,10,14,18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fan-favourites
+  cancel-in-progress: false
+
+jobs:
+  board:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 9
+      matrix:
+        sport: [football, basketball, hockey, tennis, volleyball, handball, baseball, rugby, table_tennis]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: pip install -q -r requirements.txt
+      - name: Build board
+        env:
+          PYTHONIOENCODING: utf-8
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+        run: python tools/fan_favourites.py --sport ${{ matrix.sport }} --refresh --out fan_parts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fan-${{ matrix.sport }}
+          path: fan_parts/
+          if-no-files-found: ignore
+          retention-days: 3
+
+  publish:
+    needs: board
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: pip install -q -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: fan-*
+          path: fan_parts
+      - name: Merge and settle
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          [ -d fan_parts ] && python tools/fan_favourites.py --merge fan_parts
+          python tools/fan_favourites.py --settle --days 3
+      - name: Commit board
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/fanvote_*.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Fan Favourites $(date -u +%FT%H:%MZ) [skip ci]"
+          git reset -q --hard HEAD
+          git clean -fdq results/
+          ok=0
+          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && ok=1 && break; sleep 5; done
+          [ "$ok" = 1 ] || exit 1

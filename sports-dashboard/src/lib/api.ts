@@ -560,6 +560,64 @@ export async function getTopPicks(): Promise<TopResponse> {
 }
 
 // ---------------------------------------------------------------------------
+// Fan Favourites (/api/fan-favourites, SofaScore Fan Vote board)
+// ---------------------------------------------------------------------------
+
+export interface FanPick {
+  id: string
+  sport: string
+  date?: string
+  league?: string
+  kickoff?: string | null
+  time?: string | null
+  band?: string
+  /** Pending pick for a non-subscriber: only sport/league/kickoff/band. */
+  locked?: boolean
+  home?: string
+  away?: string
+  match?: string
+  side?: 'home' | 'away'
+  team?: string
+  fanPct?: number
+  votes?: number
+  sofascoreUrl?: string | null
+  odds?: { home: number | null; draw: number | null; away: number | null }
+  oddsMarket?: string | null
+  bestPrice?: { price: number; bookmaker?: string | null; pinnacle?: number | null; books?: number | null }
+  impliedPct?: number
+  edgePct?: number
+  limit?: { min: number; source: string }
+  status?: 'pick' | 'watch'
+  form?: { overall: string; venue: string; opponentOverall: string; opponentVenue: string }
+  h2h?: { total: number; wins: number; losses: number; lastScore?: string | null; lastDate?: string | null } | null
+  forebet?: { prob: number | null; pick?: string | null; exactScore?: string | null }
+  modelProb?: number | null
+  grade?: string | null
+  availability?: { verdict: 'ok' | 'warn' | 'out' | 'unknown'; note?: string }
+  result?: { status: 'won' | 'lost'; score?: string | null; draw?: boolean } | null
+}
+
+export interface FanRecord {
+  n: number
+  won: number
+  hitPct: number | null
+  roiPct: number | null
+  profitUnits: number | null
+  avgOdds: number | null
+}
+
+export interface FanResponse {
+  isSubscriber: boolean
+  days: { date: string; generatedAt?: string; sports: Record<string, { generatedAt?: string; watch: boolean; picks: FanPick[]; locked: number }> }[]
+  record: { all: FanRecord; bySport: Record<string, FanRecord>; byBand: Record<string, FanRecord> }
+  thresholds?: { minVotes: number; fanPct: Record<string, number>; oddsLimit: Record<string, { min: number; source: string }> }
+}
+
+export async function getFanFavourites(): Promise<FanResponse> {
+  return fetchApi<FanResponse>('/api/fan-favourites')
+}
+
+// ---------------------------------------------------------------------------
 // Team history (/api/teams/<name>, stored results, public)
 // ---------------------------------------------------------------------------
 

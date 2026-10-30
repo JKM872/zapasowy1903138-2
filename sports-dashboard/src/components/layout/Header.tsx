@@ -24,6 +24,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 // linking to it would send every visitor to an error.
 const NAV_ITEMS = [
   { href: '/top',           label: 'Top Picks',    icon: Star         },
+  { href: '/fan-favourites', label: 'Fan Favourites', icon: Users     },
   { href: '/dropping-odds', label: 'Dropping Odds', icon: TrendingDown },
   { href: '/stats',       label: 'Stats',       icon: BarChart3  },
   { href: '/my-bets',     label: 'My Picks',    icon: Ticket     },
