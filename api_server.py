@@ -819,6 +819,7 @@ def _file_stats(path):
     return c
 
 
+@app.route('/api/stats', methods=['GET'])
 def get_stats():
     """Get aggregated statistics for the dashboard."""
     days = max(1, min(request.args.get('days', 30, type=int), STATS_DAYS_MAX))
@@ -2008,7 +2009,6 @@ def get_top():
         logger.warning('top_feed unavailable: %s', e)
         return jsonify({'days': [], 'summary': {'picks': 0}, 'bySport': {},
                         'isSubscriber': False})
-    return jsonify(load_top(is_subscriber=_current_user_is_subscriber()))
     return jsonify(load_top(is_subscriber=_current_user_is_subscriber()))
 
 
