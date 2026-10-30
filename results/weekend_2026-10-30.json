@@ -194,6 +194,103 @@
    "combinedImpliedPct": 10.6,
    "status": "pending",
    "adjusted": false
+  },
+  {
+   "id": "S3",
+   "legs": [
+    {
+     "id": "football|2026-10-30|Estudiantes Río Cuarto|Gimnasia La Plata",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-10-30",
+     "league": "Argentina – Liga Profesional",
+     "match": "Estudiantes Río Cuarto vs Gimnasia La Plata",
+     "home": "Estudiantes Río Cuarto",
+     "away": "Gimnasia La Plata",
+     "kickoff": "2026-10-30T21:00:00Z",
+     "side": "away",
+     "pick": "Gimnasia La Plata",
+     "price": 2.0,
+     "bookmaker": "pinnacle",
+     "modelProb": 0.661,
+     "fanPct": 78.0,
+     "impliedPct": 50.0,
+     "edgePct": 16.1,
+     "limit": {
+      "min": 2.0,
+      "source": "top_floor"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null
+    },
+    {
+     "id": "hockey|2026-10-30|Miami|St. Thomas Tommies",
+     "source": "top",
+     "sport": "hockey",
+     "date": "2026-10-30",
+     "league": "NCAA",
+     "match": "Miami vs St. Thomas Tommies",
+     "home": "Miami",
+     "away": "St. Thomas Tommies",
+     "kickoff": "2026-10-30T22:00:00Z",
+     "side": "home",
+     "pick": "Miami",
+     "price": 1.59,
+     "bookmaker": "livesport",
+     "modelProb": 0.78,
+     "fanPct": null,
+     "impliedPct": 62.9,
+     "edgePct": 15.1,
+     "limit": {
+      "min": 1.5,
+      "source": "sport_floor"
+     },
+     "grade": "A",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null
+    },
+    {
+     "id": "hockey|2026-10-30|Rochester Americans|Lehigh Valley Phantoms",
+     "source": "top",
+     "sport": "hockey",
+     "date": "2026-10-30",
+     "league": "AHL",
+     "match": "Rochester Americans vs Lehigh Valley Phantoms",
+     "home": "Rochester Americans",
+     "away": "Lehigh Valley Phantoms",
+     "kickoff": "2026-10-30T23:05:00Z",
+     "side": "away",
+     "pick": "Lehigh Valley Phantoms",
+     "price": 1.93,
+     "bookmaker": "oddssafari",
+     "modelProb": 0.661,
+     "fanPct": null,
+     "impliedPct": 51.8,
+     "edgePct": 14.3,
+     "limit": {
+      "min": 1.5,
+      "source": "sport_floor"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null
+    }
+   ],
+   "combinedOdds": 6.14,
+   "combinedModelProb": 0.341,
+   "combinedImpliedPct": 16.3,
+   "status": "pending",
+   "adjusted": false
   }
  ],
  "days": [
@@ -202,7 +299,7 @@
   "2026-11-01"
  ],
  "generatedAt": "2026-10-30T13:51:25Z",
- "updatedAt": "2026-10-30T13:51:25Z",
+ "updatedAt": "2026-10-30T14:08:18Z",
  "note": "Accumulators multiply the bookmaker margin with every leg and lose more often than singles: three legs at ~60% each land about one time in five. Backtest on two past weekends: 0 of 3 settled slips won with the odds limits, 1 of 6 without (ROI -100% / -41%). Stake small (0.5% of bankroll) or skip.",
  "stakePct": 0.5,
  "maxLegs": 3
