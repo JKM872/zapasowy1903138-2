@@ -242,7 +242,8 @@
   "closingMarket": "2way",
   "closingMinsToKick": 14,
   "closingApprox": false,
-  "clvPct": -7.2
+  "clvPct": -7.2,
+  "finalCheckMissed": true
  },
  "hockey|Krefeld Pinguine vs Kolner": {
   "checks": [
@@ -267,7 +268,8 @@
   "closingMarket": "2way",
   "closingMinsToKick": 14,
   "closingApprox": false,
-  "clvPct": -12.8
+  "clvPct": -12.8,
+  "finalCheckMissed": true
  },
  "hockey|Adler Mannheim vs Bremerhaven": {
   "checks": [
@@ -292,7 +294,8 @@
   "closingMarket": "2way_equiv",
   "closingMinsToKick": 14,
   "closingApprox": false,
-  "clvPct": -3.4
+  "clvPct": -3.4,
+  "finalCheckMissed": true
  },
  "hockey|Zug vs Langnau Tigers": {
   "checks": [
@@ -312,7 +315,15 @@
   "bestOdds": 1.49,
   "bestOddsSource": "pinnacle",
   "bestOddsAt": "2026-10-30T18:15:30Z",
-  "booksCount": 14
+  "booksCount": 14,
+  "closingOdds": 1.49,
+  "closingAt": "2026-10-30T18:15:30Z",
+  "closingSource": "pinnacle",
+  "closingMarket": "2way",
+  "closingMinsToKick": 29,
+  "closingApprox": true,
+  "clvPct": 11.0,
+  "finalCheckMissed": false
  },
  "handball|Achenheim Truchtersheim W vs Besancon W": {
   "checks": [
@@ -332,7 +343,15 @@
   "bestOdds": 1.84,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-10-30T18:15:30Z",
-  "booksCount": 11
+  "booksCount": 11,
+  "closingOdds": 1.637,
+  "closingAt": "2026-10-30T18:15:30Z",
+  "closingSource": "pinnacle",
+  "closingMarket": "3way",
+  "closingMinsToKick": 44,
+  "closingApprox": true,
+  "clvPct": 8.7,
+  "finalCheckMissed": false
  },
  "hockey|Amiens vs Briancon": {
   "checks": [
@@ -352,7 +371,15 @@
   "bestOdds": 1.53,
   "bestOddsSource": "pinnacle",
   "bestOddsAt": "2026-10-30T18:15:30Z",
-  "booksCount": 13
+  "booksCount": 13,
+  "closingOdds": 1.535,
+  "closingAt": "2026-10-30T18:15:30Z",
+  "closingSource": "pinnacle",
+  "closingMarket": "2way",
+  "closingMinsToKick": 59,
+  "closingApprox": true,
+  "clvPct": -8.5,
+  "finalCheckMissed": false
  },
  "hockey|Anglet vs Cergy-Pontoise": {
   "checks": [
@@ -372,7 +399,10 @@
   "bestOdds": 1.83,
   "bestOddsSource": "pinnacle",
   "bestOddsAt": "2026-10-30T18:15:30Z",
-  "booksCount": 13
+  "booksCount": 13,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|SV Elversberg vs Mainz": {
   "checks": [
@@ -392,7 +422,10 @@
   "bestOdds": 2.15,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-10-30T18:15:30Z",
-  "booksCount": 14
+  "booksCount": 14,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|Airbus UK vs Caernarfon Town": {
   "checks": [
@@ -412,6 +445,67 @@
   "bestOdds": 1.9,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-10-30T18:15:30Z",
-  "booksCount": 13
+  "booksCount": 13,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
+ },
+ "football|CA Huracán vs CA Tigre": {
+  "checks": [],
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": true
+ },
+ "hockey|Florida Panthers vs Winnipeg Jets": {
+  "checks": [
+   {
+    "at": "2026-10-30T22:23:15Z",
+    "minsToKick": 37,
+    "best": 1.48,
+    "bestSource": "pinnacle",
+    "books": 14,
+    "quote": 1.481,
+    "quoteSource": "pinnacle",
+    "quoteMarket": "2way",
+    "avail": "unknown",
+    "availAgeMin": null
+   }
+  ],
+  "bestOdds": 1.48,
+  "bestOddsSource": "pinnacle",
+  "bestOddsAt": "2026-10-30T22:23:15Z",
+  "booksCount": 14
+ },
+ "hockey|Rochester Americans vs Lehigh Valley Phantoms": {
+  "checks": [
+   {
+    "at": "2026-10-30T22:23:15Z",
+    "minsToKick": 42,
+    "best": 1.94,
+    "bestSource": "oddssafari",
+    "books": 14,
+    "quote": 1.935,
+    "quoteSource": "pinnacle",
+    "quoteMarket": "2way",
+    "avail": "unknown",
+    "availAgeMin": null
+   }
+  ],
+  "bestOdds": 1.94,
+  "bestOddsSource": "oddssafari",
+  "bestOddsAt": "2026-10-30T22:23:15Z",
+  "booksCount": 14
+ },
+ "hockey|Miami vs St. Thomas Tommies": {
+  "checks": [],
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": true
+ },
+ "hockey|Holy Cross Crusaders vs Bentley Falcons": {
+  "checks": [],
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": true
  }
 }
