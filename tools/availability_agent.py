@@ -268,7 +268,8 @@ def _gemini_grounded(prompt: str):
     return None, []
 
 
-GROQ_COMPOUND_MODELS = ['groq/compound', 'groq/compound-mini']
+# groq/compound* zniknęło z API Groq (404 od 2026-10); gpt-oss ma wbudowane browser_search.
+GROQ_COMPOUND_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b']
 
 
 def compound_urls(msg: Dict[str, Any]) -> List[str]:
@@ -279,6 +280,10 @@ def compound_urls(msg: Dict[str, Any]) -> List[str]:
         for res in (sr.get('results') if isinstance(sr, dict) else sr) or []:
             u = (res or {}).get('url')
             if isinstance(u, str) and u.startswith('http') and u not in urls:
+                urls.append(u)
+        # browser_search (gpt-oss) zwraca wyniki jako tekst w 'output'
+        for u in re.findall(r'https?://[^\s\]\)\u3011"<>]+', str((t or {}).get('output') or '')):
+            if 'exa.ai/search' not in u and u not in urls:
                 urls.append(u)
     return urls
 
@@ -303,14 +308,16 @@ def _groq_compound(prompt: str):
             try:
                 r = requests.post(CHAT_ENDPOINT, headers={'Authorization': f'Bearer {key}'},
                                   json={'model': model, 'temperature': 0.0, 'max_tokens': 1500,
-                                        'messages': [{'role': 'user', 'content': prompt}]},
+                                        'messages': [{'role': 'user', 'content': prompt}],
+                                        **({'tools': [{'type': 'browser_search'}]}
+                                           if model.startswith('openai/gpt-oss') else {})},
                                   timeout=90)
             except Exception:
                 _stat('groq_net_error')
                 continue
             if r.status_code != 200:
                 _stat(f'groq_http_{r.status_code}')
-                if r.status_code in (401, 403, 429):
+                if r.status_code in (401, 403, 404, 429):
                     _DEAD.add(('groq', key, model))
                 if 'groq:' + model not in ERRORS:
                     try:

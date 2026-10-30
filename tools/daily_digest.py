@@ -290,7 +290,12 @@ def accuracy() -> List[List[Any]]:
     for cat, pattern in (('TOP', 'top_*.json'), ('Twierdza', 'twierdza_*.json')):
         for p in sorted(glob.glob(os.path.join(ROOT, 'results', pattern))):
             day = os.path.basename(p).split('_', 1)[1][:-5]
+            if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', day):
+                continue  # np. top_rules.json / top_live_*.json to nie listy typów
             picks = _load(p) or []
+            if isinstance(picks, dict):
+                picks = picks.get('picks') or []
+            picks = [r for r in picks if isinstance(r, dict)]
             hit = miss = 0
             for r in picks:
                 h, _, a = str(r.get('match', '')).partition(' vs ')
