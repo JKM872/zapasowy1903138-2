@@ -96,6 +96,7 @@ def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
             visible = [p if is_subscriber or _settled(p) else _locked(p) for p in picks]
             sports_out[sp] = {'generatedAt': (blk or {}).get('generatedAt'),
                               'watch': bool((blk or {}).get('watch')), 'picks': visible,
+                              'stats': (blk or {}).get('stats') or None,
                               'locked': sum(1 for p in visible if p.get('locked'))}
         if date and day != date:
             continue
@@ -118,5 +119,6 @@ def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
                        'oddsLimit': {s: fan_limits.odds_limit(s) for s in
                                      ('football', 'basketball', 'hockey', 'tennis', 'volleyball',
                                       'handball', 'baseball', 'rugby', 'table_tennis')}},
+        'historySince': min(paths) if paths else (days[-1]['date'] if days else None),
         'isSubscriber': is_subscriber,
     }

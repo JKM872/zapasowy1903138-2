@@ -891,6 +891,97 @@ _CARDS_START = '<!--MATCH-CARDS-START-->'
 _CARDS_END = '<!--MATCH-CARDS-END-->'
 
 
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(os.environ.get(name, '') or default)
+    except ValueError:
+        return default
+
+
+def fan_favourites_thresholds() -> Dict[str, float]:
+    """Progi sekcji "Fan Favourites" w mailu (env, domyślnie jak /fan-favourites)."""
+    import fan_limits
+    return {
+        'min_pct': _env_float('FANVOTE_EMAIL_MIN_PCT', fan_limits.FAN_MIN_DEFAULT),
+        'min_pct_football': _env_float('FANVOTE_EMAIL_MIN_PCT_FOOTBALL', fan_limits.FAN_MIN['football']),
+        'min_votes': _env_float('FANVOTE_EMAIL_MIN_VOTES', fan_limits.MIN_VOTES),
+    }
+
+
+def select_fan_favourites(matches: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Mecze z maila, w których Fan Vote faworyta SofaScore >= próg (piłka 60%,
+    reszta 70%), głosów >= min, a kurs na tę stronę przechodzi standardowy limit
+    kursowy (fan_limits.passes_limit — ten sam co /fan-favourites).
+    Posortowane malejąco po Fan Vote. Nie zmienia listy meczów maila."""
+    import fan_limits
+    th = fan_favourites_thresholds()
+    out: List[Dict[str, Any]] = []
+    for m in matches:
+        home, _draw, away, votes = _sofascore_from_match(m)
+        if home is None or away is None:
+            continue
+        side, fan = ('home', home) if home >= away else ('away', away)
+        sport = str(m.get('sport') or 'football').lower().replace('-', '_')
+        need = th['min_pct_football'] if sport == 'football' else th['min_pct']
+        if fan < need or votes < th['min_votes']:
+            continue
+        raw = m.get(f'{side}_odds')
+        odds = safe_float(raw) if not is_nan_or_none(raw) else None
+        if not odds or odds <= 1 or not fan_limits.passes_limit(sport, odds, side):
+            continue
+        implied = 100.0 / odds
+        form = parse_form_list(m.get(f'{side}_form_overall', m.get(f'{side}_form', [])))
+        out.append({'match': m, 'side': side, 'team': m.get(f'{side}_team', ''),
+                    'fan_pct': fan, 'votes': votes, 'odds': odds,
+                    'implied_pct': implied, 'edge_pct': fan - implied, 'form': form,
+                    'same_as_focus': (m.get('focus_team') or 'home') == side})
+    out.sort(key=lambda r: r['fan_pct'], reverse=True)
+    return out
+
+
+def _render_fan_favourites_section(matches: List[Dict[str, Any]]) -> str:
+    rows = select_fan_favourites(matches)
+    th = fan_favourites_thresholds()
+    print(f"   🗳 Fan Favourites (mail): {len(rows)} z {len(matches)} meczów "
+          f"(próg {th['min_pct_football']:.0f}% piłka / {th['min_pct']:.0f}% inne, "
+          f"≥{th['min_votes']:.0f} głosów, limit kursowy)")
+    if not rows:
+        return ''
+    icons = {'W': '🟢', 'L': '🔴', 'D': '🟡'}
+    trs = ''
+    for r in rows:
+        m = r['match']
+        t = m.get('match_time')
+        tm = re.search(r'(\d{1,2}:\d{2})', t) if isinstance(t, str) else None
+        form = ''.join(icons.get(str(x).upper(), '⚪') for x in r['form'][:5]) or '—'
+        edge_c = '#2e7d32' if r['edge_pct'] > 0 else '#c62828'
+        focus = '' if r['same_as_focus'] else ' <span style="color:#8a6d3b;">(inna strona niż typ)</span>'
+        trs += f"""
+                <tr style="border-top:1px solid #eee;">
+                    <td style="padding:4px;">{tm.group(1) if tm else ''}</td>
+                    <td style="padding:4px;">{m.get('home_team', '')} – {m.get('away_team', '')}<br><b>{r['team']}</b>{focus}</td>
+                    <td style="padding:4px;text-align:right;"><b>{r['fan_pct']:.0f}%</b></td>
+                    <td style="padding:4px;text-align:right;">{r['votes']}</td>
+                    <td style="padding:4px;text-align:right;">{r['odds']:.2f}</td>
+                    <td style="padding:4px;text-align:right;">{r['implied_pct']:.1f}%</td>
+                    <td style="padding:4px;text-align:right;color:{edge_c};">{r['edge_pct']:+.1f}%</td>
+                    <td style="padding:4px;">{form}</td>
+                </tr>"""
+    return f"""
+            <div style="border:2px solid #7c4dff;border-radius:8px;padding:12px;margin:15px 0;background:#f6f2ff;">
+                <h2 style="margin:0 0 6px 0;color:#5e35b1;">🗳 Fan Favourites ({len(rows)})</h2>
+                <p style="margin:0 0 8px 0;font-size:12px;color:#666;">SofaScore Fan Vote ≥ {th['min_pct_football']:.0f}% (piłka) / ≥ {th['min_pct']:.0f}% (inne), ≥ {th['min_votes']:.0f} głosów, kurs przechodzi standardowy limit. Posortowane od najwyższego Fan Vote. Edge = Fan Vote − prawdopodobieństwo z kursu.</p>
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                    <tr style="color:#666;font-size:11px;text-align:left;">
+                        <th style="padding:4px;">Godz.</th><th style="padding:4px;">Mecz / typ fanów</th>
+                        <th style="padding:4px;text-align:right;">Fan Vote</th><th style="padding:4px;text-align:right;">Głosy</th>
+                        <th style="padding:4px;text-align:right;">Kurs</th><th style="padding:4px;text-align:right;">Implied</th>
+                        <th style="padding:4px;text-align:right;">Edge</th><th style="padding:4px;">Forma</th>
+                    </tr>{trs}
+                </table>
+            </div>"""
+
+
 def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = 'time', 
                       include_sorted_odds: bool = False, odds_limit: int = 15,
                       cards_only: bool = False) -> str:
@@ -1049,6 +1140,11 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         <div class="content">
     """
     
+    # Fan Favourites (SofaScore Fan Vote) — dodatkowa sekcja nad kartami;
+    # lista i kolejność kart poniżej bez zmian.
+    if not cards_only:
+        html += _render_fan_favourites_section(sorted_matches)
+
     # ========================================================================
     # REGULAR MATCHES SECTION
     # ========================================================================

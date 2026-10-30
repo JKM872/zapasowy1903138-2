@@ -7,6 +7,11 @@ name: Fan Favourites
 on:
   schedule:
     - cron: '0 6,10,14,18 * * *'
+  # The 06:00 cron often runs before the morning scrape has finished, leaving
+  # the new day empty until 10:00; rebuild as soon as the scrapers commit.
+  workflow_run:
+    workflows: ['Sports Scraper Pipeline', 'Forebet Scraper Pipeline (Forebet-first)']
+    types: [completed]
   workflow_dispatch:
 
 permissions:

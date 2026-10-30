@@ -203,6 +203,26 @@ export default function FanFavouritesPage() {
     return c
   }, [data])
 
+  // Teaser like TOP: how many picks today/tomorrow, how many are locked, and
+  // the latest settled picks (public) so a visitor never sees an empty page.
+  const teaser = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10)
+    let total = 0, locked = 0
+    const bySport: Record<string, number> = {}
+    const settled: FanPick[] = []
+    for (const d of data?.days ?? []) {
+      for (const [s, b] of Object.entries(d.sports)) {
+        if (d.date >= today) {
+          total += b.picks.length
+          locked += b.locked ?? 0
+          if (b.picks.length) bySport[s] = (bySport[s] ?? 0) + b.picks.length
+        }
+        for (const p of b.picks) if (p.result?.status && !p.locked) settled.push(p)
+      }
+    }
+    return { total, locked, bySport, settled: settled.slice(0, 5) }
+  }, [data])
+
   return (
     <div className="mx-auto max-w-6xl space-y-5 px-3 py-6 sm:px-4">
       <div>
@@ -227,6 +247,36 @@ export default function FanFavouritesPage() {
 
       {data && (
         <>
+          <Card>
+            <CardContent className="space-y-3 pt-4 text-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span>
+                  <b className="text-lg">{teaser.total}</b> Fan Favourites today and tomorrow
+                  {Object.keys(teaser.bySport).length > 0 && (
+                    <span className="text-muted-foreground">
+                      {' '}({Object.entries(teaser.bySport).map(([s, n]) => `${getSportConfig(s).name} ${n}`).join(' · ')})
+                    </span>
+                  )}
+                  {!data.isSubscriber && teaser.locked > 0 && <span> · <b>{teaser.locked}</b> locked before kick-off</span>}
+                </span>
+                {!data.isSubscriber && teaser.locked > 0 && (
+                  <Button asChild size="sm"><Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Get Premium</Link></Button>
+                )}
+              </div>
+              {data.historySince && (
+                <p className="text-xs text-muted-foreground">
+                  History is building up since {data.historySince}: picks become public with full details once they are settled.
+                </p>
+              )}
+              {teaser.settled.length > 0 && (
+                <div className="space-y-2">
+                  <div className="text-xs font-medium text-muted-foreground">Latest settled picks</div>
+                  {teaser.settled.map(p => <PickCard key={`s-${p.id}`} p={p} />)}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           <div className="grid gap-3 md:grid-cols-2">
             <RecordTable title="Record by sport (flat 1 unit at best price)"
               rows={SPORTS.filter(s => data.record.bySport[s]).map(s => [getSportConfig(s).name, data.record.bySport[s]])} />
@@ -249,7 +299,21 @@ export default function FanFavouritesPage() {
 
           {data.days.map(day => {
             const blk = day.sports[sport]
-            if (!blk || blk.picks.length === 0) return null
+            if (!blk) return null
+            if (blk.picks.length === 0) {
+              const st = blk.stats
+              if (!st) return null
+              return (
+                <Card key={day.date}>
+                  <CardHeader className="pb-2"><CardTitle className="text-base">{day.date}</CardTitle></CardHeader>
+                  <CardContent className="text-sm text-muted-foreground">
+                    {st.rows === 0
+                      ? 'No match data for this day yet. Fan Favourites appear after the morning scrape (about 05:00–07:00 UTC).'
+                      : `No pick passed the filters: ${st.rows} matches, ${st.withVote} with Fan Vote, ${st.fanOk} above the fan threshold, ${st.belowLimit} below the odds limit, ${st.noOdds} without odds.`}
+                  </CardContent>
+                </Card>
+              )
+            }
             const open = blk.picks.filter(p => !p.locked)
             const locked = blk.picks.filter(p => p.locked)
             return (

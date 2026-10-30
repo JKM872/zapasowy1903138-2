@@ -157,6 +157,30 @@ export default function WeekendPage() {
 
       {data && (
         <>
+          {current && current.slips.length > 0 && (
+            <Card>
+              <CardContent className="flex flex-wrap items-center justify-between gap-3 pt-4 text-sm">
+                <span>
+                  <b className="text-lg">{current.slips.length}</b> slips this weekend
+                  {' · '}{current.slips.reduce((n, s) => n + s.legs.length, 0)} legs
+                  {(() => {
+                    const odds = current.slips.map(s => s.combinedOdds).filter((o): o is number => !!o)
+                    return odds.length ? ` · combined odds ${formatOdds(Math.min(...odds))}–${formatOdds(Math.max(...odds))}` : ''
+                  })()}
+                  {!data.isSubscriber && locked > 0 && <span> · <b>{locked}</b> legs locked until settled</span>}
+                </span>
+                {!data.isSubscriber && locked > 0 && (
+                  <Button asChild size="sm"><Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Get Premium</Link></Button>
+                )}
+              </CardContent>
+            </Card>
+          )}
+          {(r?.slips ?? 0) === 0 && (
+            <p className="text-xs text-muted-foreground">
+              The slip record is building up since the first Weekend Slip ({data.weekends.at(-1)?.friday ?? data.current}).
+              Legs become public with teams, picks and results as soon as they are settled.
+            </p>
+          )}
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-base">Public record of past slips (flat 1 unit on combined odds)</CardTitle></CardHeader>
             <CardContent className="flex flex-wrap gap-x-8 gap-y-2 text-sm tabular-nums">

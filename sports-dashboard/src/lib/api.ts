@@ -606,10 +606,20 @@ export interface FanRecord {
   avgOdds: number | null
 }
 
+export interface FanStats {
+  rows: number
+  withVote: number
+  fanOk: number
+  belowLimit: number
+  noOdds: number
+  picks: number
+}
+
 export interface FanResponse {
   isSubscriber: boolean
-  days: { date: string; generatedAt?: string; sports: Record<string, { generatedAt?: string; watch: boolean; picks: FanPick[]; locked: number }> }[]
+  days: { date: string; generatedAt?: string; sports: Record<string, { generatedAt?: string; watch: boolean; picks: FanPick[]; locked: number; stats?: FanStats | null }> }[]
   record: { all: FanRecord; bySport: Record<string, FanRecord>; byBand: Record<string, FanRecord> }
+  historySince?: string | null
   thresholds?: { minVotes: number; fanPct: Record<string, number>; oddsLimit: Record<string, { min: number; source: string }> }
 }
 
