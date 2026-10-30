@@ -11,7 +11,9 @@ import { useAuthStore } from '@/store/authStore'
 export function useMatches() {
   const { sport, date, search } = useFilterStore()
   const userId = useAuthStore((s) => s.user?.id ?? 'anon')
-  const dateStr = date ? format(date, 'yyyy-MM-dd') : undefined
+  // No date picked = the "Today" tab the carousel highlights. Asking the API
+  // for "latest" returned tomorrow's still-empty day ("No events").
+  const dateStr = format(date ?? new Date(), 'yyyy-MM-dd')
 
   return useQuery({
     // userId in the key so matches refetch after login/logout — the server
