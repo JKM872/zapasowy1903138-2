@@ -2036,6 +2036,21 @@ def get_fan_favourites():
         return jsonify({'days': [], 'record': {}, 'isSubscriber': False})
     return jsonify(load_fan(is_subscriber=_current_user_is_subscriber(), sport=sport, date=day))
 
+
+@app.route('/api/weekend-slip', methods=['GET'])
+@optional_auth
+def get_weekend_slip():
+    import re
+    friday = request.args.get('friday') or None
+    if friday is not None and not re.fullmatch(r'\d{4}-\d{2}-\d{2}', friday):
+        return jsonify({'error': 'friday must be YYYY-MM-DD'}), 400
+    try:
+        from weekend_feed import load_weekend
+    except Exception as e:
+        logger.warning('weekend_feed unavailable: %s', e)
+        return jsonify({'weekends': [], 'record': {}, 'isSubscriber': False})
+    return jsonify(load_weekend(is_subscriber=_current_user_is_subscriber(), friday=friday))
+
 # =============================================================================
 # TEAM HISTORY — stored results (result_store + Supabase) per team, public
 # =============================================================================

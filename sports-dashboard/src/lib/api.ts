@@ -618,6 +618,72 @@ export async function getFanFavourites(): Promise<FanResponse> {
 }
 
 // ---------------------------------------------------------------------------
+// Weekend Slip (/api/weekend-slip). Pending legs are locked for non-subscribers.
+// ---------------------------------------------------------------------------
+export interface WeekendLeg {
+  id: string
+  sport: string
+  date: string
+  kickoff: string | null
+  status: 'pending' | 'won' | 'lost' | 'withdrawn'
+  withdrawnReason?: string | null
+  locked?: boolean
+  source?: 'top' | 'fan' | 'top+fan'
+  league?: string
+  match?: string
+  home?: string
+  away?: string
+  pick?: string
+  price?: number
+  bookmaker?: string | null
+  modelProb?: number | null
+  fanPct?: number | null
+  impliedPct?: number
+  edgePct?: number | null
+  limit?: { min: number; source: string }
+  grade?: string | null
+  availability?: string
+  availabilityNote?: string
+  score?: string | null
+}
+
+export interface WeekendSlip {
+  id: string
+  status: 'pending' | 'adjusted' | 'won' | 'lost' | 'void'
+  adjusted?: boolean
+  combinedOdds: number | null
+  combinedModelProb: number | null
+  combinedImpliedPct: number | null
+  legs: WeekendLeg[]
+  locked?: number
+}
+
+export interface WeekendRecord {
+  slips: number
+  won: number
+  hitPct: number | null
+  roiPct: number | null
+  profitUnits: number | null
+  legs: number
+  legsWon: number
+  void: number
+}
+
+export interface WeekendResponse {
+  current: string
+  weekends: { friday: string; days?: string[]; updatedAt?: string; slips: WeekendSlip[] }[]
+  record: WeekendRecord
+  note: string
+  stakePct: number
+  maxLegs: number
+  isSubscriber: boolean
+}
+
+export async function getWeekendSlip(): Promise<WeekendResponse> {
+  return fetchApi<WeekendResponse>('/api/weekend-slip')
+}
+
+// ---------------------------------------------------------------------------
 // Team history (/api/teams/<name>, stored results, public)
 // ---------------------------------------------------------------------------
 

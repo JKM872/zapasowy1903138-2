@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Trophy, BarChart3, Ticket, Users, Sun, Moon, Menu, LogIn, LogOut, Crown,
-  TrendingDown, Star,
+  TrendingDown, Star, CalendarDays,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
@@ -25,6 +25,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 const NAV_ITEMS = [
   { href: '/top',           label: 'Top Picks',    icon: Star         },
   { href: '/fan-favourites', label: 'Fan Favourites', icon: Users     },
+  { href: '/weekend',       label: 'Weekend',      icon: CalendarDays },
   { href: '/dropping-odds', label: 'Dropping Odds', icon: TrendingDown },
   { href: '/stats',       label: 'Stats',       icon: BarChart3  },
   { href: '/my-bets',     label: 'My Picks',    icon: Ticket     },

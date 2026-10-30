@@ -36,6 +36,7 @@ const requiredFiles = [
   'leaderboard.html',
   'top.html',
   'fan-favourites.html',
+  'weekend.html',
   'how-to-use.html',
   'team.html',
   '404.html',

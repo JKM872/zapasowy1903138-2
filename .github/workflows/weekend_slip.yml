@@ -1,0 +1,75 @@
+name: Weekend Slip
+# Weekend accumulators (tools/weekend_slip.py) from TOP picks + Fan Favourites.
+# Fri/Sat/Sun 07:00 UTC: build/refresh (published slips are never rebuilt; a
+# run adds at most 2 new slips, max 3 per weekend). Every 30 min 08-22 UTC on
+# the weekend: re-check legs kicking off within 90 min (withdraw if the side is
+# out) and settle finished legs. Monday 06:00 UTC: settle the past weekend.
+on:
+  schedule:
+    - cron: '0 7 * * 5,6,0'
+    - cron: '*/30 8-22 * * 5,6,0'
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'build | recheck | settle'
+        required: false
+        default: 'build'
+      email:
+        description: 'send the weekend email (build only)'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: weekend-slip
+  cancel-in-progress: false
+jobs:
+  slip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: pip install -q -r requirements.txt
+      - name: Build / re-check / settle
+        env:
+          PYTHONIOENCODING: utf-8
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: |
+          MODE="${{ github.event.inputs.mode }}"
+          case "${{ github.event.schedule }}" in
+            '0 7 * * 5,6,0') MODE=build ;;
+            '*/30 8-22 * * 5,6,0') MODE=recheck ;;
+            '0 6 * * 1') MODE=settle ;;
+          esac
+          [ -z "$MODE" ] && MODE=build
+          ARGS=""
+          [ "$MODE" = recheck ] && ARGS="--recheck"
+          [ "$MODE" = settle ] && ARGS="--settle"
+          # Mail once per weekend: Friday's scheduled build, or on request.
+          if [ "$MODE" = build ] && { [ "${{ github.event.schedule }}" = '0 7 * * 5,6,0' ] && [ "$(date -u +%u)" = 5 ] || [ "${{ github.event.inputs.email }}" = true ]; }; then
+            ARGS="--email"
+          fi
+          python -u tools/weekend_slip.py $ARGS
+      - name: Commit slips
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/weekend_*.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Weekend Slip $(date -u +%FT%H:%MZ) [skip ci]"
+          git reset -q --hard HEAD
+          git clean -fdq results/
+          ok=0
+          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && ok=1 && break; sleep 5; done
+          [ "$ok" = 1 ] || exit 1
