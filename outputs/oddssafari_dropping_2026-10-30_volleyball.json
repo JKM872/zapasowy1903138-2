@@ -1,0 +1,943 @@
+{
+  "meta": {
+    "generated_at": "2026-10-30T05:22:38.951222+01:00",
+    "target_date": "2026-10-30",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 8,
+      "qualified": 3
+    },
+    "enrichment_status_counts": {
+      "enriched": 2,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 5
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 8
+    },
+    "elapsed_seconds": 383.3,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Bulgaria - Superliga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga/montana-vs-slavia-sofia/11001650?MarketTypeID=701",
+      "match_id": "11001650",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Montana",
+      "away_team": "Slavia Sofia",
+      "event_date": "30/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 3.0,
+      "current_odds": 1.31,
+      "drop_pct": 56.0,
+      "max_odds": 1.33,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Latvia - Nacionala Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/latvia/nacionala-liga-w/jurmala-vk-vs-rsu-mvs-ii/12375951?MarketTypeID=701",
+      "match_id": "12375951",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Jurmala VK",
+      "away_team": "RSU-MVS II",
+      "event_date": "30/10",
+      "event_time": "17:15",
+      "outcome": "2",
+      "open_odds": 1.38,
+      "current_odds": 1.12,
+      "drop_pct": 19.0,
+      "max_odds": 1.12,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/wroclaw-vs-uni-opole/11271878?MarketTypeID=701",
+      "match_id": "11271878",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Wroclaw",
+      "away_team": "UNI Opole",
+      "event_date": "31/10",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.8,
+      "current_odds": 1.46,
+      "drop_pct": 19.0,
+      "max_odds": 1.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 4,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.7,
+        "sofascore_event_id": 16506956,
+        "sofascore_home_team_id": 57529,
+        "sofascore_away_team_id": 372811,
+        "home_team": "Wroclaw",
+        "away_team": "UNI Opole",
+        "sport": "volleyball",
+        "league": "Poland - TAURON Liga (W)",
+        "match_time": "18:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "09.03.26",
+            "home": "Impel Wrocław",
+            "away": "Uni Opole",
+            "score": "0:3",
+            "winner": "away"
+          },
+          {
+            "date": "23.12.25",
+            "home": "Uni Opole",
+            "away": "Impel Wrocław",
+            "score": "3:1",
+            "winner": "home"
+          },
+          {
+            "date": "09.12.25",
+            "home": "Uni Opole",
+            "away": "Impel Wrocław",
+            "score": "3:0",
+            "winner": "home"
+          },
+          {
+            "date": "04.04.25",
+            "home": "Uni Opole",
+            "away": "Impel Wrocław",
+            "score": "3:1",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "09.03.26",
+        "last_h2h_score": "0:3",
+        "last_h2h_home": "Impel Wrocław",
+        "last_h2h_away": "Uni Opole",
+        "sofascore_home_win_prob": 21,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 79,
+        "sofascore_total_votes": 19
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "South Korea - V-League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/south-korea/v-league/incheon-korean-air-jumbos-vs-hyundai-skywalkers/10988994?MarketTypeID=701",
+      "match_id": "10988994",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Incheon Korean Air Jumbos",
+      "away_team": "Hyundai Skywalkers",
+      "event_date": "31/10",
+      "event_time": "05:00",
+      "outcome": "1",
+      "open_odds": 1.3,
+      "current_odds": 1.08,
+      "drop_pct": 17.0,
+      "max_odds": 1.1,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Bulgaria - Superliga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga/pirin-razlog-vs-metalurg-pernik/11001647?MarketTypeID=701",
+      "match_id": "11001647",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Pirin Razlog",
+      "away_team": "Metalurg Pernik",
+      "event_date": "30/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.69,
+      "drop_pct": 16.0,
+      "max_odds": 1.7,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/pernik-p2ZvP5Sg/pirin-razlog-rVWupw64/?mid=EewXbaJ0",
+      "livesport_confidence": 0.75,
+      "enrichment": {
+        "home_team": "Pirin Razlog",
+        "away_team": "Pernik",
+        "match_time": "30.10.2026 16:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.2,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "3-0",
+        "forebet_avg_goals": 45.7,
+        "sofascore_home_win_prob": 94,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 6,
+        "sofascore_total_votes": 35,
+        "h2h_last5": [
+          {
+            "date": "24.10.26",
+            "home": "Pirin Razlog",
+            "away": "Levski Sofia",
+            "score": "0-3",
+            "winner": "away",
+            "raw": "24.10.26 Pirin Razlog 0-3 Levski Sofia"
+          },
+          {
+            "date": "11.10.26",
+            "home": "CSKA Sofia",
+            "away": "Pirin Razlog",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "11.10.26 CSKA Sofia 3-2 Pirin Razlog"
+          },
+          {
+            "date": "25.03.26",
+            "home": "Pirin Razlog",
+            "away": "Lokomotiv Avia",
+            "score": "1-3",
+            "winner": "away",
+            "raw": "25.03.26 Pirin Razlog 1-3 Lokomotiv Avia"
+          },
+          {
+            "date": "22.03.26",
+            "home": "Lokomotiv Avia",
+            "away": "Pirin Razlog",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "22.03.26 Lokomotiv Avia 3-0 Pirin Razlog"
+          },
+          {
+            "date": "14.03.26",
+            "home": "Pirin Razlog",
+            "away": "CSKA Sofia",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "14.03.26 Pirin Razlog 3-1 CSKA Sofia"
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/bydgoszcz-vs-budowlani-lodz/11271879?MarketTypeID=701",
+      "match_id": "11271879",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Bydgoszcz",
+      "away_team": "Budowlani Lodz",
+      "event_date": "31/10",
+      "event_time": "11:00",
+      "outcome": "1",
+      "open_odds": 4.33,
+      "current_odds": 3.74,
+      "drop_pct": 14.0,
+      "max_odds": 4.0,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Bulgaria - Superliga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga-w/slavia-sofia-vs-dragoman/11001659?MarketTypeID=701",
+      "match_id": "11001659",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Slavia Sofia",
+      "away_team": "Dragoman",
+      "event_date": "30/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 1.97,
+      "current_odds": 1.73,
+      "drop_pct": 12.0,
+      "max_odds": 1.75,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/dragoman-bNSofNhD/slaviya-sofia-QBeVFuGA/?mid=vgRSHKee",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Slaviya Sofia K",
+        "away_team": "Dragoman K",
+        "match_time": "30.10.2026 16:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.5,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 62,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 38,
+        "sofascore_total_votes": 21,
+        "h2h_last5": [
+          {
+            "date": "04.02.26",
+            "home": "Dragoman K",
+            "away": "Slaviya Sofia K",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "04.02.26 Dragoman K 3-2 Slaviya Sofia K"
+          },
+          {
+            "date": "31.10.25",
+            "home": "Slaviya Sofia K",
+            "away": "Dragoman K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "31.10.25 Slaviya Sofia K 3-0 Dragoman K"
+          },
+          {
+            "date": "15.02.25",
+            "home": "Dragoman K",
+            "away": "Slaviya Sofia K",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "15.02.25 Dragoman K 3-1 Slaviya Sofia K"
+          },
+          {
+            "date": "15.11.24",
+            "home": "Slaviya Sofia K",
+            "away": "Dragoman K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "15.11.24 Slaviya Sofia K 3-0 Dragoman K"
+          }
+        ],
+        "last_h2h_date": "04.02.26",
+        "last_h2h_score": "3-2",
+        "last_h2h_home": "Dragoman K",
+        "last_h2h_away": "Slaviya Sofia K",
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/sokol-mogilno-vs-kalisz/11755891?MarketTypeID=701",
+      "match_id": "11755891",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Sokol Mogilno",
+      "away_team": "Kalisz",
+      "event_date": "02/11",
+      "event_time": "19:30",
+      "outcome": "2",
+      "open_odds": 3.0,
+      "current_odds": 2.67,
+      "drop_pct": 11.0,
+      "max_odds": 2.75,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/wroclaw-vs-uni-opole/11271878?MarketTypeID=701",
+      "match_id": "11271878",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Wroclaw",
+      "away_team": "UNI Opole",
+      "event_date": "31/10",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.8,
+      "current_odds": 1.46,
+      "drop_pct": 19.0,
+      "max_odds": 1.5,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 4,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.7,
+        "sofascore_event_id": 16506956,
+        "sofascore_home_team_id": 57529,
+        "sofascore_away_team_id": 372811,
+        "home_team": "Wroclaw",
+        "away_team": "UNI Opole",
+        "sport": "volleyball",
+        "league": "Poland - TAURON Liga (W)",
+        "match_time": "18:00",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "09.03.26",
+            "home": "Impel Wrocław",
+            "away": "Uni Opole",
+            "score": "0:3",
+            "winner": "away"
+          },
+          {
+            "date": "23.12.25",
+            "home": "Uni Opole",
+            "away": "Impel Wrocław",
+            "score": "3:1",
+            "winner": "home"
+          },
+          {
+            "date": "09.12.25",
+            "home": "Uni Opole",
+            "away": "Impel Wrocław",
+            "score": "3:0",
+            "winner": "home"
+          },
+          {
+            "date": "04.04.25",
+            "home": "Uni Opole",
+            "away": "Impel Wrocław",
+            "score": "3:1",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "09.03.26",
+        "last_h2h_score": "0:3",
+        "last_h2h_home": "Impel Wrocław",
+        "last_h2h_away": "Uni Opole",
+        "sofascore_home_win_prob": 21,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 79,
+        "sofascore_total_votes": 19
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Bulgaria - Superliga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga/pirin-razlog-vs-metalurg-pernik/11001647?MarketTypeID=701",
+      "match_id": "11001647",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Pirin Razlog",
+      "away_team": "Metalurg Pernik",
+      "event_date": "30/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.69,
+      "drop_pct": 16.0,
+      "max_odds": 1.7,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/pernik-p2ZvP5Sg/pirin-razlog-rVWupw64/?mid=EewXbaJ0",
+      "livesport_confidence": 0.75,
+      "enrichment": {
+        "home_team": "Pirin Razlog",
+        "away_team": "Pernik",
+        "match_time": "30.10.2026 16:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.2,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "3-0",
+        "forebet_avg_goals": 45.7,
+        "sofascore_home_win_prob": 94,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 6,
+        "sofascore_total_votes": 35,
+        "h2h_last5": [
+          {
+            "date": "24.10.26",
+            "home": "Pirin Razlog",
+            "away": "Levski Sofia",
+            "score": "0-3",
+            "winner": "away",
+            "raw": "24.10.26 Pirin Razlog 0-3 Levski Sofia"
+          },
+          {
+            "date": "11.10.26",
+            "home": "CSKA Sofia",
+            "away": "Pirin Razlog",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "11.10.26 CSKA Sofia 3-2 Pirin Razlog"
+          },
+          {
+            "date": "25.03.26",
+            "home": "Pirin Razlog",
+            "away": "Lokomotiv Avia",
+            "score": "1-3",
+            "winner": "away",
+            "raw": "25.03.26 Pirin Razlog 1-3 Lokomotiv Avia"
+          },
+          {
+            "date": "22.03.26",
+            "home": "Lokomotiv Avia",
+            "away": "Pirin Razlog",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "22.03.26 Lokomotiv Avia 3-0 Pirin Razlog"
+          },
+          {
+            "date": "14.03.26",
+            "home": "Pirin Razlog",
+            "away": "CSKA Sofia",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "14.03.26 Pirin Razlog 3-1 CSKA Sofia"
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Bulgaria - Superliga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga-w/slavia-sofia-vs-dragoman/11001659?MarketTypeID=701",
+      "match_id": "11001659",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Slavia Sofia",
+      "away_team": "Dragoman",
+      "event_date": "30/10",
+      "event_time": "16:00",
+      "outcome": "1",
+      "open_odds": 1.97,
+      "current_odds": 1.73,
+      "drop_pct": 12.0,
+      "max_odds": 1.75,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/dragoman-bNSofNhD/slaviya-sofia-QBeVFuGA/?mid=vgRSHKee",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Slaviya Sofia K",
+        "away_team": "Dragoman K",
+        "match_time": "30.10.2026 16:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.5,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 62,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 38,
+        "sofascore_total_votes": 21,
+        "h2h_last5": [
+          {
+            "date": "04.02.26",
+            "home": "Dragoman K",
+            "away": "Slaviya Sofia K",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "04.02.26 Dragoman K 3-2 Slaviya Sofia K"
+          },
+          {
+            "date": "31.10.25",
+            "home": "Slaviya Sofia K",
+            "away": "Dragoman K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "31.10.25 Slaviya Sofia K 3-0 Dragoman K"
+          },
+          {
+            "date": "15.02.25",
+            "home": "Dragoman K",
+            "away": "Slaviya Sofia K",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "15.02.25 Dragoman K 3-1 Slaviya Sofia K"
+          },
+          {
+            "date": "15.11.24",
+            "home": "Slaviya Sofia K",
+            "away": "Dragoman K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "15.11.24 Slaviya Sofia K 3-0 Dragoman K"
+          }
+        ],
+        "last_h2h_date": "04.02.26",
+        "last_h2h_score": "3-2",
+        "last_h2h_home": "Dragoman K",
+        "last_h2h_away": "Slaviya Sofia K",
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false
+      },
+      "enrichment_error": null
+    }
+  ]
+}
