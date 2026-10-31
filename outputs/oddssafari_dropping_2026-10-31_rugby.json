@@ -1,0 +1,1546 @@
+{
+  "meta": {
+    "generated_at": "2026-10-31T05:18:48.488822+01:00",
+    "target_date": "2026-10-31",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 7,
+      "qualified": 3
+    },
+    "enrichment_status_counts": {
+      "enriched": 3,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 4
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 2,
+      "flat": 1,
+      "new": 4
+    },
+    "elapsed_seconds": 292.1,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - World Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-league/world-cup/lebanon-vs-france/11445026?MarketTypeID=1401",
+      "match_id": "11445026",
+      "sport_slug": "rugby-league",
+      "sport": "rugby",
+      "home_team": "Lebanon",
+      "away_team": "France",
+      "event_date": "01/11",
+      "event_time": "06:40",
+      "outcome": "2",
+      "open_odds": 17.5,
+      "current_odds": 12.94,
+      "drop_pct": 26.0,
+      "max_odds": 15.0,
+      "sport_page_id": "140",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 12.9,
+        "prev_seen_at": "2026-10-29T17:36:18+00:00",
+        "current_odds": 12.94,
+        "change_pct": 0.31,
+        "direction": "flat",
+        "runs_seen": 2,
+        "first_odds": 12.9,
+        "first_seen_at": "2026-10-29T17:36:18+00:00",
+        "change_from_first_pct": 0.31
+      }
+    },
+    {
+      "league": "England - PREM Rugby",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/england/prem-rugby/saracens-vs-newcastle-red-bulls/11272087?MarketTypeID=1301",
+      "match_id": "11272087",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Saracens",
+      "away_team": "Newcastle Red Bulls",
+      "event_date": "31/10",
+      "event_time": "15:00",
+      "outcome": "2",
+      "open_odds": 8.5,
+      "current_odds": 6.54,
+      "drop_pct": 23.0,
+      "max_odds": 7.5,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/munster-rugby-vs-sharks/11271992?MarketTypeID=1301",
+      "match_id": "11271992",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Munster Rugby",
+      "away_team": "Sharks",
+      "event_date": "31/10",
+      "event_time": "17:30",
+      "outcome": "2",
+      "open_odds": 2.88,
+      "current_odds": 2.24,
+      "drop_pct": 22.0,
+      "max_odds": 2.38,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 2.2,
+        "prev_seen_at": "2026-10-29T17:41:28+00:00",
+        "current_odds": 2.24,
+        "change_pct": 1.82,
+        "direction": "up",
+        "runs_seen": 2,
+        "first_odds": 2.2,
+        "first_seen_at": "2026-10-29T17:41:28+00:00",
+        "change_from_first_pct": 1.82
+      },
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/munster-25C1i2z3/sharks-YoW9lSnC/?mid=n9cn52BF",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Munster",
+        "away_team": "Sharks",
+        "match_time": "31.10.2026 17:30",
+        "sport": "rugby",
+        "league": "PRR",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "2",
+        "forebet_probability": 59.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "20-40",
+        "forebet_avg_goals": 59.5,
+        "forebet_home_prob": 39,
+        "forebet_draw_prob": null,
+        "forebet_away_prob": 59,
+        "sofascore_home_win_prob": 54,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 41,
+        "sofascore_total_votes": 152,
+        "h2h_last5": [
+          {
+            "date": "21.03.26",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "45-0",
+            "winner": "home",
+            "raw": "21.03.26 Sharks 45-0 Munster"
+          },
+          {
+            "date": "31.05.25",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "25-24",
+            "winner": "home",
+            "raw": "31.05.25 Sharks 25-24 Munster"
+          },
+          {
+            "date": "26.10.24",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "41-24",
+            "winner": "home",
+            "raw": "26.10.24 Sharks 41-24 Munster"
+          },
+          {
+            "date": "21.10.23",
+            "home": "Munster",
+            "away": "Sharks",
+            "score": "34-21",
+            "winner": "home",
+            "raw": "21.10.23 Munster 34-21 Sharks"
+          },
+          {
+            "date": "22.04.23",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "22-22",
+            "winner": "draw",
+            "raw": "22.04.23 Sharks 22-22 Munster"
+          }
+        ],
+        "last_h2h_date": "21.03.26",
+        "last_h2h_score": "45-0",
+        "last_h2h_home": "Sharks",
+        "last_h2h_away": "Munster",
+        "form_advantage": false,
+        "home_season_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "season_home_form": [
+          "W",
+          "W",
+          "L"
+        ],
+        "season_away_form": [
+          "W",
+          "W",
+          "L"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_cup_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_cup_competitions": [
+          "United Rugby Championship (Świat)",
+          "Puchar Europy Mistrzów Rugby (Europa)"
+        ],
+        "away_cup_competitions": [
+          "United Rugby Championship (Świat)",
+          "Challenge Cup (Europa)"
+        ],
+        "home_form_competitions": [
+          "United Rugby Championship (Świat)",
+          "Puchar Europy Mistrzów Rugby (Europa)"
+        ],
+        "away_form_competitions": [
+          "United Rugby Championship (Świat)",
+          "Challenge Cup (Europa)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "England - PREM Rugby",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/england/prem-rugby/bath-vs-sale-sharks/11272088?MarketTypeID=1301",
+      "match_id": "11272088",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Bath",
+      "away_team": "Sale Sharks",
+      "event_date": "31/10",
+      "event_time": "15:05",
+      "outcome": "2",
+      "open_odds": 5.5,
+      "current_odds": 4.75,
+      "drop_pct": 14.0,
+      "max_odds": 5.5,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "France - Top 14",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/france/top-14/usa-perpignan-vs-rc-toulon/11271984?MarketTypeID=1301",
+      "match_id": "11271984",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "USA Perpignan",
+      "away_team": "RC Toulon",
+      "event_date": "31/10",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.36,
+      "drop_pct": 14.0,
+      "max_odds": 2.63,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/toulon-8bL0oCnp/usa-perpignan-6kZYkhvT/?mid=xWs9G5WQ",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "USA Perpignan",
+        "away_team": "Toulon",
+        "match_time": "31.10.2026 20:00",
+        "sport": "rugby",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "win_rate": 0.8,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 33,
+        "sofascore_draw_prob": 2,
+        "sofascore_away_win_prob": 65,
+        "sofascore_total_votes": 161,
+        "h2h_last5": [
+          {
+            "date": "28.03.26",
+            "home": "USA Perpignan",
+            "away": "Toulon",
+            "score": "36-20",
+            "winner": "home",
+            "raw": "28.03.26 USA Perpignan 36-20 Toulon"
+          },
+          {
+            "date": "28.12.25",
+            "home": "Toulon",
+            "away": "USA Perpignan",
+            "score": "31-16",
+            "winner": "home",
+            "raw": "28.12.25 Toulon 31-16 USA Perpignan"
+          },
+          {
+            "date": "22.03.25",
+            "home": "Toulon",
+            "away": "USA Perpignan",
+            "score": "40-19",
+            "winner": "home",
+            "raw": "22.03.25 Toulon 40-19 USA Perpignan"
+          },
+          {
+            "date": "30.11.24",
+            "home": "USA Perpignan",
+            "away": "Toulon",
+            "score": "13-22",
+            "winner": "away",
+            "raw": "30.11.24 USA Perpignan 13-22 Toulon"
+          },
+          {
+            "date": "02.03.24",
+            "home": "Toulon",
+            "away": "USA Perpignan",
+            "score": "44-22",
+            "winner": "home",
+            "raw": "02.03.24 Toulon 44-22 USA Perpignan"
+          }
+        ],
+        "last_h2h_date": "28.03.26",
+        "last_h2h_score": "36-20",
+        "last_h2h_home": "USA Perpignan",
+        "last_h2h_away": "Toulon",
+        "form_advantage": true,
+        "home_season_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "season_home_form": [
+          "W",
+          "W",
+          "W"
+        ],
+        "season_away_form": [
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [
+          "L"
+        ],
+        "away_cup_form": [
+          "W"
+        ],
+        "home_cup_competitions": [
+          "Challenge Cup (Europa)"
+        ],
+        "away_cup_competitions": [
+          "Challenge Cup (Europa)"
+        ],
+        "home_form_competitions": [
+          "Top 14 (Francja)",
+          "Challenge Cup (Europa)"
+        ],
+        "away_form_competitions": [
+          "Top 14 (Francja)",
+          "Challenge Cup (Europa)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "England - PREM Rugby",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/england/prem-rugby/northampton-vs-gloucester/11272090?MarketTypeID=1301",
+      "match_id": "11272090",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Northampton",
+      "away_team": "Gloucester",
+      "event_date": "31/10",
+      "event_time": "17:30",
+      "outcome": "2",
+      "open_odds": 4.33,
+      "current_odds": 3.86,
+      "drop_pct": 11.0,
+      "max_odds": 4.33,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Argentina - URBA Top 14",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/argentina/urba-top-14/casi-vs-hindu-club/11272086?MarketTypeID=1301",
+      "match_id": "11272086",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "CASI",
+      "away_team": "Hindu Club",
+      "event_date": "31/10",
+      "event_time": "20:10",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.33,
+      "drop_pct": 11.0,
+      "max_odds": 2.4,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 2.31,
+        "prev_seen_at": "2026-10-29T17:48:01+00:00",
+        "current_odds": 2.33,
+        "change_pct": 0.87,
+        "direction": "up",
+        "runs_seen": 2,
+        "first_odds": 2.31,
+        "first_seen_at": "2026-10-29T17:48:01+00:00",
+        "change_from_first_pct": 0.87
+      },
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/casi-b5UyNSDS/hindu-MczmgLal/?mid=j3ectBHM",
+      "livesport_confidence": 0.667,
+      "enrichment": {
+        "home_team": "Casi",
+        "away_team": "Hindu",
+        "match_time": "31.10.2026 20:10",
+        "sport": "rugby",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 55,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 41,
+        "sofascore_total_votes": 22,
+        "h2h_last5": [
+          {
+            "date": "11.07.26",
+            "home": "Hindu",
+            "away": "Casi",
+            "score": "8-29",
+            "winner": "away",
+            "raw": "11.07.26 Hindu 8-29 Casi"
+          },
+          {
+            "date": "21.03.26",
+            "home": "Casi",
+            "away": "Hindu",
+            "score": "12-15",
+            "winner": "away",
+            "raw": "21.03.26 Casi 12-15 Hindu"
+          },
+          {
+            "date": "11.10.25",
+            "home": "Hindu",
+            "away": "Casi",
+            "score": "46-7",
+            "winner": "home",
+            "raw": "11.10.25 Hindu 46-7 Casi"
+          },
+          {
+            "date": "28.06.25",
+            "home": "Casi",
+            "away": "Hindu",
+            "score": "26-25",
+            "winner": "home",
+            "raw": "28.06.25 Casi 26-25 Hindu"
+          },
+          {
+            "date": "03.08.24",
+            "home": "Hindu",
+            "away": "Casi",
+            "score": "26-18",
+            "winner": "home",
+            "raw": "03.08.24 Hindu 26-18 Casi"
+          }
+        ],
+        "last_h2h_date": "11.07.26",
+        "last_h2h_score": "8-29",
+        "last_h2h_home": "Hindu",
+        "last_h2h_away": "Casi",
+        "form_advantage": false,
+        "home_season_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "season_home_form": [
+          "L",
+          "W",
+          "W"
+        ],
+        "season_away_form": [
+          "W",
+          "W",
+          "W"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [],
+        "away_cup_form": [],
+        "home_cup_competitions": [],
+        "away_cup_competitions": [],
+        "home_form_competitions": [
+          "Top 14 (Argentyna)"
+        ],
+        "away_form_competitions": [
+          "Top 14 (Argentyna)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "International Clubs - United Rugby Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/united-rugby-championship/munster-rugby-vs-sharks/11271992?MarketTypeID=1301",
+      "match_id": "11271992",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Munster Rugby",
+      "away_team": "Sharks",
+      "event_date": "31/10",
+      "event_time": "17:30",
+      "outcome": "2",
+      "open_odds": 2.88,
+      "current_odds": 2.24,
+      "drop_pct": 22.0,
+      "max_odds": 2.38,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 2.2,
+        "prev_seen_at": "2026-10-29T17:41:28+00:00",
+        "current_odds": 2.24,
+        "change_pct": 1.82,
+        "direction": "up",
+        "runs_seen": 2,
+        "first_odds": 2.2,
+        "first_seen_at": "2026-10-29T17:41:28+00:00",
+        "change_from_first_pct": 1.82
+      },
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/munster-25C1i2z3/sharks-YoW9lSnC/?mid=n9cn52BF",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Munster",
+        "away_team": "Sharks",
+        "match_time": "31.10.2026 17:30",
+        "sport": "rugby",
+        "league": "PRR",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "2",
+        "forebet_probability": 59.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "20-40",
+        "forebet_avg_goals": 59.5,
+        "forebet_home_prob": 39,
+        "forebet_draw_prob": null,
+        "forebet_away_prob": 59,
+        "sofascore_home_win_prob": 54,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 41,
+        "sofascore_total_votes": 152,
+        "h2h_last5": [
+          {
+            "date": "21.03.26",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "45-0",
+            "winner": "home",
+            "raw": "21.03.26 Sharks 45-0 Munster"
+          },
+          {
+            "date": "31.05.25",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "25-24",
+            "winner": "home",
+            "raw": "31.05.25 Sharks 25-24 Munster"
+          },
+          {
+            "date": "26.10.24",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "41-24",
+            "winner": "home",
+            "raw": "26.10.24 Sharks 41-24 Munster"
+          },
+          {
+            "date": "21.10.23",
+            "home": "Munster",
+            "away": "Sharks",
+            "score": "34-21",
+            "winner": "home",
+            "raw": "21.10.23 Munster 34-21 Sharks"
+          },
+          {
+            "date": "22.04.23",
+            "home": "Sharks",
+            "away": "Munster",
+            "score": "22-22",
+            "winner": "draw",
+            "raw": "22.04.23 Sharks 22-22 Munster"
+          }
+        ],
+        "last_h2h_date": "21.03.26",
+        "last_h2h_score": "45-0",
+        "last_h2h_home": "Sharks",
+        "last_h2h_away": "Munster",
+        "form_advantage": false,
+        "home_season_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "season_home_form": [
+          "W",
+          "W",
+          "L"
+        ],
+        "season_away_form": [
+          "W",
+          "W",
+          "L"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [
+          "L",
+          "W",
+          "D",
+          "W",
+          "L"
+        ],
+        "away_cup_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_cup_competitions": [
+          "United Rugby Championship (Świat)",
+          "Puchar Europy Mistrzów Rugby (Europa)"
+        ],
+        "away_cup_competitions": [
+          "United Rugby Championship (Świat)",
+          "Challenge Cup (Europa)"
+        ],
+        "home_form_competitions": [
+          "United Rugby Championship (Świat)",
+          "Puchar Europy Mistrzów Rugby (Europa)"
+        ],
+        "away_form_competitions": [
+          "United Rugby Championship (Świat)",
+          "Challenge Cup (Europa)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "France - Top 14",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/france/top-14/usa-perpignan-vs-rc-toulon/11271984?MarketTypeID=1301",
+      "match_id": "11271984",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "USA Perpignan",
+      "away_team": "RC Toulon",
+      "event_date": "31/10",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.36,
+      "drop_pct": 14.0,
+      "max_odds": 2.63,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/toulon-8bL0oCnp/usa-perpignan-6kZYkhvT/?mid=xWs9G5WQ",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "USA Perpignan",
+        "away_team": "Toulon",
+        "match_time": "31.10.2026 20:00",
+        "sport": "rugby",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "win_rate": 0.8,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 33,
+        "sofascore_draw_prob": 2,
+        "sofascore_away_win_prob": 65,
+        "sofascore_total_votes": 161,
+        "h2h_last5": [
+          {
+            "date": "28.03.26",
+            "home": "USA Perpignan",
+            "away": "Toulon",
+            "score": "36-20",
+            "winner": "home",
+            "raw": "28.03.26 USA Perpignan 36-20 Toulon"
+          },
+          {
+            "date": "28.12.25",
+            "home": "Toulon",
+            "away": "USA Perpignan",
+            "score": "31-16",
+            "winner": "home",
+            "raw": "28.12.25 Toulon 31-16 USA Perpignan"
+          },
+          {
+            "date": "22.03.25",
+            "home": "Toulon",
+            "away": "USA Perpignan",
+            "score": "40-19",
+            "winner": "home",
+            "raw": "22.03.25 Toulon 40-19 USA Perpignan"
+          },
+          {
+            "date": "30.11.24",
+            "home": "USA Perpignan",
+            "away": "Toulon",
+            "score": "13-22",
+            "winner": "away",
+            "raw": "30.11.24 USA Perpignan 13-22 Toulon"
+          },
+          {
+            "date": "02.03.24",
+            "home": "Toulon",
+            "away": "USA Perpignan",
+            "score": "44-22",
+            "winner": "home",
+            "raw": "02.03.24 Toulon 44-22 USA Perpignan"
+          }
+        ],
+        "last_h2h_date": "28.03.26",
+        "last_h2h_score": "36-20",
+        "last_h2h_home": "USA Perpignan",
+        "last_h2h_away": "Toulon",
+        "form_advantage": true,
+        "home_season_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "season_home_form": [
+          "W",
+          "W",
+          "W"
+        ],
+        "season_away_form": [
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [
+          "L"
+        ],
+        "away_cup_form": [
+          "W"
+        ],
+        "home_cup_competitions": [
+          "Challenge Cup (Europa)"
+        ],
+        "away_cup_competitions": [
+          "Challenge Cup (Europa)"
+        ],
+        "home_form_competitions": [
+          "Top 14 (Francja)",
+          "Challenge Cup (Europa)"
+        ],
+        "away_form_competitions": [
+          "Top 14 (Francja)",
+          "Challenge Cup (Europa)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Argentina - URBA Top 14",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/argentina/urba-top-14/casi-vs-hindu-club/11272086?MarketTypeID=1301",
+      "match_id": "11272086",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "CASI",
+      "away_team": "Hindu Club",
+      "event_date": "31/10",
+      "event_time": "20:10",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.33,
+      "drop_pct": 11.0,
+      "max_odds": 2.4,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 2.31,
+        "prev_seen_at": "2026-10-29T17:48:01+00:00",
+        "current_odds": 2.33,
+        "change_pct": 0.87,
+        "direction": "up",
+        "runs_seen": 2,
+        "first_odds": 2.31,
+        "first_seen_at": "2026-10-29T17:48:01+00:00",
+        "change_from_first_pct": 0.87
+      },
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/rugby/casi-b5UyNSDS/hindu-MczmgLal/?mid=j3ectBHM",
+      "livesport_confidence": 0.667,
+      "enrichment": {
+        "home_team": "Casi",
+        "away_team": "Hindu",
+        "match_time": "31.10.2026 20:10",
+        "sport": "rugby",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": null,
+        "forebet_probability": null,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": null,
+        "forebet_avg_goals": null,
+        "sofascore_home_win_prob": 55,
+        "sofascore_draw_prob": 5,
+        "sofascore_away_win_prob": 41,
+        "sofascore_total_votes": 22,
+        "h2h_last5": [
+          {
+            "date": "11.07.26",
+            "home": "Hindu",
+            "away": "Casi",
+            "score": "8-29",
+            "winner": "away",
+            "raw": "11.07.26 Hindu 8-29 Casi"
+          },
+          {
+            "date": "21.03.26",
+            "home": "Casi",
+            "away": "Hindu",
+            "score": "12-15",
+            "winner": "away",
+            "raw": "21.03.26 Casi 12-15 Hindu"
+          },
+          {
+            "date": "11.10.25",
+            "home": "Hindu",
+            "away": "Casi",
+            "score": "46-7",
+            "winner": "home",
+            "raw": "11.10.25 Hindu 46-7 Casi"
+          },
+          {
+            "date": "28.06.25",
+            "home": "Casi",
+            "away": "Hindu",
+            "score": "26-25",
+            "winner": "home",
+            "raw": "28.06.25 Casi 26-25 Hindu"
+          },
+          {
+            "date": "03.08.24",
+            "home": "Hindu",
+            "away": "Casi",
+            "score": "26-18",
+            "winner": "home",
+            "raw": "03.08.24 Hindu 26-18 Casi"
+          }
+        ],
+        "last_h2h_date": "11.07.26",
+        "last_h2h_score": "8-29",
+        "last_h2h_home": "Hindu",
+        "last_h2h_away": "Casi",
+        "form_advantage": false,
+        "home_season_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "season_home_form": [
+          "L",
+          "W",
+          "W"
+        ],
+        "season_away_form": [
+          "W",
+          "W",
+          "W"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 5,
+        "season_match_count": 5,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home_nf": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [],
+        "away_cup_form": [],
+        "home_cup_competitions": [],
+        "away_cup_competitions": [],
+        "home_form_competitions": [
+          "Top 14 (Argentyna)"
+        ],
+        "away_form_competitions": [
+          "Top 14 (Argentyna)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": false
+      },
+      "enrichment_error": null
+    }
+  ]
+}
