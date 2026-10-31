@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-31",
+  "generated_at": "2026-10-31T15:27:02.638125+00:00",
+  "issues": [
+    {
+      "level": "WARN",
+      "workflow": "scrape_forebet.yml",
+      "sport": "football",
+      "code": "budget",
+      "problem": "Czas wyczerpany podczas wzbogacania",
+      "meaning": "Wzbogacanie przerwane limitem czasu — część meczów bez danych.",
+      "action": "Rozważ węższy zakres lub dłuższy budżet czasu.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41177384016/job/124467635214"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "daily_digest.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "WARN",
+      "workflow": "SOFASCORE_RELAY",
+      "sport": "",
+      "code": "relay_dead",
+      "problem": "Przekaźnik #1: status 200",
+      "meaning": "Sonda przekaźnika: limit wyczerpany / błąd.",
+      "action": "Wymień lub odciąż ten przekaźnik.",
+      "url": ""
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "scrape_forebet.yml",
+      "runs_today": 3,
+      "issues": [
+        {
+          "level": "WARN",
+          "workflow": "scrape_forebet.yml",
+          "sport": "football",
+          "code": "budget",
+          "problem": "Czas wyczerpany podczas wzbogacania",
+          "meaning": "Wzbogacanie przerwane limitem czasu — część meczów bez danych.",
+          "action": "Rozważ węższy zakres lub dłuższy budżet czasu.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41177384016/job/124467635214"
+        }
+      ],
+      "run": {
+        "databaseId": 41177384016,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41177384016"
+      }
+    },
+    {
+      "workflow": "scrape.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 41168800751,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41168800751"
+      }
+    },
+    {
+      "workflow": "scrape_away.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 41161710131,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41161710131"
+      }
+    },
+    {
+      "workflow": "oddssafari_dropping.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 41166400716,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41166400716"
+      }
+    },
+    {
+      "workflow": "top_picks.yml",
+      "runs_today": 5,
+      "issues": [],
+      "run": {
+        "databaseId": 41201218985,
+        "status": "completed",
+        "conclusion": "cancelled",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/41201218985"
+      }
+    },
+    {
+      "workflow": "daily_digest.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "daily_digest.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    }
+  ],
+  "relays": [
+    {
+      "relay": 1,
+      "status": 200,
+      "exhausted": false,
+      "ok": false
+    },
+    {
+      "relay": 2,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 3,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 4,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 5,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 6,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    }
+  ],
+  "counts": {
+    "ALERT": 1,
+    "WARN": 2
+  }
+}
