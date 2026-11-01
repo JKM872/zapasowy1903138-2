@@ -2,7 +2,7 @@
 
 Filtr działa na etapie listowania (przed pobieraniem H2H/formy/kursów),
 żeby nie tracić czasu na mecze, których i tak nie gramy. Sprawdza:
-  * kraj / ligę (Russia, Rosja, KHL, VHL, VTB…),
+  * kraj / ligę (Russia, Rosja, KHL, VHL, VTB…, kody lig Forebet RU1/RUW/RUC…),
   * reprezentacje (Rosja, Russia U21, Rosja K…) — nazwa kraju w nazwie drużyny,
   * kluby — po rosyjskim mieście w nazwie (Spartak Moskwa, Rubin Kazań)
     albo po charakterystycznej nazwie klubu (Zenit, Achmat, Ak Bars…).
@@ -19,18 +19,26 @@ _COUNTRY_LEAGUE = (
     r"|khl|vhl|mhl|vtb united league|vtb league|superliga rosji"
 )
 
+# Forebet w sportach drużynowych podaje ligę KODEM i zostawia pusty kraj:
+# hokej RU1 (KHL), RU2 (VHL), RU4 (MHL), RUW; koszykówka RU2, RUC, RUS;
+# piłka ręczna RU1, RUW; siatkówka RU1, RUC, RUW (results/ 09-12..11-01).
+# Całe pole równe kodowi — „RUS Rebecq” (klub belgijski) nie jest kodem.
+_LEAGUE_CODE_RE = re.compile(r"RU[0-9WCS]")
+
 # Rosyjskie miasta (EN + polska transliteracja z Livesport, bez znaków PL).
 # Celowo bez dwuznacznych nazw (np. Jarosław — jest polskie miasto).
+# Przymiotniki od miast też („Krasnoyarskie Rysi”, „Omskie Krylia”).
 _CITIES = (
     r"moscow|moskwa|moskva|st\.? petersburg|sankt petersburg|petersburg|kazan"
     r"|nizhny novgorod|nizny nowogrod|niznij nowgorod|yekaterinburg|ekaterinburg|jekaterynburg"
-    r"|makhachkala|machaczkala|krasnodar|rostov|rostow|sochi|soczi|yaroslavl|omsk"
+    r"|makhachkala|machaczkala|krasnodar|rostov|rostow|sochi|soczi|yaroslavl|omsk\w*"
     r"|novosibirsk|nowosybirsk|chelyabinsk|czelabinsk|magnitogorsk|samara"
     r"|voronezh|woroniez|kaliningrad|togliatti|tolyatti|khabarovsk|chabarowsk"
-    r"|vladivostok|wladywostok|ufa|perm|saratov|saratow|krasnoyarsk|krasnojarsk"
+    r"|vladivostok|wladywostok|ufa|perm|saratov|saratow|krasnoyarsk\w*|krasnojarsk"
     r"|orenburg|volgograd|wolgograd|tyumen|tiumen|cherepovets|czerepowiec"
     r"|nizhnekamsk|niznekamsk|grozny|groznyj|izhevsk|izewsk|penza|irkutsk|surgut"
     r"|belgorod|bielgorod|lipetsk|lipieck|ryazan|riazan|tambov|tambow|barnaul|kursk"
+    r"|almetievsk|almetyevsk"
 )
 
 # Charakterystyczne nazwy klubów (bez miasta w nazwie).
@@ -76,10 +84,12 @@ def _norm(text: Any) -> str:
 
 
 def is_russian(*texts: Any) -> bool:
-    """True, gdy kraj, liga, nazwa drużyny lub slug URL wskazuje Rosję."""
+    """True, gdy kraj, liga (także kod Forebet RU1/RUW/…), nazwa drużyny lub
+    slug URL wskazuje Rosję."""
     if not enabled():
         return False
-    return any(t and _RE.search(_norm(t)) for t in texts)
+    return any(t and (_LEAGUE_CODE_RE.fullmatch(str(t).strip()) or _RE.search(_norm(t)))
+               for t in texts)
 
 
 def is_russian_url(url: str) -> bool:

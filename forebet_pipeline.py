@@ -34,6 +34,7 @@ Uruchomienie:
 from __future__ import annotations
 
 import argparse
+import difflib
 import json
 import os
 import re
@@ -47,6 +48,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import forebet_listing as fbl
 import recency
+from tools.team_names import _TRANSLIT as _TEAM_TRANSLIT
 
 SOURCE = 'forebet'
 
@@ -1116,9 +1118,230 @@ def _name_overlap(a: str, b: str) -> float:
     return hits / min(len(ta), len(tb))
 
 
+# ---------------------------------------------------------------------------
+# SofaScore: czy zdarzenie to TEN mecz (nazwy drużyn)
+# ---------------------------------------------------------------------------
+# Osobny matcher, bo ``_name_overlap`` (dopasowanie Livesport) nie zna
+# transliteracji, skrótów ani nazw sponsorów. Repro 10-28..31: z 84 Fan Vote
+# odrzuconych jako „zly_mecz” 54 były TYM meczem („Gjovik” = „Gjøvik Mammuts”,
+# „PSG” = „Paris Saint-Germain Handball”, „Zurich” = „ZSC Lions”), a zarazem
+# zły mecz potrafił przejść (TOP 10-21 „Nuwaidrad vs Al Ittihad” dostał
+# „Nacional vs Aguada”). Przypadki: tests/fixtures/sofascore_wrong_events.json.
+
+# Człony bez informacji o tożsamości klubu (forma prawna, sport, „klub”).
+_SS_GENERIC = frozenset({
+    'fc', 'sc', 'ac', 'as', 'if', 'ff', 'sk', 'bk', 'cf', 'cd', 'ca', 'cs', 'fk', 'nk',
+    'hk', 'rk', 'kk', 'vk', 'ok', 'hc', 'ehc', 'ec', 'ek', 'sv', 'tsv', 'ks', 'mks', 'kps',
+    'acs', 'csm', 'afc', 'ae', 'ao', 'us', 'uc', 'ud', 'sd', 'ad', 'bc', 'bbk', 'hb', 'vb',
+    'vc', 'rc', 'mrk', 'kfum', 'club', 'klub', 'team', 'basket', 'basketball', 'baloncesto',
+    'basquet', 'handball', 'handbold', 'haandbold', 'hockey', 'volley', 'volleyball',
+    'rugby', 'spor', 'belediye', 'belediyespor', 'bld',
+})
+_SS_STOPWORDS = frozenset({
+    'de', 'del', 'la', 'le', 'les', 'el', 'los', 'las', 'di', 'da', 'do', 'dos', 'du',
+    'of', 'the', 'and', 'y', 'et', 'und', 'an', 'der', 'den', 'am', 'al', 'au', 'sur',
+})
+# Znaczniki INNEJ drużyny tego samego klubu: kobiety, młodzież (U16..U23,
+# „U23s”, szwedzkie J18/J20), rezerwy (II, B, „2”, „Dinamo-2”, Amateure, Jong).
+_SS_WOMEN = frozenset({'w', 'women', 'woman', 'ladies', 'femenino', 'femenina', 'feminino',
+                       'feminin', 'feminine', 'frauen', 'damen', 'kvinner', 'kvinder',
+                       'dames', 'donne', 'vrouwen'})
+_SS_RESERVE = frozenset({'ii', 'iii', 'reserve', 'reserves', 'res', 'amateure',
+                         'amateur', 'jong', 'youth'})
+_SS_RESERVE_LAST = frozenset({'b', '2'})            # „Barcelona B”, „Salzburg 2”
+_SS_AGE_RE = re.compile(r'[uj](1[3-9]|2[0-3])s?')
+# Nazwy sponsorów, skróty i nazwy miast w innym języku (pary tokenów).
+_SS_ALIASES = frozenset(frozenset(p) for p in (
+    ('zurich', 'zsc'), ('rennes', 'rennais'), ('barcelona', 'barca'),
+    ('ferencvaros', 'ftc'), ('vinkovci', 'spacva'), ('klagenfurt', 'kac'),
+    ('rit', 'rochester'), ('poli', 'politehnica'), ('prague', 'praha'),
+    ('cadi', 'sedis'), ('huesca', 'penas'), ('ritten', 'rittner'),
+    ('tfoc', 'terville'), ('eisbaren', 'zell'), ('gyor', 'eto'), ('hameenlinna', 'hpk'),
+    ('villach', 'vsv'), ('brugge', 'nxt'),
+))
+_SS_FUZZY_RATIO = 0.8
+
+
+def _ss_name(name: str) -> Dict[str, Any]:
+    """Nazwa drużyny → tokeny do porównania i znaczniki drużyny.
+
+    ``words`` — tokeny treści (bez form prawnych, spójników, znaczników),
+    ``sig`` — te z nich, które liczą się do zgodności (>= 3 znaki; same
+    krótkie, gdy innych brak: „HV 71”, „A. Li”),
+    ``seq`` — kolejne tokeny z możliwymi inicjałami (do akronimów),
+    ``caps`` — akronimy zapisane wielkimi literami (PSG, FAC, DEAC),
+    ``women`` / ``ages`` / ``reserve`` — znaczniki drużyny.
+    """
+    s = re.sub(r'[\u2018\u2019`\u00b4]', "'", str(name or ''))
+    s = unicodedata.normalize('NFKD', s.translate(_TEAM_TRANSLIT))
+    s = s.encode('ascii', 'ignore').decode()
+    s = re.sub(r"(?<=[A-Za-z])'(?=[A-Za-z]\b)", '', s)            # „Al Ta'i” = „Al Tai”
+    # Nawiasy: kraj („(Den)”, „(BOL)”) pomijamy, „(Am)” = rezerwy, „(W)” = kobiety.
+    tags = [t.strip().lower() for t in re.findall(r'\(([^()]*)\)', s)]
+    s = re.sub(r'\([^()]*\)', ' ', s)
+    s = re.sub(r'\b([UuJj])[ -](\d{2})\b', r'\1\2', s)          # „U-19”, „U 19” -> „U19”
+    women = any(t in _SS_WOMEN or t == 'f' for t in tags)
+    reserve = (any(t in _SS_RESERVE or t in ('am', 'b') for t in tags)
+               or bool(re.search(r'[A-Za-z]-2\b', s)))          # „Dinamo-2 Minsk”
+    ages = {int(m.group(1)) for m in map(_SS_AGE_RE.fullmatch, tags) if m}
+    kept = []                                   # (oryginał, małe litery, kropka po)
+    for tok in re.findall(r'[A-Za-z0-9]+\.?', s):
+        orig = tok.rstrip('.')
+        low, dot = orig.lower(), tok.endswith('.')
+        if len(low) == 1 and dot:               # inicjał („W. Smith”), nie znacznik
+            kept.append((orig, low, dot))
+            continue
+        age = _SS_AGE_RE.fullmatch(low)
+        if age:
+            ages.add(int(age.group(1)))
+        elif low in _SS_WOMEN:
+            women = True
+        elif low in _SS_RESERVE:
+            reserve = True
+        else:
+            kept.append((orig, low, dot))
+    if len(kept) > 1 and kept[-1][1] in _SS_RESERVE_LAST and not kept[-1][2]:
+        reserve = True
+        kept.pop()
+    words = list(dict.fromkeys(low for _, low, _ in kept if len(low) >= 2
+                               and low not in _SS_STOPWORDS and low not in _SS_GENERIC))
+    if not words:                                # sama forma prawna („HC”)
+        words = list(dict.fromkeys(low for _, low, _ in kept if len(low) >= 2
+                                   and low not in _SS_STOPWORDS))
+    # Udział liczymy na tokenach >= 3 znaków: dwuznakowe („Ha” w „Công An Hà
+    # Nội”, „IY” w „Denizli İY”) mogą się dopasować, ale nie zaniżają wyniku.
+    sig = [w for w in words if len(w) >= 3] or words
+    seq = [((low[0], low) if orig.isupper() and len(low) <= 3 else (low[0],),
+            low if low in words else None)
+           for orig, low, _ in kept if low not in _SS_STOPWORDS]
+    caps = {low for orig, low, _ in kept
+            if orig.isalpha() and orig.isupper() and 3 <= len(low) <= 5 and low in words}
+    return {'words': words, 'sig': sig, 'seq': seq, 'caps': caps,
+            'women': women, 'ages': ages, 'reserve': reserve}
+
+
+def _ss_acronym(acr: str, seq: List[Tuple[Tuple[str, ...], Optional[str]]]) -> Optional[Set[str]]:
+    """Tokeny co najmniej dwóch kolejnych członów, których inicjały dają ``acr``
+    („PSG” = Paris Saint-Germain, „DEAC” = Debreceni Egyetemi AC); None = brak."""
+    for i in range(len(seq)):
+        partial = {''}
+        for j in range(i, min(len(seq), i + 5)):
+            partial = {p + o for p in partial for o in seq[j][0] if acr.startswith(p + o)}
+            if not partial:
+                break
+            if j > i and acr in partial:
+                return {w for _, w in seq[i:j + 1] if w}
+    return None
+
+
+def _ss_side(a: Dict[str, Any], b: Dict[str, Any]) -> Tuple[float, float, int]:
+    """Zgodność dwóch nazw jednej strony meczu: (ścisła, z przybliżeniami,
+    liczba dopasowanych tokenów obu nazw); zgodności 0..1.
+
+    Ścisła: równość, przedrostek >= 5 znaków, sklejone słowa („Graz99ers” =
+    „Graz 99ers”), akronim. Przybliżona dodaje podobieństwo tokenów difflib
+    >= 0.8 („Koroivos” ~ „Korivos”, „Odd” ~ „Odds”), skrót >= 4 znaków
+    („Univ” ~ „Universidad”) i aliasy (``_SS_ALIASES``).
+    Zgodność = udział tokenów (``sig``) lepiej pokrytej nazwy, które mają
+    odpowiednik.
+    """
+    wa, wb = a['words'], b['words']
+    if not wa or not wb:
+        return 0.0, 0.0, 0
+    exact_a, exact_b, fuzzy_a, fuzzy_b = set(), set(), set(), set()
+    for x in wa:
+        for y in wb:
+            short, long_ = sorted((x, y), key=len)
+            if x == y or (len(short) >= 5 and long_.startswith(short)):
+                exact_a.add(x)
+                exact_b.add(y)
+            elif (frozenset((x, y)) in _SS_ALIASES
+                  or (not (x.isdigit() or y.isdigit()) and len(long_) >= 4 and (
+                      (len(short) >= 4 and long_.startswith(short))
+                      or (len(short) >= 3 and difflib.SequenceMatcher(
+                          None, x, y).ratio() >= _SS_FUZZY_RATIO)))):
+                fuzzy_a.add(x)
+                fuzzy_b.add(y)
+    for p, q, cov_p, cov_q in ((a, b, exact_a, exact_b), (b, a, exact_b, exact_a)):
+        glued = {q['words'][i] + q['words'][i + 1]: (q['words'][i], q['words'][i + 1])
+                 for i in range(len(q['words']) - 1)}
+        for x in p['words']:
+            if x in glued:
+                cov_p.add(x)
+                cov_q.update(glued[x])
+        for x in p['caps']:
+            run = _ss_acronym(x, q['seq'])
+            if run:
+                cov_p.add(x)
+                cov_q.update(run)
+
+    def share(cov_a: Set[str], cov_b: Set[str]) -> float:
+        return max(len(cov_a.intersection(a['sig'])) / len(a['sig']),
+                   len(cov_b.intersection(b['sig'])) / len(b['sig']))
+
+    all_a, all_b = exact_a | fuzzy_a, exact_b | fuzzy_b
+    return share(exact_a, exact_b), share(all_a, all_b), len(all_a) + len(all_b)
+
+
+def _ss_markers_agree(ours: Dict[str, Any], theirs: Dict[str, Any]) -> bool:
+    """Czy to ta sama drużyna klubu (seniorzy / młodzież / rezerwy / kobiety).
+
+    Sprawdzone na 1 639 zdarzeniach potwierdzonych 10-26..11-01:
+    * rocznik — obie strony albo żadna; różnica najwyżej rok („Frosinone U19”
+      = „Frosinone U20”), U21 i U23 to jeden poziom („Blackburn U23s” =
+      „Blackburn U21”), a rocznik >= 21 po jednej stronie odpowiada rezerwom
+      po drugiej („Slovan Liberec B” = „Slovan Liberec U21”). Senior przeciw
+      U19 to INNY mecz („Levadiakos” ≠ „Levadiakos U19”).
+    * rezerwy po stronie SofaScore wymagają rezerw (albo rocznika) u nas;
+      odwrotnie nie — SofaScore nazywa hiszpańskie drużyny B po swojemu
+      („Real Oviedo B” = „Real Oviedo Vetusta”, „Celta B” = „Celta Fortuna”).
+    * kobiety tak samo: SofaScore w rozgrywkach kobiet pisze samą nazwę klubu
+      („Wroclaw W” = „Impel Wrocław”), więc brak znacznika po ich stronie nic
+      nie mówi; znacznik tylko po ich stronie to drużyna kobiet, u nas męska.
+    """
+    oa, ta = ours['ages'], theirs['ages']
+    if oa and ta:
+        if not any(abs(x - y) <= 1 or (x >= 21 and y >= 21) for x in oa for y in ta):
+            return False
+    elif oa or ta:
+        res = theirs['reserve'] if oa else ours['reserve']
+        if not (res and min(oa or ta) >= 21):
+            return False
+    if theirs['reserve'] and not (ours['reserve'] or oa):
+        return False
+    return ours['women'] or not theirs['women']
+
+
+def sofascore_names_match(home: str, away: str, ss_home: str,
+                          ss_away: str) -> Tuple[Optional[str], float]:
+    """Czy zdarzenie SofaScore ``ss_home`` vs ``ss_away`` to NASZ mecz?
+
+    Zwraca (``'direct'`` | ``'reversed'`` | None, zgodność słabszej strony).
+    Orientację przyjmujemy, gdy obie strony mają ścisłą zgodność >= 0.5, albo
+    gdy jedna strona ma >= 0.9, a druga >= 0.5 po przybliżeniu (difflib/alias)
+    — dwa słabe, przybliżone trafienia nie wystarczą. Znaczniki drużyny
+    (kobiety, U16..U23, rezerwy) muszą się zgadzać. Termin sprawdza
+    ``_verify_sofascore_event``; tu tylko nazwy.
+    """
+    ours = (_ss_name(home), _ss_name(away))
+    theirs = (_ss_name(ss_home), _ss_name(ss_away))
+    # Przy dwóch możliwych orientacjach wygrywa ta z większą liczbą
+    # dopasowanych tokenów: „Istanbul GSK vs Istanbul BB” → „Istanbul Genclik
+    # Spor vs Istanbul BB SK” ma „Istanbul” wszędzie, rozstrzyga „BB”.
+    best = (False, 0, 0.0, 0.0, None)
+    for orient, pair in (('direct', theirs), ('reversed', theirs[::-1])):
+        if not all(_ss_markers_agree(o, t) for o, t in zip(ours, pair)):
+            continue
+        (eh, ah, nh), (ea, aa, na) = (_ss_side(o, t) for o, t in zip(ours, pair))
+        ok = (eh >= 0.5 and ea >= 0.5) or (max(ah, aa) >= 0.9 and min(ah, aa) >= 0.5)
+        cand = (ok, nh + na, min(ah, aa), ah + aa, orient)
+        if cand[:4] > best[:4]:
+            best = cand
+    return (best[4] if best[0] else None), round(best[2], 2)
+
+
 def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
                             date_str: Optional[str] = None,
-                            min_overlap: float = 0.5,
                             max_days_off: int = 1) -> Optional[str]:
     """Sprawdź, czy zdarzenie SofaScore to naprawdę TEN mecz.
 
@@ -1129,7 +1352,8 @@ def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
 
     Wymagamy, by ZGADZAŁY SIĘ OBIE drużyny. Jedna trafiona nazwa nie wystarcza:
     tak właśnie powstawały dopasowania w rodzaju „Aluminij W vs Primorje W" ->
-    „NK Maribor vs NK Aluminij".
+    „NK Maribor vs NK Aluminij". Nazwy porównuje ``sofascore_names_match``
+    (transliteracja, aliasy, akronimy, znaczniki kobiet/młodzieży/rezerw).
 
     Sprawdzamy TAKŻE termin. Same nazwy nie wystarczają przy dwumeczach — w
     CAF Champions League i Confederations Cup ta sama para gra dwa razy, więc
@@ -1157,13 +1381,10 @@ def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
     if not ss_home or not ss_away:
         return None
 
-    direct = min(_name_overlap(home_team, ss_home), _name_overlap(away_team, ss_away))
-    reverse = min(_name_overlap(home_team, ss_away), _name_overlap(away_team, ss_home))
-
-    best = max(direct, reverse)
-    if best < min_overlap:
+    orient, score = sofascore_names_match(home_team, away_team, ss_home, ss_away)
+    if orient is None:
         print(f"      ⛔ SofaScore zwrócił inny mecz: '{ss_home} vs {ss_away}' "
-              f"(zgodność {best:.2f} < {min_overlap})")
+              f"(zgodność {score:.2f})")
         return None
 
     # Kontrola terminu — łapie rewanże, których nazwy nie odróżniają.
@@ -1181,11 +1402,11 @@ def _verify_sofascore_event(event_id: int, home_team: str, away_team: str,
                   f" — prawdopodobnie rewanż, odrzucam")
             return None
 
-    return 'direct' if direct >= reverse else 'reversed'
+    return orient
 
 
 def _orient_fan_vote(vote: Dict[str, Any], home_team: str,
-                     away_team: str) -> None:
+                     away_team: str, date_str: Optional[str] = None) -> None:
     """Ustaw Fan Vote względem NASZYCH stron. Modyfikuje ``vote`` w miejscu.
 
     Po co: ``get_sofascore_prediction`` zwraca głosy w kolejności SofaScore,
@@ -1198,6 +1419,9 @@ def _orient_fan_vote(vote: Dict[str, Any], home_team: str,
     głos PODBIJA ocenę błędnego typu i wypycha go do maila. Tak powstawały
     tenisowe „VALUE BET" na zawodnika, którego rynek wyceniał jako outsidera,
     a mail pokazywał obok 82% głosów kibiców „za nim".
+
+    ``date_str`` (dzień meczu) włącza kontrolę terminu: bez niego rewanż za
+    tydzień z tymi samymi nazwami przechodził jako ten mecz.
     """
     if not vote.get('sofascore_found'):
         return
@@ -1211,7 +1435,8 @@ def _orient_fan_vote(vote: Dict[str, Any], home_team: str,
     if not m:
         vote['sofascore_orientation'] = 'unknown'
         return
-    verdict = _verify_sofascore_event(int(m.group(1)), home_team, away_team)
+    verdict = _verify_sofascore_event(int(m.group(1)), home_team, away_team,
+                                      date_str=date_str)
     if verdict is None:
         # Inny mecz (albo niepotwierdzony) — głosy NIE dotyczą tego spotkania.
         # Dawniej zostawały w wierszu (np. Throttur W ← „NC Central Eagles”
@@ -2470,7 +2695,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             try:
                 import sofascore_fanvote as fanvote
                 vote = fanvote.get_fan_vote(home, away, sport, date_str)
-                _orient_fan_vote(vote, home, away)
+                _orient_fan_vote(vote, home, away, date_str)
                 row.update(vote)
                 if vote.get('sofascore_found'):
                     print(f"      🗳️ Fan Vote: {vote['sofascore_home_win_prob']}% / "

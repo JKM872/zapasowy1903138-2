@@ -73,7 +73,14 @@ def _raw_index(day: str) -> Dict[tuple, Dict[str, Any]]:
 
 def build_candidates(day: str, top: List[Dict[str, Any]],
                      twierdza: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """TOP + Twierdza (bez duplikatów) wzbogacone o surowe dane meczu."""
+    """TOP + Twierdza (bez duplikatów) wzbogacone o surowe dane meczu.
+
+    Bez Rosji w sportach drużynowych (liga, także kod Forebet RU1/RUW/…, kraj,
+    drużyny): opublikowane wcześniej typy mogły ją zawierać.
+    """
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
+    import russia_filter
     try:
         idx = _raw_index(day)
     except Exception:
@@ -81,13 +88,18 @@ def build_candidates(day: str, top: List[Dict[str, Any]],
     out, seen = [], set()
     for src, rows in (('TOP', top or []), ('Twierdza', twierdza or [])):
         for r in rows:
+            home, _, away = str(r.get('match') or '').partition(' vs ')
+            raw = idx.get((r.get('sport'), r.get('match'))) or {}
+            if not russia_filter.is_individual_sport(r.get('sport')) and russia_filter.is_russian(
+                    r.get('league'), raw.get('country'), home, away):
+                print(f"   🇷🇺 Analityk AI pomija mecz z Rosji: {r.get('match')}")
+                continue
             c = {'source': src, **{k: v for k, v in r.items() if k != 'stars'}}
             k = candidate_key(c)
             if k in seen:
                 continue
             seen.add(k)
             c['key'] = k
-            raw = idx.get((r.get('sport'), r.get('match'))) or {}
             c['data'] = {f: raw[f] for f in RAW_FIELDS if raw.get(f) not in (None, '', {}, [])}
             if isinstance(raw.get('form'), dict):
                 try:

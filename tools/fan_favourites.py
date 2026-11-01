@@ -28,6 +28,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 import fan_limits  # noqa: E402
+import russia_filter  # noqa: E402
 from tools import pricing  # noqa: E402
 
 RESULTS = os.path.join(ROOT, 'results')
@@ -117,7 +118,7 @@ def refresh_votes(rows: List[Dict[str, Any]], sport: str, day: str, stale: bool,
         home, away = r.get('homeTeam') or '', r.get('awayTeam') or ''
         try:
             v = fanvote.get_fan_vote(home, away, sport, day)
-            _orient_fan_vote(v, home, away)
+            _orient_fan_vote(v, home, away, day)
         except Exception as e:                   # noqa: BLE001
             log(f'   fan vote {home} - {away}: {type(e).__name__}')
             continue
@@ -195,7 +196,11 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
           use_best_price: bool = True, now: Optional[datetime] = None, log=print) -> Dict[str, Any]:
     """{'generatedAt', 'picks': [...], 'stats': {...}} for one sport and day."""
     now = now or _now()
-    rows = _rows(day, sport, results)
+    # Rosja w sportach drużynowych (także kody lig Forebet RU1/RUW/…) — przed
+    # odświeżaniem Fan Vote, żeby nie zużywać na nie zapytań SofaScore.
+    rows = russia_filter.filter_rows(_rows(day, sport, results), 'league', 'country',
+                                     'homeTeam', 'awayTeam', label=f'Fan Favourites {sport}',
+                                     sport=sport)
     if refresh and rows:
         refresh_votes(rows, sport, day, _file_age_h(day, sport, results, now) > REFRESH_AGE_H, now, log)
     avail = _read(os.path.join(results, f'availability_{day}.json')) or {}

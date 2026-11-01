@@ -34,6 +34,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 import fan_limits  # noqa: E402
+import russia_filter  # noqa: E402
 from tools import pricing  # noqa: E402
 
 RESULTS = os.path.join(ROOT, 'results')
@@ -213,8 +214,12 @@ def leg_pool(days: List[str], results: str = RESULTS, now: Optional[datetime] = 
     pool: Dict[str, Dict[str, Any]] = {}
     for day in days:
         avail = _read(os.path.join(results, f'availability_{day}.json')) or {}
-        for leg in (_top_legs(day, results, avail, now, limits)
-                    + _fan_legs(day, results, now, limits, rebuild_fan)):
+        # Rosja w sportach drużynowych: opublikowane wcześniej TOP / Fan
+        # Favourites mogły ją zawierać (historii nie przepisujemy).
+        for leg in russia_filter.filter_rows(
+                _top_legs(day, results, avail, now, limits)
+                + _fan_legs(day, results, now, limits, rebuild_fan),
+                'league', 'home', 'away', label=f'Weekend {day}'):
             ko = pricing._parse_ts(leg['kickoff'])
             if leg['availability'] == 'out' or (ko is not None and ko <= now):
                 continue

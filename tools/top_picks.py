@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
+import russia_filter  # noqa: E402
 from tools import best_price, league_tier, pricing, staking, top_rules  # noqa: E402
 
 # Learned segment rules (outputs/top_rules.json, tools/top_rules.py); a missing,
@@ -294,6 +295,13 @@ def _form_block(m: Dict[str, Any]) -> str:
         return ''
 
 
+def _without_russia(ms: List[Dict[str, Any]], sport: str) -> List[Dict[str, Any]]:
+    """Bez lig, klubów i reprezentacji Rosji w sportach drużynowych (także
+    kody lig Forebet RU1/RU2/RU4/RUW/RUC; plik z danymi mógł je zachować)."""
+    return russia_filter.filter_rows(ms, 'league', 'country', 'homeTeam', 'awayTeam',
+                                     label=f'TOP {sport}', sport=sport)
+
+
 def collect(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
     out = []
     for p in sorted(glob.glob(os.path.join(ROOT, 'results', f'matches_{day}_*_forebet.json'))):
@@ -304,7 +312,7 @@ def collect(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
             ms = json.load(open(p, encoding='utf-8-sig')).get('matches') or []
         except Exception:
             continue
-        for m in ms:
+        for m in _without_russia(ms, sport):
             if m.get('qualifies') and (m.get('predictionGrade') or '') in grades:
                 r = evaluate(m, sport, day)
                 if r:
@@ -322,7 +330,7 @@ def enrich_fanvote(m: Dict[str, Any], sport: str, day: str) -> None:
         import sofascore_fanvote as fv
         from forebet_pipeline import _orient_fan_vote
         v = fv.get_fan_vote(m.get('homeTeam'), m.get('awayTeam'), sport, day)
-        _orient_fan_vote(v, m.get('homeTeam'), m.get('awayTeam'))
+        _orient_fan_vote(v, m.get('homeTeam'), m.get('awayTeam'), day)
         _remember_event(v, sport, m)
         if v.get('sofascore_found'):
             m['sofascore'] = {'found': True, 'votes': v.get('sofascore_total_votes'),
@@ -366,7 +374,7 @@ def collect_enriched(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
             ms = json.load(open(p, encoding='utf-8-sig')).get('matches') or []
         except Exception:
             continue
-        for m in ms:
+        for m in _without_russia(ms, sport):
             if not (m.get('qualifies') and (m.get('predictionGrade') or '') in grades):
                 continue
             if not evaluate(m, sport, day):     # bez szans — nie pytamy SofaScore
