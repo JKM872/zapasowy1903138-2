@@ -2,8 +2,10 @@
  * API Contract Test
  * ──────────────────
  * Validates that the production API at Heroku returns the expected data shape.
+ * The newest day can still be empty, so the test reads /api/dates and checks
+ * the first of the newest MAX_DATES days that has matches.
  * Tests:
- *  1. /api/matches returns 200
+ *  1. /api/dates and /api/matches?date=<day> return 200
  *  2. Response shape has required top-level keys
  *  3. Match items have required fields
  *  4. sportCounts is populated
@@ -11,6 +13,7 @@
  */
 
 const API_BASE = process.env.API_URL || 'https://pickly-67e87ed00f70.herokuapp.com'
+const MAX_DATES = 5
 
 let failures = 0
 
@@ -27,20 +30,55 @@ function section(title) {
   console.log(`\n── ${title} ──`)
 }
 
-async function main() {
-  // ── 1. Fetch matches endpoint ──
-  section('API Connectivity')
-  let response
+async function get(path) {
   try {
-    response = await fetch(`${API_BASE}/api/matches`)
+    return await fetch(`${API_BASE}${path}`)
   } catch (err) {
-    console.error(`  ❌ Failed to connect: ${err.message}`)
-    process.exit(1)
+    throw new Error(`Failed to connect: ${err.message}`)
   }
-  assert(response.ok, `GET /api/matches → ${response.status} (expected 2xx)`)
+}
+
+// process.exitCode instead of process.exit(): on Windows, Node 24 before
+// 24.20 aborts with 0xC0000409 when process.exit() follows fetch calls
+// (nodejs/node#56645).
+function summary() {
+  console.log('\n' + '═'.repeat(40))
+  if (failures === 0) {
+    console.log('✅ All API contract tests PASSED')
+    process.exitCode = 0
+  } else {
+    console.error(`❌ ${failures} test(s) FAILED`)
+    process.exitCode = 1
+  }
+}
+
+async function main() {
+  // ── 1. Find the newest day with matches ──
+  section('API Connectivity')
+  const datesResponse = await get('/api/dates')
+  assert(datesResponse.ok, `GET /api/dates → ${datesResponse.status} (expected 2xx)`)
+  const dates = datesResponse.ok ? ((await datesResponse.json()).dates || []).slice(0, MAX_DATES) : []
+
+  let json = null
+  let date = null
+  for (const d of dates) {
+    const response = await get(`/api/matches?date=${encodeURIComponent(d)}`)
+    assert(response.ok, `GET /api/matches?date=${d} → ${response.status} (expected 2xx)`)
+    if (!response.ok) continue
+    const body = await response.json()
+    if (Array.isArray(body?.data) && body.data.length > 0) {
+      json = body
+      date = d
+      break
+    }
+    console.log(`  ⚠️  ${d}: no matches, trying the previous date`)
+  }
+  if (!json) {
+    assert(false, `one of the newest ${dates.length} dates has matches (${dates.join(', ')})`)
+    return summary()
+  }
 
   // ── 2. Parse JSON ──
-  const json = await response.json()
   assert(typeof json === 'object' && json !== null, 'Response is a JSON object')
 
   // ── 3. Top-level shape ──
@@ -61,61 +99,50 @@ async function main() {
 
   // ── 5. Match item fields ──
   section('Match item structure')
-  if (json.data.length > 0) {
-    const sample = json.data[0]
-    const requiredFields = [
-      'id', 'homeTeam', 'awayTeam', 'sport', 'time',
-    ]
-    for (const field of requiredFields) {
-      assert(field in sample, `Match has "${field}" field`)
-    }
-
-    // Nullable but structurally valid fields
-    const nullableFields = ['odds', 'forebet', 'sofascore', 'gemini', 'h2h']
-    for (const field of nullableFields) {
-      const value = sample[field]
-      assert(
-        value === null || value === undefined || typeof value === 'object',
-        `"${field}" is null/undefined/object (got ${typeof value})`,
-      )
-    }
-
-    // ── 6. Sub-object shapes (when present) ──
-    section('Sub-object shapes (on sample match)')
-
-    // Odds
-    if (sample.odds && typeof sample.odds === 'object') {
-      assert('home' in sample.odds, 'odds.home exists')
-      assert('away' in sample.odds, 'odds.away exists')
-    }
-
-    // Forebet
-    if (sample.forebet && typeof sample.forebet === 'object') {
-      assert('prediction' in sample.forebet, 'forebet.prediction exists')
-    }
-
-    // SofaScore
-    if (sample.sofascore && typeof sample.sofascore === 'object') {
-      assert('home' in sample.sofascore, 'sofascore.home exists')
-    }
-
-    console.log(`\n  ℹ️  Tested ${json.data.length} matches from API`)
-  } else {
-    console.log('  ⚠️  No matches returned (may be expected for some dates)')
+  const sample = json.data[0]
+  const requiredFields = [
+    'id', 'homeTeam', 'awayTeam', 'sport', 'time',
+  ]
+  for (const field of requiredFields) {
+    assert(field in sample, `Match has "${field}" field`)
   }
+
+  // Nullable but structurally valid fields
+  const nullableFields = ['odds', 'forebet', 'sofascore', 'gemini', 'h2h']
+  for (const field of nullableFields) {
+    const value = sample[field]
+    assert(
+      value === null || value === undefined || typeof value === 'object',
+      `"${field}" is null/undefined/object (got ${typeof value})`,
+    )
+  }
+
+  // ── 6. Sub-object shapes (when present) ──
+  section('Sub-object shapes (on sample match)')
+
+  // Odds
+  if (sample.odds && typeof sample.odds === 'object') {
+    assert('home' in sample.odds, 'odds.home exists')
+    assert('away' in sample.odds, 'odds.away exists')
+  }
+
+  // Forebet
+  if (sample.forebet && typeof sample.forebet === 'object') {
+    assert('prediction' in sample.forebet, 'forebet.prediction exists')
+  }
+
+  // SofaScore
+  if (sample.sofascore && typeof sample.sofascore === 'object') {
+    assert('home' in sample.sofascore, 'sofascore.home exists')
+  }
+
+  console.log(`\n  ℹ️  Tested ${json.data.length} matches from API (date ${date})`)
 
   // ── Summary ──
-  console.log('\n' + '═'.repeat(40))
-  if (failures === 0) {
-    console.log('✅ All API contract tests PASSED')
-    process.exit(0)
-  } else {
-    console.error(`❌ ${failures} test(s) FAILED`)
-    process.exit(1)
-  }
+  summary()
 }
 
 main().catch((err) => {
   console.error(`Fatal: ${err.message}`)
-  process.exit(1)
+  process.exitCode = 1
 })
