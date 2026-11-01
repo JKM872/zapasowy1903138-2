@@ -37,7 +37,9 @@ RE_TS = re.compile(r'^\S*\d{4}-\d\d-\d\dT[\d:.]+Z\s?')
 RE_FOREBET = re.compile(r'Forebet (\w+) (\d{4}-\d\d-\d\d): (\d+) meczów \(HTML=')
 RE_FV_SUMMARY = re.compile(r'Fan Vote: (\d+)/(\d+) z głosami')
 RE_FV_FOUND = re.compile(r'Fan Vote: (\d+) found / (\d+) not_found')
-RE_QUOTA = re.compile(r'Przekaźnik SofaScore|zbyt wiele razy|too many times|Service invoked', re.I)
+# Tylko teksty limitu Google. „N złych odpowiedzi z rzędu” to zepsuty przekaźnik,
+# nie limit — ten zgłasza sonda relay_dead.
+RE_QUOTA = re.compile(r'dzienny limit Google|zbyt wiele razy|too many times|Service invoked', re.I)
 RE_BLOCKED = re.compile(r'SofaScore zablokowany dla IP')
 RE_BUDGET = re.compile(r'Czas wyczerpany')
 RE_TRACEBACK = re.compile(r'Traceback \(most recent call last\)')

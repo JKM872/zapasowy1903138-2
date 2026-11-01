@@ -52,6 +52,14 @@ def test_warn_rules_and_traceback():
     assert lv['traceback'] == W.ALERT and lv['relay_quota'] == W.WARN
 
 
+def test_relay_dropped_for_bad_answers_is_not_a_quota_warning():
+    skipped = TS + '   ⚠️ Przekaźnik SofaScore #1: 3 złych odpowiedzi z rzędu — pomijam do końca runu'
+    assert W.parse_log(skipped, 'x') == []
+    quota = (TS + '   ⚠️ Przekaźnik SofaScore #2: dzienny limit Google wyczerpany'
+             ' — przełączam na kolejny (5 zostało)')
+    assert codes(W.parse_log(skipped + '\n' + quota, 'x')) == ['relay_quota']
+
+
 def test_scheduled_today(tmp_path):
     p = tmp_path / 'w.yml'
     p.write_text("on:\n  schedule:\n    - cron: '0 6 * * *'\n", encoding='utf-8')
