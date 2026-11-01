@@ -1433,7 +1433,7 @@
   "unknown": true
  },
  "football|Ittihad Tanger|Khemis Zemamra": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "home",
@@ -1453,47 +1453,67 @@
   "netKey": 0
  },
  "football|Marítimo|Santa Clara": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
-  "home": [],
-  "away": [],
-  "sources": null,
-  "board": "ok",
-  "top_block": false,
-  "netStars": 0,
-  "netKey": 0
- },
- "football|Académico Viseu|Rio Ave": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": "sofascore",
-  "confirmed": false,
-  "side": "home",
-  "home": [],
+  "home": [
+   {
+    "name": "S. Bouzaidi",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
   "away": [
    {
-    "name": "B. Aguilera",
-    "importance": "key",
+    "name": "L. Fernando",
+    "importance": "other",
     "status": "out",
-    "reason": "Anterior Cruciate Ligament"
+    "reason": "red_card_suspension"
    }
   ],
   "sources": null,
   "board": "ok",
   "top_block": false,
-  "netStars": 0,
+  "netStars": -1,
   "netKey": -1
  },
- "football|Cobresal|Everton de Vina": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
+ "football|Académico Viseu|Rio Ave": {
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
+  "side": "home",
+  "home": [
+   {
+    "name": "Á. Zamora",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "away": [],
+  "sources": null,
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 1
+ },
+ "football|Cobresal|Everton de Vina": {
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "away",
   "home": [
    {
-    "name": "S. Pino",
+    "name": "B. Carvallo",
     "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "S. Pino",
+    "importance": "key",
     "status": "doubtful",
     "reason": "Physical Discomfort"
    }
@@ -1513,27 +1533,43 @@
    }
   ],
   "sources": null,
-  "board": "downgrade",
-  "top_block": true,
-  "netStars": 1,
-  "netKey": 1
- },
- "football|Serrano PE|Jaguar": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
-  "confirmed": false,
-  "side": "away",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
+ },
+ "football|Serrano PE|Jaguar": {
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
+  "confirmed": false,
+  "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.zerozero.cv/jogo/2026-11-01-serrano-pe-jaguar/12724553",
+   "https://www.besoccer.com/match/serrano-pe/ad-jaboatao-dos-guararapes/2027244644",
+   "https://www.api-futebol.com.br/campeonato/campeonato-pernambucano/2026-2027/primeiro-turno-forro/01-11-serrano-pe-jaguar-36126",
+   "https://www.forebet.com/en/football/matches/serrano-pe-jaguar-2562087",
+   "https://www.thesportsdb.com/event/2620111-serrano-vs-jaguar"
+  ],
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0
  },
  "football|Palermo|Vicenza Calcio": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "home",
   "home": [],
   "away": [
+   {
+    "name": "T. Corazza",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
    {
     "name": "F. Tsadjout",
     "importance": "other",
@@ -1544,17 +1580,34 @@
   "sources": null,
   "board": "ok",
   "top_block": false,
-  "netStars": 0,
-  "netKey": 0
+  "netStars": -1,
+  "netKey": -1
  },
  "football|FC Rànger's|FC Santa Coloma": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [
+   {
+    "name": "David Rodríguez",
+    "importance": "key",
+    "status": "out",
+    "reason": "Listed under \"Bajas\" (absent) for FC Santa Coloma"
+   }
+  ],
+  "sources": [
+   "https://www.zerozero.com.mx/partido/2026-11-01-fc-ranger-s-fc-santa-coloma/12419284",
+   "https://www.xscores.com/soccer/match/fc-rangers-vs-fc-santa-coloma/01-11-2026/2935299",
+   "https://leaguespy.com/prev/19444624",
+   "https://promatch24.com/match/792530/",
+   "https://www.sofascore.com/football/match/fc-santa-coloma-fc-rangers/pucsled"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 1
  },
  "football|Cerro Porteño|Olimpia Asunción": {
   "checkedAt": "2026-11-01T10:16:59.107924+00:00",
@@ -1814,40 +1867,117 @@
   "unknown": true
  },
  "hockey|Cape Breton Eagles|Saint John Sea Dogs": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://chl.ca/lhjmq-eagles/article/eagles-host-sea-dogs-look-for-fifth-straight-win/",
+   "https://omnihockey.com/games/qmjhl-32720",
+   "https://www.flashscore.com/match/hockey/cape-breton-eagles-vsayqoPl/saint-john-sea-dogs-QX117ju7/",
+   "https://www.flohockey.tv/live/253016",
+   "https://www.oursportscentral.com/services/releases/sea-dogs-top-eagles-in-regular-season-finale/n-6337821"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "hockey|Sarnia Sting|Flint Firebirds": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.tsn.ca/chl/ohl/event/flint-firebirds-sarnia-sting-20261101/29150/",
+   "https://www.theobserver.ca/sports/local-sports/sarnia-sting-whittle-roster-after-competitive-training-camp",
+   "https://www.sofascore.com/ice-hockey/match/sarnia-sting-flint-firebirds/gRXskRX",
+   "https://www.flohockey.tv/live/253980-2026-flint-firebirds-vs-sarnia-sting",
+   "https://flint-firebirds.mixlr.com/events/5314096"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "hockey|Utica Comets|Hamilton Hammers": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.hamiltonhammers.com/news/detail/preview-hamilton-wraps-up-weekend-in-utica",
+   "https://insidetherink.com/ahl-game-preview-hamilton-hammers-at-utica-comets-with-projected-lines-11-01-2026/",
+   "https://theahl.com/stats/game-center/1029241",
+   "https://insidetherink.com/stats/ahl/games/2026-11-01-hammers-at-comets-1029241/",
+   "https://www.tsn.ca/ahl/event/hamilton-hammers-utica-comets-20261101/1029241/"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "hockey|Lehigh Valley Phantoms|Providence Bruins": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
-  "board": "ok",
-  "top_block": false,
-  "unknown": true
+  "home": [],
+  "away": [
+   {
+    "name": "Michael DiPietro",
+    "importance": "key",
+    "status": "out",
+    "reason": "Gone are goalie Michael DiPietro"
+   },
+   {
+    "name": "Patrick Brown",
+    "importance": "key",
+    "status": "out",
+    "reason": "Gone are captain Patrick Brown"
+   },
+   {
+    "name": "Georgii Merkulov",
+    "importance": "key",
+    "status": "out",
+    "reason": "Gone are Georgii Merkulov"
+   },
+   {
+    "name": "Fabian Lysell",
+    "importance": "key",
+    "status": "out",
+    "reason": "Gone are Fabian Lysell"
+   },
+   {
+    "name": "Riley Tufte",
+    "importance": "key",
+    "status": "out",
+    "reason": "Gone are Riley Tufte"
+   },
+   {
+    "name": "Michael Callahan",
+    "importance": "key",
+    "status": "out",
+    "reason": "Gone are Michael Callahan"
+   }
+  ],
+  "sources": [
+   "https://globalnews411.com/articles/preview-phantoms-vs-providence-sunday-matinee#L147-L149",
+   "https://theahl.com/stats/game-center/1029236",
+   "https://insidetherink.com/ahl-game-preview-providence-bruins-at-lehigh-valley-phantoms-with-projected-lines-11-01-2026/",
+   "https://insidetherink.com/stats/ahl/games/2026-11-01-bruins-at-phantoms-1029236/",
+   "https://www.pplcenter.com/events/detail/lehigh-valley-phantoms-vs-providence-bruins-11"
+  ],
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 0,
+  "netKey": 6
  },
  "hockey|Iowa Wild|Charlotte Checkers": {
   "checkedAt": "2026-11-01T10:16:59.107924+00:00",
@@ -1913,22 +2043,42 @@
   "unknown": true
  },
  "tennis|D. Dietrich|L. Draxl": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.tennis.com/tournaments/marketbeat-open/matches/d-dietrich-vs-l-draxl-2026-11-01",
+   "https://www.sofascore.com/it/tennis/match/dylan-dietrich-liam-draxl/nvObsNZad",
+   "https://tennistonic.com/tennis-news/1075204/h2h-prediction-of-liam-draxl-vs-dylan-dietrich-in-sioux-falls-challenger-with-odds-preview-pick-1st-november-2026/",
+   "https://en.tennistemple.com/match/dietrich-draxl-sioux-falls-2026/9568344/",
+   "https://www.forebet.com/en/tennis/matches/challenger-men/sioux-falls/d-dietrich-l-draxl/362511"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "tennis|A. Fenty|K. Poling": {
-  "checkedAt": "2026-11-01T10:16:59.107924+00:00",
-  "source": null,
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.tennis.com/tournaments/jonathan-fried-pro-challenger/matches/a-fenty-vs-k-poling-2026-11-01",
+   "https://www.sofascore.com/tennis/match/andrew-fenty-karl-poling/dOEbsIEdc",
+   "https://tennisforesight.com/match/12176360-fenty-vs-poling-charlottesville",
+   "https://www.pronocast.com/en/match/a-fenty-k-poling-charlottesville-2026-11-01-12176360",
+   "https://www.forebet.com/en/tennis/matches/challenger-men/charlottesville/a-fenty-k-poling/362545"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "tennis|T. Maria|B. V. Andreescu": {
   "checkedAt": "2026-11-01T10:16:59.107924+00:00",
@@ -2031,6 +2181,15 @@
  },
  "volleyball|Bergamo W|Scandicci W": {
   "checkedAt": "2026-11-01T10:16:59.107924+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true
+ },
+ "tennis|Y. Lalami Laaroussi|R. Tosetto": {
+  "checkedAt": "2026-11-01T17:56:19.712413+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
