@@ -1554,6 +1554,15 @@ _app_stats: Dict[str, int] = {}
 
 
 _dead_relays: set = set()
+# Przekaźnik, który odpowiada śmieciami (200 z HTML-em zamiast JSON-u, inny
+# status, wyjątek), wypada do końca runu po SOFASCORE_RELAY_BAD_LIMIT takich
+# odpowiedziach z rzędu. Wcześniej wypadał tylko przy „too many times”, więc
+# zepsuty przekaźnik #1 (watchdog 10.2026: „200, ok false” codziennie) był
+# pytany jako pierwszy przy KAŻDYM zapytaniu.
+_RELAY_BAD_LIMIT = int(os.getenv('SOFASCORE_RELAY_BAD_LIMIT', '3'))
+_relay_bad: Dict[str, int] = {}   # przekaźnik -> złe odpowiedzi z rzędu
+_relay_turn = 0                   # round robin: od którego przekaźnika zaczynamy
+_relay_lock = threading.Lock()    # lista dnia pyta z kilku wątków naraz
 
 
 def _relay_list() -> List[str]:
@@ -1562,6 +1571,34 @@ def _relay_list() -> List[str]:
 
 def _relays() -> List[str]:
     return [x for x in _relay_list() if x not in _dead_relays]
+
+
+def _relay_order() -> List[str]:
+    """Żywe przekaźniki, przy każdym zapytaniu od następnego (round robin),
+    żeby dzienny limit ~20k zapytań każdego konta Google schodził równo."""
+    global _relay_turn
+    live = _relays()
+    if not live:
+        return []
+    with _relay_lock:
+        k = _relay_turn % len(live)
+        _relay_turn += 1
+    return live[k:] + live[:k]
+
+
+def _relay_answer(relay: str, good: bool) -> None:
+    """Dobra odpowiedź zeruje serię złych; po _RELAY_BAD_LIMIT złych z rzędu
+    przekaźnik wypada do końca runu (log raz)."""
+    with _relay_lock:
+        if good:
+            _relay_bad.pop(relay, None)
+            return
+        n = _relay_bad[relay] = _relay_bad.get(relay, 0) + 1
+        if n < _RELAY_BAD_LIMIT or relay in _dead_relays:
+            return
+        _dead_relays.add(relay)
+    print(f"   ⚠️ Przekaźnik SofaScore #{_relay_list().index(relay) + 1}: {n} złych odpowiedzi "
+          f"z rzędu — pomijam do końca runu")
 
 
 _app_client_403_streak = 0
@@ -1584,14 +1621,20 @@ def _app_client_response(url: str, timeout: int = 10):
     # IP GitHuba/Tora/WARP dostają 403; przekaźnik pyta SofaScore za nas.
     # SOFASCORE_RELAY = jeden lub wiele adresów /exec (po przecinku, różne konta
     # Google → każde ma własny limit ~20k zapytań/dobę). Przekaźnik z wyczerpanym
-    # limitem („zbyt wiele razy” / „too many times”) wypada do końca runu.
+    # limitem („zbyt wiele razy” / „too many times”) wypada do końca runu od razu,
+    # zepsuty (HTML, inny status, wyjątek) po _RELAY_BAD_LIMIT razach z rzędu.
+    # Kolejne zapytania zaczynają od kolejnych przekaźników (round robin).
     import urllib.parse as _up
-    for relay in _relays():
+    for relay in _relay_order():
+        if relay in _dead_relays:   # inny wątek właśnie go wyłączył
+            continue
+        _app_stats['relay_calls'] = _app_stats.get('relay_calls', 0) + 1
         try:
             r = curl_requests.get(f"{relay}?url={_up.quote(www_url, safe='')}",
                                   impersonate='chrome', timeout=max(timeout, 20))
             body = (r.text or '').lstrip()
             if r.status_code == 200 and body.startswith('{') and '"code": 403' not in body[:60]:
+                _relay_answer(relay, True)
                 _app_stats['relay_ok'] = _app_stats.get('relay_ok', 0) + 1
                 _app_stats['200'] = _app_stats.get('200', 0) + 1
                 _app_client_403_streak = 0
@@ -1604,8 +1647,13 @@ def _app_client_response(url: str, timeout: int = 10):
                       f"wyczerpany — przełączam na kolejny ({len(_relays())} zostało)")
                 continue
             _app_stats['relay_fail'] = _app_stats.get('relay_fail', 0) + 1
+            # JSON z 403 SofaScore to działający przekaźnik (SofaScore odmówił
+            # temu zapytaniu) — nie liczy się do serii złych odpowiedzi.
+            if r.status_code != 200 or not body.startswith('{'):
+                _relay_answer(relay, False)
         except Exception:
             _app_stats['relay_err'] = _app_stats.get('relay_err', 0) + 1
+            _relay_answer(relay, False)
     attempts = [None]
     proxies = _get_sofascore_proxies()
     # Exity Tora są przez SofaScore blokowane (probe w CI: 4/4 × 403) —
@@ -1690,6 +1738,45 @@ def _app_client_get(url: str, timeout: int = 10) -> Tuple[Optional[int], Optiona
         return 200, None
 
 
+# Lista dnia piłki to ~200 kategorii i 8–11 min; kroki jednego joba (agent
+# dostępności, potem budowa TOP) budowały ją każdy od nowa. Gdy ustawione
+# SOFASCORE_LISTING_CACHE_DIR, lista trafia do <dir>/<slug>_<data>.json i jest
+# czytana, dopóki plik jest młodszy niż SOFASCORE_LISTING_TTL_S (domyślnie
+# 3 h). Brak listy (None) ani pusta lista nie trafiają na dysk.
+def _listing_cache_path(sport_slug: str, date_str: str) -> Optional[str]:
+    d = os.getenv('SOFASCORE_LISTING_CACHE_DIR', '').strip()
+    return os.path.join(d, f'{sport_slug}_{date_str}.json') if d else None
+
+
+def _listing_cache_load(path: Optional[str]) -> Optional[Dict[str, Any]]:
+    if not path:
+        return None
+    try:
+        if time.time() - os.path.getmtime(path) > float(os.getenv('SOFASCORE_LISTING_TTL_S', '10800')):
+            return None
+        with open(path, encoding='utf-8') as fh:
+            data = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) and data.get('events') else None
+
+
+def _listing_cache_save(path: Optional[str], data: Dict[str, Any]) -> None:
+    if not path or not data.get('events'):
+        return
+    tmp = f'{path}.{os.getpid()}.{threading.get_ident()}.tmp'
+    try:
+        os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+        with open(tmp, 'w', encoding='utf-8') as fh:
+            json.dump(data, fh, ensure_ascii=False)
+        os.replace(tmp, path)   # atomowo: czytelnik widzi stary albo pełny plik
+    except (OSError, TypeError, ValueError):
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+
+
 def _scheduled_events_via_categories(sport_slug: str, date_str: str,
                                      timeout: int = 10) -> Optional[Dict[str, Any]]:
     """Odtwarza dawne ``/sport/{slug}/scheduled-events/{date}``.
@@ -1697,11 +1784,18 @@ def _scheduled_events_via_categories(sport_slug: str, date_str: str,
     1) ``/sport/{slug}/scheduled-tournaments/{date}/page/N`` → id kategorii,
     2) ``/category/{id}/scheduled-events/{date}`` równolegle → eventy.
     Wynik w tym samym kształcie co stary endpoint: {'events': [...]}.
-    Cache per (sport, data) — robimy to raz na run.
+    Cache per (sport, data) — robimy to raz na run (i raz na job, gdy
+    ustawione SOFASCORE_LISTING_CACHE_DIR).
     """
     key = (sport_slug, date_str)
     if key in _scheduled_cache:
         return _scheduled_cache[key]
+    cache_path = _listing_cache_path(sport_slug, date_str)
+    cached = _listing_cache_load(cache_path)
+    if cached is not None:
+        print(f"   📅 SofaScore {sport_slug} {date_str}: {len(cached['events'])} meczów (z dysku)")
+        _scheduled_cache[key] = cached
+        return cached
     base = 'https://www.sofascore.com/api/v1'
     cat_ids: List[int] = []
     seen = set()
@@ -1751,6 +1845,7 @@ def _scheduled_events_via_categories(sport_slug: str, date_str: str,
     print(f"   📅 SofaScore {sport_slug} {date_str}: {len(events)} meczów z {len(cat_ids)} kategorii")
     out = {'events': events}
     _scheduled_cache[key] = out
+    _listing_cache_save(cache_path, out)
     return out
 
 

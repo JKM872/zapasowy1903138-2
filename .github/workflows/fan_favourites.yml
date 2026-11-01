@@ -25,6 +25,9 @@ jobs:
   board:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    env:
+      # SofaScore day listings are built once per sport-day and read from disk after.
+      SOFASCORE_LISTING_CACHE_DIR: /tmp/sofa_listing
     strategy:
       fail-fast: false
       max-parallel: 9

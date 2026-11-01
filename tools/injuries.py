@@ -12,6 +12,7 @@ koszykówka europejska — puste listy; siatkówka — brak lineups.
 from __future__ import annotations
 
 import os
+import re
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -32,6 +33,28 @@ events: Dict[Tuple[str, str, str], Tuple[int, str]] = {}
 def remember_event(sport: str, home: str, away: str, event_id: int, orient: str) -> None:
     if event_id and orient in ('direct', 'reversed'):
         events[(sport, home or '', away or '')] = (int(event_id), orient)
+
+
+def event_from_row(m: Dict[str, Any]) -> Optional[Tuple[int, str]]:
+    """(event_id, orientacja) zdarzenia, które Fan Vote wiersza już zweryfikował.
+
+    Id z ``sofascoreEventId``, ``sofascore.eventId`` albo ``/match/<id>`` w
+    ``sofascore.url`` — tylko przy orientacji ``direct``/``reversed``: wiersz
+    ``mismatch`` trzyma adres INNEGO meczu, a bez orientacji nic nie wiemy.
+    """
+    ss = m.get('sofascore') if isinstance(m.get('sofascore'), dict) else {}
+    orient = ss.get('orientation')
+    if orient not in ('direct', 'reversed'):
+        return None
+    eid = m.get('sofascoreEventId') or ss.get('eventId')
+    if not eid:
+        hit = re.search(r'/match/(\d+)', str(ss.get('url') or ''))
+        eid = hit.group(1) if hit else None
+    try:
+        eid = int(eid)
+    except (TypeError, ValueError):
+        return None
+    return (eid, orient) if eid > 0 else None
 
 
 def _resolve(sport: str, home: str, away: str, day: str) -> Optional[Tuple[int, str]]:
@@ -90,7 +113,13 @@ def side_risk(inj: Optional[Dict[str, Any]], side: str) -> bool:
 def attach(m: Dict[str, Any], sport: str, day: str, side: str) -> None:
     """Zapisz w meczu injuries/injuryCounts/injury_risk (dla typowanej strony)."""
     if 'injuries' not in m:
-        inj = fetch(sport, m.get('homeTeam') or '', m.get('awayTeam') or '', day)
+        home, away = m.get('homeTeam') or '', m.get('awayTeam') or ''
+        ev = event_from_row(m)
+        if ev:
+            # Zdarzenie wiersza już zweryfikowane — _resolve nie szuka po nazwach
+            # (to przebudowywało listy dnia SofaScore, 8–11 min na sport).
+            remember_event(sport, home, away, *ev)
+        inj = fetch(sport, home, away, day)
         if inj is None:
             return
         m['injuries'] = inj

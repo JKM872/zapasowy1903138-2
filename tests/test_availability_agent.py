@@ -1,3 +1,5 @@
+import pytest
+
 from tools import availability_agent as av
 
 
@@ -138,3 +140,30 @@ def test_groq_compound_search_urls_are_sources_and_429_rotates_keys(monkeypatch)
     assert av.parse_llm(txt, urls)['home'][0]['status'] == 'out'
     # no search results -> unsourced -> ignored
     assert av.parse_llm(txt, av.compound_urls({'executed_tools': []})) is None
+
+
+def test_mismatch_row_url_is_ignored_and_verified_row_uses_its_event(monkeypatch):
+    import sofascore_scraper as ss
+    from tools import injuries
+    url = 'https://www.sofascore.com/football/match/16550656'
+    bad = {'homeTeam': 'Leeds', 'awayTeam': 'Wolves',
+           'sofascore': {'found': False, 'url': url, 'orientation': 'mismatch'}}   # url of another game
+    assert av._event_id(bad) is None
+    assert av._event_id({**bad, 'sofascore': {'url': url, 'orientation': None}}) is None
+    resolved = []
+    monkeypatch.setattr(injuries, '_resolve', lambda *a: resolved.append(a) or None)
+    monkeypatch.setattr(ss, '_api_get_json', lambda *a, **k: pytest.fail('line-ups of the wrong event'))
+    assert av.sofascore_check(bad, 'football', '2026-10-31') is None
+    assert resolved == [('football', 'Leeds', 'Wolves', '2026-10-31')]   # name search + verification
+
+    good = {**bad, 'sofascore': {'found': True, 'url': url, 'orientation': 'reversed'}}
+    assert av._event_id(good) == 16550656
+    lineups = {'confirmed': False, 'away': {'players': [], 'missingPlayers': []},
+               'home': {'players': [], 'missingPlayers': [
+                   {'player': {'name': 'Star', 'proposedMarketValueRaw': {'value': 9e6}},
+                    'type': 'missing', 'description': 'Knee'}]}}
+    seen = []
+    monkeypatch.setattr(ss, '_api_get_json', lambda u, timeout=10: seen.append(u) or lineups)
+    res = av.sofascore_check(good, 'football', '2026-10-31')
+    assert seen == ['https://api.sofascore.com/api/v1/event/16550656/lineups'] and len(resolved) == 1
+    assert [p['name'] for p in res['away']] == ['Star'] and res['home'] == []   # sides swapped

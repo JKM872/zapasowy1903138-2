@@ -1,6 +1,7 @@
 """Absencje SofaScore (missingPlayers z /event/{id}/lineups) — bez sieci."""
 import os
 import sys
+import types
 
 import pytest
 
@@ -134,3 +135,53 @@ def test_unsupported_sport_skipped(monkeypatch):
     m = _match()
     injuries.attach(m, 'volleyball', '2026-10-21', 'home')
     assert 'injuries' not in m
+
+
+URL = 'https://www.sofascore.com/football/match/16550656'
+
+
+def _verified(orientation='direct'):
+    """Wiersz Forebet z Fan Vote (kształt z results/matches_*_forebet.json)."""
+    return {**_match(), 'sofascore': {'found': orientation in ('direct', 'reversed'), 'votes': 900,
+                                      'url': URL, 'orientation': orientation}}
+
+
+def test_event_from_row_needs_a_verified_orientation():
+    assert injuries.event_from_row(_verified()) == (16550656, 'direct')
+    assert injuries.event_from_row(_verified('reversed')) == (16550656, 'reversed')
+    assert injuries.event_from_row({'sofascoreEventId': '42', 'sofascore': {'orientation': 'reversed'}}) == (42, 'reversed')
+    assert injuries.event_from_row({'sofascore': {'eventId': 43, 'orientation': 'direct'}}) == (43, 'direct')
+    for orientation in ('mismatch', 'unknown', None):
+        assert injuries.event_from_row(_verified(orientation)) is None
+    assert injuries.event_from_row({'sofascore': None}) is None
+    assert injuries.event_from_row({'sofascore': {'orientation': 'direct', 'url': 'https://www.sofascore.com/'}}) is None
+
+
+def test_verified_row_never_searches_by_name(monkeypatch):
+    monkeypatch.setattr(ss, 'search_event_via_api', lambda *a, **k: pytest.fail('name search'))
+    urls = []
+    monkeypatch.setattr(ss, '_api_get_json', lambda url, timeout=10: urls.append(url) or LINEUPS)
+    m = _verified()
+    injuries.attach(m, 'football', '2026-10-21', 'home')
+    assert len(urls) == 1 and urls[0].endswith('/event/16550656/lineups')
+    assert m['injuryCounts'] == {'home': 3, 'away': 1} and m['injury_risk'] is True
+    r = {'homeTeam': 'Brest', 'awayTeam': 'Lens', 'sofascoreEventId': 777,
+         'sofascore': {'found': True, 'orientation': 'reversed'}}
+    injuries.attach(r, 'football', '2026-10-21', 'home')
+    assert urls[-1].endswith('/event/777/lineups')
+    assert r['injuryCounts'] == {'home': 1, 'away': 3}         # strony SofaScore odwrócone
+
+
+def test_mismatch_row_falls_back_to_name_search(monkeypatch):
+    fake = types.ModuleType('forebet_pipeline')               # bez distutils lokalnie
+    fake._verify_sofascore_event = lambda eid, home, away, date_str=None: 'direct'
+    monkeypatch.setitem(sys.modules, 'forebet_pipeline', fake)
+    searched = []
+    monkeypatch.setattr(ss, 'search_event_via_api', lambda h, a, **k: searched.append((h, a)) or 555)
+    urls = []
+    monkeypatch.setattr(ss, '_api_get_json', lambda url, timeout=10: urls.append(url) or LINEUPS)
+    m = _verified('mismatch')                                  # url = INNY mecz
+    injuries.attach(m, 'football', '2026-10-21', 'home')
+    assert searched == [('Leeds', 'Wolves')]
+    assert len(urls) == 1 and urls[0].endswith('/event/555/lineups')
+    assert m['injuryCounts'] == {'home': 3, 'away': 1}

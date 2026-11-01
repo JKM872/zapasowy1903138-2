@@ -27,6 +27,10 @@ jobs:
   top:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    env:
+      # One SofaScore day listing per sport-day for the whole job: the
+      # availability agent builds it, the TOP build reads it from disk.
+      SOFASCORE_LISTING_CACHE_DIR: /tmp/sofa_listing
     steps:
       - uses: actions/checkout@v6
         with:

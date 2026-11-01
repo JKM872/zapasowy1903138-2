@@ -105,8 +105,12 @@ def key_of(sport: str, home: str, away: str) -> str:
 # ── SofaScore ─────────────────────────────────────────────────────────────────
 
 def _event_id(m: Dict[str, Any]) -> Optional[int]:
-    url = ((m.get('sofascore') or {}).get('url') or '')
-    hit = re.search(r'/(\d{5,})(?:$|[/?#])', url)
+    ss = m.get('sofascore') or {}
+    # Only a verified Fan Vote event belongs to this match: a 'mismatch' row keeps
+    # the url of the other game it was matched to, and its line-ups were used.
+    if ss.get('orientation') not in ('direct', 'reversed'):
+        return None
+    hit = re.search(r'/(\d{5,})(?:$|[/?#])', ss.get('url') or '')
     return int(hit.group(1)) if hit else None
 
 
