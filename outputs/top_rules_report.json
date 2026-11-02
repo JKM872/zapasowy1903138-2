@@ -1,21 +1,21 @@
 {
- "generatedAt": "2026-10-27T02:27:40Z",
+ "generatedAt": "2026-11-02T10:10:18Z",
  "rulesFallback": null,
  "tuning": {
   "start": "2026-09-12",
-  "end": "2026-10-10",
-  "halfSplit": "2026-10-02",
-  "n": 1407
+  "end": "2026-10-16",
+  "halfSplit": "2026-10-03",
+  "n": 1688
  },
  "holdout": {
-  "start": "2026-10-11",
-  "end": "2026-10-26",
-  "days": 16
+  "start": "2026-10-17",
+  "end": "2026-11-02",
+  "days": 17
  },
  "decisions": {
-  "exclude": 39,
-  "inherit": 99,
-  "allow": 3
+  "exclude": 45,
+  "inherit": 93,
+  "allow": 4
  },
  "gateMode": "shadow",
  "enforcement": {
@@ -23,70 +23,88 @@
   "minPerDay": 3.0,
   "minRoi5": 0.0,
   "holdoutTopReplay": {
-   "n": 0,
-   "perDay": 0.0,
-   "roi5": null
+   "n": 1,
+   "perDay": 0.1,
+   "roi5": 63.9
   },
-  "reason": "holdout TOP replay after rules: 0 picks, 0.0/day, ROI -5% n/a (needs >= 3/day and > +0%)"
+  "reason": "holdout TOP replay after rules: 1 picks, 0.1/day, ROI -5% +63.9% (needs >= 3/day and > +0%)"
  },
  "safeGateForward": {
   "launch": "2026-10-27",
   "end": "2026-11-09",
-  "daysCovered": 0,
-  "status": "pending (0/14 settled days)",
+  "daysCovered": 6,
+  "status": "pending (6/14 settled days)",
   "cut": {
-   "n": 0,
-   "hit": null,
-   "roiRaw": null,
-   "roi5": null,
-   "maxDD": 0.0,
-   "perDay": 0.0,
-   "ci95": null
+   "n": 46,
+   "hit": 73.9,
+   "roiRaw": 12.9,
+   "roi5": 10.9,
+   "maxDD": 2.5,
+   "perDay": 46.0
   },
   "kept": {
-   "n": 0,
-   "hit": null,
-   "roiRaw": null,
-   "roi5": null,
-   "maxDD": 0.0,
-   "perDay": 0.0,
-   "ci95": null
+   "n": 108,
+   "hit": 57.4,
+   "roiRaw": 8.1,
+   "roi5": 5.6,
+   "maxDD": 9.89,
+   "perDay": 108.0
   },
-  "cutPerSport": {}
+  "cutPerSport": {
+   "basketball": {
+    "n": 12,
+    "hit": 83.3,
+    "roiRaw": 23.3,
+    "roi5": 21.3,
+    "maxDD": 2.0,
+    "perDay": 12.0
+   },
+   "tennis": {
+    "n": 34,
+    "hit": 70.6,
+    "roiRaw": 9.2,
+    "roi5": 7.2,
+    "maxDD": 3.01,
+    "perDay": 34.0
+   }
+  }
  },
  "universes": {
   "candidates": {
    "twoWay": {
     "before": {
-     "n": 1241,
-     "hit": 58.2,
-     "roiRaw": -3.3,
-     "roi5": -5.3,
-     "maxDD": 78.23,
-     "perDay": 77.6,
+     "n": 1968,
+     "hit": 57.0,
+     "roiRaw": -2.2,
+     "roi5": -4.3,
+     "maxDD": 98.88,
+     "perDay": 115.8,
      "ci95": [
-      -9.6,
-      -0.9
+      -7.8,
+      -0.5
      ]
     },
     "after": {
-     "n": 0,
-     "hit": null,
-     "roiRaw": null,
-     "roi5": null,
-     "maxDD": 0.0,
-     "perDay": 0.0,
-     "ci95": null
+     "n": 3,
+     "hit": 66.7,
+     "roiRaw": 9.9,
+     "roi5": 7.7,
+     "maxDD": 1.0,
+     "perDay": 0.2,
+     "ci95": [
+      -100.0,
+      63.9
+     ]
     },
     "perSport": {
      "baseball": {
       "before": {
-       "n": 24,
-       "hit": 62.5,
-       "roiRaw": 1.7,
-       "roi5": -0.2,
-       "maxDD": 3.99,
-       "perDay": 1.5
+       "n": 19,
+       "hit": 52.6,
+       "roiRaw": -16.8,
+       "roi5": -18.4,
+       "maxDD": 4.61,
+       "perDay": 1.1
       },
       "after": {
        "n": 0,
@@ -100,12 +118,12 @@
      },
      "basketball": {
       "before": {
-       "n": 282,
-       "hit": 64.2,
-       "roiRaw": -1.0,
-       "roi5": -2.7,
-       "maxDD": 28.76,
-       "perDay": 17.6
+       "n": 284,
+       "hit": 65.1,
+       "roiRaw": 1.9,
+       "roi5": 0.1,
+       "maxDD": 18.39,
+       "perDay": 16.7
       },
       "after": {
        "n": 0,
@@ -119,12 +137,12 @@
      },
      "football": {
       "before": {
-       "n": 476,
-       "hit": 53.8,
-       "roiRaw": 0.4,
-       "roi5": -1.9,
-       "maxDD": 28.86,
-       "perDay": 29.8
+       "n": 1113,
+       "hit": 53.1,
+       "roiRaw": -1.2,
+       "roi5": -3.5,
+       "maxDD": 67.38,
+       "perDay": 65.5
       },
       "after": {
        "n": 0,
@@ -138,12 +156,12 @@
      },
      "handball": {
       "before": {
-       "n": 39,
-       "hit": 56.4,
-       "roiRaw": -5.4,
-       "roi5": -7.3,
-       "maxDD": 7.06,
-       "perDay": 2.4
+       "n": 38,
+       "hit": 55.3,
+       "roiRaw": -8.3,
+       "roi5": -10.1,
+       "maxDD": 6.06,
+       "perDay": 2.2
       },
       "after": {
        "n": 0,
@@ -157,31 +175,30 @@
      },
      "hockey": {
       "before": {
-       "n": 232,
-       "hit": 57.3,
-       "roiRaw": -11.1,
-       "roi5": -12.7,
-       "maxDD": 30.15,
-       "perDay": 14.5
+       "n": 282,
+       "hit": 58.2,
+       "roiRaw": -9.6,
+       "roi5": -11.2,
+       "maxDD": 33.06,
+       "perDay": 16.6
       },
       "after": {
-       "n": 0,
-       "hit": null,
-       "roiRaw": null,
-       "roi5": null,
-       "maxDD": 0.0,
-       "perDay": 0.0,
-       "ci95": null
+       "n": 3,
+       "hit": 66.7,
+       "roiRaw": 9.9,
+       "roi5": 7.7,
+       "maxDD": 1.0,
+       "perDay": 0.2
       }
      },
      "rugby": {
       "before": {
-       "n": 3,
+       "n": 6,
        "hit": 66.7,
-       "roiRaw": 7.7,
-       "roi5": 5.6,
+       "roiRaw": 2.2,
+       "roi5": 0.4,
        "maxDD": 1.0,
-       "perDay": 0.2
+       "perDay": 0.4
       },
       "after": {
        "n": 0,
@@ -195,12 +212,12 @@
      },
      "tennis": {
       "before": {
-       "n": 150,
-       "hit": 58.0,
-       "roiRaw": -11.0,
-       "roi5": -12.5,
-       "maxDD": 22.98,
-       "perDay": 9.4
+       "n": 195,
+       "hit": 62.6,
+       "roiRaw": -3.9,
+       "roi5": -5.6,
+       "maxDD": 14.2,
+       "perDay": 11.5
       },
       "after": {
        "n": 0,
@@ -214,12 +231,12 @@
      },
      "volleyball": {
       "before": {
-       "n": 35,
-       "hit": 74.3,
-       "roiRaw": 9.5,
-       "roi5": 7.7,
-       "maxDD": 3.38,
-       "perDay": 2.2
+       "n": 31,
+       "hit": 80.6,
+       "roiRaw": 15.4,
+       "roi5": 13.6,
+       "maxDD": 2.0,
+       "perDay": 1.8
       },
       "after": {
        "n": 0,
@@ -233,45 +250,44 @@
      }
     },
     "applied": {
-     "n": 854,
-     "hit": 55.6,
-     "roiRaw": -3.3,
-     "roi5": -5.4,
-     "maxDD": 51.54,
-     "perDay": 53.4,
+     "n": 1550,
+     "hit": 54.8,
+     "roiRaw": -2.5,
+     "roi5": -4.7,
+     "maxDD": 88.79,
+     "perDay": 91.2,
      "ci95": [
-      -11.6,
-      0.3
+      -9.0,
+      -0.4
      ]
     }
    },
    "asStored": {
     "before": {
-     "n": 1241,
-     "hit": 58.2,
+     "n": 1968,
+     "hit": 57.0,
      "roiRaw": 1.1,
      "roi5": -1.1,
-     "maxDD": 34.93,
-     "perDay": 77.6
+     "maxDD": 54.45,
+     "perDay": 115.8
     },
     "after": {
-     "n": 0,
-     "hit": null,
-     "roiRaw": null,
-     "roi5": null,
-     "maxDD": 0.0,
-     "perDay": 0.0,
-     "ci95": null
+     "n": 3,
+     "hit": 66.7,
+     "roiRaw": 41.7,
+     "roi5": 37.9,
+     "maxDD": 1.0,
+     "perDay": 0.2
     },
     "perSport": {
      "baseball": {
       "before": {
-       "n": 24,
-       "hit": 62.5,
-       "roiRaw": 5.0,
-       "roi5": 2.8,
-       "maxDD": 3.84,
-       "perDay": 1.5
+       "n": 19,
+       "hit": 52.6,
+       "roiRaw": -13.6,
+       "roi5": -15.3,
+       "maxDD": 4.22,
+       "perDay": 1.1
       },
       "after": {
        "n": 0,
@@ -285,12 +301,12 @@
      },
      "basketball": {
       "before": {
-       "n": 282,
-       "hit": 64.2,
-       "roiRaw": -1.0,
-       "roi5": -2.7,
-       "maxDD": 28.76,
-       "perDay": 17.6
+       "n": 284,
+       "hit": 65.1,
+       "roiRaw": 1.9,
+       "roi5": 0.1,
+       "maxDD": 18.39,
+       "perDay": 16.7
       },
       "after": {
        "n": 0,
@@ -304,12 +320,12 @@
      },
      "football": {
       "before": {
-       "n": 476,
-       "hit": 53.8,
-       "roiRaw": 0.4,
-       "roi5": -1.9,
-       "maxDD": 28.86,
-       "perDay": 29.8
+       "n": 1113,
+       "hit": 53.1,
+       "roiRaw": -1.2,
+       "roi5": -3.5,
+       "maxDD": 67.38,
+       "perDay": 65.5
       },
       "after": {
        "n": 0,
@@ -323,12 +339,12 @@
      },
      "handball": {
       "before": {
-       "n": 39,
-       "hit": 56.4,
-       "roiRaw": -5.4,
-       "roi5": -7.3,
-       "maxDD": 7.06,
-       "perDay": 2.4
+       "n": 38,
+       "hit": 55.3,
+       "roiRaw": -8.3,
+       "roi5": -10.1,
+       "maxDD": 6.06,
+       "perDay": 2.2
       },
       "after": {
        "n": 0,
@@ -342,31 +358,30 @@
      },
      "hockey": {
       "before": {
-       "n": 232,
-       "hit": 57.3,
-       "roiRaw": 12.0,
-       "roi5": 9.3,
-       "maxDD": 6.93,
-       "perDay": 14.5
+       "n": 282,
+       "hit": 58.2,
+       "roiRaw": 13.5,
+       "roi5": 10.8,
+       "maxDD": 6.85,
+       "perDay": 16.6
       },
       "after": {
-       "n": 0,
-       "hit": null,
-       "roiRaw": null,
-       "roi5": null,
-       "maxDD": 0.0,
-       "perDay": 0.0,
-       "ci95": null
+       "n": 3,
+       "hit": 66.7,
+       "roiRaw": 41.7,
+       "roi5": 37.9,
+       "maxDD": 1.0,
+       "perDay": 0.2
       }
      },
      "rugby": {
       "before": {
-       "n": 3,
+       "n": 6,
        "hit": 66.7,
-       "roiRaw": 7.7,
-       "roi5": 5.6,
+       "roiRaw": 2.2,
+       "roi5": 0.4,
        "maxDD": 1.0,
-       "perDay": 0.2
+       "perDay": 0.4
       },
       "after": {
        "n": 0,
@@ -380,12 +395,12 @@
      },
      "tennis": {
       "before": {
-       "n": 150,
-       "hit": 58.0,
-       "roiRaw": -11.0,
-       "roi5": -12.5,
-       "maxDD": 22.98,
-       "perDay": 9.4
+       "n": 195,
+       "hit": 62.6,
+       "roiRaw": -3.9,
+       "roi5": -5.6,
+       "maxDD": 14.2,
+       "perDay": 11.5
       },
       "after": {
        "n": 0,
@@ -399,12 +414,12 @@
      },
      "volleyball": {
       "before": {
-       "n": 35,
-       "hit": 74.3,
-       "roiRaw": 9.5,
-       "roi5": 7.7,
-       "maxDD": 3.38,
-       "perDay": 2.2
+       "n": 31,
+       "hit": 80.6,
+       "roiRaw": 15.4,
+       "roi5": 13.6,
+       "maxDD": 2.0,
+       "perDay": 1.8
       },
       "after": {
        "n": 0,
@@ -422,35 +437,35 @@
   "topReplay": {
    "twoWay": {
     "before": {
-     "n": 256,
-     "hit": 64.1,
-     "roiRaw": 2.9,
-     "roi5": 1.0,
-     "maxDD": 8.6,
-     "perDay": 16.0,
+     "n": 340,
+     "hit": 62.9,
+     "roiRaw": 6.5,
+     "roi5": 4.3,
+     "maxDD": 10.61,
+     "perDay": 20.0,
      "ci95": [
-      -7.7,
-      10.4
+      -4.8,
+      13.4
      ]
     },
     "after": {
-     "n": 0,
-     "hit": null,
-     "roiRaw": null,
-     "roi5": null,
+     "n": 1,
+     "hit": 100.0,
+     "roiRaw": 67.3,
+     "roi5": 63.9,
      "maxDD": 0.0,
-     "perDay": 0.0,
+     "perDay": 0.1,
      "ci95": null
     },
     "perSport": {
      "baseball": {
       "before": {
-       "n": 4,
-       "hit": 75.0,
-       "roiRaw": 12.8,
-       "roi5": 10.9,
-       "maxDD": 1.0,
-       "perDay": 0.2
+       "n": 6,
+       "hit": 66.7,
+       "roiRaw": -0.5,
+       "roi5": -2.1,
+       "maxDD": 1.45,
+       "perDay": 0.4
       },
       "after": {
        "n": 0,
@@ -464,12 +479,12 @@
      },
      "basketball": {
       "before": {
-       "n": 34,
-       "hit": 64.7,
-       "roiRaw": 1.1,
-       "roi5": -0.7,
-       "maxDD": 3.27,
-       "perDay": 2.1
+       "n": 40,
+       "hit": 70.0,
+       "roiRaw": 7.7,
+       "roi5": 5.8,
+       "maxDD": 3.09,
+       "perDay": 2.4
       },
       "after": {
        "n": 0,
@@ -483,12 +498,12 @@
      },
      "football": {
       "before": {
-       "n": 33,
-       "hit": 54.5,
-       "roiRaw": 20.1,
-       "roi5": 16.8,
-       "maxDD": 4.77,
-       "perDay": 2.1
+       "n": 98,
+       "hit": 53.1,
+       "roiRaw": 15.8,
+       "roi5": 12.6,
+       "maxDD": 5.63,
+       "perDay": 5.8
       },
       "after": {
        "n": 0,
@@ -502,12 +517,12 @@
      },
      "handball": {
       "before": {
-       "n": 10,
-       "hit": 90.0,
-       "roiRaw": 48.5,
-       "roi5": 45.6,
+       "n": 8,
+       "hit": 75.0,
+       "roiRaw": 22.8,
+       "roi5": 20.4,
        "maxDD": 1.0,
-       "perDay": 0.6
+       "perDay": 0.5
       },
       "after": {
        "n": 0,
@@ -521,21 +536,20 @@
      },
      "hockey": {
       "before": {
-       "n": 84,
-       "hit": 64.3,
-       "roiRaw": -1.5,
-       "roi5": -3.2,
-       "maxDD": 7.1,
-       "perDay": 5.2
+       "n": 95,
+       "hit": 60.0,
+       "roiRaw": -8.5,
+       "roi5": -10.1,
+       "maxDD": 10.79,
+       "perDay": 5.6
       },
       "after": {
-       "n": 0,
-       "hit": null,
-       "roiRaw": null,
-       "roi5": null,
+       "n": 1,
+       "hit": 100.0,
+       "roiRaw": 67.3,
+       "roi5": 63.9,
        "maxDD": 0.0,
-       "perDay": 0.0,
-       "ci95": null
+       "perDay": 0.1
       }
      },
      "rugby": {
@@ -559,12 +573,12 @@
      },
      "tennis": {
       "before": {
-       "n": 76,
-       "hit": 63.2,
-       "roiRaw": -4.4,
-       "roi5": -6.0,
-       "maxDD": 9.59,
-       "perDay": 4.8
+       "n": 84,
+       "hit": 71.4,
+       "roiRaw": 10.6,
+       "roi5": 8.7,
+       "maxDD": 3.01,
+       "perDay": 4.9
       },
       "after": {
        "n": 0,
@@ -578,12 +592,12 @@
      },
      "volleyball": {
       "before": {
-       "n": 14,
-       "hit": 71.4,
-       "roiRaw": 5.2,
-       "roi5": 3.5,
-       "maxDD": 2.38,
-       "perDay": 0.9
+       "n": 8,
+       "hit": 87.5,
+       "roiRaw": 24.1,
+       "roi5": 22.3,
+       "maxDD": 1.0,
+       "perDay": 0.5
       },
       "after": {
        "n": 0,
@@ -597,45 +611,44 @@
      }
     },
     "applied": {
-     "n": 155,
-     "hit": 64.5,
-     "roiRaw": 8.1,
-     "roi5": 5.9,
-     "maxDD": 5.81,
-     "perDay": 9.7,
+     "n": 226,
+     "hit": 59.7,
+     "roiRaw": 7.3,
+     "roi5": 4.9,
+     "maxDD": 9.89,
+     "perDay": 13.3,
      "ci95": [
-      -6.3,
-      19.3
+      -6.9,
+      16.7
      ]
     }
    },
    "asStored": {
     "before": {
-     "n": 256,
-     "hit": 64.1,
-     "roiRaw": 11.1,
-     "roi5": 8.8,
-     "maxDD": 6.64,
-     "perDay": 16.0
+     "n": 340,
+     "hit": 62.9,
+     "roiRaw": 12.4,
+     "roi5": 9.9,
+     "maxDD": 8.64,
+     "perDay": 20.0
     },
     "after": {
-     "n": 0,
-     "hit": null,
-     "roiRaw": null,
-     "roi5": null,
+     "n": 1,
+     "hit": 100.0,
+     "roiRaw": 115.0,
+     "roi5": 109.2,
      "maxDD": 0.0,
-     "perDay": 0.0,
-     "ci95": null
+     "perDay": 0.1
     },
     "perSport": {
      "baseball": {
       "before": {
-       "n": 4,
-       "hit": 75.0,
-       "roiRaw": 16.9,
-       "roi5": 14.8,
-       "maxDD": 1.0,
-       "perDay": 0.2
+       "n": 6,
+       "hit": 66.7,
+       "roiRaw": 3.1,
+       "roi5": 1.2,
+       "maxDD": 1.45,
+       "perDay": 0.4
       },
       "after": {
        "n": 0,
@@ -649,12 +662,12 @@
      },
      "basketball": {
       "before": {
-       "n": 34,
-       "hit": 64.7,
-       "roiRaw": 1.1,
-       "roi5": -0.7,
-       "maxDD": 3.27,
-       "perDay": 2.1
+       "n": 40,
+       "hit": 70.0,
+       "roiRaw": 7.7,
+       "roi5": 5.8,
+       "maxDD": 3.09,
+       "perDay": 2.4
       },
       "after": {
        "n": 0,
@@ -668,12 +681,12 @@
      },
      "football": {
       "before": {
-       "n": 33,
-       "hit": 54.5,
-       "roiRaw": 20.1,
-       "roi5": 16.8,
-       "maxDD": 4.77,
-       "perDay": 2.1
+       "n": 98,
+       "hit": 53.1,
+       "roiRaw": 15.8,
+       "roi5": 12.6,
+       "maxDD": 5.63,
+       "perDay": 5.8
       },
       "after": {
        "n": 0,
@@ -687,12 +700,12 @@
      },
      "handball": {
       "before": {
-       "n": 10,
-       "hit": 90.0,
-       "roiRaw": 48.5,
-       "roi5": 45.6,
+       "n": 8,
+       "hit": 75.0,
+       "roiRaw": 22.8,
+       "roi5": 20.4,
        "maxDD": 1.0,
-       "perDay": 0.6
+       "perDay": 0.5
       },
       "after": {
        "n": 0,
@@ -706,21 +719,20 @@
      },
      "hockey": {
       "before": {
-       "n": 84,
-       "hit": 64.3,
-       "roiRaw": 23.3,
-       "roi5": 20.3,
-       "maxDD": 4.24,
-       "perDay": 5.2
+       "n": 95,
+       "hit": 60.0,
+       "roiRaw": 12.4,
+       "roi5": 9.8,
+       "maxDD": 7.03,
+       "perDay": 5.6
       },
       "after": {
-       "n": 0,
-       "hit": null,
-       "roiRaw": null,
-       "roi5": null,
+       "n": 1,
+       "hit": 100.0,
+       "roiRaw": 115.0,
+       "roi5": 109.2,
        "maxDD": 0.0,
-       "perDay": 0.0,
-       "ci95": null
+       "perDay": 0.1
       }
      },
      "rugby": {
@@ -744,12 +756,12 @@
      },
      "tennis": {
       "before": {
-       "n": 76,
-       "hit": 63.2,
-       "roiRaw": -4.4,
-       "roi5": -6.0,
-       "maxDD": 9.59,
-       "perDay": 4.8
+       "n": 84,
+       "hit": 71.4,
+       "roiRaw": 10.6,
+       "roi5": 8.7,
+       "maxDD": 3.01,
+       "perDay": 4.9
       },
       "after": {
        "n": 0,
@@ -763,12 +775,12 @@
      },
      "volleyball": {
       "before": {
-       "n": 14,
-       "hit": 71.4,
-       "roiRaw": 5.2,
-       "roi5": 3.5,
-       "maxDD": 2.38,
-       "perDay": 0.9
+       "n": 8,
+       "hit": 87.5,
+       "roiRaw": 24.1,
+       "roi5": 22.3,
+       "maxDD": 1.0,
+       "perDay": 0.5
       },
       "after": {
        "n": 0,
@@ -785,65 +797,65 @@
   }
  },
  "published": {
-  "published": 194,
-  "joined": 103,
+  "published": 312,
+  "joined": 189,
   "asStored": {
-   "n": 103,
-   "hit": 62.1,
-   "roiRaw": 10.0,
-   "roi5": 7.6,
-   "maxDD": 5.46,
-   "perDay": 6.4
+   "n": 189,
+   "hit": 61.4,
+   "roiRaw": 11.3,
+   "roi5": 8.8,
+   "maxDD": 7.47,
+   "perDay": 11.1
   },
   "twoWay": {
-   "n": 103,
-   "hit": 62.1,
-   "roiRaw": 3.9,
-   "roi5": 1.8,
-   "maxDD": 7.42,
-   "perDay": 6.4
+   "n": 189,
+   "hit": 61.4,
+   "roiRaw": 3.7,
+   "roi5": 1.6,
+   "maxDD": 9.42,
+   "perDay": 11.1
   }
  },
  "livesportContext": {
   "baseball": {
-   "n": 507,
-   "hit": 59.4,
-   "roiRaw": 11.1,
-   "roi5": 8.5,
+   "n": 513,
+   "hit": 59.1,
+   "roiRaw": 10.7,
+   "roi5": 8.1,
    "maxDD": 14.7,
-   "perDay": 507.0
+   "perDay": 513.0
   },
   "basketball": {
-   "n": 3630,
-   "hit": 63.3,
-   "roiRaw": 2.4,
-   "roi5": 0.4,
+   "n": 3752,
+   "hit": 63.1,
+   "roiRaw": 2.1,
+   "roi5": 0.1,
    "maxDD": 49.74,
-   "perDay": 3630.0
+   "perDay": 3752.0
   },
   "football": {
-   "n": 13743,
+   "n": 13967,
    "hit": 41.3,
    "roiRaw": -4.5,
    "roi5": -7.2,
-   "maxDD": 1097.6,
-   "perDay": 13743.0
+   "maxDD": 1100.6,
+   "perDay": 13967.0
   },
   "handball": {
-   "n": 810,
-   "hit": 66.8,
-   "roiRaw": -1.3,
-   "roi5": -2.9,
+   "n": 838,
+   "hit": 66.9,
+   "roiRaw": -0.5,
+   "roi5": -2.1,
    "maxDD": 36.21,
-   "perDay": 810.0
+   "perDay": 838.0
   },
   "hockey": {
-   "n": 1697,
-   "hit": 60.0,
-   "roiRaw": -5.5,
-   "roi5": -7.2,
+   "n": 1770,
+   "hit": 60.5,
+   "roiRaw": -4.5,
+   "roi5": -6.3,
    "maxDD": 135.26,
-   "perDay": 1697.0
+   "perDay": 1770.0
   },
   "tennis": {
    "n": 1087,
@@ -854,12 +866,12 @@
    "perDay": 1087.0
   },
   "volleyball": {
-   "n": 878,
-   "hit": 68.5,
-   "roiRaw": -6.7,
-   "roi5": -7.9,
-   "maxDD": 72.88,
-   "perDay": 878.0
+   "n": 897,
+   "hit": 68.2,
+   "roiRaw": -7.2,
+   "roi5": -8.4,
+   "maxDD": 77.95,
+   "perDay": 897.0
   }
  },
  "supabase": {
