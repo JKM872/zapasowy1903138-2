@@ -417,11 +417,23 @@
   "unknown": true
  },
  "football|Villarreal|PSG": {
-  "checkedAt": "2026-11-03T05:34:42.258026+00:00",
+  "checkedAt": "2026-11-03T20:06:57.537888+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [
+   {
+    "name": "A. Moleiro",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "G. Mikautadze",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
    {
     "name": "G. Moreno",
     "importance": "other",
@@ -480,10 +492,10 @@
    }
   ],
   "sources": null,
-  "board": "downgrade",
-  "top_block": true,
-  "netStars": 1,
-  "netKey": 1
+  "board": "ok",
+  "top_block": false,
+  "netStars": -1,
+  "netKey": -1
  },
  "hockey|Novopolotsk|Lokomotiv Orsha": {
   "checkedAt": "2026-11-03T12:46:29.550846+00:00",
@@ -631,13 +643,23 @@
   "unknown": true
  },
  "volleyball|Monte Carmelo|Suzano Volei": {
-  "checkedAt": "2026-11-03T05:34:42.258026+00:00",
-  "source": null,
+  "checkedAt": "2026-11-03T20:06:57.537888+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://ge.globo.com/sp/mogi-das-cruzes-suzano/volei/noticia/2026/11/03/monte-carmelo-x-suzano-pela-superliga-masculina-onde-assistir-ao-vivo-e-horario.ghtml",
+   "https://www.brasileirao.com.br/monte-carmelo-x-suzano-na-superliga-masculina-onde-assistir-e-horario-do-jogo",
+   "https://www.portalultimahoraoficial.com.br/noticia/17590/esporte/monte-carmelo-x-suzano-pela-superliga-masculina-de-volei-horario-e-onde-assistir.html",
+   "https://forepitch.com/pt/volleyball/match/monte-carmelo-suzano-volei-2026-11-04/",
+   "https://www.itatiaia.com.br/esportes/volei/superliga-masculina-de-volei/superliga-masculina-26-27-suzano-volei-mexe-em-pecas-para-tentar-surpreender/"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "volleyball|IBK W|Hyundai E&C Hillstate W": {
   "checkedAt": "2026-11-03T08:22:25.236030+00:00",
@@ -754,11 +776,17 @@
   "netKey": 0
  },
  "football|Birmingham City|Millwall": {
-  "checkedAt": "2026-11-03T08:22:25.236030+00:00",
+  "checkedAt": "2026-11-03T20:06:57.537888+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "home",
   "home": [
+   {
+    "name": "C. Vicente",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
    {
     "name": "J. Beadle",
     "importance": "key",
@@ -774,16 +802,22 @@
   ],
   "away": [
    {
+    "name": "R. Esse",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "J. Coburn",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
     "name": "J. Metcalfe",
     "importance": "key",
     "status": "out",
     "reason": "yellow_card_accumulation_suspension"
-   },
-   {
-    "name": "T. Arconte",
-    "importance": "key",
-    "status": "out",
-    "reason": "Ankle Injury"
    },
    {
     "name": "F. Marschall",
@@ -795,7 +829,7 @@
   "sources": null,
   "board": "ok",
   "top_block": false,
-  "netStars": 0,
+  "netStars": -1,
   "netKey": -1
  }
 }
