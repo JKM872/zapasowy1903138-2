@@ -1,12 +1,12 @@
 [
  {
   "key": "football|Unión La Calera vs Coquimbo Unido|Coquimbo Unido",
-  "verdict": "OBSERWUJ",
-  "confidence": 3,
-  "reason": "Coquimbo jest w dobrej formie ogólnej (4 wygrane w 5 meczach), jednak niska predykcja Forebet (39%) i klasyfikacja Grade C nakazują ostrożność w meczu pucharowym.",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Kurs 2.51 na wyjazd nie daje wystarczającego value przy niskim wskaźniku grade C i braku pełnej dominacji w H2H.",
   "risks": [
-   "Mecz pucharowy bez danych u siebie/na wyjeździe",
-   "Niski współczynnik Forebet"
+   "Wyrównana forma obu zespołów",
+   "Niepewność w pucharowych spotkaniach"
   ],
   "match": "Unión La Calera vs Coquimbo Unido",
   "pick": "Coquimbo Unido",
@@ -17,12 +17,12 @@
  },
  {
   "key": "hockey|Barrie Colts vs Sudbury Wolves|Sudbury Wolves",
-  "verdict": "ODPUŚĆ",
-  "confidence": 2,
-  "reason": "Ujemna wartość oczekiwana (EV -0.7%) oraz umiarkowane prawdopodobieństwo Forebet (52%) czynią ten typ nieopłacalnym po kursie 1.67.",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Sudbury Wolves ma solidne poparcie w fanvote, jednak ujemne EV (-0.007) nakazuje ostrożność.",
   "risks": [
-   "Ujemne EV",
-   "Wyrównane szanse według modelu"
+   "Wahania formy gości",
+   "Ujemne expected value"
   ],
   "match": "Barrie Colts vs Sudbury Wolves",
   "pick": "Sudbury Wolves",
@@ -35,9 +35,9 @@
   "key": "football|Deportivo Tachira vs Puerto Cabello|Deportivo Tachira",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Deportivo Tachira jest niepokonane w ostatnich 5 meczach, prezentuje świetną formę u siebie oraz dominuje w bezpośrednich starciach H2H.",
+  "reason": "Silna forma gospodarzy u siebie oraz korzystna historia H2H wspierają ten typ po dobrym kursie 2.10.",
   "risks": [
-   "Umiarkowany odsetek remisów w ligowych meczach wyjazdowych rywala"
+   "Remisowy charakter ostatnich spotkań Deportivo"
   ],
   "match": "Deportivo Tachira vs Puerto Cabello",
   "pick": "Deportivo Tachira",
@@ -50,10 +50,10 @@
   "key": "hockey|Vancouver Canucks vs Anaheim Ducks|Anaheim Ducks",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Niskie kursy na wyjazdowego faworyta w NHL przy ujemnym EV (-3.5%) i słabej stabilności formy obu zespołów.",
+  "reason": "Mimo wysokiego prawdopodobieństwa Forebet, ujemne EV (-0.035) dyskwalifikuje ten zakład przy obecnym kursie.",
   "risks": [
-   "Ujemne EV",
-   "Wyjazdowy mecz w NHL"
+   "Niska stabilność formy Anaheim",
+   "Ujemne EV"
   ],
   "match": "Vancouver Canucks vs Anaheim Ducks",
   "pick": "Anaheim Ducks",
@@ -66,9 +66,9 @@
   "key": "baseball|Aguilas de Mexicali vs Mazatlan|Aguilas de Mexicali",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Gospodarze wygrali 4 z ostatnich 5 meczów, a poparcie kibiców (78%) oraz Forebet (64%) wykazują wyraźne dodatnie EV.",
+  "reason": "Gospodarze są w znakomitej formie (4 zwycięstwa z rzędu) i mają silne poparcie fanów.",
   "risks": [
-   "Specyfika ligi baseballowej LMP"
+   "Specyfika ligi baseballowej"
   ],
   "match": "Aguilas de Mexicali vs Mazatlan",
   "pick": "Aguilas de Mexicali",
@@ -78,12 +78,27 @@
   "injuryLine": ""
  },
  {
+  "key": "baseball|KT Wiz Suwon vs Samsung Lions|KT Wiz Suwon",
+  "verdict": "GRAJ",
+  "confidence": 5,
+  "reason": "Świetna seria wygranych gospodarzy oraz dominacja w bezpośrednich starciach (5.0-0) przy wysokiej ocenie A.",
+  "risks": [
+   "Drobne osłabienia w składzie gospodarzy"
+  ],
+  "match": "KT Wiz Suwon vs Samsung Lions",
+  "pick": "KT Wiz Suwon",
+  "odds": 1.5,
+  "sport": "baseball",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
   "key": "volleyball|Hungkuk W vs Daejeon JKJ W|Hungkuk W",
   "verdict": "GRAJ",
   "confidence": 5,
-  "reason": "Ogromna przewaga formy gospodarzy (4 wygrane z 5) nad rywalkami (4 porażki z 5) potwierdzona 95% głosów kibiców i prognozą Grade A.",
+  "reason": "Zdecydowany faworyt spotkania z 95% poparciem fanów i świetnymi statystykami domowymi.",
   "risks": [
-   "Niski kurs"
+   "Niski kurs bazowy"
   ],
   "match": "Hungkuk W vs Daejeon JKJ W",
   "pick": "Hungkuk W",
@@ -96,9 +111,9 @@
   "key": "football|Chiangmai FC vs Pattaya Dolphins|Chiangmai FC",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Chiangmai FC posiada perfekcyjną serię 5 zwycięstw z rzędu i gra u siebie, generując wysokie EV (+26.5%).",
+  "reason": "Komplet zwycięstw gospodarzy w ostatnich meczach i wysokie EV (0.265) dają solidne podstawy do typu.",
   "risks": [
-   "Specyfika rozgrywek pucharowych"
+   "Pucharowy charakter meczu może przynieść niespodzianki"
   ],
   "match": "Chiangmai FC vs Pattaya Dolphins",
   "pick": "Chiangmai FC",
@@ -109,12 +124,12 @@
  },
  {
   "key": "football|Nakhon Si United vs Phichit United|Phichit United",
-  "verdict": "OBSERWUJ",
-  "confidence": 3,
-  "reason": "Mimo serii 5 wygranych gości, model Forebet daje im tylko 36% szans, a marża EV jest znikoma (+1.5%).",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Niska ocena grade C oraz niewielki edge (1.5%) nie uzasadniają grancia na wyjeżdżających w pucharze.",
   "risks": [
-   "Niskie prawdopodobieństwo wygranej wyjazdowej według Forebet",
-   "Grade C"
+   "Brak stabilności u gości",
+   "Niski stopień pewności modelu"
   ],
   "match": "Nakhon Si United vs Phichit United",
   "pick": "Phichit United",
@@ -127,9 +142,9 @@
   "key": "football|FC Dordoi vs Asiagoal|FC Dordoi",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Dordoi jest znakomite u siebie (WWWWD), podczas gdy Asiagoal wyraźnie odstaje na wyjazdach. Bardzo wysokie EV przy kursie 2.50.",
+  "reason": "Świetna forma gospodarzy u siebie oraz bardzo wysokie wsparcie fanów (91%) przy dobrym kursie.",
   "risks": [
-   "Wahań formy w pucharach azjatyckich"
+   "Spotkanie w ramach azjatyckiej Ligi Mistrzów"
   ],
   "match": "FC Dordoi vs Asiagoal",
   "pick": "FC Dordoi",
@@ -141,10 +156,10 @@
  {
   "key": "football|Bugesera FC vs Amagaju|Bugesera FC",
   "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Bugesera wygrała 3 z 5 ostatnich meczów, a Amagaju przegrało aż 4 z 5. Dodatnie EV i przewaga własnego boiska.",
+  "confidence": 3,
+  "reason": "Wyraźna przewaga formy gospodarzy nad słabą serią gości na wyjazdach.",
   "risks": [
-   "Brak rozbicia na mecze dom/wyjazd w bieżącym sezonie"
+   "Nieregularność w lidgach afrykańskich"
   ],
   "match": "Bugesera FC vs Amagaju",
   "pick": "Bugesera FC",
@@ -155,12 +170,12 @@
  },
  {
   "key": "football|Gorilla vs Gicumbi|Gorilla",
-  "verdict": "OBSERWUJ",
-  "confidence": 3,
-  "reason": "Forma zespołu Gorilla jest dobra (4 wygrane na 5), lecz model szacuje remis aż na 36%, obniżając EV do zaledwie 2.3%.",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Obydwie drużyny prezentują zbliżony poziom w ostatnich kolejkach, co czyni typ ryzykownym.",
   "risks": [
-   "Niska szansa na czystą wygraną wg Forebet (37%)",
-   "Grade C"
+   "Niska ocena grade C",
+   "Niewielkie edge"
   ],
   "match": "Gorilla vs Gicumbi",
   "pick": "Gorilla",
@@ -173,9 +188,9 @@
   "key": "football|BDF XI vs Centre Chiefs|Centre Chiefs",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Centre Chiefs wygrali 4 ostatnie mecze z rzędu i są faworytem według Forebet (58%) przy bardzo atrakcyjnym kursie 2.20.",
+  "reason": "Goście w znakomitej formie wyjazdowej z serią czterech zwycięstw i wysokim wskaźnikiem EV.",
   "risks": [
-   "Mecz wyjazdowy przeciwko niepokonanym u siebie gospodarzom"
+   "Twarda postawa gospodarzy na własnym boisku"
   ],
   "match": "BDF XI vs Centre Chiefs",
   "pick": "Centre Chiefs",
@@ -188,9 +203,9 @@
   "key": "football|União Leiria U23 vs Estoril U23|Estoril U23",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Estoril U23 notuje serię 5 wygranych z rzędu, podczas gdy Leiria U23 przegrała 4 z 5 ostatnich spotkań. Bardzo wysokie EV.",
+  "reason": "Zdecydowana dominacja Estoril w ostatnich meczach i wysoki wskaźnik EV (0.382) przy kursie 2.47.",
   "risks": [
-   "Liga młodzieżowa U23 o wyższej zmienności"
+   "Specyfika rozgrywek młodzieżowych U23"
   ],
   "match": "União Leiria U23 vs Estoril U23",
   "pick": "Estoril U23",
@@ -201,12 +216,11 @@
  },
  {
   "key": "football|Penafiel U23 vs Famalicão U23|Famalicão U23",
-  "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Famalicão U23 znajduje się w świetnej dyspozycji (4 wygrane w 5 meczach) naprzeciw bardzo słabej formy Penafiel.",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Mimo dobrego EV, niska ocena grade C i słabsze ostatnie wyniki gości sugerują pominięcie meczu.",
   "risks": [
-   "Grade C",
-   "Mecz wyjazdowy"
+   "Wahania formy gości w ostatnich spotkaniach"
   ],
   "match": "Penafiel U23 vs Famalicão U23",
   "pick": "Famalicão U23",
@@ -218,10 +232,10 @@
  {
   "key": "football|Žalgiris U19 vs St. Patricks U19|Žalgiris U19",
   "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Žalgiris U19 imponuje serią 5 zwycięstw z rzędu i posiada przewagę własnego boiska w UEFA Youth League przy poparciu 75% w Fan Vote.",
+  "confidence": 3,
+  "reason": "Komplet zwycięstw Žalgirisu w ostatnich meczach i wysokie poparcie w głosowaniu fanów.",
   "risks": [
-   "Rozgrywki młodzieżowe UEFA"
+   "Młodzieżowa piłka europejska bywa nieprzewidywalna"
   ],
   "match": "Žalgiris U19 vs St. Patricks U19",
   "pick": "Žalgiris U19",
@@ -233,10 +247,10 @@
  {
   "key": "volleyball|Sliedrecht W vs Antwerp W|Sliedrecht W",
   "verdict": "GRAJ",
-  "confidence": 5,
-  "reason": "Sliedrecht W wygrało 5 kolejnych spotkań, a Forebet (74%) i SofaScore (91%) jednoznacznie wskazują na ich dominację.",
+  "confidence": 4,
+  "reason": "Gospodynie są w świetnej formie z serią pięciu wygranych z rzędu i dominacją w statystykach.",
   "risks": [
-   "Niski kurs (1.38)"
+   "Niski kurs główny"
   ],
   "match": "Sliedrecht W vs Antwerp W",
   "pick": "Sliedrecht W",
@@ -249,9 +263,9 @@
   "key": "football|Francs Borains vs Dender|Dender",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Dender wygrał 4 z 5 ostatnich meczów i jest zdecydowanym faworytem modelu (53% szans wygranej na wyjeździe), oferując wysokie EV.",
+  "reason": "Dender notuje świetną serię wygranych, a gospodarze przegrywali większość ostatnich spotkań.",
   "risks": [
-   "Mecz wyjazdowy w Challenger Pro League"
+   "Spotkanie wyjazdowe"
   ],
   "match": "Francs Borains vs Dender",
   "pick": "Dender",
@@ -262,18 +276,81 @@
  },
  {
   "key": "basketball|Appalachian State W vs Montreat College W|Appalachian State W",
-  "verdict": "OBSERWUJ",
-  "confidence": 3,
-  "reason": "Mimo gigantycznej przewagi (100% zwycięstw u siebie i przewidywany pogrom), kurs 1.35 generuje lekkie ujemne EV w wyliczeniach skoringowych.",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Ujemne EV (-0.022) oraz ocena grade C przy niskim kursie odradzają inwestycję.",
   "risks": [
-   "Lekko ujemne EV (-2.2%)",
-   "Niski kurs"
+   "Ujemne expected value"
   ],
   "match": "Appalachian State W vs Montreat College W",
   "pick": "Appalachian State W",
   "odds": 1.35,
   "sport": "basketball",
   "source": "Forebet",
+  "injuryLine": ""
+ },
+ {
+  "key": "handball|Bistrita K vs Stiinta Bucharest K|Bistrita K",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Bistrita absolutnie dominuje rywalki pod każdym względem (forma 5-0 vs 0-5, H2H 5-0), jednak kurs 1.001 nie niesie ze sobą żadnej wartości zakładowej. Gra po tak niskim kursie jest nieopłacalna.",
+  "risks": [
+   "Kurs 1.001 pozbawiony wartości (brak EV)",
+   "Ryzyko losowej niespodzianki przy zerowej opłacalności"
+  ],
+  "match": "Bistrita K vs Stiinta Bucharest K",
+  "pick": "Bistrita K",
+  "odds": 1.001,
+  "sport": "handball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Panseraikos K vs Gorzów K|Gorzów K",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Gorzów K znajduje się w perfekcyjnej formie (5 zwycięstw z rzędu) i dominuje w rozgrywkach pucharowych, w przeciwieństwie do Panseraikosu, który przegrał 4 z 5 ostatnich spotkań. Różnica potencjału i formy obu zespołów jest znacząca.",
+  "risks": [
+   "Bardzo niski kurs 1.02 przy meczu wyjazdowym",
+   "Model Forebet szacuje prawdopodobieństwo na zaledwie 55%"
+  ],
+  "match": "Panseraikos K vs Gorzów K",
+  "pick": "Gorzów K",
+  "odds": 1.02,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Nis K vs Sopron K|Sopron K",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Sopron K to utytułowany zespół z dużą przewagą doświadczenia w pucharach europejskich, wykazujący świetną dyspozycję wyjazdową. Nis K gra w kratkę i przegrał dotąd oba swoje mecze w EuroCupie.",
+  "risks": [
+   "Niski kurs 1.06 ograniczający opłacalność",
+   "Mecz na wyjeździe w pucharach"
+  ],
+  "match": "Nis K vs Sopron K",
+  "pick": "Sopron K",
+  "odds": 1.06,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "handball|Metz K vs Chambray Touraine K|Metz K",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Metz K to potęga szczypiorniaka kobiet i stały uczestnik Ligi Mistrzyń, który u siebie nie przegrywa i ma bilans 5-0 w H2H. Chambray na wyjazdach ewidentnie ustępuje czołowym rywalkom.",
+  "risks": [
+   "Niski kurs 1.02",
+   "Chambray ma ogólnie dobrą serię zwycięstw z mniej wymagającymi rywalami"
+  ],
+  "match": "Metz K vs Chambray Touraine K",
+  "pick": "Metz K",
+  "odds": 1.02,
+  "sport": "handball",
+  "source": "Sports",
   "injuryLine": ""
  }
 ]
