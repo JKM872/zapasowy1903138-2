@@ -1,36 +1,36 @@
 # Audyt Forebet
 
-_wygenerowano 2026-11-04 15:32 UTC_
+_wygenerowano 2026-11-05 15:29 UTC_
 
 ## Kontrole zdrowia danych
 
-- 🟡 **UWAGA** `baseball` — 1/3 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `basketball` — 13/19 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `football` — 20/48 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `hockey` — 2/2 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `hockey` — 13/21 meczów bez kursów
-- 🟡 **UWAGA** `tennis` — 12/16 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `volleyball` — 5/8 zakwalifikowanych z UJEMNYM EV
-- 🟡 **UWAGA** `volleyball` — 51/80 meczów bez kursów
+- 🟡 **UWAGA** `baseball` — 1/1 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `basketball` — 13/21 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `football` — 15/30 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `handball` — 1/2 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `hockey` — Forebet zgodny z rynkiem tylko w 56% (14/25) — sygnał bliski rzutowi monetą
+- 🟡 **UWAGA** `hockey` — 1/9 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `tennis` — 8/17 zakwalifikowanych z UJEMNYM EV
+- 🟡 **UWAGA** `volleyball` — 2/2 zakwalifikowanych z UJEMNYM EV
 
 ## Wyniki typów
 
-Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}`
+Rozliczanie w tym przebiegu: `{'settled': 490, 'mismatch': 79, 'unfinished': 31}`
 
-**3719 rozliczonych typów — trafność 56%, ROI -0.5%, wynik -16.8 j.** (stawka 1 j. na typ)
+**4209 rozliczonych typów — trafność 56%, ROI -0.1%, wynik -2.3 j.** (stawka 1 j. na typ)
 
 ### Wg sportu
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| football | 2049 | 52% | -2.0% | 1.92 |
-| basketball | 606 | 64% | +0.1% | 1.58 |
-| hockey | 458 | 57% | +13.0% | 1.98 |
-| tennis | 367 | 61% | -6.6% | 1.55 |
-| volleyball | 113 | 67% | -1.4% | 1.48 |
-| handball | 74 | 54% | -8.7% | 1.72 |
-| baseball | 39 | 54% | -10.7% | 1.69 |
-| rugby ⚠️ | 13 | 69% | +0.8% | 1.45 |
+| football | 2248 | 52% | -2.0% | 1.93 |
+| basketball | 650 | 63% | -0.7% | 1.58 |
+| hockey | 576 | 59% | +14.7% | 1.97 |
+| tennis | 427 | 60% | -6.7% | 1.56 |
+| volleyball | 134 | 67% | +0.6% | 1.50 |
+| handball | 107 | 58% | -2.2% | 1.72 |
+| baseball | 44 | 52% | -14.0% | 1.68 |
+| rugby | 23 | 70% | -0.3% | 1.49 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -38,7 +38,7 @@ Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| poprawne | 3719 | 56% | -0.5% | 1.81 |
+| poprawne | 4209 | 56% | -0.1% | 1.82 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -46,10 +46,10 @@ Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| lepsza | 2329 | 57% | +2.0% | 1.81 |
-| gorsza | 813 | 53% | -6.1% | 1.84 |
-| rowna | 475 | 56% | -2.5% | 1.78 |
-| brak | 102 | 56% | -1.8% | 1.79 |
+| lepsza | 2678 | 57% | +2.3% | 1.82 |
+| gorsza | 885 | 53% | -5.5% | 1.84 |
+| rowna | 524 | 56% | -2.2% | 1.78 |
+| brak | 122 | 55% | -3.3% | 1.80 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -57,8 +57,8 @@ Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| faworyt rynku | 3662 | 56% | -0.5% | 1.81 |
-| underdog rynku | 57 | 46% | +2.9% | 2.29 |
+| faworyt rynku | 4112 | 56% | -0.2% | 1.80 |
+| underdog rynku | 97 | 45% | +5.5% | 2.39 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -66,9 +66,9 @@ Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| ujemne | 1994 | 56% | -5.4% | 1.72 |
-| 0-0.2 | 1268 | 57% | +3.5% | 1.87 |
-| 0.2+ | 457 | 53% | +10.1% | 2.09 |
+| ujemne | 2254 | 57% | -5.3% | 1.71 |
+| 0-0.2 | 1412 | 57% | +3.7% | 1.87 |
+| 0.2+ | 543 | 53% | +11.9% | 2.13 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -76,9 +76,9 @@ Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| czolowa | 1408 | 60% | +1.7% | 1.73 |
-| nizsza | 1373 | 52% | -2.5% | 1.90 |
-| srednia | 938 | 56% | -0.8% | 1.81 |
+| czolowa | 1590 | 59% | +1.6% | 1.74 |
+| nizsza | 1528 | 53% | -1.0% | 1.90 |
+| srednia | 1091 | 56% | -1.2% | 1.81 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
 
@@ -86,9 +86,9 @@ Rozliczanie w tym przebiegu: `{'settled': 495, 'mismatch': 85, 'unfinished': 20}
 
 | grupa | typów | trafność | ROI | śr. kurs |
 |---|---:|---:|---:|---:|
-| <55 | 1728 | 51% | -2.9% | 1.94 |
-| 55-60 | 768 | 56% | -1.5% | 1.77 |
-| 65+ | 656 | 66% | +6.4% | 1.63 |
-| 60-65 | 567 | 59% | +0.4% | 1.71 |
+| <55 | 1946 | 52% | -1.3% | 1.95 |
+| 55-60 | 889 | 56% | -2.8% | 1.77 |
+| 65+ | 727 | 66% | +5.1% | 1.62 |
+| 60-65 | 647 | 60% | +1.6% | 1.71 |
 
 ⚠️ = mniej niż 20 typów, wynik niewiarygodny
