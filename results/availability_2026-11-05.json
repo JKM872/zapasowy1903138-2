@@ -360,16 +360,27 @@
   "unknown": true
  },
  "football|FC Bunyodkor|Xorazm Urganch": {
-  "checkedAt": "2026-11-05T06:40:26.336335+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-11-05T13:11:29.834476+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "M. Shiryaev",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "sources": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": -1,
+  "netKey": -1
  },
  "football|Abha Club|Shabab Riyadh": {
-  "checkedAt": "2026-11-05T06:40:26.336335+00:00",
+  "checkedAt": "2026-11-05T13:11:29.834476+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "away",
@@ -618,22 +629,81 @@
   "unknown": true
  },
  "hockey|Greensboro Gargoyles|Maine Mariners": {
-  "checkedAt": "2026-11-05T06:40:26.336335+00:00",
-  "source": null,
+  "checkedAt": "2026-11-05T13:11:29.834476+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [
+   {
+    "name": "Patrick Kudla",
+    "importance": "key",
+    "status": "out",
+    "reason": "Placed on Injured Reserve (7‑day) on Nov 4"
+   },
+   {
+    "name": "Jaxson Murray",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Placed on reserve on Nov 4 (likely rest/rotation)"
+   }
+  ],
+  "away": [
+   {
+    "name": "Mark Liwiski",
+    "importance": "key",
+    "status": "out",
+    "reason": "Placed on Injured Reserve (7‑day) on Oct 29"
+   },
+   {
+    "name": "Ryan Francis",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Placed on reserve on Oct 29"
+   },
+   {
+    "name": "Jackson Stewart",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Placed on reserve on Oct 29"
+   }
+  ],
+  "sources": [
+   "https://www.echlstats.com/team/greensboro",
+   "https://www.echlstats.com/team/maine",
+   "https://echl.com/news/2026/11/echl-today-nov-5",
+   "https://gargoyleshockey.com/news/2026/11/gargoyles-weekend-preview-november-4-2026",
+   "https://echl.com/games/2026/11/05/greensboro-gargoyles-vs-maine-mariners"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "hockey|Savannah Ghost Pirates|Atlanta Gladiators": {
-  "checkedAt": "2026-11-05T06:40:26.336335+00:00",
-  "source": null,
+  "checkedAt": "2026-11-05T13:11:29.834476+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [
+   {
+    "name": "Tyler Muszelik",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "Availability unclear for the game"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://insidetherink.com/echl-game-preview-atlanta-gladiators-vs-savannah-ghost-pirates-11-05-2026/",
+   "https://atlantagladiators.com/games/2026/11/05/savannah-ghost-pirates",
+   "https://echl.com/games/2026/11/05/savannah-ghost-pirates-vs-atlanta-gladiators",
+   "https://ahockeyreport.com/predictions/head-to-head/2026-11-05/usa/echl/savannah-ghost-pirates/atlanta-gladiators/NTcwOTItNTcyOTg=",
+   "https://www.savannaharena.com/events/"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "hockey|Kitzbuhel|Ritten": {
   "checkedAt": "2026-11-05T06:40:26.336335+00:00",
@@ -700,13 +770,23 @@
   "netKey": 0
  },
  "tennis|A. Mayo|A. Gray": {
-  "checkedAt": "2026-11-05T06:40:26.336335+00:00",
-  "source": null,
+  "checkedAt": "2026-11-05T13:11:29.834476+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.sofascore.com/tennis/match/aidan-mayo-alastair-gray/ijObshIyc",
+   "https://www.xscores.com/tennis/match/Aidan-Mayo-vs-Alastair-Gray/05-11-2026/3019763",
+   "https://tennistonic.com/tennis-news/1077947/h2h-prediction-of-alastair-gray-vs-aidan-mayo-in-charlottesville-challenger-with-odds-preview-pick-5th-november-2026/",
+   "https://scores24.live/en/tennis/m-04-11-2026-mayo-aidan-gray-alastair",
+   "https://livescore.tennis365.com/USA-Challenger-Charlottesville-Mayo,-Aidan-vs-Gray,-Alastair-3394637"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "tennis|J. Riera|R. Zarazua": {
   "checkedAt": "2026-11-05T06:40:26.336335+00:00",
