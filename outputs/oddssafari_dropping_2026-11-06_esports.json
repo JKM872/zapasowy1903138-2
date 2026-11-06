@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "generated_at": "2026-11-06T06:01:51.023102+01:00",
+    "target_date": "2026-11-06",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 5,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 1,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 4
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 5
+    },
+    "elapsed_seconds": 7.6,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "CS2 - Champion of Champions Tour",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/cs2-champion-of-champions-tour/your-end-vs-low-cortisol-br/16107652?MarketTypeID=1201",
+      "match_id": "16107652",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "your end",
+      "away_team": "Low Cortisol BR",
+      "event_date": "06/11",
+      "event_time": "19:00",
+      "outcome": "1",
+      "open_odds": 4.8,
+      "current_odds": 3.6,
+      "drop_pct": 25.0,
+      "max_odds": 3.6,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "CS2 - European Pro League",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/cs2-european-pro-league/forze-reload-vs-navi-junior/15565109?MarketTypeID=1201",
+      "match_id": "15565109",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "FORZE Reload",
+      "away_team": "NaVi Junior",
+      "event_date": "06/11",
+      "event_time": "09:00",
+      "outcome": "1",
+      "open_odds": 1.63,
+      "current_odds": 1.32,
+      "drop_pct": 19.0,
+      "max_odds": 1.37,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "CS2 - United21",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/cs2-united21/cph-wolves-vs-passion-academy/16102422?MarketTypeID=1201",
+      "match_id": "16102422",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "CPH Wolves",
+      "away_team": "Passion Academy",
+      "event_date": "06/11",
+      "event_time": "11:30",
+      "outcome": "2",
+      "open_odds": 3.75,
+      "current_odds": 3.09,
+      "drop_pct": 18.0,
+      "max_odds": 3.25,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "CS2 - BLAST Rivals",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/cs2-blast-rivals/team-vitality-vs-team-falcons/10613142?MarketTypeID=1201",
+      "match_id": "10613142",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "Team Vitality",
+      "away_team": "Team Falcons",
+      "event_date": "11/11",
+      "event_time": "04:30",
+      "outcome": "2",
+      "open_odds": 3.3,
+      "current_odds": 2.87,
+      "drop_pct": 13.0,
+      "max_odds": 3.3,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Dota2 - DreamLeague Division 2",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/dota2-dreamleague-division-2/potn9ki-vs-zenith-cn/16139809?MarketTypeID=1201",
+      "match_id": "16139809",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "potn9ki",
+      "away_team": "Zenith CN",
+      "event_date": "06/11",
+      "event_time": "10:00",
+      "outcome": "1",
+      "open_odds": 1.65,
+      "current_odds": 1.47,
+      "drop_pct": 11.0,
+      "max_odds": 1.5,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_team": "potn9ki",
+        "away_team": "Zenith",
+        "sport": "esports",
+        "league": "DreamLeague Group A",
+        "match_time": "10:00",
+        "home_odds": 1.47,
+        "away_odds": null,
+        "sofascore_event_id": 17491610,
+        "form_source": "sofascore_api",
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_advantage": true
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Dota2 - DreamLeague Division 2",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/dota2-dreamleague-division-2/potn9ki-vs-zenith-cn/16139809?MarketTypeID=1201",
+      "match_id": "16139809",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "potn9ki",
+      "away_team": "Zenith CN",
+      "event_date": "06/11",
+      "event_time": "10:00",
+      "outcome": "1",
+      "open_odds": 1.65,
+      "current_odds": 1.47,
+      "drop_pct": 11.0,
+      "max_odds": 1.5,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_team": "potn9ki",
+        "away_team": "Zenith",
+        "sport": "esports",
+        "league": "DreamLeague Group A",
+        "match_time": "10:00",
+        "home_odds": 1.47,
+        "away_odds": null,
+        "sofascore_event_id": 17491610,
+        "form_source": "sofascore_api",
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_advantage": true
+      },
+      "enrichment_error": null
+    }
+  ]
+}

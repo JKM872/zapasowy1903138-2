@@ -1,0 +1,2259 @@
+{
+  "meta": {
+    "generated_at": "2026-11-06T06:08:42.443861+01:00",
+    "target_date": "2026-11-06",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 12,
+      "qualified": 10
+    },
+    "enrichment_status_counts": {
+      "enriched": 6,
+      "resolve_failed": 4,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 12
+    },
+    "elapsed_seconds": 585.1,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Challenger - Villa Maria",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-villa-maria/ficovich-j.p.-vs-coria-f./16398763?MarketTypeID=301",
+      "match_id": "16398763",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ficovich J.P.",
+      "away_team": "Coria F.",
+      "event_date": "06/11",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.8,
+      "drop_pct": 22.0,
+      "max_odds": 1.83,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/coria-federico-vJdE1Bg7/ficovich-juan-pablo-WpchB57t/?mid=GO9Z2DYb",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Ficovich J. P.",
+        "away_team": "Coria F.",
+        "match_time": "06.11.2026 20:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.4,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.93,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 41.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "08.03.25",
+            "home": "Ficovich J. P.",
+            "away": "Coria F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "08.03.25 Ficovich J. P. 2-0 Coria F."
+          },
+          {
+            "date": "10.10.23",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "10.10.23 Coria F. 2-1 Ficovich J. P."
+          },
+          {
+            "date": "09.08.23",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "09.08.23 Coria F. 2-1 Ficovich J. P."
+          },
+          {
+            "date": "01.02.22",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "01.02.22 Coria F. 0-2 Ficovich J. P."
+          },
+          {
+            "date": "22.01.19",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "22.01.19 Coria F. 0-2 Ficovich J. P."
+          }
+        ],
+        "last_h2h_date": "08.03.25",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Ficovich J. P.",
+        "last_h2h_away": "Coria F.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.4
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Ficovich J. P.)",
+          "missing_recent_matches_B (Coria F.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 370,
+        "ranking_b": 831,
+        "forebet_prediction": "2",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.4,
+        "forebet_home_prob": 48,
+        "forebet_away_prob": 52
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Luanda",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-luanda/mikulskyte-j.-vs-noha-akugue-n./16213889?MarketTypeID=301",
+      "match_id": "16213889",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mikulskyte J.",
+      "away_team": "Noha Akugue N.",
+      "event_date": "06/11",
+      "event_time": "11:40",
+      "outcome": "2",
+      "open_odds": 1.42,
+      "current_odds": 1.14,
+      "drop_pct": 20.0,
+      "max_odds": 1.15,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Charlottesville",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-charlottesville/kozlov-s.-vs-shick-b./15731331?MarketTypeID=301",
+      "match_id": "15731331",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kozlov S.",
+      "away_team": "Shick B.",
+      "event_date": "06/11",
+      "event_time": "17:30",
+      "outcome": "1",
+      "open_odds": 1.87,
+      "current_odds": 1.51,
+      "drop_pct": 20.0,
+      "max_odds": 1.54,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/kozlov-stefan-hI2zuuMo/shick-braden-QiV3GEFB/?mid=jB9yQCHO",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kozlov S.",
+        "away_team": "Shick B.",
+        "match_time": "06.11.2026 17:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.48,
+        "away_odds": 2.45,
+        "favorite": "player_a",
+        "advanced_score": 2.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "04.11.26",
+            "home": "Cassone M.",
+            "away": "Kozlov S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "04.11.26 Cassone M. 0-2 Kozlov S."
+          },
+          {
+            "date": "03.11.26",
+            "home": "Kozlov S.",
+            "away": "Martin A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.11.26 Kozlov S. 2-0 Martin A."
+          },
+          {
+            "date": "29.10.26",
+            "home": "Rehberg M. H.",
+            "away": "Kozlov S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.10.26 Rehberg M. H. 2-0 Kozlov S."
+          },
+          {
+            "date": "27.10.26",
+            "home": "Kozlov S.",
+            "away": "Cassone M.",
+            "score": "1-1",
+            "winner": "draw",
+            "raw": "27.10.26 Kozlov S. 1-1 Cassone M."
+          },
+          {
+            "date": "01.10.26",
+            "home": "Kozlov S.",
+            "away": "Krueger M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "01.10.26 Kozlov S. 1-2 Krueger M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Kozlov S.)",
+          "missing_recent_matches_B (Shick B.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 271,
+        "ranking_b": 205,
+        "forebet_prediction": "1",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.1,
+        "forebet_home_prob": 65,
+        "forebet_away_prob": 35
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Taranto",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-taranto/mrva-m.-vs-martineau-m./16198675?MarketTypeID=301",
+      "match_id": "16198675",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mrva M.",
+      "away_team": "Martineau M.",
+      "event_date": "06/11",
+      "event_time": "09:30",
+      "outcome": "2",
+      "open_odds": 2.5,
+      "current_odds": 2.11,
+      "drop_pct": 16.0,
+      "max_odds": 2.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/martineau-matteo-IDkmT0Hj/mrva-maxim-hMR2isnm/?mid=p8Nh1MTq",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Mrva M.",
+        "away_team": "Martineau M.",
+        "match_time": "06.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.68,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 27.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.11.26",
+            "home": "Mrva M.",
+            "away": "Faurel T.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "05.11.26 Mrva M. 2-1 Faurel T."
+          },
+          {
+            "date": "03.11.26",
+            "home": "Mrva M.",
+            "away": "Ribecai M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.11.26 Mrva M. 2-0 Ribecai M."
+          },
+          {
+            "date": "19.10.26",
+            "home": "Herbert P.H.",
+            "away": "Mrva M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "19.10.26 Herbert P.H. 2-1 Mrva M."
+          },
+          {
+            "date": "18.10.26",
+            "home": "Mrva M.",
+            "away": "Lajovic D.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "18.10.26 Mrva M. 2-0 Lajovic D."
+          },
+          {
+            "date": "16.10.26",
+            "home": "Fearnley J.",
+            "away": "Mrva M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.10.26 Fearnley J. 2-0 Mrva M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Mrva M.)",
+          "missing_recent_matches_B (Martineau M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 231,
+        "ranking_b": 244,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.9,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Chennai Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-chennai-doubles/da-silva-fick-g.kulambayeva-z.-vs-falkowska-w.smith-a./16248950?MarketTypeID=301",
+      "match_id": "16248950",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Da Silva Fick G./Kulambayeva Z.",
+      "away_team": "Falkowska W./Smith A.",
+      "event_date": "06/11",
+      "event_time": "10:30",
+      "outcome": "1",
+      "open_odds": 2.18,
+      "current_odds": 1.85,
+      "drop_pct": 15.0,
+      "max_odds": 1.9,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava/dodig-m.-vs-djere-l./16212757?MarketTypeID=301",
+      "match_id": "16212757",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Dodig M.",
+      "away_team": "Djere L.",
+      "event_date": "06/11",
+      "event_time": "12:10",
+      "outcome": "1",
+      "open_odds": 2.05,
+      "current_odds": 1.75,
+      "drop_pct": 15.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/djere-laslo-4GGnypTh/dodig-matej-2wbou5PR/?mid=4jThnWtT",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Dodig M.",
+        "away_team": "Djere L.",
+        "match_time": "06.11.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.73,
+        "away_odds": 1.95,
+        "favorite": "player_a",
+        "advanced_score": 37.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.11.26",
+            "home": "Gentzsch T.",
+            "away": "Dodig M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "05.11.26 Gentzsch T. 0-2 Dodig M."
+          },
+          {
+            "date": "04.11.26",
+            "home": "Dodig M.",
+            "away": "Krajci M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "04.11.26 Dodig M. 2-0 Krajci M."
+          },
+          {
+            "date": "23.10.26",
+            "home": "Trungelliti M.",
+            "away": "Dodig M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.10.26 Trungelliti M. 2-0 Dodig M."
+          },
+          {
+            "date": "21.10.26",
+            "home": "Dodig M.",
+            "away": "Cecchinato M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "21.10.26 Dodig M. 2-1 Cecchinato M."
+          },
+          {
+            "date": "20.10.26",
+            "home": "Dodig M.",
+            "away": "Domingues J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "20.10.26 Dodig M. 2-0 Domingues J."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 1.0
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Dodig M.)",
+          "missing_recent_matches_B (Djere L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 138,
+        "ranking_b": 137,
+        "forebet_prediction": "1",
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 63,
+        "forebet_away_prob": 37
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Paris",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-paris/fritz-t.-vs-alcaraz-c./16334014?MarketTypeID=301",
+      "match_id": "16334014",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Fritz T.",
+      "away_team": "Alcaraz C.",
+      "event_date": "06/11",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 3.93,
+      "current_odds": 3.37,
+      "drop_pct": 14.0,
+      "max_odds": 3.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Taipei Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-taipei-doubles/chandrasekar-a.rai-a.-vs-donski-a.poljak-d./16090248?MarketTypeID=301",
+      "match_id": "16090248",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Chandrasekar A./Rai A.",
+      "away_team": "Donski A./Poljak D.",
+      "event_date": "06/11",
+      "event_time": "07:10",
+      "outcome": "2",
+      "open_odds": 1.73,
+      "current_odds": 1.5,
+      "drop_pct": 13.0,
+      "max_odds": 1.51,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Paris",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-paris/van-assche-l.-vs-hijikata-r./16277886?MarketTypeID=301",
+      "match_id": "16277886",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Van Assche L.",
+      "away_team": "Hijikata R.",
+      "event_date": "06/11",
+      "event_time": "14:10",
+      "outcome": "1",
+      "open_odds": 1.8,
+      "current_odds": 1.57,
+      "drop_pct": 13.0,
+      "max_odds": 1.6,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/hijikata-rinky-f9eT4NTQ/van-assche-luca-nP9K42Bg/?mid=rVBrrlLa",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "van Assche L.",
+        "away_team": "Hijikata R.",
+        "match_time": "06.11.2026 14:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.58,
+        "away_odds": 2.35,
+        "favorite": "player_a",
+        "advanced_score": 16.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.11.26",
+            "home": "Musetti L.",
+            "away": "van Assche L.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "05.11.26 Musetti L. 1-2 van Assche L."
+          },
+          {
+            "date": "04.11.26",
+            "home": "van Assche L.",
+            "away": "Tien L.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "04.11.26 van Assche L. 2-0 Tien L."
+          },
+          {
+            "date": "02.11.26",
+            "home": "van Assche L.",
+            "away": "Navone M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.11.26 van Assche L. 2-0 Navone M."
+          },
+          {
+            "date": "26.10.26",
+            "home": "van Assche L.",
+            "away": "Tien L.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "26.10.26 van Assche L. 0-2 Tien L."
+          },
+          {
+            "date": "23.10.26",
+            "home": "van Assche L.",
+            "away": "Musetti L.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "23.10.26 van Assche L. 1-2 Musetti L."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (van Assche L.)",
+          "missing_recent_matches_B (Hijikata R.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 47,
+        "ranking_b": 83,
+        "forebet_prediction": "1",
+        "forebet_probability": 58.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 11.2,
+        "forebet_home_prob": 58,
+        "forebet_away_prob": 42
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava/svrcina-d.-vs-piros-z./16306727?MarketTypeID=301",
+      "match_id": "16306727",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Svrcina D.",
+      "away_team": "Piros Z.",
+      "event_date": "06/11",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 2.0,
+      "drop_pct": 13.0,
+      "max_odds": 2.1,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/piros-zsombor-2BC3jj8o/svrcina-dalibor-vDue624T/?mid=jgj2UOig",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Svrcina D.",
+        "away_team": "Piros Z.",
+        "match_time": "06.11.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.73,
+        "away_odds": 2.0,
+        "favorite": "player_a",
+        "advanced_score": 44.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "29.04.25",
+            "home": "Piros Z.",
+            "away": "Svrcina D.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.04.25 Piros Z. 2-0 Svrcina D."
+          }
+        ],
+        "last_h2h_date": "29.04.25",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Piros Z.",
+        "last_h2h_away": "Svrcina D.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Svrcina D.)",
+          "missing_recent_matches_B (Piros Z.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 119,
+        "ranking_b": 101,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Hong Kong Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-hong-kong-doubles/gibson-t.inglis-m.-vs-maleckova-j.skoch-m./16196634?MarketTypeID=301",
+      "match_id": "16196634",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gibson T./Inglis M.",
+      "away_team": "Maleckova J./Skoch M.",
+      "event_date": "06/11",
+      "event_time": "10:00",
+      "outcome": "1",
+      "open_odds": 2.1,
+      "current_odds": 1.85,
+      "drop_pct": 12.0,
+      "max_odds": 1.91,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava-doubles/liutarevich-i.pieczonka-f.-vs-rojer-j.j.winegar-t./16234460?MarketTypeID=301",
+      "match_id": "16234460",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Liutarevich I./Pieczonka F.",
+      "away_team": "Rojer J.J./Winegar T.",
+      "event_date": "06/11",
+      "event_time": "11:00",
+      "outcome": "1",
+      "open_odds": 2.25,
+      "current_odds": 1.98,
+      "drop_pct": 12.0,
+      "max_odds": 2.02,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Villa Maria",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-villa-maria/ficovich-j.p.-vs-coria-f./16398763?MarketTypeID=301",
+      "match_id": "16398763",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ficovich J.P.",
+      "away_team": "Coria F.",
+      "event_date": "06/11",
+      "event_time": "20:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.8,
+      "drop_pct": 22.0,
+      "max_odds": 1.83,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/coria-federico-vJdE1Bg7/ficovich-juan-pablo-WpchB57t/?mid=GO9Z2DYb",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Ficovich J. P.",
+        "away_team": "Coria F.",
+        "match_time": "06.11.2026 20:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.4,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.93,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 41.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "08.03.25",
+            "home": "Ficovich J. P.",
+            "away": "Coria F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "08.03.25 Ficovich J. P. 2-0 Coria F."
+          },
+          {
+            "date": "10.10.23",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "10.10.23 Coria F. 2-1 Ficovich J. P."
+          },
+          {
+            "date": "09.08.23",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "09.08.23 Coria F. 2-1 Ficovich J. P."
+          },
+          {
+            "date": "01.02.22",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "01.02.22 Coria F. 0-2 Ficovich J. P."
+          },
+          {
+            "date": "22.01.19",
+            "home": "Coria F.",
+            "away": "Ficovich J. P.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "22.01.19 Coria F. 0-2 Ficovich J. P."
+          }
+        ],
+        "last_h2h_date": "08.03.25",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Ficovich J. P.",
+        "last_h2h_away": "Coria F.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.4
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Ficovich J. P.)",
+          "missing_recent_matches_B (Coria F.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 370,
+        "ranking_b": 831,
+        "forebet_prediction": "2",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.4,
+        "forebet_home_prob": 48,
+        "forebet_away_prob": 52
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Charlottesville",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-charlottesville/kozlov-s.-vs-shick-b./15731331?MarketTypeID=301",
+      "match_id": "15731331",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kozlov S.",
+      "away_team": "Shick B.",
+      "event_date": "06/11",
+      "event_time": "17:30",
+      "outcome": "1",
+      "open_odds": 1.87,
+      "current_odds": 1.51,
+      "drop_pct": 20.0,
+      "max_odds": 1.54,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/kozlov-stefan-hI2zuuMo/shick-braden-QiV3GEFB/?mid=jB9yQCHO",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kozlov S.",
+        "away_team": "Shick B.",
+        "match_time": "06.11.2026 17:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.48,
+        "away_odds": 2.45,
+        "favorite": "player_a",
+        "advanced_score": 2.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "04.11.26",
+            "home": "Cassone M.",
+            "away": "Kozlov S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "04.11.26 Cassone M. 0-2 Kozlov S."
+          },
+          {
+            "date": "03.11.26",
+            "home": "Kozlov S.",
+            "away": "Martin A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.11.26 Kozlov S. 2-0 Martin A."
+          },
+          {
+            "date": "29.10.26",
+            "home": "Rehberg M. H.",
+            "away": "Kozlov S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.10.26 Rehberg M. H. 2-0 Kozlov S."
+          },
+          {
+            "date": "27.10.26",
+            "home": "Kozlov S.",
+            "away": "Cassone M.",
+            "score": "1-1",
+            "winner": "draw",
+            "raw": "27.10.26 Kozlov S. 1-1 Cassone M."
+          },
+          {
+            "date": "01.10.26",
+            "home": "Kozlov S.",
+            "away": "Krueger M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "01.10.26 Kozlov S. 1-2 Krueger M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Kozlov S.)",
+          "missing_recent_matches_B (Shick B.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 271,
+        "ranking_b": 205,
+        "forebet_prediction": "1",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.1,
+        "forebet_home_prob": 65,
+        "forebet_away_prob": 35
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Taranto",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-taranto/mrva-m.-vs-martineau-m./16198675?MarketTypeID=301",
+      "match_id": "16198675",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mrva M.",
+      "away_team": "Martineau M.",
+      "event_date": "06/11",
+      "event_time": "09:30",
+      "outcome": "2",
+      "open_odds": 2.5,
+      "current_odds": 2.11,
+      "drop_pct": 16.0,
+      "max_odds": 2.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/martineau-matteo-IDkmT0Hj/mrva-maxim-hMR2isnm/?mid=p8Nh1MTq",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Mrva M.",
+        "away_team": "Martineau M.",
+        "match_time": "06.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.68,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 27.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.11.26",
+            "home": "Mrva M.",
+            "away": "Faurel T.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "05.11.26 Mrva M. 2-1 Faurel T."
+          },
+          {
+            "date": "03.11.26",
+            "home": "Mrva M.",
+            "away": "Ribecai M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.11.26 Mrva M. 2-0 Ribecai M."
+          },
+          {
+            "date": "19.10.26",
+            "home": "Herbert P.H.",
+            "away": "Mrva M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "19.10.26 Herbert P.H. 2-1 Mrva M."
+          },
+          {
+            "date": "18.10.26",
+            "home": "Mrva M.",
+            "away": "Lajovic D.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "18.10.26 Mrva M. 2-0 Lajovic D."
+          },
+          {
+            "date": "16.10.26",
+            "home": "Fearnley J.",
+            "away": "Mrva M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.10.26 Fearnley J. 2-0 Mrva M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Mrva M.)",
+          "missing_recent_matches_B (Martineau M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 231,
+        "ranking_b": 244,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.9,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Chennai Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-chennai-doubles/da-silva-fick-g.kulambayeva-z.-vs-falkowska-w.smith-a./16248950?MarketTypeID=301",
+      "match_id": "16248950",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Da Silva Fick G./Kulambayeva Z.",
+      "away_team": "Falkowska W./Smith A.",
+      "event_date": "06/11",
+      "event_time": "10:30",
+      "outcome": "1",
+      "open_odds": 2.18,
+      "current_odds": 1.85,
+      "drop_pct": 15.0,
+      "max_odds": 1.9,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava/dodig-m.-vs-djere-l./16212757?MarketTypeID=301",
+      "match_id": "16212757",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Dodig M.",
+      "away_team": "Djere L.",
+      "event_date": "06/11",
+      "event_time": "12:10",
+      "outcome": "1",
+      "open_odds": 2.05,
+      "current_odds": 1.75,
+      "drop_pct": 15.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/djere-laslo-4GGnypTh/dodig-matej-2wbou5PR/?mid=4jThnWtT",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Dodig M.",
+        "away_team": "Djere L.",
+        "match_time": "06.11.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.73,
+        "away_odds": 1.95,
+        "favorite": "player_a",
+        "advanced_score": 37.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.11.26",
+            "home": "Gentzsch T.",
+            "away": "Dodig M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "05.11.26 Gentzsch T. 0-2 Dodig M."
+          },
+          {
+            "date": "04.11.26",
+            "home": "Dodig M.",
+            "away": "Krajci M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "04.11.26 Dodig M. 2-0 Krajci M."
+          },
+          {
+            "date": "23.10.26",
+            "home": "Trungelliti M.",
+            "away": "Dodig M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.10.26 Trungelliti M. 2-0 Dodig M."
+          },
+          {
+            "date": "21.10.26",
+            "home": "Dodig M.",
+            "away": "Cecchinato M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "21.10.26 Dodig M. 2-1 Cecchinato M."
+          },
+          {
+            "date": "20.10.26",
+            "home": "Dodig M.",
+            "away": "Domingues J.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "20.10.26 Dodig M. 2-0 Domingues J."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 1.0
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Dodig M.)",
+          "missing_recent_matches_B (Djere L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 138,
+        "ranking_b": 137,
+        "forebet_prediction": "1",
+        "forebet_probability": 63.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 63,
+        "forebet_away_prob": 37
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Taipei Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-taipei-doubles/chandrasekar-a.rai-a.-vs-donski-a.poljak-d./16090248?MarketTypeID=301",
+      "match_id": "16090248",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Chandrasekar A./Rai A.",
+      "away_team": "Donski A./Poljak D.",
+      "event_date": "06/11",
+      "event_time": "07:10",
+      "outcome": "2",
+      "open_odds": 1.73,
+      "current_odds": 1.5,
+      "drop_pct": 13.0,
+      "max_odds": 1.51,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Paris",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-paris/van-assche-l.-vs-hijikata-r./16277886?MarketTypeID=301",
+      "match_id": "16277886",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Van Assche L.",
+      "away_team": "Hijikata R.",
+      "event_date": "06/11",
+      "event_time": "14:10",
+      "outcome": "1",
+      "open_odds": 1.8,
+      "current_odds": 1.57,
+      "drop_pct": 13.0,
+      "max_odds": 1.6,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/hijikata-rinky-f9eT4NTQ/van-assche-luca-nP9K42Bg/?mid=rVBrrlLa",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "van Assche L.",
+        "away_team": "Hijikata R.",
+        "match_time": "06.11.2026 14:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.58,
+        "away_odds": 2.35,
+        "favorite": "player_a",
+        "advanced_score": 16.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "05.11.26",
+            "home": "Musetti L.",
+            "away": "van Assche L.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "05.11.26 Musetti L. 1-2 van Assche L."
+          },
+          {
+            "date": "04.11.26",
+            "home": "van Assche L.",
+            "away": "Tien L.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "04.11.26 van Assche L. 2-0 Tien L."
+          },
+          {
+            "date": "02.11.26",
+            "home": "van Assche L.",
+            "away": "Navone M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "02.11.26 van Assche L. 2-0 Navone M."
+          },
+          {
+            "date": "26.10.26",
+            "home": "van Assche L.",
+            "away": "Tien L.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "26.10.26 van Assche L. 0-2 Tien L."
+          },
+          {
+            "date": "23.10.26",
+            "home": "van Assche L.",
+            "away": "Musetti L.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "23.10.26 van Assche L. 1-2 Musetti L."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 1.0
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (van Assche L.)",
+          "missing_recent_matches_B (Hijikata R.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 47,
+        "ranking_b": 83,
+        "forebet_prediction": "1",
+        "forebet_probability": 58.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 11.2,
+        "forebet_home_prob": 58,
+        "forebet_away_prob": 42
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava/svrcina-d.-vs-piros-z./16306727?MarketTypeID=301",
+      "match_id": "16306727",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Svrcina D.",
+      "away_team": "Piros Z.",
+      "event_date": "06/11",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 2.0,
+      "drop_pct": 13.0,
+      "max_odds": 2.1,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/piros-zsombor-2BC3jj8o/svrcina-dalibor-vDue624T/?mid=jgj2UOig",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Svrcina D.",
+        "away_team": "Piros Z.",
+        "match_time": "06.11.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.73,
+        "away_odds": 2.0,
+        "favorite": "player_a",
+        "advanced_score": 44.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "29.04.25",
+            "home": "Piros Z.",
+            "away": "Svrcina D.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.04.25 Piros Z. 2-0 Svrcina D."
+          }
+        ],
+        "last_h2h_date": "29.04.25",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Piros Z.",
+        "last_h2h_away": "Svrcina D.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Svrcina D.)",
+          "missing_recent_matches_B (Piros Z.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 119,
+        "ranking_b": 101,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Hong Kong Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-hong-kong-doubles/gibson-t.inglis-m.-vs-maleckova-j.skoch-m./16196634?MarketTypeID=301",
+      "match_id": "16196634",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gibson T./Inglis M.",
+      "away_team": "Maleckova J./Skoch M.",
+      "event_date": "06/11",
+      "event_time": "10:00",
+      "outcome": "1",
+      "open_odds": 2.1,
+      "current_odds": 1.85,
+      "drop_pct": 12.0,
+      "max_odds": 1.91,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava-doubles/liutarevich-i.pieczonka-f.-vs-rojer-j.j.winegar-t./16234460?MarketTypeID=301",
+      "match_id": "16234460",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Liutarevich I./Pieczonka F.",
+      "away_team": "Rojer J.J./Winegar T.",
+      "event_date": "06/11",
+      "event_time": "11:00",
+      "outcome": "1",
+      "open_odds": 2.25,
+      "current_odds": 1.98,
+      "drop_pct": 12.0,
+      "max_odds": 2.02,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ]
+}
