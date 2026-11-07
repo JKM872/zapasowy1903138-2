@@ -29,9 +29,9 @@
      "grade": "D",
      "availability": "unknown",
      "availabilityNote": "",
-     "status": "pending",
+     "status": "lost",
      "withdrawnReason": null,
-     "score": null
+     "score": "1-1"
     },
     {
      "id": "football|2026-11-06|NK Dekani|NK Bistrica",
@@ -58,9 +58,9 @@
      "grade": "C",
      "availability": "unknown",
      "availabilityNote": "",
-     "status": "pending",
+     "status": "lost",
      "withdrawnReason": null,
-     "score": null
+     "score": "1-0"
     },
     {
      "id": "football|2026-11-06|Cambrian & Clydach|Barry Town",
@@ -87,15 +87,15 @@
      "grade": "B",
      "availability": "unknown",
      "availabilityNote": "",
-     "status": "pending",
+     "status": "lost",
      "withdrawnReason": null,
-     "score": null
+     "score": "3-3"
     }
    ],
    "combinedOdds": 13.96,
    "combinedModelProb": 0.222,
    "combinedImpliedPct": 7.2,
-   "status": "pending",
+   "status": "lost",
    "adjusted": false
   },
   {
@@ -156,9 +156,9 @@
      "grade": "B",
      "availability": "unknown",
      "availabilityNote": "",
-     "status": "pending",
+     "status": "lost",
      "withdrawnReason": null,
-     "score": null,
+     "score": "1-1",
      "checkedAt": "2026-11-06T15:37:50Z"
     },
     {
@@ -186,15 +186,113 @@
      "grade": "B",
      "availability": "unknown",
      "availabilityNote": "",
-     "status": "pending",
+     "status": "won",
      "withdrawnReason": null,
-     "score": null,
+     "score": "0-2",
      "checkedAt": "2026-11-06T15:37:50Z"
     }
    ],
    "combinedOdds": 14.88,
    "combinedModelProb": 0.183,
    "combinedImpliedPct": 6.7,
+   "status": "lost",
+   "adjusted": false
+  },
+  {
+   "id": "S3",
+   "legs": [
+    {
+     "id": "football|2026-11-07|SC Vianense|Leça FC",
+     "source": "top",
+     "sport": "football",
+     "date": "2026-11-07",
+     "league": "Liga 3",
+     "match": "SC Vianense vs Leça FC",
+     "home": "SC Vianense",
+     "away": "Leça FC",
+     "kickoff": "2026-11-07T15:00:00Z",
+     "side": "away",
+     "pick": "Leça FC",
+     "price": 2.47,
+     "bookmaker": "pinnacle",
+     "modelProb": 0.653,
+     "fanPct": null,
+     "impliedPct": 40.5,
+     "edgePct": 24.8,
+     "limit": {
+      "min": 2.0,
+      "source": "top_floor"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "checkedAt": "2026-11-07T13:38:08Z"
+    },
+    {
+     "id": "football|2026-11-07|San Miguel|UD Las Palmas C",
+     "source": "top",
+     "sport": "football",
+     "date": "2026-11-07",
+     "league": "Tercera Division Group 12 - Canarias",
+     "match": "San Miguel vs UD Las Palmas C",
+     "home": "San Miguel",
+     "away": "UD Las Palmas C",
+     "kickoff": "2026-11-07T17:00:00Z",
+     "side": "home",
+     "pick": "San Miguel",
+     "price": 2.57,
+     "bookmaker": "pinnacle",
+     "modelProb": 0.639,
+     "fanPct": null,
+     "impliedPct": 38.9,
+     "edgePct": 25.0,
+     "limit": {
+      "min": 2.0,
+      "source": "top_floor"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null
+    },
+    {
+     "id": "football|2026-11-07|Tigres FC (COL)|Deportes Quindío",
+     "source": "top+fan",
+     "sport": "football",
+     "date": "2026-11-07",
+     "league": "Primera B",
+     "match": "Tigres FC (COL) vs Deportes Quindío",
+     "home": "Tigres FC (COL)",
+     "away": "Deportes Quindío",
+     "kickoff": "2026-11-07T19:00:00Z",
+     "side": "away",
+     "pick": "Deportes Quindío",
+     "price": 2.54,
+     "bookmaker": "pinnacle",
+     "modelProb": 0.665,
+     "fanPct": 61.0,
+     "impliedPct": 39.4,
+     "edgePct": 27.1,
+     "limit": {
+      "min": 2.0,
+      "source": "top_floor"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null
+    }
+   ],
+   "combinedOdds": 16.12,
+   "combinedModelProb": 0.277,
+   "combinedImpliedPct": 6.2,
    "status": "pending",
    "adjusted": false
   }
@@ -205,7 +303,7 @@
   "2026-11-08"
  ],
  "generatedAt": "2026-11-06T14:40:40Z",
- "updatedAt": "2026-11-07T01:02:50Z",
+ "updatedAt": "2026-11-07T13:38:08Z",
  "note": "Accumulators multiply the bookmaker margin with every leg and lose more often than singles: three legs at ~60% each land about one time in five. Backtest on two past weekends: 0 of 3 settled slips won with the odds limits, 1 of 6 without (ROI -100% / -41%). Stake small (0.5% of bankroll) or skip.",
  "stakePct": 0.5,
  "maxLegs": 3
