@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "generated_at": "2026-11-07T05:39:48.299136+01:00",
+    "target_date": "2026-11-07",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 3,
+      "qualified": 0
+    },
+    "enrichment_status_counts": {
+      "enriched": 0,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "odds_change_counts": {
+      "down": 1,
+      "up": 0,
+      "flat": 0,
+      "new": 2
+    },
+    "elapsed_seconds": 4.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "International  - Nations Championship",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/nations-championship/england-vs-australia/12200698?MarketTypeID=1301",
+      "match_id": "12200698",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "England",
+      "away_team": "Australia",
+      "event_date": "08/11",
+      "event_time": "15:10",
+      "outcome": "2",
+      "open_odds": 4.5,
+      "current_odds": 3.25,
+      "drop_pct": 28.0,
+      "max_odds": 3.5,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 3.63,
+        "prev_seen_at": "2026-11-03T05:19:55+00:00",
+        "current_odds": 3.25,
+        "change_pct": -10.47,
+        "direction": "down",
+        "runs_seen": 2,
+        "first_odds": 3.63,
+        "first_seen_at": "2026-11-03T05:19:55+00:00",
+        "change_from_first_pct": -10.47
+      }
+    },
+    {
+      "league": "International  - Rugby Nations Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/rugby-nations-cup/portugal-vs-chile/13456715?MarketTypeID=1301",
+      "match_id": "13456715",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Portugal",
+      "away_team": "Chile",
+      "event_date": "07/11",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 1.5,
+      "current_odds": 1.22,
+      "drop_pct": 19.0,
+      "max_odds": 1.25,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "International  - Rugby Nations Cup",
+      "match_url": "https://www.oddssafari.com/matches/rugby-union/rugby-nations-cup/spain-vs-uruguay/13456712?MarketTypeID=1301",
+      "match_id": "13456712",
+      "sport_slug": "rugby-union",
+      "sport": "rugby",
+      "home_team": "Spain",
+      "away_team": "Uruguay",
+      "event_date": "07/11",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 1.55,
+      "current_odds": 1.32,
+      "drop_pct": 15.0,
+      "max_odds": 1.35,
+      "sport_page_id": "130",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    }
+  ],
+  "qualified": []
+}

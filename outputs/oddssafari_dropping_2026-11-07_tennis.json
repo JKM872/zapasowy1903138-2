@@ -1,0 +1,1648 @@
+{
+  "meta": {
+    "generated_at": "2026-11-07T05:38:23.909540+01:00",
+    "target_date": "2026-11-07",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 9,
+      "qualified": 8
+    },
+    "enrichment_status_counts": {
+      "enriched": 5,
+      "resolve_failed": 3,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 1
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 9
+    },
+    "elapsed_seconds": 437.6,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Challenger - Taranto Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-taranto-doubles/mansouri-s.neuchrist-m.-vs-forcano-i.izquierdo-luque-r./17133261?MarketTypeID=301",
+      "match_id": "17133261",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mansouri S./Neuchrist M.",
+      "away_team": "Forcano I./Izquierdo Luque R.",
+      "event_date": "07/11",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 3.3,
+      "current_odds": 2.45,
+      "drop_pct": 26.0,
+      "max_odds": 2.55,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava/svrcina-d.-vs-rodionov-j./17484159?MarketTypeID=301",
+      "match_id": "17484159",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Svrcina D.",
+      "away_team": "Rodionov J.",
+      "event_date": "07/11",
+      "event_time": "13:20",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.16,
+      "drop_pct": 21.0,
+      "max_odds": 2.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/rodionov-jurij-CKjcTLz1/svrcina-dalibor-vDue624T/?mid=48M4KoOp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Svrcina D.",
+        "away_team": "Rodionov J.",
+        "match_time": "07.11.2026 14:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.63,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 62.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.02.25",
+            "home": "Rodionov J.",
+            "away": "Svrcina D.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.02.25 Rodionov J. 0-2 Svrcina D."
+          }
+        ],
+        "last_h2h_date": "19.02.25",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Rodionov J.",
+        "last_h2h_away": "Svrcina D.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Svrcina D.)",
+          "missing_recent_matches_B (Rodionov J.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 119,
+        "ranking_b": 142,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Villa Maria",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-villa-maria/coria-f.-vs-olivieri-g.a./17538040?MarketTypeID=301",
+      "match_id": "17538040",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Coria F.",
+      "away_team": "Olivieri G.A.",
+      "event_date": "07/11",
+      "event_time": "15:10",
+      "outcome": "2",
+      "open_odds": 2.05,
+      "current_odds": 1.77,
+      "drop_pct": 14.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/coria-federico-vJdE1Bg7/olivieri-genaro-alberto-lnHtsdAT/?mid=EX6XJZYP",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Coria F.",
+        "away_team": "Olivieri G. A.",
+        "match_time": "07.11.2026 15:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L"
+        ],
+        "away_form": [
+          "W"
+        ],
+        "home_form_overall": [
+          "L"
+        ],
+        "away_form_overall": [
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.9,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 70.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "13.08.23",
+            "home": "Coria F.",
+            "away": "Olivieri G. A.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.08.23 Coria F. 1-2 Olivieri G. A."
+          }
+        ],
+        "last_h2h_date": "13.08.23",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Coria F.",
+        "last_h2h_away": "Olivieri G. A.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Coria F.)",
+          "missing_recent_matches_B (Olivieri G. A.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 831,
+        "ranking_b": 257,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "1",
+        "forebet_probability": 54.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 54,
+        "forebet_away_prob": 46
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Stockholm",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-stockholm/dzumhur-d.-vs-montes-de-la-torre-i./17757519?MarketTypeID=301",
+      "match_id": "17757519",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Dzumhur D.",
+      "away_team": "Montes-De La Torre I.",
+      "event_date": "07/11",
+      "event_time": "11:10",
+      "outcome": "1",
+      "open_odds": 1.67,
+      "current_odds": 1.45,
+      "drop_pct": 13.0,
+      "max_odds": 1.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/dzumhur-damir-hMrlbuuQ/montes-de-la-torre-inaki-4CYXUVX7/?mid=IwRlWT46",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Dzumhur D.",
+        "away_team": "Montes-De La Torre I.",
+        "match_time": "07.11.2026 11:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.43,
+        "away_odds": 2.6,
+        "favorite": "player_a",
+        "advanced_score": 4.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "28.08.24",
+            "home": "Dzumhur D.",
+            "away": "Montes-De La Torre I.",
+            "score": "0-1",
+            "winner": "away",
+            "raw": "28.08.24 Dzumhur D. 0-1 Montes-De La Torre I."
+          }
+        ],
+        "last_h2h_date": "28.08.24",
+        "last_h2h_score": "0-1",
+        "last_h2h_home": "Dzumhur D.",
+        "last_h2h_away": "Montes-De La Torre I.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Dzumhur D.)",
+          "missing_recent_matches_B (Montes-De La Torre I.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 88,
+        "ranking_b": 191,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Stockholm",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-stockholm/durasovic-v.-vs-shevchenko-a./17757514?MarketTypeID=301",
+      "match_id": "17757514",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Durasovic V.",
+      "away_team": "Shevchenko A.",
+      "event_date": "07/11",
+      "event_time": "12:20",
+      "outcome": "2",
+      "open_odds": 1.41,
+      "current_odds": 1.22,
+      "drop_pct": 13.0,
+      "max_odds": 1.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Costa do Sauipe",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-costa-do-sauipe/diaz-acosta-f.-vs-seyboth-wild-t./17659688?MarketTypeID=301",
+      "match_id": "17659688",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Diaz Acosta F.",
+      "away_team": "Seyboth Wild T.",
+      "event_date": "07/11",
+      "event_time": "19:10",
+      "outcome": "2",
+      "open_odds": 1.85,
+      "current_odds": 1.63,
+      "drop_pct": 12.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/diaz-acosta-facundo-AsRYv2m2/seyboth-wild-thiago-pO9zJCv1/?mid=fkL0ZTj3",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Diaz Acosta F.",
+        "away_team": "Seyboth Wild T.",
+        "match_time": "07.11.2026 19:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 3.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "10.02.25",
+            "home": "Diaz Acosta F.",
+            "away": "Seyboth Wild T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "10.02.25 Diaz Acosta F. 1-2 Seyboth Wild T."
+          },
+          {
+            "date": "08.01.24",
+            "home": "Seyboth Wild T.",
+            "away": "Diaz Acosta F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "08.01.24 Seyboth Wild T. 1-2 Diaz Acosta F."
+          },
+          {
+            "date": "11.03.23",
+            "home": "Diaz Acosta F.",
+            "away": "Seyboth Wild T.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "11.03.23 Diaz Acosta F. 0-2 Seyboth Wild T."
+          },
+          {
+            "date": "02.12.21",
+            "home": "Seyboth Wild T.",
+            "away": "Diaz Acosta F.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "02.12.21 Seyboth Wild T. 0-2 Diaz Acosta F."
+          },
+          {
+            "date": "24.11.21",
+            "home": "Seyboth Wild T.",
+            "away": "Diaz Acosta F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "24.11.21 Seyboth Wild T. 2-0 Diaz Acosta F."
+          }
+        ],
+        "last_h2h_date": "10.02.25",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Diaz Acosta F.",
+        "last_h2h_away": "Seyboth Wild T.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 1.0
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Diaz Acosta F.)",
+          "missing_recent_matches_B (Seyboth Wild T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 72,
+        "ranking_b": 109,
+        "forebet_prediction": "1",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 59,
+        "forebet_away_prob": 41
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Hong Kong Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-hong-kong-doubles/jiang-x.wong-h.y.c.-vs-chan-h.c.kato-m./16848875?MarketTypeID=301",
+      "match_id": "16848875",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Jiang X./Wong H.Y.C.",
+      "away_team": "Chan H.C./Kato M.",
+      "event_date": "07/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.22,
+      "drop_pct": 11.0,
+      "max_odds": 2.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Luanda Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-luanda-doubles/sanchez-a.s.zaytseva-k.-vs-kubka-m.mikulskyte-j./16270341?MarketTypeID=301",
+      "match_id": "16270341",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sanchez A.S./Zaytseva K.",
+      "away_team": "Kubka M./Mikulskyte J.",
+      "event_date": "07/11",
+      "event_time": "10:30",
+      "outcome": "2",
+      "open_odds": 1.53,
+      "current_odds": 1.37,
+      "drop_pct": 11.0,
+      "max_odds": 1.41,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Charlottesville",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-charlottesville/mayo-a.-vs-andrade-a./17571869?MarketTypeID=301",
+      "match_id": "17571869",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mayo A.",
+      "away_team": "Andrade A.",
+      "event_date": "07/11",
+      "event_time": "18:30",
+      "outcome": "1",
+      "open_odds": 1.64,
+      "current_odds": 1.46,
+      "drop_pct": 11.0,
+      "max_odds": 1.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/andrade-andres-fLLaEvj2/mayo-aidan-2mEGNcVp/?mid=fVn5wLVF",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Mayo A.",
+        "away_team": "Andrade A.",
+        "match_time": "07.11.2026 18:30",
+        "sport": "tennis",
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.5,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.45,
+        "away_odds": 2.55,
+        "favorite": "player_a",
+        "advanced_score": 0.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "29.08.26",
+            "home": "Mayo A.",
+            "away": "Andrade A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.08.26 Mayo A. 2-0 Andrade A."
+          },
+          {
+            "date": "23.04.26",
+            "home": "Andrade A.",
+            "away": "Mayo A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.04.26 Andrade A. 2-0 Mayo A."
+          },
+          {
+            "date": "16.03.26",
+            "home": "Mayo A.",
+            "away": "Andrade A.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "16.03.26 Mayo A. 0-2 Andrade A."
+          },
+          {
+            "date": "30.06.25",
+            "home": "Andrade A.",
+            "away": "Mayo A.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "30.06.25 Andrade A. 0-2 Mayo A."
+          }
+        ],
+        "last_h2h_date": "29.08.26",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Mayo A.",
+        "last_h2h_away": "Andrade A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 1.0
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Mayo A.)",
+          "missing_recent_matches_B (Andrade A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 285,
+        "ranking_b": 229,
+        "forebet_prediction": "2",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 41,
+        "forebet_away_prob": 59
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Taranto Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-taranto-doubles/mansouri-s.neuchrist-m.-vs-forcano-i.izquierdo-luque-r./17133261?MarketTypeID=301",
+      "match_id": "17133261",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mansouri S./Neuchrist M.",
+      "away_team": "Forcano I./Izquierdo Luque R.",
+      "event_date": "07/11",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 3.3,
+      "current_odds": 2.45,
+      "drop_pct": 26.0,
+      "max_odds": 2.55,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Bratislava",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-bratislava/svrcina-d.-vs-rodionov-j./17484159?MarketTypeID=301",
+      "match_id": "17484159",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Svrcina D.",
+      "away_team": "Rodionov J.",
+      "event_date": "07/11",
+      "event_time": "13:20",
+      "outcome": "2",
+      "open_odds": 2.75,
+      "current_odds": 2.16,
+      "drop_pct": 21.0,
+      "max_odds": 2.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/rodionov-jurij-CKjcTLz1/svrcina-dalibor-vDue624T/?mid=48M4KoOp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Svrcina D.",
+        "away_team": "Rodionov J.",
+        "match_time": "07.11.2026 14:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.63,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 62.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.02.25",
+            "home": "Rodionov J.",
+            "away": "Svrcina D.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.02.25 Rodionov J. 0-2 Svrcina D."
+          }
+        ],
+        "last_h2h_date": "19.02.25",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Rodionov J.",
+        "last_h2h_away": "Svrcina D.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Svrcina D.)",
+          "missing_recent_matches_B (Rodionov J.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 119,
+        "ranking_b": 142,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Villa Maria",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-villa-maria/coria-f.-vs-olivieri-g.a./17538040?MarketTypeID=301",
+      "match_id": "17538040",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Coria F.",
+      "away_team": "Olivieri G.A.",
+      "event_date": "07/11",
+      "event_time": "15:10",
+      "outcome": "2",
+      "open_odds": 2.05,
+      "current_odds": 1.77,
+      "drop_pct": 14.0,
+      "max_odds": 1.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/coria-federico-vJdE1Bg7/olivieri-genaro-alberto-lnHtsdAT/?mid=EX6XJZYP",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Coria F.",
+        "away_team": "Olivieri G. A.",
+        "match_time": "07.11.2026 15:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "L"
+        ],
+        "away_form": [
+          "W"
+        ],
+        "home_form_overall": [
+          "L"
+        ],
+        "away_form_overall": [
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.9,
+        "away_odds": 1.8,
+        "favorite": "player_b",
+        "advanced_score": 70.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "13.08.23",
+            "home": "Coria F.",
+            "away": "Olivieri G. A.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.08.23 Coria F. 1-2 Olivieri G. A."
+          }
+        ],
+        "last_h2h_date": "13.08.23",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Coria F.",
+        "last_h2h_away": "Olivieri G. A.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Coria F.)",
+          "missing_recent_matches_B (Olivieri G. A.)",
+          "missing_form_A",
+          "missing_form_B"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 831,
+        "ranking_b": 257,
+        "form_source": "h2h_derived",
+        "forebet_prediction": "1",
+        "forebet_probability": 54.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 54,
+        "forebet_away_prob": 46
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "ATP - Stockholm",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-stockholm/dzumhur-d.-vs-montes-de-la-torre-i./17757519?MarketTypeID=301",
+      "match_id": "17757519",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Dzumhur D.",
+      "away_team": "Montes-De La Torre I.",
+      "event_date": "07/11",
+      "event_time": "11:10",
+      "outcome": "1",
+      "open_odds": 1.67,
+      "current_odds": 1.45,
+      "drop_pct": 13.0,
+      "max_odds": 1.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/dzumhur-damir-hMrlbuuQ/montes-de-la-torre-inaki-4CYXUVX7/?mid=IwRlWT46",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Dzumhur D.",
+        "away_team": "Montes-De La Torre I.",
+        "match_time": "07.11.2026 11:30",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.43,
+        "away_odds": 2.6,
+        "favorite": "player_a",
+        "advanced_score": 4.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "28.08.24",
+            "home": "Dzumhur D.",
+            "away": "Montes-De La Torre I.",
+            "score": "0-1",
+            "winner": "away",
+            "raw": "28.08.24 Dzumhur D. 0-1 Montes-De La Torre I."
+          }
+        ],
+        "last_h2h_date": "28.08.24",
+        "last_h2h_score": "0-1",
+        "last_h2h_home": "Dzumhur D.",
+        "last_h2h_away": "Montes-De La Torre I.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Dzumhur D.)",
+          "missing_recent_matches_B (Montes-De La Torre I.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 88,
+        "ranking_b": 191,
+        "forebet_prediction": "2",
+        "forebet_probability": 51.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 49,
+        "forebet_away_prob": 51
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Costa do Sauipe",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-costa-do-sauipe/diaz-acosta-f.-vs-seyboth-wild-t./17659688?MarketTypeID=301",
+      "match_id": "17659688",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Diaz Acosta F.",
+      "away_team": "Seyboth Wild T.",
+      "event_date": "07/11",
+      "event_time": "19:10",
+      "outcome": "2",
+      "open_odds": 1.85,
+      "current_odds": 1.63,
+      "drop_pct": 12.0,
+      "max_odds": 1.67,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/diaz-acosta-facundo-AsRYv2m2/seyboth-wild-thiago-pO9zJCv1/?mid=fkL0ZTj3",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Diaz Acosta F.",
+        "away_team": "Seyboth Wild T.",
+        "match_time": "07.11.2026 19:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 3.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "10.02.25",
+            "home": "Diaz Acosta F.",
+            "away": "Seyboth Wild T.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "10.02.25 Diaz Acosta F. 1-2 Seyboth Wild T."
+          },
+          {
+            "date": "08.01.24",
+            "home": "Seyboth Wild T.",
+            "away": "Diaz Acosta F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "08.01.24 Seyboth Wild T. 1-2 Diaz Acosta F."
+          },
+          {
+            "date": "11.03.23",
+            "home": "Diaz Acosta F.",
+            "away": "Seyboth Wild T.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "11.03.23 Diaz Acosta F. 0-2 Seyboth Wild T."
+          },
+          {
+            "date": "02.12.21",
+            "home": "Seyboth Wild T.",
+            "away": "Diaz Acosta F.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "02.12.21 Seyboth Wild T. 0-2 Diaz Acosta F."
+          },
+          {
+            "date": "24.11.21",
+            "home": "Seyboth Wild T.",
+            "away": "Diaz Acosta F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "24.11.21 Seyboth Wild T. 2-0 Diaz Acosta F."
+          }
+        ],
+        "last_h2h_date": "10.02.25",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Diaz Acosta F.",
+        "last_h2h_away": "Seyboth Wild T.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 1.0
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Diaz Acosta F.)",
+          "missing_recent_matches_B (Seyboth Wild T.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 72,
+        "ranking_b": 109,
+        "forebet_prediction": "1",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.3,
+        "forebet_home_prob": 59,
+        "forebet_away_prob": 41
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Hong Kong Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-hong-kong-doubles/jiang-x.wong-h.y.c.-vs-chan-h.c.kato-m./16848875?MarketTypeID=301",
+      "match_id": "16848875",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Jiang X./Wong H.Y.C.",
+      "away_team": "Chan H.C./Kato M.",
+      "event_date": "07/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 2.5,
+      "current_odds": 2.22,
+      "drop_pct": 11.0,
+      "max_odds": 2.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Luanda Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-luanda-doubles/sanchez-a.s.zaytseva-k.-vs-kubka-m.mikulskyte-j./16270341?MarketTypeID=301",
+      "match_id": "16270341",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Sanchez A.S./Zaytseva K.",
+      "away_team": "Kubka M./Mikulskyte J.",
+      "event_date": "07/11",
+      "event_time": "10:30",
+      "outcome": "2",
+      "open_odds": 1.53,
+      "current_odds": 1.37,
+      "drop_pct": 11.0,
+      "max_odds": 1.41,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Charlottesville",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-charlottesville/mayo-a.-vs-andrade-a./17571869?MarketTypeID=301",
+      "match_id": "17571869",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Mayo A.",
+      "away_team": "Andrade A.",
+      "event_date": "07/11",
+      "event_time": "18:30",
+      "outcome": "1",
+      "open_odds": 1.64,
+      "current_odds": 1.46,
+      "drop_pct": 11.0,
+      "max_odds": 1.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/andrade-andres-fLLaEvj2/mayo-aidan-2mEGNcVp/?mid=fVn5wLVF",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Mayo A.",
+        "away_team": "Andrade A.",
+        "match_time": "07.11.2026 18:30",
+        "sport": "tennis",
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 2,
+        "win_rate": 0.5,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.45,
+        "away_odds": 2.55,
+        "favorite": "player_a",
+        "advanced_score": 0.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "29.08.26",
+            "home": "Mayo A.",
+            "away": "Andrade A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "29.08.26 Mayo A. 2-0 Andrade A."
+          },
+          {
+            "date": "23.04.26",
+            "home": "Andrade A.",
+            "away": "Mayo A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.04.26 Andrade A. 2-0 Mayo A."
+          },
+          {
+            "date": "16.03.26",
+            "home": "Mayo A.",
+            "away": "Andrade A.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "16.03.26 Mayo A. 0-2 Andrade A."
+          },
+          {
+            "date": "30.06.25",
+            "home": "Andrade A.",
+            "away": "Mayo A.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "30.06.25 Andrade A. 0-2 Mayo A."
+          }
+        ],
+        "last_h2h_date": "29.08.26",
+        "last_h2h_score": "2-0",
+        "last_h2h_home": "Mayo A.",
+        "last_h2h_away": "Andrade A.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 1.0
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Mayo A.)",
+          "missing_recent_matches_B (Andrade A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 285,
+        "ranking_b": 229,
+        "forebet_prediction": "2",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 41,
+        "forebet_away_prob": 59
+      },
+      "enrichment_error": null
+    }
+  ]
+}
