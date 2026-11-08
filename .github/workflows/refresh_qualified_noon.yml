@@ -3,7 +3,7 @@ name: Noon Refresh — Forebet + SofaScore Update
 on:
   # Run daily at 12:00 UTC (14:00 CEST / 13:00 CET)
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '7 12 * * *'
 
   # Allow manual trigger
   workflow_dispatch:

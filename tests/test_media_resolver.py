@@ -249,6 +249,8 @@ class TestPageAndCacheFile:
         calls = _responder(monkeypatch, [('searchteams.php', {'teams': None})])
         page = [{'homeTeam': f'Club{i}x', 'awayTeam': f'Club{i}y', 'sport': 'football'} for i in range(5)]
         tlr.media_for_page(page)
+        assert calls == []  # default: cache only (MEDIA_LIVE_LOOKUPS=0)
+        tlr.media_for_page(page, live_budget=3)
         looked_up = {c.split('t=')[1] for c in calls}
         assert len(looked_up) == 3
         assert all('homeMedia' in m and 'awayMedia' in m for m in page)
@@ -257,7 +259,7 @@ class TestPageAndCacheFile:
         _responder(monkeypatch, [('searchteams.php', {'teams': [
             {'idTeam': '9', 'strSport': 'Soccer', 'strBadge': 'https://r2.thesportsdb.com/a.png'}]})])
         m = {'homeTeam': 'Arsenal', 'awayTeam': 'Chelsea', 'sport': 'football'}
-        tlr.media_for_page([m])
+        tlr.media_for_page([m], live_budget=3)
         assert m['homeLogo'] == 'https://r2.thesportsdb.com/a.png'
         assert m['homeMedia']['source'] == 'thesportsdb'
         assert not (tmp_path / 'media_cache.json').exists()

@@ -3,13 +3,18 @@ name: Podsumowanie dnia (Excel + AI)
 # Dropping Odds, tenis stołowy) + komentarz AI (Groq, rotacja 4 kluczy).
 on:
   schedule:
-    - cron: '30 12 * * *'   # 14:30 PL latem / 13:30 zimą — po Forebet i porannym Dropping
+    - cron: '37 12 * * *'   # 14:30 PL latem / 13:30 zimą — po Forebet i porannym Dropping
   workflow_dispatch:
     inputs:
       date:
         description: 'Data YYYY-MM-DD (puste = dziś UTC)'
         required: false
         default: ''
+      email:
+        description: 'Send the e-mail'
+        type: boolean
+        required: false
+        default: true
 permissions:
   contents: write
 jobs:
@@ -42,7 +47,8 @@ jobs:
         run: |
           D="${{ github.event.inputs.date }}"; [ -z "$D" ] && D=$(date -u +%F)
           echo "DAY=$D" >> "$GITHUB_ENV"
-          python tools/daily_digest.py "$D" --email
+          EM="--email"; [ "${{ github.event.inputs.email }}" = "false" ] && EM=""
+          python tools/daily_digest.py "$D" $EM
       - name: Commit digest
         run: |
           git config user.name "github-actions[bot]"

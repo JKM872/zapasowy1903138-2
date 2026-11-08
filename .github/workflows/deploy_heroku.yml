@@ -24,11 +24,11 @@ name: Deploy to Heroku (refresh site data)
 
 on:
   schedule:
-    - cron: '30 7 * * *'    # after the overnight block and the 07:00 verdict model
-    - cron: '30 12 * * *'   # after the noon refresh and first dropping-odds window
-    - cron: '0 15 * * *'    # after the second dropping-odds window
-    - cron: '0 18 * * *'    # after the third window and baseball
-    - cron: '0 23 * * *'    # after evening result settling
+    - cron: '37 7 * * *'    # after the overnight block and the 07:00 verdict model
+    - cron: '37 12 * * *'   # after the noon refresh and first dropping-odds window
+    - cron: '7 15 * * *'    # after the second dropping-odds window
+    - cron: '7 18 * * *'    # after the third window and baseball
+    - cron: '7 23 * * *'    # after evening result settling
   workflow_dispatch:
 
 # One deploy at a time. Overlapping builds of the same commit waste minutes and

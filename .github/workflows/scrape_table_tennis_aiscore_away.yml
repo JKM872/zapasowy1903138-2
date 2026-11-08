@@ -3,7 +3,7 @@ name: Table Tennis (AiScore) - AWAY FOCUS
 on:
   # 06:30 UTC — offset from the home run (05:30) to reduce push races on main.
   schedule:
-    - cron: '30 6 * * *'
+    - cron: '37 6 * * *'
 
   workflow_dispatch:
     inputs:

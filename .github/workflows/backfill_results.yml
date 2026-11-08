@@ -34,7 +34,7 @@ on:
   schedule:
     # Nightly, chipping away at whatever is left. Resumable, so repeated runs
     # converge without any bookkeeping.
-    - cron: '0 2 * * *'
+    - cron: '7 2 * * *'
 
 env:
   PYTHONIOENCODING: utf-8

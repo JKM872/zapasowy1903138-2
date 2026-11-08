@@ -24,16 +24,16 @@ name: OddsSafari Dropping Odds Pipeline
 on:
   schedule:
     # Nocny przebieg: 02:00 Europe/Warsaw (CEST) / 01:00 (CET)
-    - cron: '0 0 * * *'
+    - cron: '7 0 * * *'
     # 12:00 Europe/Warsaw
-    - cron: '0 10 * * *'
-    - cron: '0 11 * * *'
+    - cron: '7 10 * * *'
+    - cron: '7 11 * * *'
     # 15:00 Europe/Warsaw
-    - cron: '0 13 * * *'
-    - cron: '0 14 * * *'
+    - cron: '7 13 * * *'
+    - cron: '7 14 * * *'
     # 18:00 Europe/Warsaw
-    - cron: '0 16 * * *'
-    - cron: '0 17 * * *'
+    - cron: '7 16 * * *'
+    - cron: '7 17 * * *'
   workflow_dispatch:
     inputs:
       date:
@@ -116,7 +116,7 @@ jobs:
           # Crons fire at both DST offsets for each target hour; keep only the
           # fire that lands on 12:00, 15:00 or 18:00 in Europe/Warsaw. Manual
           # runs always proceed.
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 0 * * *" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "7 0 * * *" ]; then
             echo "Nocny przebieg (cron 0 0 UTC) — proceeding"
           elif [ "${{ github.event_name }}" = "schedule" ]; then
             LOCAL_HOUR=$(TZ='Europe/Warsaw' date +%H)

@@ -6,7 +6,7 @@ name: Fan Favourites
 # last 3 days and commits once (no parallel pushes).
 on:
   schedule:
-    - cron: '0 6,10,14,18 * * *'
+    - cron: '11 6,10,14,18 * * *'
   # The 06:00 cron often runs before the morning scrape has finished, leaving
   # the new day empty until 10:00; rebuild as soon as the scrapers commit.
   workflow_run:

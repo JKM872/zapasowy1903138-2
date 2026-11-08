@@ -8,7 +8,7 @@ on:
   schedule:
     # 10:30 UTC — po zakończeniu scrape.yml (00:00), scrape_away (03:00)
     # i większości scrape_forebet (04:00, do ~6 h).
-    - cron: '30 10 * * *'
+    - cron: '37 10 * * *'
   workflow_dispatch:
     inputs:
       date:
@@ -41,26 +41,18 @@ jobs:
           sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev
           pip install curl-cffi 'requests[socks]' 'PySocks>=1.7.1'
 
-      # Tor tylko do rozliczania wyników przez SofaScore (403 na IP GitHuba).
-      - name: Setup Tor
-        continue-on-error: true
-        env:
-          SOFASCORE_XRW: ${{ secrets.SOFASCORE_XRW }}
-        run: bash tools/setup_tor.sh
 
       - name: Build coupons
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
-          SOFASCORE_PROXY: "socks5h://localhost:9050"
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
-          SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_XRW: ${{ secrets.SOFASCORE_XRW }}
         run: |
           ARGS=""
           if [ -n "${{ github.event.inputs.date }}" ]; then ARGS="--date ${{ github.event.inputs.date }}"; fi
-          python tools/coupon_builder.py $ARGS
+          python -u tools/coupon_builder.py $ARGS
 
       - name: Commit coupons
         run: |

@@ -16,7 +16,7 @@ name: Forebet Audit (wyniki typow + zdrowie danych)
 on:
   schedule:
     # 06:30 UTC — po nocnych meczach (Ameryki, Azja), przed porannym scrapem.
-    - cron: '30 6 * * *'
+    - cron: '37 6 * * *'
   workflow_dispatch:
     inputs:
       days:

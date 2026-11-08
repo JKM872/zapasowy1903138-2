@@ -4,12 +4,12 @@ on:
   # Run daily at 22:00 UTC (late evening — most matches finished)
   schedule:
     # Evening pass over today's card.
-    - cron: '0 22 * * *'
+    - cron: '7 22 * * *'
     # Morning pass over yesterday's. Baseball starts 17:00-21:00 UTC and runs
     # about three hours, so the late games are still in progress at 22:00 and
     # every one of them was reported as pending — 7 of 7 on 2026-07-31. The
     # store keeps finished results, so this only settles what was left open.
-    - cron: '0 6 * * *'
+    - cron: '7 6 * * *'
 
   # Allow manual trigger for any date
   workflow_dispatch:
@@ -25,6 +25,7 @@ env:
 jobs:
   check-results:
     runs-on: ubuntu-latest
+    timeout-minutes: 150
     permissions:
       contents: write
 
@@ -72,12 +73,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4b. SofaScore reaches us through Cloudflare, which refuses GitHub's
-      # datacenter ranges outright. Tor gives the resolver an exit IP that is
-      # not on that list; FlareSolverr above is the second line when it is.
-      - name: Setup Tor (SOCKS5 on :9050)
-        continue-on-error: true
-        run: bash tools/setup_tor.sh
 
       # 5. Determine target date
       - name: Set target date
@@ -85,10 +80,10 @@ jobs:
         run: |
           if [ -n "${{ github.event.inputs.date }}" ]; then
             TARGET="${{ github.event.inputs.date }}"
-          elif [ "$(date -u +%H)" -lt 12 ]; then
-            # The morning pass exists to catch what was still being played at
-            # 22:00, so it looks at yesterday.
-            TARGET="$(date -u -d 'yesterday' +%Y-%m-%d)"
+          elif [ "${{ github.event.schedule }}" = '7 6 * * *' ]; then
+            TARGET="$(date -u -d '18 hours ago' +%F)"
+          elif [ "${{ github.event.schedule }}" = '7 22 * * *' ]; then
+            TARGET="$(date -u -d '8 hours ago' +%F)"
             echo "🌅 Przebieg poranny — sprawdzam wczorajszą datę"
           else
             TARGET="$(date -u +%Y-%m-%d)"
@@ -106,9 +101,7 @@ jobs:
           # Same bypass chain the scrapers use, in the same order.
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
-          SOFASCORE_PROXY: "socks5h://localhost:9050"
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
-          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           echo "📊 Checking results for $TARGET_DATE..."
           # Settlement goes through the SofaScore API first (no browser), and
@@ -136,9 +129,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
-          SOFASCORE_PROXY: "socks5h://localhost:9050"
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
-          SOFASCORE_PROXY_PRIMARY: "1"
         run: |
           if [ -f "outputs/telegram_manifest_${TARGET_DATE}.json" ]; then
             echo "📨 Telegram manifest found — checking results for picks sent to Telegram..."

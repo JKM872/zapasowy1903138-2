@@ -34,7 +34,7 @@ XRW="${SOFASCORE_XRW:-$(printf '%s' "$(( $(date +%s) / 1800 ))" | sha256sum | cu
 PROBE_URL="${SOFASCORE_PROBE_URL:-https://api.sofascore.com/api/v1/sport/football/scheduled-events/$(date +%Y-%m-%d)}"
 
 echo "🧅 Instaluje Tor..."
-sudo apt-get update -qq && sudo apt-get install -y -qq tor || true
+sudo timeout 180 apt-get update -qq && sudo timeout 180 apt-get install -y -qq tor || true
 
 # v11.0 — dopisz konfiguracje do /etc/tor/torrc (idempotentnie):
 #  - ControlPort 9051 bez auth (tylko localhost, efemeryczny runner GHA) — pozwala

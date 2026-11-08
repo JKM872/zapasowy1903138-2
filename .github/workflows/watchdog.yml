@@ -4,8 +4,8 @@ name: Strażnik (watchdog)
 # gdy są problemy; raport zawsze w results/watchdog_<data>.json.
 on:
   schedule:
-    - cron: '30 9 * * *'
-    - cron: '30 15 * * *'
+    - cron: '37 9 * * *'
+    - cron: '37 15 * * *'
   workflow_dispatch:
     inputs:
       date:

@@ -6,7 +6,10 @@ name: Media cache (logos / photos)
 # Commits only outputs/media_cache.json.
 on:
   schedule:
-    - cron: '30 6,14 * * *'
+    - cron: '37 6,14 * * *'
+  workflow_run:
+    workflows: ["Forebet Scraper Pipeline (Forebet-first)", "Sports Scraper Pipeline"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       days:
@@ -39,7 +42,7 @@ jobs:
           BUDGET_INPUT: ${{ github.event.inputs.budget_sec }}
           PYTHONIOENCODING: utf-8
         run: |
-          BUDGET="${BUDGET_INPUT:-300}"
+          BUDGET="${BUDGET_INPUT:-300}"; [ "${{ github.event_name }}" = "workflow_run" ] && BUDGET=600
           if ! [[ "$BUDGET" =~ ^[0-9]+$ ]] || [ "$BUDGET" -gt 600 ]; then echo "bad budget_sec"; exit 1; fi
           if [ -n "$DAYS_INPUT" ] && ! [[ "$DAYS_INPUT" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}(,[0-9]{4}-[0-9]{2}-[0-9]{2})*$ ]]; then echo "bad days"; exit 1; fi
           python team_logo_resolver.py --fill --budget-sec "$BUDGET" ${DAYS_INPUT:+--days "$DAYS_INPUT"}

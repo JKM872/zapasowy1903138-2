@@ -15,7 +15,7 @@ name: "Backtest & Calibration"
 on:
   schedule:
     # Mondays 06:00 UTC — after a full weekend of settled fixtures.
-    - cron: '0 6 * * 1'
+    - cron: '7 6 * * 1'
   workflow_dispatch:
     inputs:
       sport:

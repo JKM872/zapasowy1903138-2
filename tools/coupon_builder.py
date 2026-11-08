@@ -391,7 +391,9 @@ def settle_leg(date: str, l: Dict[str, Any]) -> Optional[bool]:
     return rec['winner'] == ('home' if l['pick'] == '1' else 'away')
 
 
-def settle_past(days: int = 30) -> str:
+def settle_past(days: int = 30, network: bool = True, budget_s: Optional[float] = None) -> str:
+    import time as _time
+    deadline = _time.monotonic() + budget_s if budget_s else None
     try:
         import sofascore_scraper as ss
     except Exception:
@@ -407,7 +409,9 @@ def settle_past(days: int = 30) -> str:
         if date < today:
             for c in doc['coupons'].values():
                 for l in c['legs']:
-                    if l.get('won') is None and l.get('tries', 0) < 3:
+                    if network and l.get('won') is None and l.get('tries', 0) < 3:
+                        if deadline is not None and _time.monotonic() > deadline:
+                            break
                         if ss and ss.is_sofascore_unreachable():
                             break
                         try:
@@ -474,11 +478,13 @@ def main() -> int:
                    'form_rule': f'>={FORM_FAV_MIN}/5 vs <={FORM_DOG_MAX}/5',
                    'coupons': coupons}, fh, ensure_ascii=False, indent=1, default=list)
 
-    balance = '' if args.no_settle else settle_past()
+    balance = '' if args.no_settle else settle_past(network=False)
     text = message(args.date, coupons, balance)
     print('\n' + text)
     if not args.no_telegram:
         send_telegram(text)
+    if not args.no_settle:
+        settle_past(budget_s=float(os.environ.get('COUPON_SETTLE_BUDGET_S', '900') or 900))
     summary = os.environ.get('GITHUB_STEP_SUMMARY')
     if summary:
         with open(summary, 'a', encoding='utf-8') as fh:

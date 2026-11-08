@@ -8,9 +8,9 @@ name: "Dropping Odds - mail 'zarabialo'"
 # in outputs/ remembers what was sent), and a run with nothing new sends nothing.
 on:
   schedule:
-    - cron: '30 11 * * *'
-    - cron: '30 14 * * *'
-    - cron: '30 17 * * *'
+    - cron: '37 11 * * *'
+    - cron: '37 14 * * *'
+    - cron: '37 17 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

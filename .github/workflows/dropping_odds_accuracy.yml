@@ -4,7 +4,7 @@ on:
   # 07:00 UTC — po obu przebiegach "Check Results" (22:00 i 06:00 UTC), żeby
   # liczyć na świeżo rozstrzygniętym result_store.
   schedule:
-    - cron: '0 7 * * *'
+    - cron: '7 7 * * *'
 
   workflow_dispatch:
     inputs:

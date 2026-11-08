@@ -6,7 +6,10 @@ name: TOP live (closing odds + pre-kickoff check)
 # Commits only results/top_live_*.json (owned by this job, design K2).
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '3-59/10 * * * *'
+  workflow_run:
+    workflows: ["TOP picks (perełki A/B)"]
+    types: [completed]
   workflow_dispatch:
 permissions:
   contents: write

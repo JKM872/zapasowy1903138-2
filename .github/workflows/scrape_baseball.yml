@@ -4,7 +4,7 @@ on:
   # MLB games typically start 17:00-22:00 ET → run at 14:00 UTC (10 AM ET)
   # to catch lineup/pitcher announcements
   schedule:
-    - cron: '0 14 * * *'
+    - cron: '7 14 * * *'
 
   # Allow manual trigger
   workflow_dispatch:

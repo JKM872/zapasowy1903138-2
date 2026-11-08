@@ -57,7 +57,7 @@ _REQUEST_TIMEOUT = 6             # seconds
 _USER_AGENT = "PicklyMedia/1.0 (https://github.com/JKM872/zapasowy1903138-2)"
 _WIKIDATA_API = "https://www.wikidata.org/w/api.php"
 _COMMONS_API = "https://commons.wikimedia.org/w/api.php"
-LIVE_LOOKUPS_PER_REQUEST = 3
+LIVE_LOOKUPS_PER_REQUEST = int(os.environ.get('MEDIA_LIVE_LOOKUPS', '0') or 0)
 
 # Hosts a served image may come from. Anything else (SofaScore CDN included) is dropped.
 _ALLOWED_HOSTS = frozenset({
