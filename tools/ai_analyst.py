@@ -90,8 +90,9 @@ def build_candidates(day: str, top: List[Dict[str, Any]],
         for r in rows:
             home, _, away = str(r.get('match') or '').partition(' vs ')
             raw = idx.get((r.get('sport'), r.get('match'))) or {}
-            if not russia_filter.is_individual_sport(r.get('sport')) and russia_filter.is_russian(
-                    r.get('league'), raw.get('country'), home, away):
+            if not russia_filter.is_individual_sport(r.get('sport')) and (
+                    russia_filter.is_russian_code(r.get('sport'), r.get('league'))
+                    or russia_filter.is_russian(r.get('league'), raw.get('country'), home, away)):
                 print(f"   🇷🇺 Analityk AI pomija mecz z Rosji: {r.get('match')}")
                 continue
             c = {'source': src, **{k: v for k, v in r.items() if k != 'stars'}}

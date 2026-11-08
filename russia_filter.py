@@ -24,6 +24,20 @@ _COUNTRY_LEAGUE = (
 # piłka ręczna RU1, RUW; siatkówka RU1, RUC, RUW (results/ 09-12..11-01).
 # Całe pole równe kodowi — „RUS Rebecq” (klub belgijski) nie jest kodem.
 _LEAGUE_CODE_RE = re.compile(r"RU[0-9WCS]")
+# Kody spoza RU*, rosyjskie tylko w danym sporcie (siatkowka RCW = Serbia,
+# koszykowka RWC = Rumunia), wiec bez reguly globalnej.
+_SPORT_CODES = {
+    "basketball": {"RCW", "RW2"},
+    "volleyball": {"RW2", "RWC"},
+    "rugby": {"PLE"},
+}
+
+
+def is_russian_code(sport: Any, league: Any) -> bool:
+    """True, gdy cale pole ligi to rosyjski kod Forebet dla danego sportu."""
+    if not enabled() or not sport or not league:
+        return False
+    return str(league).strip() in _SPORT_CODES.get(_norm(sport).strip(), ())
 
 # Rosyjskie miasta (EN + polska transliteracja z Livesport, bez znaków PL).
 # Celowo bez dwuznacznych nazw (np. Jarosław — jest polskie miasto).
@@ -117,6 +131,9 @@ def filter_rows(rows: Iterable[Any], *fields: str, label: str = "",
     def _drop(r):
         if is_individual_sport(_get(r, "sport")) or is_individual_sport(_get(r, "sport_slug")):
             return False
+        rs = sport or _get(r, "sport") or _get(r, "sport_slug")
+        if "league" in fields and is_russian_code(rs, _get(r, "league")):
+            return True
         return is_russian(*(_get(r, f) for f in fields))
 
     kept = [r for r in rows if not _drop(r)]

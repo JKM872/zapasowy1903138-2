@@ -91,7 +91,10 @@ def test_livesport_tennis_links_kept():
 OBSERVED_CODES = [("basketball", "RU2"), ("basketball", "RUC"), ("basketball", "RUS"),
                   ("handball", "RU1"), ("handball", "RUW"),
                   ("hockey", "RU1"), ("hockey", "RU2"), ("hockey", "RU4"), ("hockey", "RUW"),
-                  ("volleyball", "RU1"), ("volleyball", "RUC"), ("volleyball", "RUW")]
+                  ("volleyball", "RU1"), ("volleyball", "RUC"), ("volleyball", "RUW"),
+                  # Non-RU* codes (all codes scanned): per-sport table.
+                  ("basketball", "RCW"), ("basketball", "RW2"), ("volleyball", "RW2"),
+                  ("volleyball", "RWC"), ("rugby", "PLE")]
 FIELDS = ("league", "country", "homeTeam", "awayTeam")
 
 
@@ -115,6 +118,13 @@ def test_other_codes_and_individual_sports_kept():
     assert russia_filter.filter_rows(per_row, *FIELDS) == per_row
     # Only a whole field equal to a code: a Belgian "RUS Rebecq" is not one.
     assert not russia_filter.is_russian("RUS Rebecq") and not russia_filter.is_russian("ru1")
+
+
+def test_sport_specific_codes_not_global():
+    # Volleyball RCW = Serbian women's cup, basketball RWC = Romanian league.
+    for sport, code in (("volleyball", "RCW"), ("basketball", "RWC"), ("hockey", "PLE")):
+        assert russia_filter.filter_rows([_row(code)], *FIELDS, sport=sport) == [_row(code)]
+    assert russia_filter.filter_rows([_row("RW2", sport="volleyball")], *FIELDS) == []
 
 
 def test_adjectival_city_names_are_russian():
