@@ -38,7 +38,7 @@ REFRESH_MAX = int(os.getenv('FAN_FILL_MAX_CALLS', '400'))                    # F
 REFRESH_AGE_H = 3
 # Wall-clock budget for Fan Vote lookups per sport and day (a lookup can take
 # ~25 s when the SofaScore API path falls back to the browser).
-REFRESH_BUDGET_S = float(os.getenv('FAN_REFRESH_BUDGET_S', '540'))
+REFRESH_BUDGET_S = float(os.getenv('FAN_FILL_BUDGET_S') or os.getenv('FAN_REFRESH_BUDGET_S', '540'))
 
 
 def _now() -> datetime:
@@ -80,6 +80,8 @@ def _rows(day: str, sport: str, results: str) -> List[Dict[str, Any]]:
     raw = _read(os.path.join(results, f'matches_{day}_{sport}_forebet.json'))
     rows = raw.get('matches') if isinstance(raw, dict) else raw
     rows = [r for r in rows or [] if isinstance(r, dict)]
+    if sport == 'table_tennis':
+        return _aiscore_rows(day, results)
     # Forebet finishes ~12:00 UTC; until then (and for matches Forebet lacks)
     # use the morning Sports Scraper rows so the board fills during the day.
     seen = {((r.get('homeTeam') or '').lower(), (r.get('awayTeam') or '').lower()) for r in rows}
@@ -89,6 +91,21 @@ def _rows(day: str, sport: str, results: str) -> List[Dict[str, Any]]:
             seen.add(k)
             rows.append(r)
     return rows
+
+
+def _aiscore_rows(day: str, results: str) -> List[Dict[str, Any]]:
+    """Table tennis: union (by names) of the AiScore home/away focus files."""
+    out, seen = [], set()
+    for focus in ('home', 'away'):
+        raw = _read(os.path.join(results, f'matches_{day}_table_tennis_aiscore_{focus}.json'))
+        for r in (raw.get('matches') if isinstance(raw, dict) else raw) or []:
+            if not isinstance(r, dict) or not r.get('homeTeam') or not r.get('awayTeam'):
+                continue
+            k = (r['homeTeam'].lower(), r['awayTeam'].lower())
+            if k not in seen:
+                seen.add(k)
+                out.append(r)
+    return out
 
 
 def _scraper_rows(day: str, sport: str, results: str) -> List[Dict[str, Any]]:
@@ -118,50 +135,15 @@ def _file_age_h(day: str, sport: str, results: str, now: datetime) -> float:
 
 
 def refresh_votes(rows: List[Dict[str, Any]], sport: str, day: str, stale: bool,
-                  now: datetime, log=print) -> int:
-    """Re-read Fan Vote (sofascore_fanvote, SOFASCORE_RELAY) for upcoming rows
-    without a vote, and - when the forebet file is older than REFRESH_AGE_H -
-    for rows near the board threshold. Oriented with _orient_fan_vote."""
-    try:
-        import sofascore_fanvote as fanvote
-        from forebet_pipeline import _orient_fan_vote
-    except Exception as e:                       # noqa: BLE001
-        log(f'   fan vote refresh unavailable: {type(e).__name__}: {e}')
-        return 0
-    thr = fan_limits.fan_threshold(sport) - 10
-    todo = []
-    for r in rows:
-        ko = pricing._parse_ts(pricing.parse_kickoff(day, r.get('time'), [r.get('kickoffUtc')], sport=sport))
-        if ko and ko <= now:
-            continue
-        fs = fan_limits.fan_side(r)
-        if fs is None or (stale and fs['fanPct'] >= thr):
-            todo.append(r)
-    n = tried = 0
-    t0 = time.monotonic()
-    for r in todo[:REFRESH_MAX]:
-        if time.monotonic() - t0 > REFRESH_BUDGET_S:
-            log(f'   fan vote refresh budget {REFRESH_BUDGET_S:.0f}s used, stopping')
-            break
-        tried += 1
-        home, away = r.get('homeTeam') or '', r.get('awayTeam') or ''
-        try:
-            v = fanvote.get_fan_vote(home, away, sport, day)
-            _orient_fan_vote(v, home, away, day)
-        except Exception as e:                   # noqa: BLE001
-            log(f'   fan vote {home} - {away}: {type(e).__name__}')
-            continue
-        if v.get('sofascore_found') and v.get('sofascore_orientation') != 'unknown':
-            r['sofascore'] = {**(r.get('sofascore') or {}), 'found': True,
-                              'homeProb': v.get('sofascore_home_win_prob'),
-                              'awayProb': v.get('sofascore_away_win_prob'),
-                              'votes': v.get('sofascore_total_votes'),
-                              'url': v.get('sofascore_url'), 'refreshedAt': _iso(now)}
-            n += 1
-        if fanvote.is_disabled_for_run():
-            break
-    log(f'   fan vote refreshed {n}/{tried} (queued {min(len(todo), REFRESH_MAX)})')
-    return n
+                  now: datetime, log=print, results: str = RESULTS) -> Dict[str, int]:
+    """Fan Vote for every upcoming row (tools.fanvote_fill); store per day."""
+    from tools import fanvote_fill
+    path = fanvote_fill.store_path(day, results)
+    store = fanvote_fill.load_store(path)
+    st = fanvote_fill.fill_votes(rows, sport, day, now, store, log,
+                                 budget_s=REFRESH_BUDGET_S, max_calls=REFRESH_MAX)
+    fanvote_fill.save_store(path, store)
+    return st
 
 
 def _form_str(xs: Any) -> str:
@@ -173,7 +155,9 @@ def _form(r: Dict[str, Any], side: str) -> Dict[str, str]:
     op = 'away' if side == 'home' else 'home'
     venue = {'home': 'homeAtHome', 'away': 'awayAtAway'}
     return {'overall': _form_str(f.get(side)), 'venue': _form_str(f.get(venue[side])),
-            'opponentOverall': _form_str(f.get(op)), 'opponentVenue': _form_str(f.get(venue[op]))}
+            'opponentOverall': _form_str(f.get(op)), 'opponentVenue': _form_str(f.get(venue[op])),
+            'season': _form_str(r.get(f'{side}Season')), 'opponentSeason': _form_str(r.get(f'{op}Season')),
+            'venueSeason': _form_str(r.get({'home': 'homeAtHomeSeason', 'away': 'awayAtAwaySeason'}[side]))}
 
 
 def _h2h(r: Dict[str, Any], side: str) -> Optional[Dict[str, Any]]:
@@ -222,7 +206,8 @@ def settled_count(sport: str, results: str = RESULTS) -> int:
 
 
 def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
-          use_best_price: bool = True, now: Optional[datetime] = None, log=print) -> Dict[str, Any]:
+          use_best_price: bool = True, now: Optional[datetime] = None, log=print,
+          votes_dir: Optional[str] = None) -> Dict[str, Any]:
     """{'generatedAt', 'picks': [...], 'stats': {...}} for one sport and day."""
     now = now or _now()
     # Rosja w sportach drużynowych (także kody lig Forebet RU1/RUW/…) — przed
@@ -230,18 +215,25 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
     rows = russia_filter.filter_rows(_rows(day, sport, results), 'league', 'country',
                                      'homeTeam', 'awayTeam', label=f'Fan Favourites {sport}',
                                      sport=sport)
+    fill: Dict[str, int] = {}
     if refresh and rows:
-        refresh_votes(rows, sport, day, _file_age_h(day, sport, results, now) > REFRESH_AGE_H, now, log)
+        fill = refresh_votes(rows, sport, day, _file_age_h(day, sport, results, now) > REFRESH_AGE_H, now, log,
+                             results=votes_dir or results) or {}
     avail = _read(os.path.join(results, f'availability_{day}.json')) or {}
     watch = (sport in fan_limits.WATCH_SPORTS
              and settled_count(sport, results) < fan_limits.WATCH_MIN_SETTLED)
-    stats = {'rows': len(rows), 'withVote': 0, 'fanOk': 0, 'belowLimit': 0, 'noOdds': 0}
+    stats = {'rows': len(rows), 'withVote': 0, 'fanOk': 0, 'belowLimit': 0, 'noOdds': 0,
+             'voteRequested': int(fill.get('voteRequested', 0)), 'voteFound': int(fill.get('voteFound', 0)),
+             'wrongEvent': int(fill.get('wrongEvent', 0)), 'fanThr': 0, 'oddsOk': 0,
+             'calls': int(fill.get('calls', 0)), 'budgetHit': int(fill.get('budgetHit', 0))}
     picks, seen = [], set()
     for r in rows:
         fs = fan_limits.fan_side(r)
         if fs is None:
             continue
         stats['withVote'] += 1
+        if fs['fanPct'] >= fan_limits.fan_threshold(sport):
+            stats['fanThr'] += 1
         if not fan_limits.select(sport, fs['fanPct'], fs['votes']):
             continue
         home, away = r.get('homeTeam') or '', r.get('awayTeam') or ''
@@ -253,7 +245,7 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
         side = fs['side']
         odds = r.get('odds') or {}
         stored, market = pricing.side_price(odds, sport, side)
-        kickoff = pricing.parse_kickoff(day, r.get('time'), [r.get('kickoffUtc')], sport=sport)
+        kickoff = r.get('kickoffUtc') or pricing.parse_kickoff(day, r.get('time'), [r.get('kickoffUtc')], sport=sport)
         ko = pricing._parse_ts(kickoff)
         bp = None
         if use_best_price and (ko is None or ko > now):
@@ -266,6 +258,7 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
         if price < limit['min'] or not fan_limits.passes_standard(sport, odds.get('home'), odds.get('away')):
             stats['belowLimit'] += 1
             continue
+        stats['oddsOk'] += 1
         implied = round(100 / price, 1)
         fb = r.get('forebet') or {}
         ss = r.get('sofascore') or {}
@@ -276,7 +269,9 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
             'home': home, 'away': away, 'match': f'{home} vs {away}',
             'side': side, 'team': home if side == 'home' else away,
             'fanPct': fs['fanPct'], 'votes': fs['votes'], 'band': fan_limits.band(fs['fanPct']),
-            'sofascoreUrl': ss.get('url'),
+            'sofascoreUrl': ss.get('url'), 'matchUrl': ss.get('url'),
+            'forebetUrl': r.get('forebetUrl') or r.get('url') or fb.get('url'),
+            'eventId': r.get('sofascoreEventId'),
             'odds': {k: _f(odds.get(k)) for k in ('home', 'draw', 'away')},
             'oddsSource': odds.get('bookmaker') or odds.get('source'),
             'oddsMarket': market,
@@ -318,7 +313,7 @@ def merge(day: str, sport: str, block: Dict[str, Any], results: str = RESULTS,
             <= (now or _now())]
     block['picks'] = sorted((block.get('picks') or []) + keep, key=lambda p: (-p['fanPct'], -p['votes']))
     data.update(day=day, generatedAt=_iso(now or _now()),
-                thresholds={'minVotes': fan_limits.MIN_VOTES,
+                thresholds={'minVotes': fan_limits.MIN_VOTES, 'minVotesBySport': dict(fan_limits.MIN_VOTES_BY_SPORT),
                             'fanPct': {**fan_limits.FAN_MIN, 'default': fan_limits.FAN_MIN_DEFAULT}})
     data.setdefault('sports', {})[sport] = block
     _write(path, data)
@@ -381,6 +376,14 @@ def main(argv: Optional[List[str]] = None) -> int:
         for p in sorted(glob.glob(os.path.join(a.merge, '**', '*.json'), recursive=True)):
             m = re.match(r'(.+)_(\d{4}-\d{2}-\d{2})\.json$', os.path.basename(p))
             blk = _read(p)
+            if m and m.group(1) == 'fanvote_votes' and isinstance(blk, dict):
+                from tools import fanvote_fill
+                sp = fanvote_fill.store_path(m.group(2), RESULTS)
+                cur = fanvote_fill.load_store(sp)
+                for s, v in blk.items():
+                    cur.setdefault(s, {}).update(v or {})
+                fanvote_fill.save_store(sp, cur)
+                continue
             if m and isinstance(blk, dict):
                 merge(m.group(2), m.group(1), blk)
                 print(f'   merged {os.path.basename(p)}: {len(blk.get("picks") or [])} picks')
@@ -390,7 +393,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     today = _now().date()
     days = a.day or [today.isoformat(), (today + timedelta(days=1)).isoformat()]
     for day in days:
-        blk = build(a.sport, day, refresh=a.refresh, use_best_price=not a.no_best_price)
+        blk = build(a.sport, day, refresh=a.refresh, use_best_price=not a.no_best_price, votes_dir=a.out)
         if a.out:
             os.makedirs(a.out, exist_ok=True)
             _write(os.path.join(a.out, f'{a.sport}_{day}.json'), blk)

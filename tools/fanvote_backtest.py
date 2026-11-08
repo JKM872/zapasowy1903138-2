@@ -49,6 +49,78 @@ def odds_limit(sport: str) -> float:
     return fan_limits.odds_limit(sport)['min']
 
 
+def passes(r: Dict[str, Any]) -> bool:
+    """Standard AND rule (home and away odds >= sport minimum); rows without
+    both sides fall back to the backed side's odds."""
+    if r.get('oddsHome') is None and r.get('oddsAway') is None:
+        return r['odds'] >= odds_limit(r['sport'])
+    return fan_limits.passes_standard(r['sport'], r.get('oddsHome'), r.get('oddsAway'))
+
+
+VOTE_BANDS = [(10, 19), (20, 29), (30, 49), (50, 99), (100, 199), (200, None)]
+CAL_MIN_N = 30
+
+
+def _vband(v: int) -> Optional[str]:
+    for lo, hi in VOTE_BANDS:
+        if v >= lo and (hi is None or v <= hi):
+            return f'{lo}-{hi}' if hi else f'{lo}+'
+    return None
+
+
+def vote_bands(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    """Per vote band, per sport and 'all': n, hit %, ROI (fan >= sport threshold)."""
+    out: Dict[str, Dict[str, List]] = defaultdict(lambda: defaultdict(list))
+    for r in rows:
+        b = _vband(r['votes'])
+        if b is None or r['fan'] < fan_min(r['sport']):
+            continue
+        out['all'][b].append(r)
+        out[r['sport']][b].append(r)
+    return {s: {b: stats(v) for b, v in d.items()} for s, d in out.items()}
+
+
+def _cal(rs: List[Dict[str, Any]]) -> Optional[int]:
+    """Lowest accepted band bound; None when a used band is thin."""
+    rs = [r for r in rs if r['fan'] >= fan_min(r['sport'])]
+    base = stats([r for r in rs if r['votes'] >= 100])
+    if base['n'] < CAL_MIN_N:
+        return None
+    mv = 100
+    for lo, hi in [(50, 99), (30, 49), (20, 29), (10, 19)]:
+        s = stats([r for r in rs if lo <= r['votes'] <= hi])
+        if s['n'] < CAL_MIN_N:
+            return mv if mv < 100 else None
+        if s['hit'] < base['hit'] - 3 or s['roi'] < base['roi'] - 5:
+            break
+        mv = lo
+    return mv
+
+
+def calibrate(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """{'minVotes': int, 'bySport': {sport: int}} (100 when data is thin)."""
+    allv = _cal(rows)
+    by = {}
+    for s in sorted({r['sport'] for r in rows}):
+        v = _cal([r for r in rows if r['sport'] == s])
+        if v is not None and v != (allv or 100):
+            by[s] = v
+    return {'minVotes': allv or 100, 'bySport': by}
+
+
+def calibration_md(rows: List[Dict[str, Any]]) -> str:
+    vb, cal = vote_bands(rows), calibrate(rows)
+    L = ['# Min votes calibration', '', f"Result: MIN_VOTES={cal['minVotes']}, by sport {cal['bySport']}", '',
+         '| sport | band | n | hit % | ROI % |', '|---|---|---:|---:|---:|']
+    for s in sorted(vb):
+        for lo, hi in VOTE_BANDS:
+            b = f'{lo}-{hi}' if hi else f'{lo}+'
+            if b in vb[s]:
+                x = vb[s][b]
+                L.append(f"| {s} | {b} | {x['n']} | {x['hit']} | {x['roi']} |")
+    return '\n'.join(L) + '\n'
+
+
 def _f(x: Any) -> Optional[float]:
     try:
         v = float(x)
@@ -110,6 +182,7 @@ def load_rows(root: str = ROOT) -> List[Dict[str, Any]]:
                 'day': day, 'sport': sport, 'league': f"{m.get('country') or ''}|{m.get('league') or ''}",
                 'home': m.get('homeTeam'), 'away': m.get('awayTeam'), 'side': side,
                 'fan': fan, 'votes': int(_f(ss.get('votes')) or 0), 'odds': odds,
+                'oddsHome': _f(od.get('home')), 'oddsAway': _f(od.get('away')),
                 'won': w == side, 'p': p, 'edge': (p * odds - 1) if p else None,
                 'top': structural(m) and (m.get('scoring') or {}).get('pick') == ('1' if side == 'home' else '2'),
                 'grade': m.get('predictionGrade'),
@@ -131,7 +204,7 @@ def fan_backtest(rows: List[Dict[str, Any]], min_votes: int) -> Dict[str, Any]:
     out: Dict[str, Any] = {}
     for limited in (False, True):
         sel = [r for r in rows if r['fan'] >= 60 and r['votes'] >= min_votes
-               and (not limited or r['odds'] >= odds_limit(r['sport']))]
+               and (not limited or passes(r))]
         by_sport, by_band, by_sb = defaultdict(list), defaultdict(list), defaultdict(list)
         board = []
         for r in sel:
@@ -154,7 +227,7 @@ def vote_scan(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     res = {}
     for v in VOTE_STEPS:
         b = [r for r in rows if r['fan'] >= fan_min(r['sport']) and r['votes'] >= v]
-        bl = [r for r in b if r['odds'] >= odds_limit(r['sport'])]
+        bl = [r for r in b if passes(r)]
         res[str(v)] = {'noLimits': stats(b), 'limits': stats(bl)}
     return res
 
@@ -312,7 +385,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument('--min-votes', type=int, default=100)
     ap.add_argument('--json')
     ap.add_argument('--md')
+    ap.add_argument('--calibrate', action='store_true')
     a = ap.parse_args(argv)
+    if a.calibrate:
+        md = calibration_md([r for r in load_rows() if r['day'] >= CLEAN_FROM])
+        if a.md:
+            open(a.md, 'w', encoding='utf-8').write(md)
+        print(md)
+        return 0
     res = run(a.min_votes)
     md = report_md(res)
     if a.json:

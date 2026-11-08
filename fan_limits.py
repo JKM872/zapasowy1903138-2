@@ -1,15 +1,12 @@
 """Thresholds and odds limits shared by Fan Favourites, the Weekend Slip and
 their backtest (tools/fanvote_backtest.py).
 
-``odds_limit(sport, price, side)`` is the minimum decimal price for the side we
-back. It is the highest of:
-
-* the qualifying pipeline's per-sport minimum (``qualification_gate.SPORT_MIN_ODDS``,
-  the same values as ``api_server._passes_sport_odds_threshold``),
-* the TOP floors: football >= 2.0 (``tools/top_picks.MIN_ODDS``) and the
-  tennis/basketball 1.80 safe gate (``tools/top_rules.FALLBACK_EXCLUDE``),
-* the don't-bet-below ``floorOdds`` of an ``allow`` segment in
-  ``outputs/top_rules.json`` matching sport x odds band (x side), if any.
+Odds limits are the main qualifying e-mails' rule: home AND away odds >= the
+per-sport minimum of ``qualification_gate.SPORT_MIN_ODDS`` (``passes_standard``;
+``odds_limit`` returns that minimum with source ``standard``). TOP floors and
+learned ``outputs/top_rules.json`` floors do not apply (learned rules are only
+recorded). ``min_votes(sport)`` reads ``MIN_VOTES_BY_SPORT`` then ``MIN_VOTES``
+(calibrated with ``tools/fanvote_backtest.py --calibrate``).
 """
 from __future__ import annotations
 
@@ -22,10 +19,12 @@ from qualification_gate import SPORT_MIN_ODDS, SPORT_MIN_ODDS_FALLBACK
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RULES_PATH = os.path.join(ROOT, 'outputs', 'top_rules.json')
 
-TOP_FLOORS = {'football': 2.0, 'tennis': 1.8, 'basketball': 1.8}
 FAN_MIN = {'football': 60.0}
 FAN_MIN_DEFAULT = 70.0
-MIN_VOTES = 100
+# Calibrated 2026-11 (tools/fanvote_backtest.py --calibrate, rows from 2026-09-27):
+# 30-49 votes hit 62.2% / ROI +14.3% (n=249) vs base >=100 votes 57.2% / -0.9%.
+MIN_VOTES = 30
+MIN_VOTES_BY_SPORT: Dict[str, int] = {'basketball': 100, 'hockey': 100}
 FAN_BANDS = [(60, 70), (70, 80), (80, 90), (90, 101)]
 # Sports without a settled record yet: listed as "watch" until this many
 # settled board picks exist for the sport.
@@ -108,6 +107,11 @@ def fan_side(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     return {'side': side, 'fanPct': pct, 'votes': votes}
 
 
-def select(sport: str, fan_pct: float, votes: int, min_votes: int = MIN_VOTES) -> bool:
+def min_votes(sport: str) -> int:
+    return int(MIN_VOTES_BY_SPORT.get(sport, MIN_VOTES))
+
+
+def select(sport: str, fan_pct: float, votes: int, min_votes: Optional[int] = None) -> bool:
     """Fan Vote threshold for the board (odds limit checked separately)."""
-    return fan_pct >= fan_threshold(sport) and votes >= min_votes
+    mv = globals()['min_votes'](sport) if min_votes is None else min_votes
+    return fan_pct >= fan_threshold(sport) and votes >= mv

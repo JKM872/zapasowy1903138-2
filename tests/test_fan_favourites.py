@@ -59,7 +59,7 @@ def test_build_selects_sorts_and_applies_the_limit(tmp_path):
         row('A', 'B', 65, 20),                          # 65% at 2.2 -> pick
         row('C', 'D', 80, 10, odds=(1.4, 4, 6)),       # 1.4 < 1.5 -> out
         row('E', 'F', 15, 75, odds=(5, 4, 2.4)),       # away 75% -> pick, first
-        row('G', 'H', 90, 5, votes=50),                # too few votes
+        row('G', 'H', 90, 5, votes=20),                # too few votes
     ], avail={'football|A|B': {'side': 'home', 'home': [
         {'name': 'X', 'importance': 'star', 'status': 'out'},
         {'name': 'Y', 'importance': 'star', 'status': 'out'}], 'away': []}})
@@ -72,6 +72,31 @@ def test_build_selects_sorts_and_applies_the_limit(tmp_path):
     assert a['availability']['verdict'] == 'out' and a['modelProb'] == 0.58
     assert f['availability']['verdict'] == 'unknown'
     assert blk['stats']['belowLimit'] == 1
+
+
+def test_c6_standard_limits_counters_and_season_form(tmp_path):
+    r1 = row('A', 'B', 65, 20, odds=(1.60, 4.0, 5.5))
+    r1.update(homeSeason=['W', 'W'], awaySeason=['L'], homeAtHomeSeason=['W'])
+    res = write_rows(tmp_path, 'football', [
+        r1, row('C', 'D', 70, 10, odds=(2.6, 3, 1.40)),
+        {**row('E', 'F', 70, 10), 'odds': {'home': 2.0, 'draw': 3, 'away': None}}])
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    s = blk['stats']
+    assert [p['team'] for p in blk['picks']] == ['A']
+    assert s['belowLimit'] == 1 and s['noOdds'] == 1
+    assert s['rows'] >= s['withVote'] >= s['fanThr'] >= s['fanOk'] >= s['oddsOk'] >= s['picks'] == 1
+    f = blk['picks'][0]['form']
+    assert f['season'] == 'WW' and f['opponentSeason'] == 'L' and f['venueSeason'] == 'W'
+
+
+def test_c6_table_tennis_rows_union_aiscore(tmp_path):
+    res = tmp_path / 'results'
+    res.mkdir()
+    for focus, rs in (('home', [row('A', 'B', 80, 20), row('C', 'D', 80, 20)]),
+                      ('away', [row('A', 'B', 80, 20), row('E', 'F', 20, 80)])):
+        (res / f'matches_{DAY}_table_tennis_aiscore_{focus}.json').write_text(
+            json.dumps({'matches': rs}), encoding='utf-8')
+    assert [r['homeTeam'] for r in ff._rows(DAY, 'table_tennis', str(res))] == ['A', 'C', 'E']
 
 
 def test_watch_sports_are_not_staked(tmp_path):

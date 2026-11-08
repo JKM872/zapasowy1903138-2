@@ -57,7 +57,7 @@ jobs:
         env:
           PYTHONIOENCODING: utf-8
           PYTHONUNBUFFERED: '1'
-          FAN_REFRESH_BUDGET_S: '1500'
+          FAN_FILL_BUDGET_S: '1500'
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
         run: python -u tools/fan_favourites.py --sport ${{ matrix.sport }} --refresh --out fan_parts
       - uses: actions/upload-artifact@v4
