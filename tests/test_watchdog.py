@@ -91,6 +91,7 @@ def test_run_end_to_end(monkeypatch, tmp_path):
     logs = {11: TS + 'Forebet basketball 2026-10-21: 3 meczów (HTML=3,', 12: ''}
     monkeypatch.setattr(W, 'gh', _fake_gh(runs, jobs, logs))
     monkeypatch.setattr(W, 'ROOT', tmp_path)
+    monkeypatch.setattr(W, 'check_outputs', lambda d, n: [])
     monkeypatch.setattr(W, 'scheduled_today', lambda p, d, n: p.name == 'scrape.yml')
     monkeypatch.setenv('SOFASCORE_RELAY', 'https://a,https://b')
     monkeypatch.setattr(W, 'probe_relays', lambda r: [
@@ -107,6 +108,7 @@ def test_run_end_to_end(monkeypatch, tmp_path):
 def test_run_all_ok_sends_nothing(monkeypatch, tmp_path):
     monkeypatch.setattr(W, 'gh', lambda a: '[]' if a[0] == 'run' else '{}')
     monkeypatch.setattr(W, 'ROOT', tmp_path)
+    monkeypatch.setattr(W, 'check_outputs', lambda d, n: [])
     monkeypatch.delenv('SOFASCORE_RELAY', raising=False)
     sent = []
     monkeypatch.setattr(W, 'send_email', lambda i, d: sent.append(1))
@@ -129,3 +131,39 @@ def test_probe_relays_detects_quota(monkeypatch):
 def test_html_table():
     html = W.build_html([W._issue(W.ALERT, 'wf', 'football', 'forebet_low', 'x<y')], '2026-10-21')
     assert 'Sugerowana akcja' in html and 'x&lt;y' in html
+def _now(h):
+    return dt.datetime(2026, 11, 2, h, 0, tzinfo=dt.timezone.utc)
+def _full_day(root, day):
+    r = root / 'results'; (r / 'coupons').mkdir(parents=True)
+    for s in W.FOREBET_SPORTS:
+        (r / f'matches_{day}_{s}_forebet.json').write_text(json.dumps([{}] * 300))
+    for s in W.TEAM_SPORTS:
+        (r / f'matches_{day}_{s}.json').write_text(json.dumps({'stats': {'total': 5}}))
+    for side in ('home', 'away'):
+        (r / f'matches_{day}_table_tennis_aiscore_{side}.json').write_text('[]')
+    (r / f'fanvote_{day}.json').write_text('{}')
+    (r / f'status_top_{day}.json').write_text('{"status": "ok"}')
+    return r
+def test_outputs_ok(tmp_path):
+    _full_day(tmp_path, '2026-11-02')
+    assert W.check_outputs('2026-11-02', _now(15), tmp_path) == []
+def test_outputs_missing_and_empty(tmp_path):
+    r = _full_day(tmp_path, '2026-11-02')
+    (r / 'matches_2026-11-02_hockey_forebet.json').unlink()
+    (r / 'matches_2026-11-02_football.json').write_text(json.dumps({'stats': {'total': 0}}))
+    issues = W.check_outputs('2026-11-02', _now(15), tmp_path)
+    assert {(i['code'], i['problem']) for i in issues} == {
+        ('missing_output', 'Missing matches_2026-11-02_hockey_forebet.json'),
+        ('empty_output', 'Empty matches_2026-11-02.json'.replace('02.json', '02_football.json'))}
+    assert all(i['level'] == W.ALERT for i in issues)
+def test_morning_missing_digest(tmp_path):
+    r = tmp_path / 'results' / 'coupons'; r.mkdir(parents=True)
+    (r / 'coupons_2026-11-01.json').write_text('{}')
+    issues = W.check_outputs('2026-11-02', _now(8), tmp_path)
+    assert [i['problem'] for i in issues] == ['Missing digest_2026-11-01.xlsx']
+def test_long_cancelled_run_reported(monkeypatch):
+    run = {'databaseId': 1, 'createdAt': '2026-11-02T10:00:00Z', 'startedAt': '2026-11-02T10:00:00Z',
+           'updatedAt': '2026-11-02T10:40:00Z', 'status': 'completed', 'conclusion': 'cancelled', 'url': 'u'}
+    monkeypatch.setattr(W, 'gh', lambda a: json.dumps([run]) if a[0] == 'run' else '{"jobs": []}')
+    res = W.check_workflow('r', 'coupons.yml', '2026-11-02')
+    assert codes(res['issues']) == ['run_cancelled']

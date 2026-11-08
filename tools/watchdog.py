@@ -22,7 +22,14 @@ from typing import Any, Dict, List, Optional
 ROOT = Path(__file__).resolve().parent.parent
 
 WORKFLOWS = ['scrape_forebet.yml', 'scrape.yml', 'scrape_away.yml',
-             'oddssafari_dropping.yml', 'top_picks.yml', 'daily_digest.yml']
+             'oddssafari_dropping.yml', 'top_picks.yml', 'daily_digest.yml',
+             'fan_favourites.yml', 'scrape_table_tennis_aiscore_home.yml',
+             'scrape_table_tennis_aiscore_away.yml', 'coupons.yml',
+             'check_results.yml', 'top_live.yml']
+FOREBET_SPORTS = ['baseball', 'basketball', 'football', 'handball', 'hockey',
+                  'rugby', 'tennis', 'volleyball']
+TEAM_SPORTS = ['basketball', 'football', 'handball', 'hockey', 'volleyball']
+LONG_RUN_S = 120   # cancelled/timed_out run shorter than this never really ran
 
 # Minimalna liczba meczów z listingu Forebet per sport (poniżej => ALERT).
 FOREBET_MIN = {'football': 200, 'basketball': 30, 'hockey': 30,
@@ -61,6 +68,12 @@ MEANING = {
                'Rozważ węższy zakres lub dłuższy budżet czasu.'),
     'no_run': ('Workflow zaplanowany na dziś, a nie ma żadnego runu.',
                'Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.'),
+    'missing_output': ('Expected output file is missing.',
+                       'Check the workflow run that should have written it; re-run it.'),
+    'empty_output': ('Output file exists but has no data.',
+                     'Check the source site / scraper log for that run; re-run it.'),
+    'run_cancelled': ('Run was cancelled or timed out after running for a while.',
+                      'Open the log; raise timeout or fix the hang; re-run.'),
     'relay_dead': ('Sonda przekaźnika: limit wyczerpany / błąd.',
                    'Wymień lub odciąż ten przekaźnik.'),
 }
@@ -145,7 +158,7 @@ def _sport_of(job_name: str) -> str:
 
 def check_workflow(repo: str, wf: str, day: str) -> Dict[str, Any]:
     out = gh(['run', 'list', '-R', repo, '--workflow', wf, '-L', '20',
-              '--json', 'databaseId,createdAt,status,conclusion,url'])
+              '--json', 'databaseId,createdAt,startedAt,updatedAt,status,conclusion,url'])
     runs = [r for r in (json.loads(out) if out.strip() else [])
             if str(r.get('createdAt', '')).startswith(day)]
     res: Dict[str, Any] = {'workflow': wf, 'runs_today': len(runs), 'issues': []}
@@ -153,6 +166,10 @@ def check_workflow(repo: str, wf: str, day: str) -> Dict[str, Any]:
         return res
     run = runs[0]  # gh zwraca od najnowszego
     res['run'] = {k: run.get(k) for k in ('databaseId', 'status', 'conclusion', 'url')}
+    if run.get('conclusion') in ('cancelled', 'timed_out') and \
+            _duration_s(run.get('startedAt') or run.get('createdAt'), run.get('updatedAt')) >= LONG_RUN_S:
+        res['issues'].append(_issue(ALERT, wf, '', 'run_cancelled',
+                                    f"Run {run.get('conclusion')}", run.get('url', '')))
     jobs_raw = gh(['api', f'repos/{repo}/actions/runs/{run["databaseId"]}/jobs?per_page=100'])
     jobs = (json.loads(jobs_raw).get('jobs', []) if jobs_raw.strip() else [])
     for job in jobs:
@@ -173,6 +190,76 @@ def check_workflow(repo: str, wf: str, day: str) -> Dict[str, Any]:
     return res
 
 
+def _duration_s(start: Any, end: Any) -> float:
+    try:
+        a = dt.datetime.fromisoformat(str(start).replace('Z', '+00:00'))
+        b = dt.datetime.fromisoformat(str(end).replace('Z', '+00:00'))
+        return (b - a).total_seconds()
+    except (TypeError, ValueError):
+        return 0.0
+def _load(path: Path) -> Any:
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+def _rows(data: Any) -> int:
+    if isinstance(data, list):
+        return len(data)
+    if isinstance(data, dict):
+        for k in ('matches', 'data', 'rows'):
+            if isinstance(data.get(k), list):
+                return len(data[k])
+    return 0
+def check_outputs(day: str, now: dt.datetime, root: Optional[Path] = None) -> List[Dict[str, Any]]:
+    """Checks that the day's output files exist and are not empty (reads the checkout)."""
+    res_dir = (root or ROOT) / 'results'
+    issues: List[Dict[str, Any]] = []
+    def missing(name: str) -> None:
+        issues.append(_issue(ALERT, 'outputs', '', 'missing_output', f'Missing {name}'))
+    def empty(name: str) -> None:
+        issues.append(_issue(ALERT, 'outputs', '', 'empty_output', f'Empty {name}'))
+    if (now.hour, now.minute) >= (12, 0):
+        for sport in FOREBET_SPORTS:
+            name = f'matches_{day}_{sport}_forebet.json'
+            path = res_dir / name
+            if not path.exists():
+                missing(name)
+                continue
+            n = _rows(_load(path))
+            if n == 0 or n < FOREBET_MIN.get(sport, FOREBET_MIN_DEFAULT):
+                empty(name)
+        for sport in TEAM_SPORTS:
+            name = f'matches_{day}_{sport}.json'
+            path = res_dir / name
+            if not path.exists():
+                missing(name)
+                continue
+            data = _load(path)
+            stats = data.get('stats') if isinstance(data, dict) else None
+            total = (stats or {}).get('total') if isinstance(stats, dict) else None
+            if not total:
+                empty(name)
+        for side in ('home', 'away'):
+            name = f'matches_{day}_table_tennis_aiscore_{side}.json'
+            if not (res_dir / name).exists():
+                missing(name)
+        name = f'fanvote_{day}.json'
+        if not (res_dir / name).exists():
+            missing(name)
+    if (now.hour, now.minute) >= (14, 0):
+        name = f'status_top_{day}.json'
+        data = _load(res_dir / name)
+        if data is None:
+            missing(name)
+        elif isinstance(data, dict) and data.get('status') == 'waiting_for_data':
+            empty(name)
+    if now.hour < 12:
+        prev = (dt.date.fromisoformat(day) - dt.timedelta(days=1)).isoformat()
+        for name, path in ((f'digest_{prev}.xlsx', res_dir / f'digest_{prev}.xlsx'),
+                           (f'coupons/coupons_{prev}.json', res_dir / 'coupons' / f'coupons_{prev}.json')):
+            if not path.exists():
+                missing(name)
+    return issues
 def scheduled_today(wf_path: Path, day: str, now: dt.datetime) -> bool:
     """Czy workflow ma cron, który dziś już powinien był wystartować."""
     if not wf_path.exists():
@@ -257,6 +344,7 @@ def run(day: str, repo: str, email: bool, now: Optional[dt.datetime] = None) -> 
             res['issues'].append(_issue(ALERT, wf, '', 'no_run', 'Brak runu mimo harmonogramu'))
         issues.extend(res['issues'])
         workflows.append(res)
+    issues.extend(check_outputs(day, now))
     relays = [r.strip() for r in os.getenv('SOFASCORE_RELAY', '').split(',') if r.strip()]
     probes = probe_relays(relays) if relays else []
     for p in probes:

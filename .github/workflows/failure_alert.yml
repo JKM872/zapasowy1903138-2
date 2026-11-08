@@ -32,6 +32,9 @@ on:
       - "Tests"
       - "TOP picks (perełki A/B)"
       - "Strażnik (watchdog)"
+      - "TOP live (closing odds + pre-kickoff check)"
+      - "Media cache (logos / photos)"
+      - "TOP rules (weekly re-learning)"
     types: [completed]
 
 permissions:
@@ -39,14 +42,24 @@ permissions:
 
 jobs:
   alert:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'timed_out' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: tools
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Decide
+        id: decide
+        env:
+          WF_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WF_STARTED: ${{ github.event.workflow_run.run_started_at }}
+          WF_UPDATED: ${{ github.event.workflow_run.updated_at }}
+        run: echo "alert=$(python tools/alert_filter.py)" >> "$GITHUB_OUTPUT"
       - name: Wyślij e-mail
+        if: steps.decide.outputs.alert == 'true'
         env:
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}

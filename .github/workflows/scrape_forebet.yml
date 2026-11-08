@@ -79,6 +79,7 @@ concurrency:
 
 env:
   PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: '1'
 
 jobs:
   scrape-forebet:

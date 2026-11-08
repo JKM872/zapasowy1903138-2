@@ -23,6 +23,8 @@ concurrency:
 jobs:
   coupons:
     runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: '1'
     timeout-minutes: 60
     permissions:
       contents: write
