@@ -34,7 +34,7 @@ from tools import pricing  # noqa: E402
 RESULTS = os.path.join(ROOT, 'results')
 SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball',
           'baseball', 'rugby', 'table_tennis']
-REFRESH_MAX = 80                     # Fan Vote lookups per sport and run
+REFRESH_MAX = int(os.getenv('FAN_FILL_MAX_CALLS', '400'))                    # Fan Vote lookups per sport and run
 REFRESH_AGE_H = 3
 # Wall-clock budget for Fan Vote lookups per sport and day (a lookup can take
 # ~25 s when the SofaScore API path falls back to the browser).
