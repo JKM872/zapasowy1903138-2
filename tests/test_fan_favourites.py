@@ -163,3 +163,16 @@ def test_rows_fall_back_to_sports_scraper_before_forebet(tmp_path):
     rows = ff._rows(day, 'football', str(tmp_path))
     assert len(rows) == 1 and rows[0]['time'] == '14:00'
     assert fl.fan_side(rows[0]) == {'side': 'home', 'fanPct': 70.0, 'votes': 500}
+
+
+def test_settle_file_marks_void(tmp_path):
+    import json as _j
+    import top_feed
+    from tools import fan_favourites as _ff
+    day = '2026-10-20'
+    (tmp_path / f'fanvote_{day}.json').write_text(_j.dumps({'sports': {'tennis': {'picks': [
+        {'match': 'Alpha vs Beta', 'team': 'Alpha'}]}}}), encoding='utf-8')
+    idx = {(day, top_feed._norm('Alpha'), top_feed._norm('Beta')): {'void': True, 'winner': None}}
+    assert _ff.settle_file(day, idx, str(tmp_path)) == 1
+    d = _j.loads((tmp_path / f'fanvote_{day}.json').read_text(encoding='utf-8'))
+    assert d['sports']['tennis']['picks'][0]['result']['status'] == 'void'

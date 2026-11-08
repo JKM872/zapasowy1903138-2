@@ -214,6 +214,10 @@ def _apply_rules(out: Dict[str, Any], m: Dict[str, Any], sport: str, me: str,
         'kickoffUtc': pricing.parse_kickoff(day, m.get('time'), [m.get('kickoffUtc')], sport) if day else None,
         'kickoffApprox': not m.get('kickoffUtc'),
     })
+    from tools import injuries
+    ev = injuries.event_from_row(m)
+    if ev:
+        out['sofascoreEventId'], out['sofascoreOrientation'] = ev
     return out
 
 

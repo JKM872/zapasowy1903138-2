@@ -172,6 +172,8 @@ def settle(day: str, pick: Dict[str, Any],
         flipped = bool(res)
     if not res or side is None:
         return {'status': 'pending'}
+    if res.get('void'):
+        return {'status': 'void'}
 
     winner = res.get('winner')
     if flipped:
@@ -230,6 +232,7 @@ def _summary(picks: List[Dict[str, Any]]) -> Dict[str, Any]:
         'settled': n,
         'won': len(won),
         'pending': sum(1 for p in picks if _status(p) == 'pending'),
+        'void': sum(1 for p in picks if _status(p) == 'void'),
         'hitRate': round(len(won) / n * 100, 1) if n else None,
         'roi': round(profit / n * 100, 1) if n else None,
         'profitUnits': round(profit, 2) if n else None,
@@ -294,6 +297,24 @@ def _forebet_settled(results_dir: str) -> Dict[Tuple[str, str, str], Dict[str, A
     return out
 
 
+def _event_settled(results_dir: str) -> Dict[Tuple[str, str, str], Dict[str, Any]]:
+    """Settlement from the SofaScore event (tools/settle_events.py); void kept."""
+    raw = _read_json(os.path.join(results_dir, 'event_settled.json'))
+    out = {}
+    for key, v in (raw.items() if isinstance(raw, dict) else ()):
+        parts = key.split('|')
+        if len(parts) != 4 or not isinstance(v, dict):
+            continue
+        k = (parts[0], _norm(parts[2]), _norm(parts[3]))
+        if v.get('status') == 'void':
+            out[k] = {'void': True, 'winner': None}
+        elif v.get('status') == 'settled':
+            sh, _, sa = str(v.get('score') or '').partition('-')
+            out[k] = {'winner': v.get('winner'), 'score_home': sh, 'score_away': sa}
+    return out
+def settle_index(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH):
+    """Result store, then the audit's Forebet settlement, then the SofaScore event (wins)."""
+    return {**_store_index(store_path), **_forebet_settled(results_dir), **_event_settled(results_dir)}
 # ---------------------------------------------------------------------------
 # Inputs: slug files + raw GitHub for the newest days
 # ---------------------------------------------------------------------------
@@ -494,7 +515,7 @@ def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
     if remote is None:
         remote = _remote_auto(results_dir)
     # Audit settlement first (Forebet names), result store as fallback.
-    index = {**_store_index(store_path), **_forebet_settled(results_dir)}
+    index = settle_index(results_dir, store_path)
 
     day_paths = {}
     for path in glob.glob(os.path.join(results_dir, 'top_*.json')):

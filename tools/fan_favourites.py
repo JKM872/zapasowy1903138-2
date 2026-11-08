@@ -332,7 +332,10 @@ def settle_file(day: str, index, results: str = RESULTS, now: Optional[datetime]
             if p.get('result'):
                 continue
             res = settle(day, {'match': p['match'], 'pick': p['team']}, index)
-            if res['status'] in ('won', 'lost', 'draw'):
+            if res['status'] == 'void':
+                p['result'] = {'status': 'void', 'settledAt': _iso(now or _now())}
+                n += 1
+            elif res['status'] in ('won', 'lost', 'draw'):
                 p['result'] = {'status': 'won' if res['status'] == 'won' else 'lost',
                                'score': res.get('score'), 'draw': res['status'] == 'draw',
                                'settledAt': _iso(now or _now())}
@@ -345,7 +348,7 @@ def settle_file(day: str, index, results: str = RESULTS, now: Optional[datetime]
 def settle_recent(days: int = 3, results: str = RESULTS, store: Optional[str] = None,
                   today: Optional[str] = None, log=print) -> int:
     import top_feed
-    index = {**top_feed._store_index(store or top_feed.STORE_PATH), **top_feed._forebet_settled(results)}
+    index = top_feed.settle_index(results, store or top_feed.STORE_PATH)
     d0 = datetime.fromisoformat(today).date() if today else _now().date()
     total = 0
     for i in range(days + 1):

@@ -66,7 +66,7 @@ def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
             paths[m.group(1)] = p
     recent = {(now.date() - timedelta(days=i)).isoformat() for i in range(-1, top_feed.REMOTE_DAYS)}
     all_days = set(paths) | (recent if remote else set())
-    index = top_feed._forebet_settled(results_dir)
+    index = top_feed.settle_index(results_dir)
     everything: List[Dict[str, Any]] = []
     days = []
     for day in sorted(all_days, reverse=True):
@@ -86,7 +86,9 @@ def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
                     continue
                 if not p.get('result'):
                     res = top_feed.settle(day, {'match': p.get('match'), 'pick': p.get('team')}, index)
-                    if res['status'] in ('won', 'lost', 'draw'):
+                    if res['status'] == 'void':
+                        p = {**p, 'result': {'status': 'void'}}
+                    elif res['status'] in ('won', 'lost', 'draw'):
                         p = {**p, 'result': {'status': 'won' if res['status'] == 'won' else 'lost',
                                              'score': res.get('score'), 'draw': res['status'] == 'draw'}}
                 picks.append(p)

@@ -63,7 +63,7 @@ def load_weekend(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
     cur = weekend_slip.friday_of(today) or today - timedelta(days=(today.weekday() - 4) % 7)
     current = cur.isoformat()
     fridays = set(paths) | ({current} if remote else set())
-    index = top_feed._forebet_settled(results_dir)
+    index = top_feed.settle_index(results_dir)
     weekends = []
     for fr in sorted(fridays, reverse=True):
         raw = None

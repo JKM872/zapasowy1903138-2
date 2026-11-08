@@ -259,3 +259,15 @@ def test_remote_is_off_for_non_default_dirs(tmp_path, remote):
     res, sp = setup(tmp_path, [pick('A vs B', 'A')])
     load(res, sp)
     assert calls == []
+
+
+# --- SofaScore event settlement (C8) ---
+def test_event_settlement_wins_and_void_is_excluded(tmp_path):
+    ev = {f'{DAY}|tennis|A|B': {'status': 'settled', 'winner': 'away', 'score': '0-2'},
+          f'{DAY}|tennis|C|D': {'status': 'void', 'winner': None}}
+    res, sp = setup(tmp_path, [pick('A vs B', 'A', time='08:00'), pick('C vs D', 'C', time='08:00')],
+                    settle=settled(('tennis', 'A', 'B', 'home'), ('tennis', 'C', 'D', 'home')),
+                    extra={'event_settled.json': ev})
+    s = load(res, sp, sub=True)['summary']
+    assert (s['settled'], s['won'], s['void'], s['pending']) == (1, 0, 1, 0)
+    assert s['hitRate'] == 0.0

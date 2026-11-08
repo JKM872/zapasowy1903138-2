@@ -149,7 +149,7 @@ def _top_legs(day: str, results: str, avail: Dict[str, Any], now: datetime,
         out.append(_leg('top', sport, day, r.get('league') or '', home, away, side, price,
                         r.get('bestOddsSource') or 'stored', mp, None, limit, av,
                         r.get('kickoffUtc') or pricing.parse_kickoff(day, r.get('time'), sport=sport),
-                        r.get('grade')))
+                        r.get('grade'), r.get('sofascoreEventId')))
     return out
 
 
@@ -186,12 +186,17 @@ def _fan_legs(day: str, results: str, now: datetime, limits: bool,
         out.append(_leg('fan', p['sport'], day, p.get('league') or '', p['home'], p['away'], p['side'],
                         price, (p.get('bestPrice') or {}).get('bookmaker'), _f(p.get('modelProb')),
                         p.get('fanPct'), limit, p.get('availability') or {}, p.get('kickoff'),
-                        p.get('grade')))
+                        p.get('grade'), p.get('sofascoreEventId') or p.get('eventId')
+                        or _url_eid(p.get('sofascoreUrl'))))
     return out
 
 
+def _url_eid(url):
+    import re
+    m = re.search(r'(?:/match/|id:)(\d+)', str(url or ''))
+    return int(m.group(1)) if m else None
 def _leg(source, sport, day, league, home, away, side, price, book, model, fan, limit, av,
-         kickoff, grade) -> Dict[str, Any]:
+         kickoff, grade, eid=None) -> Dict[str, Any]:
     implied = 100 / price
     prob = model * 100 if model else fan
     return {
@@ -205,6 +210,7 @@ def _leg(source, sport, day, league, home, away, side, price, book, model, fan, 
         'availability': (av or {}).get('verdict') or 'unknown',
         'availabilityNote': (av or {}).get('note') or '',
         'status': 'pending', 'withdrawnReason': None, 'score': None,
+        'eventId': eid,
     }
 
 
@@ -258,7 +264,7 @@ def _league_key(leg: Dict[str, Any]) -> str:
 
 def slip_numbers(slip: Dict[str, Any]) -> None:
     """Combined odds / model prob over legs that are not withdrawn; status."""
-    live = [l for l in slip['legs'] if l['status'] != 'withdrawn']
+    live = [l for l in slip['legs'] if l['status'] not in ('withdrawn', 'void')]
     odds, prob = 1.0, 1.0
     for l in live:
         odds *= l['price']
@@ -311,7 +317,7 @@ def build_slips(pool: List[Dict[str, Any]], existing: List[Dict[str, Any]],
 
 def _index(results: str, store: Optional[str] = None):
     import top_feed
-    return {**top_feed._store_index(store or top_feed.STORE_PATH), **top_feed._forebet_settled(results)}
+    return top_feed.settle_index(results, store or top_feed.STORE_PATH)
 
 
 def settle_slips(slips: List[Dict[str, Any]], index) -> int:
@@ -322,7 +328,10 @@ def settle_slips(slips: List[Dict[str, Any]], index) -> int:
             if l['status'] != 'pending':
                 continue
             res = settle(l['date'], {'match': l['match'], 'pick': l['pick']}, index)
-            if res['status'] in ('won', 'lost', 'draw'):
+            if res['status'] == 'void':
+                l['status'] = 'void'
+                n += 1
+            elif res['status'] in ('won', 'lost', 'draw'):
                 l['status'] = 'won' if res['status'] == 'won' else 'lost'   # draw = lost
                 l['score'] = res.get('score')
                 n += 1

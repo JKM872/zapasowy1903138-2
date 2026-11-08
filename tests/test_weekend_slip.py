@@ -134,3 +134,15 @@ def test_api_validates_friday(monkeypatch):
     assert c.get('/api/weekend-slip?friday=23-10-2026').status_code == 400
     r = c.get('/api/weekend-slip')
     assert r.status_code == 200 and r.get_json()['isSubscriber'] is False
+
+
+def test_void_leg_is_dropped_like_withdrawn():
+    legs = [dict(id=str(i), date='2026-10-30', match=f'H{i} vs A{i}', pick=f'H{i}', price=1.5,
+                 modelProb=0.7, status='pending') for i in range(3)]
+    idx = {('2026-10-30', 'h0', 'a0'): {'void': True, 'winner': None}}
+    import top_feed
+    idx = {('2026-10-30', top_feed._norm('H0'), top_feed._norm('A0')): {'void': True, 'winner': None}}
+    s = {'id': 'S1', 'legs': legs}
+    ws.settle_slips([s], idx)
+    assert legs[0]['status'] == 'void'
+    assert s['combinedOdds'] == round(1.5 * 1.5, 2) and s['adjusted']

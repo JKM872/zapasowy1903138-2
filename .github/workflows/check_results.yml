@@ -172,6 +172,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python tools/build_team_index.py
+      - name: Settle published picks by SofaScore event
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 20
+        env:
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+        run: python -u tools/settle_events.py --days 3
       # 7. Commit result summary + the accumulated result store.
       # The store is what makes backtesting possible: it is the only place
       # final scores survive between runs. Previously it lived only on the
