@@ -92,16 +92,64 @@
   "unknown": true
  },
  "hockey|Charlottetown Islanders|Saint John Sea Dogs": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
-  "board": "ok",
-  "top_block": false,
-  "unknown": true
+  "home": [
+   {
+    "name": "Nathan Frost",
+    "importance": "other",
+    "status": "out",
+    "reason": "scratched"
+   },
+   {
+    "name": "Cameron Haye",
+    "importance": "other",
+    "status": "out",
+    "reason": "scratched"
+   },
+   {
+    "name": "Artyom Mate",
+    "importance": "other",
+    "status": "out",
+    "reason": "scratched"
+   }
+  ],
+  "away": [
+   {
+    "name": "Alexis Joseph",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury or sickness"
+   },
+   {
+    "name": "Matyas Cancik",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury"
+   },
+   {
+    "name": "Olivier Duhamel",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury"
+   }
+  ],
+  "sources": [
+   "https://chl.ca/lhjmq-eagles/article/eagles-fall-in-overtime-to-islanders",
+   "http://stationnation.blogspot.com/2026/11/recap-sea-dogs-lose-5-1.html",
+   "https://www.eliteprospects.com/team/4586/charlottetown-islanders",
+   "https://chl.ca/lhjmq-eagles/article/eagles-fall-in-overtime-to-islanders/",
+   "https://chl.ca/lhjmq-islanders/schedule/"
+  ],
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 3
  },
  "hockey|Arizona State Sun Devils|Denver Pioneers": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -110,7 +158,7 @@
   "unknown": true
  },
  "hockey|Sarnia Sting|London Knights": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -299,7 +347,7 @@
   "unknown": true
  },
  "volleyball|Reggio Calabria|Gioia del Colle": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -308,7 +356,7 @@
   "unknown": true
  },
  "volleyball|Trentino|Perugia": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -317,7 +365,7 @@
   "unknown": true
  },
  "volleyball|Guibertin|Gent": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -326,7 +374,7 @@
   "unknown": true
  },
  "volleyball|Pineto|Macerata": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -335,7 +383,7 @@
   "unknown": true
  },
  "volleyball|Cisterna|Padova": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -344,7 +392,7 @@
   "unknown": true
  },
  "volleyball|Vojvodina|Takovo": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -353,7 +401,7 @@
   "unknown": true
  },
  "volleyball|Lagonegro|Union Napoli": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -362,7 +410,7 @@
   "unknown": true
  },
  "volleyball|Porto Viro|Grottazzolina": {
-  "checkedAt": "2026-11-08T05:41:21.465965+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -760,49 +808,132 @@
   "unknown": true
  },
  "basketball|Strasbourg|Le Mans": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [
+   {
+    "name": "Maxence Lemoine",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "has missed the two previous matches"
+   }
+  ],
+  "away": [
+   {
+    "name": "Wilfried Yeguete",
+    "importance": "key",
+    "status": "out",
+    "reason": "left elbow dislocation"
+   }
+  ],
+  "sources": [
+   "https://www.ouest-france.fr/sport/basket/le-mans/a-strasbourg-le-mans-sarthe-basket-vise-un-cinquieme-succes-daffilee-en-betclic-elite-1ceddc96-dae1-11f1-81f5-8e32b0872d76",
+   "https://www.bebasket.fr/entre-strasbourg-et-le-mans-quelle-serie-s-arretera-ce-soir-ou-regarder-le-match",
+   "https://basketballsphere.com/en/strasbourg-vs-le-mans-prediction-odds-lnb-elite-november-8-2026/",
+   "https://www.sportsgambler.com/betting-tips/basketball/strasbourg-vs-le-mans-prediction-odds-2026-11-08/",
+   "https://basketora.app/france-lnb-elite/le-mans-vs-strasbourg/lineups"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 1
  },
  "basketball|Maryland W|George Mason W": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.on3.com/teams/maryland-terrapins/news/maryland-womens-basketball-set-to-host-george-mason-focused-on-building-chemistry/",
+   "https://www.testudotimes.com/maryland-terps-womens-basketball/94978/no-20-maryland-womens-basketball-vs-george-mason-preview",
+   "https://umterps.com/news/2026/11/5/womens-basketball-no-20-maryland-to-host-george-mason-in-home-opener",
+   "https://gomason.com/news/2026/11/7/womens-basketball-patriots-face-maryland-on-sunday-at-1-pm-on-big-10.aspx",
+   "https://www.power1047.com/post/maryland-womens-basketball-george-mason-home-opener-november-8-2026"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Boise State|Butler": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [
+   {
+    "name": "Lamar Washington",
+    "importance": "star",
+    "status": "doubtful",
+    "reason": "Eligibility issues, listed as questionable"
+   },
+   {
+    "name": "Kaur Tomann",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Achilles injury, listed as questionable"
+   },
+   {
+    "name": "Ty Rodgers",
+    "importance": "key",
+    "status": "out",
+    "reason": "Injured backcourt transfer"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://www.boydsbets.com/ncaa-basketball-injuries/",
+   "https://thebutlercollegian.com/2026/11/what-you-need-to-know-dawgs-gear-up-for-road-tilt-in-boise/",
+   "https://www.covers.com/sport/basketball/ncaab/matchup/391234",
+   "https://www.sportsline.com/college-basketball/game-forecast/NCAAB_20261108_BUTLER@BOISE/",
+   "https://www.idahostatesman.com/sports/college/mountain-west/boise-state-university/boise-state-basketball/article317544748.html"
+  ],
   "board": "ok",
-  "top_block": false,
-  "unknown": true
+  "top_block": true,
+  "netStars": 0,
+  "netKey": 1
  },
  "basketball|North Dakota W|Minot State W": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://scoutfly.cbsistatic.com/womens-college-basketball/teams/NDAK/north-dakota-fighting-hawks/injuries/",
+   "https://bvmsports.com/2026/11/07/notes-womens-basketball-looks-to-rebound-against-minot-state/",
+   "https://fightinghawks.com/news/2026/11/7/womens-basketball-womens-basketball-looks-to-rebound-against-minot-state.aspx",
+   "https://bandwagon.fyi/wcbb/north-dakota-vs-detroit-mercy-prediction-2026-11-14",
+   "https://fightinghawks.com/news/2026/11/1/womens-basketball-notes-womens-basketball-prepped-to-open-2026-27-at-home-against-minnesota-crookston.aspx"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Montecatini|Pistoia": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.flashscore.com/match/basketball/montecatini-hj2DBrba/pistoia-82eS0xuN/",
+   "https://www.lanazione.it/sport/basket/basket-derby-pistoia-montecatini-miudycq7",
+   "https://www.sofascore.com/basketball/match/latecnica-gema-montecatini-estra-pistoia/aPjsEwHc",
+   "https://www.lastampa.it/sport/dirette/basket/serie-a2-2026/diretta-la-t-tecnica-gema-montecatini-pistoia-5frn5i525i318lh6z31svygb8/",
+   "https://www.eurosport.es/baloncesto/serie-a2/2026-2027/la-t-tecnica-gema-montecatini-pistoia_mtc21933294/live.shtml"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "football|FC Brumov|Sternberk": {
   "checkedAt": "2026-11-08T08:46:20.135867+00:00",
@@ -2886,11 +3017,17 @@
   "netKey": 2
  },
  "football|Vitória|Porto": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [
+   {
+    "name": "Alan",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
    {
     "name": "F. Dias",
     "importance": "other",
@@ -2904,63 +3041,63 @@
     "importance": "other",
     "status": "out",
     "reason": "Unknown"
-   }
-  ],
-  "sources": null,
-  "board": "ok",
-  "top_block": false,
-  "netStars": 0,
-  "netKey": 0
- },
- "football|Los Chankas|Alianza Lima": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": "sofascore",
-  "confirmed": false,
-  "side": "away",
-  "home": [
-   {
-    "name": "M. Kaufman",
-    "importance": "star",
-    "status": "out",
-    "reason": "yellow_or_red_card_suspension"
    },
    {
-    "name": "F. Torres",
-    "importance": "star",
-    "status": "doubtful",
-    "reason": "Muscle Injury"
-   }
-  ],
-  "away": [
-   {
-    "name": "P. Guerrero",
-    "importance": "other",
-    "status": "out",
-    "reason": "Leg Injury"
-   },
-   {
-    "name": "G. Chávez",
+    "name": "W. Gomes",
     "importance": "key",
-    "status": "doubtful",
-    "reason": "Muscle Injury"
-   },
-   {
-    "name": "J. Castillo",
-    "importance": "other",
-    "status": "doubtful",
-    "reason": "Muscle Injury"
+    "status": "out",
+    "reason": "Ankle Injury"
    }
   ],
   "sources": null,
   "board": "ok",
   "top_block": false,
   "netStars": -1,
+  "netKey": 0
+ },
+ "football|Los Chankas|Alianza Lima": {
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "sofascore",
+  "confirmed": true,
+  "side": "away",
+  "home": [
+   {
+    "name": "G. Rizzo",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "M. Kaufman",
+    "importance": "key",
+    "status": "out",
+    "reason": "yellow_or_red_card_suspension"
+   }
+  ],
+  "away": [
+   {
+    "name": "A. Cantero",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "P. Guerrero",
+    "importance": "other",
+    "status": "out",
+    "reason": "Leg Injury"
+   }
+  ],
+  "sources": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
   "netKey": -1
  },
  "football|Vojvodina|Crvena Zvezda": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [],
   "away": [
@@ -2978,9 +3115,9 @@
   "netKey": 1
  },
  "football|Ñublense|Colo Colo": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [
    {
@@ -2988,32 +3125,68 @@
     "importance": "other",
     "status": "out",
     "reason": "yellow_or_red_card_suspension"
+   },
+   {
+    "name": "P. Calderón",
+    "importance": "other",
+    "status": "out",
+    "reason": "yellow_card_accumulation_suspension"
    }
   ],
   "away": [
    {
-    "name": "L. Hernández",
+    "name": "I. Román",
     "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "M. Romero",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "J. Sosa",
+    "importance": "key",
+    "status": "out",
+    "reason": "yellow_card_accumulation_suspension"
+   },
+   {
+    "name": "C. Aquino",
+    "importance": "other",
+    "status": "out",
+    "reason": "Appendicitis"
+   },
+   {
+    "name": "L. Hernández",
+    "importance": "key",
     "status": "out",
     "reason": "Ankle Injury"
    }
   ],
   "sources": null,
-  "board": "downgrade",
+  "board": "drop",
   "top_block": true,
-  "netStars": 1,
-  "netKey": 1
+  "netStars": 2,
+  "netKey": 4
  },
  "football|Vasas SC|Ferencvaros": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [],
   "away": [
    {
-    "name": "B. Ötvös",
+    "name": "L. Joseph",
     "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "B. Ötvös",
+    "importance": "other",
     "status": "out",
     "reason": "Cruciate Ligament Injury"
    }
@@ -3025,12 +3198,26 @@
   "netKey": 1
  },
  "football|Sint-Truiden|Zulte Waregem": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "home",
-  "home": [],
-  "away": [],
+  "home": [
+   {
+    "name": "K. Takai",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "away": [
+   {
+    "name": "O. Niang",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
   "sources": null,
   "board": "ok",
   "top_block": false,
@@ -3038,13 +3225,23 @@
   "netKey": 0
  },
  "football|SD Aucas|Ind del Valle": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T17:55:41.227176+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.eluniverso.com/deportes/habra-nuevo-campeon-este-domingo-independiente-del-valle-se-juega-el-titulo-ante-aucas-07112026/",
+   "https://www.flashscore.com/match/football/aucas-nJRc8sLh/independiente-del-valle-YFwXD2sh/summary/lineups/",
+   "https://www.tntsports.co.uk/football/serie-a-ecuadoriana/2026/aucas-independiente-del-valle_mtc22028010/live-lineup.shtml",
+   "https://www.fotmob.com/matches/aucas-vs-independiente-del-valle/9522bzu",
+   "https://www.eldiario.ec/deportes/habra-nuevo-campeon-este-domingo-independiente-del-valle-se-juega-el-titulo-ante-aucas-07112026/"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "football|Sportivo Trinidense|Sportivo Ameliano": {
   "checkedAt": "2026-11-08T08:46:20.135867+00:00",
