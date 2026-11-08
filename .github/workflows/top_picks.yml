@@ -17,6 +17,10 @@ on:
         description: 'Data YYYY-MM-DD (puste = dziś UTC)'
         required: false
         default: ''
+      force_email:
+        description: 'Wyślij mail TOP nawet bez nowych typów'
+        type: boolean
+        default: false
 permissions:
   contents: write
   actions: read
@@ -26,8 +30,9 @@ concurrency:
 jobs:
   top:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 90
     env:
+      PYTHONUNBUFFERED: '1'
       # One SofaScore day listing per sport-day for the whole job: the
       # availability agent builds it, the TOP build reads it from disk.
       SOFASCORE_LISTING_CACHE_DIR: /tmp/sofa_listing
@@ -56,7 +61,9 @@ jobs:
             | cut -d' ' -f2- | while read f; do cp "$f" results/; done
           ls results/matches_${D}_*_forebet.json 2>/dev/null || echo "brak wyników Forebet na $D"
       - name: Availability agent (injuries, suspensions, benched stars)
+        timeout-minutes: 30
         env:
+          AVAIL_BUDGET_S: '1200'
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -68,29 +75,51 @@ jobs:
           GROQ_API_KEY_4: ${{ secrets.GROQ_API_KEY_4 }}
           PYTHONIOENCODING: utf-8
         run: python tools/availability_agent.py "$DAY" || echo "availability agent failed – TOP runs without it"
-      - name: Build TOP + Excel + email
+      - name: Build TOP + Excel
         env:
           SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
           GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
-          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
-          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          TOP_BUILD_BUDGET_S: '1500'
           PYTHONIOENCODING: utf-8
-        run: python tools/top_picks.py "$DAY" --fanvote --email
+        run: python -u tools/top_picks.py "$DAY" --fanvote
       - name: Commit TOP json + Excel
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results/top_*.json results/TOP.xlsx
+          git add results/top_*.json results/status_top_*.json results/TOP.xlsx 2>/dev/null || true
           git add results/availability_*.json 2>/dev/null || true
           git add results/ai_analyst_*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "TOP picks $DAY"
-          git reset -q --hard HEAD
-          git clean -fdq results/
-          for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && break; sleep 5; done
+          git stash -q -u || true
+          ok=0; for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && ok=1 && break; sleep 5; done
+          git stash pop -q || true
+          [ "$ok" = 1 ] || exit 1
+      - name: Mail TOP
+        env:
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          F=""; [ "${{ github.event.inputs.force_email }}" = "true" ] && F="--force-email"
+          python -u tools/top_picks.py "$DAY" --mail-only $F
+      - name: Commit mail ledger
+        if: always()
+        run: |
+          git add -f outputs/top_mail_sent_*.json results/ai_analyst_*.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -q -m "TOP mail ledger $DAY [skip ci]"
+          ok=0; for i in 1 2 3; do git pull --rebase -q -X theirs && git push -q && ok=1 && break; sleep 5; done
+          [ "$ok" = 1 ] || exit 1
       - uses: actions/upload-artifact@v7
         with:
           name: TOP-${{ github.run_id }}

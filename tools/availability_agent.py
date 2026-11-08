@@ -470,7 +470,19 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         store = {}
     now = datetime.now(timezone.utc)
     checked = llm_calls = 0
+    import time as _time
+    t0, budget = _time.monotonic(), float(os.getenv('AVAIL_BUDGET_S', '1200'))
+
+    def _save():
+        tmp = path + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as fh:
+            json.dump(store, fh, ensure_ascii=False, indent=1)
+        os.replace(tmp, path)
     for c in candidates(day):
+        left = budget - (_time.monotonic() - t0)
+        if left <= 0:
+            log(f'   availability: budżet {budget:.0f}s wyczerpany, stop po {checked} sprawdzeniach')
+            break
         m, sport, side = c['m'], c['sport'], c['side']
         ko = _kickoff(day, m.get('time'))
         if ko and ko < now - timedelta(minutes=10):
@@ -481,10 +493,12 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         if not force and not needs_check(prev, ko, now):
             continue
         res = sofascore_check(m, sport, day)
-        if res is None and use_llm:
+        if res is None and use_llm and left >= 60:
             res = llm_check(m, sport, day)
             llm_calls += 1
         checked += 1
+        if checked % 10 == 0:
+            _save()
         if res is None:
             store[c['key']] = {'checkedAt': now.isoformat(), 'source': None, 'confirmed': False,
                                'side': side, 'board': 'ok', 'top_block': False, 'unknown': True}
@@ -499,8 +513,7 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         if v['board'] != 'ok' or v['top_block']:
             names = ', '.join(p['name'] for p in res[side] if p['importance'] == 'star')
             log(f"   🚑 {c['key']}: {v['board']}{' / TOP blocked' if v['top_block'] else ''} ({names})")
-    with open(path, 'w', encoding='utf-8') as fh:
-        json.dump(store, fh, ensure_ascii=False, indent=1)
+    _save()
     flagged = sum(1 for r in store.values() if r.get('board') != 'ok' or r.get('top_block'))
     log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)} | {STATS}")
     if ERRORS:

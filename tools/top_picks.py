@@ -37,8 +37,17 @@ EXCLUDED_SPORTS = {s for s in os.getenv('TOP_EXCLUDED_SPORTS', '').split(',') if
 # The added picks earned on their own in BOTH halves (+43.9% / +15.0%), except
 # basketball, where the extra picks were flat after a realistic price
 # (-0.2%) — so basketball keeps the old, stricter rules.
-MIN_WINS = int(os.getenv('TOP_MIN_WINS', '2'))
-DEFAULT_GRADES = tuple(g for g in os.getenv('TOP_GRADES', 'A,B,C').split(',') if g)
+MIN_WINS = int(os.getenv('TOP_MIN_WINS', '3'))
+DEFAULT_GRADES = tuple(g for g in os.getenv('TOP_GRADES', 'A,B').split(',') if g)
+# Budżet czasu (od startu procesu): po nim bez wywołań sieciowych (Fan Vote,
+# absencje, best price), analityk tylko z zapasem TOP_ANALYST_BUDGET_S.
+_T0 = __import__('time').monotonic()
+BUILD_BUDGET_S = float(os.getenv('TOP_BUILD_BUDGET_S', '1500'))
+ANALYST_BUDGET_S = float(os.getenv('TOP_ANALYST_BUDGET_S', '300'))
+
+
+def budget_left() -> float:
+    return BUILD_BUDGET_S - (__import__('time').monotonic() - _T0)
 STRICT_SPORTS = {s for s in os.getenv('TOP_STRICT_SPORTS', 'basketball').split(',') if s}
 STRICT_MIN_WINS = 3
 STRICT_GRADES = ('A', 'B')
@@ -266,7 +275,9 @@ def publish_gate(new: List[Dict[str, Any]], day: str) -> List[Dict[str, Any]]:
     now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     out = []
     for r in new:
-        bp = best_price.best_price(r, day)
+        bp = (best_price.best_price(r, day) if budget_left() > 0 else
+              {'bestOdds': None, 'bestOddsSource': None, 'bestOddsAt': None,
+               'booksCount': 0, 'kickoff': None})
         price = bp['bestOdds'] or r.get('odds2') or r['odds']
         floor = r.get('floorOdds') or 1.0
         if price < floor:
@@ -379,8 +390,9 @@ def collect_enriched(day: str, grades=DEFAULT_GRADES) -> List[Dict[str, Any]]:
                 continue
             if not evaluate(m, sport, day):     # bez szans — nie pytamy SofaScore
                 continue
-            enrich_fanvote(m, sport, day)
-            enrich_injuries(m, sport, day)
+            if budget_left() > 0:
+                enrich_fanvote(m, sport, day)
+                enrich_injuries(m, sport, day)
             r = evaluate(m, sport, day)
             if r:
                 out.append(r)
@@ -532,7 +544,8 @@ def run_analyst(day: str, merged: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = None,
                new_count: Optional[int] = None,
-               analyst: Optional[List[Dict[str, Any]]] = None) -> None:
+               analyst: Optional[List[Dict[str, Any]]] = None,
+               subject_suffix: str = '') -> bool:
     import smtplib
     from email.mime.text import MIMEText
     from html import escape
@@ -540,8 +553,12 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
                    os.getenv('EMAIL_PASSWORD'))
     if not (to and frm and pw):
         print('   ℹ️ Mail TOP pominięty (brak EMAIL_*)')
-        return
+        return False
     def row(r):
+        if r.get('withdrawn'):
+            return (f"<tr><td colspan='11'><s>{escape(str(r.get('time')))} {escape(str(r.get('sport')))} "
+                    f"{escape(str(r.get('match')))} — {escape(str(r.get('pick')))}</s><br>"
+                    f"<small>Wycofany: {escape(str(r.get('withdrawReason') or ''))}</small></td></tr>")
         return (
         f"<tr><td>{escape(str(r['time']))}</td><td>{escape(r['sport'])}</td>"
         f"<td>{escape(r['match'])}<br><small>{escape(str(r['league']))}</small>"
@@ -555,10 +572,16 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
     rows_for = lambda rs: ''.join(row(r) for r in rs)  # noqa: E731
     clubs = [r for r in picks if r.get('category') != 'reprezentacje']
     national = [r for r in picks if r.get('category') == 'reprezentacje']
+    withdrawn = [r for r in picks if r.get('withdrawn')]
+    clubs = [r for r in clubs if not r.get('withdrawn')]
+    national = [r for r in national if not r.get('withdrawn')]
     rows = rows_for(clubs)
     if national:
         rows += ("<tr><th colspan='11' style='text-align:left'>🏳️ Reprezentacje</th></tr>"
                  + rows_for(national))
+    if withdrawn:
+        rows += ("<tr><th colspan='11' style='text-align:left'>Wycofane</th></tr>"
+                 + rows_for(withdrawn))
     html = (_analyst_html(analyst)
             + f"<h2>⭐ TOP — {day}</h2><p>Perełki z Grade A/B: typowana drużyna dominuje "
             f"we wszystkich danych (Forebet, forma, dom/wyjazd, H2H, SofaScore, model).</p>"
@@ -574,23 +597,91 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
         part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attach)}"'
         msg.attach(part)
     extra = f", nowe: {new_count}" if new_count is not None else ''
-    msg['Subject'] = f"⭐ TOP — {day} ({len(picks)}{extra})"
+    msg['Subject'] = f"⭐ TOP — {day} ({len(picks)}{extra}){subject_suffix}"
     msg['From'], msg['To'] = frm, to
-    with smtplib.SMTP('smtp.gmail.com', 587) as s:
-        s.starttls()
-        s.login(frm, pw)
-        s.sendmail(frm, [x.strip() for x in to.split(',')], msg.as_string())
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as s:
+            s.starttls()
+            s.login(frm, pw)
+            s.sendmail(frm, [x.strip() for x in to.split(',')], msg.as_string())
+    except Exception as e:
+        print(f"   ❌ Mail TOP nie wysłany: {type(e).__name__}: {e}")
+        return False
     print(f"   ✅ Mail TOP wysłany ({len(picks)} meczów)")
+    return True
+
+
+def _ledger_path(day: str) -> str:
+    return os.path.join(ROOT, 'outputs', f'top_mail_sent_{day}.json')
+
+
+def load_ledger(day: str) -> Dict[str, Any]:
+    try:
+        d = json.load(open(_ledger_path(day), encoding='utf-8'))
+        return {'sent': list(d.get('sent') or []), 'statusMailSent': bool(d.get('statusMailSent'))}
+    except Exception:
+        return {'sent': [], 'statusMailSent': False}
+
+
+def save_ledger(day: str, led: Dict[str, Any]) -> None:
+    p = _ledger_path(day)
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    tmp = p + '.tmp'
+    with open(tmp, 'w', encoding='utf-8') as fh:
+        json.dump(led, fh, ensure_ascii=False, indent=1)
+    os.replace(tmp, p)
+
+
+def mail_only(day: str, force: bool = False) -> bool:
+    """Mailuje perełki z results/top_<day>.json, których nie ma w ledgerze."""
+    p = os.path.join(ROOT, 'results', f'top_{day}.json')
+    try:
+        merged = json.load(open(p, encoding='utf-8-sig'))
+    except Exception:
+        merged = []
+    led = load_ledger(day)
+    new = [r for r in merged if not r.get('withdrawn') and _key(r) not in led['sent']]
+    if not new and not force:
+        print(f"   ℹ️ TOP {day}: brak nowych do wysłania")
+        return False
+    analyst = None
+    if budget_left() >= ANALYST_BUDGET_S and merged:
+        analyst = run_analyst(day, merged)
+    ok = send_email(merged, day, attach=os.path.join(ROOT, 'results', 'TOP.xlsx'),
+                    new_count=len(new), analyst=analyst,
+                    subject_suffix=' — wysyłka ręczna' if force else '')
+    if ok:
+        led['sent'] = list(dict.fromkeys(led['sent'] + [_key(r) for r in merged]))
+        save_ledger(day, led)
+    return ok
 
 
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     day = args[0] if args else date.today().isoformat()
+    if '--mail-only' in sys.argv:
+        mail_only(day, force='--force-email' in sys.argv)
+        sys.exit(0)
     grades = DEFAULT_GRADES
     for a in sys.argv[1:]:
         if a.startswith('--grades='):
             grades = tuple(a.split('=', 1)[1].split(','))
+    _fb = sorted(glob.glob(os.path.join(ROOT, 'results', f'matches_{day}_*_forebet.json')))
+    _status_p = os.path.join(ROOT, 'results', f'status_top_{day}.json')
+
+    def _status(state, cand, n):
+        from datetime import datetime as _dt, timezone as _tz
+        with open(_status_p, 'w', encoding='utf-8') as fh:
+            json.dump({'day': day, 'state': state,
+                       'forebetSports': [os.path.basename(p)[len(f'matches_{day}_'):-len('_forebet.json')]
+                                         for p in _fb],
+                       'candidates': cand, 'picks': n, 'mailed': len(load_ledger(day)['sent']),
+                       'updatedAt': _dt.now(_tz.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}, fh, indent=1)
+    if not _fb:
+        print(f"   ⏳ TOP {day}: brak plików Forebet — czekam na dane")
+        _status('waiting_for_data', 0, 0)
+        sys.exit(0)
     picks = collect_enriched(day, grades) if '--fanvote' in sys.argv else collect(day, grades)
     out_p = os.path.join(ROOT, 'results', f'top_{day}.json')
     # Tryb równoległy: workflow odpala się co godzinę w trakcie Forebet —
@@ -634,10 +725,11 @@ if __name__ == '__main__':
         json.dump(merged, fh, ensure_ascii=False, indent=1)
     print(f"   ➕ nowe TOP w tym przebiegu: {len(new)} (łącznie dziś {len(merged)})")
     xlsx = write_excel(day)
+    _status('published' if merged else 'no_picks', len(picks), len(merged))
     if '--email' in sys.argv and new:
-        send_email(merged, day, attach=xlsx, new_count=len(new),
-                   analyst=run_analyst(day, merged))
-    elif merged and len(_analyst_saved(day)) < len(merged):
+        mail_only(day, force='--force-email' in sys.argv)
+    elif (merged and len(_analyst_saved(day)) < len(merged)
+          and budget_left() >= ANALYST_BUDGET_S):
         run_analyst(day, merged)   # brak/niepełne werdykty bez nowych TOP — tylko zapis
     print(f"â­ TOP {day} (Grade {'/'.join(grades)}): {len(picks)}")
     for r in picks:
