@@ -58,7 +58,7 @@ def test_pool_filters_limit_availability_watch_and_merges_top(tmp_path):
     pool = ws.leg_pool([FRI], res, NOW)
     assert [l['pick'] for l in pool] == ['A']
     a = pool[0]
-    assert a['source'] == 'top+fan' and a['price'] == 2.5 and a['limit']['min'] == 2.0
+    assert a['source'] == 'top+fan' and a['price'] == 2.5 and a['limit']['min'] == 1.5
 
 
 def test_slips_are_disjoint_multi_day_and_capped(tmp_path):

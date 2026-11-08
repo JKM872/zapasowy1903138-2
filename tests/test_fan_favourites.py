@@ -41,20 +41,23 @@ def test_thresholds_and_bands():
     assert [fl.band(x) for x in (60, 69.9, 70, 85, 90, 100)] == ['60-70', '60-70', '70-80', '80-90', '90+', '90+']
 
 
-def test_odds_limits_use_the_pipeline_and_top_floors(tmp_path):
-    assert fl.odds_limit('football') == {'min': 2.0, 'source': 'top_floor'}
-    assert fl.odds_limit('basketball')['min'] == 1.8
-    assert fl.odds_limit('hockey') == {'min': 1.5, 'source': 'sport_floor'}
+def test_odds_limits_are_the_standard_per_sport_limits(tmp_path):
+    assert fl.odds_limit('football') == {'min': 1.5, 'source': 'standard'}
+    assert fl.odds_limit('basketball')['min'] == 1.3
+    assert fl.odds_limit('hockey') == {'min': 1.5, 'source': 'standard'}
+    assert fl.odds_limit('baseball')['min'] == 1.4
     assert fl.odds_limit('rugby')['min'] == 1.35
     rules = tmp_path / 'r.json'
     rules.write_text(json.dumps({'segments': {'hockey|1.6-1.8': {'decision': 'allow', 'floorOdds': 1.7}}}))
-    assert fl.odds_limit('hockey', 1.65, 'home', str(rules)) == {'min': 1.7, 'source': 'top_rules:hockey|1.6-1.8'}
+    assert fl.odds_limit('hockey', 1.65, 'home', str(rules)) == {'min': 1.5, 'source': 'standard'}
+    assert fl.passes_standard('football', 1.6, 5.5) and not fl.passes_standard('football', 2.6, 1.4)
+    assert not fl.passes_standard('football', 2.0, None)
 
 
 def test_build_selects_sorts_and_applies_the_limit(tmp_path):
     res = write_rows(tmp_path, 'football', [
         row('A', 'B', 65, 20),                          # 65% at 2.2 -> pick
-        row('C', 'D', 80, 10, odds=(1.5, 4, 6)),       # 1.5 < 2.0 -> out
+        row('C', 'D', 80, 10, odds=(1.4, 4, 6)),       # 1.4 < 1.5 -> out
         row('E', 'F', 15, 75, odds=(5, 4, 2.4)),       # away 75% -> pick, first
         row('G', 'H', 90, 5, votes=50),                # too few votes
     ], avail={'football|A|B': {'side': 'home', 'home': [
@@ -65,7 +68,7 @@ def test_build_selects_sorts_and_applies_the_limit(tmp_path):
     f, a = blk['picks']
     assert f['side'] == 'away' and f['band'] == '70-80' and f['form']['overall'] == 'LD'
     assert f['impliedPct'] == round(100 / 2.4, 1) and f['edgePct'] == round(75 - 100 / 2.4, 1)
-    assert f['limit'] == {'min': 2.0, 'source': 'top_floor'} and f['status'] == 'pick'
+    assert f['limit'] == {'min': 1.5, 'source': 'standard'} and f['status'] == 'pick'
     assert a['availability']['verdict'] == 'out' and a['modelProb'] == 0.58
     assert f['availability']['verdict'] == 'unknown'
     assert blk['stats']['belowLimit'] == 1

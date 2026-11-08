@@ -57,22 +57,23 @@ def _band(o: Optional[float]) -> Optional[str]:
 
 def odds_limit(sport: str, price: Optional[float] = None, side: Optional[str] = None,
                rules_path: str = RULES_PATH) -> Dict[str, Any]:
-    """{'min': float, 'source': str} for the side we back."""
-    base = SPORT_MIN_ODDS.get(sport, SPORT_MIN_ODDS_FALLBACK)
-    lim, src = base, 'sport_floor'
-    top = TOP_FLOORS.get(sport)
-    if top and top > lim:
-        lim, src = top, 'top_floor'
-    if price:
-        b = _band(price)
-        segs = _segments(rules_path)
-        for key in ([f'{sport}|{b}|{side}'] if side else []) + [f'{sport}|{b}']:
-            s = segs.get(key) or {}
-            f = s.get('floorOdds')
-            if s.get('decision') == 'allow' and isinstance(f, (int, float)) and f > lim:
-                lim, src = float(f), f'top_rules:{key}'
-                break
-    return {'min': round(float(lim), 2), 'source': src}
+    """{'min': float, 'source': 'standard'}: the qualifying pipeline's per-sport
+    minimum, the same limits as the main mails (TOP floors and learned rules
+    no longer apply here)."""
+    return {'min': round(standard_min(sport), 2), 'source': 'standard'}
+
+
+def standard_min(sport: str) -> float:
+    return float(SPORT_MIN_ODDS.get(sport, SPORT_MIN_ODDS_FALLBACK))
+
+
+def passes_standard(sport: str, home_odds: Any, away_odds: Any) -> bool:
+    """Home AND away odds present and >= the sport minimum."""
+    m = standard_min(sport)
+    try:
+        return bool(home_odds) and bool(away_odds) and float(home_odds) >= m and float(away_odds) >= m
+    except (TypeError, ValueError):
+        return False
 
 
 def passes_limit(sport: str, price: Optional[float], side: Optional[str] = None) -> bool:

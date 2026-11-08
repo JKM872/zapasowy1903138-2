@@ -67,6 +67,11 @@ on:
         default: false
         type: boolean
 
+# Jeden run Forebet naraz: nakładające się runy dublowały pracę i TOP brał niepełne artefakty.
+concurrency:
+  group: forebet-scrape
+  cancel-in-progress: false
+
 env:
   PYTHONIOENCODING: utf-8
 

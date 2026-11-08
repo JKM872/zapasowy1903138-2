@@ -229,12 +229,12 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
         bp = None
         if use_best_price and (ko is None or ko > now):
             bp = _best(r, sport, side, day, market)
-        price = (bp or {}).get('bestOdds') or stored
-        if not price:
+        price = max((bp or {}).get('bestOdds') or 0, stored or 0) or None
+        if not price or not (odds.get('home') and odds.get('away')):
             stats['noOdds'] += 1
             continue
         limit = fan_limits.odds_limit(sport, price, side)
-        if price < limit['min']:
+        if price < limit['min'] or not fan_limits.passes_standard(sport, odds.get('home'), odds.get('away')):
             stats['belowLimit'] += 1
             continue
         implied = round(100 / price, 1)
