@@ -266,6 +266,7 @@ export interface ApiResponse<T> {
     total: number
     page: number
     per_page: number
+    pages?: number
   }
   stats?: {
     total: number

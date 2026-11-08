@@ -18,7 +18,7 @@ import { useBasketStore } from '@/store/basketStore'
 import type { Match } from '@/lib/types'
 
 export default function HomePage() {
-  const { data, isLoading, isError, error } = useMatches()
+  const { data, total, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useMatches()
   const { data: liveScores } = useLiveScores()
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null)
 
@@ -60,6 +60,21 @@ export default function HomePage() {
           isLoading={isLoading}
           onSelect={setSelectedMatch}
         />
+        {!isLoading && matches.length > 0 && (
+          <div className="mt-4 flex flex-col items-center gap-2 text-xs text-muted-foreground">
+            <span>Showing {matches.length} of {total} events{hasNextPage ? ' (filters apply to loaded events)' : ''}</span>
+            {hasNextPage && (
+              <button
+                type="button"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-50"
+              >
+                {isFetchingNextPage ? 'Loading...' : 'Load more'}
+              </button>
+            )}
+          </div>
+        )}
       </EventsShell>
 
       <MatchDetails

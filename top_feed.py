@@ -504,6 +504,19 @@ def _remote_auto(results_dir: str) -> bool:
             and os.environ.get('TOP_FEED_REMOTE', '1') != '0')
 
 
+def _today_status(results_dir: str, day: str, remote: bool) -> Optional[Dict[str, Any]]:
+    """results/status_top_<day>.json written by tools/top_picks.py, or None."""
+    raw = None
+    if remote:
+        got = _remote_json(f'status_top_{day}.json')
+        raw = got if isinstance(got, dict) else None
+    if raw is None:
+        raw = _read_json(os.path.join(results_dir, f'status_top_{day}.json'))
+    if not isinstance(raw, dict):
+        return None
+    return {'day': day, 'state': raw.get('state'),
+            'candidates': raw.get('candidates'), 'picks': raw.get('picks'),
+            'updatedAt': raw.get('updatedAt')}
 def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
              is_subscriber: bool = False, remote: Optional[bool] = None,
              now: Optional[datetime] = None) -> Dict[str, Any]:
@@ -571,6 +584,7 @@ def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
     summary['bankroll'] = _bankroll(everything)
     return {
         'days': days,
+        'todayStatus': _today_status(results_dir, now.date().isoformat(), remote),
         'summary': summary,
         'bySport': {s: _summary(v) for s, v in sorted(by_sport.items(), key=lambda kv: -len(kv[1]))},
         'isSubscriber': is_subscriber,

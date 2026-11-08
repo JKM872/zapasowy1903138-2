@@ -48,6 +48,7 @@ export async function getMatches(params: {
   search?: string
   page?: number
   per_page?: number
+  sort?: string
 }): Promise<ApiResponse<Match[]>> {
   const searchParams = new URLSearchParams()
   if (params.date) searchParams.set('date', params.date)
@@ -55,6 +56,7 @@ export async function getMatches(params: {
   if (params.search) searchParams.set('search', params.search)
   if (params.page) searchParams.set('page', String(params.page))
   if (params.per_page) searchParams.set('per_page', String(params.per_page))
+  if (params.sort) searchParams.set('sort', params.sort)
 
   const qs = searchParams.toString()
   return fetchApi<ApiResponse<Match[]>>(`/api/matches${qs ? '?' + qs : ''}`)
@@ -385,6 +387,9 @@ export interface DroppingOddsEvent {
 export interface DropVerdict {
   verdict: 'warto' | 'nie_warto' | 'za_malo_danych'
   reason?: string
+  reasonCode?: string
+  /** English reason; `reason` stays Polish for the e-mails. */
+  reasonEn?: string
   segment?: string
   /** Settled moves the verdict rests on. */
   n?: number
@@ -497,7 +502,7 @@ export interface TopPick {
   signals?: string
   result?: { status: string; score?: string; reason?: string } | null
   availabilityNote?: string
-  status?: 'won' | 'lost' | 'draw' | 'pending' | 'withdrawn' | null
+  status?: 'won' | 'lost' | 'draw' | 'pending' | 'withdrawn' | 'void' | null
   odds2?: number | null
   oddsMarket?: TopOddsMarket | null
   kickoffUtc?: string | null
@@ -548,8 +553,31 @@ export interface TopDay {
   locked: number
 }
 
+/** Local kick-off time (24 h) from kickoffUtc, else the scraped time. */
+export function topKickoff(p: { kickoffUtc?: string | null; time?: string }): string {
+  if (p.kickoffUtc) {
+    const d = new Date(p.kickoffUtc)
+    if (!isNaN(d.getTime())) return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  }
+  return p.time ?? ''
+}
+export interface TopTodayStatus {
+  day: string
+  state?: string | null
+  candidates?: number | null
+  picks?: number | null
+  updatedAt?: string | null
+}
+/** One line for a day without picks; null when today has picks or no status. */
+export function topTodayLine(t?: TopTodayStatus | null): string | null {
+  if (!t) return null
+  if (t.state === 'waiting_for_data') return "Waiting for today's data"
+  if ((t.picks ?? 0) === 0) return `No pick passed every rule today (${t.candidates ?? 0} candidates checked)`
+  return null
+}
 export interface TopResponse {
   isSubscriber: boolean
+  todayStatus?: TopTodayStatus | null
   summary: TopSummary
   bySport: Record<string, TopSummary>
   days: TopDay[]
@@ -594,7 +622,7 @@ export interface FanPick {
   modelProb?: number | null
   grade?: string | null
   availability?: { verdict: 'ok' | 'warn' | 'out' | 'unknown'; note?: string }
-  result?: { status: 'won' | 'lost'; score?: string | null; draw?: boolean } | null
+  result?: { status: 'won' | 'lost' | 'void'; score?: string | null; draw?: boolean } | null
 }
 
 export interface FanRecord {

@@ -269,7 +269,7 @@ function VerdictLine({ verdict: v }: { verdict: DropVerdict }) {
           )}
         </span>
       )}
-      {v.reason && <span className="text-muted-foreground/70">({v.reason})</span>}
+      {(v.reasonEn || v.reason) && <span className="text-muted-foreground/70">({v.reasonEn ?? v.reason})</span>}
     </div>
   )
 }

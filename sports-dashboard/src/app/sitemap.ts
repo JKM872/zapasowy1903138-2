@@ -1,4 +1,4 @@
-import type { MetadataRoute } from 'next'
+﻿import type { MetadataRoute } from 'next'
 
 // Required for `output: 'export'`: generated once at build time as out/sitemap.xml
 export const dynamic = 'force-static'
@@ -12,7 +12,6 @@ const ROUTES: { path: string; freq: 'hourly' | 'daily' | 'monthly'; priority: nu
   { path: '/stats', freq: 'daily', priority: 0.7 },
   { path: '/leaderboard', freq: 'daily', priority: 0.6 },
   { path: '/dropping-odds', freq: 'hourly', priority: 0.6 },
-  { path: '/standings', freq: 'daily', priority: 0.5 },
   { path: '/team', freq: 'daily', priority: 0.4 },
   { path: '/how-to-use', freq: 'monthly', priority: 0.4 },
   { path: '/terms', freq: 'monthly', priority: 0.2 },

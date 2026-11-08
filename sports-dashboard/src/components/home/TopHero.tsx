@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import { formatOdds } from '@/lib/format'
 import { getSportConfig } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
-import { getTopPicks, type TopPick } from '@/lib/api'
+import { getTopPicks, topKickoff, topTodayLine, type TopPick } from '@/lib/api'
 
 function signed(v: number | null | undefined, suffix = '%') {
   if (v === null || v === undefined) return '—'
@@ -34,7 +34,7 @@ function PickCard({ p }: { p: TopPick }) {
           {getSportConfig(p.sport).name}
           {p.league && <span className="truncate">· {p.league}</span>}
         </span>
-        <span className="tabular-nums">{p.time ?? ''}</span>
+        <span className="tabular-nums">{topKickoff(p)}</span>
       </div>
       <div className="text-sm font-semibold leading-snug">
         {home} <span className="font-normal text-muted-foreground">–</span> {away}
@@ -44,9 +44,13 @@ function PickCard({ p }: { p: TopPick }) {
           Pick: <b>{p.pick}</b>
         </span>
         <span className="rounded-md bg-primary/15 px-2 py-0.5 text-sm font-bold tabular-nums text-primary">
-          {p.odds ? formatOdds(p.odds) : '—'}
+          {p.oddsMarket === '2way_equiv' && p.odds2 ? formatOdds(p.odds2) : p.odds ? formatOdds(p.odds) : '—'}
+          {p.oddsMarket === '2way_equiv' && p.odds2 && <span className="ml-1 text-[10px] font-normal">incl. OT</span>}
         </span>
       </div>
+      {p.oddsMarket === '2way_equiv' && p.odds2 && p.odds && (
+        <div className="text-right text-[10px] text-muted-foreground">3-way {formatOdds(p.odds)}</div>
+      )}
       {st === 'won' && (
         <span className="flex items-center gap-1 text-xs font-medium text-emerald-500">
           <CheckCircle2 className="h-3.5 w-3.5" /> Won {p.result?.score}
@@ -125,6 +129,11 @@ export function TopHero() {
           </div>
         ) : null}
 
+        {topTodayLine(data.todayStatus) && lockedToday === 0 && openToday.length === 0 && (
+          <p className="rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+            {topTodayLine(data.todayStatus)}
+          </p>
+        )}
         {recentWins.length > 0 && (
           <div>
             <div className="mb-2 flex items-center justify-between">

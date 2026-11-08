@@ -250,7 +250,7 @@ def test_remote_failure_falls_back_to_slug_with_one_warning(tmp_path, remote, ca
     with caplog.at_level(logging.WARNING, logger='top_feed'):
         d = load(res, sp, sub=True, remote=True)
     assert len(d['days'][0]['picks']) == 1 and d['summary']['clv']['n'] == 1
-    assert len(calls) == 4                                   # 2 days x (top, live)
+    assert len(calls) == 5                                   # 2 days x (top, live) + today's status
     assert sum('raw GitHub fetch' in r.message for r in caplog.records) == 1
 
 
@@ -271,3 +271,14 @@ def test_event_settlement_wins_and_void_is_excluded(tmp_path):
     s = load(res, sp, sub=True)['summary']
     assert (s['settled'], s['won'], s['void'], s['pending']) == (1, 0, 1, 0)
     assert s['hitRate'] == 0.0
+
+def test_today_status_comes_from_status_file(tmp_path):
+    res, sp = setup(tmp_path, [pick('A vs B', 'A', 2.0)],
+                    extra={'status_top_2026-10-21.json': {'day': '2026-10-21', 'state': 'published',
+                                                          'candidates': 9, 'picks': 0}})
+    d = load(res, sp, remote=False)
+    assert d['todayStatus']['state'] == 'published'
+    assert d['todayStatus']['candidates'] == 9
+def test_today_status_missing_is_none(tmp_path):
+    res, sp = setup(tmp_path, [pick('A vs B', 'A', 2.0)])
+    assert load(res, sp, remote=False)['todayStatus'] is None

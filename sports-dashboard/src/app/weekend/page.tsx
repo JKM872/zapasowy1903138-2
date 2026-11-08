@@ -26,7 +26,7 @@ function pct(v: number | null | undefined, signed = false) {
 
 function kickoff(l: WeekendLeg) {
   if (!l.kickoff) return l.date
-  return new Date(l.kickoff).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })
+  return new Date(l.kickoff).toLocaleString('en-GB', { weekday: 'short', hour: '2-digit', minute: '2-digit' })
 }
 
 const LEG_STATUS = {

@@ -23,7 +23,7 @@ export function SportBreakdown({ sportStats }: SportBreakdownProps) {
       <CardContent className="space-y-4">
         {sportStats.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-4">
-            No data.
+            No settled TOP picks yet
           </p>
         )}
         {sportStats.map((stat) => {
@@ -48,6 +48,7 @@ export function SportBreakdown({ sportStats }: SportBreakdownProps) {
                     <Badge variant="outline" className="text-[10px]">
                       {stat.total} events
                     </Badge>
+                    <span className="text-[10px] text-muted-foreground">TOP hit rate</span>
                     <span className="text-sm font-mono font-semibold tabular-nums">
                       {hasAccuracy ? `${pct}%` : '—'}
                     </span>

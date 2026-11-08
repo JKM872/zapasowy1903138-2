@@ -97,20 +97,28 @@ def judge(early: List[Dict[str, Any]], late: List[Dict[str, Any]]) -> Dict[str, 
             and (roi_early or 0) > 0 and (roi_late or 0) > 0:
         verdict, reason = VERDICT_GOOD, (
             "zarabia w obu okresach i po obnizeniu kursu o 5%")
+        code, reason_en = "profitable", "profitable in both periods and after a 5% price cut"
     elif enough and roi_hc is not None and roi_hc < 0:
         verdict, reason = VERDICT_BAD, (
             "traci po realistycznym kursie" if (roi or 0) >= 0
             else "traci na historii")
+        code, reason_en = (("loses_realistic", "loses at a realistic price") if (roi or 0) >= 0
+                           else ("loses_history", "loses on history"))
     elif not enough:
         verdict, reason = VERDICT_UNKNOWN, f"za malo rozstrzygnietych ({n} z {MIN_SAMPLE})"
+        code, reason_en = "small_sample", f"too few settled picks ({n} of {MIN_SAMPLE})"
     elif not both_halves:
         verdict, reason = VERDICT_UNKNOWN, "historia zbyt krotka, by sprawdzic trwalosc"
+        code, reason_en = "short_history", "history too short to check stability"
     else:
         verdict, reason = VERDICT_UNKNOWN, "wynik niestabilny w czasie"
+        code, reason_en = "unstable", "result unstable over time"
 
     return {
         "verdict": verdict,
         "reason": reason,
+        "reasonCode": code,
+        "reasonEn": reason_en,
         "n": n,
         "hitRate": _round(_hit_rate(rows)),
         "avgOdds": round(sum(r["odds"] for r in rows) / n, 2) if n else None,

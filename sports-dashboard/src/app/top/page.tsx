@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 import { getSportConfig } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
-import { getTopPicks, teamHref, topStatus, topWithdrawn, type TopPick, type TopSummary } from '@/lib/api'
+import { getTopPicks, teamHref, topKickoff, topStatus, topTodayLine, topWithdrawn, type TopPick, type TopSummary } from '@/lib/api'
 import { TopPickDetails } from '@/components/match/TopPicksSection'
 import { ClvTile } from '@/components/top/ClvTile'
 import { BankrollChart } from '@/components/top/BankrollChart'
@@ -38,6 +38,7 @@ const STATUS: Record<string, { label: string; cls: string }> = {
   won: { label: 'Won', cls: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' },
   lost: { label: 'Lost', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
   draw: { label: 'Draw (lost)', cls: 'bg-red-500/15 text-red-600 dark:text-red-400' },
+  void: { label: 'Void – not counted', cls: 'bg-zinc-500/15 text-zinc-500' },
   withdrawn: { label: 'Withdrawn – not counted', cls: 'bg-zinc-500/15 text-zinc-500' },
 }
 
@@ -188,6 +189,11 @@ export default function TopPage() {
             </Card>
           )}
 
+          {topTodayLine(data.todayStatus) && (
+            <div className="rounded-md border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+              {topTodayLine(data.todayStatus)}
+            </div>
+          )}
           <WithdrawnList days={data.days} totals={topWithdrawn(data.summary)} />
 
           {data.days.map(day => (
@@ -209,7 +215,7 @@ export default function TopPage() {
                     {day.picks.map((p, i) => (
                       <li key={`${p.match}-${i}`} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
                         <SportIcon sport={p.sport} className="h-4 w-4 shrink-0" />
-                        <span className="w-12 tabular-nums text-muted-foreground">{p.time ?? ''}</span>
+                        <span className="w-12 tabular-nums text-muted-foreground">{topKickoff(p)}</span>
                         <span className="min-w-0 flex-1">
                           <MatchTeams match={p.match} sport={p.sport} />
                           {p.league && <span className="ml-2 text-xs text-muted-foreground">{p.league}</span>}
@@ -221,7 +227,11 @@ export default function TopPage() {
                         ) : (
                           <>
                             <span>Pick: <b>{p.pick}</b></span>
-                            <span className="tabular-nums">@ {p.odds ? formatOdds(p.odds) : '—'}</span>
+                            {p.oddsMarket === '2way_equiv' && p.odds2 ? (
+                              <span className="tabular-nums">@ {formatOdds(p.odds2)} <span className="text-xs text-muted-foreground">incl. OT ({p.odds ? formatOdds(p.odds) : '—'} 3-way)</span></span>
+                            ) : (
+                              <span className="tabular-nums">@ {p.odds ? formatOdds(p.odds) : '—'}</span>
+                            )}
                           </>
                         )}
                         {p.grade && <Badge variant="secondary">{p.grade}</Badge>}

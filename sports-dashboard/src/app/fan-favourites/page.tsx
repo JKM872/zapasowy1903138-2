@@ -35,7 +35,7 @@ function tone(v: number | null | undefined) {
 function kickoff(p: FanPick) {
   if (!p.kickoff) return p.time ?? ''
   const d = new Date(p.kickoff)
-  return d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })
+  return d.toLocaleString('en-GB', { weekday: 'short', hour: '2-digit', minute: '2-digit' })
 }
 
 function Form({ s }: { s?: string }) {
@@ -60,6 +60,7 @@ const AVAIL: Record<string, { label: string; cls: string }> = {
 function ResultBadge({ p }: { p: FanPick }) {
   const st = p.result?.status
   if (!st) return <span className="rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground">Pending</span>
+  if (st === 'void') return <span className="rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground">Void – not counted</span>
   return (
     <span className={cn('rounded px-2 py-0.5 text-xs font-medium', st === 'won'
       ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-500/15 text-red-600 dark:text-red-400')}>
@@ -132,8 +133,8 @@ function PickCard({ p }: { p: FanPick }) {
           <div className="tabular-nums">{pct(p.fanPct)} vs {pct(p.impliedPct)} · <span className={tone(p.edgePct)}>edge {pct(p.edgePct, true)}</span></div>
         </div>
         <div>
-          <div className="text-muted-foreground">Odds limit</div>
-          <div className="tabular-nums">≥ {p.limit?.min.toFixed(2)} <span className="text-muted-foreground">({p.limit?.source})</span></div>
+          <div className="text-muted-foreground">Standard odds limit</div>
+          <div className="tabular-nums">≥ {p.limit?.min.toFixed(2)} (both sides)</div>
         </div>
         <div>
           <div className="text-muted-foreground">Form {p.team} (all / venue)</div>
@@ -230,7 +231,7 @@ export default function FanFavouritesPage() {
           <Users className="h-6 w-6 text-primary" /> Fan Favourites
         </h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Matches where SofaScore fans clearly back one side (football ≥ 60%, other sports ≥ 70%, at least 100 votes),
+          Matches where SofaScore fans clearly back one side (football ≥ {data?.thresholds?.fanPct?.football ?? 60}%, other sports ≥ {data?.thresholds?.fanPct?.default ?? 70}%, at least {data?.thresholds?.minVotes ?? 100} votes),
           listed only when the price passes our standard odds limit, sorted by Fan Vote. A strong crowd favourite is
           often a short price, so judge the record by ROI, not only by hit rate.
         </p>

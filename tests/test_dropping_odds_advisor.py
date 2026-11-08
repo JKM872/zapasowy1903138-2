@@ -57,6 +57,20 @@ class TestJudge:
         assert v['roi'] == 20.0
 
 
+    def test_each_branch_has_reason_code_and_english_text(self):
+        cases = [
+            (picks(60, 36, 2.0, '2026-08-01'), picks(60, 36, 2.0, '2026-10-01'), 'profitable'),
+            (picks(100, 52, 2.0, '2026-08-01'), picks(100, 52, 2.0, '2026-10-01'), 'loses_realistic'),
+            (picks(80, 30, 2.0, '2026-08-01'), picks(80, 30, 2.0, '2026-10-01'), 'loses_history'),
+            (picks(30, 25, 2.0, '2026-08-01'), picks(30, 25, 2.0, '2026-10-01'), 'small_sample'),
+            (picks(150, 100, 2.0, '2026-08-01'), [], 'short_history'),
+            (picks(60, 45, 2.0, '2026-08-01'), picks(60, 24, 2.0, '2026-10-01'), 'unstable'),
+        ]
+        for early, late, code in cases:
+            v = adv.judge(early, late)
+            assert v['reasonCode'] == code
+            assert v['reasonEn'] and v['reasonEn'].isascii()
+            assert v['reason']
 class TestBuildModel:
     def test_segments_are_keyed_by_sport_and_side(self):
         rows = (picks(60, 36, 2.0, '2026-08-01') + picks(60, 36, 2.0, '2026-10-01')

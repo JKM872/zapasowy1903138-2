@@ -2,7 +2,7 @@
 // SPORTS DASHBOARD - React‑Query hooks
 // ============================================================================
 'use client'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import * as api from '@/lib/api'
 import { useFilterStore } from '@/store/filterStore'
@@ -15,16 +15,33 @@ export function useMatches() {
   // for "latest" returned tomorrow's still-empty day ("No events").
   const dateStr = format(date ?? new Date(), 'yyyy-MM-dd')
 
-  return useQuery({
-    // userId in the key so matches refetch after login/logout — the server
+  const q = useInfiniteQuery({
+    // userId in the key so matches refetch after login/logout - the server
     // unlocks Grade A for active subscribers based on the auth token.
     queryKey: ['matches', sport, dateStr ?? 'latest', search, userId],
-    queryFn: () => api.getMatches({ sport, date: dateStr, search }),
+    queryFn: ({ pageParam }) => api.getMatches({ sport, date: dateStr, search, page: pageParam, per_page: 200, sort: 'board' }),
+    initialPageParam: 1,
+    getNextPageParam: (last) => {
+      const m = last.meta
+      return m && m.pages && m.page < m.pages ? m.page + 1 : undefined
+    },
     staleTime: 60_000,          // 1 min
     refetchInterval: 300_000,   // 5 min background refresh
   })
+  const pages = q.data?.pages ?? []
+  const first = pages[0]
+  const rows = pages.flatMap((p) => p.data ?? [])
+  return {
+    data: first ? { ...first, data: rows } : undefined,
+    total: first?.meta?.total ?? rows.length,
+    isLoading: q.isLoading,
+    isError: q.isError,
+    error: q.error,
+    fetchNextPage: q.fetchNextPage,
+    hasNextPage: !!q.hasNextPage,
+    isFetchingNextPage: q.isFetchingNextPage,
+  }
 }
-
 export function useMatchDetail(id: string) {
   return useQuery({
     queryKey: ['match', id],
@@ -64,7 +81,9 @@ export function useLiveScores(sport: string = 'football') {
 // ---------------------------------------------------------------------------
 
 export function useBets(params?: { status?: string; days?: number; limit?: number }) {
+  const signedIn = useAuthStore((s) => !!s.user)
   return useQuery({
+    enabled: signedIn,
     queryKey: ['bets', params?.status, params?.days, params?.limit],
     queryFn: () => api.getBets(params),
     staleTime: 30_000,
@@ -72,7 +91,9 @@ export function useBets(params?: { status?: string; days?: number; limit?: numbe
 }
 
 export function useBetStats() {
+  const signedIn = useAuthStore((s) => !!s.user)
   return useQuery({
+    enabled: signedIn,
     queryKey: ['bet-stats'],
     queryFn: () => api.getBetStats(),
     staleTime: 60_000,
