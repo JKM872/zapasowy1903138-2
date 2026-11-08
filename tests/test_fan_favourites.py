@@ -128,3 +128,13 @@ def test_api_validates_params(monkeypatch):
     assert c.get('/api/fan-favourites?date=21-10-2026').status_code == 400
     r = c.get('/api/fan-favourites?sport=football')
     assert r.status_code == 200 and r.get_json()['isSubscriber'] is False
+
+
+def test_rows_fall_back_to_sports_scraper_before_forebet(tmp_path):
+    day = '2026-11-08'
+    (tmp_path / f'matches_{day}_football.json').write_text(json.dumps({'matches': [
+        {'homeTeam': 'A', 'awayTeam': 'B', 'time': '08.11.2026 14:00',
+         'sofascore': {'home': 70, 'draw': 10, 'away': 20, 'votes': 500}}]}), encoding='utf-8')
+    rows = ff._rows(day, 'football', str(tmp_path))
+    assert len(rows) == 1 and rows[0]['time'] == '14:00'
+    assert fl.fan_side(rows[0]) == {'side': 'home', 'fanPct': 70.0, 'votes': 500}

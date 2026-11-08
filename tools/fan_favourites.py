@@ -79,7 +79,36 @@ def fan_path(day: str, results: str = RESULTS) -> str:
 def _rows(day: str, sport: str, results: str) -> List[Dict[str, Any]]:
     raw = _read(os.path.join(results, f'matches_{day}_{sport}_forebet.json'))
     rows = raw.get('matches') if isinstance(raw, dict) else raw
-    return [r for r in rows or [] if isinstance(r, dict)]
+    rows = [r for r in rows or [] if isinstance(r, dict)]
+    # Forebet finishes ~12:00 UTC; until then (and for matches Forebet lacks)
+    # use the morning Sports Scraper rows so the board fills during the day.
+    seen = {((r.get('homeTeam') or '').lower(), (r.get('awayTeam') or '').lower()) for r in rows}
+    for r in _scraper_rows(day, sport, results):
+        k = ((r.get('homeTeam') or '').lower(), (r.get('awayTeam') or '').lower())
+        if k not in seen:
+            seen.add(k)
+            rows.append(r)
+    return rows
+
+
+def _scraper_rows(day: str, sport: str, results: str) -> List[Dict[str, Any]]:
+    raw = _read(os.path.join(results, f'matches_{day}_{sport}.json'))
+    rows = raw.get('matches') if isinstance(raw, dict) else raw
+    out = []
+    for r in rows or []:
+        if not isinstance(r, dict) or not r.get('homeTeam') or not r.get('awayTeam'):
+            continue
+        r = dict(r)
+        ss = r.get('sofascore')
+        if isinstance(ss, dict) and 'homeProb' not in ss and ss.get('home') is not None:
+            r['sofascore'] = {'found': True, 'homeProb': ss.get('home'), 'drawProb': ss.get('draw'),
+                              'awayProb': ss.get('away'), 'votes': ss.get('votes'), 'url': ss.get('url')}
+        t = str(r.get('time') or '')
+        if ' ' in t:
+            r['time'] = t.rsplit(' ', 1)[1]
+        r['rowSource'] = 'sports_scraper'
+        out.append(r)
+    return out
 
 
 def _file_age_h(day: str, sport: str, results: str, now: datetime) -> float:
