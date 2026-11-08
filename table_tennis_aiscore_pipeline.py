@@ -1094,6 +1094,7 @@ def run(focus: str, date_str: str, max_matches: Optional[int] = None,
                 provider=email_cfg.get("provider", "gmail"),
                 subject=f"🏓 Table Tennis ({focus}) — {date_str}",
                 date=date_str,
+                manifest_tag=f"table_tennis_{focus}",
                 # Only priced picks go out. AiScore itself has no odds, but
                 # SofaScore prices these amateur events often enough to matter:
                 # measured over the mailed manifests, 150 of 546 table-tennis

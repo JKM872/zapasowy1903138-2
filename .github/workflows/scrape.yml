@@ -295,14 +295,12 @@ jobs:
                 break
               fi
               echo "⚠️ Push rejected (attempt $attempt) — rebasing onto origin/main..."
-              git fetch origin main || true
-              if ! git rebase origin/main; then
-                git rebase --abort 2>/dev/null || true
-              fi
+              git pull --rebase -X theirs origin main || git rebase --abort 2>/dev/null || true
               sleep $(( (RANDOM % 6) + 2 ))
             done
             if [ "$pushed" != "true" ]; then
               echo "::warning::Could not push results after retries — leaving for next run"
+              exit 1
             fi
           fi
 

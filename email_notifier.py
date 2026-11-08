@@ -1561,7 +1561,10 @@ def send_email_notification(
     grade_filter: Optional[set] = None,
     fallback_grades: Optional[set] = None,
     date: Optional[str] = None,
-):
+    manifest_tag: str = '',
+    exclude_keys: Optional[set] = None,
+    sent_keys_out: Optional[list] = None,
+) -> bool:
     """
     Wysyła email z powiadomieniem o kwalifikujących się meczach
     
@@ -1716,7 +1719,16 @@ def send_email_notification(
             print(f"Brak kwalifikujacych sie meczow z {' i '.join(messages)} do wyslania")
         else:
             print("Brak kwalifikujacych sie meczow do wyslania")
-        return
+        return False
+
+    if exclude_keys:
+        _ex = {str(k).lower() for k in exclude_keys}
+        _keys = qualified.apply(lambda r: f"{r.get('home_team')}|{r.get('away_team')}".lower(), axis=1)
+        before_count = len(qualified)
+        qualified = qualified[~_keys.isin(_ex)]
+        print(f"   ⏭️ Pominięto {before_count - len(qualified)} meczów już wysłanych")
+        if len(qualified) == 0:
+            return False
 
     # Policz mecze z kursami i bez (tylko jeśli nie pomijamy meczów bez kursów)
     if not skip_no_odds:
@@ -1752,7 +1764,7 @@ def send_email_notification(
 
     # Zapisz manifest meczów wysłanych mailem (źródło prawdy dla rozliczenia)
     if matches:
-        _save_mailed_manifest(list(matches), date)  # type: ignore[arg-type]
+        _save_mailed_manifest(list(matches), date, manifest_tag)  # type: ignore[arg-type]
     
     if subject is None:
         subject_parts: List[str] = []
@@ -1797,6 +1809,9 @@ def send_email_notification(
             server.send_message(msg)
         
         print("Email wyslany pomyslnie!")
+        if sent_keys_out is not None:
+            sent_keys_out.extend(f"{m.get('home_team')}|{m.get('away_team')}".lower() for m in matches)
+        return True
         
     except Exception as e:
         print(f"Blad wysylania emaila: {e}")
@@ -1805,6 +1820,7 @@ def send_email_notification(
         print("     Jak uzyskac: https://myaccount.google.com/apppasswords")
         print("   - Sprawdz czy SMTP jest wlaczony w ustawieniach konta")
         print("   - Sprawdz dane logowania")
+        return False
 
 
 # ---------------------------------------------------------------------------
@@ -2131,6 +2147,7 @@ def send_split_emails_by_sport(
     fallback_grades: Optional[set] = None,
     date: Optional[str] = None,
     split_by_role: bool = True,
+    manifest_suffix: str = '',
 ):
     """
     Wysyła 1 mail dla każdego sportu z kwalifikującymi się meczami.
@@ -2341,7 +2358,7 @@ def send_split_emails_by_sport(
             group = groups.get(role)
             if not group:
                 continue
-            tag = f'{sport}_{role}' if role else sport
+            tag = (f'{sport}_{role}' if role else sport) + manifest_suffix
             _log_sofascore_coverage(group, label=tag)
             _save_mailed_manifest(group, date, tag=tag)
             sport_payloads[(sport, role)] = group

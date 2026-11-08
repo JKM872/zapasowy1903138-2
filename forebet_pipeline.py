@@ -2295,6 +2295,32 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
 # Orkiestracja
 # ---------------------------------------------------------------------------
 
+def _mail_key(row: Dict[str, Any]) -> str:
+    return f"{row.get('home_team')}|{row.get('away_team')}".lower()
+
+
+def mail_ledger_path(sport: str, date_str: str, out_dir: str = 'outputs') -> str:
+    return os.path.join(out_dir, f'forebet_mailed_{date_str}_{sport}.json')
+
+
+def load_mail_ledger(path: str) -> Dict[str, List[str]]:
+    """Klucze meczów już wysłanych dziś: {"AB": [...], "CD": [...]}."""
+    try:
+        with open(path, encoding='utf-8') as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            return {k: list(v) for k, v in data.items() if isinstance(v, list)}
+    except (OSError, ValueError):
+        pass
+    return {}
+
+
+def save_mail_ledger(path: str, ledger: Dict[str, List[str]]) -> None:
+    os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(ledger, f, ensure_ascii=False, indent=2)
+
+
 def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         min_odds: float = 0.0, max_odds: float = 0.0,
         min_score: Optional[float] = None, min_sources: int = 2,
@@ -2304,7 +2330,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         send_email: bool = True, send_telegram: bool = False,
         email_cfg: Optional[Dict[str, str]] = None,
         prefer_puppeteer: bool = True,
-        load_more_clicks: int = 25) -> Dict[str, Any]:
+        load_more_clicks: int = 25, resend: bool = False) -> Dict[str, Any]:
     """Przejdź cały pipeline dla jednego sportu."""
     sport = sport.lower()
     # None = weź domyślny próg (nadpisywalny przez FOREBET_MIN_SCORE). Trzymamy
@@ -2798,10 +2824,24 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
         from email_notifier import send_email_notification
         # Decyzja użytkownika: dwa osobne maile — A/B oraz C/D. Pusty tier
         # nie wysyła nic (send_email_notification kończy przy 0 meczach).
+        ledger_path = mail_ledger_path(sport, date_str)
+        ledger = load_mail_ledger(ledger_path)
         for tier in ({'A', 'B'}, {'C', 'D'}):
             label = '/'.join(sorted(tier))
+            code = ''.join(sorted(tier))
+            already = set(ledger.get(code, []))
+            if not resend and already:
+                pending = [r for r in rows if r.get('qualifies')
+                           and str(r.get('prediction_grade') or '') in tier
+                           and _mail_key(r) not in already]
+                if not pending:
+                    n = sum(1 for r in rows if r.get('qualifies')
+                            and str(r.get('prediction_grade') or '') in tier)
+                    print(f"   ⏭️ E-mail Grade {label}: wszystkie {n} meczów już wysłane dziś — pomijam")
+                    continue
+            sent_keys: List[str] = []
             try:
-                send_email_notification(
+                ok = send_email_notification(
                     csv_file=paths['csv'],
                     to_email=email_cfg['to'],
                     from_email=email_cfg['from'],
@@ -2814,7 +2854,13 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                     min_odds_threshold=min_odds,
                     grade_filter=tier,
                     fallback_grades=None,
+                    manifest_tag=f'forebet_{sport}_{code}',
+                    exclude_keys=None if resend else already,
+                    sent_keys_out=sent_keys,
                 )
+                if ok:
+                    ledger[code] = sorted(already | set(sent_keys))
+                    save_mail_ledger(ledger_path, ledger)
                 print(f"   ✅ E-mail Grade {label} — gotowe")
             except Exception as e:
                 print(f"   ⚠️ E-mail Grade {label} błąd: {e}")
@@ -2915,6 +2961,8 @@ def main() -> None:
     ap.add_argument('--no-email', action='store_true')
     ap.add_argument('--telegram', action='store_true',
                     help='Wyślij podsumowanie na Telegram')
+    ap.add_argument('--resend', action='store_true',
+                    help='Wyślij ponownie mecze już wysłane dziś')
     args = ap.parse_args()
 
     if args.sport not in SUPPORTED_SPORTS:
@@ -2936,6 +2984,7 @@ def main() -> None:
         headless=args.headless,
         send_email=not args.no_email,
         send_telegram=args.telegram,
+        resend=args.resend,
         email_cfg={
             'to': args.to,
             'from': args.from_email,

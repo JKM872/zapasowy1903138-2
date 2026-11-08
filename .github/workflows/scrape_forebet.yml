@@ -61,6 +61,11 @@ on:
         required: false
         default: true
         type: boolean
+      resend:
+        description: 'Wysłać ponownie mecze już wysłane dziś?'
+        required: false
+        default: false
+        type: boolean
       dump_ltodrows:
         description: 'Diagnostyka: wypisz definicję ltodrows z JS Forebet'
         required: false
@@ -275,6 +280,7 @@ jobs:
           if [ -z "$TARGET_DATE" ]; then
             TARGET_DATE=$(date -u +%Y-%m-%d)
           fi
+          echo "TARGET_DATE=$TARGET_DATE" >> "$GITHUB_ENV"
 
           # Rozsuniecie startow. Osiem jobow matrixa startuje w tej samej
           # sekundzie i wszystkie uderzaja w te sama organizacje Groq, ktorej
@@ -308,6 +314,9 @@ jobs:
           EMAIL_ARGS=""
           if [ "${{ github.event.inputs.send_email }}" = "false" ]; then
             EMAIL_ARGS="--no-email"
+          fi
+          if [ "${{ github.event.inputs.resend }}" = "true" ]; then
+            EMAIL_ARGS="$EMAIL_ARGS --resend"
           fi
 
           python forebet_pipeline.py \
@@ -362,12 +371,12 @@ jobs:
         with:
           name: forebet-${{ matrix.sport }}-${{ github.run_id }}
           path: |
-            results/*_forebet.json
-            outputs/forebet_*.csv
-            outputs/forebet_summary_*.json
-            # Manifesty maili sa potrzebne workflow `Check Results` — zbieramy je
-            # mimo tego, ze glob lapie tez manifesty juz zacommitowane w repo.
-            outputs/mailed_manifest_*.json
+            results/matches_${{ env.TARGET_DATE }}_${{ matrix.sport }}_forebet.json
+            outputs/forebet_${{ matrix.sport }}_${{ env.TARGET_DATE }}.csv
+            outputs/forebet_summary_${{ matrix.sport }}_*.json
+            # Tylko pliki tego joba — stare manifesty z repo nadpisywały świeże.
+            outputs/mailed_manifest_${{ env.TARGET_DATE }}_forebet_${{ matrix.sport }}_*.json
+            outputs/forebet_mailed_${{ env.TARGET_DATE }}_${{ matrix.sport }}.json
             logs/
             # HTML pobrany z Forebet — bez niego diagnoza "dlaczego 0 meczów"
             # sprowadza się do zgadywania po logu.
@@ -406,7 +415,7 @@ jobs:
             cp "$f" "results/$fname"
           done
           echo "📦 Zbieram manifesty maili (potrzebne dla check_results)..."
-          find artifacts -name 'mailed_manifest_*.json' | while read f; do
+          find artifacts \( -name 'mailed_manifest_*.json' -o -name 'forebet_mailed_*.json' \) | while read f; do
             fname=$(basename "$f")
             echo "  → $fname"
             cp "$f" "outputs/$fname"
@@ -419,6 +428,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/*_forebet.json 2>/dev/null || true
           git add outputs/mailed_manifest_*.json 2>/dev/null || true
+          git add outputs/forebet_mailed_*.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "ℹ️ Brak wyników Forebet do commita"
           else
@@ -433,13 +443,11 @@ jobs:
                 break
               fi
               echo "⚠️ Push odrzucony (próba $attempt) — rebase na origin/main..."
-              git fetch origin main || true
-              if ! git rebase origin/main; then
-                git rebase --abort 2>/dev/null || true
-              fi
+              git pull --rebase -X theirs origin main || git rebase --abort 2>/dev/null || true
               sleep $(( (RANDOM % 6) + 2 ))
             done
             if [ "$pushed" != "true" ]; then
               echo "::warning::Nie udało się wypushować wyników Forebet — zostaną w następnym runie"
+              exit 1
             fi
           fi

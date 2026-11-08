@@ -36,6 +36,17 @@ except Exception as e:
     SUPABASE_AVAILABLE = False
 
 
+def should_keep_existing_results(path, new_count):
+    """True gdy nowy wynik ma 0 meczów, a istniejący plik ma mecze."""
+    if new_count:
+        return False
+    try:
+        with open(path, encoding='utf-8') as f:
+            return bool(json.load(f).get('matches'))
+    except (OSError, ValueError, AttributeError):
+        return False
+
+
 def clean_odds_value(val):
     """
     Czyści wartość kursu - zamienia NaN/None/string 'nan' na None.
@@ -1307,10 +1318,14 @@ def scrape_and_send_email(
             'matches': frontend_matches
         }
         
-        with open(json_filename, 'w', encoding='utf-8') as f:
-            json.dump(json_output, f, ensure_ascii=False, indent=2)
-        
-        print(f"   ✅ JSON zapisany: {json_filename}")
+        if should_keep_existing_results(json_filename, len(frontend_matches)):
+            print(f"   ⚠️ 0 meczów — zostawiam istniejący plik {json_filename}")
+        else:
+            with open(json_filename, 'w', encoding='utf-8') as f:
+                json.dump(json_output, f, ensure_ascii=False, indent=2)
+            print(f"   ✅ JSON zapisany: {json_filename}")
+        if not frontend_matches and not any(s in ('tennis', 'table_tennis') for s in sports):
+            print(f"::warning::{sport_suffix}: 0 meczów")
                 # \u2601\ufe0f SUPABASE: Zapisz mecze do bazy danych
         if SUPABASE_AVAILABLE and _supabase_mgr:
             print(f"\n\u2601\ufe0f Zapisywanie {len(rows)} mecz\u00f3w do Supabase...")
@@ -1357,6 +1372,7 @@ def scrape_and_send_email(
                 odds_limit=odds_limit,
                 min_odds_threshold=min_odds_threshold,
                 date=date,
+                manifest_suffix='_away' if away_team_focus else '',
             )
             
             print("\n✅ SUKCES! Email wysłany.")
