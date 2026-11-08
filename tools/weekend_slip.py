@@ -41,7 +41,7 @@ RESULTS = os.path.join(ROOT, 'results')
 MAX_LEGS = 3
 MIN_LEGS = 2
 MAX_SLIPS = 3
-MAX_NEW_PER_RUN = 2       # Friday leaves room for a Sat/Sun slip
+SLOTS = ('S1', 'S2', 'S3')   # Friday / Saturday / Sunday slip
 STAKE_PCT = 0.5
 RECHECK_MIN = 90
 NOTE = ('Accumulators multiply the bookmaker margin with every leg and lose more often '
@@ -339,24 +339,34 @@ def settle_slips(slips: List[Dict[str, Any]], index) -> int:
     return n
 
 
+def _top_withdrawn(l: Dict[str, Any], results: str) -> Optional[str]:
+    from top_feed import _top_list
+    day = l['date']
+    for r in _top_list(_read(os.path.join(results, f'top_{day}.json'))) or []:
+        if isinstance(r, dict) and r.get('withdrawn') and r.get('sport') == l['sport'] \
+                and _norm(r.get('match')) == _norm(l['match']):
+            return r.get('withdrawReason') or 'TOP pick withdrawn'
+    live = _read(os.path.join(results, f'top_live_{day}.json')) or {}
+    e = live.get(f"{l['sport']}|{l['match']}") or {}
+    if e.get('withdrawn'):
+        return e.get('withdrawReason') or 'TOP pick withdrawn'
+    return None
+
+
 def recheck(slips: List[Dict[str, Any]], results: str, now: datetime) -> int:
-    """Withdraw pending legs (kickoff within RECHECK_MIN) whose side is now out
-    or whose TOP pick was withdrawn."""
+    """Withdraw pending legs whose TOP pick was withdrawn (any time before
+    kickoff) or whose side is now out (kickoff within RECHECK_MIN)."""
     from tools.fan_favourites import availability
     n = 0
     for s in slips:
         for l in s['legs']:
             ko = pricing._parse_ts(l.get('kickoff'))
-            if l['status'] != 'pending' or ko is None or ko <= now \
-                    or ko - now > timedelta(minutes=RECHECK_MIN):
+            if l['status'] != 'pending' or ko is None or ko <= now:
                 continue
             day = l['date']
-            reason = None
-            if 'top' in l['source']:
-                live = _read(os.path.join(results, f'top_live_{day}.json')) or {}
-                e = live.get(f"{l['sport']}|{l['match']}") or {}
-                if e.get('withdrawn'):
-                    reason = e.get('withdrawReason') or 'TOP pick withdrawn'
+            reason = _top_withdrawn(l, results) if 'top' in l['source'] else None
+            if not reason and ko - now > timedelta(minutes=RECHECK_MIN):
+                continue
             avail = _read(os.path.join(results, f'availability_{day}.json')) or {}
             av = availability(avail.get(f"{l['sport']}|{l['home']}|{l['away']}"), l['side'])
             l['availability'] = av['verdict']
@@ -371,16 +381,36 @@ def recheck(slips: List[Dict[str, Any]], results: str, now: datetime) -> int:
     return n
 
 
+def build_slot(pool: List[Dict[str, Any]], slips: List[Dict[str, Any]], friday: str,
+               now: datetime) -> int:
+    """Build the slip of the run's own weekend day (S1 Fri, S2 Sat, S3 Sun)
+    from legs dated that day or later, only when that slot is empty."""
+    offset = (now.astimezone(_TZ).date() - date.fromisoformat(friday)).days
+    offset = min(max(offset, 0), len(SLOTS) - 1)
+    slot = SLOTS[offset]
+    if any((s.get('slot') or s.get('id')) == slot for s in slips):
+        return 0
+    first = weekend_days(date.fromisoformat(friday))[offset]
+    out = build_slips([l for l in pool if l['date'] >= first], slips,
+                      max_slips=len(slips) + 1, max_new=1)
+    if len(out) == len(slips):
+        return 0
+    out[-1].update(id=slot, slot=slot)
+    slips.append(out[-1])
+    return 1
+
+
 def run(friday: str, mode: str = 'build', results: str = RESULTS, now: Optional[datetime] = None,
         store: Optional[str] = None, log=print) -> Dict[str, Any]:
     now = now or _now()
     path = slip_path(friday, results)
     data = _read(path) or {'friday': friday, 'slips': []}
     slips = data.get('slips') or []
+    added = 0
     if mode == 'build':
         pool = leg_pool(weekend_days(date.fromisoformat(friday)), results, now)
         before = len(slips)
-        slips = build_slips(pool, slips, max_new=MAX_NEW_PER_RUN)
+        added = build_slot(pool, slips, friday, now)
         log(f'   weekend {friday}: pool {len(pool)} legs, slips {before} -> {len(slips)}')
     if mode in ('build', 'recheck'):
         w = recheck(slips, results, now)
@@ -393,7 +423,7 @@ def run(friday: str, mode: str = 'build', results: str = RESULTS, now: Optional[
                 generatedAt=data.get('generatedAt') or _iso(now), updatedAt=_iso(now),
                 note=NOTE, stakePct=STAKE_PCT, maxLegs=MAX_LEGS, slips=slips)
     _write(path, data)
-    return data
+    return {**data, 'added': added}
 
 
 # ---------------------------------------------------------------------------
@@ -498,8 +528,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             return 0
         fr = f.isoformat()
     data = run(fr, 'recheck' if a.recheck else 'build')
-    if a.email:
+    if a.email and data.get('added'):
         send_email(data)
+    elif a.email:
+        print('   no new slip - mail skipped')
     return 0
 
 

@@ -1,4 +1,4 @@
-"""Weekend Slip: leg pool, disjoint slips, withdrawal, settlement and paywall."""
+﻿"""Weekend Slip: leg pool, disjoint slips, withdrawal, settlement and paywall."""
 import json
 import os
 import sys
@@ -146,3 +146,71 @@ def test_void_leg_is_dropped_like_withdrawn():
     ws.settle_slips([s], idx)
     assert legs[0]['status'] == 'void'
     assert s['combinedOdds'] == round(1.5 * 1.5, 2) and s['adjusted']
+
+
+SUN = '2026-10-25'
+
+
+def _pool_weekend(tmp_path):
+    by = {}
+    for d, sp in ((FRI, 'football'), (SAT, 'hockey'), (SUN, 'basketball')):
+        by[d] = [fan(sp, d, f'{d}A{i}', f'{d}B{i}', 2.2, league=f'{d}L{i}') for i in range(4)]
+    return setup(tmp_path, by)
+
+
+def _build(res, now):
+    return ws.run(FRI, 'build', res, now=now, store='none.json', log=lambda *_: None)
+
+
+def test_day_slots_one_slip_per_day(tmp_path):
+    res = _pool_weekend(tmp_path)
+    d = _build(res, NOW)
+    assert d['added'] == 1 and [s['slot'] for s in d['slips']] == ['S1']
+    assert _build(res, NOW)['added'] == 0
+    d = _build(res, datetime(2026, 10, 24, 6, 0, tzinfo=timezone.utc))
+    s2 = d['slips'][-1]
+    assert d['added'] == 1 and s2['slot'] == 'S2' and {l['date'] for l in s2['legs']} <= {SAT, SUN}
+    d = _build(res, datetime(2026, 10, 25, 6, 0, tzinfo=timezone.utc))
+    s3 = d['slips'][-1]
+    assert d['added'] == 1 and s3['slot'] == 'S3' and {l['date'] for l in s3['legs']} == {SUN}
+    assert _build(res, datetime(2026, 10, 25, 7, 0, tzinfo=timezone.utc))['added'] == 0
+
+
+def test_mail_only_when_slip_added(tmp_path, monkeypatch):
+    res = _pool_weekend(tmp_path)
+    sent = []
+    monkeypatch.setattr(ws, 'send_email', lambda d: sent.append(d))
+    monkeypatch.setattr(ws, '_now', lambda: NOW)
+    run = ws.run
+    monkeypatch.setattr(ws, 'run', lambda fr, mode: run(fr, mode, res, now=NOW, log=lambda *_: None))
+    monkeypatch.setattr(ws, '_index', lambda *a, **k: {})
+    monkeypatch.setattr(ws, 'settle_slips', lambda *a, **k: 0)
+    ws.main(['--email'])
+    ws.main(['--email'])
+    assert len(sent) == 1
+
+
+def test_top_withdrawal_hours_before_kickoff(tmp_path):
+    res = setup(tmp_path, {FRI: [fan('football', FRI, 'A', 'B', 2.4, league='X'),
+                                 fan('hockey', FRI, 'C', 'D', 2.0, league='Y')]},
+                top={FRI: [{'sport': 'football', 'match': 'A vs B', 'pick': 'A', 'bestOdds': 2.4,
+                            'league': 'X', 'kickoffUtc': f'{FRI}T18:00:00Z'}]})
+    slip = ws.build_slips(ws.leg_pool([FRI], res, NOW), [])[0]
+    (tmp_path / 'results' / f'top_{FRI}.json').write_text(json.dumps([
+        {'sport': 'football', 'match': 'A vs B', 'pick': 'A', 'withdrawn': True,
+         'withdrawReason': 'Odds fell below the limit'}]), encoding='utf-8')
+    assert ws.recheck([slip], res, datetime(2026, 10, 23, 13, 0, tzinfo=timezone.utc)) == 1
+    leg = next(l for l in slip['legs'] if l['pick'] == 'A')
+    assert leg['status'] == 'withdrawn' and leg['withdrawnReason'] == 'Odds fell below the limit'
+
+
+def test_pending_leg_of_lost_slip_stays_locked(tmp_path):
+    res = setup(tmp_path, {FRI: [fan('football', FRI, 'A', 'B', 2.0, league='X')],
+                           SAT: [fan('hockey', SAT, 'C', 'D', 2.0, league='Y')]})
+    (tmp_path / 'results' / 'forebet_settled.json').write_text(json.dumps({
+        f'{FRI}|football|A|B': {'status': 'settled', 'winner': 'away', 'score': '0-1'}}), encoding='utf-8')
+    ws.run(FRI, 'build', res, now=NOW, store=str(tmp_path / 'none.json'), log=lambda *_: None)
+    later = datetime(2026, 10, 23, 22, 0, tzinfo=timezone.utc)
+    s = weekend_feed.load_weekend(res, is_subscriber=False, remote=False, now=later)['weekends'][0]['slips'][0]
+    assert s['status'] == 'lost'
+    assert s['legs'][0]['pick'] == 'A' and s['legs'][1]['locked'] and 'pick' not in s['legs'][1]

@@ -1,7 +1,7 @@
 name: Weekend Slip
 # Weekend accumulators (tools/weekend_slip.py) from TOP picks + Fan Favourites.
-# Fri/Sat/Sun 07:00 UTC: build/refresh (published slips are never rebuilt; a
-# run adds at most 2 new slips, max 3 per weekend). Every 30 min 08-22 UTC on
+# Fri/Sat/Sun 07:00 UTC: build the day's slip (S1 Fri, S2 Sat, S3 Sun;
+# published slips are never rebuilt). Every 30 min 08-22 UTC on
 # the weekend: re-check legs kicking off within 90 min (withdraw if the side is
 # out) and settle finished legs. Monday 06:00 UTC: settle the past weekend.
 on:
@@ -56,8 +56,8 @@ jobs:
           ARGS=""
           [ "$MODE" = recheck ] && ARGS="--recheck"
           [ "$MODE" = settle ] && ARGS="--settle"
-          # Mail once per weekend: Friday's scheduled build, or on request.
-          if [ "$MODE" = build ] && { [ "${{ github.event.schedule }}" = '7 7 * * 5,6,0' ] && [ "$(date -u +%u)" = 5 ] || [ "${{ github.event.inputs.email }}" = true ]; }; then
+          # Mail on every scheduled weekend build (sent only when the day's slip was added), or on request.
+          if [ "$MODE" = build ] && { [ "${{ github.event.schedule }}" = '7 7 * * 5,6,0' ] || [ "${{ github.event.inputs.email }}" = true ]; }; then
             ARGS="--email"
           fi
           python -u tools/weekend_slip.py $ARGS

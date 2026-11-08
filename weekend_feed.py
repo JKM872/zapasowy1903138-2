@@ -34,6 +34,14 @@ def _locked(leg: Dict[str, Any]) -> Dict[str, Any]:
     return v
 
 
+def _public(leg: Dict[str, Any], now: datetime) -> bool:
+    """Settled or started legs are public; any other leg stays locked."""
+    if leg.get('status') in ('won', 'lost', 'void'):
+        return True
+    ko = weekend_slip.pricing._parse_ts(leg.get('kickoff'))
+    return ko is not None and ko <= now
+
+
 def _record(slips: List[Dict[str, Any]]) -> Dict[str, Any]:
     done = [s for s in slips if s.get('status') in ('won', 'lost')]
     won = [s for s in done if s['status'] == 'won']
@@ -85,9 +93,7 @@ def load_weekend(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
     if not is_subscriber:
         for w in weekends:
             for s in w['slips']:
-                if s.get('status') in ('won', 'lost', 'void'):
-                    continue
-                s['legs'] = [l if l.get('status') in ('won', 'lost') else _locked(l) for l in s['legs']]
+                s['legs'] = [l if _public(l, now) else _locked(l) for l in s['legs']]
                 s['locked'] = sum(1 for l in s['legs'] if l.get('locked'))
     return {'current': current, 'weekends': weekends, 'record': record,
             'note': weekend_slip.NOTE, 'stakePct': weekend_slip.STAKE_PCT,
