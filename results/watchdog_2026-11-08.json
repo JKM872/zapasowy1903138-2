@@ -1,0 +1,247 @@
+{
+  "date": "2026-11-08",
+  "generated_at": "2026-11-08T16:15:31.359574+00:00",
+  "issues": [
+    {
+      "level": "ALERT",
+      "workflow": "scrape_table_tennis_aiscore_home.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "scrape_table_tennis_aiscore_away.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "coupons.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "missing_output",
+      "problem": "Missing matches_2026-11-08_table_tennis_aiscore_home.json",
+      "meaning": "Expected output file is missing.",
+      "action": "Check the workflow run that should have written it; re-run it.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "missing_output",
+      "problem": "Missing matches_2026-11-08_table_tennis_aiscore_away.json",
+      "meaning": "Expected output file is missing.",
+      "action": "Check the workflow run that should have written it; re-run it.",
+      "url": ""
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "scrape_forebet.yml",
+      "runs_today": 2,
+      "issues": [],
+      "run": {
+        "databaseId": 42456684562,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42456684562"
+      }
+    },
+    {
+      "workflow": "scrape.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 42448646965,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42448646965"
+      }
+    },
+    {
+      "workflow": "scrape_away.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 42440036618,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42440036618"
+      }
+    },
+    {
+      "workflow": "oddssafari_dropping.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 42446015043,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42446015043"
+      }
+    },
+    {
+      "workflow": "top_picks.yml",
+      "runs_today": 5,
+      "issues": [],
+      "run": {
+        "databaseId": 42477787513,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42477787513"
+      }
+    },
+    {
+      "workflow": "daily_digest.yml",
+      "runs_today": 3,
+      "issues": [],
+      "run": {
+        "databaseId": 42460967605,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42460967605"
+      }
+    },
+    {
+      "workflow": "fan_favourites.yml",
+      "runs_today": 5,
+      "issues": [],
+      "run": {
+        "databaseId": 42472721147,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42472721147"
+      }
+    },
+    {
+      "workflow": "scrape_table_tennis_aiscore_home.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "scrape_table_tennis_aiscore_home.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "workflow": "scrape_table_tennis_aiscore_away.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "scrape_table_tennis_aiscore_away.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "workflow": "coupons.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "coupons.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "workflow": "check_results.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 42432162765,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42432162765"
+      }
+    },
+    {
+      "workflow": "top_live.yml",
+      "runs_today": 5,
+      "issues": [],
+      "run": {
+        "databaseId": 42492052632,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/42492052632"
+      }
+    }
+  ],
+  "relays": [
+    {
+      "relay": 1,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 2,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 3,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 4,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 5,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 6,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    }
+  ],
+  "counts": {
+    "ALERT": 5,
+    "WARN": 0
+  }
+}
