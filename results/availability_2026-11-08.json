@@ -3244,13 +3244,37 @@
   "netKey": 0
  },
  "football|Sportivo Trinidense|Sportivo Ameliano": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-11-08T22:00:47.171088+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "home",
-  "board": "ok",
-  "top_block": false,
-  "unknown": true
+  "home": [
+   {
+    "name": "T. Rayer",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "F. Barone",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "away": [
+   {
+    "name": "L. Ortiz",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "sources": null,
+  "board": "drop",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 1
  },
  "hockey|Henderson Silver Knights|San Diego Gulls": {
   "checkedAt": "2026-11-08T08:46:20.135867+00:00",
@@ -3307,12 +3331,41 @@
   "unknown": true
  },
  "hockey|Oshawa Generals|Brantford Bulldogs": {
-  "checkedAt": "2026-11-08T08:46:20.135867+00:00",
-  "source": null,
+  "checkedAt": "2026-11-08T22:00:47.171088+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [
+   {
+    "name": "Nathan Hauad",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Undisclosed – Day-to-Day"
+   },
+   {
+    "name": "Cullen McCrate",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Undisclosed – Week-to-Week"
+   },
+   {
+    "name": "Jason Musa",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Undisclosed – Week-to-Week"
+   }
+  ],
+  "sources": [
+   "https://chl.ca/ohl/ohl-weekly-report/",
+   "https://oshawagenerals.mixlr.com/events/5112024",
+   "https://www.tsn.ca/chl/ohl/event/brantford-bulldogs-oshawa-generals-20261108/29174/",
+   "https://stadiro.com/matches/hockey/canada/ohl/2026-11-08/oshawa-generals-v-brantford-bulldogs/",
+   "https://puckbank.com/games/ohl/29174"
+  ],
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  }
 }
