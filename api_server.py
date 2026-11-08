@@ -124,11 +124,12 @@ except Exception as e:
 _live_scores_cache: dict = {'data': [], 'timestamp': 0}
 
 app = Flask(__name__)
+import re as _re
 CORS(app, origins=[
     'http://localhost:3000',
     'http://localhost:5000',
     'https://pickly-dashboard.vercel.app',
-    'https://pickly-dashboard-*.vercel.app',
+    _re.compile(r'^https://pickly-dashboard(-[a-z0-9-]+)?\.vercel\.app$'),
     'https://pickly-67e87ed00f70.herokuapp.com',
 ])  # Enable CORS for frontend (Vercel production + previews + local dev)
 
@@ -622,7 +623,8 @@ def get_matches():
     search = request.args.get('search', '').strip().lower()
     only_qualifying = request.args.get('qualifying', 'false').lower() == 'true'
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 100, type=int)
+    per_page = max(1, min(request.args.get('per_page', 100, type=int), 500))
+    sort_mode = request.args.get('sort', '')
     
     all_matches = []
     source = 'none'
@@ -713,10 +715,23 @@ def get_matches():
         key = (m.get('sport'), (m.get('homeTeam') or '').strip().lower(),
                (m.get('awayTeam') or '').strip().lower(), m.get('time') or '')
         prev = seen.get(key)
-        if prev is None or _richness(m) > _richness(prev):
+        if prev is None:
             seen[key] = m
+            continue
+        keep, other = (m, prev) if _richness(m) > _richness(prev) else (prev, m)
+        if not keep.get('sofascoreEventId') and other.get('sofascoreEventId'):
+            keep = {**keep, 'sofascoreEventId': other['sofascoreEventId']}
+            o_url = (other.get('sofascore') or {}).get('url') if isinstance(other.get('sofascore'), dict) else None
+            if o_url:
+                ks = keep.get('sofascore') if isinstance(keep.get('sofascore'), dict) else {}
+                if not ks.get('url'):
+                    keep['sofascore'] = {**ks, 'url': o_url}
+        seen[key] = keep
     all_matches = list(seen.values())
     all_matches.sort(key=lambda m: (_SPORT_ORDER.get(m.get('sport'), 50), m.get('time') or ''))
+    if sort_mode == 'board':
+        all_matches.sort(key=lambda m: (0 if m.get('qualifies') else 1 if (m.get('odds') or {}).get('home') else 2,
+                                        _SPORT_ORDER.get(m.get('sport'), 50), m.get('time') or ''))
     _apply_availability(all_matches, date_str)
 
     # ── Per-sport odds threshold filter (OR condition) ──────────────
@@ -777,16 +792,49 @@ def get_matches():
 def get_match(match_id):
     """Get a single match by ID."""
     is_subscriber = _current_user_is_subscriber()
-    # Search all available dates
-    files = find_result_files()
-    for f in files:
-        matches = load_matches_from_file(f)
-        for m in matches:
-            normalized = normalize_match(m)
-            if str(normalized['id']) == str(match_id):
-                resolve_logos_for_page([normalized])
-                return jsonify(apply_paywall(normalized, is_subscriber))
+    path = _match_index().get(str(match_id))
+    if path is None:
+        return jsonify({'error': 'Match not found'}), 404
+    for m in load_matches_from_file(path):
+        if not isinstance(m, dict):
+            continue
+        normalized = normalize_match(m)
+        if str(normalized['id']) == str(match_id):
+            resolve_logos_for_page([normalized])
+            return jsonify(apply_paywall(normalized, is_subscriber))
     return jsonify({'error': 'Match not found'}), 404
+
+
+MATCH_INDEX_DAYS = 14
+# {'sig': frozenset((path, mtime)), 'ids': {id: path}}; rebuilt only when files change.
+_match_index_cache: dict = {'sig': None, 'ids': {}}
+
+
+def _match_index():
+    import re
+    cutoff = (datetime.now() - timedelta(days=MATCH_INDEX_DAYS)).strftime('%Y-%m-%d')
+    sig = set()
+    for f in find_result_files():
+        m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(f))
+        if not m or m.group(1) < cutoff:
+            continue
+        try:
+            sig.add((f, os.path.getmtime(f)))
+        except OSError:
+            continue
+    sig = frozenset(sig)
+    if sig != _match_index_cache['sig']:
+        ids = {}
+        for f, _mt in sorted(sig):
+            for row in load_matches_from_file(f):
+                if not isinstance(row, dict):
+                    continue
+                home = row.get('home_team') or row.get('homeTeam', '')
+                away = row.get('away_team') or row.get('awayTeam', '')
+                mid = row.get('id') or hash(f"{home}_{away}")
+                ids.setdefault(str(mid), f)
+        _match_index_cache.update(sig=sig, ids=ids)
+    return _match_index_cache['ids']
 
 
 STATS_DAYS_MAX = 90
@@ -846,15 +894,18 @@ def get_stats():
                 sport_map[sport]['total'] += tot
                 sport_map[sport]['with_predictions'] += preds
     
+    track = _top_track_record()
+    track.setdefault('by_sport_accuracy', {})
     sport_breakdown = [
         {
             'sport': s,
             'total': info['total'],
             'with_predictions': info['with_predictions'],
-            'accuracy': None  # TODO: compute from settled results
+            'accuracy': track['by_sport_accuracy'].get(s),
         }
         for s, info in sorted(sport_map.items(), key=lambda x: x[1]['total'], reverse=True)
     ]
+    track.pop('by_sport_accuracy', None)
     
     return jsonify({
         'total_matches': total_matches,
@@ -863,7 +914,7 @@ def get_stats():
         'matches_with_odds': matches_with_odds,
         # Measured on the published TOP record — the picks readers were actually
         # sent — rather than on every scraped match, which nobody bets.
-        **_top_track_record(),
+        **track,
         'sport_breakdown': sport_breakdown
     })
 
@@ -886,13 +937,26 @@ def _top_track_record() -> dict:
         if not picks:
             return None, None
         won = [p for p in picks if p['result']['status'] == 'won']
-        profit = sum(p['odds'] or 0 for p in won) - len(picks)
+        profit = sum(_top_price(p) or 0 for p in won) - len(picks)
         return round(len(won) / len(picks) * 100, 1), round(profit / len(picks) * 100, 1)
 
     out['accuracy_7d'], out['roi_7d'] = window(7)
     out['accuracy_30d'], out['roi_30d'] = window(30)
     out['top_settled'] = data['summary'].get('settled', 0)
+    out['by_sport_accuracy'] = {}
+    for s, summ in (data.get('bySport') or {}).items():
+        won = summ.get('won') or 0
+        settled = (won + (summ.get('lost') or 0)) if 'lost' in summ else summ.get('settled')
+        out['by_sport_accuracy'][s] = round(won / settled, 4) if settled else None
     return out
+
+
+def _top_price(p):
+    try:
+        from top_feed import _price
+        return _price(p)
+    except Exception:
+        return p.get('odds2') or p.get('odds')
 
 
 @app.route('/api/sports', methods=['GET'])
@@ -1122,7 +1186,7 @@ def get_worldcup_dates():
 # =============================================================================
 
 @app.route('/api/bets', methods=['GET'])
-@optional_auth
+@require_auth
 def get_bets():
     """Get user bets with optional filters."""
     if not SUPABASE_AVAILABLE:
@@ -1243,7 +1307,8 @@ def update_bet(bet_id):
         bet_id=bet_id,
         actual_result=data['actual_result'],
         home_score=int(data['home_score']),
-        away_score=int(data['away_score'])
+        away_score=int(data['away_score']),
+        user_id=getattr(request, 'user_id', 'anonymous'),
     )
     
     if success:
@@ -1252,7 +1317,7 @@ def update_bet(bet_id):
             'message': f'Bet {bet_id} settled'
         })
     else:
-        return jsonify({'error': 'Failed to update bet'}), 500
+        return jsonify({'error': 'Bet not found'}), 404
 
 
 @app.route('/api/bets/<int:bet_id>', methods=['DELETE'])
@@ -1262,7 +1327,7 @@ def delete_bet(bet_id):
     if not SUPABASE_AVAILABLE:
         return jsonify({'error': 'Supabase not available'}), 503
     
-    success = supabase.delete_bet(bet_id)
+    success = supabase.delete_bet(bet_id, user_id=getattr(request, 'user_id', 'anonymous'))
     
     if success:
         return jsonify({
@@ -1270,17 +1335,17 @@ def delete_bet(bet_id):
             'message': f'Bet {bet_id} deleted'
         })
     else:
-        return jsonify({'error': 'Failed to delete bet'}), 500
+        return jsonify({'error': 'Bet not found'}), 404
 
 
 @app.route('/api/bets/stats', methods=['GET'])
-@optional_auth
+@require_auth
 def get_betting_stats():
     """Get user betting statistics."""
     if not SUPABASE_AVAILABLE:
         return jsonify({'error': 'Supabase not available'}), 503
     
-    stats = supabase.get_user_betting_stats()
+    stats = supabase.get_user_betting_stats(user_id=getattr(request, 'user_id', 'anonymous'))
     
     return jsonify(stats)
 
@@ -2117,29 +2182,29 @@ def get_match_comments(match_id):
 def add_match_comment(match_id):
     """Post a comment as the signed-in reader."""
     if not SUPABASE_AVAILABLE:
-        return jsonify({'error': 'Komentarze są chwilowo niedostępne'}), 503
+        return jsonify({'error': 'Comments are temporarily unavailable'}), 503
 
     user_id = getattr(request, 'user_id', 'anonymous')
     if user_id == 'anonymous':
-        return jsonify({'error': 'Zaloguj się, aby dodać komentarz'}), 401
+        return jsonify({'error': 'Sign in to add a comment'}), 401
 
     payload = request.get_json(silent=True) or {}
     body = str(payload.get('body') or '').strip()
     if not body:
-        return jsonify({'error': 'Komentarz nie może być pusty'}), 400
+        return jsonify({'error': 'Comment cannot be empty'}), 400
     if len(body) > COMMENT_MAX_LEN:
         return jsonify({
-            'error': f'Komentarz może mieć najwyżej {COMMENT_MAX_LEN} znaków',
+            'error': f'Comment can be at most {COMMENT_MAX_LEN} characters',
         }), 400
 
     # Rate limit. A failed count returns -1, which is treated as "cannot verify"
     # and refused, so a broken check cannot become an open door.
     recent = supabase.count_recent_comments(user_id, COMMENT_RATE_WINDOW_S)
     if recent < 0:
-        return jsonify({'error': 'Nie udało się zweryfikować limitu, spróbuj ponownie'}), 503
+        return jsonify({'error': 'Could not verify the rate limit, please try again'}), 503
     if recent >= COMMENT_RATE_LIMIT:
         return jsonify({
-            'error': 'Za dużo komentarzy w krótkim czasie. Odczekaj chwilę.',
+            'error': 'Too many comments in a short time. Please wait a moment.',
         }), 429
 
     row = supabase.add_match_comment(
@@ -2147,7 +2212,7 @@ def add_match_comment(match_id):
         author_label=str(payload.get('author') or '').strip(),
     )
     if not row:
-        return jsonify({'error': 'Nie udało się zapisać komentarza'}), 500
+        return jsonify({'error': 'Could not save the comment'}), 500
 
     return jsonify({
         'id': row.get('id'),
@@ -2163,16 +2228,16 @@ def add_match_comment(match_id):
 def delete_match_comment(comment_id):
     """Delete one of your own comments."""
     if not SUPABASE_AVAILABLE:
-        return jsonify({'error': 'Komentarze są chwilowo niedostępne'}), 503
+        return jsonify({'error': 'Comments are temporarily unavailable'}), 503
 
     user_id = getattr(request, 'user_id', 'anonymous')
     if user_id == 'anonymous':
-        return jsonify({'error': 'Zaloguj się'}), 401
+        return jsonify({'error': 'Sign in required'}), 401
 
     # The ownership check is in the query, so another reader's id cannot be
     # deleted by guessing it.
     if not supabase.delete_match_comment(comment_id, user_id):
-        return jsonify({'error': 'Nie znaleziono komentarza'}), 404
+        return jsonify({'error': 'Comment not found'}), 404
     return jsonify({'deleted': comment_id})
 
 
@@ -2210,17 +2275,17 @@ def get_preferences():
 def put_preferences():
     """Store the reader's answers to the questionnaire."""
     if not SUPABASE_AVAILABLE:
-        return jsonify({'error': 'Preferencje są chwilowo niedostępne'}), 503
+        return jsonify({'error': 'Preferences are temporarily unavailable'}), 503
 
     user_id = getattr(request, 'user_id', 'anonymous')
     if user_id == 'anonymous':
-        return jsonify({'error': 'Zaloguj się, aby zapisać preferencje'}), 401
+        return jsonify({'error': 'Sign in to save preferences'}), 401
 
     payload = request.get_json(silent=True) or {}
     sports = payload.get('sports')
     leagues = payload.get('leagues')
     if not isinstance(sports, list) or not isinstance(leagues, list):
-        return jsonify({'error': 'Pola sports i leagues muszą być listami'}), 400
+        return jsonify({'error': 'Fields sports and leagues must be lists'}), 400
 
     ok = supabase.upsert_user_preferences(
         user_id,
@@ -2229,7 +2294,7 @@ def put_preferences():
         onboarded=bool(payload.get('onboarded', True)),
     )
     if not ok:
-        return jsonify({'error': 'Nie udało się zapisać preferencji'}), 500
+        return jsonify({'error': 'Could not save preferences'}), 500
     return jsonify({'saved': True})
 
 

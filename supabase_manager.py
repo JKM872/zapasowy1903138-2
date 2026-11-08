@@ -581,11 +581,10 @@ class SupabaseManager:
         Returns:
             Lista zakładów
         """
+        if not user_id or user_id == 'anonymous':
+            return []  # never an unfiltered query over everyone's bets
         try:
-            query = self.client.table('user_bets').select('*')
-            
-            if user_id and user_id != 'anonymous':
-                query = query.eq('user_id', user_id)
+            query = self.client.table('user_bets').select('*').eq('user_id', user_id)
             
             if status:
                 query = query.eq('status', status)
@@ -610,7 +609,8 @@ class SupabaseManager:
         bet_id: int,
         actual_result: str,
         home_score: int,
-        away_score: int
+        away_score: int,
+        user_id: Optional[str] = None
     ) -> bool:
         """
         Aktualizuje wynik zakładu po zakończeniu meczu
@@ -624,9 +624,11 @@ class SupabaseManager:
         Returns:
             True jeśli sukces
         """
+        if not user_id or user_id == 'anonymous':
+            return False
         try:
             # Pobierz zakład aby obliczyć profit
-            response = self.client.table('user_bets').select('*').eq('id', bet_id).execute()
+            response = self.client.table('user_bets').select('*').eq('id', bet_id).eq('user_id', user_id).execute()
             
             if not response.data:
                 print(f"[ERROR] Bet ID {bet_id} not found")
@@ -654,7 +656,7 @@ class SupabaseManager:
                 'settled_at': datetime.now().isoformat(),
             }
             
-            self.client.table('user_bets').update(update_data).eq('id', bet_id).execute()
+            self.client.table('user_bets').update(update_data).eq('id', bet_id).eq('user_id', user_id).execute()
             
             print(f"[OK] Updated bet ID {bet_id}: {status} (profit: {profit:+.2f})")
             return True
@@ -664,7 +666,7 @@ class SupabaseManager:
             return False
     
     
-    def get_user_betting_stats(self) -> Dict[str, Any]:
+    def get_user_betting_stats(self, user_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Pobiera statystyki zakładów użytkownika
         
@@ -680,8 +682,11 @@ class SupabaseManager:
             - roi: float (%)
         """
         try:
-            response = self.client.table('user_bets').select('*').execute()
-            bets = cast(List[Dict[str, Any]], response.data or [])
+            if not user_id or user_id == 'anonymous':
+                bets: List[Dict[str, Any]] = []
+            else:
+                response = self.client.table('user_bets').select('*').eq('user_id', user_id).execute()
+                bets = cast(List[Dict[str, Any]], response.data or [])
             
             if not bets:
                 return {
@@ -925,7 +930,7 @@ class SupabaseManager:
             print(f"[ERROR] Error saving preferences: {e}")
             return False
 
-    def delete_bet(self, bet_id: int) -> bool:
+    def delete_bet(self, bet_id: int, user_id: Optional[str] = None) -> bool:
         """
         Usuwa zakład użytkownika
         
@@ -936,7 +941,11 @@ class SupabaseManager:
             True jeśli sukces
         """
         try:
-            self.client.table('user_bets').delete().eq('id', bet_id).execute()
+            if not user_id or user_id == 'anonymous':
+                return False
+            response = self.client.table('user_bets').delete().eq('id', bet_id).eq('user_id', user_id).execute()
+            if not response.data:
+                return False
             print(f"[OK] Deleted bet ID {bet_id}")
             return True
         except Exception as e:

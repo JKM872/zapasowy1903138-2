@@ -216,3 +216,12 @@ class TestPreferences:
         client.put('/api/preferences', json={'sports': ['tennis'], 'leagues': []})
         as_user(monkeypatch, 'user-2')
         assert client.get('/api/preferences').get_json()['sports'] == []
+
+
+def test_errors_are_english(client, fake, monkeypatch):
+    as_user(monkeypatch, 'user-1')
+    err = client.post('/api/matches/m1/comments', json={'body': '  '}).get_json()['error']
+    assert err == 'Comment cannot be empty'
+    err = client.put('/api/preferences', json={'sports': 'x', 'leagues': []}).get_json()['error']
+    assert err == 'Fields sports and leagues must be lists'
+
