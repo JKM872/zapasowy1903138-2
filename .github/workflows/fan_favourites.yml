@@ -13,6 +13,15 @@ on:
     workflows: ['Sports Scraper Pipeline', 'Forebet Scraper Pipeline (Forebet-first)']
     types: [completed]
   workflow_dispatch:
+    inputs:
+      email:
+        description: 'Wyślij mail SofaScore Fan Favourites'
+        type: boolean
+        default: true
+      force_email:
+        description: 'Wyślij mail nawet bez nowych typów'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -24,7 +33,7 @@ concurrency:
 jobs:
   board:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     env:
       # SofaScore day listings are built once per sport-day and read from disk after.
       SOFASCORE_LISTING_CACHE_DIR: /tmp/sofa_listing
@@ -82,11 +91,24 @@ jobs:
         run: |
           [ -d fan_parts ] && python tools/fan_favourites.py --merge fan_parts
           python tools/fan_favourites.py --settle --days 3
+      - name: Mail Fan Favourites
+        if: github.event.inputs.email != 'false'
+        env:
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          pip install -q openpyxl==3.1.5
+          F=""; [ "${{ github.event.inputs.force_email }}" = "true" ] && F="--force"
+          python -u fan_favourites_email.py $F
       - name: Commit board
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/fanvote_*.json 2>/dev/null || true
+          git add -f outputs/fanfav_mail_sent_*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "Fan Favourites $(date -u +%FT%H:%MZ) [skip ci]"
           git reset -q --hard HEAD
