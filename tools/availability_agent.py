@@ -27,6 +27,7 @@ Every failure degrades to "no information" and never stops a run.
 """
 from __future__ import annotations
 
+from zoneinfo import ZoneInfo
 import argparse
 import glob
 import json
@@ -397,10 +398,11 @@ def llm_check(m: Dict[str, Any], sport: str, day: str) -> Optional[Dict[str, Any
 
 # ── orchestration ─────────────────────────────────────────────────────────────
 
-def _kickoff(day: str, hhmm: Optional[str]) -> Optional[datetime]:
+def _kickoff(day: str, hhmm: Optional[str], explicit: Optional[str] = None,
+             sport: Optional[str] = None) -> Optional[datetime]:
+    from tools import pricing
     try:
-        h, mi = (hhmm or '').split(':')[:2]
-        return datetime.strptime(day, '%Y-%m-%d').replace(hour=int(h), minute=int(mi), tzinfo=SITE_TZ)
+        return pricing._parse_ts(pricing.parse_kickoff(day, hhmm, [explicit], sport))
     except Exception:
         return None
 
@@ -484,7 +486,7 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
             log(f'   availability: budżet {budget:.0f}s wyczerpany, stop po {checked} sprawdzeniach')
             break
         m, sport, side = c['m'], c['sport'], c['side']
-        ko = _kickoff(day, m.get('time'))
+        ko = _kickoff(day, m.get('time'), m.get('kickoffUtc'), sport)
         if ko and ko < now - timedelta(minutes=10):
             continue  # already started
         if ko and ko > now + timedelta(hours=LOOKAHEAD_H):
@@ -543,7 +545,7 @@ def note(rec: Optional[Dict[str, Any]]) -> str:
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     ap = argparse.ArgumentParser()
-    ap.add_argument('day', nargs='?', default=datetime.now(SITE_TZ).date().isoformat())
+    ap.add_argument('day', nargs='?', default=datetime.now(ZoneInfo('Europe/Warsaw')).date().isoformat())
     ap.add_argument('--no-llm', action='store_true')
     ap.add_argument('--force', action='store_true')
     a = ap.parse_args()

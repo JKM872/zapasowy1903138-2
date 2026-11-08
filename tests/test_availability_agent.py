@@ -167,3 +167,9 @@ def test_mismatch_row_url_is_ignored_and_verified_row_uses_its_event(monkeypatch
     res = av.sofascore_check(good, 'football', '2026-10-31')
     assert seen == ['https://api.sofascore.com/api/v1/event/16550656/lineups'] and len(resolved) == 1
     assert [p['name'] for p in res['away']] == ['Star'] and res['home'] == []   # sides swapped
+
+
+def test_kickoff_uses_warsaw_time_and_explicit_utc():
+    from tools import availability_agent as aa
+    assert aa._kickoff('2026-10-26', '18:00').strftime('%H:%MZ') == '17:00Z'
+    assert aa._kickoff('2026-10-26', '18:00', '2026-10-26T16:05:00Z').strftime('%H:%MZ') == '16:05Z'

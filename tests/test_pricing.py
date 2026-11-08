@@ -71,24 +71,25 @@ def test_parse_kickoff_prefers_explicit_sources():
     assert pricing.parse_kickoff('2026-10-26', '22:00', ['2026-10-26T19:00:00Z'], 'football') == '2026-10-26T19:00:00Z'
     assert pricing.parse_kickoff('2026-10-26', '22:00', [None, 1793046000000]) == '2026-10-26T20:20:00Z'
     # a source more than 3 days away is rejected -> next source / fallback
-    assert pricing.parse_kickoff('2026-10-26', '20:00', ['2026-11-01T01:07:00Z'], 'basketball') == '2026-10-26T19:00:00Z'
+    assert pricing.parse_kickoff('2026-10-26', '20:00', ['2026-11-01T01:07:00Z'], 'basketball') == '2026-10-26T18:00:00Z'
 
 
 def test_parse_kickoff_fallback_per_sport_and_night_wrap():
-    assert pricing.parse_kickoff('2026-10-26', '22:00', sport='football') == '2026-10-26T19:00:00Z'
-    assert pricing.parse_kickoff('2026-10-26', '20:00', sport='basketball') == '2026-10-26T19:00:00Z'
+    assert pricing.parse_kickoff('2026-10-26', '22:00', sport='football') == '2026-10-26T20:00:00Z'
+    assert pricing.parse_kickoff('2026-10-26', '20:00', sport='basketball') == '2026-10-26T18:00:00Z'
+    assert pricing.parse_kickoff('2026-10-26', '20:00', sport='hockey') == '2026-10-26T19:00:00Z'
     assert pricing.parse_kickoff('2026-10-26', '21:30', sport='tennis') == '2026-10-26T21:30:00Z'
     # times before 05:00 belong to the night after the file day
-    assert pricing.parse_kickoff('2026-10-26', '00:00', sport='basketball') == '2026-10-26T23:00:00Z'
-    assert pricing.parse_kickoff('2026-10-26', '00:30', sport='hockey') == '2026-10-27T00:30:00Z'
+    assert pricing.parse_kickoff('2026-10-26', '00:00', sport='basketball') == '2026-10-26T22:00:00Z'
+    assert pricing.parse_kickoff('2026-10-26', '00:30', sport='tennis') == '2026-10-27T00:30:00Z'
     # default Europe/Warsaw, summer time (CEST)
-    assert pricing.parse_kickoff('2026-09-15', '18:00', sport='handball') == '2026-09-15T16:00:00Z'
+    assert pricing.parse_kickoff('2026-09-15', '18:00', sport='rugby') == '2026-09-15T16:00:00Z'
     assert pricing.parse_kickoff('2026-10-26', None) is None
     assert pricing.parse_kickoff('2026-10-26', 'TBD') is None
 
 
 def test_kickoff_fallback_verified_against_pinnacle_fixture():
-    """>=20 real Forebet rows agree with Pinnacle startTime within 15 min (2026-10-26)."""
+    """>=20 real picks agree with the explicit kickoff within 15 min (2026-10-26..31)."""
     rows = json.load(open(FIX, encoding='utf-8'))['rows']
 
     def mins(a, b):

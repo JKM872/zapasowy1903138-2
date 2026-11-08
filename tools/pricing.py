@@ -24,9 +24,12 @@ HAIRCUT = 0.05
 # baseball UTC. Single place to change: FOREBET_TZ (default) + FOREBET_TZ_BY_SPORT.
 FOREBET_TZ = 'Europe/Warsaw'
 FOREBET_TZ_BY_SPORT = {
-    'football': 'Etc/GMT-3',       # = UTC+3
-    'basketball': 'Europe/Warsaw',
-    'tennis': 'UTC', 'hockey': 'UTC', 'volleyball': 'UTC', 'baseball': 'UTC',
+    # Modal offset of Forebet time vs Pinnacle startTime, top_2026-10-26..31
+    # (kickoffApprox false, 48 picks): football +2 (11/12), hockey +1 (25/26),
+    # handball +1 (4/4), basketball +2 (2/2, matches repro). Others unchanged.
+    'football': 'Etc/GMT-2', 'basketball': 'Etc/GMT-2',
+    'hockey': 'Etc/GMT-1', 'handball': 'Etc/GMT-1',
+    'tennis': 'UTC', 'volleyball': 'UTC', 'baseball': 'UTC',
 }
 # A day file also lists the night after it: times before 05:00 are on day+1.
 NIGHT_WRAP_HOUR = 5

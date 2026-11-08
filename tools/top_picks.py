@@ -211,8 +211,8 @@ def _apply_rules(out: Dict[str, Any], m: Dict[str, Any], sport: str, me: str,
         'stakePct': staking.stake_pct(grade, d['pCal'], o2),
         # Forebet time read per sport (pricing.FOREBET_TZ_BY_SPORT); replaced by
         # an explicit source kickoff when best_price finds one.
-        'kickoffUtc': pricing.parse_kickoff(day, m.get('time'), None, sport) if day else None,
-        'kickoffApprox': True,
+        'kickoffUtc': pricing.parse_kickoff(day, m.get('time'), [m.get('kickoffUtc')], sport) if day else None,
+        'kickoffApprox': not m.get('kickoffUtc'),
     })
     return out
 

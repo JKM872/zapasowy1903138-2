@@ -131,7 +131,7 @@ def refresh_votes(rows: List[Dict[str, Any]], sport: str, day: str, stale: bool,
     thr = fan_limits.fan_threshold(sport) - 10
     todo = []
     for r in rows:
-        ko = pricing._parse_ts(pricing.parse_kickoff(day, r.get('time'), sport=sport))
+        ko = pricing._parse_ts(pricing.parse_kickoff(day, r.get('time'), [r.get('kickoffUtc')], sport=sport))
         if ko and ko <= now:
             continue
         fs = fan_limits.fan_side(r)
@@ -253,7 +253,7 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
         side = fs['side']
         odds = r.get('odds') or {}
         stored, market = pricing.side_price(odds, sport, side)
-        kickoff = pricing.parse_kickoff(day, r.get('time'), sport=sport)
+        kickoff = pricing.parse_kickoff(day, r.get('time'), [r.get('kickoffUtc')], sport=sport)
         ko = pricing._parse_ts(kickoff)
         bp = None
         if use_best_price and (ko is None or ko > now):

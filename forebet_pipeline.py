@@ -1570,6 +1570,7 @@ def _pinnacle_index(sport: str) -> List[Dict[str, Any]]:
                     continue
                 rows.append({'home': h, 'away': a, 'th': cb.name_tokens(h),
                              'ta': cb.name_tokens(a), 'start': str(mu.get('startTime'))[:10],
+                             'start_full': mu.get('startTime'),
                              'prices': pr})
             print(f"   📌 Pinnacle {sport}: {len(rows)} meczów z kursami")
         except Exception as e:
@@ -1628,7 +1629,8 @@ def _pinnacle_odds_uncached(home: str, away: str, sport: str,
     p = best['prices']
     h, a = (p['away'], p['home']) if flip else (p['home'], p['away'])
     return {'home_odds': h, 'draw_odds': p.get('draw'), 'away_odds': a,
-            'bookmaker': 'Pinnacle', 'odds_source': PRIMARY_BOOKMAKER, 'reason': None}
+            'bookmaker': 'Pinnacle', 'odds_source': PRIMARY_BOOKMAKER, 'reason': None,
+            'kickoff_utc': best.get('start_full')}
 
 
 def superbet_odds(home: str, away: str, sport: str,
@@ -2152,6 +2154,8 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                 'homeTeam': r.get('home_team'),
                 'awayTeam': r.get('away_team'),
                 'time': r.get('match_time'),
+                'kickoffUtc': r.get('kickoff_utc'),
+                'kickoffSource': 'pinnacle' if r.get('kickoff_utc') else None,
                 'league': r.get('league'),
                 'country': r.get('country'),
                 'source': SOURCE,
@@ -2658,6 +2662,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
             row['odds_source'] = odds.get('odds_source')
             row['bookmaker'] = odds.get('bookmaker')
             row['odds_note'] = odds.get('reason')
+            row['kickoff_utc'] = odds.get('kickoff_utc')
 
         # BEZ zamiany stron na podstawie URL-a Livesport.
         #

@@ -54,7 +54,10 @@ def test_allowed_segment_passes_with_fields():
     assert r['odds2'] == 2.1 and r['oddsMarket'] == '3way'
     assert r['floorOdds'] == 2.0 and r['pCal'] == 0.6
     assert r['stakePct'] == 2.0                    # A, edge 0.26 -> quarter Kelly clamped
-    assert r['kickoffUtc'] == '2026-10-26T15:00:00Z' and r['kickoffApprox'] is True
+    assert r['kickoffUtc'] == '2026-10-26T16:00:00Z' and r['kickoffApprox'] is True
+def test_explicit_kickoff_utc_is_used():
+    r = tp.evaluate({**_match(), 'kickoffUtc': '2026-10-26T15:30:00Z'}, 'football', DAY)
+    assert r['kickoffUtc'] == '2026-10-26T15:30:00Z' and r['kickoffApprox'] is False
 
 
 def test_excluded_segment_returns_none():
