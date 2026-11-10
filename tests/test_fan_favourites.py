@@ -41,6 +41,48 @@ def test_thresholds_and_bands():
     assert [fl.band(x) for x in (60, 69.9, 70, 85, 90, 100)] == ['60-70', '60-70', '70-80', '80-90', '90+', '90+']
 
 
+def test_1x2_threshold_needs_form_of_both_teams():
+    form = {'overall': 'WL', 'opponentOverall': 'D'}
+    assert fl.fan_threshold('football', '3way', form) == 60
+    assert fl.fan_threshold('football', '3way', {'overall': 'WL', 'opponentOverall': ''}) == 70
+    assert fl.fan_threshold('football', '3way', None) == 70
+    assert fl.fan_threshold('tennis', '2way', form) == 70
+    assert fl.fan_threshold('hockey', '2way_equiv', form) == 70
+    assert fl.select('football', 60, 100, market='3way', form=form)
+    assert not fl.select('football', 60, 29, market='3way', form=form)
+
+
+def test_build_1x2_60_with_form_only(tmp_path):
+    nf = row('C', 'D', 62, 20)
+    nf['form'] = {}
+    nf70 = row('E', 'F', 71, 20)
+    nf70['form'] = {}
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 62, 20), nf, nf70])
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    assert sorted(p['team'] for p in blk['picks']) == ['A', 'E']
+    hres = write_rows(tmp_path, 'handball', [row('H', 'I', 61, 20)])
+    hb = ff.build('handball', DAY, hres, use_best_price=False, now=NOW, log=lambda *_: None)
+    assert [p['team'] for p in hb['picks']] == ['H']
+
+
+def test_build_2way_65_with_form_rejected(tmp_path):
+    res = write_rows(tmp_path, 'tennis', [row('A', 'B', 65, 35, odds=(1.8, None, 2.0)),
+                                          row('C', 'D', 72, 28, odds=(1.8, None, 2.0))])
+    blk = ff.build('tennis', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    assert [p['team'] for p in blk['picks']] == ['C']
+    res = write_rows(tmp_path, 'hockey', [row('A', 'B', 65, 20, odds=(2.0, 4.0, 3.0))])
+    assert ff.build('hockey', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)['picks'] == []
+
+
+def test_1x2_60_still_rejected_by_odds_limit_and_rival_rule(tmp_path):
+    res = write_rows(tmp_path, 'football', [
+        row('A', 'B', 62, 20, odds=(1.4, 4.0, 6.0)),    # fan side below 1.5 limit
+        row('C', 'D', 62, 20, odds=(1.6, 4.0, 1.4)),    # rival below limit (passes_standard)
+    ])
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    assert blk['picks'] == [] and blk['stats']['belowLimit'] == 2
+
+
 def test_odds_limits_are_the_standard_per_sport_limits(tmp_path):
     assert fl.odds_limit('football') == {'min': 1.5, 'source': 'standard'}
     assert fl.odds_limit('basketball')['min'] == 1.3
@@ -301,10 +343,12 @@ def test_every_qualifying_pick_appears_on_the_board(tmp_path):
         assert ids == built
 
 
-def test_football_69_fails_70_qualifies(tmp_path):
+def test_football_without_form_69_fails_70_qualifies(tmp_path):
     assert fl.select('football', 69.9, 500) is False
     assert fl.select('football', 70.0, 500) is True
-    res = write_rows(tmp_path, 'football', [row('A', 'B', 69, 20), row('C', 'D', 70, 20)])
+    a, c = row('A', 'B', 69, 20), row('C', 'D', 70, 20)
+    a['form'] = c['form'] = {}
+    res = write_rows(tmp_path, 'football', [a, c])
     blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
     assert [p['team'] for p in blk['picks']] == ['C']
 

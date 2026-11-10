@@ -5,8 +5,8 @@ model and availability, one sport per run (GitHub matrix job).
     python tools/fan_favourites.py --merge DIR          # parts -> results/fanvote_<day>.json
     python tools/fan_favourites.py --settle [--days 3]  # fill result of finished picks
 
-Selection (fan_limits): Fan Vote >= 60% (football) / >= 70% (other sports),
-votes >= 100, and the price of the fan side (best price across bookmakers,
+Selection (fan_limits): Fan Vote >= 70%, or >= 60% for 1X2 picks (draw possible,
+market '3way') with form of both teams present; votes >= min_votes(sport), and the price of the fan side (best price across bookmakers,
 fallback the stored quote) >= odds_limit(). Sorted by Fan Vote % descending.
 Sports without a settled record (fan_limits.WATCH_SPORTS) are listed with
 status "watch" until they have WATCH_MIN_SETTLED settled board picks.
@@ -252,9 +252,13 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
         # Matches this run actually checked; merge() keeps old picks it did not.
         evaluated.append(f"{sport}|{day}|{r.get('homeTeam') or ''}|{r.get('awayTeam') or ''}")
         stats['withVote'] += 1
-        if fs['fanPct'] >= fan_limits.fan_threshold(sport):
+        side = fs['side']
+        odds = r.get('odds') or {}
+        stored, market = pricing.side_price(odds, sport, side)
+        form = _form(r, side)
+        if fs['fanPct'] >= fan_limits.fan_threshold(sport, market, form):
             stats['fanThr'] += 1
-        if not fan_limits.select(sport, fs['fanPct'], fs['votes']):
+        if not fan_limits.select(sport, fs['fanPct'], fs['votes'], market=market, form=form):
             continue
         home, away = r.get('homeTeam') or '', r.get('awayTeam') or ''
         key = (home.lower(), away.lower())
@@ -262,9 +266,6 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
             continue
         seen.add(key)
         stats['fanOk'] += 1
-        side = fs['side']
-        odds = r.get('odds') or {}
-        stored, market = pricing.side_price(odds, sport, side)
         kickoff = r.get('kickoffUtc') or pricing.parse_kickoff(day, r.get('time'), [r.get('kickoffUtc')], sport=sport)
         ko = pricing._parse_ts(kickoff)
         bp = None
@@ -303,7 +304,7 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
             'impliedPct': implied, 'edgePct': round(fs['fanPct'] - implied, 1),
             'limit': limit,
             'status': 'watch' if watch else 'pick',
-            'form': _form(r, side), 'h2h': _h2h(r, side), 'lastMatch': _last_match(r, side),
+            'form': form, 'h2h': _h2h(r, side), 'lastMatch': _last_match(r, side),
             'forebet': {'prob': _f(fb.get('homeProb' if side == 'home' else 'awayProb')),
                         'pick': fb.get('prediction'), 'exactScore': fb.get('exactScore')},
             'modelProb': model_prob(r, side), 'grade': r.get('predictionGrade'),
@@ -338,7 +339,8 @@ def merge(day: str, sport: str, block: Dict[str, Any], results: str = RESULTS,
     block['picks'] = sorted((block.get('picks') or []) + keep, key=lambda p: (-p['fanPct'], -p['votes']))
     data.update(day=day, generatedAt=_iso(now or _now()),
                 thresholds={'minVotes': fan_limits.MIN_VOTES, 'minVotesBySport': dict(fan_limits.MIN_VOTES_BY_SPORT),
-                            'fanPct': {**fan_limits.FAN_MIN, 'default': fan_limits.FAN_MIN_DEFAULT}})
+                            'fanPct': {**fan_limits.FAN_MIN, 'default': fan_limits.FAN_MIN_DEFAULT,
+                                       'drawWithForm': fan_limits.FAN_MIN_1X2_WITH_FORM}})
     data.setdefault('sports', {})[sport] = block
     _write(path, data)
     return data

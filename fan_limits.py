@@ -21,6 +21,10 @@ RULES_PATH = os.path.join(ROOT, 'outputs', 'top_rules.json')
 
 FAN_MIN = {'football': 70.0}
 FAN_MIN_DEFAULT = 70.0
+# 1X2 sports (draw possible; market '3way' in tools.pricing.two_way: football,
+# handball, and any other sport priced with a draw outside the OT-equivalent
+# sports) qualify from 60% when both teams' form is present.
+FAN_MIN_1X2_WITH_FORM = 60.0
 # Calibrated 2026-11 (tools/fanvote_backtest.py --calibrate, rows from 2026-09-27):
 # 30-49 votes hit 62.2% / ROI +14.3% (n=249) vs base >=100 votes 57.2% / -0.9%.
 MIN_VOTES = 30
@@ -79,8 +83,22 @@ def passes_limit(sport: str, price: Optional[float], side: Optional[str] = None)
     return bool(price) and price >= odds_limit(sport, price, side)['min']
 
 
-def fan_threshold(sport: str) -> float:
-    return FAN_MIN.get(sport, FAN_MIN_DEFAULT)
+def has_form(form: Optional[Dict[str, Any]]) -> bool:
+    """Form shown on the card for both teams (form.overall and form.opponentOverall).
+    Presence only, not form quality."""
+    form = form or {}
+    return bool(form.get('overall')) and bool(form.get('opponentOverall'))
+
+
+def fan_threshold(sport: str, market: Optional[str] = None,
+                  form: Optional[Dict[str, Any]] = None) -> float:
+    """Fan Vote minimum. 1X2 picks (``market == '3way'``: a draw is possible,
+    tools.pricing.two_way) qualify from FAN_MIN_1X2_WITH_FORM when form of both
+    teams is present; otherwise the sport / default minimum applies."""
+    base = FAN_MIN.get(sport, FAN_MIN_DEFAULT)
+    if market == '3way' and has_form(form):
+        return min(base, FAN_MIN_1X2_WITH_FORM)
+    return base
 
 
 def band(pct: float) -> str:
@@ -111,7 +129,8 @@ def min_votes(sport: str) -> int:
     return int(MIN_VOTES_BY_SPORT.get(sport, MIN_VOTES))
 
 
-def select(sport: str, fan_pct: float, votes: int, min_votes: Optional[int] = None) -> bool:
+def select(sport: str, fan_pct: float, votes: int, min_votes: Optional[int] = None,
+           market: Optional[str] = None, form: Optional[Dict[str, Any]] = None) -> bool:
     """Fan Vote threshold for the board (odds limit checked separately)."""
     mv = globals()['min_votes'](sport) if min_votes is None else min_votes
-    return fan_pct >= fan_threshold(sport) and votes >= mv
+    return fan_pct >= fan_threshold(sport, market, form) and votes >= mv

@@ -210,10 +210,11 @@ def build_html(picks: List[Dict[str, Any]], days: List[str],
     mv = thr.get('minVotes', 100)
     import fan_limits
     fp = thr.get('fanPct') or {}
-    fb_min = fp.get('football', fan_limits.FAN_MIN.get('football', fan_limits.FAN_MIN_DEFAULT))
+    dr_min = fp.get('drawWithForm', fan_limits.FAN_MIN_1X2_WITH_FORM)
     df_min = fp.get('default', fan_limits.FAN_MIN_DEFAULT)
-    parts.append(f"<p style='font-family:sans-serif;font-size:12px'>Progi: piłka ≥ {_e(f'{fb_min:g}')}%,"
-                 f" pozostałe ≥ {_e(f'{df_min:g}')}%,"
+    parts.append(f"<p style='font-family:sans-serif;font-size:12px'>Progi: ≥ {_e(f'{df_min:g}')}%;"
+                 f" sporty z remisem (1X2: piłka nożna, piłka ręczna) ≥ {_e(f'{dr_min:g}')}%"
+                 f" gdy jest forma obu drużyn,"
                  f" ≥ {_e(mv)} głosów, standardowy limit kursu dla sportu.</p>")
     for s, v in per.items():
         v.sort(key=lambda p: (-(p.get('fanPct') or 0), -(p.get('votes') or 0)))

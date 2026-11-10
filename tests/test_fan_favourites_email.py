@@ -85,6 +85,7 @@ def test_card_renders_cleanly_without_new_fields():
     assert 'Ostatni mecz A1: —' in h and 'Ostatni mecz H1: —' in h
 
 
-def test_threshold_text_shows_football_70():
+def test_threshold_text_shows_1x2_60_with_form():
     h = fe.build_html([_p(1, 'football', 80)], [DAY], {})
-    assert 'piłka ≥ 70%' in h and 'pozostałe ≥ 70%' in h
+    assert 'Progi: ≥ 70%' in h and '(1X2: piłka nożna, piłka ręczna) ≥ 60%' in h
+    assert 'forma obu drużyn' in h

@@ -1,6 +1,6 @@
 // ============================================================================
-// Fan Favourites – SofaScore Fan Vote favourites (football >= 70%, others
-// >= 70%, at least 100 votes) whose price passes our standard odds limit.
+// Fan Favourites – SofaScore Fan Vote favourites (>= 70%; 1X2 sports >= 60%
+// when both teams' form is present, at least 30 votes) whose price passes our standard odds limit.
 // Pending picks are returned only to subscribers; settled picks and the
 // record (hit rate + flat-stake ROI per sport and per Fan Vote band) are public.
 // ============================================================================
@@ -261,7 +261,7 @@ export default function FanFavouritesPage() {
           <Users className="h-6 w-6 text-primary" /> Fan Favourites
         </h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Matches where SofaScore fans clearly back one side (football ≥ {data?.thresholds?.fanPct?.football ?? 70}%, other sports ≥ {data?.thresholds?.fanPct?.default ?? 70}%, at least {data?.thresholds?.minVotes ?? 100} votes),
+          Matches where SofaScore fans clearly back one side (≥ {data?.thresholds?.fanPct?.default ?? 70}%; sports with a draw (1X2, e.g. football, handball) ≥ {data?.thresholds?.fanPct?.drawWithForm ?? 60}% when both teams&apos; form is available, at least {data?.thresholds?.minVotes ?? 100} votes),
           listed only when the price passes our standard odds limit, sorted by kick-off time, then Fan Vote. A strong crowd favourite is
           often a short price, so judge the record by ROI, not only by hit rate.
         </p>
