@@ -1,6 +1,6 @@
 {
  "day": "2026-11-10",
- "generatedAt": "2026-11-10T07:56:04Z",
+ "generatedAt": "2026-11-10T08:19:15Z",
  "thresholds": {
   "minVotes": 30,
   "minVotesBySport": {
@@ -14,107 +14,3317 @@
  },
  "sports": {
   "baseball": {
-   "generatedAt": "2026-11-10T07:54:16Z",
+   "generatedAt": "2026-11-10T08:16:45Z",
    "watch": false,
    "picks": [],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
+    "rows": 16,
+    "withVote": 16,
+    "fanOk": 9,
     "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "noOdds": 9,
+    "voteRequested": 16,
+    "voteFound": 16,
     "wrongEvent": 0,
-    "fanThr": 0,
+    "fanThr": 14,
     "oddsOk": 0,
-    "calls": 0,
+    "calls": 16,
     "budgetHit": 0,
     "picks": 0
    }
   },
   "basketball": {
-   "generatedAt": "2026-11-10T07:53:20Z",
+   "generatedAt": "2026-11-10T08:16:49Z",
    "watch": false,
-   "picks": [],
+   "picks": [
+    {
+     "id": "basketball|2026-11-10|Hawaii|Portland",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "NCAA",
+     "kickoff": "2026-11-10T04:59:00Z",
+     "time": "06:59",
+     "home": "Hawaii",
+     "away": "Portland",
+     "match": "Hawaii vs Portland",
+     "side": "home",
+     "team": "Hawaii",
+     "fanPct": 84.0,
+     "votes": 348,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/17420962",
+     "matchUrl": "https://www.sofascore.com/basketball/match/17420962",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/ncaa/hawaii-portland/306971",
+     "eventId": null,
+     "odds": {
+      "home": 1.33,
+      "draw": null,
+      "away": 3.6
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.33,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 75.2,
+     "edgePct": 8.8,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWWL",
+      "venue": "LWWWW",
+      "opponentOverall": "WLLWL",
+      "opponentVenue": "WLWLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 4,
+      "wins": 3,
+      "losses": 1,
+      "lastScore": "66-73",
+      "lastDate": "10.11.26",
+      "line": "H2H: Hawaii 3-0-1 (last: 2026-11-10 Hawaii 66-73 Portland)",
+      "last": "2026-11-10 Hawaii 66-73 Portland (Portland won)",
+      "edge": {
+       "team": "Hawaii",
+       "wins": 3,
+       "draws": 0,
+       "losses": 1,
+       "record": "3-0-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 86.0,
+      "pick": "1",
+      "exactScore": "84-60"
+     },
+     "modelProb": 0.78,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "basketball|2026-11-10|Dallas Mavericks|Indiana Pacers",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "NBA",
+     "kickoff": "2026-11-11T01:00:00Z",
+     "time": "03:00",
+     "home": "Dallas Mavericks",
+     "away": "Indiana Pacers",
+     "match": "Dallas Mavericks vs Indiana Pacers",
+     "side": "home",
+     "team": "Dallas Mavericks",
+     "fanPct": 83.0,
+     "votes": 16763,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16824842",
+     "matchUrl": "https://www.sofascore.com/basketball/match/16824842",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/nba/dallas-mavericks-indiana-pacers/299290",
+     "eventId": null,
+     "odds": {
+      "home": 1.53,
+      "draw": null,
+      "away": 2.55
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.59,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:30Z"
+     },
+     "impliedPct": 62.9,
+     "edgePct": 20.1,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWWLL",
+      "venue": "WWWLW",
+      "opponentOverall": "LLWLL",
+      "opponentVenue": "LWLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 2,
+      "lastScore": "125-122",
+      "lastDate": "10.11.26",
+      "line": "H2H: Dallas Mavericks 4-0-1 (last: 2026-11-10 Dallas Mavericks 125-122 Indiana Pacers)",
+      "last": "2026-11-10 Dallas Mavericks 125-122 Indiana Pacers (Dallas Mavericks won)",
+      "edge": {
+       "team": "Dallas Mavericks",
+       "wins": 4,
+       "draws": 0,
+       "losses": 1,
+       "record": "4-0-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 59.0,
+      "pick": "1",
+      "exactScore": "118-114"
+     },
+     "modelProb": 0.714,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "basketball|2026-11-10|Neptunas|Slask Wroclaw",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "ECU",
+     "kickoff": "2026-11-10T17:00:00Z",
+     "time": "19:00",
+     "home": "Neptunas",
+     "away": "Slask Wroclaw",
+     "match": "Neptunas vs Slask Wroclaw",
+     "side": "home",
+     "team": "Neptunas",
+     "fanPct": 82.0,
+     "votes": 1074,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16561690",
+     "matchUrl": "https://www.sofascore.com/basketball/match/16561690",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/eurocup/neptunas-slask-wroclaw/294511",
+     "eventId": null,
+     "odds": {
+      "home": 1.43,
+      "draw": null,
+      "away": 3.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.43,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.336,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 69.9,
+     "edgePct": 12.1,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLLLW",
+      "venue": "WLWWW",
+      "opponentOverall": "WLWLW",
+      "opponentVenue": "WLLWW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "103-87",
+      "lastDate": "10.12.25",
+      "line": "H2H: Neptunas 1-0-0 (last: 2025-12-10 Neptunas 103-87 Śląsk Wrocław)",
+      "last": "2025-12-10 Neptunas 103-87 Śląsk Wrocław (Neptunas won)",
+      "edge": {
+       "team": "Neptunas",
+       "wins": 1,
+       "draws": 0,
+       "losses": 0,
+       "record": "1-0-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 54.0,
+      "pick": "1",
+      "exactScore": "97-83"
+     },
+     "modelProb": 0.601,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "basketball|2026-11-10|Hapoel Holon|Vechta",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "CHL",
+     "kickoff": "2026-11-10T17:30:00Z",
+     "time": "19:30",
+     "home": "Hapoel Holon",
+     "away": "Vechta",
+     "match": "Hapoel Holon vs Vechta",
+     "side": "home",
+     "team": "Hapoel Holon",
+     "fanPct": 77.0,
+     "votes": 493,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/17231229",
+     "matchUrl": "https://www.sofascore.com/basketball/match/17231229",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/champions-league/hapoel-holon-vechta/303889",
+     "eventId": null,
+     "odds": {
+      "home": 1.9,
+      "draw": null,
+      "away": 2.2
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.9,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.763,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 52.6,
+     "edgePct": 24.4,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWWL",
+      "venue": "LLLLW",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "WWLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "lastScore": "81-88",
+      "lastDate": "28.10.26",
+      "line": "H2H: Hapoel Holon 1-0-0 (last: 2026-10-28 Vechta 81-88 Hapoel Holon)",
+      "last": "2026-10-28 Vechta 81-88 Hapoel Holon (Hapoel Holon won)",
+      "edge": {
+       "team": "Hapoel Holon",
+       "wins": 1,
+       "draws": 0,
+       "losses": 0,
+       "record": "1-0-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 61.0,
+      "pick": "1",
+      "exactScore": "85-83"
+     },
+     "modelProb": 0.577,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "basketball|2026-11-10|Cluj-Napoca|Turk Telekom",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "ECU",
+     "kickoff": "2026-11-10T17:00:00Z",
+     "time": "19:00",
+     "home": "Cluj-Napoca",
+     "away": "Turk Telekom",
+     "match": "Cluj-Napoca vs Turk Telekom",
+     "side": "away",
+     "team": "Turk Telekom",
+     "fanPct": 75.0,
+     "votes": 1374,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16561689",
+     "matchUrl": "https://www.sofascore.com/basketball/match/16561689",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/eurocup/cluj-napoca-turk-telekom/294512",
+     "eventId": null,
+     "odds": {
+      "home": 2.49,
+      "draw": null,
+      "away": 1.541
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.63,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.629,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 61.3,
+     "edgePct": 13.7,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 49.0,
+      "pick": "1",
+      "exactScore": "88-87"
+     },
+     "modelProb": 0.49,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "basketball|2026-11-10|Sabah BC|Trabzonspor",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "CHL",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "18:00",
+     "home": "Sabah BC",
+     "away": "Trabzonspor",
+     "match": "Sabah BC vs Trabzonspor",
+     "side": "away",
+     "team": "Trabzonspor",
+     "fanPct": 75.0,
+     "votes": 867,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16611459",
+     "matchUrl": "https://www.sofascore.com/basketball/match/16611459",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/champions-league/sabah-bc-trabzonspor/286202",
+     "eventId": null,
+     "odds": {
+      "home": 3.15,
+      "draw": null,
+      "away": 1.5
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.5,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.368,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 66.7,
+     "edgePct": 8.3,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWLLW",
+      "venue": "WLWLL",
+      "opponentOverall": "WLLLL",
+      "opponentVenue": "WWLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "lastScore": "100-83",
+      "lastDate": "14.10.26",
+      "line": "H2H: Trabzonspor 1-0-0 (last: 2026-10-14 Trabzonspor 100-83 Sabah BC)",
+      "last": "2026-10-14 Trabzonspor 100-83 Sabah BC (Trabzonspor won)",
+      "edge": {
+       "team": "Trabzonspor",
+       "wins": 0,
+       "draws": 0,
+       "losses": 1,
+       "record": "0-0-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 69.0,
+      "pick": "2",
+      "exactScore": "76-85"
+     },
+     "modelProb": 0.676,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "basketball|2026-11-10|Spartak Subotica|Cholet",
+     "sport": "basketball",
+     "date": "2026-11-10",
+     "league": "CHL",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "21:00",
+     "home": "Spartak Subotica",
+     "away": "Cholet",
+     "match": "Spartak Subotica vs Cholet",
+     "side": "home",
+     "team": "Spartak Subotica",
+     "fanPct": 75.0,
+     "votes": 453,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16611479",
+     "matchUrl": "https://www.sofascore.com/basketball/match/16611479",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/champions-league/spartak-subotica-cholet/286203",
+     "eventId": null,
+     "odds": {
+      "home": 1.9,
+      "draw": null,
+      "away": 2.2
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.9,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.694,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 52.6,
+     "edgePct": 22.4,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WDWLW",
+      "venue": "WLWLW",
+      "opponentOverall": "LDLLL",
+      "opponentVenue": "LLWWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "lastScore": "65-69",
+      "lastDate": "28.10.26",
+      "line": "H2H: Spartak Subotica 1-0-0 (last: 2026-10-28 Cholet 65-69 Spartak Subotica)",
+      "last": "2026-10-28 Cholet 65-69 Spartak Subotica (Spartak Subotica won)",
+      "edge": {
+       "team": "Spartak Subotica",
+       "wins": 1,
+       "draws": 0,
+       "losses": 0,
+       "record": "1-0-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 69.0,
+      "pick": "1",
+      "exactScore": "93-81"
+     },
+     "modelProb": 0.701,
+     "grade": "A",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "rows": 95,
+    "withVote": 77,
+    "fanOk": 31,
+    "belowLimit": 22,
+    "noOdds": 2,
+    "voteRequested": 73,
+    "voteFound": 60,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 60,
+    "oddsOk": 7,
+    "calls": 73,
     "budgetHit": 0,
-    "picks": 0
+    "picks": 7
    }
   },
   "football": {
-   "generatedAt": "2026-11-10T07:53:28Z",
+   "generatedAt": "2026-11-10T08:16:53Z",
    "watch": false,
-   "picks": [],
+   "picks": [
+    {
+     "id": "football|2026-11-10|Uxbridge|Hanwell Town",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Uxbridge",
+     "away": "Hanwell Town",
+     "match": "Uxbridge vs Hanwell Town",
+     "side": "home",
+     "team": "Uxbridge",
+     "fanPct": 85.0,
+     "votes": 344,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587655",
+     "matchUrl": "https://www.sofascore.com/football/match/16587655",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/uxbridge-hanwell-town-2502072",
+     "eventId": null,
+     "odds": {
+      "home": 1.7,
+      "draw": 3.7,
+      "away": 3.7
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.71,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.714,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 58.5,
+     "edgePct": 26.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "DLWWW",
+      "venue": "WWLWW",
+      "opponentOverall": "WLLWL",
+      "opponentVenue": "LLWDD",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "06.04.26",
+      "line": "H2H: Uxbridge 1-1-0 (last: 2026-04-06 Uxbridge 2-0 Hanwell Town)",
+      "last": "2026-04-06 Uxbridge 2-0 Hanwell Town (Uxbridge won)",
+      "edge": {
+       "team": "Uxbridge",
+       "wins": 1,
+       "draws": 1,
+       "losses": 0,
+       "record": "1-1-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 59.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.614,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Bath City|Taunton",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Bath City",
+     "away": "Taunton",
+     "match": "Bath City vs Taunton",
+     "side": "home",
+     "team": "Bath City",
+     "fanPct": 81.0,
+     "votes": 308,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587647",
+     "matchUrl": "https://www.sofascore.com/football/match/16587647",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/bath-city-taunton-2502079",
+     "eventId": null,
+     "odds": {
+      "home": 1.73,
+      "draw": 3.65,
+      "away": 3.65
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.76,
+      "bookmaker": "livesport",
+      "pinnacle": 1.758,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 56.8,
+     "edgePct": 24.2,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWDWW",
+      "venue": "WDWLW",
+      "opponentOverall": "LLWWL",
+      "opponentVenue": "LWDWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "1-3",
+      "lastDate": "22.09.26",
+      "line": "H2H: Bath City 3-0-2 (last: 2026-09-22 Taunton 1-3 Bath)",
+      "last": "2026-09-22 Taunton 1-3 Bath (Bath won)",
+      "edge": {
+       "team": "Bath City",
+       "wins": 3,
+       "draws": 0,
+       "losses": 2,
+       "record": "3-0-2",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 46.0,
+      "pick": "1",
+      "exactScore": "1-0"
+     },
+     "modelProb": 0.6,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Bury Town|Bishop's Stortford",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Bury Town",
+     "away": "Bishop's Stortford",
+     "match": "Bury Town vs Bishop's Stortford",
+     "side": "home",
+     "team": "Bury Town",
+     "fanPct": 78.0,
+     "votes": 362,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587184",
+     "matchUrl": "https://www.sofascore.com/football/match/16587184",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/bury-town-bishop's-stortford-2501617",
+     "eventId": null,
+     "odds": {
+      "home": 1.73,
+      "draw": 3.5,
+      "away": 3.7
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.76,
+      "bookmaker": "livesport",
+      "pinnacle": 1.752,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 56.8,
+     "edgePct": 21.2,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLDLD",
+      "venue": "LDWLD",
+      "opponentOverall": "LLLWL",
+      "opponentVenue": "LLLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 3,
+      "wins": 1,
+      "losses": 1,
+      "lastScore": "1-2",
+      "lastDate": "29.09.26",
+      "line": "H2H: Bury Town 2-1-0 (last: 2026-09-29 Bishop's Stortford 1-2 Bury Town)",
+      "last": "2026-09-29 Bishop's Stortford 1-2 Bury Town (Bury Town won)",
+      "edge": {
+       "team": "Bury Town",
+       "wins": 2,
+       "draws": 1,
+       "losses": 0,
+       "record": "2-1-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 65.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.648,
+     "grade": "A",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Tigre Res.|Vélez Sársfield Res.",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "Argentina – Reserve League",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "20:00",
+     "home": "Tigre Res.",
+     "away": "Vélez Sársfield Res.",
+     "match": "Tigre Res. vs Vélez Sársfield Res.",
+     "side": "away",
+     "team": "Vélez Sársfield Res.",
+     "fanPct": 77.0,
+     "votes": 728,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17212580",
+     "matchUrl": "https://www.sofascore.com/football/match/17212580",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/tigre-res-vélez-sársfield-res-2563560",
+     "eventId": null,
+     "odds": {
+      "home": 5.25,
+      "draw": 3.6,
+      "away": 1.6
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.6,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.556,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 62.5,
+     "edgePct": 14.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWDWW",
+      "venue": "WDWWD",
+      "opponentOverall": "LLDLL",
+      "opponentVenue": "LLWWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 4,
+      "lastScore": "2-0",
+      "lastDate": "10.06.26",
+      "line": "H2H: Vélez Sársfield Res. 0-1-0 (even) (last: 2026-06-10 Velez Sarsfield 2 2-0 Tigre 2)",
+      "last": "2026-06-10 Velez Sarsfield 2 2-0 Tigre 2 (Velez Sarsfield 2 won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 1,
+       "losses": 0,
+       "record": "0-1-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.674,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Cacahuatique|Luís Ángel Firpo",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "El Salvador – Primera Division",
+     "kickoff": "2026-11-10T21:30:00Z",
+     "time": "23:30",
+     "home": "Cacahuatique",
+     "away": "Luís Ángel Firpo",
+     "match": "Cacahuatique vs Luís Ángel Firpo",
+     "side": "away",
+     "team": "Luís Ángel Firpo",
+     "fanPct": 77.0,
+     "votes": 526,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16604726",
+     "matchUrl": "https://www.sofascore.com/football/match/16604726",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/cacahuatique-luís-ángel-firpo-2483438",
+     "eventId": null,
+     "odds": {
+      "home": 3.7,
+      "draw": 3.2,
+      "away": 1.85
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.91,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.909,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 52.4,
+     "edgePct": 24.6,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWDLD",
+      "venue": "WLDWD",
+      "opponentOverall": "WWDDL",
+      "opponentVenue": "WDLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 2,
+      "lastScore": "0-0",
+      "lastDate": "24.09.26",
+      "line": "H2H: Luís Ángel Firpo 0-1-0 (even) (last: 2026-09-24 Luis Angel Firpo 0-0 Cacahuatique)",
+      "last": "2026-09-24 Luis Angel Firpo 0-0 Cacahuatique (draw)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 1,
+       "losses": 0,
+       "record": "0-1-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 54.0,
+      "pick": "2",
+      "exactScore": "0-1"
+     },
+     "modelProb": 0.617,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Leiston FC|Real Bedford",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Leiston FC",
+     "away": "Real Bedford",
+     "match": "Leiston FC vs Real Bedford",
+     "side": "away",
+     "team": "Real Bedford",
+     "fanPct": 77.0,
+     "votes": 339,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587187",
+     "matchUrl": "https://www.sofascore.com/football/match/16587187",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/leiston-fc-real-bedford-2501614",
+     "eventId": null,
+     "odds": {
+      "home": 3.3,
+      "draw": 4.0,
+      "away": 1.73
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.74,
+      "bookmaker": "livesport",
+      "pinnacle": 1.735,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 57.5,
+     "edgePct": 19.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWLLL",
+      "venue": "WLLWL",
+      "opponentOverall": "LLWLL",
+      "opponentVenue": "LLWLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 3,
+      "wins": 1,
+      "losses": 2,
+      "lastScore": "3-2",
+      "lastDate": "29.09.26",
+      "line": "H2H: Real Bedford 1-0-2 (last: 2026-09-29 Real Bedford 3-2 Leiston)",
+      "last": "2026-09-29 Real Bedford 3-2 Leiston (Real Bedford won)",
+      "edge": {
+       "team": "Leiston FC",
+       "wins": 2,
+       "draws": 0,
+       "losses": 1,
+       "record": "2-0-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 47.0,
+      "pick": "2",
+      "exactScore": "1-3"
+     },
+     "modelProb": 0.518,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Gimnasia Mendoza Res|Aldosivi Res.",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "Argentina – Reserve League",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "20:00",
+     "home": "Gimnasia Mendoza Res",
+     "away": "Aldosivi Res.",
+     "match": "Gimnasia Mendoza Res vs Aldosivi Res.",
+     "side": "home",
+     "team": "Gimnasia Mendoza Res",
+     "fanPct": 76.0,
+     "votes": 635,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17212577",
+     "matchUrl": "https://www.sofascore.com/football/match/17212577",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/gimnasia-mendoza-res-aldosivi-res-2563559",
+     "eventId": null,
+     "odds": {
+      "home": 1.667,
+      "draw": 3.59,
+      "away": 4.84
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.67,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.667,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 59.9,
+     "edgePct": 16.1,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 34.0,
+      "pick": "2",
+      "exactScore": "0-1"
+     },
+     "modelProb": 0.34,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Sholing|Chippenham",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Sholing",
+     "away": "Chippenham",
+     "match": "Sholing vs Chippenham",
+     "side": "home",
+     "team": "Sholing",
+     "fanPct": 73.0,
+     "votes": 232,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587654",
+     "matchUrl": "https://www.sofascore.com/football/match/16587654",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/sholing-chippenham-2502073",
+     "eventId": null,
+     "odds": {
+      "home": 1.806,
+      "draw": 3.61,
+      "away": 3.74
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.83,
+      "bookmaker": "livesport",
+      "pinnacle": 1.806,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 54.6,
+     "edgePct": 18.4,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 34.0,
+      "pick": "2",
+      "exactScore": "1-3"
+     },
+     "modelProb": 0.34,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Darlington 1883|Oxford City",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – National League North",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Darlington 1883",
+     "away": "Oxford City",
+     "match": "Darlington 1883 vs Oxford City",
+     "side": "away",
+     "team": "Oxford City",
+     "fanPct": 72.0,
+     "votes": 684,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17416878",
+     "matchUrl": "https://www.sofascore.com/football/match/17416878",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/darlington-1883-oxford-city-2500044",
+     "eventId": null,
+     "odds": {
+      "home": 3.0,
+      "draw": 3.5,
+      "away": 1.95
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.07,
+      "bookmaker": "pinnacle",
+      "pinnacle": 2.07,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 48.3,
+     "edgePct": 23.7,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWDW",
+      "venue": "DWWWW",
+      "opponentOverall": "LLWLD",
+      "opponentVenue": "WDDLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 4,
+      "wins": 1,
+      "losses": 1,
+      "lastScore": "1-3",
+      "lastDate": "25.04.26",
+      "line": "H2H: Oxford City 2-2-0 (last: 2026-04-25 Darlington 1-3 Oxford City)",
+      "last": "2026-04-25 Darlington 1-3 Oxford City (Oxford City won)",
+      "edge": {
+       "team": "Oxford City",
+       "wins": 0,
+       "draws": 2,
+       "losses": 2,
+       "record": "0-2-2",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "2",
+      "exactScore": "1-2"
+     },
+     "modelProb": 0.644,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|WA Tlemcen|RC Arbaa",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "Algeria – Ligue 2",
+     "kickoff": "2026-11-10T14:00:00Z",
+     "time": "16:00",
+     "home": "WA Tlemcen",
+     "away": "RC Arbaa",
+     "match": "WA Tlemcen vs RC Arbaa",
+     "side": "home",
+     "team": "WA Tlemcen",
+     "fanPct": 72.0,
+     "votes": 623,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17408762",
+     "matchUrl": "https://www.sofascore.com/football/match/17408762",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/wa-tlemcen-rc-arbaa-2557300",
+     "eventId": null,
+     "odds": {
+      "home": 1.85,
+      "draw": 3.0,
+      "away": 4.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.85,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.84,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 54.1,
+     "edgePct": 17.9,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "DLWLL",
+      "venue": "DWLWW",
+      "opponentOverall": "WDLWL",
+      "opponentVenue": "WLLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 4,
+      "losses": 0,
+      "lastScore": "2-1",
+      "lastDate": "06.02.26",
+      "line": "H2H: WA Tlemcen 3-1-1 (last: 2026-02-06 Arba 2-1 Tlemcen)",
+      "last": "2026-02-06 Arba 2-1 Tlemcen (Arba won)",
+      "edge": {
+       "team": "WA Tlemcen",
+       "wins": 3,
+       "draws": 1,
+       "losses": 1,
+       "record": "3-1-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 42.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.488,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Quorn|Stockton Town",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – NPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Quorn",
+     "away": "Stockton Town",
+     "match": "Quorn vs Stockton Town",
+     "side": "home",
+     "team": "Quorn",
+     "fanPct": 71.0,
+     "votes": 303,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17361770",
+     "matchUrl": "https://www.sofascore.com/football/match/17361770",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/quorn-stockton-town-2564867",
+     "eventId": null,
+     "odds": {
+      "home": 2.59,
+      "draw": 3.51,
+      "away": 2.34
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.65,
+      "bookmaker": "livesport",
+      "pinnacle": 2.59,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 37.7,
+     "edgePct": 33.3,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 36.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.367,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Hemel Hempstead|Torquay United",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – National League South",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Hemel Hempstead",
+     "away": "Torquay United",
+     "match": "Hemel Hempstead vs Torquay United",
+     "side": "away",
+     "team": "Torquay United",
+     "fanPct": 69.0,
+     "votes": 504,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17423830",
+     "matchUrl": "https://www.sofascore.com/football/match/17423830",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/hemel-hempstead-torquay-united-2500546",
+     "eventId": null,
+     "odds": {
+      "home": 3.35,
+      "draw": 3.45,
+      "away": 1.85
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.91,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.909,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 52.4,
+     "edgePct": 16.6,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLDLW",
+      "venue": "WLWLW",
+      "opponentOverall": "LLDLL",
+      "opponentVenue": "LLDDD",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "1-2",
+      "lastDate": "18.04.26",
+      "line": "H2H: Torquay United 3-0-2 (last: 2026-04-18 Torquay 1-2 Hemel Hempstead)",
+      "last": "2026-04-18 Torquay 1-2 Hemel Hempstead (Hemel Hempstead won)",
+      "edge": {
+       "team": "Torquay United",
+       "wins": 2,
+       "draws": 0,
+       "losses": 3,
+       "record": "2-0-3",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 43.0,
+      "pick": "2",
+      "exactScore": "1-3"
+     },
+     "modelProb": 0.522,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Leamington|Bromsgrove Sporting",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Leamington",
+     "away": "Bromsgrove Sporting",
+     "match": "Leamington vs Bromsgrove Sporting",
+     "side": "away",
+     "team": "Bromsgrove Sporting",
+     "fanPct": 69.0,
+     "votes": 324,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587185",
+     "matchUrl": "https://www.sofascore.com/football/match/16587185",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/leamington-bromsgrove-sporting-2501616",
+     "eventId": null,
+     "odds": {
+      "home": 3.5,
+      "draw": 3.5,
+      "away": 1.78
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.83,
+      "bookmaker": "livesport",
+      "pinnacle": 1.813,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 54.6,
+     "edgePct": 14.4,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWDWD",
+      "venue": "WWDLW",
+      "opponentOverall": "WLLLL",
+      "opponentVenue": "LLDWD",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 3,
+      "wins": 1,
+      "losses": 1,
+      "lastScore": "1-1",
+      "lastDate": "29.09.26",
+      "line": "H2H: Bromsgrove Sporting 0-1-2 (last: 2026-09-29 Bromsgrove 1-1 Leamington)",
+      "last": "2026-09-29 Bromsgrove 1-1 Leamington (draw)",
+      "edge": {
+       "team": "Leamington",
+       "wins": 2,
+       "draws": 1,
+       "losses": 0,
+       "record": "2-1-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 41.0,
+      "pick": "2",
+      "exactScore": "1-2"
+     },
+     "modelProb": 0.566,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Millwall U23|Brighton U23s",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – Premier League Cup",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "21:00",
+     "home": "Millwall U23",
+     "away": "Brighton U23s",
+     "match": "Millwall U23 vs Brighton U23s",
+     "side": "away",
+     "team": "Brighton U23s",
+     "fanPct": 69.0,
+     "votes": 302,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16801746",
+     "matchUrl": "https://www.sofascore.com/football/match/16801746",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/millwall-u23-brighton-u23s-2514251",
+     "eventId": null,
+     "odds": {
+      "home": 3.0,
+      "draw": 3.7,
+      "away": 1.93
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.98,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.98,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 50.5,
+     "edgePct": 18.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWDLW",
+      "venue": "LWLLD",
+      "opponentOverall": "WWWLL",
+      "opponentVenue": "WWLLD",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "lastScore": "2-0",
+      "lastDate": "14.08.26",
+      "line": "H2H: Brighton U23s 0-0-0 (even) (last: 2026-08-14 Brighton U21 2-0 Millwall U21)",
+      "last": "2026-08-14 Brighton U21 2-0 Millwall U21 (Brighton U21 won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 41.0,
+      "pick": "2",
+      "exactScore": "1-4"
+     },
+     "modelProb": 0.482,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|JS Jijel|CR Béni Thour",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "Algeria – Ligue 2",
+     "kickoff": "2026-11-10T14:00:00Z",
+     "time": "16:00",
+     "home": "JS Jijel",
+     "away": "CR Béni Thour",
+     "match": "JS Jijel vs CR Béni Thour",
+     "side": "home",
+     "team": "JS Jijel",
+     "fanPct": 68.0,
+     "votes": 759,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17408763",
+     "matchUrl": "https://www.sofascore.com/football/match/17408763",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/js-jijel-cr-béni-thour-2548745",
+     "eventId": null,
+     "odds": {
+      "home": 1.5,
+      "draw": 3.45,
+      "away": 6.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.5,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 66.7,
+     "edgePct": 1.3,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WDDLL",
+      "venue": "WDLDL",
+      "opponentOverall": "WLLLW",
+      "opponentVenue": "LLLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": 0,
+      "losses": 0,
+      "lastScore": "0-0",
+      "lastDate": "24.01.26",
+      "line": "H2H: JS Jijel 0-2-0 (even) (last: 2026-01-24 Djijel 0-0 CR Beni Thour)",
+      "last": "2026-01-24 Djijel 0-0 CR Beni Thour (draw)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 2,
+       "losses": 0,
+       "record": "0-2-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 43.0,
+      "pick": "1",
+      "exactScore": "1-0"
+     },
+     "modelProb": 0.405,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Rushall Olympic|Halesowen Town",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Rushall Olympic",
+     "away": "Halesowen Town",
+     "match": "Rushall Olympic vs Halesowen Town",
+     "side": "home",
+     "team": "Rushall Olympic",
+     "fanPct": 68.0,
+     "votes": 235,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587188",
+     "matchUrl": "https://www.sofascore.com/football/match/16587188",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/rushall-olympic-halesowen-town-2501613",
+     "eventId": null,
+     "odds": {
+      "home": 2.15,
+      "draw": 3.4,
+      "away": 2.6
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.25,
+      "bookmaker": "livesport",
+      "pinnacle": 2.18,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 44.4,
+     "edgePct": 23.6,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLLWW",
+      "venue": "LWWWL",
+      "opponentOverall": "LWWWL",
+      "opponentVenue": "WWLDD",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "1-0",
+      "lastDate": "29.09.26",
+      "line": "H2H: Rushall Olympic 0-3-2 (last: 2026-09-29 Halesowen 1-0 Rushall)",
+      "last": "2026-09-29 Halesowen 1-0 Rushall (Halesowen won)",
+      "edge": {
+       "team": "Halesowen Town",
+       "wins": 0,
+       "draws": 3,
+       "losses": 2,
+       "record": "0-3-2",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 45.0,
+      "pick": "1",
+      "exactScore": "3-1"
+     },
+     "modelProb": 0.482,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Stratford Town|Banbury United",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – SPL Premier Division",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Stratford Town",
+     "away": "Banbury United",
+     "match": "Stratford Town vs Banbury United",
+     "side": "home",
+     "team": "Stratford Town",
+     "fanPct": 67.0,
+     "votes": 256,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16587191",
+     "matchUrl": "https://www.sofascore.com/football/match/16587191",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/stratford-town-banbury-united-2501610",
+     "eventId": null,
+     "odds": {
+      "home": 2.1,
+      "draw": 3.15,
+      "away": 2.85
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.2,
+      "bookmaker": "pinnacle",
+      "pinnacle": 2.2,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 45.5,
+     "edgePct": 21.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWDDD",
+      "venue": "WDDWL",
+      "opponentOverall": "LDLLW",
+      "opponentVenue": "DLDLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 2,
+      "lastScore": "2-3",
+      "lastDate": "29.09.26",
+      "line": "H2H: Stratford Town 1-3-1 (even) (last: 2026-09-29 Banbury 2-3 Stratford)",
+      "last": "2026-09-29 Banbury 2-3 Stratford (Stratford won)",
+      "edge": {
+       "team": "even",
+       "wins": 1,
+       "draws": 3,
+       "losses": 1,
+       "record": "1-3-1",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 34.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.46,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Barnet|Leyton Orient",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – EFL Trophy",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "21:00",
+     "home": "Barnet",
+     "away": "Leyton Orient",
+     "match": "Barnet vs Leyton Orient",
+     "side": "home",
+     "team": "Barnet",
+     "fanPct": 65.0,
+     "votes": 1889,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16801972",
+     "matchUrl": "https://www.sofascore.com/football/match/16801972",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/barnet-leyton-orient-2518931",
+     "eventId": null,
+     "odds": {
+      "home": 2.3,
+      "draw": 3.5,
+      "away": 2.5
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.36,
+      "bookmaker": "pinnacle",
+      "pinnacle": 2.36,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 42.4,
+     "edgePct": 22.6,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WDWDL",
+      "venue": "WWDLW",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "LLDDW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 1,
+      "lastScore": "2-0",
+      "lastDate": "19.07.25",
+      "line": "H2H: Barnet 2-2-1 (last: 2025-07-19 Barnet 2-0 Leyton Orient)",
+      "last": "2025-07-19 Barnet 2-0 Leyton Orient (Barnet won)",
+      "edge": {
+       "team": "Barnet",
+       "wins": 2,
+       "draws": 2,
+       "losses": 1,
+       "record": "2-2-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 39.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.461,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Bromley FC|Milton Keynes Dons",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – EFL Trophy",
+     "kickoff": "2026-11-10T19:30:00Z",
+     "time": "21:30",
+     "home": "Bromley FC",
+     "away": "Milton Keynes Dons",
+     "match": "Bromley FC vs Milton Keynes Dons",
+     "side": "away",
+     "team": "Milton Keynes Dons",
+     "fanPct": 65.0,
+     "votes": 1649,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16802006",
+     "matchUrl": "https://www.sofascore.com/football/match/16802006",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/bromley-fc-milton-keynes-dons-2518945",
+     "eventId": null,
+     "odds": {
+      "home": 3.45,
+      "draw": 3.65,
+      "away": 1.78
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.83,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.826,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 54.6,
+     "edgePct": 10.4,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWWWL",
+      "venue": "WLDDL",
+      "opponentOverall": "LLLDL",
+      "opponentVenue": "LDLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 1,
+      "losses": 3,
+      "lastScore": "4-1",
+      "lastDate": "27.10.26",
+      "line": "H2H: Milton Keynes Dons 2-1-2 (even) (last: 2026-10-27 Milton Keynes 4-1 Bromley)",
+      "last": "2026-10-27 Milton Keynes 4-1 Bromley (Milton Keynes won)",
+      "edge": {
+       "team": "even",
+       "wins": 2,
+       "draws": 1,
+       "losses": 2,
+       "record": "2-1-2",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 43.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.607,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Scarborough|Marine",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – National League North",
+     "kickoff": "2026-11-10T19:45:00Z",
+     "time": "21:45",
+     "home": "Scarborough",
+     "away": "Marine",
+     "match": "Scarborough vs Marine",
+     "side": "home",
+     "team": "Scarborough",
+     "fanPct": 65.0,
+     "votes": 479,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17299210",
+     "matchUrl": "https://www.sofascore.com/football/match/17299210",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/scarborough-marine-2499992",
+     "eventId": null,
+     "odds": {
+      "home": 2.1,
+      "draw": 3.3,
+      "away": 2.9
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.17,
+      "bookmaker": "pinnacle",
+      "pinnacle": 2.17,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 46.1,
+     "edgePct": 18.9,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "DLLWL",
+      "venue": "DLDDL",
+      "opponentOverall": "LLLDW",
+      "opponentVenue": "LLLWW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 2,
+      "lastScore": "1-1",
+      "lastDate": "07.02.26",
+      "line": "H2H: Scarborough 2-1-2 (even) (last: 2026-02-07 Marine 1-1 Scarborough)",
+      "last": "2026-02-07 Marine 1-1 Scarborough (draw)",
+      "edge": {
+       "team": "even",
+       "wins": 2,
+       "draws": 1,
+       "losses": 2,
+       "record": "2-1-2",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 46.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.45,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Bristol Rovers|Reading",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "England – EFL Trophy",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "21:00",
+     "home": "Bristol Rovers",
+     "away": "Reading",
+     "match": "Bristol Rovers vs Reading",
+     "side": "away",
+     "team": "Reading",
+     "fanPct": 64.0,
+     "votes": 1946,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16801950",
+     "matchUrl": "https://www.sofascore.com/football/match/16801950",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/bristol-rovers-reading-2518933",
+     "eventId": null,
+     "odds": {
+      "home": 3.35,
+      "draw": 3.65,
+      "away": 1.83
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.86,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.862,
+      "books": 2,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 53.8,
+     "edgePct": 10.2,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLDWW",
+      "venue": "WLDLW",
+      "opponentOverall": "WLDLL",
+      "opponentVenue": "WDLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 1,
+      "lastScore": "0-2",
+      "lastDate": "26.04.25",
+      "line": "H2H: Reading 4-1-0 (last: 2025-04-26 Bristol Rovers 0-2 Reading)",
+      "last": "2025-04-26 Bristol Rovers 0-2 Reading (Reading won)",
+      "edge": {
+       "team": "Reading",
+       "wins": 0,
+       "draws": 1,
+       "losses": 4,
+       "record": "0-1-4",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 41.0,
+      "pick": "2",
+      "exactScore": "1-2"
+     },
+     "modelProb": 0.539,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Quilmes Res.|Independiente Riva. Res.",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "Argentina – Reserve League",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "20:00",
+     "home": "Quilmes Res.",
+     "away": "Independiente Riva. Res.",
+     "match": "Quilmes Res. vs Independiente Riva. Res.",
+     "side": "home",
+     "team": "Quilmes Res.",
+     "fanPct": 64.0,
+     "votes": 430,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17212578",
+     "matchUrl": "https://www.sofascore.com/football/match/17212578",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/quilmes-res-independiente-riva-res-2563557",
+     "eventId": null,
+     "odds": {
+      "home": 1.877,
+      "draw": 3.48,
+      "away": 3.78
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.88,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.877,
+      "books": 1,
+      "at": "2026-11-10T08:17:35Z"
+     },
+     "impliedPct": 53.2,
+     "edgePct": 10.8,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 30.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.3,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "football|2026-11-10|Paradou AC|JSM Skikda",
+     "sport": "football",
+     "date": "2026-11-10",
+     "league": "Algeria – Ligue 2",
+     "kickoff": "2026-11-10T14:00:00Z",
+     "time": "16:00",
+     "home": "Paradou AC",
+     "away": "JSM Skikda",
+     "match": "Paradou AC vs JSM Skikda",
+     "side": "home",
+     "team": "Paradou AC",
+     "fanPct": 60.0,
+     "votes": 900,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/17408765",
+     "matchUrl": "https://www.sofascore.com/football/match/17408765",
+     "forebetUrl": "https://www.forebet.com/en/football/matches/paradou-ac-jsm-skikda-2558176",
+     "eventId": null,
+     "odds": {
+      "home": 1.55,
+      "draw": 3.5,
+      "away": 5.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.58,
+      "bookmaker": "livesport",
+      "pinnacle": 1.535,
+      "books": 2,
+      "at": "2026-11-10T08:17:32Z"
+     },
+     "impliedPct": 63.3,
+     "edgePct": -3.3,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "DWLWL",
+      "venue": "WWWLW",
+      "opponentOverall": "WLWLW",
+      "opponentVenue": "LLLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 1,
+      "lastScore": "0-3",
+      "lastDate": "01.07.21",
+      "line": "H2H: Paradou AC 3-1-1 (last: 2021-07-01 Skikda 0-3 Paradou)",
+      "last": "2021-07-01 Skikda 0-3 Paradou (Paradou won)",
+      "edge": {
+       "team": "Paradou AC",
+       "wins": 3,
+       "draws": 1,
+       "losses": 1,
+       "record": "3-1-1",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 55.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.547,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "rows": 64,
+    "withVote": 63,
+    "fanOk": 46,
+    "belowLimit": 21,
+    "noOdds": 2,
+    "voteRequested": 38,
+    "voteFound": 38,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 47,
+    "oddsOk": 23,
+    "calls": 38,
     "budgetHit": 0,
-    "picks": 0
+    "picks": 23
    }
   },
   "handball": {
-   "generatedAt": "2026-11-10T07:53:17Z",
+   "generatedAt": "2026-11-10T08:16:47Z",
    "watch": true,
-   "picks": [],
+   "picks": [
+    {
+     "id": "handball|2026-11-10|Fasano|Cassano",
+     "sport": "handball",
+     "date": "2026-11-10",
+     "league": "IT1",
+     "kickoff": "2026-11-10T19:15:00Z",
+     "time": "20:15",
+     "home": "Fasano",
+     "away": "Cassano",
+     "match": "Fasano vs Cassano",
+     "side": "away",
+     "team": "Cassano",
+     "fanPct": 84.0,
+     "votes": 37,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/handball/match/17198757",
+     "matchUrl": "https://www.sofascore.com/handball/match/17198757",
+     "forebetUrl": "https://www.forebet.com/en/handball/matches/serie-a/fasano-cassano/196343",
+     "eventId": null,
+     "odds": {
+      "home": 1.52,
+      "draw": 8.5,
+      "away": 3.0
+     },
+     "oddsSource": "Bet365",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 3.0,
+      "bookmaker": "Bet365",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 33.3,
+     "edgePct": 50.7,
+     "limit": {
+      "min": 1.45,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "LLWLW",
+      "venue": "LLWLW",
+      "opponentOverall": "WWLLL",
+      "opponentVenue": "LWWDL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 1,
+      "losses": 4,
+      "lastScore": "28-37",
+      "lastDate": "06.05.26",
+      "line": "H2H: Cassano 4-0-1 (last: 2026-05-06 Fasano 28-37 Cassano)",
+      "last": "2026-05-06 Fasano 28-37 Cassano (Cassano won)",
+      "edge": {
+       "team": "Cassano",
+       "wins": 1,
+       "draws": 0,
+       "losses": 4,
+       "record": "1-0-4",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 59.0,
+      "pick": "2",
+      "exactScore": "26-33"
+     },
+     "modelProb": 0.641,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "handball|2026-11-10|Linz|Voslauer",
+     "sport": "handball",
+     "date": "2026-11-10",
+     "league": "AT1",
+     "kickoff": "2026-11-10T18:30:00Z",
+     "time": "19:30",
+     "home": "Linz",
+     "away": "Voslauer",
+     "match": "Linz vs Voslauer",
+     "side": "home",
+     "team": "Linz",
+     "fanPct": 83.0,
+     "votes": 46,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/handball/match/16536493",
+     "matchUrl": "https://www.sofascore.com/handball/match/16536493",
+     "forebetUrl": "https://www.forebet.com/en/handball/matches/hla/linz-voslauer/188575",
+     "eventId": null,
+     "odds": {
+      "home": 1.7,
+      "draw": 8.0,
+      "away": 2.55
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.7,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:55Z"
+     },
+     "impliedPct": 58.8,
+     "edgePct": 24.2,
+     "limit": {
+      "min": 1.45,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "LLWWW",
+      "venue": "WWLLW",
+      "opponentOverall": "WWWWL",
+      "opponentVenue": "WLLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 2,
+      "lastScore": "34-30",
+      "lastDate": "28.02.26",
+      "line": "H2H: Linz 2-1-2 (even) (last: 2026-02-28 Voslauer 34-30 Linz)",
+      "last": "2026-02-28 Voslauer 34-30 Linz (Voslauer won)",
+      "edge": {
+       "team": "even",
+       "wins": 2,
+       "draws": 1,
+       "losses": 2,
+       "record": "2-1-2",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 54.0,
+      "pick": "1",
+      "exactScore": "31-29"
+     },
+     "modelProb": 0.486,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "handball|2026-11-10|H 65 Hoor W|Boden W",
+     "sport": "handball",
+     "date": "2026-11-10",
+     "league": "SHE",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "19:00",
+     "home": "H 65 Hoor W",
+     "away": "Boden W",
+     "match": "H 65 Hoor W vs Boden W",
+     "side": "home",
+     "team": "H 65 Hoor W",
+     "fanPct": 80.0,
+     "votes": 116,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/handball/match/17471958",
+     "matchUrl": "https://www.sofascore.com/handball/match/17471958",
+     "forebetUrl": "https://www.forebet.com/en/handball/matches/she-women/h-65-hoor-w-boden-w/189291",
+     "eventId": null,
+     "odds": {
+      "home": 1.95,
+      "draw": 8.0,
+      "away": 2.05
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.95,
+      "bookmaker": "livesport",
+      "pinnacle": 1.667,
+      "books": 2,
+      "at": "2026-11-10T08:17:55Z"
+     },
+     "impliedPct": 51.3,
+     "edgePct": 28.7,
+     "limit": {
+      "min": 1.45,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "LWWLL",
+      "venue": "WLWWL",
+      "opponentOverall": "LWWWW",
+      "opponentVenue": "LWWWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 4,
+      "losses": 1,
+      "lastScore": "30-35",
+      "lastDate": "19.04.26",
+      "line": "H2H: H 65 Hoor W 0-0-0 (even) (last: 2026-04-19 Boden K 30-35 H 65 Hoor K)",
+      "last": "2026-04-19 Boden K 30-35 H 65 Hoor K (H 65 Hoor K won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 51.0,
+      "pick": "1",
+      "exactScore": "29-26"
+     },
+     "modelProb": 0.577,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "handball|2026-11-10|Zalau W|Dunarea Braila W",
+     "sport": "handball",
+     "date": "2026-11-10",
+     "league": "ROW",
+     "kickoff": "2026-11-10T14:30:00Z",
+     "time": "15:30",
+     "home": "Zalau W",
+     "away": "Dunarea Braila W",
+     "match": "Zalau W vs Dunarea Braila W",
+     "side": "away",
+     "team": "Dunarea Braila W",
+     "fanPct": 77.0,
+     "votes": 39,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/handball/match/16950980",
+     "matchUrl": "https://www.sofascore.com/handball/match/16950980",
+     "forebetUrl": "https://www.forebet.com/en/handball/matches/liga-nationala-women/zalau-w-dunarea-braila-w/191635",
+     "eventId": null,
+     "odds": {
+      "home": 2.7,
+      "draw": 8.5,
+      "away": 1.58
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 1.58,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:51Z"
+     },
+     "impliedPct": 63.3,
+     "edgePct": 13.7,
+     "limit": {
+      "min": 1.45,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "LLLWW",
+      "venue": "LLWWW",
+      "opponentOverall": "WDWLL",
+      "opponentVenue": "DLLLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "30-33",
+      "lastDate": "04.04.26",
+      "line": "H2H: Dunarea Braila W 0-0-0 (even) (last: 2026-04-04 Zalau K 30-33 Dunarea Braila K)",
+      "last": "2026-04-04 Zalau K 30-33 Dunarea Braila K (Dunarea Braila K won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 66.0,
+      "pick": "2",
+      "exactScore": "25-31"
+     },
+     "modelProb": 0.712,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "rows": 22,
+    "withVote": 17,
+    "fanOk": 13,
+    "belowLimit": 3,
+    "noOdds": 6,
+    "voteRequested": 18,
+    "voteFound": 13,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 16,
+    "oddsOk": 4,
+    "calls": 18,
     "budgetHit": 0,
-    "picks": 0
+    "picks": 4
    }
   },
   "hockey": {
-   "generatedAt": "2026-11-10T07:54:09Z",
+   "generatedAt": "2026-11-10T08:16:37Z",
    "watch": false,
-   "picks": [],
+   "picks": [
+    {
+     "id": "hockey|2026-11-10|Angers|Rouen",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "FR1",
+     "kickoff": "2026-11-10T19:30:00Z",
+     "time": "20:30",
+     "home": "Angers",
+     "away": "Rouen",
+     "match": "Angers vs Rouen",
+     "side": "away",
+     "team": "Rouen",
+     "fanPct": 85.0,
+     "votes": 119,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16355290",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16355290",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/ligue-magnus/angers-rouen/371506",
+     "eventId": null,
+     "odds": {
+      "home": 2.6,
+      "draw": 3.95,
+      "away": 2.15
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.74,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.735,
+      "books": 2,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 57.5,
+     "edgePct": 27.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "DWWWD",
+      "venue": "WDWWL",
+      "opponentOverall": "LLLWD",
+      "opponentVenue": "LDWDW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 2,
+      "lastScore": "4-2",
+      "lastDate": "23.10.26",
+      "line": "H2H: Rouen 3-0-2 (last: 2026-10-23 Rouen 4-2 Angers)",
+      "last": "2026-10-23 Rouen 4-2 Angers (Rouen won)",
+      "edge": {
+       "team": "Rouen",
+       "wins": 2,
+       "draws": 0,
+       "losses": 3,
+       "record": "2-0-3",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 51.0,
+      "pick": "2",
+      "exactScore": "3-4"
+     },
+     "modelProb": 0.612,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|Rögle|Skellefteå",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "CHA",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "19:00",
+     "home": "Rögle",
+     "away": "Skellefteå",
+     "match": "Rögle vs Skellefteå",
+     "side": "away",
+     "team": "Skellefteå",
+     "fanPct": 84.0,
+     "votes": 196,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/17348235",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/17348235",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/champions-league/rögle-skellefteå/391879",
+     "eventId": null,
+     "odds": {
+      "home": 2.65,
+      "draw": 4.2,
+      "away": 2.15
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.74,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.735,
+      "books": 2,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 57.5,
+     "edgePct": 26.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWWWD",
+      "venue": "WDWLW",
+      "opponentOverall": "DLWDW",
+      "opponentVenue": "LWLWW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 1,
+      "losses": 4,
+      "lastScore": "3-2",
+      "lastDate": "10.10.26",
+      "line": "H2H: Skellefteå 4-0-0 (last: 2026-10-10 Skelleftea 3-2 Rogle)",
+      "last": "2026-10-10 Skelleftea 3-2 Rogle (Skelleftea won)",
+      "edge": {
+       "team": "Skellefteå",
+       "wins": 0,
+       "draws": 0,
+       "losses": 4,
+       "record": "0-0-4",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 57.0,
+      "pick": "2",
+      "exactScore": "2-7"
+     },
+     "modelProb": 0.663,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|Springfield Thunderbirds|Hartford Wolf Pack",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "AHL",
+     "kickoff": "2026-11-10T15:35:00Z",
+     "time": "16:35",
+     "home": "Springfield Thunderbirds",
+     "away": "Hartford Wolf Pack",
+     "match": "Springfield Thunderbirds vs Hartford Wolf Pack",
+     "side": "away",
+     "team": "Hartford Wolf Pack",
+     "fanPct": 82.0,
+     "votes": 218,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16499952",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16499952",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/ahl/springfield-thunderbirds-hartford-wolf-pack/379259",
+     "eventId": null,
+     "odds": {
+      "home": 1.885,
+      "draw": null,
+      "away": 1.935
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.94,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.935,
+      "books": 2,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 51.5,
+     "edgePct": 30.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 56.0,
+      "pick": "2",
+      "exactScore": "3-7"
+     },
+     "modelProb": 0.549,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|KooKoo|Eisbaren Berlin",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "CHA",
+     "kickoff": "2026-11-10T16:30:00Z",
+     "time": "17:30",
+     "home": "KooKoo",
+     "away": "Eisbaren Berlin",
+     "match": "KooKoo vs Eisbaren Berlin",
+     "side": "away",
+     "team": "Eisbaren Berlin",
+     "fanPct": 80.0,
+     "votes": 271,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/17348236",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/17348236",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/champions-league/kookoo-eisbaren-berlin/391877",
+     "eventId": null,
+     "odds": {
+      "home": 2.7,
+      "draw": 4.3,
+      "away": 2.1
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.76,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.758,
+      "books": 2,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 56.8,
+     "edgePct": 23.2,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWWW",
+      "venue": "WWWWW",
+      "opponentOverall": "LLWLL",
+      "opponentVenue": "LWLDW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "1-3",
+      "lastDate": "31.10.26",
+      "line": "H2H: Eisbaren Berlin 0-0-1 (last: 2026-10-31 KooKoo 1-3 IFK Helsinki)",
+      "last": "2026-10-31 KooKoo 1-3 IFK Helsinki (IFK Helsinki won)",
+      "edge": {
+       "team": "KooKoo",
+       "wins": 1,
+       "draws": 0,
+       "losses": 0,
+       "record": "1-0-0",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 63.0,
+      "pick": "2",
+      "exactScore": "2-4"
+     },
+     "modelProb": 0.676,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|Vancouver Canucks|Philadelphia Flyers",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "NHL",
+     "kickoff": "2026-11-11T02:30:00Z",
+     "time": "03:30",
+     "home": "Vancouver Canucks",
+     "away": "Philadelphia Flyers",
+     "match": "Vancouver Canucks vs Philadelphia Flyers",
+     "side": "away",
+     "team": "Philadelphia Flyers",
+     "fanPct": 76.0,
+     "votes": 4276,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16550724",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16550724",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/nhl/vancouver-canucks-philadelphia-flyers/386325",
+     "eventId": null,
+     "odds": {
+      "home": 2.8,
+      "draw": 4.1,
+      "away": 2.15
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.66,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 60.3,
+     "edgePct": 15.7,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WDLLW",
+      "venue": "WDLLW",
+      "opponentOverall": "LLLLL",
+      "opponentVenue": "LLLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 4,
+      "losses": 1,
+      "lastScore": "1-3",
+      "lastDate": "10.11.26",
+      "line": "H2H: Philadelphia Flyers 4-0-1 (last: 2026-11-10 Vancouver Canucks 1-3 Philadelphia Flyers)",
+      "last": "2026-11-10 Vancouver Canucks 1-3 Philadelphia Flyers (Philadelphia Flyers won)",
+      "edge": {
+       "team": "Philadelphia Flyers",
+       "wins": 1,
+       "draws": 0,
+       "losses": 4,
+       "record": "1-0-4",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 56.0,
+      "pick": "2",
+      "exactScore": "3-4"
+     },
+     "modelProb": 0.705,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|San Jose Sharks|New York Islanders",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "NHL",
+     "kickoff": "2026-11-11T03:00:00Z",
+     "time": "04:00",
+     "home": "San Jose Sharks",
+     "away": "New York Islanders",
+     "match": "San Jose Sharks vs New York Islanders",
+     "side": "away",
+     "team": "New York Islanders",
+     "fanPct": 75.0,
+     "votes": 4321,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16550725",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16550725",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/nhl/san-jose-sharks-new-york-islanders/386326",
+     "eventId": null,
+     "odds": {
+      "home": 2.8,
+      "draw": 4.1,
+      "away": 2.15
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.66,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 60.3,
+     "edgePct": 14.7,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "DDLLD",
+      "venue": "DDDLW",
+      "opponentOverall": "DLLLL",
+      "opponentVenue": "DLLWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "3-2",
+      "lastDate": "10.11.26",
+      "line": "H2H: New York Islanders 4-0-1 (last: 2026-11-10 San Jose Sharks 3-2 New York Islanders)",
+      "last": "2026-11-10 San Jose Sharks 3-2 New York Islanders (San Jose Sharks won)",
+      "edge": {
+       "team": "New York Islanders",
+       "wins": 1,
+       "draws": 0,
+       "losses": 4,
+       "record": "1-0-4",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "2",
+      "exactScore": "2-7"
+     },
+     "modelProb": 0.617,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|Milwaukee Admirals|Iowa Wild",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "AHL",
+     "kickoff": "2026-11-10T16:30:00Z",
+     "time": "17:30",
+     "home": "Milwaukee Admirals",
+     "away": "Iowa Wild",
+     "match": "Milwaukee Admirals vs Iowa Wild",
+     "side": "home",
+     "team": "Milwaukee Admirals",
+     "fanPct": 75.0,
+     "votes": 208,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16499953",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16499953",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/ahl/milwaukee-admirals-iowa-wild/379260",
+     "eventId": null,
+     "odds": {
+      "home": 2.25,
+      "draw": 3.95,
+      "away": 2.55
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.81,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.813,
+      "books": 2,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 55.2,
+     "edgePct": 19.8,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWLW",
+      "venue": "LWDDL",
+      "opponentOverall": "WWDDL",
+      "opponentVenue": "WWLDW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 2,
+      "lastScore": "1-3",
+      "lastDate": "08.11.26",
+      "line": "H2H: Milwaukee Admirals 2-0-3 (last: 2026-11-08 Milwaukee Admirals 1-3 Iowa Wild)",
+      "last": "2026-11-08 Milwaukee Admirals 1-3 Iowa Wild (Iowa Wild won)",
+      "edge": {
+       "team": "Iowa Wild",
+       "wins": 2,
+       "draws": 0,
+       "losses": 3,
+       "record": "2-0-3",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 53.0,
+      "pick": "1",
+      "exactScore": "3-2"
+     },
+     "modelProb": 0.505,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "hockey|2026-11-10|Rungsted|Esbjerg",
+     "sport": "hockey",
+     "date": "2026-11-10",
+     "league": "DK1",
+     "kickoff": "2026-11-10T18:30:00Z",
+     "time": "19:30",
+     "home": "Rungsted",
+     "away": "Esbjerg",
+     "match": "Rungsted vs Esbjerg",
+     "side": "home",
+     "team": "Rungsted",
+     "fanPct": 71.0,
+     "votes": 203,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16698155",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16698155",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/metal-ligaen/rungsted-esbjerg/377438",
+     "eventId": null,
+     "odds": {
+      "home": 2.07,
+      "draw": null,
+      "away": 1.704
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 2.07,
+      "bookmaker": "pinnacle",
+      "pinnacle": 2.07,
+      "books": 2,
+      "at": "2026-11-10T08:17:44Z"
+     },
+     "impliedPct": 48.3,
+     "edgePct": 22.7,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 51.0,
+      "pick": "1",
+      "exactScore": "4-3"
+     },
+     "modelProb": 0.503,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
+    "rows": 53,
+    "withVote": 44,
+    "fanOk": 15,
+    "belowLimit": 7,
     "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "voteRequested": 35,
+    "voteFound": 26,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 33,
+    "oddsOk": 8,
+    "calls": 35,
     "budgetHit": 0,
-    "picks": 0
+    "picks": 8
    }
   },
   "rugby": {
-   "generatedAt": "2026-11-10T07:54:21Z",
+   "generatedAt": "2026-11-10T08:16:42Z",
    "watch": true,
    "picks": [],
    "stats": {
@@ -134,7 +3344,7 @@
    }
   },
   "table_tennis": {
-   "generatedAt": "2026-11-10T07:53:48Z",
+   "generatedAt": "2026-11-10T08:16:56Z",
    "watch": true,
    "picks": [],
    "stats": {
@@ -154,43 +3364,3187 @@
    }
   },
   "tennis": {
-   "generatedAt": "2026-11-10T07:54:46Z",
+   "generatedAt": "2026-11-10T08:16:44Z",
    "watch": false,
-   "picks": [],
+   "picks": [
+    {
+     "id": "tennis|2026-11-10|D. Svrcina|V. Sachko",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T11:00:00Z",
+     "time": "11:00",
+     "home": "D. Svrcina",
+     "away": "V. Sachko",
+     "match": "D. Svrcina vs V. Sachko",
+     "side": "home",
+     "team": "D. Svrcina",
+     "fanPct": 92.0,
+     "votes": 1888,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514485",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514485",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/orleans/d-svrcina-v-sachko/363034",
+     "eventId": null,
+     "odds": {
+      "home": 1.5,
+      "draw": null,
+      "away": 2.45
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.55,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.546,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 64.5,
+     "edgePct": 27.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWWL",
+      "venue": "",
+      "opponentOverall": "LLWLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "06.04.25",
+      "line": "H2H: D. Svrcina 0-0-0 (even) (last: 2025-04-06 Svrcina D. 2-0 Sachko V.)",
+      "last": "2025-04-06 Svrcina D. 2-0 Sachko V. (Svrcina D. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 68.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.636,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|H. Moriya|A. Bolt",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "Br3",
+     "kickoff": "2026-11-10T09:15:00Z",
+     "time": "09:15",
+     "home": "H. Moriya",
+     "away": "A. Bolt",
+     "match": "H. Moriya vs A. Bolt",
+     "side": "away",
+     "team": "A. Bolt",
+     "fanPct": 92.0,
+     "votes": 1028,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17524179",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17524179",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/brisbane-3/h-moriya-a-bolt/363173",
+     "eventId": null,
+     "odds": {
+      "home": 3.14,
+      "draw": null,
+      "away": 1.38
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.38,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.38,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 72.5,
+     "edgePct": 19.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 46.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.46,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|F. Maestrelli|J. Loge",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T10:30:00Z",
+     "time": "10:30",
+     "home": "F. Maestrelli",
+     "away": "J. Loge",
+     "match": "F. Maestrelli vs J. Loge",
+     "side": "home",
+     "team": "F. Maestrelli",
+     "fanPct": 91.0,
+     "votes": 681,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17526342",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17526342",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/f-maestrelli-j-loge/363245",
+     "eventId": null,
+     "odds": {
+      "home": 1.4,
+      "draw": null,
+      "away": 2.75
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.45,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.446,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 69.0,
+     "edgePct": 22.0,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWLW",
+      "venue": "",
+      "opponentOverall": "WWLWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 0,
+      "lastScore": "0-2",
+      "lastDate": "06.11.26",
+      "line": "H2H: F. Maestrelli 0-0-0 (even) (last: 2026-11-06 Maestrelli F. 0-2 Caniato C. A.)",
+      "last": "2026-11-06 Maestrelli F. 0-2 Caniato C. A. (Caniato C. A. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 51.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.586,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|M. Petkovic|G. Cadenasso",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "MCH",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "16:00",
+     "home": "M. Petkovic",
+     "away": "G. Cadenasso",
+     "match": "M. Petkovic vs G. Cadenasso",
+     "side": "away",
+     "team": "G. Cadenasso",
+     "fanPct": 88.0,
+     "votes": 392,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514490",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514490",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/monastir/m-petkovic-g-cadenasso/363105",
+     "eventId": null,
+     "odds": {
+      "home": 2.4,
+      "draw": null,
+      "away": 1.5
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.54,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.543,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 64.9,
+     "edgePct": 23.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWLWW",
+      "venue": "",
+      "opponentOverall": "LWWLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 3,
+      "lastScore": "2-0",
+      "lastDate": "29.10.26",
+      "line": "H2H: G. Cadenasso 0-0-0 (even) (last: 2026-10-29 Tarvet O. 2-0 Petkovic M.)",
+      "last": "2026-10-29 Tarvet O. 2-0 Petkovic M. (Tarvet O. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 55.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.524,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|M. Giron|M. Kasnikowski",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-11T00:30:00Z",
+     "time": "00:30",
+     "home": "M. Giron",
+     "away": "M. Kasnikowski",
+     "match": "M. Giron vs M. Kasnikowski",
+     "side": "home",
+     "team": "M. Giron",
+     "fanPct": 87.0,
+     "votes": 853,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17516951",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17516951",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/knoxville/m-giron-m-kasnikowski/363109",
+     "eventId": null,
+     "odds": {
+      "home": 1.52,
+      "draw": null,
+      "away": 2.42
+     },
+     "oddsSource": "Livesport (bukm. 1133)",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.54,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:16Z"
+     },
+     "impliedPct": 64.9,
+     "edgePct": 22.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 37.0,
+      "pick": "2",
+      "exactScore": "1-2"
+     },
+     "modelProb": 0.37,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|E. Moeller|G. A. Olivieri",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "19:00",
+     "home": "E. Moeller",
+     "away": "G. A. Olivieri",
+     "match": "E. Moeller vs G. A. Olivieri",
+     "side": "home",
+     "team": "E. Moeller",
+     "fanPct": 87.0,
+     "votes": 740,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17516099",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17516099",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/lima-2/e-moeller-g-a-olivieri/363067",
+     "eventId": null,
+     "odds": {
+      "home": 1.43,
+      "draw": null,
+      "away": 2.6
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.43,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 69.9,
+     "edgePct": 17.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWLWW",
+      "venue": "",
+      "opponentOverall": "LWWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "lastScore": "2-0",
+      "lastDate": "13.11.24",
+      "line": "H2H: E. Moeller 0-0-0 (even) (last: 2024-11-13 Olivieri G. A. 2-0 Moller E.)",
+      "last": "2024-11-13 Olivieri G. A. 2-0 Moller E. (Olivieri G. A. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 42.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.42,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|C. Monnet|L. Romero Gormaz",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "CoC",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "16:00",
+     "home": "C. Monnet",
+     "away": "L. Romero Gormaz",
+     "match": "C. Monnet vs L. Romero Gormaz",
+     "side": "away",
+     "team": "L. Romero Gormaz",
+     "fanPct": 87.0,
+     "votes": 555,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17522223",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17522223",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/sopo/c-monnet-l-romero-gormaz/363225",
+     "eventId": null,
+     "odds": {
+      "home": 2.82,
+      "draw": null,
+      "away": 1.4
+     },
+     "oddsSource": "Livesport (bukm. 1133)",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.51,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 66.2,
+     "edgePct": 20.8,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 34.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.34,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|J. Ortenzi|L. Jeanjean",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "CoC",
+     "kickoff": "2026-11-10T17:30:00Z",
+     "time": "17:30",
+     "home": "J. Ortenzi",
+     "away": "L. Jeanjean",
+     "match": "J. Ortenzi vs L. Jeanjean",
+     "side": "away",
+     "team": "L. Jeanjean",
+     "fanPct": 87.0,
+     "votes": 222,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17522227",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17522227",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/sopo/j-ortenzi-l-jeanjean/363224",
+     "eventId": null,
+     "odds": {
+      "home": 2.48,
+      "draw": null,
+      "away": 1.5
+     },
+     "oddsSource": "Livesport (bukm. 1133)",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.51,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 66.2,
+     "edgePct": 20.8,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 41.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.41,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|S. Baez|D. Glinka",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T15:30:00Z",
+     "time": "15:30",
+     "home": "S. Baez",
+     "away": "D. Glinka",
+     "match": "S. Baez vs D. Glinka",
+     "side": "home",
+     "team": "S. Baez",
+     "fanPct": 86.0,
+     "votes": 2262,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514489",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514489",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/orleans/s-baez-d-glinka/363027",
+     "eventId": null,
+     "odds": {
+      "home": 1.75,
+      "draw": null,
+      "away": 2.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.82,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.82,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 54.9,
+     "edgePct": 31.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWLL",
+      "venue": "",
+      "opponentOverall": "LLLWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "02.11.26",
+      "line": "H2H: S. Baez 0-0-0 (even) (last: 2026-11-02 Merida Aguilar D. 2-0 Baez S.)",
+      "last": "2026-11-02 Merida Aguilar D. 2-0 Baez S. (Merida Aguilar D. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 53.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.385,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|L. van Assche|A. Shevchenko",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T11:00:00Z",
+     "time": "11:00",
+     "home": "L. van Assche",
+     "away": "A. Shevchenko",
+     "match": "L. van Assche vs A. Shevchenko",
+     "side": "home",
+     "team": "L. van Assche",
+     "fanPct": 86.0,
+     "votes": 953,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17520226",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17520226",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/stockholm/l-van-assche-a-shevchenko/363150",
+     "eventId": null,
+     "odds": {
+      "home": 1.6,
+      "draw": null,
+      "away": 2.15
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.64,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 61.0,
+     "edgePct": 25.0,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWWW",
+      "venue": "",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 4,
+      "wins": 2,
+      "losses": 2,
+      "lastScore": "2-0",
+      "lastDate": "27.01.26",
+      "line": "H2H: L. van Assche 0-0-0 (even) (last: 2026-01-27 van Assche L. 2-0 Szewczenko A.)",
+      "last": "2026-01-27 van Assche L. 2-0 Szewczenko A. (van Assche L. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 55.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.655,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|F. Bondioli|J. Forejtek",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "MCH",
+     "kickoff": "2026-11-10T13:00:00Z",
+     "time": "13:00",
+     "home": "F. Bondioli",
+     "away": "J. Forejtek",
+     "match": "F. Bondioli vs J. Forejtek",
+     "side": "away",
+     "team": "J. Forejtek",
+     "fanPct": 86.0,
+     "votes": 467,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514495",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514495",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/monastir/f-bondioli-j-forejtek/363100",
+     "eventId": null,
+     "odds": {
+      "home": 2.6,
+      "draw": null,
+      "away": 1.45
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.46,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.457,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 68.5,
+     "edgePct": 17.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWLL",
+      "venue": "",
+      "opponentOverall": "LLWLL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 1,
+      "lastScore": "2-0",
+      "lastDate": "03.11.26",
+      "line": "H2H: J. Forejtek 0-1-0 (even) (last: 2026-11-03 Clarke J. 2-0 Bondioli F.)",
+      "last": "2026-11-03 Clarke J. 2-0 Bondioli F. (Clarke J. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 1,
+       "losses": 0,
+       "record": "0-1-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 53.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.551,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|A. Andreev|B. Pietri",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T13:30:00Z",
+     "time": "13:30",
+     "home": "A. Andreev",
+     "away": "B. Pietri",
+     "match": "A. Andreev vs B. Pietri",
+     "side": "home",
+     "team": "A. Andreev",
+     "fanPct": 86.0,
+     "votes": 403,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17526340",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17526340",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/a-andreev-b-pietri/363242",
+     "eventId": null,
+     "odds": {
+      "home": 1.478,
+      "draw": null,
+      "away": 2.69
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.48,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.478,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 67.6,
+     "edgePct": 18.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 38.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.38,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|L. Angelini|R. Bertrand",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T09:00:00Z",
+     "time": "09:00",
+     "home": "L. Angelini",
+     "away": "R. Bertrand",
+     "match": "L. Angelini vs R. Bertrand",
+     "side": "away",
+     "team": "R. Bertrand",
+     "fanPct": 85.0,
+     "votes": 550,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17526338",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17526338",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/l-angelini-r-bertrand/363246",
+     "eventId": null,
+     "odds": {
+      "home": 2.9,
+      "draw": null,
+      "away": 1.35
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.36,
+      "bookmaker": "livesport",
+      "pinnacle": 1.355,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 73.5,
+     "edgePct": 11.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWWL",
+      "venue": "",
+      "opponentOverall": "WWLWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 3,
+      "lastScore": "0-2",
+      "lastDate": "09.11.26",
+      "line": "H2H: R. Bertrand 0-0-0 (even) (last: 2026-11-09 Orlov V. 0-2 Angelini L.)",
+      "last": "2026-11-09 Orlov V. 0-2 Angelini L. (Angelini L. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 55.0,
+      "pick": "2",
+      "exactScore": "1-2"
+     },
+     "modelProb": 0.55,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|S. Imai|F. Sun",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T05:05:00Z",
+     "time": "05:05",
+     "home": "S. Imai",
+     "away": "F. Sun",
+     "match": "S. Imai vs F. Sun",
+     "side": "away",
+     "team": "F. Sun",
+     "fanPct": 85.0,
+     "votes": 500,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17524292",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17524292",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/matsuyama/s-imai-f-sun/363170",
+     "eventId": null,
+     "odds": {
+      "home": 2.85,
+      "draw": null,
+      "away": 1.35
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.35,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 74.1,
+     "edgePct": 10.9,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLWLW",
+      "venue": "",
+      "opponentOverall": "LWWLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 4,
+      "wins": 2,
+      "losses": 2,
+      "lastScore": "1-2",
+      "lastDate": "10.11.26",
+      "line": "H2H: F. Sun 0-0-0 (even) (last: 2026-11-10 Imai S. 1-2 Sun F.)",
+      "last": "2026-11-10 Imai S. 1-2 Sun F. (Sun F. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 52.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.586,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|K. Samrej|Y. Shimizu",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-11T04:40:00Z",
+     "time": "04:40",
+     "home": "K. Samrej",
+     "away": "Y. Shimizu",
+     "match": "K. Samrej vs Y. Shimizu",
+     "side": "away",
+     "team": "Y. Shimizu",
+     "fanPct": 83.0,
+     "votes": 665,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17511322",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17511322",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/matsuyama/k-samrej-y-shimizu/363085",
+     "eventId": null,
+     "odds": {
+      "home": 2.65,
+      "draw": null,
+      "away": 1.43
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.45,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 69.0,
+     "edgePct": 14.0,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWWW",
+      "venue": "",
+      "opponentOverall": "WLWWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "lastScore": "2-1",
+      "lastDate": "10.11.26",
+      "line": "H2H: Y. Shimizu 0-0-0 (even) (last: 2026-11-10 Samrej K. 2-1 Shimizu Y.)",
+      "last": "2026-11-10 Samrej K. 2-1 Shimizu Y. (Samrej K. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 74.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.606,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|S. Mochizuki|C. Hemery",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T17:00:00Z",
+     "time": "17:00",
+     "home": "S. Mochizuki",
+     "away": "C. Hemery",
+     "match": "S. Mochizuki vs C. Hemery",
+     "side": "home",
+     "team": "S. Mochizuki",
+     "fanPct": 82.0,
+     "votes": 655,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17528375",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17528375",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/orleans/s-mochizuki-c-hemery/363256",
+     "eventId": null,
+     "odds": {
+      "home": 1.6,
+      "draw": null,
+      "away": 2.2
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.62,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 61.7,
+     "edgePct": 20.3,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLLWW",
+      "venue": "",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "0-2",
+      "lastDate": "03.11.26",
+      "line": "H2H: S. Mochizuki 0-0-0 (even) (last: 2026-11-03 Mochizuki S. 0-2 Budkov Kjaer N.)",
+      "last": "2026-11-03 Mochizuki S. 0-2 Budkov Kjaer N. (Budkov Kjaer N. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 56.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.508,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|M. Kostyuk|J. Pegula",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T21:00:00Z",
+     "time": "21:00",
+     "home": "M. Kostyuk",
+     "away": "J. Pegula",
+     "match": "M. Kostyuk vs J. Pegula",
+     "side": "away",
+     "team": "J. Pegula",
+     "fanPct": 81.0,
+     "votes": 5671,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17524829",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17524829",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/finals-cancun/m-kostyuk-j-pegula/363186",
+     "eventId": null,
+     "odds": {
+      "home": 2.4,
+      "draw": null,
+      "away": 1.55
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.58,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.578,
+      "books": 2,
+      "at": "2026-11-10T08:17:16Z"
+     },
+     "impliedPct": 63.3,
+     "edgePct": 17.7,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLLWW",
+      "venue": "",
+      "opponentOverall": "LLLLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "0-2",
+      "lastDate": "26.04.26",
+      "line": "H2H: J. Pegula 0-0-0 (even) (last: 2026-04-26 Pegula J. 0-2 Kostjuk M.)",
+      "last": "2026-04-26 Pegula J. 0-2 Kostjuk M. (Kostjuk M. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 60.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.571,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|A. Rinderknech|M. Kecmanovic",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "16:00",
+     "home": "A. Rinderknech",
+     "away": "M. Kecmanovic",
+     "match": "A. Rinderknech vs M. Kecmanovic",
+     "side": "home",
+     "team": "A. Rinderknech",
+     "fanPct": 81.0,
+     "votes": 5413,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17511575",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17511575",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/stockholm/a-rinderknech-m-kecmanovic/362985",
+     "eventId": null,
+     "odds": {
+      "home": 1.45,
+      "draw": null,
+      "away": 2.55
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.52,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.524,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 65.8,
+     "edgePct": 15.2,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWLL",
+      "venue": "",
+      "opponentOverall": "LWLLL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 4,
+      "wins": 3,
+      "losses": 1,
+      "lastScore": "1-2",
+      "lastDate": "05.08.26",
+      "line": "H2H: A. Rinderknech 0-0-0 (even) (last: 2026-08-05 Kecmanovic M. 1-2 Rinderknech A.)",
+      "last": "2026-08-05 Kecmanovic M. 1-2 Rinderknech A. (Rinderknech A. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.573,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|A. Mannarino|A. Shevchenko",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T13:00:00Z",
+     "time": "13:00",
+     "home": "A. Mannarino",
+     "away": "A. Shevchenko",
+     "match": "A. Mannarino vs A. Shevchenko",
+     "side": "home",
+     "team": "A. Mannarino",
+     "fanPct": 81.0,
+     "votes": 5365,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17525794",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17525794",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/stockholm/a-mannarino-a-shevchenko/363193",
+     "eventId": null,
+     "odds": {
+      "home": 1.7,
+      "draw": null,
+      "away": 2.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.77,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.769,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 56.5,
+     "edgePct": 24.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWLLW",
+      "venue": "",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "3-0",
+      "lastDate": "05.07.23",
+      "line": "H2H: A. Mannarino 0-0-0 (even) (last: 2023-07-05 Mannarino A. 3-0 Szewczenko A.)",
+      "last": "2023-07-05 Mannarino A. 3-0 Szewczenko A. (Mannarino A. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 69.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.509,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|O. Virtanen|D. Prizmic",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T11:00:00Z",
+     "time": "11:00",
+     "home": "O. Virtanen",
+     "away": "D. Prizmic",
+     "match": "O. Virtanen vs D. Prizmic",
+     "side": "away",
+     "team": "D. Prizmic",
+     "fanPct": 81.0,
+     "votes": 2886,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514484",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514484",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/orleans/o-virtanen-d-prizmic/363036",
+     "eventId": null,
+     "odds": {
+      "home": 2.11,
+      "draw": null,
+      "away": 1.787
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.79,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.787,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 55.9,
+     "edgePct": 25.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 37.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.37,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|N. Basavareddy|P. Herbert",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "19:00",
+     "home": "N. Basavareddy",
+     "away": "P. Herbert",
+     "match": "N. Basavareddy vs P. Herbert",
+     "side": "home",
+     "team": "N. Basavareddy",
+     "fanPct": 81.0,
+     "votes": 1110,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514481",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514481",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/orleans/n-basavareddy-p-herbert/363028",
+     "eventId": null,
+     "odds": {
+      "home": 1.45,
+      "draw": null,
+      "away": 2.55
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.49,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.49,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 67.1,
+     "edgePct": 13.9,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWLL",
+      "venue": "",
+      "opponentOverall": "LLWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "0-2",
+      "lastDate": "06.11.26",
+      "line": "H2H: N. Basavareddy 0-0-0 (even) (last: 2026-11-06 Basavareddy N. 0-2 Kym J.)",
+      "last": "2026-11-06 Basavareddy N. 0-2 Kym J. (Kym J. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 59.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.548,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|R. M. Papoe|P. Henning",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T15:00:00Z",
+     "time": "15:00",
+     "home": "R. M. Papoe",
+     "away": "P. Henning",
+     "match": "R. M. Papoe vs P. Henning",
+     "side": "away",
+     "team": "P. Henning",
+     "fanPct": 81.0,
+     "votes": 472,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514474",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514474",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/r-m-papoe-p-henning/363196",
+     "eventId": null,
+     "odds": {
+      "home": 2.37,
+      "draw": null,
+      "away": 1.599
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.6,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.599,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 62.5,
+     "edgePct": 18.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 38.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.38,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|L. Sonego|Q. Halys",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T14:30:00Z",
+     "time": "14:30",
+     "home": "L. Sonego",
+     "away": "Q. Halys",
+     "match": "L. Sonego vs Q. Halys",
+     "side": "away",
+     "team": "Q. Halys",
+     "fanPct": 80.0,
+     "votes": 6628,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17520227",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17520227",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/stockholm/l-sonego-q-halys/363151",
+     "eventId": null,
+     "odds": {
+      "home": 2.17,
+      "draw": null,
+      "away": 1.758
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.76,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.758,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 56.8,
+     "edgePct": 23.2,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 46.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.46,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|R. Noguchi|D. Michalski",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T06:55:00Z",
+     "time": "06:55",
+     "home": "R. Noguchi",
+     "away": "D. Michalski",
+     "match": "R. Noguchi vs D. Michalski",
+     "side": "home",
+     "team": "R. Noguchi",
+     "fanPct": 80.0,
+     "votes": 820,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17511318",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17511318",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/matsuyama/r-noguchi-d-michalski/363083",
+     "eventId": null,
+     "odds": {
+      "home": 1.75,
+      "draw": null,
+      "away": 1.95
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.75,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 57.1,
+     "edgePct": 22.9,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLLLL",
+      "venue": "",
+      "opponentOverall": "LLLWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "10.11.26",
+      "line": "H2H: R. Noguchi 0-0-0 (even) (last: 2026-11-10 Noguchi R. 2-0 Michalski D.)",
+      "last": "2026-11-10 Noguchi R. 2-0 Michalski D. (Noguchi R. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 59.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.391,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|C. A. Caniato|G. A. Bailly",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T13:30:00Z",
+     "time": "13:30",
+     "home": "C. A. Caniato",
+     "away": "G. A. Bailly",
+     "match": "C. A. Caniato vs G. A. Bailly",
+     "side": "home",
+     "team": "C. A. Caniato",
+     "fanPct": 80.0,
+     "votes": 527,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514472",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514472",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/c-a-caniato-g-a-bailly/363200",
+     "eventId": null,
+     "odds": {
+      "home": 1.5,
+      "draw": null,
+      "away": 2.45
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.53,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.535,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 65.4,
+     "edgePct": 14.6,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWWL",
+      "venue": "",
+      "opponentOverall": "WWWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "0-2",
+      "lastDate": "02.11.25",
+      "line": "H2H: C. A. Caniato 0-0-0 (even) (last: 2025-11-02 Bailly G. A. 0-2 Caniato C. A.)",
+      "last": "2025-11-02 Bailly G. A. 0-2 Caniato C. A. (Caniato C. A. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 67.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.57,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|C. Gauff|L. Noskova",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T22:30:00Z",
+     "time": "22:30",
+     "home": "C. Gauff",
+     "away": "L. Noskova",
+     "match": "C. Gauff vs L. Noskova",
+     "side": "home",
+     "team": "C. Gauff",
+     "fanPct": 79.0,
+     "votes": 5368,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17524827",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17524827",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/wta-singles/finals-cancun/c-gauff-l-noskova/363185",
+     "eventId": null,
+     "odds": {
+      "home": 1.55,
+      "draw": null,
+      "away": 2.4
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.61,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.613,
+      "books": 2,
+      "at": "2026-11-10T08:17:16Z"
+     },
+     "impliedPct": 62.1,
+     "edgePct": 16.9,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLWWL",
+      "venue": "",
+      "opponentOverall": "WLWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "lastScore": "2-1",
+      "lastDate": "27.04.26",
+      "line": "H2H: C. Gauff 0-0-0 (even) (last: 2026-04-27 Noskova L. 2-1 Gauff C.)",
+      "last": "2026-04-27 Noskova L. 2-1 Gauff C. (Noskova L. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 54.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.546,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|B. Gadamauri|D. Lajovic",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T12:30:00Z",
+     "time": "12:30",
+     "home": "B. Gadamauri",
+     "away": "D. Lajovic",
+     "match": "B. Gadamauri vs D. Lajovic",
+     "side": "away",
+     "team": "D. Lajovic",
+     "fanPct": 79.0,
+     "votes": 1029,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17528372",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17528372",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/orleans/b-gadamauri-d-lajovic/363259",
+     "eventId": null,
+     "odds": {
+      "home": 1.9,
+      "draw": null,
+      "away": 1.83
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.94,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.943,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 51.5,
+     "edgePct": 27.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLLWW",
+      "venue": "",
+      "opponentOverall": "WWLWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 3,
+      "lastScore": "2-1",
+      "lastDate": "09.11.26",
+      "line": "H2H: D. Lajovic 0-0-0 (even) (last: 2026-11-09 Gadamauri B. 2-1 Blanchet U.)",
+      "last": "2026-11-09 Gadamauri B. 2-1 Blanchet U. (Gadamauri B. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 42.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.42,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|O. Kimhi|F. J. Planinsek",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "16:00",
+     "home": "O. Kimhi",
+     "away": "F. J. Planinsek",
+     "match": "O. Kimhi vs F. J. Planinsek",
+     "side": "away",
+     "team": "F. J. Planinsek",
+     "fanPct": 79.0,
+     "votes": 227,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17529384",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17529384",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/knoxville/o-kimhi-f-j-planinsek/363275",
+     "eventId": null,
+     "odds": {
+      "home": 2.35,
+      "draw": null,
+      "away": 1.53
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.54,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 64.9,
+     "edgePct": 14.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWLLW",
+      "venue": "",
+      "opponentOverall": "LLWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "18.09.26",
+      "line": "H2H: F. J. Planinsek 0-0-0 (even) (last: 2026-09-18 Planinsek F. J. 2-0 Kimhi O.)",
+      "last": "2026-09-18 Planinsek F. J. 2-0 Kimhi O. (Planinsek F. J. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 66.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.595,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|D. Milavsky|M. Cassone",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "19:00",
+     "home": "D. Milavsky",
+     "away": "M. Cassone",
+     "match": "D. Milavsky vs M. Cassone",
+     "side": "away",
+     "team": "M. Cassone",
+     "fanPct": 78.0,
+     "votes": 209,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17529382",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17529382",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/knoxville/d-milavsky-m-cassone/363273",
+     "eventId": null,
+     "odds": {
+      "home": 1.88,
+      "draw": null,
+      "away": 1.83
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.9,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 52.6,
+     "edgePct": 25.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWLLL",
+      "venue": "",
+      "opponentOverall": "WWLWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "03.06.26",
+      "line": "H2H: M. Cassone 0-0-0 (even) (last: 2026-06-03 Cassone M. 2-0 Milavsky D.)",
+      "last": "2026-06-03 Cassone M. 2-0 Milavsky D. (Cassone M. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.412,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|T. M. Etcheverry|T. A. Tirante",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T14:30:00Z",
+     "time": "14:30",
+     "home": "T. M. Etcheverry",
+     "away": "T. A. Tirante",
+     "match": "T. M. Etcheverry vs T. A. Tirante",
+     "side": "home",
+     "team": "T. M. Etcheverry",
+     "fanPct": 76.0,
+     "votes": 3344,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17489488",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17489488",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/atp-singles/stockholm/t-m-etcheverry-t-a-tirante/363261",
+     "eventId": null,
+     "odds": {
+      "home": 1.68,
+      "draw": null,
+      "away": 2.05
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.73,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.73,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 57.8,
+     "edgePct": 18.2,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLWWL",
+      "venue": "",
+      "opponentOverall": "WLLWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "lastScore": "0-2",
+      "lastDate": "01.08.21",
+      "line": "H2H: T. M. Etcheverry 0-0-0 (even) (last: 2021-08-01 Tirante T. A. 0-2 Etcheverry T. M.)",
+      "last": "2021-08-01 Tirante T. A. 0-2 Etcheverry T. M. (Etcheverry T. M. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 64.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.614,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|J. P. Varillas|T. Barrios Vera",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T23:30:00Z",
+     "time": "23:30",
+     "home": "J. P. Varillas",
+     "away": "T. Barrios Vera",
+     "match": "J. P. Varillas vs T. Barrios Vera",
+     "side": "away",
+     "team": "T. Barrios Vera",
+     "fanPct": 76.0,
+     "votes": 650,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17516098",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17516098",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/lima-2/j-p-varillas-t-barrios-vera/363069",
+     "eventId": null,
+     "odds": {
+      "home": 2.95,
+      "draw": null,
+      "away": 1.35
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.36,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:16Z"
+     },
+     "impliedPct": 73.5,
+     "edgePct": 2.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWLWL",
+      "venue": "",
+      "opponentOverall": "LLLWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 2,
+      "lastScore": "2-0",
+      "lastDate": "05.04.25",
+      "line": "H2H: T. Barrios Vera 0-0-0 (even) (last: 2025-04-05 Barrios Vera T. 2-0 Varillas J. P.)",
+      "last": "2025-04-05 Barrios Vera T. 2-0 Varillas J. P. (Barrios Vera T. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 53.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.536,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|M. Geerts|J. C. Martin Manzano",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T09:00:00Z",
+     "time": "09:00",
+     "home": "M. Geerts",
+     "away": "J. C. Martin Manzano",
+     "match": "M. Geerts vs J. C. Martin Manzano",
+     "side": "home",
+     "team": "M. Geerts",
+     "fanPct": 75.0,
+     "votes": 706,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514478",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514478",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/m-geerts-j-c-martin-manzano/363199",
+     "eventId": null,
+     "odds": {
+      "home": 1.4,
+      "draw": null,
+      "away": 2.65
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.5,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.5,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 66.7,
+     "edgePct": 8.3,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWLL",
+      "venue": "",
+      "opponentOverall": "LWWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "27.10.26",
+      "line": "H2H: M. Geerts 0-0-0 (even) (last: 2026-10-27 Bobichon M. 2-0 Geerts M.)",
+      "last": "2026-10-27 Bobichon M. 2-0 Geerts M. (Bobichon M. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 52.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.5,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|B. Shick|A. Andrade",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T22:00:00Z",
+     "time": "22:00",
+     "home": "B. Shick",
+     "away": "A. Andrade",
+     "match": "B. Shick vs A. Andrade",
+     "side": "home",
+     "team": "B. Shick",
+     "fanPct": 74.0,
+     "votes": 602,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17516941",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17516941",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/knoxville/b-shick-a-andrade/363115",
+     "eventId": null,
+     "odds": {
+      "home": 1.45,
+      "draw": null,
+      "away": 2.5
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.45,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:16Z"
+     },
+     "impliedPct": 69.0,
+     "edgePct": 5.0,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LWWLL",
+      "venue": "",
+      "opponentOverall": "LWWWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "30.07.26",
+      "line": "H2H: B. Shick 0-0-0 (even) (last: 2026-07-30 Shick B. 2-0 Andrade A.)",
+      "last": "2026-07-30 Shick B. 2-0 Andrade A. (Shick B. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 54.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.468,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|O. Paldanius|R. Brancaccio",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "GrC",
+     "kickoff": "2026-11-10T12:00:00Z",
+     "time": "12:00",
+     "home": "O. Paldanius",
+     "away": "R. Brancaccio",
+     "match": "O. Paldanius vs R. Brancaccio",
+     "side": "away",
+     "team": "R. Brancaccio",
+     "fanPct": 73.0,
+     "votes": 347,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17526339",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17526339",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-3/o-paldanius-r-brancaccio/363243",
+     "eventId": null,
+     "odds": {
+      "home": 1.85,
+      "draw": null,
+      "away": 1.85
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.9,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 52.6,
+     "edgePct": 20.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWLL",
+      "venue": "",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 0,
+      "losses": 3,
+      "lastScore": "0-2",
+      "lastDate": "09.11.26",
+      "line": "H2H: R. Brancaccio 0-0-0 (even) (last: 2026-11-09 Krutykh O. 0-2 Paldanius O.)",
+      "last": "2026-11-09 Krutykh O. 0-2 Paldanius O. (Paldanius O. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 51.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.278,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|D. Ajdukovic|M. Echargui",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "MCH",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "16:00",
+     "home": "D. Ajdukovic",
+     "away": "M. Echargui",
+     "match": "D. Ajdukovic vs M. Echargui",
+     "side": "away",
+     "team": "M. Echargui",
+     "fanPct": 72.0,
+     "votes": 469,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17514491",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17514491",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/monastir/d-ajdukovic-m-echargui/363097",
+     "eventId": null,
+     "odds": {
+      "home": 2.05,
+      "draw": null,
+      "away": 1.68
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.76,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.763,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 56.8,
+     "edgePct": 15.2,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LLWWL",
+      "venue": "",
+      "opponentOverall": "LWWWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "12.02.24",
+      "line": "H2H: M. Echargui 0-0-0 (even) (last: 2024-02-12 Echargui M. 2-0 Ajdukovic D.)",
+      "last": "2024-02-12 Echargui M. 2-0 Ajdukovic D. (Echargui M. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 60.0,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.468,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|M. Cecchinato|F. Comesana",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "",
+     "kickoff": "2026-11-10T19:00:00Z",
+     "time": "19:00",
+     "home": "M. Cecchinato",
+     "away": "F. Comesana",
+     "match": "M. Cecchinato vs F. Comesana",
+     "side": "away",
+     "team": "F. Comesana",
+     "fanPct": 71.0,
+     "votes": 1185,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17516102",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17516102",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/lima-2/m-cecchinato-f-comesana/363062",
+     "eventId": null,
+     "odds": {
+      "home": 2.18,
+      "draw": null,
+      "away": 1.63
+     },
+     "oddsSource": "Livesport (bukm. 1133)",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.66,
+      "bookmaker": "livesport",
+      "pinnacle": null,
+      "books": 1,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 60.2,
+     "edgePct": 10.8,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 35.0,
+      "pick": "1",
+      "exactScore": "2-1"
+     },
+     "modelProb": 0.35,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "tennis|2026-11-10|J. Echeverria|A. Ouakaa",
+     "sport": "tennis",
+     "date": "2026-11-10",
+     "league": "MCH",
+     "kickoff": "2026-11-10T14:30:00Z",
+     "time": "14:30",
+     "home": "J. Echeverria",
+     "away": "A. Ouakaa",
+     "match": "J. Echeverria vs A. Ouakaa",
+     "side": "home",
+     "team": "J. Echeverria",
+     "fanPct": 70.0,
+     "votes": 243,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17527359",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17527359",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/monastir/j-echeverria-a-ouakaa/363251",
+     "eventId": null,
+     "odds": {
+      "home": 1.35,
+      "draw": null,
+      "away": 3.0
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.36,
+      "bookmaker": "livesport",
+      "pinnacle": 1.356,
+      "books": 2,
+      "at": "2026-11-10T08:17:11Z"
+     },
+     "impliedPct": 73.5,
+     "edgePct": -3.5,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLWWL",
+      "venue": "",
+      "opponentOverall": "LWWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 0,
+      "lastScore": "2-0",
+      "lastDate": "09.11.26",
+      "line": "H2H: J. Echeverria 0-0-0 (even) (last: 2026-11-09 Echeverria J. 2-0 Dalmasso G.)",
+      "last": "2026-11-09 Echeverria J. 2-0 Dalmasso G. (Echeverria J. won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 59.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.59,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "rows": 95,
+    "withVote": 87,
+    "fanOk": 67,
+    "belowLimit": 29,
+    "noOdds": 1,
+    "voteRequested": 48,
+    "voteFound": 48,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 67,
+    "oddsOk": 37,
+    "calls": 48,
     "budgetHit": 0,
-    "picks": 0
+    "picks": 37
    }
   },
   "volleyball": {
-   "generatedAt": "2026-11-10T07:54:02Z",
+   "generatedAt": "2026-11-10T08:16:41Z",
    "watch": true,
-   "picks": [],
+   "picks": [
+    {
+     "id": "volleyball|2026-11-10|Prerov W|Ostrava W",
+     "sport": "volleyball",
+     "date": "2026-11-10",
+     "league": "CZW",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "18:00",
+     "home": "Prerov W",
+     "away": "Ostrava W",
+     "match": "Prerov W vs Ostrava W",
+     "side": "home",
+     "team": "Prerov W",
+     "fanPct": 90.0,
+     "votes": 72,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/volleyball/match/17511208",
+     "matchUrl": "https://www.sofascore.com/volleyball/match/17511208",
+     "forebetUrl": "https://www.forebet.com/en/volleyball/matches/extraliga-women/prerov-w-ostrava-w/105013",
+     "eventId": null,
+     "odds": {
+      "home": 1.4,
+      "draw": null,
+      "away": 2.7
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.4,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.38,
+      "books": 1,
+      "at": "2026-11-10T08:18:07Z"
+     },
+     "impliedPct": 71.4,
+     "edgePct": 18.6,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "LWWWW",
+      "venue": "WWWLL",
+      "opponentOverall": "WWLLW",
+      "opponentVenue": "LLWWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 3,
+      "losses": 2,
+      "lastScore": "3-1",
+      "lastDate": "06.11.26",
+      "line": "H2H: Prerov W 0-0-0 (even) (last: 2026-11-06 Ostrava K 3-1 Prerov K)",
+      "last": "2026-11-06 Ostrava K 3-1 Prerov K (Ostrava K won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 56.0,
+      "pick": "1",
+      "exactScore": "3-1"
+     },
+     "modelProb": 0.598,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "volleyball|2026-11-10|Sao Jose dos Campos|Montes Claros",
+     "sport": "volleyball",
+     "date": "2026-11-10",
+     "league": "BR1",
+     "kickoff": "2026-11-10T22:30:00Z",
+     "time": "22:30",
+     "home": "Sao Jose dos Campos",
+     "away": "Montes Claros",
+     "match": "Sao Jose dos Campos vs Montes Claros",
+     "side": "home",
+     "team": "Sao Jose dos Campos",
+     "fanPct": 83.0,
+     "votes": 308,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/volleyball/match/17276059",
+     "matchUrl": "https://www.sofascore.com/volleyball/match/17276059",
+     "forebetUrl": "https://www.forebet.com/en/volleyball/matches/superliga/sao-jose-dos-campos-montes-claros/113595",
+     "eventId": null,
+     "odds": {
+      "home": 1.35,
+      "draw": null,
+      "away": 3.1
+     },
+     "oddsSource": "Livesport (bukm. 1149)",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.35,
+      "bookmaker": "Livesport (bukm. 1149)",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 74.1,
+     "edgePct": 8.9,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 41.0,
+      "pick": "2",
+      "exactScore": "2-3"
+     },
+     "modelProb": 0.41,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "volleyball|2026-11-10|Spor Toto|Onikisubat",
+     "sport": "volleyball",
+     "date": "2026-11-10",
+     "league": "TRC",
+     "kickoff": "2026-11-10T16:00:00Z",
+     "time": "16:00",
+     "home": "Spor Toto",
+     "away": "Onikisubat",
+     "match": "Spor Toto vs Onikisubat",
+     "side": "home",
+     "team": "Spor Toto",
+     "fanPct": 81.0,
+     "votes": 102,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/volleyball/match/17385574",
+     "matchUrl": "https://www.sofascore.com/volleyball/match/17385574",
+     "forebetUrl": "https://www.forebet.com/en/volleyball/matches/turkish-cup/spor-toto-onikisubat/113612",
+     "eventId": null,
+     "odds": {
+      "home": 1.325,
+      "draw": null,
+      "away": 3.41
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.32,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.325,
+      "books": 1,
+      "at": "2026-11-10T08:18:07Z"
+     },
+     "impliedPct": 75.5,
+     "edgePct": 5.5,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "forebet": {
+      "prob": 40.0,
+      "pick": "2",
+      "exactScore": "2-3"
+     },
+     "modelProb": 0.4,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "volleyball|2026-11-10|Samsung Blue Fangs|Kepco",
+     "sport": "volleyball",
+     "date": "2026-11-10",
+     "league": "KR1",
+     "kickoff": "2026-11-10T11:00:00Z",
+     "time": "11:00",
+     "home": "Samsung Blue Fangs",
+     "away": "Kepco",
+     "match": "Samsung Blue Fangs vs Kepco",
+     "side": "away",
+     "team": "Kepco",
+     "fanPct": 79.0,
+     "votes": 276,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/volleyball/match/17267101",
+     "matchUrl": "https://www.sofascore.com/volleyball/match/17267101",
+     "forebetUrl": "https://www.forebet.com/en/volleyball/matches/volleyball-league-kr/samsung-blue-fangs-kepco/113609",
+     "eventId": null,
+     "odds": {
+      "home": 2.45,
+      "draw": null,
+      "away": 1.5
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.5,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 66.7,
+     "edgePct": 12.3,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "WLLWW",
+      "venue": "WWLWW",
+      "opponentOverall": "LWLLL",
+      "opponentVenue": "LLLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "3-0",
+      "lastDate": "07.03.26",
+      "line": "H2H: Kepco 4-0-1 (last: 2026-03-07 Kepco 3-0 Samsung Blue Fangs)",
+      "last": "2026-03-07 Kepco 3-0 Samsung Blue Fangs (Kepco won)",
+      "edge": {
+       "team": "Kepco",
+       "wins": 1,
+       "draws": 0,
+       "losses": 4,
+       "record": "1-0-4",
+       "even": false
+      }
+     },
+     "forebet": {
+      "prob": 70.0,
+      "pick": "2",
+      "exactScore": "2-3"
+     },
+     "modelProb": 0.731,
+     "grade": "B",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    },
+    {
+     "id": "volleyball|2026-11-10|Jedinstvo S.P. W|Napredak W",
+     "sport": "volleyball",
+     "date": "2026-11-10",
+     "league": "RCW",
+     "kickoff": "2026-11-10T18:00:00Z",
+     "time": "18:00",
+     "home": "Jedinstvo S.P. W",
+     "away": "Napredak W",
+     "match": "Jedinstvo S.P. W vs Napredak W",
+     "side": "away",
+     "team": "Napredak W",
+     "fanPct": 71.0,
+     "votes": 38,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/volleyball/match/17436623",
+     "matchUrl": "https://www.sofascore.com/volleyball/match/17436623",
+     "forebetUrl": "https://www.forebet.com/en/volleyball/matches/serbia-cup-women/jedinstvo-sp-w-napredak-w/113606",
+     "eventId": null,
+     "odds": {
+      "home": 1.46,
+      "draw": null,
+      "away": 2.37
+     },
+     "oddsSource": "Superbet",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 2.37,
+      "bookmaker": "Superbet",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 42.2,
+     "edgePct": 28.8,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "WWWLW",
+      "venue": "WLWW",
+      "opponentOverall": "LWLWW",
+      "opponentVenue": "LWWWL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": 1,
+      "losses": 1,
+      "lastScore": "1-3",
+      "lastDate": "06.11.26",
+      "line": "H2H: Napredak W 0-0-0 (even) (last: 2026-11-06 Jedinstvo S.P. K 1-3 Napredak K)",
+      "last": "2026-11-06 Jedinstvo S.P. K 1-3 Napredak K (Napredak K won)",
+      "edge": {
+       "team": "even",
+       "wins": 0,
+       "draws": 0,
+       "losses": 0,
+       "record": "0-0-0",
+       "even": true
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "2",
+      "exactScore": "0-3"
+     },
+     "modelProb": 0.675,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "rows": 33,
+    "withVote": 17,
+    "fanOk": 12,
+    "belowLimit": 5,
+    "noOdds": 2,
+    "voteRequested": 29,
+    "voteFound": 13,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 14,
+    "oddsOk": 5,
+    "calls": 29,
     "budgetHit": 0,
-    "picks": 0
+    "picks": 5
    }
   }
  }
