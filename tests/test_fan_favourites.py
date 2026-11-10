@@ -176,3 +176,126 @@ def test_settle_file_marks_void(tmp_path):
     assert _ff.settle_file(day, idx, str(tmp_path)) == 1
     d = _j.loads((tmp_path / f'fanvote_{day}.json').read_text(encoding='utf-8'))
     assert d['sports']['tennis']['picks'][0]['result']['status'] == 'void'
+
+
+def _fp(sport, home, away, band, price, status='pick', result=None, kickoff='2026-10-21T19:00:00Z',
+        fan=75, votes=500):
+    return {'id': f'{sport}|{DAY}|{home}|{away}', 'sport': sport, 'date': DAY, 'home': home, 'away': away,
+            'match': f'{home} vs {away}', 'team': home, 'band': band, 'fanPct': fan, 'votes': votes,
+            'kickoff': kickoff, 'bestPrice': {'price': price}, 'status': status, 'result': result}
+
+
+def _fixed_sample(tmp_path):
+    res = tmp_path / 'results'
+    res.mkdir(exist_ok=True)
+    past = '2026-10-20T19:00:00Z'
+    data = {'sports': {
+        'football': {'picks': [
+            _fp('football', 'A', 'B', '60-70', 2.0, result={'status': 'won', 'score': '2-0'}, kickoff=past),
+            _fp('football', 'C', 'D', '70-80', 2.5, result={'status': 'lost', 'score': '0-1'}, kickoff=past),
+            _fp('football', 'E', 'F', '60-70', 1.8, kickoff=past,
+                result={'status': 'lost', 'score': '1-1', 'draw': True}),
+            _fp('football', 'G', 'H', '80-90', 2.2, result={'status': 'void'}, kickoff=past),
+            _fp('football', 'I', 'J', '60-70', 1.9)]},
+        'tennis': {'picks': [
+            _fp('tennis', 'K', 'L', '80-90', 1.7, result={'status': 'won'}, kickoff=past),
+            _fp('tennis', 'M', 'N', '90+', 1.9, status='watch', result={'status': 'won'}, kickoff=past),
+            _fp('tennis', 'O', 'P', '70-80', 1.6)]}}}
+    (res / f'fanvote_{DAY}.json').write_text(json.dumps(data), encoding='utf-8')
+    return str(res)
+
+
+def test_record_unchanged_fixed_sample(tmp_path):
+    out = fan_feed.load_fan(_fixed_sample(tmp_path), remote=False, now=NOW)
+    rec = out['record']
+    none = {'n': 0, 'won': 0, 'hitPct': None, 'roiPct': None, 'profitUnits': None, 'avgOdds': None}
+    assert rec['all'] == {'n': 4, 'won': 2, 'hitPct': 50.0, 'roiPct': -7.5, 'profitUnits': -0.3, 'avgOdds': 2.0}
+    assert rec['bySport'] == {
+        'football': {'n': 3, 'won': 1, 'hitPct': 33.3, 'roiPct': -33.3, 'profitUnits': -1.0, 'avgOdds': 2.1},
+        'tennis': {'n': 1, 'won': 1, 'hitPct': 100.0, 'roiPct': 70.0, 'profitUnits': 0.7, 'avgOdds': 1.7}}
+    assert rec['byBand'] == {
+        '60-70': {'n': 2, 'won': 1, 'hitPct': 50.0, 'roiPct': 0.0, 'profitUnits': 0.0, 'avgOdds': 1.9},
+        '70-80': {'n': 1, 'won': 0, 'hitPct': 0.0, 'roiPct': -100.0, 'profitUnits': -1.0, 'avgOdds': 2.5},
+        '80-90': {'n': 1, 'won': 1, 'hitPct': 100.0, 'roiPct': 70.0, 'profitUnits': 0.7, 'avgOdds': 1.7},
+        '90+': none}
+
+
+def _merged_ids(res):
+    data = json.load(open(ff.fan_path(DAY, res), encoding='utf-8'))
+    return [p['id'] for p in data['sports']['football']['picks']]
+
+
+def _run(res):
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    ff.merge(DAY, 'football', blk, res, now=NOW)
+    return blk
+
+
+def test_merge_keeps_pending_pick_the_new_run_did_not_evaluate(tmp_path):
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('C', 'D', 70, 10)])
+    _run(res)
+    lost_vote = row('A', 'B', 65, 20)
+    lost_vote['sofascore'] = {'found': False}
+    write_rows(tmp_path, 'football', [lost_vote, row('C', 'D', 70, 10)])
+    blk = _run(res)
+    assert f'football|{DAY}|A|B' not in blk['evaluated']
+    assert sorted(_merged_ids(res)) == [f'football|{DAY}|A|B', f'football|{DAY}|C|D']
+
+
+def test_merge_drops_re_evaluated_pick_below_the_odds_limit(tmp_path):
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('C', 'D', 70, 10)])
+    _run(res)
+    write_rows(tmp_path, 'football', [row('A', 'B', 65, 20, odds=(1.4, 4, 6)), row('C', 'D', 70, 10)])
+    _run(res)
+    assert _merged_ids(res) == [f'football|{DAY}|C|D']
+
+
+def test_merge_without_evaluated_key_behaves_as_before(tmp_path):
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('C', 'D', 70, 10)])
+    _run(res)
+    lost_vote = row('A', 'B', 65, 20)
+    lost_vote['sofascore'] = {'found': False}
+    write_rows(tmp_path, 'football', [lost_vote, row('C', 'D', 70, 10)])
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    del blk['evaluated']
+    ff.merge(DAY, 'football', blk, res, now=NOW)
+    assert _merged_ids(res) == [f'football|{DAY}|C|D']
+
+
+def test_upcoming_sorted_by_kickoff_then_fan_vote_and_started_flagged(tmp_path):
+    res = tmp_path / 'results'
+    res.mkdir()
+    picks = [
+        _fp('football', 'A', 'B', '60-70', 2.0, kickoff='2026-10-21T20:00:00Z', fan=65),
+        _fp('football', 'C', 'D', '70-80', 2.0, kickoff='2026-10-21T18:00:00Z', fan=70, votes=300),
+        _fp('football', 'E', 'F', '80-90', 2.0, kickoff='2026-10-21T18:00:00Z', fan=85),
+        _fp('football', 'G', 'H', '70-80', 2.0, kickoff='2026-10-21T18:00:00Z', fan=70, votes=900),
+        _fp('football', 'I', 'J', '90+', 2.0, kickoff=None, fan=95),
+        _fp('football', 'K', 'L', '90+', 2.0, kickoff='2026-10-21T05:00:00Z', fan=92),   # started
+        _fp('football', 'M', 'N', '60-70', 2.0, kickoff='2026-10-21T06:00:00Z', fan=62),  # ko == now
+        _fp('football', 'O', 'P', '60-70', 2.0, kickoff='2026-10-21T21:00:00Z', result={'status': 'void'}),
+        _fp('football', 'Q', 'R', '60-70', 2.0, kickoff='2026-10-21T22:00:00Z', result={'status': 'won'}),
+    ]
+    (res / f'fanvote_{DAY}.json').write_text(json.dumps({'sports': {'football': {'picks': picks}}}),
+                                             encoding='utf-8')
+    for sub in (True, False):
+        blk = fan_feed.load_fan(str(res), is_subscriber=sub, remote=False, now=NOW)['days'][0]['sports']['football']
+        up = [p['id'].split('|')[2] for p in blk['picks'] if not p['started']]
+        assert up == ['E', 'G', 'C', 'A', 'I']
+        assert blk['upcoming'] == 5
+        started = {p['id'].split('|')[2] for p in blk['picks'] if p['started']}
+        assert started == {'K', 'M', 'O', 'Q'}
+
+
+def test_every_qualifying_pick_appears_on_the_board(tmp_path):
+    res = write_rows(tmp_path, 'football', [
+        row('A', 'B', 65, 20, time='12:00'), row('C', 'D', 80, 10, time='09:00'),
+        row('E', 'F', 15, 75, odds=(5, 4, 2.4), time='21:00'), row('G', 'H', 70, 20, time='12:00'),
+        row('X', 'Y', 80, 10, odds=(1.4, 4, 6)), row('V', 'W', 90, 5, votes=20)])
+    blk = _run(res)
+    built = {p['id'] for p in blk['picks']}
+    assert len(built) == 4
+    for sub in (True, False):
+        board = fan_feed.load_fan(res, is_subscriber=sub, remote=False, now=NOW)
+        ids = {p['id'] for p in board['days'][0]['sports']['football']['picks'] if not p['started']}
+        assert ids == built

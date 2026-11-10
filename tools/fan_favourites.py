@@ -229,11 +229,13 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
              'voteRequested': int(fill.get('voteRequested', 0)), 'voteFound': int(fill.get('voteFound', 0)),
              'wrongEvent': int(fill.get('wrongEvent', 0)), 'fanThr': 0, 'oddsOk': 0,
              'calls': int(fill.get('calls', 0)), 'budgetHit': int(fill.get('budgetHit', 0))}
-    picks, seen = [], set()
+    picks, seen, evaluated = [], set(), []
     for r in rows:
         fs = fan_limits.fan_side(r)
         if fs is None:
             continue
+        # Matches this run actually checked; merge() keeps old picks it did not.
+        evaluated.append(f"{sport}|{day}|{r.get('homeTeam') or ''}|{r.get('awayTeam') or ''}")
         stats['withVote'] += 1
         if fs['fanPct'] >= fan_limits.fan_threshold(sport):
             stats['fanThr'] += 1
@@ -296,7 +298,8 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
     picks.sort(key=lambda p: (-p['fanPct'], -p['votes']))
     stats['picks'] = len(picks)
     log(f'   fan favourites {sport} {day}: {stats}')
-    return {'generatedAt': _iso(now), 'watch': watch, 'picks': picks, 'stats': stats}
+    return {'generatedAt': _iso(now), 'watch': watch, 'picks': picks, 'stats': stats,
+            'evaluated': evaluated}
 
 
 def merge(day: str, sport: str, block: Dict[str, Any], results: str = RESULTS,
@@ -310,8 +313,11 @@ def merge(day: str, sport: str, block: Dict[str, Any], results: str = RESULTS,
         prev = old.pop(p['id'], None)
         if prev and prev.get('result'):
             p['result'] = prev['result']
-    # Picks that already started stay on the board even if the new run drops them.
+    # Picks that already started stay on the board even if the new run drops them,
+    # and so do pending picks the new run never evaluated (no Fan Vote / missing row).
+    evaluated = set(block['evaluated']) if 'evaluated' in block else None
     keep = [p for p in old.values() if p.get('result')
+            or (evaluated is not None and p.get('id') not in evaluated)
             or (pricing._parse_ts(p.get('kickoff')) or datetime.max.replace(tzinfo=timezone.utc))
             <= (now or _now())]
     block['picks'] = sorted((block.get('picks') or []) + keep, key=lambda p: (-p['fanPct'], -p['votes']))

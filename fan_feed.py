@@ -21,6 +21,7 @@ from typing import Any, Dict, List, Optional
 import fan_limits
 import top_feed
 from top_feed import _read_json, _remote_json
+from tools import pricing
 
 RESULTS_DIR = top_feed.RESULTS_DIR
 _DAY_RE = re.compile(r'fanvote_(\d{4}-\d{2}-\d{2})\.json$')
@@ -51,6 +52,22 @@ def _locked(p: Dict[str, Any]) -> Dict[str, Any]:
     v = {k: p.get(k) for k in _LOCKED_KEEP}
     v['locked'] = True
     return v
+
+
+def _ko(p: Dict[str, Any]) -> Optional[datetime]:
+    return pricing._parse_ts(p.get('kickoff'))
+
+
+def _started(p: Dict[str, Any], now: datetime) -> bool:
+    """Kicked off or settled (won/lost/void); unknown kickoff counts as upcoming."""
+    ko = _ko(p)
+    return bool((p.get('result') or {}).get('status')) or (ko is not None and ko <= now)
+
+
+def _order(p: Dict[str, Any]):
+    ko = _ko(p)
+    return (ko is None, ko or datetime.max.replace(tzinfo=timezone.utc),
+            -(p.get('fanPct') or 0), -(p.get('votes') or 0))
 
 
 def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
@@ -95,11 +112,14 @@ def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
                 everything.append(p)
             if sport and sp != sport:
                 continue
-            visible = [p if is_subscriber or _settled(p) else _locked(p) for p in picks]
+            picks = sorted(picks, key=_order)
+            visible = [{**(p if is_subscriber or _settled(p) else _locked(p)), 'started': _started(p, now)}
+                       for p in picks]
             sports_out[sp] = {'generatedAt': (blk or {}).get('generatedAt'),
                               'watch': bool((blk or {}).get('watch')), 'picks': visible,
                               'stats': (blk or {}).get('stats') or None,
-                              'locked': sum(1 for p in visible if p.get('locked'))}
+                              'locked': sum(1 for p in visible if p.get('locked')),
+                              'upcoming': sum(1 for p in visible if not p['started'])}
         if date and day != date:
             continue
         days.append({'date': day, 'generatedAt': raw.get('generatedAt'), 'sports': sports_out})

@@ -200,7 +200,7 @@ export default function FanFavouritesPage() {
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {}
-    for (const d of data?.days ?? []) for (const [s, b] of Object.entries(d.sports)) c[s] = (c[s] ?? 0) + b.picks.length
+    for (const d of data?.days ?? []) for (const [s, b] of Object.entries(d.sports)) c[s] = (c[s] ?? 0) + b.picks.filter(p => !p.started).length
     return c
   }, [data])
 
@@ -214,9 +214,10 @@ export default function FanFavouritesPage() {
     for (const d of data?.days ?? []) {
       for (const [s, b] of Object.entries(d.sports)) {
         if (d.date >= today) {
-          total += b.picks.length
-          locked += b.locked ?? 0
-          if (b.picks.length) bySport[s] = (bySport[s] ?? 0) + b.picks.length
+          const up = b.picks.filter(p => !p.started)
+          total += up.length
+          locked += up.filter(p => p.locked).length
+          if (up.length) bySport[s] = (bySport[s] ?? 0) + up.length
         }
         for (const p of b.picks) if (p.result?.status && !p.locked) settled.push(p)
       }
@@ -232,7 +233,7 @@ export default function FanFavouritesPage() {
         </h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
           Matches where SofaScore fans clearly back one side (football ≥ {data?.thresholds?.fanPct?.football ?? 60}%, other sports ≥ {data?.thresholds?.fanPct?.default ?? 70}%, at least {data?.thresholds?.minVotes ?? 100} votes),
-          listed only when the price passes our standard odds limit, sorted by Fan Vote. A strong crowd favourite is
+          listed only when the price passes our standard odds limit, sorted by kick-off time, then Fan Vote. A strong crowd favourite is
           often a short price, so judge the record by ROI, not only by hit rate.
         </p>
       </div>
@@ -315,26 +316,48 @@ export default function FanFavouritesPage() {
                 </Card>
               )
             }
-            const open = blk.picks.filter(p => !p.locked)
-            const locked = blk.picks.filter(p => p.locked)
+            // Backend order: kick-off time, then Fan Vote. Started/settled picks
+            // leave the main list and go to a collapsed history sub-list.
+            const upcoming = blk.picks.filter(p => !p.started)
+            const history = blk.picks.filter(p => p.started)
+            const locked = upcoming.filter(p => p.locked)
+            const st = blk.stats
+            const others = Object.entries(day.sports)
+              .filter(([s]) => s !== sport)
+              .reduce((n, [, b]) => n + b.picks.filter(p => !p.started).length, 0)
+            const why = st && [
+              `${st.rows} matches, ${st.withVote} with Fan Vote, ${st.fanOk} above the fan threshold, ${st.belowLimit} below the odds limit, ${st.noOdds} without odds`,
+              others > 0 ? `+${others} in other sports` : '',
+              !data.isSubscriber && locked.length > 0 ? `${locked.length} locked (Premium)` : '',
+            ].filter(Boolean).join(' · ')
             return (
               <Card key={day.date}>
                 <CardHeader className="pb-2">
                   <CardTitle className="flex flex-wrap items-baseline justify-between gap-2 text-base">
                     <span>{day.date}</span>
                     <span className="text-sm font-normal text-muted-foreground">
-                      {blk.picks.length} picks{blk.watch ? ' · watch only (no record yet)' : ''}
+                      {upcoming.length} upcoming{blk.watch ? ' · watch only (no record yet)' : ''}
                     </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {open.map(p => <PickCard key={p.id} p={p} />)}
-                  {locked.map(p => <LockedCard key={p.id} p={p} />)}
+                  {upcoming.map(p => p.locked ? <LockedCard key={p.id} p={p} /> : <PickCard key={p.id} p={p} />)}
                   {locked.length > 0 && (
                     <div className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-muted/50 p-3 text-sm">
                       <span>{locked.length} Fan Favourites before kick-off, available in Premium</span>
                       <Button asChild size="sm"><Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Unlock</Link></Button>
                     </div>
+                  )}
+                  {why && <p className="text-xs text-muted-foreground">{why}</p>}
+                  {history.length > 0 && (
+                    <details className="space-y-2">
+                      <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
+                        Started / settled ({history.length})
+                      </summary>
+                      <div className="mt-2 space-y-2">
+                        {history.map(p => p.locked ? <LockedCard key={p.id} p={p} /> : <PickCard key={p.id} p={p} />)}
+                      </div>
+                    </details>
                   )}
                 </CardContent>
               </Card>

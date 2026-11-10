@@ -604,6 +604,8 @@ export interface FanPick {
   band?: string
   /** Pending pick for a non-subscriber: only sport/league/kickoff/band. */
   locked?: boolean
+  /** Kicked off or settled: not part of the upcoming list. */
+  started?: boolean
   home?: string
   away?: string
   match?: string
@@ -648,7 +650,7 @@ export interface FanStats {
 
 export interface FanResponse {
   isSubscriber: boolean
-  days: { date: string; generatedAt?: string; sports: Record<string, { generatedAt?: string; watch: boolean; picks: FanPick[]; locked: number; stats?: FanStats | null }> }[]
+  days: { date: string; generatedAt?: string; sports: Record<string, { generatedAt?: string; watch: boolean; picks: FanPick[]; locked: number; upcoming?: number; stats?: FanStats | null }> }[]
   record: { all: FanRecord; bySport: Record<string, FanRecord>; byBand: Record<string, FanRecord> }
   historySince?: string | null
   thresholds?: { minVotes: number; fanPct: Record<string, number>; oddsLimit: Record<string, { min: number; source: string }> }
