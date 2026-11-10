@@ -19,7 +19,7 @@ from qualification_gate import SPORT_MIN_ODDS, SPORT_MIN_ODDS_FALLBACK
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RULES_PATH = os.path.join(ROOT, 'outputs', 'top_rules.json')
 
-FAN_MIN = {'football': 60.0}
+FAN_MIN = {'football': 70.0}
 FAN_MIN_DEFAULT = 70.0
 # Calibrated 2026-11 (tools/fanvote_backtest.py --calibrate, rows from 2026-09-27):
 # 30-49 votes hit 62.2% / ROI +14.3% (n=249) vs base >=100 votes 57.2% / -0.9%.

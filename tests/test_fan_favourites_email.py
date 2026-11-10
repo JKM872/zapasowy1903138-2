@@ -56,3 +56,35 @@ def test_nothing_new_no_send_and_failed_send_keeps_ledger(tmp_path, monkeypatch)
     n = len(calls)
     assert fe.main(args) == 0 and len(calls) == n          # nothing new -> no send
     assert fe.main(args + ['--force']) == 0 and 'ręczna' in calls[-1][1]
+
+
+def test_card_shows_form_h2h_last_h2h_and_last_matches():
+    p = _p(1, 'football', 80, home='H1', away='A1',
+           form={'overall': 'WWL', 'venue': 'WD', 'opponentOverall': 'LLD', 'opponentVenue': 'L'},
+           h2h={'total': 3, 'line': 'H2H 3: A1 2-1', 'last': '2026-10-29 H1 1-0 A1',
+                'lastDate': '29.10.26', 'lastScore': '1-0'},
+           lastMatch={'team': {'date': '05.11.26', 'result': 'W', 'score': '2-1'},
+                      'opponent': {'date': '04.11.26', 'result': 'L', 'score': '0-3'}})
+    h = fe.build_html([p], [DAY], {})
+    assert 'Forma A1' in h and 'Forma H1' in h and '>D<' in h
+    assert 'H2H 3: A1 2-1' in h and '2026-10-29 H1 1-0 A1' in h
+    assert 'Ostatni mecz A1: 05.11.26' in h and '2-1' in h
+    assert 'Ostatni mecz H1: 04.11.26' in h and '0-3' in h
+
+
+def test_card_falls_back_to_last_h2h_date_and_score():
+    p = _p(1, 'football', 80, h2h={'total': 1, 'line': 'x', 'last': 'No previous meetings',
+                                   'lastDate': '29.10.26', 'lastScore': '1-0'})
+    assert 'Ostatni H2H: 29.10.26 1-0' in fe.build_html([p], [DAY], {})
+
+
+def test_card_renders_cleanly_without_new_fields():
+    p = _p(1, 'football', 80, form={}, h2h=None)
+    h = fe.build_html([p], [DAY], {})
+    assert 'Brak bezpośrednich meczów' in h and 'Ostatni H2H: —' in h
+    assert 'Ostatni mecz A1: —' in h and 'Ostatni mecz H1: —' in h
+
+
+def test_threshold_text_shows_football_70():
+    h = fe.build_html([_p(1, 'football', 80)], [DAY], {})
+    assert 'piłka ≥ 70%' in h and 'pozostałe ≥ 70%' in h

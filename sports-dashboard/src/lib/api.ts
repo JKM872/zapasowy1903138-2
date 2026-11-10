@@ -594,6 +594,13 @@ export async function getTopPicks(): Promise<TopResponse> {
 // Fan Favourites (/api/fan-favourites, SofaScore Fan Vote board)
 // ---------------------------------------------------------------------------
 
+export interface FanLastMatch {
+  date?: string
+  result?: string
+  score?: string
+  event?: string
+}
+
 export interface FanPick {
   id: string
   sport: string
@@ -621,8 +628,10 @@ export interface FanPick {
   edgePct?: number
   limit?: { min: number; source: string }
   status?: 'pick' | 'watch'
-  form?: { overall: string; venue: string; opponentOverall: string; opponentVenue: string }
+  form?: { overall: string; venue: string; opponentOverall: string; opponentVenue: string; season?: string }
   h2h?: { total: number; wins: number; losses: number; lastScore?: string | null; lastDate?: string | null; line?: string; last?: string } | null
+  /** Newest match of each team against any opponent (livesport dated form). */
+  lastMatch?: { team: FanLastMatch | null; opponent: FanLastMatch | null } | null
   forebet?: { prob: number | null; pick?: string | null; exactScore?: string | null }
   modelProb?: number | null
   grade?: string | null

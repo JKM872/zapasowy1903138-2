@@ -172,6 +172,21 @@ def _h2h(r: Dict[str, Any], side: str) -> Optional[Dict[str, Any]]:
             'line': line, 'last': last, 'edge': h.get('edge')}
 
 
+def _last_match(r: Dict[str, Any], side: str) -> Dict[str, Optional[Dict[str, str]]]:
+    """Newest dated form row (any opponent) of the fan side and its rival; None when unknown."""
+    def first(key: str) -> Optional[Dict[str, str]]:
+        xs = (r.get('form') or {}).get(key)
+        if not isinstance(xs, list) or not xs or not isinstance(xs[0], dict):
+            return None
+        e = xs[0]
+        return {k: str(e.get(k) or '') for k in ('date', 'result', 'score', 'event')}
+    try:
+        op = 'away' if side == 'home' else 'home'
+        return {'team': first(f'{side}Dated'), 'opponent': first(f'{op}Dated')}
+    except Exception:
+        return {'team': None, 'opponent': None}
+
+
 def model_prob(r: Dict[str, Any], side: str) -> Optional[float]:
     sc, fb = r.get('scoring') or {}, r.get('forebet') or {}
     if sc.get('pick') == ('1' if side == 'home' else '2') and _f(sc.get('prob')):
@@ -288,7 +303,7 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
             'impliedPct': implied, 'edgePct': round(fs['fanPct'] - implied, 1),
             'limit': limit,
             'status': 'watch' if watch else 'pick',
-            'form': _form(r, side), 'h2h': _h2h(r, side),
+            'form': _form(r, side), 'h2h': _h2h(r, side), 'lastMatch': _last_match(r, side),
             'forebet': {'prob': _f(fb.get('homeProb' if side == 'home' else 'awayProb')),
                         'pick': fb.get('prediction'), 'exactScore': fb.get('exactScore')},
             'modelProb': model_prob(r, side), 'grade': r.get('predictionGrade'),

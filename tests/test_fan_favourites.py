@@ -35,8 +35,8 @@ def write_rows(tmp_path, sport, rows, avail=None):
 
 
 def test_thresholds_and_bands():
-    assert fl.fan_threshold('football') == 60 and fl.fan_threshold('tennis') == 70
-    assert fl.select('football', 60, 100) and not fl.select('football', 59.9, 500)
+    assert fl.fan_threshold('football') == 70 and fl.fan_threshold('tennis') == 70
+    assert fl.select('football', 70, 100) and not fl.select('football', 69.9, 500)
     assert not fl.select('hockey', 69, 500) and not fl.select('hockey', 75, 99)
     assert [fl.band(x) for x in (60, 69.9, 70, 85, 90, 100)] == ['60-70', '60-70', '70-80', '80-90', '90+', '90+']
 
@@ -56,7 +56,7 @@ def test_odds_limits_are_the_standard_per_sport_limits(tmp_path):
 
 def test_build_selects_sorts_and_applies_the_limit(tmp_path):
     res = write_rows(tmp_path, 'football', [
-        row('A', 'B', 65, 20),                          # 65% at 2.2 -> pick
+        row('A', 'B', 72, 20),                          # 72% at 2.2 -> pick
         row('C', 'D', 80, 10, odds=(1.4, 4, 6)),       # 1.4 < 1.5 -> out
         row('E', 'F', 15, 75, odds=(5, 4, 2.4)),       # away 75% -> pick, first
         row('G', 'H', 90, 5, votes=20),                # too few votes
@@ -75,7 +75,7 @@ def test_build_selects_sorts_and_applies_the_limit(tmp_path):
 
 
 def test_c6_standard_limits_counters_and_season_form(tmp_path):
-    r1 = row('A', 'B', 65, 20, odds=(1.60, 4.0, 5.5))
+    r1 = row('A', 'B', 72, 20, odds=(1.60, 4.0, 5.5))
     r1.update(homeSeason=['W', 'W'], awaySeason=['L'], homeAtHomeSeason=['W'])
     res = write_rows(tmp_path, 'football', [
         r1, row('C', 'D', 70, 10, odds=(2.6, 3, 1.40)),
@@ -106,7 +106,7 @@ def test_watch_sports_are_not_staked(tmp_path):
 
 
 def _board(tmp_path):
-    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('E', 'F', 15, 75, odds=(5, 4, 2.4))])
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 72, 20), row('E', 'F', 15, 75, odds=(5, 4, 2.4))])
     blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
     ff.merge(DAY, 'football', blk, res, now=NOW)
     (tmp_path / 'results' / 'forebet_settled.json').write_text(json.dumps({
@@ -139,7 +139,7 @@ def test_feed_paywall_and_record(tmp_path):
     assert locked[0]['band'] == '70-80'
     rec = anon['record']['bySport']['football']
     assert rec == {'n': 1, 'won': 0, 'hitPct': 0.0, 'roiPct': -100.0, 'profitUnits': -1.0, 'avgOdds': 2.2}
-    assert anon['record']['byBand']['60-70']['n'] == 1
+    assert anon['record']['byBand']['70-80']['n'] == 1
     sub = fan_feed.load_fan(res, is_subscriber=True, remote=False, now=NOW, sport='football', date=DAY)
     assert all(not p.get('locked') for p in sub['days'][0]['sports']['football']['picks'])
     assert fan_feed.load_fan(res, remote=False, now=NOW, sport='hockey')['days'][0]['sports'] == {}
@@ -232,9 +232,9 @@ def _run(res):
 
 
 def test_merge_keeps_pending_pick_the_new_run_did_not_evaluate(tmp_path):
-    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('C', 'D', 70, 10)])
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 72, 20), row('C', 'D', 70, 10)])
     _run(res)
-    lost_vote = row('A', 'B', 65, 20)
+    lost_vote = row('A', 'B', 72, 20)
     lost_vote['sofascore'] = {'found': False}
     write_rows(tmp_path, 'football', [lost_vote, row('C', 'D', 70, 10)])
     blk = _run(res)
@@ -243,17 +243,17 @@ def test_merge_keeps_pending_pick_the_new_run_did_not_evaluate(tmp_path):
 
 
 def test_merge_drops_re_evaluated_pick_below_the_odds_limit(tmp_path):
-    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('C', 'D', 70, 10)])
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 72, 20), row('C', 'D', 70, 10)])
     _run(res)
-    write_rows(tmp_path, 'football', [row('A', 'B', 65, 20, odds=(1.4, 4, 6)), row('C', 'D', 70, 10)])
+    write_rows(tmp_path, 'football', [row('A', 'B', 72, 20, odds=(1.4, 4, 6)), row('C', 'D', 70, 10)])
     _run(res)
     assert _merged_ids(res) == [f'football|{DAY}|C|D']
 
 
 def test_merge_without_evaluated_key_behaves_as_before(tmp_path):
-    res = write_rows(tmp_path, 'football', [row('A', 'B', 65, 20), row('C', 'D', 70, 10)])
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 72, 20), row('C', 'D', 70, 10)])
     _run(res)
-    lost_vote = row('A', 'B', 65, 20)
+    lost_vote = row('A', 'B', 72, 20)
     lost_vote['sofascore'] = {'found': False}
     write_rows(tmp_path, 'football', [lost_vote, row('C', 'D', 70, 10)])
     blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
@@ -289,7 +289,7 @@ def test_upcoming_sorted_by_kickoff_then_fan_vote_and_started_flagged(tmp_path):
 
 def test_every_qualifying_pick_appears_on_the_board(tmp_path):
     res = write_rows(tmp_path, 'football', [
-        row('A', 'B', 65, 20, time='12:00'), row('C', 'D', 80, 10, time='09:00'),
+        row('A', 'B', 72, 20, time='12:00'), row('C', 'D', 80, 10, time='09:00'),
         row('E', 'F', 15, 75, odds=(5, 4, 2.4), time='21:00'), row('G', 'H', 70, 20, time='12:00'),
         row('X', 'Y', 80, 10, odds=(1.4, 4, 6)), row('V', 'W', 90, 5, votes=20)])
     blk = _run(res)
@@ -299,3 +299,24 @@ def test_every_qualifying_pick_appears_on_the_board(tmp_path):
         board = fan_feed.load_fan(res, is_subscriber=sub, remote=False, now=NOW)
         ids = {p['id'] for p in board['days'][0]['sports']['football']['picks'] if not p['started']}
         assert ids == built
+
+
+def test_football_69_fails_70_qualifies(tmp_path):
+    assert fl.select('football', 69.9, 500) is False
+    assert fl.select('football', 70.0, 500) is True
+    res = write_rows(tmp_path, 'football', [row('A', 'B', 69, 20), row('C', 'D', 70, 20)])
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    assert [p['team'] for p in blk['picks']] == ['C']
+
+
+def test_last_match_from_dated_form(tmp_path):
+    r1 = row('A', 'B', 80, 10)
+    r1['form'].update(homeDated=[{'date': '05.11.26', 'result': 'W', 'score': '2-1', 'event': 'L'}],
+                      awayDated=[{'date': '04.11.26', 'result': 'L', 'score': '0-3'}])
+    res = write_rows(tmp_path, 'football', [r1, row('C', 'D', 80, 10)])
+    blk = ff.build('football', DAY, res, use_best_price=False, now=NOW, log=lambda *_: None)
+    by = {p['team']: p for p in blk['picks']}
+    assert by['A']['lastMatch'] == {
+        'team': {'date': '05.11.26', 'result': 'W', 'score': '2-1', 'event': 'L'},
+        'opponent': {'date': '04.11.26', 'result': 'L', 'score': '0-3', 'event': ''}}
+    assert by['C']['lastMatch'] == {'team': None, 'opponent': None}

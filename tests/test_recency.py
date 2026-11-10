@@ -347,12 +347,12 @@ class TestExtractDatedRows:
     def test_badge_row_tracked_away_wins(self):
         import livesport_h2h_scraper as ls
         sec = self._sec(_ls_row('01.10.26', 'Other', 'Home FC', 0, 2, 'W'))
-        assert ls.extract_dated_rows(sec, 'Home FC') == [{'date': '01.10.26', 'result': 'W', 'event': ''}]
+        assert ls.extract_dated_rows(sec, 'Home FC') == [{'date': '01.10.26', 'result': 'W', 'score': '0-2', 'event': ''}]
 
     def test_badgeless_name_match(self):
         import livesport_h2h_scraper as ls
         sec = self._sec(_ls_row('01.10.26', 'Other', 'Home FC', 3, 1))
-        assert ls.extract_dated_rows(sec, 'Home FC') == [{'date': '01.10.26', 'result': 'L', 'event': ''}]
+        assert ls.extract_dated_rows(sec, 'Home FC') == [{'date': '01.10.26', 'result': 'L', 'score': '3-1', 'event': ''}]
 
     def test_badgeless_no_match_dropped(self):
         import livesport_h2h_scraper as ls
@@ -363,7 +363,7 @@ class TestExtractDatedRows:
     def test_undated_badge_placeholder(self):
         import livesport_h2h_scraper as ls
         sec = self._sec(_ls_row('', 'Home FC', 'Other', 2, 0, 'W'))
-        assert ls.extract_dated_rows(sec, 'Home FC') == [{'date': '', 'result': 'W', 'event': ''}]
+        assert ls.extract_dated_rows(sec, 'Home FC') == [{'date': '', 'result': 'W', 'score': '2-0', 'event': ''}]
 
 
 class TestNoExtraPageLoads:

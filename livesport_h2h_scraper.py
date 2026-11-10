@@ -854,7 +854,11 @@ def extract_dated_rows(section, tracked_team: str) -> List[dict]:
                 else:
                     continue
             ev = row.select_one('span.h2h__event')
-            out.append({'date': date_txt, 'result': result,
+            try:
+                score = _h2h_row_score(row)[0] or ''
+            except Exception:
+                score = ''
+            out.append({'date': date_txt, 'result': result, 'score': score,
                         'event': (ev.get('title') or ev.get_text(' ', strip=True)) if ev else ''})
     except Exception as e:
         logger.debug(f"extract_dated_rows error: {e}")

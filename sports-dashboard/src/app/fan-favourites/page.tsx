@@ -1,5 +1,5 @@
 // ============================================================================
-// Fan Favourites – SofaScore Fan Vote favourites (football >= 60%, others
+// Fan Favourites – SofaScore Fan Vote favourites (football >= 70%, others
 // >= 70%, at least 100 votes) whose price passes our standard odds limit.
 // Pending picks are returned only to subscribers; settled picks and the
 // record (hit rate + flat-stake ROI per sport and per Fan Vote band) are public.
@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils'
 import { getSportConfig } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
-import { getFanFavourites, teamHref, type FanPick, type FanRecord } from '@/lib/api'
+import { getFanFavourites, teamHref, type FanLastMatch, type FanPick, type FanRecord } from '@/lib/api'
 import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
 
 const SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball', 'baseball', 'rugby', 'table_tennis']
@@ -47,6 +47,23 @@ function Form({ s }: { s?: string }) {
           c === 'W' ? 'bg-emerald-500' : c === 'L' ? 'bg-red-500' : 'bg-zinc-400')}>{c}</span>
       ))}
     </span>
+  )
+}
+
+function lastH2h(p: FanPick) {
+  const last = p.h2h?.last
+  if (last && last !== 'No previous meetings') return last
+  return [p.h2h?.lastDate, p.h2h?.lastScore].filter(Boolean).join(' ') || '—'
+}
+
+function LastMatch({ m }: { m?: FanLastMatch | null }) {
+  if (!m || !(m.date || m.result || m.score)) return <div className="text-muted-foreground">—</div>
+  return (
+    <div className="flex items-center gap-2 tabular-nums">
+      {m.date && <span>{m.date}</span>}
+      {m.result && <Form s={m.result} />}
+      {m.score && <span>{m.score}</span>}
+    </div>
   )
 }
 
@@ -149,6 +166,18 @@ function PickCard({ p }: { p: FanPick }) {
           <div className="tabular-nums">{p.h2h?.line || 'No previous meetings'}</div>
         </div>
         <div>
+          <div className="text-muted-foreground">Last H2H</div>
+          <div className="tabular-nums">{lastH2h(p)}</div>
+        </div>
+        <div>
+          <div className="text-muted-foreground">Last match {p.team}</div>
+          <LastMatch m={p.lastMatch?.team} />
+        </div>
+        <div>
+          <div className="text-muted-foreground">Last match {(p.side === 'home' ? p.away : p.home) || 'opponent'}</div>
+          <LastMatch m={p.lastMatch?.opponent} />
+        </div>
+        <div>
           <div className="text-muted-foreground">Forebet · model · grade</div>
           <div className="tabular-nums">
             {pct(p.forebet?.prob)} · {p.modelProb != null ? pct(p.modelProb * 100) : '—'} · {p.grade ?? '—'}
@@ -232,7 +261,7 @@ export default function FanFavouritesPage() {
           <Users className="h-6 w-6 text-primary" /> Fan Favourites
         </h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Matches where SofaScore fans clearly back one side (football ≥ {data?.thresholds?.fanPct?.football ?? 60}%, other sports ≥ {data?.thresholds?.fanPct?.default ?? 70}%, at least {data?.thresholds?.minVotes ?? 100} votes),
+          Matches where SofaScore fans clearly back one side (football ≥ {data?.thresholds?.fanPct?.football ?? 70}%, other sports ≥ {data?.thresholds?.fanPct?.default ?? 70}%, at least {data?.thresholds?.minVotes ?? 100} votes),
           listed only when the price passes our standard odds limit, sorted by kick-off time, then Fan Vote. A strong crowd favourite is
           often a short price, so judge the record by ROI, not only by hit rate.
         </p>

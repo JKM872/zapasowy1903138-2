@@ -115,6 +115,27 @@ def _local(p: Dict[str, Any]) -> str:
         return k.strftime('%d.%m %H:%M UTC')
 
 
+def _form_or_dash(form: Optional[str]) -> str:
+    return _chips(form) if form else '—'
+
+
+def _last_h2h(h: Dict[str, Any]) -> str:
+    last = h.get('last')
+    try:
+        from h2h_summary import NO_H2H
+    except Exception:
+        NO_H2H = None
+    if last and last != NO_H2H:
+        return str(last)
+    return ' '.join(str(x) for x in (h.get('lastDate'), h.get('lastScore')) if x) or '—'
+
+
+def _last_match_txt(m: Any) -> str:
+    if not isinstance(m, dict) or not (m.get('date') or m.get('result') or m.get('score')):
+        return '—'
+    return ' '.join(x for x in (_e(m.get('date')), _chips(m.get('result')), _e(m.get('score'))) if x)
+
+
 def card(p: Dict[str, Any]) -> str:
     o = p.get('odds') or {}
     bp = p.get('bestPrice') or {}
@@ -131,6 +152,11 @@ def card(p: Dict[str, Any]) -> str:
         ('SofaScore', p.get('sofascoreUrl')), ('Forebet', p.get('forebetUrl')),
         ('Livesport', p.get('matchUrl')), ('Strona', SITE)) if u)
     mp = p.get('modelProb')
+    opp = p.get('away') if p.get('side') == 'home' else p.get('home')
+    if not opp:
+        parts = str(p.get('match') or '').split(' vs ')
+        opp = (parts[0] if p.get('team') == parts[-1] else parts[-1]) if len(parts) == 2 else 'rywal'
+    lm = p.get('lastMatch') or {}
     return (
         "<div style='border:1px solid #d1c4e9;border-radius:10px;padding:10px;margin:8px 0;"
         "font-family:sans-serif;background:#faf8ff'>"
@@ -142,10 +168,15 @@ def card(p: Dict[str, Any]) -> str:
         + (f" (Pinnacle {_e(bp.get('pinnacle'))})" if bp.get('pinnacle') else '')
         + f" · limit ≥ {_e(lim.get('min'))}</div>"
         f"<div>Implied {_e(p.get('impliedPct'))}% · edge <b style='color:{ec}'>{_e(edge)}</b> pp</div>"
-        f"<div>Forma: {_chips(f.get('overall'))} dom/wyjazd {_chips(f.get('venue'))}"
-        f" · rywal {_chips(f.get('opponentOverall'))}"
+        f"<div>Forma {_e(p.get('team'))}: {_form_or_dash(f.get('overall'))}"
+        f" · dom/wyjazd {_form_or_dash(f.get('venue'))}"
         + (f" · sezon {_chips(f.get('season'))}" if f.get('season') else '') + "</div>"
-        f"<div>{_e(h.get('line') or 'No previous meetings')}</div>"
+        f"<div>Forma {_e(opp)}: {_form_or_dash(f.get('opponentOverall'))}"
+        f" · dom/wyjazd {_form_or_dash(f.get('opponentVenue'))}</div>"
+        f"<div>H2H: {_e(h.get('line') or 'Brak bezpośrednich meczów')}</div>"
+        f"<div>Ostatni H2H: {_e(_last_h2h(h))}</div>"
+        f"<div>Ostatni mecz {_e(p.get('team'))}: {_last_match_txt(lm.get('team'))}</div>"
+        f"<div>Ostatni mecz {_e(opp)}: {_last_match_txt(lm.get('opponent'))}</div>"
         f"<div>Forebet {_e(fb.get('prob'))}% typ {_e(fb.get('pick'))} wynik {_e(fb.get('exactScore'))}"
         f" · model {_e(round(mp * 100, 1) if isinstance(mp, (int, float)) else '-')}%"
         f" · Grade <b>{_e(p.get('grade'))}</b></div>"
@@ -175,8 +206,14 @@ def build_html(picks: List[Dict[str, Any]], days: List[str],
                          f" → z głosami {tot.get('withVote', 0)} → próg fanów i głosów {tot.get('fanOk', 0)}"
                          f" → poniżej limitu kursu {tot.get('belowLimit', 0)}, bez kursu {tot.get('noOdds', 0)}"
                          f" → pokazane {tot.get('picks', 0)}</p>")
-    mv = ((boards.get(days[0]) or {}).get('thresholds') or {}).get('minVotes', 100)
-    parts.append("<p style='font-family:sans-serif;font-size:12px'>Progi: piłka ≥ 60%, pozostałe ≥ 70%,"
+    thr = (boards.get(days[0]) or {}).get('thresholds') or {}
+    mv = thr.get('minVotes', 100)
+    import fan_limits
+    fp = thr.get('fanPct') or {}
+    fb_min = fp.get('football', fan_limits.FAN_MIN.get('football', fan_limits.FAN_MIN_DEFAULT))
+    df_min = fp.get('default', fan_limits.FAN_MIN_DEFAULT)
+    parts.append(f"<p style='font-family:sans-serif;font-size:12px'>Progi: piłka ≥ {_e(f'{fb_min:g}')}%,"
+                 f" pozostałe ≥ {_e(f'{df_min:g}')}%,"
                  f" ≥ {_e(mv)} głosów, standardowy limit kursu dla sportu.</p>")
     for s, v in per.items():
         v.sort(key=lambda p: (-(p.get('fanPct') or 0), -(p.get('votes') or 0)))
