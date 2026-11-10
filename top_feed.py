@@ -454,7 +454,7 @@ def _entry(day: str, r: Dict[str, Any], live: Dict[str, Any], index, results_dir
         'date': day, 'sport': sport, 'time': r.get('time') or '',
         'league': r.get('league') or '', 'match': r.get('match') or '',
         'pick': r.get('pick') or '', 'odds': odds, 'grade': r.get('grade') or '',
-        'form': r.get('form') or '', 'h2h': r.get('h2h') or '',
+        'form': r.get('form') or '', 'h2h': r.get('h2h') or '', 'h2hLast': r.get('h2hLast') or '',
         'signals': r.get('signals') or '',
         'result': result,
         'status': result['status'],

@@ -371,6 +371,28 @@ def _sofa_event_id(match):
     return None
 
 
+def _h2h_struct(match, home, away):
+    """h2h.meetings/last/edge/line from scraped h2h_last5 (no extra loads)."""
+    import h2h_summary
+    sub = _sub_dict(match, 'h2h')
+    if sub.get('edge') is not None or sub.get('meetings'):
+        s = {k: sub.get(k) for k in ('meetings', 'last', 'edge')}
+        if not s['edge'] and s['meetings']:
+            s = h2h_summary.summarize(s['meetings'], home, away)
+    else:
+        rows = match.get('h2h_last5')
+        if isinstance(rows, str):
+            try:
+                import ast
+                rows = ast.literal_eval(rows)
+            except (ValueError, SyntaxError):
+                rows = []
+        s = h2h_summary.summarize(rows, home, away)
+    s['meetings'] = s.get('meetings') or []
+    s['line'] = h2h_summary.format_line(s, home, away)
+    return s
+
+
 def normalize_match(match):
     """Normalize match data to frontend format."""
     # Handle different key naming conventions
@@ -443,6 +465,7 @@ def normalize_match(match):
             'away': match.get('h2h_away_wins') or match.get('away_wins_in_h2h_last5') or _sub_dict(match, 'h2h').get('away', 0),
             'total': match.get('h2h_total') or match.get('h2h_count') or _sub_dict(match, 'h2h').get('total', 5),
             'winRate': safe_value(match.get('h2h_win_rate')) or safe_value(match.get('win_rate')) or safe_value(_sub_dict(match, 'h2h').get('winRate', 0)),
+            **_h2h_struct(match, home_team_val, away_team_val),
         },
         # Form Data
         'homeForm': match.get('home_form') or match.get('homeForm', []),

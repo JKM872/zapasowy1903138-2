@@ -53,6 +53,10 @@ export interface H2HData {
   away: number
   total: number
   winRate: number
+  meetings?: { date: string; home: string; away: string; score: string; winner: string }[]
+  last?: { date: string; score: string; winner: string; home: string; away: string } | null
+  edge?: { team: string; wins: number; draws: number; losses: number; record: string; even: boolean } | null
+  line?: string
 }
 
 export type GeminiRecommendation = 'HIGH' | 'MEDIUM' | 'LOW' | 'SKIP'

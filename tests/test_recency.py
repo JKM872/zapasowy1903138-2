@@ -698,7 +698,7 @@ class TestTopPicks:
         stale = {'total': 3, 'homeWins': 0, 'awayWins': 3, 'effectiveTotal': 0,
                  'homeWinsEff': 0, 'awayWinsEff': 0}
         r = tp.evaluate(_top_match(h2h=stale), 'football')
-        assert r is not None and r['h2h'] == 'brak'
+        assert r is not None and r['h2h'] == 'H2H: Home FC 0-0-3'
         old = {'total': 3, 'homeWins': 0, 'awayWins': 3}
         assert tp.evaluate(_top_match(h2h=old), 'football') is None
 
@@ -771,7 +771,7 @@ class TestDailyDigest:
             assert all(len(r) == 16 for r in data[cat]), cat
         fb = [r for r in data['Forebet'] if r[3] == 'Home FC vs Away FC'][0]
         assert fb[14] == 'WW / L'
-        assert fb[9] == 'WWWWD' and fb[10] == 'LLLDW' and fb[11] == ''
+        assert fb[9] == 'WWWWD' and fb[10] == 'LLLDW' and fb[11] == 'No previous meetings'
         assert fb[12] == '' and fb[13] is None
         assert data['TOP'][0][14] == 'WW / L'
 
@@ -841,12 +841,12 @@ class TestReviewFixes:
         from tools import daily_digest as dd
         stale = _top_match(h2h={'total': 1, 'homeWins': 1, 'awayWins': 0,
                                 'effectiveTotal': 0, 'homeWinsEff': 0, 'awayWinsEff': 0})
-        assert dd._row('Forebet', 'football', stale, 'home')[11] == 'brak'
+        assert dd._row('Forebet', 'football', stale, 'home')[11] == 'H2H: Home FC 1-0-0'
         half = _top_match(h2h={'total': 2, 'homeWins': 2, 'awayWins': 0,
                                'effectiveTotal': 1.5, 'homeWinsEff': 0.5, 'awayWinsEff': 1.0})
-        assert dd._row('Forebet', 'football', half, 'home')[11] == '0.5-1'
+        assert dd._row('Forebet', 'football', half, 'home')[11] == 'H2H: Home FC 2-0-0'
         old = _top_match(h2h={'total': 2, 'homeWins': 2, 'awayWins': 0})
-        assert dd._row('Forebet', 'football', old, 'home')[11] == '2-0'
+        assert dd._row('Forebet', 'football', old, 'home')[11] == 'H2H: Home FC 2-0-0'
 
     def test_email_stale_h2h_marker(self):
         import email_notifier as en

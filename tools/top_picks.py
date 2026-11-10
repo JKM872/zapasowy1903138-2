@@ -23,6 +23,31 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 import russia_filter  # noqa: E402
+import h2h_summary  # noqa: E402
+
+
+def h2h_texts(m: Dict[str, Any], team: Optional[str] = None) -> tuple:
+    """(line, last) readable H2H for a normalised match; integer W-D-L."""
+    h2h = m.get('h2h') if isinstance(m.get('h2h'), dict) else {}
+    home, away = m.get('homeTeam') or '', m.get('awayTeam') or ''
+    s = h2h if h2h.get('edge') else h2h_summary.summarize(
+        h2h.get('meetings') or m.get('h2h_last5'), home, away)
+    if not s.get('edge') and h2h.get('total'):
+        # Older JSON without meetings: integer counts + last meeting fields.
+        hw, aw, tot = (int(h2h.get('homeWins') or 0), int(h2h.get('awayWins') or 0),
+                       int(h2h.get('total') or 0))
+        if tot:
+            dr = max(tot - hw - aw, 0)
+            sc = h2h_summary._SCORE.search(str(h2h.get('lastScore') or ''))
+            ls = f"{sc.group(1)}-{sc.group(2)}" if sc else str(h2h.get('lastScore') or '')
+            s = {'edge': {'team': home if hw > aw else (away if aw > hw else 'even'),
+                          'wins': hw, 'draws': dr, 'losses': aw, 'even': hw == aw},
+                 'last': {'date': h2h_summary.norm_date(h2h.get('lastDate')), 'score': ls,
+                          'winner': '', 'home': '', 'away': ''}}
+            return (h2h_summary.format_line(s, home, away, team),
+                    f"{s['last']['date']} {ls}".strip() or h2h_summary.NO_H2H)
+    return (h2h_summary.format_line(s, home, away, team),
+            h2h_summary.last_line(s) if s.get('last') else h2h_summary.NO_H2H)
 from tools import best_price, league_tier, pricing, staking, top_rules  # noqa: E402
 
 # Learned segment rules (outputs/top_rules.json, tools/top_rules.py); a missing,
@@ -177,7 +202,8 @@ def evaluate(m: Dict[str, Any], sport: str, day: Optional[str] = None,
         'odds': float(o_me), 'grade': m.get('predictionGrade'),
         'score': (m.get('scoring') or {}).get('prob'),
         'form': f"{''.join(form.get(me) or [])} ({p_me} pkt) vs {''.join(form.get(op) or [])} ({p_op} pkt)",
-        'h2h': f"{w_me}-{w_op}" if has_h2h else 'brak',
+        'h2h': h2h_texts(m, team)[0],
+        'h2hLast': h2h_texts(m, team)[1],
         'fanvote': f"{ss.get('homeProb' if me == 'home' else 'awayProb')}%" if ss.get('found') else 'brak',
         'signals': f"{sum(1 for v in have.values() if v > 0)}/{len(have)} za",
         'seasonForm': season_form,

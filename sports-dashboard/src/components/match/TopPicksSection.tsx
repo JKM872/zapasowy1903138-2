@@ -56,6 +56,7 @@ export function TopPickDetails({ pick: p }: { pick: TopPick }) {
     <div className="flex basis-full flex-wrap items-center gap-x-3 gap-y-1 pl-7 text-xs text-muted-foreground">
       <StakeChip stakePct={p.stakePct} />
       {showTwoWay && <span className="tabular-nums">2-way price {formatOdds(p.odds2)}</span>}
+      {p.h2h && <span className="tabular-nums">{p.h2h.replace(/^brak$/, 'No previous meetings')}</span>}
       {typeof p.bestOdds === 'number' && (
         <span className="tabular-nums">
           Best price <b className="text-foreground">{formatOdds(p.bestOdds)}</b> ({sourceName(p.bestOddsSource)}

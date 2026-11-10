@@ -269,6 +269,23 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
               {match.h2h ? (
                 <div className="rounded-xl border bg-card p-4 space-y-4">
                   <span className="text-sm font-medium">Head to Head</span>
+                  <p className="text-sm font-semibold">{match.h2h.line || 'No previous meetings'}</p>
+                  {match.h2h.last && (
+                    <p className="text-xs text-muted-foreground">
+                      Last meeting: {match.h2h.last.date} · {match.h2h.last.home} {match.h2h.last.score} {match.h2h.last.away} ·{' '}
+                      {match.h2h.last.winner === 'draw' ? 'Draw' : `${match.h2h.last.winner} won`}
+                    </p>
+                  )}
+                  {!!match.h2h.meetings?.length && (
+                    <ul className="text-xs space-y-1 tabular-nums">
+                      {match.h2h.meetings.map((g, i) => (
+                        <li key={i} className="flex justify-between gap-2">
+                          <span className="text-muted-foreground">{g.date}</span>
+                          <span>{g.home} <b>{g.score}</b> {g.away}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <H2HBar
                     home={match.h2h.home}
                     draw={match.h2h.draw}

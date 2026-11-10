@@ -162,6 +162,15 @@ export function MatchRow({
             </span>
           )}
 
+          {match.h2h?.edge && (
+            <span
+              title={match.h2h.line || 'No previous meetings'}
+              className="hidden shrink-0 text-[10px] tabular-nums text-muted-foreground sm:inline"
+            >
+              H2H {match.h2h.edge.even ? 'even' : match.h2h.edge.team} {match.h2h.edge.record}
+              {match.h2h.last ? ` · last ${match.h2h.last.date} ${match.h2h.last.score}` : ''}
+            </span>
+          )}
           {match.availability && match.availability.verdict !== 'ok' && (
             <span
               title={match.availability.note || 'Key player absences'}

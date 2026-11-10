@@ -235,6 +235,7 @@ export default function TopPage() {
                           </>
                         )}
                         {p.grade && <Badge variant="secondary">{p.grade}</Badge>}
+                        {p.h2h && <span className="text-xs text-muted-foreground tabular-nums">{p.h2h.replace(/^brak$/, 'No previous meetings')}</span>}
                         {p.result?.score && <span className="tabular-nums text-muted-foreground">{p.result.score}</span>}
                         <StatusBadge pick={p} />
                         <TopPickDetails pick={p} />

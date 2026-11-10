@@ -61,8 +61,9 @@ def _row(src, sport, m, side: Optional[str]) -> List[Any]:
         hk, ak, total = 'homeWins', 'awayWins', h2h.get('total')
     hw = h2h.get(hk if side == 'home' else ak)
     aw = h2h.get(ak if side == 'home' else hk)
-    h2h_txt = (f"{hw:g}-{aw:g}" if isinstance(hw, (int, float)) and isinstance(aw, (int, float))
-               else f"{hw}-{aw}") if total else ('brak' if h2h.get('effectiveTotal') is not None else '')
+    del hw, aw, total
+    from tools.top_picks import h2h_texts
+    h2h_txt = h2h_texts(m, pick or None)[0]
     return [src, sport, _time(m.get('time')), f"{home} vs {away}", m.get('league'),
             pick, o, m.get('predictionGrade'), sc.get('prob'),
             _f(fh if side == 'home' else fa), _f(fa if side == 'home' else fh),

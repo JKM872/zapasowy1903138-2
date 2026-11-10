@@ -146,7 +146,7 @@ function PickCard({ p }: { p: FanPick }) {
         </div>
         <div>
           <div className="text-muted-foreground">H2H ({p.team})</div>
-          <div className="tabular-nums">{p.h2h ? `${p.h2h.wins}W–${p.h2h.losses}L of ${p.h2h.total}${p.h2h.lastScore ? ` · last ${p.h2h.lastScore}` : ''}` : '—'}</div>
+          <div className="tabular-nums">{p.h2h?.line || 'No previous meetings'}</div>
         </div>
         <div>
           <div className="text-muted-foreground">Forebet · model · grade</div>

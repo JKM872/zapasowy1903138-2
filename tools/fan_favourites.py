@@ -164,9 +164,12 @@ def _h2h(r: Dict[str, Any], side: str) -> Optional[Dict[str, Any]]:
     h = r.get('h2h') or {}
     if not h.get('total'):
         return None
+    from tools.top_picks import h2h_texts
+    line, last = h2h_texts(r, r.get('homeTeam' if side == 'home' else 'awayTeam'))
     op = 'away' if side == 'home' else 'home'
     return {'total': h.get('total'), 'wins': h.get(f'{side}Wins'), 'losses': h.get(f'{op}Wins'),
-            'lastScore': h.get('lastScore'), 'lastDate': h.get('lastDate')}
+            'lastScore': h.get('lastScore'), 'lastDate': h.get('lastDate'),
+            'line': line, 'last': last, 'edge': h.get('edge')}
 
 
 def model_prob(r: Dict[str, Any], side: str) -> Optional[float]:

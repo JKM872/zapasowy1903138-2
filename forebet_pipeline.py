@@ -47,6 +47,14 @@ from typing import Any, Dict, List, Optional, Set, Tuple  # noqa: F401
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import forebet_listing as fbl
+import h2h_summary as _h2hs
+
+
+def _h2h_struct(r: Dict[str, Any]) -> Dict[str, Any]:
+    """meetings/last/edge/line from the already-scraped h2h_last5 list."""
+    home, away = r.get('home_team') or '', r.get('away_team') or ''
+    s = _h2hs.summarize(r.get('h2h_last5'), home, away)
+    return {**s, 'line': _h2hs.format_line(s, home, away)}
 import recency
 from tools.team_names import _TRANSLIT as _TEAM_TRANSLIT
 
@@ -2187,6 +2195,7 @@ def write_outputs(rows: List[Dict[str, Any]], sport: str,
                     'homeWinsEff': r.get('h2h_effective_home_wins'),
                     'awayWinsEff': r.get('h2h_effective_away_wins'),
                     'allStale': r.get('h2h_all_stale'),
+                    **_h2h_struct(r),
                 },
                 'form': {
                     'home': r.get('home_form'),

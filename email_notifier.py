@@ -364,6 +364,23 @@ def _log_sofascore_coverage(matches: List[Dict[str, Any]], label: str = "") -> N
         print(f"      ↳ skip_reasons: {', '.join(parts)}")
 
 
+def _h2h_line(match: Dict[str, Any], home: str, away: str, subject: str = '') -> str:
+    """Readable H2H: 'H2H: Arsenal 3-1-1 (last: 2026-04-12 Arsenal 2-1 Chelsea)'."""
+    import ast
+    import html
+    import h2h_summary
+    rows = match.get('h2h_last5')
+    if isinstance(rows, str):
+        try:
+            rows = ast.literal_eval(rows)
+        except (ValueError, SyntaxError):
+            rows = []
+    s = h2h_summary.summarize(rows, home, away)
+    if not s.get('edge'):
+        return h2h_summary.NO_H2H
+    return html.escape(h2h_summary.format_line(s, home, away, subject or None))
+
+
 def _sofascore_from_match(match: Dict[str, Any]) -> tuple:
     """Zwróć (home, draw, away, votes) dla bloku Fan Vote w mailu.
 
@@ -1132,6 +1149,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         h2h_subject = (match.get('away_team') or '') if focus_team == 'away' \
             else (match.get('home_team') or '')
         
+        h2h_line = _h2h_line(match, home, away, h2h_subject)
         # SofaScore - jednolita ekstrakcja z płaskich pól lub zagnieżdżonego dict
         ss_home, ss_draw, ss_away, ss_votes = _sofascore_from_match(match)
         # Flaga: pokaż SofaScore jeśli DOWOLNA wartość jest dostępna (home/away/draw/votes)
@@ -1338,6 +1356,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     ''' if is_tennis and (ranking_a or ranking_b) else ''}
                     
                     <!-- H2H + OSTATNI MECZ -->
+                    <div style="font-size: 13px; font-weight: bold; color: #333; margin-bottom: 6px;">🔄 {h2h_line}</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px;">
                         <div style="flex: 1; text-align: center; border-right: 1px solid #eee;">
                             <div style="font-size: 11px; color: #666;">🔄 H2H</div>

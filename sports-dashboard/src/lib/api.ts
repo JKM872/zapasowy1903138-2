@@ -500,6 +500,9 @@ export interface TopPick {
   league?: string
   grade?: string
   signals?: string
+  /** 'H2H: Arsenal 3-1-1 (last: 2026-04-12 Arsenal 2-1 Chelsea)' or 'No previous meetings'. */
+  h2h?: string
+  h2hLast?: string
   result?: { status: string; score?: string; reason?: string } | null
   availabilityNote?: string
   status?: 'won' | 'lost' | 'draw' | 'pending' | 'withdrawn' | 'void' | null
@@ -617,7 +620,7 @@ export interface FanPick {
   limit?: { min: number; source: string }
   status?: 'pick' | 'watch'
   form?: { overall: string; venue: string; opponentOverall: string; opponentVenue: string }
-  h2h?: { total: number; wins: number; losses: number; lastScore?: string | null; lastDate?: string | null } | null
+  h2h?: { total: number; wins: number; losses: number; lastScore?: string | null; lastDate?: string | null; line?: string; last?: string } | null
   forebet?: { prob: number | null; pick?: string | null; exactScore?: string | null }
   modelProb?: number | null
   grade?: string | null
