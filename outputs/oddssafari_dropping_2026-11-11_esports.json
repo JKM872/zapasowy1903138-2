@@ -1,0 +1,257 @@
+{
+  "meta": {
+    "generated_at": "2026-11-11T06:45:39.189013+01:00",
+    "target_date": "2026-11-11",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 4,
+      "qualified": 1
+    },
+    "enrichment_status_counts": {
+      "enriched": 1,
+      "resolve_failed": 0,
+      "process_match_error": 0
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 1,
+      "flat": 0,
+      "new": 3
+    },
+    "elapsed_seconds": 8.0,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "LOL - LCP",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/lol-lcp/ground-zero-vs-frank-esports/11177173?MarketTypeID=1201",
+      "match_id": "11177173",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "Ground Zero",
+      "away_team": "Frank Esports",
+      "event_date": "11/11",
+      "event_time": "09:00",
+      "outcome": "2",
+      "open_odds": 10.5,
+      "current_odds": 4.59,
+      "drop_pct": 56.0,
+      "max_odds": 4.7,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "CS2 - Stake Ranked",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/cs2-stake-ranked/ninjas-in-pyjamas-vs-unity/16112938?MarketTypeID=1201",
+      "match_id": "16112938",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "Ninjas In Pyjamas",
+      "away_team": "UNiTY",
+      "event_date": "17/11",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 6.0,
+      "current_odds": 4.47,
+      "drop_pct": 25.0,
+      "max_odds": 5.25,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 3.89,
+        "prev_seen_at": "2026-11-08T17:06:06+00:00",
+        "current_odds": 4.47,
+        "change_pct": 14.91,
+        "direction": "up",
+        "runs_seen": 2,
+        "first_odds": 3.89,
+        "first_seen_at": "2026-11-08T17:06:06+00:00",
+        "change_from_first_pct": 14.91
+      }
+    },
+    {
+      "league": "CS2 - BLAST Rivals",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/cs2-blast-rivals/team-spirit-vs-fut-esports/10613139?MarketTypeID=1201",
+      "match_id": "10613139",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "Team Spirit",
+      "away_team": "FUT Esports",
+      "event_date": "11/11",
+      "event_time": "07:00",
+      "outcome": "1",
+      "open_odds": 1.38,
+      "current_odds": 1.15,
+      "drop_pct": 16.0,
+      "max_odds": 1.19,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "LOL - World Championship",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/lol-world-championship/bilibili-gaming-vs-gen.g/19235693?MarketTypeID=1201",
+      "match_id": "19235693",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "Bilibili Gaming",
+      "away_team": "Gen.G",
+      "event_date": "14/11",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 1.75,
+      "current_odds": 1.56,
+      "drop_pct": 11.0,
+      "max_odds": 1.61,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_team": "Bilibili Gaming",
+        "away_team": "Gen.G",
+        "sport": "esports",
+        "league": "Worlds Playoffs",
+        "match_time": "19:00",
+        "home_odds": null,
+        "away_odds": 1.56,
+        "sofascore_event_id": 17523322,
+        "form_source": "sofascore_api",
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "form_advantage": true
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "LOL - World Championship",
+      "match_url": "https://www.oddssafari.com/matches/e-sports/lol-world-championship/bilibili-gaming-vs-gen.g/19235693?MarketTypeID=1201",
+      "match_id": "19235693",
+      "sport_slug": "e-sports",
+      "sport": "esports",
+      "home_team": "Bilibili Gaming",
+      "away_team": "Gen.G",
+      "event_date": "14/11",
+      "event_time": "19:00",
+      "outcome": "2",
+      "open_odds": 1.75,
+      "current_odds": 1.56,
+      "drop_pct": 11.0,
+      "max_odds": 1.61,
+      "sport_page_id": "120",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_team": "Bilibili Gaming",
+        "away_team": "Gen.G",
+        "sport": "esports",
+        "league": "Worlds Playoffs",
+        "match_time": "19:00",
+        "home_odds": null,
+        "away_odds": 1.56,
+        "sofascore_event_id": 17523322,
+        "form_source": "sofascore_api",
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 3,
+        "win_rate": 0.6,
+        "form_advantage": true
+      },
+      "enrichment_error": null
+    }
+  ]
+}
