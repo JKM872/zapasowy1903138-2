@@ -299,37 +299,30 @@ def main(argv: Optional[List[str]] = None) -> int:
     for d in days:
         sent = set() if a.force else load_ledger(ledger_path(d, a.outputs))
         picks += select_new(boards[d], sent, now)
-    if not picks:
+    if not picks and not a.force:
         print('Fan Favourites: nic nowego — mail nie zostaje wysłany')
         return 0
-    if not a.dry_run and not (a.to and a.from_email and a.password):
+    body = build_html(picks, days, boards)
+    subject = f'🗳️ SofaScore Fan Favourites — {days[0]} ({len(picks)} nowych)' + (
+        ' — wysyłka ręczna' if a.force else '')
+    if a.dry_run:
+        if a.html:
+            with open(a.html, 'w', encoding='utf-8') as fh:
+                fh.write(body)
+        print(f'[dry-run] {subject}')
+        return 0
+    if not (a.to and a.from_email and a.password):
         print('ℹ️ Mail Fan Favourites pominięty (brak EMAIL_*)')
         return 0
-    rc = 0
-    # One e-mail per sport with new picks; the ledger is updated after each
-    # successful send, so a failure in one sport never blocks/repeats others.
-    for s in _sport_order(picks):
-        sp = [p for p in picks if p['sport'] == s]
-        body = build_html(sp, days, boards)
-        subject = (f'🗳️ Fan Favourites – {SPORT_PL.get(s, s)} ({len(sp)}) – {days[0]}'
-                   + (' — wysyłka ręczna' if a.force else ''))
-        if a.dry_run:
-            if a.html:
-                root, ext = os.path.splitext(a.html)
-                with open(f'{root}_{s}{ext or ".html"}', 'w', encoding='utf-8') as fh:
-                    fh.write(body)
-            print(f'[dry-run] {subject}')
-            continue
-        xlsx = write_xlsx(sp, os.path.join(a.outputs, f'fanfav_{days[0]}_{s}.xlsx'))
-        if not send(body, subject, a.to, a.from_email, a.password, a.provider, xlsx):
-            rc = 1
-            continue
-        for d in days:
-            ids = [p['id'] for p in sp if p.get('date') == d or (p.get('id') or '').split('|')[1:2] == [d]]
-            if ids:
-                save_ledger(ledger_path(d, a.outputs), load_ledger(ledger_path(d, a.outputs)) | set(ids))
-        print(f'✅ Mail Fan Favourites {s} wysłany ({len(sp)} typów)')
-    return rc
+    xlsx = write_xlsx(picks, os.path.join(a.outputs, f'fanfav_{days[0]}.xlsx'))
+    if not send(body, subject, a.to, a.from_email, a.password, a.provider, xlsx):
+        return 1
+    for d in days:
+        ids = [p['id'] for p in picks if p.get('date') == d or (p.get('id') or '').split('|')[1:2] == [d]]
+        if ids:
+            save_ledger(ledger_path(d, a.outputs), load_ledger(ledger_path(d, a.outputs)) | set(ids))
+    print(f'✅ Mail SofaScore Fan Favourites wysłany ({len(picks)} typów)')
+    return 0
 
 
 if __name__ == '__main__':
