@@ -69,6 +69,12 @@ def _default_fetch(home: str, away: str, sport: str, day: str) -> Optional[Dict[
             'eventId': v.get('sofascore_event_id'), 'startTimestamp': v.get('sofascore_start_timestamp')}
 
 
+# Refresh set pinned to the pre-trial vote minimum (30; basketball/hockey 100)
+# so the 100-vote Fan Favourites trial does not add SofaScore requests.
+FILL_MIN_VOTES = 30
+FILL_MIN_VOTES_BY_SPORT = {'basketball': 100, 'hockey': 100}
+
+
 def needs_fetch(r: Dict[str, Any], sport: str, now: datetime) -> bool:
     ss = r.get('sofascore') or {}
     fs = fan_limits.fan_side(r)
@@ -79,7 +85,7 @@ def needs_fetch(r: Dict[str, Any], sport: str, now: datetime) -> bool:
         return False
     if ts is not None and (now - ts).total_seconds() < STALE_H * 3600:
         return False
-    return (fs['votes'] < fan_limits.min_votes(sport)
+    return (fs['votes'] < FILL_MIN_VOTES_BY_SPORT.get(sport, FILL_MIN_VOTES)
             or abs(fs['fanPct'] - fan_limits.fan_threshold(sport)) < NEAR_PP)
 
 

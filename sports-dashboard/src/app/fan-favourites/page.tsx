@@ -1,6 +1,6 @@
 // ============================================================================
 // Fan Favourites – SofaScore Fan Vote favourites (>= 70%; 1X2 sports >= 60%
-// when both teams' form is present, at least 30 votes) whose price passes our standard odds limit.
+// when both teams' form is present, at least 100 votes) whose price passes our standard odds limit.
 // Pending picks are returned only to subscribers; settled picks and the
 // record (hit rate + flat-stake ROI per sport and per Fan Vote band) are public.
 // ============================================================================

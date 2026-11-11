@@ -27,7 +27,8 @@ FAN_MIN_DEFAULT = 70.0
 FAN_MIN_1X2_WITH_FORM = 60.0
 # Calibrated 2026-11 (tools/fanvote_backtest.py --calibrate, rows from 2026-09-27):
 # 30-49 votes hit 62.2% / ROI +14.3% (n=249) vs base >=100 votes 57.2% / -0.9%.
-MIN_VOTES = 30
+# Trial 2026-11: Fan Favourites requires at least 100 votes for every sport.
+MIN_VOTES = 100
 MIN_VOTES_BY_SPORT: Dict[str, int] = {'basketball': 100, 'hockey': 100}
 FAN_BANDS = [(60, 70), (70, 80), (80, 90), (90, 101)]
 # Sports without a settled record yet: listed as "watch" until this many
