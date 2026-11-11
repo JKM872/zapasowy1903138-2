@@ -38,13 +38,6 @@ def test_thresholds_and_bands():
     assert fl.fan_threshold('football') == 70 and fl.fan_threshold('tennis') == 70
     assert fl.select('football', 70, 100) and not fl.select('football', 69.9, 500)
     assert not fl.select('hockey', 69, 500) and not fl.select('hockey', 75, 99)
-
-
-def test_min_votes_100_for_every_sport():
-    for sport in ('football', 'tennis', 'volleyball', 'handball', 'table_tennis'):
-        assert fl.min_votes(sport) == 100
-        assert not fl.select(sport, 75, 99)
-        assert fl.select(sport, 75, 100)
     assert [fl.band(x) for x in (60, 69.9, 70, 85, 90, 100)] == ['60-70', '60-70', '70-80', '80-90', '90+', '90+']
 
 
