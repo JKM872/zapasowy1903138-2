@@ -136,6 +136,30 @@ def _last_match_txt(m: Any) -> str:
     return ' '.join(x for x in (_e(m.get('date')), _chips(m.get('result')), _e(m.get('score'))) if x)
 
 
+def _recent_txt(m: Dict[str, Any]) -> str:
+    dur = m.get('durationMin')
+    return ' '.join(x for x in (
+        _e(m.get('date')), _chips(m.get('result')) if m.get('result') else '',
+        f"{'vs' if m.get('venue') == 'H' else '@'} {_e(m.get('opponent'))}", _e(m.get('score')),
+        f"⏱ {dur // 60}h{dur % 60:02d}" if isinstance(dur, int) else '',
+        f"({_e(m.get('round'))})" if m.get('round') else '') if x)
+
+
+def _details_html(d: Optional[Dict[str, Any]], team: Any, opp: Any) -> str:
+    """Tournament / round and last matches (tools.match_details); '' when absent."""
+    if not d:
+        return ''
+    head = ' · '.join(_e(x) for x in (d.get('category'), d.get('tournament'), d.get('round'),
+                                     d.get('surface')) if x)
+    out = f"<div>Turniej / runda: <b>{head or '—'}</b></div>"
+    for name, key in ((team, 'team'), (opp, 'opponent')):
+        rows = d.get(key) or []
+        if rows:
+            out += (f"<div style='margin-top:4px'>Ostatnie mecze {_e(name)}:</div>"
+                    + ''.join(f"<div style='margin-left:10px;font-size:12px'>{_recent_txt(m)}</div>" for m in rows))
+    return out
+
+
 def card(p: Dict[str, Any]) -> str:
     o = p.get('odds') or {}
     bp = p.get('bestPrice') or {}
@@ -177,6 +201,7 @@ def card(p: Dict[str, Any]) -> str:
         f"<div>Ostatni H2H: {_e(_last_h2h(h))}</div>"
         f"<div>Ostatni mecz {_e(p.get('team'))}: {_last_match_txt(lm.get('team'))}</div>"
         f"<div>Ostatni mecz {_e(opp)}: {_last_match_txt(lm.get('opponent'))}</div>"
+        + _details_html(p.get('details'), p.get('team'), opp) +
         f"<div>Forebet {_e(fb.get('prob'))}% typ {_e(fb.get('pick'))} wynik {_e(fb.get('exactScore'))}"
         f" · model {_e(round(mp * 100, 1) if isinstance(mp, (int, float)) else '-')}%"
         f" · Grade <b>{_e(p.get('grade'))}</b></div>"

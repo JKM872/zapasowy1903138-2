@@ -601,7 +601,28 @@ export interface FanLastMatch {
   event?: string
 }
 
+export interface FanRecentMatch {
+  date?: string
+  opponent?: string
+  venue?: string
+  result?: string
+  score?: string
+  round?: string
+  tournament?: string
+  durationMin?: number | null
+}
+
+export interface FanDetails {
+  tournament?: string
+  category?: string
+  round?: string
+  surface?: string
+  team?: FanRecentMatch[]
+  opponent?: FanRecentMatch[]
+}
+
 export interface FanPick {
+  details?: FanDetails | null
   id: string
   sport: string
   date?: string

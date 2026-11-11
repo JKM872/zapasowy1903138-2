@@ -36,6 +36,8 @@ SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball'
           'baseball', 'rugby', 'table_tennis']
 REFRESH_MAX = int(os.getenv('FAN_FILL_MAX_CALLS', '400'))                    # Fan Vote lookups per sport and run
 REFRESH_AGE_H = 3
+# SofaScore event-detail lookups (3 calls each) per sport and run.
+DETAILS_MAX = int(os.getenv('FAN_DETAILS_MAX', '120'))
 # Wall-clock budget for Fan Vote lookups per sport and day (a lookup can take
 # ~25 s when the SofaScore API path falls back to the browser).
 REFRESH_BUDGET_S = float(os.getenv('FAN_FILL_BUDGET_S') or os.getenv('FAN_REFRESH_BUDGET_S', '540'))
@@ -223,6 +225,35 @@ def settled_count(sport: str, results: str = RESULTS) -> int:
     return n
 
 
+def add_details(picks: List[Dict[str, Any]], sport: str, day: str, results: str, now: datetime,
+                fetch: bool = True, log=print, get=None) -> int:
+    """Attach tools.match_details (round, tournament, last matches, tennis
+    duration) to picks. Details already on the day's board are reused; new
+    lookups only when ``fetch`` and for upcoming picks, at most DETAILS_MAX."""
+    from tools import match_details as md
+    old = {p.get('id'): p.get('details') for p in
+           ((((_read(fan_path(day, results)) or {}).get('sports') or {}).get(sport) or {}).get('picks') or [])
+           if p.get('details')}
+    n = 0
+    for p in picks:
+        if old.get(p['id']):
+            p['details'] = old[p['id']]
+            continue
+        ko = pricing._parse_ts(p.get('kickoff'))
+        eid = md.event_id(p)
+        if not (fetch and eid and n < DETAILS_MAX and (ko is None or ko > now)):
+            continue
+        n += 1
+        try:
+            d = md.details(eid, sport, p['side'], **({'get': get} if get else {}))
+        except Exception as e:  # noqa: BLE001 - details are optional
+            log(f'   details {p["match"]}: {e}')
+            d = None
+        if d:
+            p['details'] = d
+    return n
+
+
 def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
           use_best_price: bool = True, now: Optional[datetime] = None, log=print,
           votes_dir: Optional[str] = None) -> Dict[str, Any]:
@@ -312,6 +343,7 @@ def build(sport: str, day: str, results: str = RESULTS, refresh: bool = False,
             'result': None,
         })
     picks.sort(key=lambda p: (-p['fanPct'], -p['votes']))
+    stats['details'] = add_details(picks, sport, day, results, now, fetch=refresh, log=log)
     stats['picks'] = len(picks)
     log(f'   fan favourites {sport} {day}: {stats}')
     return {'generatedAt': _iso(now), 'watch': watch, 'picks': picks, 'stats': stats,

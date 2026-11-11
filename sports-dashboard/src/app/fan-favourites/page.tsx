@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils'
 import { getSportConfig } from '@/lib/constants'
 import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
-import { getFanFavourites, teamHref, type FanLastMatch, type FanPick, type FanRecord } from '@/lib/api'
+import { getFanFavourites, teamHref, type FanLastMatch, type FanPick, type FanRecentMatch, type FanRecord } from '@/lib/api'
 import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
 
 const SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball', 'baseball', 'rugby', 'table_tennis']
@@ -64,6 +64,42 @@ function LastMatch({ m }: { m?: FanLastMatch | null }) {
       {m.date && <span>{m.date}</span>}
       {m.result && <Form s={m.result} />}
       {m.score && <span>{m.score}</span>}
+    </div>
+  )
+}
+
+function duration(min?: number | null) {
+  return min ? `${Math.floor(min / 60)}h${String(min % 60).padStart(2, '0')}` : null
+}
+
+function RecentMatches({ title, rows }: { title: string; rows?: FanRecentMatch[] }) {
+  if (!rows?.length) return null
+  return (
+    <div>
+      <div className="text-muted-foreground">{title}</div>
+      {rows.map((m, i) => (
+        <div key={i} className="flex flex-wrap items-center gap-x-2 tabular-nums">
+          <span>{m.date}</span>
+          {m.result && <Form s={m.result} />}
+          <span>{m.venue === 'H' ? 'vs' : '@'} {m.opponent}</span>
+          {m.score && <span>{m.score}</span>}
+          {duration(m.durationMin) && <span className="text-muted-foreground">⏱ {duration(m.durationMin)}</span>}
+          {m.round && <span className="text-muted-foreground">({m.round})</span>}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Details({ p }: { p: FanPick }) {
+  const d = p.details
+  if (!d) return null
+  const head = [d.category, d.tournament, d.round, d.surface].filter(Boolean).join(' · ')
+  return (
+    <div className="grid gap-x-6 gap-y-2 border-t pt-2 text-xs sm:grid-cols-2">
+      {head && <div className="sm:col-span-2"><span className="text-muted-foreground">Tournament / round: </span><b>{head}</b></div>}
+      <RecentMatches title={`Last matches ${p.team ?? ''}`} rows={d.team} />
+      <RecentMatches title={`Last matches ${(p.side === 'home' ? p.away : p.home) || 'opponent'}`} rows={d.opponent} />
     </div>
   )
 }
@@ -185,6 +221,7 @@ function PickCard({ p }: { p: FanPick }) {
           </div>
         </div>
       </div>
+      <Details p={p} />
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className={cn('rounded px-2 py-0.5', av.cls)}>{av.label}</span>
         {p.availability?.note && <span className="text-muted-foreground">{p.availability.note}</span>}
