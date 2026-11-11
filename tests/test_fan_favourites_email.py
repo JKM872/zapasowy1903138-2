@@ -72,7 +72,7 @@ def test_one_section_per_sport_with_counts_toc_and_order():
     assert hk < h.index('A2') < h.index('A1')
 
 
-def test_single_mail_with_all_sport_sections_no_resend(tmp_path, monkeypatch):
+def test_one_mail_per_sport_ordered_no_empty_no_resend(tmp_path, monkeypatch):
     picks = [_p(1, 'football', 70, ko='2099-01-01T18:00:00Z'), _p(2, 'football', 85, ko='2099-01-01T18:00:00Z'),
              _p(3, 'football', 95, ko='2099-01-01T19:00:00Z'), _p(4, 'hockey', 75, ko='2099-01-01T17:00:00Z')]
     _board(tmp_path, picks)
@@ -81,13 +81,25 @@ def test_single_mail_with_all_sport_sections_no_resend(tmp_path, monkeypatch):
     args = ['--day', DAY, '--days', '1', '--results', str(tmp_path / 'results'),
             '--outputs', str(tmp_path / 'outputs'), '--to', 't', '--from-email', 'f', '--password', 'p']
     assert fe.main(args) == 0
-    assert len(calls) == 1 and '(4 nowych)' in calls[0][1]
-    h = calls[0][0]
-    assert h.count("<h3 id='sport-") == 2
-    fb, hk = h.index("id='sport-football'"), h.index("id='sport-hockey'")
-    assert fb < h.index('A2') < h.index('A1') < h.index('A3') < hk < h.index('A4')
-    assert 'Koszykówka' not in h
-    assert fe.main(args) == 0 and len(calls) == 1           # second run: nothing resent
+    subjects = [c[1] for c in calls]
+    assert len(calls) == 2
+    assert f'Piłka nożna (3) – {DAY}' in subjects[0] and f'Hokej (1) – {DAY}' in subjects[1]
+    fb = calls[0][0]
+    assert 'A4' not in fb and fb.index('A2') < fb.index('A1') < fb.index('A3')
+    assert 'A4' in calls[1][0] and 'A1' not in calls[1][0]
+    assert 'Koszykówka' not in ''.join(c[1] for c in calls)
+    assert fe.main(args) == 0 and len(calls) == 2           # second run: nothing resent
+
+
+def test_force_with_zero_picks_sends_one_mail(tmp_path, monkeypatch):
+    _board(tmp_path, [])
+    calls = []
+    monkeypatch.setattr(fe, 'send', lambda *a, **k: calls.append(a) or True)
+    args = ['--day', DAY, '--days', '1', '--results', str(tmp_path / 'results'),
+            '--outputs', str(tmp_path / 'outputs'), '--to', 't', '--from-email', 'f', '--password', 'p']
+    assert fe.main(args) == 0 and calls == []
+    assert fe.main(args + ['--force']) == 0
+    assert len(calls) == 1 and '(0)' in calls[0][1] and 'wysyłka ręczna' in calls[0][1]
 
 
 def test_card_shows_form_h2h_last_h2h_and_last_matches():
