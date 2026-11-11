@@ -2,7 +2,7 @@
   "date": "2026-11-11",
   "sport": "football",
   "source": "forebet",
-  "generatedAt": "2026-11-11T07:58:41.283637+00:00",
+  "generatedAt": "2026-11-11T08:42:07.080006+00:00",
   "matches": [
     {
       "homeTeam": "Udon United",
@@ -15,12 +15,10 @@
       "source": "forebet",
       "matchUrl": null,
       "forebetUrl": "https://www.forebet.com/en/football/matches/udon-united-udon-banchan-2551358",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
       "forebet": {
         "prediction": "1",
         "probability": 47.0,
@@ -109,29 +107,29 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -13.7,
+      "marketGapPp": -3.1,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
+        "found": true,
+        "votes": 476,
+        "homeProb": 83,
+        "awayProb": 7,
+        "url": "https://www.sofascore.com/football/match/17112477",
+        "orientation": "direct",
+        "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 1.48,
-        "draw": 3.9,
-        "away": 5.5,
+        "home": 1.83,
+        "draw": 3.6,
+        "away": 3.75,
         "source": "sofascore",
         "bookmaker": "SofaScore",
         "note": null,
         "forebet": {
-          "home": 208.0,
-          "draw": 290.0,
-          "away": 450.0
+          "home": 100.0,
+          "draw": 240.0,
+          "away": 225.0
         }
       },
       "ai": {
@@ -142,30 +140,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 51.7,
-        "ev": -0.235,
-        "edge": -15.9,
-        "sources": 3,
+        "prob": 55.3,
+        "ev": 0.013,
+        "edge": 0.7,
+        "sources": 4,
         "components": {
           "forebet": 0.47,
           "form": 0.5,
-          "odds": 0.676
+          "sofascore": 0.83,
+          "odds": 0.546
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.75,
+        "sources_available": 2,
+        "quality_score": 0.9,
         "h2h_available": false,
         "h2h_neutral": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -15.868,
+        "consensus_strength": "moderate",
+        "market_model_gap": 0.655,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -183,7 +182,7 @@
       "matchUrl": null,
       "forebetUrl": "https://www.forebet.com/en/football/matches/chernihiv-inhulets-petrove-2475261",
       "qualifies": true,
-      "channelQualifies": false,
+      "channelQualifies": true,
       "emailQualifies": true,
       "skipReasons": [],
       "forebet": {
@@ -213,8 +212,20 @@
         "line": "No previous meetings"
       },
       "form": {
-        "home": [],
-        "away": [],
+        "home": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
         "homeAtHome": [],
         "awayAtAway": [],
         "homeDated": [],
@@ -223,7 +234,7 @@
         "homeSurface": null,
         "awaySurface": null,
         "surfaceIsProxy": null,
-        "source": null,
+        "source": "sofascore",
         "homeSeason": null,
         "awaySeason": null,
         "homeAtHomeSeason": null,
@@ -232,8 +243,20 @@
         "awaySeasonMatches": null,
         "homeSeasonStart": null,
         "awaySeasonStart": null,
-        "homeClean": [],
-        "awayClean": [],
+        "homeClean": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "awayClean": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
         "homeAtHomeClean": [],
         "awayAtAwayClean": [],
         "homeCup": [],
@@ -253,14 +276,14 @@
       "marketGapPp": -14.5,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": false,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": "https://www.sofascore.com/football/match/17513728",
-        "orientation": "mismatch",
+        "found": true,
+        "votes": 999,
+        "homeProb": 34,
+        "awayProb": 47,
+        "url": "https://www.sofascore.com/football/match/16439176",
+        "orientation": "direct",
         "unavailable": false,
-        "skipReason": "zly_mecz"
+        "skipReason": null
       },
       "odds": {
         "home": 1.826,
@@ -270,9 +293,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 108.0,
-          "draw": 215.0,
-          "away": 230.0
+          "home": 118.0,
+          "draw": 220.0,
+          "away": 270.0
         }
       },
       "ai": {
@@ -283,29 +306,31 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 40.2,
-        "ev": -0.267,
-        "edge": -14.6,
-        "sources": 2,
+        "prob": 43.6,
+        "ev": -0.203,
+        "edge": -11.1,
+        "sources": 4,
         "components": {
           "forebet": 0.35,
+          "form": 0.6,
+          "sofascore": 0.34,
           "odds": 0.548
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.65,
+        "sources_available": 2,
+        "quality_score": 0.9,
         "h2h_available": false,
         "h2h_neutral": true,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": false,
         "odds_available": true,
-        "form_available": false,
+        "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -14.565,
+        "market_model_gap": -11.165,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -420,9 +445,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 166,
-        "homeProb": 24,
-        "awayProb": 54,
+        "votes": 187,
+        "homeProb": 26,
+        "awayProb": 52,
         "url": "https://www.sofascore.com/football/match/17112478",
         "orientation": "direct",
         "unavailable": false,
@@ -449,14 +474,14 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 38.3,
-        "ev": -0.063,
-        "edge": -2.6,
+        "prob": 38.6,
+        "ev": -0.054,
+        "edge": -2.2,
         "sources": 4,
         "components": {
           "forebet": 0.37,
           "form": 0.5,
-          "sofascore": 0.24,
+          "sofascore": 0.26,
           "odds": 0.408
         }
       },
@@ -473,7 +498,7 @@
         "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -2.516,
+        "market_model_gap": -2.216,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -756,12 +781,12 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -4.2,
+      "marketGapPp": -2.7,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 3758,
-        "homeProb": 38,
+        "votes": 4233,
+        "homeProb": 37,
         "awayProb": 42,
         "url": "https://www.sofascore.com/football/match/17438143",
         "orientation": "direct",
@@ -769,52 +794,52 @@
         "skipReason": null
       },
       "odds": {
-        "home": 2.85,
-        "draw": 3.65,
-        "away": 2.1,
+        "home": 2.8,
+        "draw": 3.6,
+        "away": 2.2,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 162.0,
+          "home": 175.0,
           "draw": 270.0,
-          "away": 115.0
+          "away": 105.0
         }
       },
       "ai": {
-        "prediction": "Kashiwa Reysol are favored to secure an away victory, driven by their significantly superior recent form (8.7/10) compared to Kawasaki Frontale's struggling 6.0/10. Despite Kawasaki's perfect head-to-head record, the current momentum and bookmaker odds strongly support the visitors.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "Although Kawasaki Frontale holds a dominant 5-0 head-to-head record, this historical data is heavily outweighed by current performance metrics. Kashiwa Reysol boasts an impressive overall form rating of 8.7/10, which contrasts sharply with Kawasaki's 6.0/10, indicating a significant drop in quality for the home side. The venue-specific data further supports the away team, as Kawasaki's home form (6.7/10) is only marginally better than their overall average, while Kashiwa's away form (5.3/10) is their weakest area, yet still outperformed by Kawasaki's home rating in isolation but not in context of current momentum. The bookmaker odds reflect this shift, pricing Kashiwa as favorites at 2.10 compared to Kawasaki's 2.85, aligning with the Forebet prediction of a 39% away win probability. The risk lies in the psychological edge of the H2H dominance, but the disparity in current form scores (2.7 points) suggests the historical trend is breaking."
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "2",
-        "prob": 50.0,
-        "ev": 0.05,
-        "edge": 2.4,
+        "prob": 49.7,
+        "ev": 0.094,
+        "edge": 4.3,
         "sources": 5,
         "components": {
           "forebet": 0.39,
           "h2h": 0.625,
           "form": 0.633,
           "sofascore": 0.42,
-          "odds": 0.476
+          "odds": 0.455
         }
       },
       "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
+        "sources_available": 3,
+        "quality_score": 0.95,
         "h2h_available": true,
         "h2h_neutral": false,
         "forebet_available": true,
         "sofascore_available": true,
-        "gemini_available": true,
+        "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
         "consensus_strength": "none",
-        "market_model_gap": 14.912,
+        "market_model_gap": 13.986,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1074,8 +1099,8 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 519,
-        "homeProb": 73,
+        "votes": 570,
+        "homeProb": 72,
         "awayProb": 9,
         "url": "https://www.sofascore.com/football/match/16537847",
         "orientation": "direct",
@@ -1103,14 +1128,14 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 50.9,
-        "ev": -0.068,
-        "edge": -3.7,
+        "prob": 50.7,
+        "ev": -0.071,
+        "edge": -3.9,
         "sources": 4,
         "components": {
           "forebet": 0.41,
           "form": 0.5,
-          "sofascore": 0.73,
+          "sofascore": 0.72,
           "odds": 0.546
         }
       },
@@ -1127,7 +1152,7 @@
         "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "moderate",
-        "market_model_gap": -3.745,
+        "market_model_gap": -3.945,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1407,17 +1432,17 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 462,
-        "homeProb": 11,
-        "awayProb": 76,
+        "votes": 509,
+        "homeProb": 12,
+        "awayProb": 74,
         "url": "https://www.sofascore.com/football/match/16537858",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 4.6,
-        "draw": 3.6,
+        "home": 4.7,
+        "draw": 3.55,
         "away": 1.58,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -1436,15 +1461,15 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 43.2,
-        "ev": -0.318,
-        "edge": -20.1,
+        "prob": 42.9,
+        "ev": -0.323,
+        "edge": -20.4,
         "sources": 5,
         "components": {
           "forebet": 0.38,
           "h2h": 0.0,
           "form": 0.667,
-          "sofascore": 0.76,
+          "sofascore": 0.74,
           "odds": 0.633
         }
       },
@@ -1461,7 +1486,7 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "none",
-        "market_model_gap": 21.461,
+        "market_model_gap": 21.623,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4116,22 +4141,22 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -8.9,
+      "marketGapPp": -10.2,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 191,
+        "votes": 205,
         "homeProb": 20,
-        "awayProb": 73,
+        "awayProb": 72,
         "url": "https://www.sofascore.com/football/match/16537864",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 3.5,
-        "draw": 3.3,
-        "away": 1.85,
+        "home": 3.6,
+        "draw": 3.5,
+        "away": 1.83,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -4149,16 +4174,16 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 39.6,
-        "ev": -0.268,
-        "edge": -14.5,
+        "prob": 39.5,
+        "ev": -0.277,
+        "edge": -15.1,
         "sources": 5,
         "components": {
           "forebet": 0.39,
           "h2h": 0.0,
           "form": 0.533,
-          "sofascore": 0.73,
-          "odds": 0.541
+          "sofascore": 0.72,
+          "odds": 0.546
         }
       },
       "predictionGrade": "C",
@@ -4174,7 +4199,7 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "none",
-        "market_model_gap": 11.029,
+        "market_model_gap": 11.722,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4783,12 +4808,12 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": 1.1,
+      "marketGapPp": 1.9,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 374,
-        "homeProb": 17,
+        "votes": 407,
+        "homeProb": 15,
         "awayProb": 67,
         "url": "https://www.sofascore.com/football/match/16537844",
         "orientation": "direct",
@@ -4796,16 +4821,16 @@
         "skipReason": null
       },
       "odds": {
-        "home": 2.8,
+        "home": 2.75,
         "draw": 3.05,
-        "away": 2.2,
+        "away": 2.25,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 187.0,
+          "home": 180.0,
           "draw": 220.0,
-          "away": 120.0
+          "away": 125.0
         }
       },
       "ai": {
@@ -4816,16 +4841,16 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 40.2,
-        "ev": -0.116,
-        "edge": -5.3,
+        "prob": 40.1,
+        "ev": -0.099,
+        "edge": -4.4,
         "sources": 5,
         "components": {
           "forebet": 0.41,
           "h2h": 0.0,
           "form": 0.633,
           "sofascore": 0.67,
-          "odds": 0.455
+          "odds": 0.444
         }
       },
       "predictionGrade": "D",
@@ -4841,8 +4866,306 @@
         "form_available": true,
         "h2h_count": 4,
         "consensus_strength": "none",
-        "market_model_gap": 4.486,
+        "market_model_gap": 3.736,
         "skip_reason": null
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
+      "homeTeam": "Blessing",
+      "awayTeam": "Saint-Luc",
+      "time": "13:00",
+      "kickoffUtc": null,
+      "kickoffSource": null,
+      "league": "Ligue 1",
+      "country": "DR Congo",
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/blessing-Sv4ZfUyS/saint-luc-bRDQ07GG/?mid=xI6eaXTh",
+      "forebetUrl": "https://www.forebet.com/en/football/matches/blessing-saint-luc-2564538",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 60.0,
+        "homeProb": 60,
+        "drawProb": 25,
+        "awayProb": 15,
+        "exactScore": "1-0",
+        "avgGoals": 1.75,
+        "favorite": "home",
+        "gap": 45
+      },
+      "h2h": {
+        "total": 2,
+        "homeWins": 2,
+        "awayWins": 0,
+        "lastDate": "02.04.26",
+        "lastScore": "1-0",
+        "effectiveTotal": 2.0,
+        "homeWinsEff": 1.0,
+        "awayWinsEff": 1.0,
+        "allStale": false,
+        "meetings": [
+          {
+            "date": "2026-04-02",
+            "home": "Blessing",
+            "away": "Saint-Luc",
+            "score": "1-0",
+            "winner": "Blessing"
+          },
+          {
+            "date": "2025-11-19",
+            "home": "Saint-Luc",
+            "away": "Blessing",
+            "score": "1-0",
+            "winner": "Saint-Luc"
+          }
+        ],
+        "last": {
+          "date": "2026-04-02",
+          "score": "1-0",
+          "winner": "Blessing",
+          "home": "Blessing",
+          "away": "Saint-Luc"
+        },
+        "edge": {
+          "team": "even",
+          "wins": 1,
+          "draws": 0,
+          "losses": 1,
+          "record": "1-0-1",
+          "even": true
+        },
+        "line": "H2H: Blessing 1-0-1 (even) (last: 2026-04-02 Blessing 1-0 Saint-Luc)"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away": [
+          "L",
+          "D",
+          "D",
+          "L",
+          "D"
+        ],
+        "homeAtHome": [
+          "W",
+          "W",
+          "W",
+          "D",
+          "W"
+        ],
+        "awayAtAway": [
+          "D",
+          "L",
+          "D",
+          "L",
+          "L"
+        ],
+        "homeDated": [
+          {
+            "date": "26.10.26",
+            "result": "W",
+            "score": "2-1",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "20.10.26",
+            "result": "L",
+            "score": "2-1",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "15.04.26",
+            "result": "L",
+            "score": "3-0",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "09.04.26",
+            "result": "L",
+            "score": "2-0",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "05.04.26",
+            "result": "L",
+            "score": "2-1",
+            "event": "Ligue 1 (DR Konga)"
+          }
+        ],
+        "awayDated": [
+          {
+            "date": "05.11.26",
+            "result": "L",
+            "score": "0-1",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "30.10.26",
+            "result": "D",
+            "score": "1-1",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "26.10.26",
+            "result": "D",
+            "score": "0-0",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "20.10.26",
+            "result": "L",
+            "score": "2-0",
+            "event": "Ligue 1 (DR Konga)"
+          },
+          {
+            "date": "11.04.26",
+            "result": "D",
+            "score": "2-2",
+            "event": "Ligue 1 (DR Konga)"
+          }
+        ],
+        "surface": null,
+        "homeSurface": null,
+        "awaySurface": null,
+        "surfaceIsProxy": null,
+        "source": null,
+        "homeSeason": [
+          "W",
+          "L"
+        ],
+        "awaySeason": [
+          "L",
+          "D",
+          "D",
+          "L"
+        ],
+        "homeAtHomeSeason": [
+          "W"
+        ],
+        "awayAtAwaySeason": [
+          "D",
+          "L"
+        ],
+        "homeSeasonMatches": 2,
+        "awaySeasonMatches": 4,
+        "homeSeasonStart": "2026-10-20",
+        "awaySeasonStart": "2026-10-20",
+        "homeClean": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "awayClean": [
+          "L",
+          "D",
+          "D",
+          "L",
+          "D"
+        ],
+        "homeAtHomeClean": [
+          "W",
+          "W",
+          "W",
+          "D",
+          "W"
+        ],
+        "awayAtAwayClean": [
+          "D",
+          "L",
+          "D",
+          "L",
+          "L"
+        ],
+        "homeCup": [],
+        "awayCup": [],
+        "homeCupCompetitions": [],
+        "awayCupCompetitions": [],
+        "homeCompetitions": [
+          "Ligue 1 (DR Konga)"
+        ],
+        "awayCompetitions": [
+          "Ligue 1 (DR Konga)"
+        ],
+        "friendliesExcluded": 0
+      },
+      "category": null,
+      "nationalFriendly": false,
+      "seasonMatchCount": 2,
+      "earlySeason": true,
+      "seasonFormConflict": false,
+      "staleModel": false,
+      "marketGapPp": null,
+      "predictionGradeRaw": null,
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": null,
+        "draw": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 54.6,
+        "ev": null,
+        "edge": null,
+        "sources": 3,
+        "components": {
+          "forebet": 0.6,
+          "h2h": 0.5,
+          "form": 0.5
+        }
+      },
+      "predictionGrade": "F",
+      "dataQuality": {
+        "sources_available": 2,
+        "quality_score": 0.5,
+        "h2h_available": true,
+        "h2h_neutral": false,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
+        "form_available": true,
+        "h2h_count": 2,
+        "consensus_strength": "weak",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -4891,20 +5214,8 @@
         "line": "No previous meetings"
       },
       "form": {
-        "home": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "away": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
+        "home": [],
+        "away": [],
         "homeAtHome": [],
         "awayAtAway": [],
         "homeDated": [],
@@ -4913,7 +5224,7 @@
         "homeSurface": null,
         "awaySurface": null,
         "surfaceIsProxy": null,
-        "source": "sofascore",
+        "source": null,
         "homeSeason": null,
         "awaySeason": null,
         "homeAtHomeSeason": null,
@@ -4922,20 +5233,8 @@
         "awaySeasonMatches": null,
         "homeSeasonStart": null,
         "awaySeasonStart": null,
-        "homeClean": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "awayClean": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
+        "homeClean": [],
+        "awayClean": [],
         "homeAtHomeClean": [],
         "awayAtAwayClean": [],
         "homeCup": [],
@@ -4952,7 +5251,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": null,
+      "marketGapPp": -33.1,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -4965,11 +5264,11 @@
         "skipReason": null
       },
       "odds": {
-        "home": 14,
-        "draw": null,
-        "away": 1.13,
-        "source": "superbet",
-        "bookmaker": "Superbet",
+        "home": 12.5,
+        "draw": 7.25,
+        "away": 1.14,
+        "source": "livesport_bulk",
+        "bookmaker": "Livesport (bukm. 851)",
         "note": null,
         "forebet": {
           "home": null,
@@ -4985,30 +5284,29 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 50.0,
-        "ev": -0.435,
-        "edge": -38.5,
-        "sources": 3,
+        "prob": 57.6,
+        "ev": -0.343,
+        "edge": -30.1,
+        "sources": 2,
         "components": {
           "forebet": 0.47,
-          "form": 0.3,
-          "odds": 0.885
+          "odds": 0.877
         }
       },
       "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 1,
-        "quality_score": 0.75,
+        "quality_score": 0.65,
         "h2h_available": false,
         "h2h_neutral": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
         "odds_available": true,
-        "form_available": true,
+        "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "none",
-        "market_model_gap": 42.857,
+        "market_model_gap": 49.6,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -5115,9 +5413,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 900.0,
-          "draw": 600.0,
-          "away": 500.0
+          "home": 600.0,
+          "draw": 500.0,
+          "away": 333.0
         }
       },
       "ai": {
@@ -5431,7 +5729,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 480,
+        "votes": 518,
         "homeProb": 12,
         "awayProb": 75,
         "url": "https://www.sofascore.com/football/match/17455392",
@@ -5447,9 +5745,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 350.0,
-          "draw": 270.0,
-          "away": 167.0
+          "home": 400.0,
+          "draw": 280.0,
+          "away": 189.0
         }
       },
       "ai": {
@@ -6557,9 +6855,9 @@
         "bookmaker": null,
         "note": "brak_kursow|sofascore_zle_dopasowanie",
         "forebet": {
-          "home": 182.0,
+          "home": 175.0,
           "draw": 270.0,
-          "away": 400.0
+          "away": 375.0
         }
       },
       "ai": {
@@ -7506,7 +7804,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -20.1,
+      "marketGapPp": -21.5,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -7519,11 +7817,11 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.43,
-        "draw": 4.15,
-        "away": 5.4,
-        "source": "livesport",
-        "bookmaker": "William Hill",
+        "home": 1.4,
+        "draw": 4.1,
+        "away": 6.0,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
           "home": 208.0,
@@ -7539,15 +7837,15 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 51.7,
-        "ev": -0.261,
-        "edge": -18.2,
+        "prob": 51.9,
+        "ev": -0.273,
+        "edge": -19.5,
         "sources": 4,
         "components": {
           "forebet": 0.42,
           "h2h": 0.5,
           "form": 0.6,
-          "odds": 0.699
+          "odds": 0.714
         }
       },
       "predictionGrade": "D",
@@ -7563,7 +7861,7 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "weak",
-        "market_model_gap": -18.23,
+        "market_model_gap": -19.529,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -7870,304 +8168,6 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "Blessing",
-      "awayTeam": "Saint-Luc",
-      "time": "15:00",
-      "kickoffUtc": null,
-      "kickoffSource": null,
-      "league": "Ligue 1",
-      "country": "DR Congo",
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/blessing-Sv4ZfUyS/saint-luc-bRDQ07GG/?mid=xI6eaXTh",
-      "forebetUrl": "https://www.forebet.com/en/football/matches/blessing-saint-luc-2564538",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "brak_kursow"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 60.0,
-        "homeProb": 60,
-        "drawProb": 25,
-        "awayProb": 15,
-        "exactScore": "1-0",
-        "avgGoals": 1.75,
-        "favorite": "home",
-        "gap": 45
-      },
-      "h2h": {
-        "total": 2,
-        "homeWins": 2,
-        "awayWins": 0,
-        "lastDate": "02.04.26",
-        "lastScore": "1-0",
-        "effectiveTotal": 2.0,
-        "homeWinsEff": 1.0,
-        "awayWinsEff": 1.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-04-02",
-            "home": "Blessing",
-            "away": "Saint-Luc",
-            "score": "1-0",
-            "winner": "Blessing"
-          },
-          {
-            "date": "2025-11-19",
-            "home": "Saint-Luc",
-            "away": "Blessing",
-            "score": "1-0",
-            "winner": "Saint-Luc"
-          }
-        ],
-        "last": {
-          "date": "2026-04-02",
-          "score": "1-0",
-          "winner": "Blessing",
-          "home": "Blessing",
-          "away": "Saint-Luc"
-        },
-        "edge": {
-          "team": "even",
-          "wins": 1,
-          "draws": 0,
-          "losses": 1,
-          "record": "1-0-1",
-          "even": true
-        },
-        "line": "H2H: Blessing 1-0-1 (even) (last: 2026-04-02 Blessing 1-0 Saint-Luc)"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "away": [
-          "L",
-          "D",
-          "D",
-          "L",
-          "D"
-        ],
-        "homeAtHome": [
-          "W",
-          "W",
-          "W",
-          "D",
-          "W"
-        ],
-        "awayAtAway": [
-          "D",
-          "L",
-          "D",
-          "L",
-          "L"
-        ],
-        "homeDated": [
-          {
-            "date": "26.10.26",
-            "result": "W",
-            "score": "2-1",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "20.10.26",
-            "result": "L",
-            "score": "2-1",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "15.04.26",
-            "result": "L",
-            "score": "3-0",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "09.04.26",
-            "result": "L",
-            "score": "2-0",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "05.04.26",
-            "result": "L",
-            "score": "2-1",
-            "event": "Ligue 1 (DR Konga)"
-          }
-        ],
-        "awayDated": [
-          {
-            "date": "05.11.26",
-            "result": "L",
-            "score": "0-1",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "30.10.26",
-            "result": "D",
-            "score": "1-1",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "26.10.26",
-            "result": "D",
-            "score": "0-0",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "20.10.26",
-            "result": "L",
-            "score": "2-0",
-            "event": "Ligue 1 (DR Konga)"
-          },
-          {
-            "date": "11.04.26",
-            "result": "D",
-            "score": "2-2",
-            "event": "Ligue 1 (DR Konga)"
-          }
-        ],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null,
-        "homeSeason": [
-          "W",
-          "L"
-        ],
-        "awaySeason": [
-          "L",
-          "D",
-          "D",
-          "L"
-        ],
-        "homeAtHomeSeason": [
-          "W"
-        ],
-        "awayAtAwaySeason": [
-          "D",
-          "L"
-        ],
-        "homeSeasonMatches": 2,
-        "awaySeasonMatches": 4,
-        "homeSeasonStart": "2026-10-20",
-        "awaySeasonStart": "2026-10-20",
-        "homeClean": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "awayClean": [
-          "L",
-          "D",
-          "D",
-          "L",
-          "D"
-        ],
-        "homeAtHomeClean": [
-          "W",
-          "W",
-          "W",
-          "D",
-          "W"
-        ],
-        "awayAtAwayClean": [
-          "D",
-          "L",
-          "D",
-          "L",
-          "L"
-        ],
-        "homeCup": [],
-        "awayCup": [],
-        "homeCupCompetitions": [],
-        "awayCupCompetitions": [],
-        "homeCompetitions": [
-          "Ligue 1 (DR Konga)"
-        ],
-        "awayCompetitions": [
-          "Ligue 1 (DR Konga)"
-        ],
-        "friendliesExcluded": 0
-      },
-      "category": null,
-      "nationalFriendly": false,
-      "seasonMatchCount": 2,
-      "earlySeason": true,
-      "seasonFormConflict": false,
-      "staleModel": false,
-      "marketGapPp": null,
-      "predictionGradeRaw": null,
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 54.6,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
-        "components": {
-          "forebet": 0.6,
-          "h2h": 0.5,
-          "form": 0.5
-        }
-      },
-      "predictionGrade": "F",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.5,
-        "h2h_available": true,
-        "h2h_neutral": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": false,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "weak",
         "market_model_gap": null,
         "skip_reason": "no_odds"
       },
@@ -8859,22 +8859,22 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": 4.3,
+      "marketGapPp": 1.6,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 241,
-        "homeProb": 40,
-        "awayProb": 39,
+        "votes": 257,
+        "homeProb": 39,
+        "awayProb": 40,
         "url": "https://www.sofascore.com/football/match/17329446",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.55,
-        "draw": 3.2,
-        "away": 2.35,
+        "home": 2.75,
+        "draw": 3.25,
+        "away": 2.2,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -8885,25 +8885,25 @@
         }
       },
       "ai": {
-        "prediction": "Based on the strong home record (4/5 wins) and consistent performance at home, I predict a CS Onhaye victory. CS Onhaye's recent form is weaker, but their superior H2H record and home advantage should prevail.",
-        "confidence": 80,
-        "recommendation": "HIGH",
-        "reasoning": ""
+        "prediction": "Habay-la-Neuve is expected to secure a narrow victory, leveraging their superior overall form and the statistical edge indicated by bookmakers and predictive models.",
+        "confidence": 62,
+        "recommendation": "MEDIUM",
+        "reasoning": "Although CS Onhaye holds a perfect 100% head-to-head record in the last two meetings, this sample size is too small to override current form trends. Habay-la-Neuve demonstrates significantly better overall form (4.7/10) compared to Onhaye's struggling 2.7/10, suggesting a recent performance gap. The away team's specific venue form is poor (1.3/10), which is a major counter-indicator, but the bookmaker odds (2.20 for away vs 2.75 for home) and Forebet's 42% probability favor the visitors. The draw odds at 3.25 indicate a tight match, but the combination of better general form and market confidence tilts the balance slightly toward an away win. The risk is elevated due to the conflicting signals between historical dominance and current poor away performance."
       },
       "scoring": {
         "pick": "2",
-        "prob": 45.7,
-        "ev": 0.074,
-        "edge": 3.1,
+        "prob": 46.3,
+        "ev": 0.019,
+        "edge": 0.9,
         "sources": 4,
         "components": {
           "forebet": 0.42,
           "form": 0.6,
-          "sofascore": 0.39,
-          "odds": 0.426
+          "sofascore": 0.4,
+          "odds": 0.455
         }
       },
-      "predictionGrade": "B",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 4,
         "quality_score": 1.0,
@@ -8915,8 +8915,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 0,
-        "consensus_strength": "moderate",
-        "market_model_gap": 6.484,
+        "consensus_strength": "none",
+        "market_model_gap": 9.936,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -9159,13 +9159,13 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": 5.5,
+      "marketGapPp": 5.4,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 234,
+        "votes": 253,
         "homeProb": 21,
-        "awayProb": 54,
+        "awayProb": 55,
         "url": "https://www.sofascore.com/football/match/16429872",
         "orientation": "direct",
         "unavailable": false,
@@ -9173,22 +9173,22 @@
       },
       "odds": {
         "home": 2.3,
-        "draw": 3.4,
-        "away": 2.5,
+        "draw": 3.35,
+        "away": 2.55,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
+          "home": 130.0,
+          "draw": 240.0,
+          "away": 150.0
         }
       },
       "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
+        "prediction": "Miedź Legnica II's significantly superior form, both overall and away, coupled with strong fan backing, positions them as favorites despite the bookmakers' slightly favoring the home side.",
+        "confidence": 70,
+        "recommendation": "MEDIUM",
+        "reasoning": "Miedź Legnica II exhibits dramatically better recent form (6.0/10 overall and away) compared to Barycz Sułów's dismal 0.7/10 overall form. Although Barycz Sułów shows a notable improvement at home with a 5.3/10 venue-specific form, Miedź Legnica II's 6.0/10 away form still outmatches it, indicating consistent strength regardless of location. The sole head-to-head meeting also saw Miedź Legnica II emerge victorious. While bookmakers offer close odds (Barycz 2.3, Miedź 2.55) and Forebet predicts a 44% home win, these contradict the strong fan sentiment (55% for away win) and the objective form metrics which heavily favor the away team. The perceived discrepancy in odds might offer value on Miedź Legnica II."
       },
       "scoring": {
         "pick": "1",
@@ -9203,15 +9203,15 @@
           "odds": 0.435
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 3,
-        "quality_score": 0.9,
+        "sources_available": 4,
+        "quality_score": 1.0,
         "h2h_available": true,
         "h2h_neutral": false,
         "forebet_available": true,
         "sofascore_available": true,
-        "gemini_available": false,
+        "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 1,
@@ -9444,7 +9444,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -34.7,
+      "marketGapPp": -31.3,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -9457,16 +9457,16 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.207,
-        "draw": 5.48,
-        "away": 8.88,
+        "home": 1.271,
+        "draw": 4.98,
+        "away": 7.64,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 556.0,
-          "draw": 600.0,
-          "away": 1000.0
+          "home": 400.0,
+          "draw": 525.0,
+          "away": 750.0
         }
       },
       "ai": {
@@ -9477,13 +9477,13 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 50.4,
-        "ev": -0.391,
-        "edge": -32.4,
+        "prob": 49.4,
+        "ev": -0.373,
+        "edge": -29.3,
         "sources": 2,
         "components": {
           "forebet": 0.39,
-          "odds": 0.829
+          "odds": 0.787
         }
       },
       "predictionGrade": "D",
@@ -9499,7 +9499,7 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -32.45,
+        "market_model_gap": -29.278,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -10237,47 +10237,47 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -3.6,
+      "marketGapPp": -3.2,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 546,
+        "votes": 581,
         "homeProb": 14,
-        "awayProb": 72,
+        "awayProb": 71,
         "url": "https://www.sofascore.com/football/match/16912793",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 3.1,
-        "draw": 3.35,
+        "home": 3.05,
+        "draw": 3.3,
         "away": 2.0,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 250.0,
-          "draw": 250.0,
-          "away": 120.0
+          "home": 230.0,
+          "draw": 240.0,
+          "away": 111.0
         }
       },
       "ai": {
-        "prediction": "Rumilly Vallières will win, leveraging superior recent form and favorable odds.",
-        "confidence": 68,
-        "recommendation": "SKIP",
-        "reasoning": "Head‑to‑head shows the away side has 2 wins out of 5 encounters and a 20% home win rate for Saint‑Priest, indicating a historical edge"
+        "prediction": "Rumilly Vallières are the clear favorites to secure an away victory, supported by superior overall form and strong head-to-head dominance. The combination of their 6.0/10 away form and the bookmakers' pricing indicates a high probability of a win.",
+        "confidence": 72,
+        "recommendation": "MEDIUM",
+        "reasoning": "Rumilly Vallières hold a significant head-to-head advantage, having won 2 of the last 5 meetings compared to Saint-Priest's 1 win. While Saint-Priest's home form (6.0/10) matches the visitors' away form (6.0/10), Rumilly's overall form (6.0/10) is notably higher than Saint-Priest's overall rating (4.7/10). The market reflects this disparity, with Rumilly priced at 2.00 (implied 50%) versus Saint-Priest at 3.05 (implied 33%), aligning with the Forebet prediction of a 41% away win probability. The low home H2H win rate of 20% further undermines confidence in the home side, suggesting they struggle against this specific opponent."
       },
       "scoring": {
         "pick": "2",
-        "prob": 51.6,
-        "ev": 0.031,
-        "edge": 1.6,
+        "prob": 51.4,
+        "ev": 0.028,
+        "edge": 1.4,
         "sources": 4,
         "components": {
           "forebet": 0.41,
           "form": 0.567,
-          "sofascore": 0.72,
+          "sofascore": 0.71,
           "odds": 0.5
         }
       },
@@ -10294,7 +10294,7 @@
         "form_available": true,
         "h2h_count": 1,
         "consensus_strength": "none",
-        "market_model_gap": 19.342,
+        "market_model_gap": 18.613,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -10561,11 +10561,11 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -9.3,
+      "marketGapPp": -10.8,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 482,
+        "votes": 507,
         "homeProb": 34,
         "awayProb": 45,
         "url": "https://www.sofascore.com/football/match/17006489",
@@ -10574,16 +10574,16 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.95,
+        "home": 1.9,
         "draw": 3.2,
-        "away": 3.25,
+        "away": 3.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 180.0,
-          "draw": 180.0,
-          "away": 150.0
+          "home": 125.0,
+          "draw": 240.0,
+          "away": 280.0
         }
       },
       "ai": {
@@ -10594,16 +10594,16 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 43.8,
-        "ev": -0.145,
-        "edge": -7.5,
+        "prob": 44.0,
+        "ev": -0.164,
+        "edge": -8.6,
         "sources": 5,
         "components": {
           "forebet": 0.36,
           "h2h": 0.667,
           "form": 0.333,
           "sofascore": 0.34,
-          "odds": 0.513
+          "odds": 0.526
         }
       },
       "predictionGrade": "D",
@@ -10619,7 +10619,7 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "weak",
-        "market_model_gap": -7.482,
+        "market_model_gap": -8.632,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -10726,9 +10726,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 189.0,
-          "draw": 300.0,
-          "away": 350.0
+          "home": 238.0,
+          "draw": 320.0,
+          "away": 450.0
         }
       },
       "ai": {
@@ -10874,9 +10874,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 176,
+        "votes": 188,
         "homeProb": 19,
-        "awayProb": 66,
+        "awayProb": 65,
         "url": "https://www.sofascore.com/football/match/16537865",
         "orientation": "direct",
         "unavailable": false,
@@ -10903,14 +10903,14 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 54.8,
-        "ev": 0.19,
-        "edge": 8.8,
+        "prob": 54.7,
+        "ev": 0.186,
+        "edge": 8.6,
         "sources": 4,
         "components": {
           "forebet": 0.4,
           "form": 0.8,
-          "sofascore": 0.66,
+          "sofascore": 0.65,
           "odds": 0.461
         }
       },
@@ -10927,7 +10927,7 @@
         "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "none",
-        "market_model_gap": 19.086,
+        "market_model_gap": 18.986,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -11674,9 +11674,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 400.0,
-          "draw": 500.0,
-          "away": 600.0
+          "home": 556.0,
+          "draw": 600.0,
+          "away": 800.0
         }
       },
       "ai": {
@@ -11816,7 +11816,7 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 155.0,
+          "home": 162.0,
           "draw": 260.0,
           "away": 120.0
         }
@@ -11958,9 +11958,9 @@
         "bookmaker": null,
         "note": "brak_kursow|sofascore_zle_dopasowanie",
         "forebet": {
-          "home": 260.0,
-          "draw": 240.0,
-          "away": 118.0
+          "home": 275.0,
+          "draw": 230.0,
+          "away": 111.0
         }
       },
       "ai": {
@@ -12593,8 +12593,8 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 786,
-        "homeProb": 65,
+        "votes": 844,
+        "homeProb": 64,
         "awayProb": 12,
         "url": "https://www.sofascore.com/football/match/17381177",
         "orientation": "direct",
@@ -12615,22 +12615,22 @@
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": "Despite a challenging head-to-head record, Castellonense's strong home form and robust support from prediction models and fans suggest a narrow victory.",
+        "confidence": 68,
+        "recommendation": "MEDIUM",
+        "reasoning": "Forebet predicts a 50% chance for a home win with a 28 percentage point advantage, a view strongly echoed by 64% of fan votes. Castellonense exhibits excellent home form, scoring 6.7/10, significantly better than their overall form of 3.3/10, giving them a slight edge over La Nucía's respectable 6.0/10 away form. However, La Nucía has dominated the head-to-head, winning 3 of the last 5 meetings, with Castellonense winning only once (20% home H2H win rate). The bookmaker odds are perfectly balanced at 2.7 for both teams, indicating high market uncertainty, but offer potential value on Castellonense if Forebet's analysis is accurate."
       },
       "scoring": {
         "pick": "1",
-        "prob": 56.5,
-        "ev": 0.524,
-        "edge": 19.4,
+        "prob": 56.3,
+        "ev": 0.521,
+        "edge": 19.3,
         "sources": 5,
         "components": {
           "forebet": 0.5,
           "h2h": 0.714,
           "form": 0.567,
-          "sofascore": 0.65,
+          "sofascore": 0.64,
           "odds": 0.37
         }
       },
@@ -12647,7 +12647,7 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "moderate",
-        "market_model_gap": 19.463,
+        "market_model_gap": 19.263,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -12892,8 +12892,8 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 320,
-        "homeProb": 22,
+        "votes": 339,
+        "homeProb": 23,
         "awayProb": 57,
         "url": "https://www.sofascore.com/football/match/17212582",
         "orientation": "direct",
@@ -12908,16 +12908,16 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 187.0,
-          "draw": 230.0,
-          "away": 115.0
+          "home": 190.0,
+          "draw": 240.0,
+          "away": 110.0
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 5 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": "Defensa y Justicia Res. is strongly favored due to superior recent form, favorable bookmaker odds, and aligned expert/fan predictions, pointing to an away victory.",
+        "confidence": 85,
+        "recommendation": "HIGH",
+        "reasoning": "Defensa y Justicia Res. exhibits superior recent form (3.3/10 overall and away) compared to Ferro Carril Reserves (2.0/10 overall and at home). Bookmakers price Defensa at 2.25 (44.4% implied probability), significantly favoring them over Ferro's 2.95 (33.9%). Forebet's prediction of a 44% away win and a fan vote of 57% for the away team further corroborate this sentiment. While Ferro won the single prior H2H meeting at home, this isolated data point is heavily outweighed by consistent indicators favoring the away side. The overall risk is managed by the strong alignment of multiple data points."
       },
       "scoring": {
         "pick": "2",
@@ -12944,7 +12944,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 1,
-        "consensus_strength": "none",
+        "consensus_strength": "weak",
         "market_model_gap": 15.402,
         "skip_reason": null
       },
@@ -13204,7 +13204,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 330,
+        "votes": 352,
         "homeProb": 25,
         "awayProb": 54,
         "url": "https://www.sofascore.com/football/match/17212581",
@@ -13220,16 +13220,16 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 225.0,
-          "draw": 210.0,
-          "away": 110.0
+          "home": 300.0,
+          "draw": 225.0,
+          "away": 125.0
         }
       },
       "ai": {
-        "prediction": "Deportivo Riestra",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": ""
+        "prediction": "Deportivo Riestra Res. are expected to secure a victory, as their significantly superior recent form (4.7/10 vs 1.3/10) and status as the bookmakers' favorite outweigh Platense's historical head-to-head dominance.",
+        "confidence": 68,
+        "recommendation": "MEDIUM",
+        "reasoning": "Although Platense holds a strong historical edge with a 67% home win rate in the last three meetings, their current form is critically poor at just 1.3/10, indicating a significant drop in performance. In contrast, Deportivo Riestra Res. boasts a much healthier 4.7/10 form rating, suggesting they are in a far better competitive state. The bookmaker odds reflect this shift in momentum, pricing the away team as the favorite at 2.05 compared to Platense's 3.5, which aligns with the Forebet prediction of a 41% away win probability. The 12-point form gap is a substantial indicator that the historical H2H trend is likely broken by current team dynamics. While home advantage usually provides a boost, it appears insufficient to compensate for the stark disparity in recent results and market confidence."
       },
       "scoring": {
         "pick": "2",
@@ -13365,9 +13365,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 110.0,
-          "draw": 260.0,
-          "away": 180.0
+          "home": 120.0,
+          "draw": 250.0,
+          "away": 162.0
         }
       },
       "ai": {
@@ -13507,7 +13507,7 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 230.0,
+          "home": 240.0,
           "draw": 240.0,
           "away": 111.0
         }
@@ -13816,9 +13816,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 369,
+        "votes": 393,
         "homeProb": 51,
-        "awayProb": 20,
+        "awayProb": 19,
         "url": "https://www.sofascore.com/football/match/17212587",
         "orientation": "direct",
         "unavailable": false,
@@ -13832,9 +13832,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 138.0,
-          "draw": 195.0,
-          "away": 170.0
+          "home": 140.0,
+          "draw": 187.0,
+          "away": 180.0
         }
       },
       "ai": {
@@ -14143,9 +14143,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 422,
+        "votes": 453,
         "homeProb": 73,
-        "awayProb": 9,
+        "awayProb": 10,
         "url": "https://www.sofascore.com/football/match/17212585",
         "orientation": "direct",
         "unavailable": false,
@@ -14452,7 +14452,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 285,
+        "votes": 298,
         "homeProb": 78,
         "awayProb": 12,
         "url": "https://www.sofascore.com/football/match/16989542",
@@ -14613,9 +14613,9 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 222.0,
-          "draw": 290.0,
-          "away": 450.0
+          "home": 200.0,
+          "draw": 300.0,
+          "away": 475.0
         }
       },
       "ai": {
@@ -14942,10 +14942,10 @@
         }
       },
       "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
+        "prediction": "CD Utrera is strongly favored to win this match, primarily due to their outstanding home form contrasting sharply with Córdoba CF B's abysmal away performances, despite a historically balanced head-to-head.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "CD Utrera boasts an exceptional home form rating of 8.0/10, which stands in stark contrast to Córdoba CF B's dismal 0.7/10 away form. Bookmakers heavily reflect this disparity, pricing Utrera at 1.6 (implying a 62.5% win probability) and Forebet predicting a 46% home win. While the head-to-head record shows a significant tendency for draws (3 out of 5 meetings, 60%) and only a 20% home H2H win rate for Utrera, the current venue-specific trends are overwhelmingly decisive. Both teams have poor overall recent form (Utrera 4.7/10, Córdoba B 4.0/10), but Utrera's home advantage is expected to dominate given the opponent's struggles on the road."
       },
       "scoring": {
         "pick": "1",
@@ -14960,19 +14960,19 @@
           "odds": 0.625
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
+        "sources_available": 3,
+        "quality_score": 0.85,
         "h2h_available": true,
         "h2h_neutral": false,
         "forebet_available": true,
         "sofascore_available": false,
-        "gemini_available": false,
+        "gemini_available": true,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 2,
-        "consensus_strength": "weak",
+        "consensus_strength": "moderate",
         "market_model_gap": -24.4,
         "skip_reason": null
       },
@@ -14990,10 +14990,12 @@
       "source": "forebet",
       "matchUrl": "https://www.livesport.com/pl/mecz/pilka-nozna/ontinyent-1931-cf-dhNxFfxR/utiel-2mUAGEdb/?mid=fiUDBgqg",
       "forebetUrl": "https://www.forebet.com/en/football/matches/ontinyent-1931-cd-utiel-2539065",
-      "qualifies": true,
-      "channelQualifies": true,
-      "emailQualifies": true,
-      "skipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_ponizej_progu"
+      ],
       "forebet": {
         "prediction": "1",
         "probability": 48.0,
@@ -15242,65 +15244,64 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -9.3,
+      "marketGapPp": -12.8,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": true,
-        "votes": 97,
-        "homeProb": 80,
-        "awayProb": 6,
-        "url": "https://www.sofascore.com/football/match/17510228",
-        "orientation": "direct",
-        "unavailable": false,
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
         "skipReason": null
       },
       "odds": {
-        "home": 1.55,
-        "draw": 3.55,
-        "away": 5.0,
+        "home": 1.45,
+        "draw": 3.8,
+        "away": 5.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 154.0,
-          "draw": 260.0,
-          "away": 350.0
+          "home": 182.0,
+          "draw": 270.0,
+          "away": 400.0
         }
       },
       "ai": {
-        "prediction": "Ontinyent 1931 will leverage their superior home form and the heavy betting market support to secure a win.",
-        "confidence": 70,
-        "recommendation": "SKIP",
-        "reasoning": "Ontinyent’s recent overall form (3.3/10) and home form (4.7/10) far outpace CD Utiel’s 1.3/10 and 2.0/10 away form. The bookmaker odds (1.55) and Forebet’s 48% home win probability reflect strong market confidence. Although the head‑to‑head record favors"
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "1",
-        "prob": 64.9,
-        "ev": 0.006,
-        "edge": 0.4,
-        "sources": 5,
+        "prob": 63.1,
+        "ev": -0.085,
+        "edge": -5.9,
+        "sources": 4,
         "components": {
           "forebet": 0.48,
           "h2h": 0.857,
           "form": 0.6,
-          "sofascore": 0.8,
-          "odds": 0.645
+          "odds": 0.69
         }
       },
-      "predictionGrade": "B",
+      "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
+        "sources_available": 2,
+        "quality_score": 0.8,
         "h2h_available": true,
         "h2h_neutral": false,
         "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
         "odds_available": true,
         "form_available": true,
         "h2h_count": 3,
-        "consensus_strength": "moderate",
-        "market_model_gap": 0.384,
+        "consensus_strength": "weak",
+        "market_model_gap": -5.866,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -15545,11 +15546,11 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -7.6,
+      "marketGapPp": -7.7,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 395,
+        "votes": 406,
         "homeProb": 75,
         "awayProb": 15,
         "url": "https://www.sofascore.com/football/match/16608583",
@@ -15558,36 +15559,36 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.8,
-        "draw": 3.5,
-        "away": 3.6,
+        "home": 1.78,
+        "draw": 3.3,
+        "away": 3.75,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
           "home": 125.0,
-          "draw": 250.0,
-          "away": 260.0
+          "draw": 275.0,
+          "away": 250.0
         }
       },
       "ai": {
-        "prediction": "Based on the data, we can see that Saint-Pryvé Saint-Hilaire has a strong home advantage with a 50% win rate at home and a poor away record. US Chantilly, on the other hand, has shown improvement in their recent form, but they have not won away from home in their last 5 matches. The odds value leans towards US Chantilly with a lower home team odds, suggesting some uncertainty in the outcome.",
-        "confidence": 70,
+        "prediction": "Saint-Pryvé Saint-Hilaire is expected to secure a victory, driven by their significantly stronger home performance compared to US Chantilly's complete lack of away points. The data indicates a clear disparity in venue-specific form that outweighs the balanced head-to-head history.",
+        "confidence": 78,
         "recommendation": "MEDIUM",
-        "reasoning": ""
+        "reasoning": "The head-to-head record is perfectly balanced with one win each, suggesting no historical dominance, but recent form tells a different story. Saint-Pryvé Saint-Hilaire's overall form is 2.0/10, which is still poor, but their home form jumps to 4.7/10, indicating they are competitive on their own turf. In stark contrast, US Chantilly has a 0.0/10 away form, meaning they have failed to score or win in recent away matches, making them highly vulnerable. The bookmaker odds reflect this disparity, with the home team priced at 1.78 (implied probability ~56%) versus the away team at 3.75, aligning with the Forebet prediction of a 42% home win probability. The fan vote (75% for home) further supports the narrative that the home side is the safer bet despite the low absolute quality of both teams."
       },
       "scoring": {
         "pick": "1",
-        "prob": 41.6,
-        "ev": -0.25,
-        "edge": -13.9,
+        "prob": 41.7,
+        "ev": -0.257,
+        "edge": -14.5,
         "sources": 5,
         "components": {
           "forebet": 0.42,
           "h2h": 0.0,
           "form": 0.567,
           "sofascore": 0.75,
-          "odds": 0.556
+          "odds": 0.562
         }
       },
       "predictionGrade": "C",
@@ -15603,7 +15604,7 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "moderate",
-        "market_model_gap": -13.956,
+        "market_model_gap": -14.48,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -15878,8 +15879,8 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 631,
-        "homeProb": 15,
+        "votes": 647,
+        "homeProb": 14,
         "awayProb": 74,
         "url": "https://www.sofascore.com/football/match/17433801",
         "orientation": "direct",
@@ -15894,9 +15895,9 @@
         "bookmaker": "William Hill",
         "note": null,
         "forebet": {
-          "home": 210.0,
-          "draw": 250.0,
-          "away": 100.0
+          "home": 250.0,
+          "draw": 260.0,
+          "away": 125.0
         }
       },
       "ai": {
@@ -16186,7 +16187,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -1.9,
+      "marketGapPp": -1.6,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": false,
@@ -16201,7 +16202,7 @@
       "odds": {
         "home": 2.1,
         "draw": 3.2,
-        "away": 3.1,
+        "away": 3.05,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -16212,10 +16213,10 @@
         }
       },
       "ai": {
-        "prediction": "CD Cieza is favored to secure a home victory, driven by their significantly superior venue-specific form and the historical dominance of Valencia Mestalla in this matchup.",
+        "prediction": "CD Cieza is expected to secure a narrow victory at home, leveraging their significantly superior venue-specific form against Valencia Mestalla's poor away record. The data strongly favors the home side, with a 41% win probability and odds of 2.1 offering reasonable value compared to the away team's struggles.",
         "confidence": 72,
         "recommendation": "MEDIUM",
-        "reasoning": "The head-to-head record shows a 100% win rate for Valencia Mestalla in their last meeting, but this is a small sample size (n=1) that is heavily outweighed by current form metrics. CD Cieza's home form is rated at 4.7/10, which is substantially higher than Valencia Mestalla's away form of 0.7/10, indicating a strong home advantage and poor away performance for the visitors. The bookmaker odds (2.1 for home vs 3.1 for away) align with the Forebet prediction of a 41% home win probability, suggesting the market agrees with the statistical edge for the home side. While the overall form scores are low for both teams (4.0 vs 2.0), the disparity in venue-specific performance creates a clear tactical and psychological edge for Cieza. The risk remains moderate due to the limited H2H data and the generally low scoring nature implied by the low form ratings."
+        "reasoning": "The head-to-head record shows Valencia Mestalla won the last meeting, but this is a single data point and does not outweigh current form trends. CD Cieza's home form is rated 4.7/10, which is substantially higher than Valencia Mestalla's away form of 0.7/10, indicating a clear performance gap in this specific context. The bookmaker odds of 2.1 for the home win align with the Forebet prediction of 41%, suggesting the market agrees on the home advantage. While the overall form scores are low for both teams (4.0 vs 2.0), the relative difference and venue-specific metrics strongly point to a home win. The risk lies in the low absolute quality of both teams, which can lead to unpredictable results, but the statistical edge remains with Cieza."
       },
       "scoring": {
         "pick": "1",
@@ -16993,7 +16994,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 1660,
+        "votes": 1682,
         "homeProb": 82,
         "awayProb": 5,
         "url": "https://www.sofascore.com/football/match/17212579",
@@ -17015,10 +17016,10 @@
         }
       },
       "ai": {
-        "prediction": "Based on the data, this match appears to be closely balanced, with both teams showing similar performance levels. Talleres Córdoba Res. has a strong home record, winning 4 out of 5 matches at their home ground, while Sarmiento Res. has improved away form, winning 2 out of their last 3 matches outside of their home ground.",
+        "prediction": "Talleres Córdoba Res. are favored to win this match due to their outstanding recent home form and strong market backing, despite a poor historical Head-to-Head record against Sarmiento Res.",
         "confidence": 70,
         "recommendation": "MEDIUM",
-        "reasoning": ""
+        "reasoning": "Talleres Córdoba Res. enters this match in excellent form, boasting an 8.0/10 overall and home form rating, significantly superior to Sarmiento Res.'s 3.3/10 overall and 4.0/10 away form. Bookmakers also heavily favor Talleres with odds of 1.73, implying a 57.8% win probability, which is strongly supported by an overwhelming 82% fan vote. However, a major counter-indicator is the Head-to-Head record, where Sarmiento Res. has won 3 of the last 5 meetings, with Talleres having a mere 20% home H2H win rate. While historical H2H presents a risk, the current disparity in form and home advantage, coupled with strong market confidence, suggests Talleres is the more likely victor in the present context. Forebet also predicts a 43% home win."
       },
       "scoring": {
         "pick": "1",
@@ -17210,7 +17211,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow"
+        "kurs_faworyta_4.75>1.62"
       ],
       "forebet": {
         "prediction": "2",
@@ -17276,7 +17277,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": null,
+      "marketGapPp": 16.8,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -17289,12 +17290,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
-        "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_zle_dopasowanie",
+        "home": 1.62,
+        "draw": 3.75,
+        "away": 4.75,
+        "source": "livesport_bulk",
+        "bookmaker": "Livesport (bukm. 549)",
+        "note": null,
         "forebet": {
           "home": 164.0,
           "draw": 275.0,
@@ -17309,29 +17310,30 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 36.0,
-        "ev": null,
-        "edge": null,
-        "sources": 1,
+        "prob": 32.1,
+        "ev": 0.525,
+        "edge": 11.0,
+        "sources": 2,
         "components": {
-          "forebet": 0.36
+          "forebet": 0.36,
+          "odds": 0.211
         }
       },
       "predictionGrade": "F",
       "dataQuality": {
         "sources_available": 1,
-        "quality_score": 0.4,
+        "quality_score": 0.65,
         "h2h_available": false,
         "h2h_neutral": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "none",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -29.628,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -17607,13 +17609,13 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -6.7,
+      "marketGapPp": -6.5,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 580,
+        "votes": 610,
         "homeProb": 10,
-        "awayProb": 78,
+        "awayProb": 77,
         "url": "https://www.sofascore.com/football/match/16604728",
         "orientation": "direct",
         "unavailable": false,
@@ -17621,7 +17623,7 @@
       },
       "odds": {
         "home": 3.6,
-        "draw": 3.35,
+        "draw": 3.3,
         "away": 1.83,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
@@ -17633,22 +17635,22 @@
         }
       },
       "ai": {
-        "prediction": "Alianza FC will win the match, driven by their superior overall form and the bookmakers’ odds heavily favoring them.",
-        "confidence": 68,
-        "recommendation": "SKIP",
-        "reasoning": "Head‑to‑head shows a balanced record (2‑2‑1), but the home win rate is only 40%, offering little advantage to Fuerte San Francisco. Recent overall form is starkly different: Alianza FC averages 4.7/10 versus 1.3/10 for Fuerte San Francisco. Venue‑specific scores reinforce this, with Alianza’s away rating at 0.7/10 but still better than the home team’s 2.0/10. Bookmakers set odds at 1.83 for Alianza versus 3.60 for the home side, indicating a clear market edge. Forebet also predicts a 42% chance of an away win, matching the odds trend. The main risk is the home team’s low form and the fact that Alianza’s away performance is modest, but the overall data still tilt the balance."
+        "prediction": "Alianza FC is the clear favorite to secure an away victory, driven by their significantly superior overall form and the home team's poor defensive record. The data strongly favors the visitors, with Fuerte San Francisco struggling to maintain consistency even on their home turf.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "Alianza FC demonstrates a substantial form advantage with a 4.7/10 rating compared to Fuerte San Francisco's weak 1.3/10, indicating a significant quality gap. While the head-to-head record is balanced (2 wins each), Fuerte San Francisco's home form (2.0/10) is still inferior to Alianza's away form (0.7/10 is likely a typo in source or implies very low points, but contextually Alianza is favored; however, looking at the odds and forebet, Alianza is the stronger side). The bookmaker odds of 1.83 for Alianza versus 3.6 for the home team reflect this disparity, offering a reasonable probability of an away win. The 42% Forebet prediction for an away win aligns with the market sentiment, suggesting a 14 percentage point edge over the home team. The risk is moderate due to the balanced H2H history, but the current form trends heavily favor the visitors."
       },
       "scoring": {
         "pick": "2",
-        "prob": 60.9,
-        "ev": 0.114,
-        "edge": 6.2,
+        "prob": 60.7,
+        "ev": 0.111,
+        "edge": 6.1,
         "sources": 5,
         "components": {
           "forebet": 0.42,
           "h2h": 0.778,
           "form": 0.667,
-          "sofascore": 0.78,
+          "sofascore": 0.77,
           "odds": 0.546
         }
       },
@@ -17664,8 +17666,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
-        "consensus_strength": "none",
-        "market_model_gap": 33.122,
+        "consensus_strength": "weak",
+        "market_model_gap": 32.922,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -17940,7 +17942,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 3430,
+        "votes": 3531,
         "homeProb": 47,
         "awayProb": 39,
         "url": "https://www.sofascore.com/football/match/15526385",
@@ -17956,16 +17958,16 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 167.0,
-          "draw": 290.0,
-          "away": 450.0
+          "home": 125.0,
+          "draw": 250.0,
+          "away": 350.0
         }
       },
       "ai": {
-        "prediction": "Londrina is expected to secure a narrow victory, leveraging their significantly superior home performance metrics against Nautico's poor away record. The data strongly favors the home side, with a 14-point edge in venue-specific form and a 60% historical win rate in this fixture.",
-        "confidence": 72,
+        "prediction": "Based on the data, this match seems likely to end in a draw due to similar performances of both teams. Londrina has a 4/5 win record against Nautico, but Nautico's away form is improving, which could potentially lead to an upset.",
+        "confidence": 70,
         "recommendation": "MEDIUM",
-        "reasoning": "The head-to-head record shows Londrina has won 3 of the last 5 meetings, establishing a 60% home win rate that aligns with current trends. While overall form is identical (2.7/10 for both), the venue-specific data reveals a stark contrast: Londrina performs at 4.0/10 at home, whereas Nautico struggles significantly at 1.3/10 away. Bookmaker odds of 1.7 for Londrina imply a 58.8% probability of a home win, which is higher than Forebet's 40% prediction, suggesting the market may be overvaluing the home advantage or underestimating the draw risk. The 14-point difference in venue form is the strongest statistical indicator, outweighing the neutral overall form. However, the low Forebet confidence (40%) and the relatively high draw odds (3.6) indicate that while a home win is likely, it is not a lock, keeping confidence in the moderate range."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
