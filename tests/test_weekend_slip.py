@@ -214,3 +214,54 @@ def test_pending_leg_of_lost_slip_stays_locked(tmp_path):
     s = weekend_feed.load_weekend(res, is_subscriber=False, remote=False, now=later)['weekends'][0]['slips'][0]
     assert s['status'] == 'lost'
     assert s['legs'][0]['pick'] == 'A' and s['legs'][1]['locked'] and 'pick' not in s['legs'][1]
+
+
+def _leg(sport, day, home, away, side, price=2.0):
+    return {'id': f'{sport}|{day}|{home}|{away}', 'sport': sport, 'date': day, 'home': home,
+            'away': away, 'match': f'{home} vs {away}', 'side': side,
+            'pick': home if side == 'home' else away, 'price': price, 'modelProb': 0.5,
+            'status': 'pending', 'score': None}
+
+
+def test_pending_women_leg_settles_from_polish_store_names():
+    # 2026-11-06 S2: Sweden W - Canada W stayed pending; Livesport stores 'Szwecja K - Kanada K'.
+    import top_feed
+    day = '2026-11-06'
+    idx = {(day, top_feed._norm('Szwecja K'), top_feed._norm('Kanada K')):
+           {'winner': 'away', 'score_home': 1, 'score_away': 5},
+           (day, top_feed._norm('Szwecja U18'), top_feed._norm('Kanada')):
+           {'winner': 'home', 'score_home': 4, 'score_away': 2}}
+    legs = [_leg('hockey', day, 'Sweden W', 'Canada W', 'away', 3.08),
+            _leg('football', '2026-11-07', 'Tigres FC (COL)', 'Deportes Quindío', 'away')]
+    idx[('2026-11-07', 'tigres', 'quindio')] = {'winner': 'home', 'score_home': 2, 'score_away': 0}
+    s = {'id': 'S2', 'legs': legs}
+    assert ws.settle_slips([s], idx) == 2
+    assert (legs[0]['status'], legs[0]['score']) == ('won', '1-5')
+    assert (legs[1]['status'], legs[1]['score']) == ('lost', '2-0')
+
+
+def test_loose_match_keeps_women_youth_and_reserves_apart():
+    import top_feed
+    day = '2026-11-06'
+    idx = {(day, top_feed._norm('Szwecja'), top_feed._norm('Kanada')): {'winner': 'home'},
+           (day, top_feed._norm('Szwecja U18'), top_feed._norm('Kanada U18')): {'winner': 'home'}}
+    leg = _leg('hockey', day, 'Sweden W', 'Canada W', 'away')
+    ws.settle_slips([{'id': 'S1', 'legs': [leg]}], idx)
+    assert leg['status'] == 'pending'
+
+
+def test_settle_sweeps_every_recent_weekend_with_pending_legs(tmp_path, monkeypatch):
+    res = tmp_path / 'results'
+    res.mkdir()
+    pending = {'slips': [{'id': 'S3', 'legs': [_leg('football', '2026-11-07', 'A', 'B', 'away')]}]}
+    done = {'slips': [{'id': 'S1', 'legs': [dict(_leg('football', '2026-10-30', 'C', 'D', 'home'),
+                                                 status='won')]}]}
+    (res / 'weekend_2026-11-06.json').write_text(json.dumps(pending), encoding='utf-8')
+    (res / 'weekend_2026-10-30.json').write_text(json.dumps(done), encoding='utf-8')
+    (res / 'weekend_2026-09-04.json').write_text(json.dumps(pending), encoding='utf-8')  # too old
+    assert ws.pending_fridays(date(2026, 11, 12), str(res)) == ['2026-11-06']
+    idx = {('2026-11-07', 'a', 'b'): {'winner': 'away', 'score_home': '0', 'score_away': '1'}}
+    monkeypatch.setattr(ws, '_index', lambda *a, **k: idx)
+    ws.run('2026-11-06', 'settle', results=str(res), log=lambda *a: None)
+    leg = json.load(open(res / 'weekend_2026-11-06.json', encoding='utf-8'))['slips'][0]['legs'][0]
+    assert (leg['status'], leg['score']) == ('won', '0-1')

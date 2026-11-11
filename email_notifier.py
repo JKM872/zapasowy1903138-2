@@ -482,11 +482,52 @@ def _pick_odds_value(pick: Optional[str], home_odds: Optional[float],
     return None
 
 
+def _model_pick_code(match: Dict[str, Any], is_tennis: bool) -> Tuple[Optional[str], str]:
+    """Pick shown in the „Typ modelu" line: scoring_pick, else Forebet 1X2."""
+    pick = _canonical_pick_code(match.get('scoring_pick'), is_tennis=is_tennis)
+    if pick is not None:
+        return pick, 'Scoring'
+    # Forebet always speaks 1X2, whatever the sport.
+    return _canonical_pick_code(match.get('forebet_prediction')), 'Forebet'
+
+
+def _is_tennis_match(match: Dict[str, Any]) -> bool:
+    url = str(match.get('match_url', '')).lower()
+    return (match.get('sport') in ('tennis', 'table_tennis') or '/tenis/' in url
+            or '/tennis/' in url or '/table-tennis/' in url)
+
+
+def break_even_text(odds: Optional[float]) -> str:
+    """'kurs 1.60 → potrzeba 62.5% trafień' — the hit rate a flat stake needs."""
+    if not odds or odds <= 1.0:
+        return ''
+    return f'kurs {odds:.2f} → potrzeba {100.0 / odds:.1f}% trafień, by wyjść na zero'
+
+
+# Grade C in the Forebet mail, recomputed 2026-11-12 from settled history
+# (matches_*_forebet.json emailQualifies rows × forebet_settled.json): flat-stake
+# ROI of Grade C was negative in these sports and positive in hockey/rugby.
+GRADE_C_LOSING_SPORTS = frozenset({'football', 'basketball', 'handball', 'tennis',
+                                   'volleyball', 'baseball'})
+
+
+def grade_c_label(sport: Any) -> str:
+    sp = str(sport or '').lower()
+    if sp in GRADE_C_LOSING_SPORTS:
+        return 'Grade C – historycznie stratny'
+    return 'Grade C – niższa pewność'
+
+
+# Forebet mail sections, by the side the model picked. Draw last.
+_SIDE_SECTIONS = (('1', '🏠 Typy na gospodarzy'), ('2', '✈️ Typy na gości'), ('X', '🤝 Typy na remis'))
+
+
 def _render_model_pick_section(match: Dict[str, Any],
                                home_odds: Optional[float],
                                draw_odds: Optional[float],
                                away_odds: Optional[float],
-                               is_tennis: bool) -> str:
+                               is_tennis: bool,
+                               show_break_even: bool = False) -> str:
     """
     Renderuj wyraźną linię „Typ modelu" z pickiem i odpowiadającym mu kursem.
 
@@ -495,12 +536,7 @@ def _render_model_pick_section(match: Dict[str, Any],
     widzi jasną rekomendację zamiast domyślać się jej z kolorowania sekcji
     kursów (gdzie zielony = najniższy kurs, a nie typ modelu).
     """
-    pick = _canonical_pick_code(match.get('scoring_pick'), is_tennis=is_tennis)
-    source = 'Scoring'
-    if pick is None:
-        # Forebet always speaks 1X2, whatever the sport.
-        pick = _canonical_pick_code(match.get('forebet_prediction'))
-        source = 'Forebet'
+    pick, source = _model_pick_code(match, is_tennis)
     if pick is None:
         return ''
 
@@ -518,11 +554,15 @@ def _render_model_pick_section(match: Dict[str, Any],
 
     odds_val = _pick_odds_value(pick, home_odds, draw_odds, away_odds)
     odds_str = f'@ {odds_val:.2f}' if odds_val else ''
+    be = break_even_text(odds_val) if show_break_even else ''
+    be_html = (f'<div style="font-size: 11px; color: rgba(255,255,255,0.85); margin-top: 4px;">'
+               f'⚖️ Próg opłacalności: {be}</div>') if be else ''
 
     return f'''
     <div style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); border-radius: 8px; color: white;">
         <div style="font-size: 11px; color: rgba(255,255,255,0.75); margin-bottom: 4px;">🎯 Typ modelu ({source})</div>
         <div style="font-size: 18px; font-weight: 700;">{pick} — {label} <span style="color: #ffd740;">{odds_str}</span></div>
+        {be_html}
     </div>
     '''
 
@@ -910,9 +950,13 @@ _CARDS_END = '<!--MATCH-CARDS-END-->'
 
 def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = 'time', 
                       include_sorted_odds: bool = False, odds_limit: int = 15,
-                      cards_only: bool = False) -> str:
+                      cards_only: bool = False, forebet_layout: bool = False) -> str:
     """
     Tworzy ładny HTML email z listą meczów
+
+    forebet_layout: mail Forebet — sekcje wg strony typu (gospodarze / goście /
+    remis, kolejność w sekcji bez zmian), próg opłacalności przy typie i
+    etykieta Grade C. Tylko układ: żaden mecz nie jest dodawany ani usuwany.
     
     Args:
         matches: Lista meczów
@@ -990,6 +1034,16 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
     import form_schema
     sorted_matches = [m for m in sorted_matches if not form_schema.is_national_friendly(m)]
     sorted_matches = sorted(sorted_matches, key=form_schema.is_national)
+
+    def _side_of(m: Dict[str, Any]) -> str:
+        return _model_pick_code(m, _is_tennis_match(m))[0] or '?'
+
+    _side_rank = {code: n for n, (code, _) in enumerate(_SIDE_SECTIONS)}
+    if forebet_layout:
+        # Stabilnie: w sekcji zostaje dotychczasowa kolejność. Mecz bez typu
+        # (nie powinien się zdarzyć) idzie na koniec, ale nie znika.
+        sorted_matches = sorted(sorted_matches,
+                                key=lambda m: _side_rank.get(_side_of(m), len(_SIDE_SECTIONS)))
     
     html = f"""
     <html>
@@ -1288,8 +1342,17 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         if is_nan_or_none(league):
             league = ''
 
+        new_section = False
+        if forebet_layout:
+            side = _side_of(match)
+            new_section = i == 1 or _side_of(sorted_matches[i - 2]) != side
+            if new_section:
+                title = dict(_SIDE_SECTIONS).get(side, '❔ Typy bez strony')
+                n_side = sum(1 for m in sorted_matches if _side_of(m) == side)
+                html += (f'<h2 class="side-section" style="margin: 25px 0 5px; color: #333;">'
+                         f'{title} ({n_side})</h2>')
         if form_schema.is_national(match) and (
-                i == 1 or not form_schema.is_national(sorted_matches[i - 2])):
+                i == 1 or new_section or not form_schema.is_national(sorted_matches[i - 2])):
             html += ('<h2 style="margin: 25px 0 5px; color: #333;">🏳️ Reprezentacje</h2>')
         form_block_html = '' if is_tennis else form_schema.form_html(
             form_schema.block_from_row(match), str(home), str(away))
@@ -1400,7 +1463,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     ''' if show_sofascore_placeholder else '')}
                     
                     <!-- TYP MODELU (wyraźna rekomendacja) -->
-                    {_render_model_pick_section(match, home_odds, draw_odds, away_odds, is_tennis)}
+                    {_render_model_pick_section(match, home_odds, draw_odds, away_odds, is_tennis, show_break_even=forebet_layout)}
 
                     <!-- KURSY -->
                     {_render_odds_section(home_odds, draw_odds, away_odds) if has_odds else ''}
@@ -1504,6 +1567,11 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     <div style="margin-bottom: 6px;">
                         <span style="display: inline-block; background: {gc}; color: #111; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 4px;">Grade {grade}</span>
                     </div>"""
+        if forebet_layout and grade == 'C':
+            html += f"""
+                    <div style="margin-bottom: 6px;">
+                        <span class="grade-c-badge" style="display: inline-block; background: #ff5252; color: white; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 4px;">⚠️ {grade_c_label(match.get('sport'))}</span>
+                    </div>"""
         # Bramka rynkowa (recency): Forebet > rynek o >20 pp → ocena obniżona.
         if str(match.get('stale_model')).strip().lower() in ('true', '1'):
             gap_pp = safe_float(match.get('market_gap_pp'), None)
@@ -1583,6 +1651,7 @@ def send_email_notification(
     manifest_tag: str = '',
     exclude_keys: Optional[set] = None,
     sent_keys_out: Optional[list] = None,
+    forebet_layout: bool = False,
 ) -> bool:
     """
     Wysyła email z powiadomieniem o kwalifikujących się meczach
@@ -1808,7 +1877,8 @@ def send_email_notification(
         matches, date,  # type: ignore[arg-type]
         sort_by=sort_by,
         include_sorted_odds=include_sorted_odds,
-        odds_limit=odds_limit
+        odds_limit=odds_limit,
+        forebet_layout=forebet_layout,
     )
     html_part = MIMEText(html_content, 'html')
     msg.attach(html_part)

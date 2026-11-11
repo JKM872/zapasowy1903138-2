@@ -2868,6 +2868,7 @@ def run(sport: str, date_str: str, max_matches: Optional[int] = None,
                     manifest_tag=f'forebet_{sport}_{code}',
                     exclude_keys=None if resend else already,
                     sent_keys_out=sent_keys,
+                    forebet_layout=True,
                 )
                 if ok:
                     ledger[code] = sorted(already | set(sent_keys))

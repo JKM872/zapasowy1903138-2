@@ -320,14 +320,100 @@ def _index(results: str, store: Optional[str] = None):
     return top_feed.settle_index(results, store or top_feed.STORE_PATH)
 
 
-def settle_slips(slips: List[Dict[str, Any]], index) -> int:
+# Tokens that name a different team; two names match only when these agree.
+_MARKER = re.compile(r'^(w|ii|iii|b|c|u\d{2})$')
+
+
+def _pl_to_en() -> Dict[str, str]:
+    try:
+        from team_logo_resolver import _PL_TO_EN
+        return {k: v.lower() for k, v in _PL_TO_EN.items()}
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _name_tokens(name: str, sport: str, pl: Dict[str, str]) -> Optional[tuple]:
+    """(core tokens, marker tokens) of a team name for loose matching.
+    Livesport (Polish) and Forebet/SofaScore (English) spell the same side
+    differently: 'Szwecja K' / 'Sweden W', 'Leca' / 'Leça FC',
+    'Quindio' / 'Deportes Quindío'."""
+    from tools.team_names import fold
+    s = fold(_norm(name), sport)
+    if not s:
+        return None
+    for pl_name in sorted(pl, key=len, reverse=True):
+        if ' ' in pl_name and (s == pl_name or s.startswith(pl_name + ' ')):
+            s = pl[pl_name] + s[len(pl_name):]
+    toks = []
+    for t in s.split():
+        toks.extend(pl.get(t, t).split())
+    marks = frozenset(t for t in toks if _MARKER.match(t))
+    core = frozenset(t for t in toks if not _MARKER.match(t))
+    return (core, marks) if core else None
+
+
+def _same_side(a: Optional[tuple], b: Optional[tuple]) -> bool:
+    return bool(a and b and a[1] == b[1] and (a[0] <= b[0] or b[0] <= a[0]))
+
+
+def loose_result(day: str, sport: str, home: str, away: str, index,
+                 pl: Optional[Dict[str, str]] = None) -> Optional[tuple]:
+    """(result, flipped) for a leg whose names differ from the result source.
+    Both sides must match on the same day and the match must be unique."""
+    pl = _pl_to_en() if pl is None else pl
+    th, ta = _name_tokens(home, sport, pl), _name_tokens(away, sport, pl)
+    if not (th and ta):
+        return None
+    hits = []
+    for key, res in index.items():
+        if key[0] != day:
+            continue
+        kh, ka = _name_tokens(key[1], sport, pl), _name_tokens(key[2], sport, pl)
+        if _same_side(th, kh) and _same_side(ta, ka):
+            hits.append((key, res, False))
+        elif _same_side(th, ka) and _same_side(ta, kh):
+            hits.append((key, res, True))
+    # The same fixture may sit in several sources (store + audit) — one outcome.
+    outcomes = {(r.get('winner') if not f else {'home': 'away', 'away': 'home'}.get(r.get('winner'), r.get('winner')),
+                 bool(r.get('void'))) for _, r, f in hits}
+    if not hits or len(outcomes) != 1:
+        return None
+    _, res, flipped = hits[0]
+    return res, flipped
+
+
+def _settle_leg(l: Dict[str, Any], index) -> Dict[str, Any]:
     from top_feed import settle
+    res = settle(l['date'], {'match': l['match'], 'pick': l['pick']}, index)
+    if res['status'] != 'pending':
+        return res
+    side = l.get('side') if l.get('side') in ('home', 'away') else None
+    got = loose_result(l['date'], l.get('sport') or '', l.get('home'), l.get('away'), index) if side else None
+    if not got:
+        return res
+    r, flipped = got
+    if r.get('void'):
+        return {'status': 'void'}
+    winner = r.get('winner')
+    sh, sa = r.get('score_home'), r.get('score_away')
+    if flipped:
+        winner = {'home': 'away', 'away': 'home'}.get(winner, winner)
+        sh, sa = sa, sh
+    score = f'{sh}-{sa}'
+    if winner == 'draw':
+        return {'status': 'draw', 'score': score}
+    if winner not in ('home', 'away'):
+        return {'status': 'pending'}
+    return {'status': 'won' if winner == side else 'lost', 'score': score}
+
+
+def settle_slips(slips: List[Dict[str, Any]], index) -> int:
     n = 0
     for s in slips:
         for l in s['legs']:
             if l['status'] != 'pending':
                 continue
-            res = settle(l['date'], {'match': l['match'], 'pick': l['pick']}, index)
+            res = _settle_leg(l, index)
             if res['status'] == 'void':
                 l['status'] = 'void'
                 n += 1
@@ -400,6 +486,24 @@ def build_slot(pool: List[Dict[str, Any]], slips: List[Dict[str, Any]], friday: 
     return 1
 
 
+SETTLE_LOOKBACK_DAYS = 28
+
+
+def pending_fridays(today: date, results: str = RESULTS) -> List[str]:
+    """Fridays of past/current weekends (within SETTLE_LOOKBACK_DAYS) whose
+    slip file still has a pending leg."""
+    out = []
+    lo = (today - timedelta(days=SETTLE_LOOKBACK_DAYS)).isoformat()
+    for name in sorted(os.listdir(results)) if os.path.isdir(results) else ():
+        m = re.fullmatch(r'weekend_(\d{4}-\d{2}-\d{2})\.json', name)
+        if not m or not (lo <= m.group(1) <= today.isoformat()):
+            continue
+        data = _read(os.path.join(results, name)) or {}
+        if any(l.get('status') == 'pending' for s in data.get('slips') or [] for l in s.get('legs') or []):
+            out.append(m.group(1))
+    return out
+
+
 def run(friday: str, mode: str = 'build', results: str = RESULTS, now: Optional[datetime] = None,
         store: Optional[str] = None, log=print) -> Dict[str, Any]:
     now = now or _now()
@@ -419,6 +523,8 @@ def run(friday: str, mode: str = 'build', results: str = RESULTS, now: Optional[
     n = settle_slips(slips, _index(results, store))
     if n:
         log(f'   settled {n} legs')
+    elif mode == 'settle':
+        return {**data, 'added': 0}     # nothing new: leave the file (and git) alone
     data.update(friday=friday, days=weekend_days(date.fromisoformat(friday)),
                 generatedAt=data.get('generatedAt') or _iso(now), updatedAt=_iso(now),
                 note=NOTE, stakePct=STAKE_PCT, maxLegs=MAX_LEGS, slips=slips)
@@ -513,8 +619,13 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 0
     today = _now().astimezone(_TZ).date()
     if a.settle:
-        fr = a.friday or (friday_of(today) or today - timedelta(days=(today.weekday() - 4) % 7)).isoformat()
-        if os.path.exists(slip_path(fr)):
+        if a.friday:
+            if os.path.exists(slip_path(a.friday)):
+                run(a.friday, 'settle')
+            return 0
+        # Results reach the sources days late (the Forebet audit, the
+        # SofaScore event pass), so one Monday run left legs pending for good.
+        for fr in pending_fridays(today):
             run(fr, 'settle')
         return 0
     if a.friday:

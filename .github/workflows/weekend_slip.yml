@@ -3,12 +3,13 @@ name: Weekend Slip
 # Fri/Sat/Sun 07:00 UTC: build the day's slip (S1 Fri, S2 Sat, S3 Sun;
 # published slips are never rebuilt). Every 30 min 08-22 UTC on
 # the weekend: re-check legs kicking off within 90 min (withdraw if the side is
-# out) and settle finished legs. Monday 06:00 UTC: settle the past weekend.
+# out) and settle finished legs. Daily 06:37 and 23:37 UTC: settle every weekend of the
+# last 28 days that still has a pending leg (results arrive days late).
 on:
   schedule:
     - cron: '7 7 * * 5,6,0'
     - cron: '9,39 8-22 * * 5,6,0'
-    - cron: '7 6 * * 1'
+    - cron: '37 6,23 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -50,7 +51,7 @@ jobs:
           case "${{ github.event.schedule }}" in
             '7 7 * * 5,6,0') MODE=build ;;
             '9,39 8-22 * * 5,6,0') MODE=recheck ;;
-            '7 6 * * 1') MODE=settle ;;
+            '37 6,23 * * *') MODE=settle ;;
           esac
           [ -z "$MODE" ] && MODE=build
           ARGS=""
