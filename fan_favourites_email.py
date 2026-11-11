@@ -188,12 +188,16 @@ def build_html(picks: List[Dict[str, Any]], days: List[str],
                boards: Dict[str, Dict[str, Any]]) -> str:
     parts = ["<div style='background:linear-gradient(90deg,#5e35b1,#7c4dff);color:#fff;"
              "padding:14px;border-radius:10px;font-family:sans-serif'>"
-             f"<h2 style='margin:0'>🗳️ SofaScore Fan Favourites — {_e(', '.join(days))}</h2>"
+             f"<h2 style='margin:0'>🗳️ SofaScore Fan Favourites"
+             + (f" – {_e(SPORT_PL.get(picks[0]['sport'], picks[0]['sport']))}"
+                if picks and len({p['sport'] for p in picks}) == 1 else '')
+             + f" — {_e(', '.join(days))}</h2>"
              f"<div>Nowe typy: {len(picks)}</div></div>"]
     per = {s: [p for p in picks if p['sport'] == s] for s in _sport_order(picks)}
-    if per:
-        parts.append("<p style='font-family:sans-serif'>" + ' · '.join(
-            f"{_e(SPORT_PL.get(s, s))}: {len(v)}" for s, v in per.items()) + "</p>")
+    if len(per) > 1:
+        parts.append("<p style='font-family:sans-serif'><b>Sporty:</b> " + ' · '.join(
+            f"<a href='#sport-{_e(s)}' style='color:#5e35b1'>{_e(SPORT_PL.get(s, s))}</a>: {len(v)}"
+            for s, v in per.items()) + "</p>")
     for d in days:
         b = boards.get(d) or {}
         tot: Dict[str, int] = {}
@@ -217,8 +221,12 @@ def build_html(picks: List[Dict[str, Any]], days: List[str],
                  f" gdy jest forma obu drużyn,"
                  f" ≥ {_e(mv)} głosów, standardowy limit kursu dla sportu.</p>")
     for s, v in per.items():
-        v.sort(key=lambda p: (-(p.get('fanPct') or 0), -(p.get('votes') or 0)))
-        parts.append(f"<h3 style='font-family:sans-serif;color:#5e35b1'>{_e(SPORT_PL.get(s, s))} ({len(v)})</h3>")
+        v.sort(key=lambda p: (_ko(p) or datetime.max.replace(tzinfo=timezone.utc),
+                              -(p.get('fanPct') or 0), -(p.get('votes') or 0)))
+        parts.append(f"<h3 id='sport-{_e(s)}' style='font-family:sans-serif;color:#fff;background:#5e35b1;"
+                     f"padding:6px 10px;border-radius:6px;margin-top:18px'>"
+                     f"<a name='sport-{_e(s)}'></a>{_e(SPORT_PL.get(s, s))} — {len(v)} "
+                     f"{'typ' if len(v) == 1 else 'typów'}</h3>")
         parts.extend(card(p) for p in v)
     return ''.join(parts)
 
@@ -291,30 +299,37 @@ def main(argv: Optional[List[str]] = None) -> int:
     for d in days:
         sent = set() if a.force else load_ledger(ledger_path(d, a.outputs))
         picks += select_new(boards[d], sent, now)
-    if not picks and not a.force:
+    if not picks:
         print('Fan Favourites: nic nowego — mail nie zostaje wysłany')
         return 0
-    body = build_html(picks, days, boards)
-    subject = f'🗳️ SofaScore Fan Favourites — {days[0]} ({len(picks)} nowych)' + (
-        ' — wysyłka ręczna' if a.force else '')
-    if a.dry_run:
-        if a.html:
-            with open(a.html, 'w', encoding='utf-8') as fh:
-                fh.write(body)
-        print(f'[dry-run] {subject}')
-        return 0
-    if not (a.to and a.from_email and a.password):
+    if not a.dry_run and not (a.to and a.from_email and a.password):
         print('ℹ️ Mail Fan Favourites pominięty (brak EMAIL_*)')
         return 0
-    xlsx = write_xlsx(picks, os.path.join(a.outputs, f'fanfav_{days[0]}.xlsx'))
-    if not send(body, subject, a.to, a.from_email, a.password, a.provider, xlsx):
-        return 1
-    for d in days:
-        ids = [p['id'] for p in picks if p.get('date') == d or (p.get('id') or '').split('|')[1:2] == [d]]
-        if ids:
-            save_ledger(ledger_path(d, a.outputs), load_ledger(ledger_path(d, a.outputs)) | set(ids))
-    print(f'✅ Mail SofaScore Fan Favourites wysłany ({len(picks)} typów)')
-    return 0
+    rc = 0
+    # One e-mail per sport with new picks; the ledger is updated after each
+    # successful send, so a failure in one sport never blocks/repeats others.
+    for s in _sport_order(picks):
+        sp = [p for p in picks if p['sport'] == s]
+        body = build_html(sp, days, boards)
+        subject = (f'🗳️ Fan Favourites – {SPORT_PL.get(s, s)} ({len(sp)}) – {days[0]}'
+                   + (' — wysyłka ręczna' if a.force else ''))
+        if a.dry_run:
+            if a.html:
+                root, ext = os.path.splitext(a.html)
+                with open(f'{root}_{s}{ext or ".html"}', 'w', encoding='utf-8') as fh:
+                    fh.write(body)
+            print(f'[dry-run] {subject}')
+            continue
+        xlsx = write_xlsx(sp, os.path.join(a.outputs, f'fanfav_{days[0]}_{s}.xlsx'))
+        if not send(body, subject, a.to, a.from_email, a.password, a.provider, xlsx):
+            rc = 1
+            continue
+        for d in days:
+            ids = [p['id'] for p in sp if p.get('date') == d or (p.get('id') or '').split('|')[1:2] == [d]]
+            if ids:
+                save_ledger(ledger_path(d, a.outputs), load_ledger(ledger_path(d, a.outputs)) | set(ids))
+        print(f'✅ Mail Fan Favourites {s} wysłany ({len(sp)} typów)')
+    return rc
 
 
 if __name__ == '__main__':

@@ -58,6 +58,38 @@ def test_nothing_new_no_send_and_failed_send_keeps_ledger(tmp_path, monkeypatch)
     assert fe.main(args + ['--force']) == 0 and 'ręczna' in calls[-1][1]
 
 
+def test_one_section_per_sport_with_counts_toc_and_order():
+    picks = [_p(1, 'hockey', 90, ko='2026-11-01T20:00:00Z'), _p(2, 'hockey', 75, ko='2026-11-01T17:00:00Z'),
+             _p(3, 'football', 70, ko='2026-11-01T18:00:00Z'), _p(4, 'football', 85, ko='2026-11-01T18:00:00Z'),
+             _p(5, 'football', 95, ko='2026-11-01T19:00:00Z')]
+    h = fe.build_html(picks, [DAY], {})
+    assert h.count("<h3 id='sport-") == 2
+    assert 'Piłka nożna — 3 typów' in h and 'Hokej — 2 typów' in h
+    assert "href='#sport-football'" in h and "href='#sport-hockey'" in h
+    assert 'Koszykówka' not in h and 'sport-basketball' not in h
+    fb, hk = h.index("id='sport-football'"), h.index("id='sport-hockey'")
+    assert fb < h.index('A4') < h.index('A3') < h.index('A5') < hk
+    assert hk < h.index('A2') < h.index('A1')
+
+
+def test_one_mail_per_sport_ordered_no_empty_no_resend(tmp_path, monkeypatch):
+    picks = [_p(1, 'football', 70, ko='2099-01-01T18:00:00Z'), _p(2, 'football', 85, ko='2099-01-01T18:00:00Z'),
+             _p(3, 'football', 95, ko='2099-01-01T19:00:00Z'), _p(4, 'hockey', 75, ko='2099-01-01T17:00:00Z')]
+    _board(tmp_path, picks)
+    calls = []
+    monkeypatch.setattr(fe, 'send', lambda *a, **k: calls.append(a) or True)
+    args = ['--day', DAY, '--days', '1', '--results', str(tmp_path / 'results'),
+            '--outputs', str(tmp_path / 'outputs'), '--to', 't', '--from-email', 'f', '--password', 'p']
+    assert fe.main(args) == 0
+    subjects = [c[1] for c in calls]
+    assert len(calls) == 2
+    assert 'Piłka nożna (3)' in subjects[0] and 'Hokej (1)' in subjects[1]
+    fb = calls[0][0]
+    assert 'A4' not in fb and fb.index('A2') < fb.index('A1') < fb.index('A3')
+    assert 'Hokej' not in fb and 'Koszykówka' not in ''.join(c[0] for c in calls)
+    assert fe.main(args) == 0 and len(calls) == 2           # second run: nothing resent
+
+
 def test_card_shows_form_h2h_last_h2h_and_last_matches():
     p = _p(1, 'football', 80, home='H1', away='A1',
            form={'overall': 'WWL', 'venue': 'WD', 'opponentOverall': 'LLD', 'opponentVenue': 'L'},

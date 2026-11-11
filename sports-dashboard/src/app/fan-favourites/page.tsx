@@ -21,6 +21,7 @@ import { getFanFavourites, teamHref, type FanLastMatch, type FanPick, type FanRe
 import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
 
 const SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball', 'baseball', 'rugby', 'table_tennis']
+const ALL = 'all'
 const BANDS = ['60-70', '70-80', '80-90', '90+']
 
 function pct(v: number | null | undefined, signed = false) {
@@ -219,7 +220,7 @@ function RecordTable({ title, rows }: { title: string; rows: [string, FanRecord 
 }
 
 export default function FanFavouritesPage() {
-  const [sport, setSport] = useState('football')
+  const [sport, setSport] = useState(ALL)
   const { data, isLoading, isError } = useQuery({
     queryKey: ['fan-favourites'],
     queryFn: getFanFavourites,
@@ -232,6 +233,8 @@ export default function FanFavouritesPage() {
     for (const d of data?.days ?? []) for (const [s, b] of Object.entries(d.sports)) c[s] = (c[s] ?? 0) + b.picks.filter(p => !p.started).length
     return c
   }, [data])
+  // Sports with upcoming picks first (stable SPORTS order), empty ones last.
+  const tabOrder = useMemo(() => [...SPORTS].sort((a, b) => Number(!counts[a]) - Number(!counts[b])), [counts])
 
   // Teaser like TOP: how many picks today/tomorrow, how many are locked, and
   // the latest settled picks (public) so a visitor never sees an empty page.
@@ -319,8 +322,14 @@ export default function FanFavouritesPage() {
           </p>
 
           <div className="flex flex-wrap gap-2" role="tablist">
-            {SPORTS.map(s => (
-              <Button key={s} role="tab" aria-selected={sport === s} size="sm" variant={sport === s ? 'default' : 'outline'} onClick={() => setSport(s)}>
+            <Button role="tab" aria-selected={sport === ALL} size="sm" variant={sport === ALL ? 'default' : 'outline'} onClick={() => setSport(ALL)}>
+              All sports
+              <span className="ml-1.5 text-xs opacity-70">{Object.values(counts).reduce((a, b) => a + b, 0)}</span>
+            </Button>
+            {tabOrder.map(s => (
+              <Button key={s} role="tab" aria-selected={sport === s} size="sm" variant={sport === s ? 'default' : 'outline'} onClick={() => setSport(s)}
+                className={cn(sport !== s && !(counts[s] ?? 0) && 'opacity-50')}
+                title={counts[s] ? `${counts[s]} upcoming` : 'No upcoming picks'}>
                 <SportIcon sport={s} className="mr-1.5 h-3.5 w-3.5" />
                 {getSportConfig(s).name}
                 <span className="ml-1.5 text-xs opacity-70">{counts[s] ?? 0}</span>
@@ -328,7 +337,48 @@ export default function FanFavouritesPage() {
             ))}
           </div>
 
-          {data.days.map(day => {
+          {sport === ALL && data.days.map(day => {
+            const groups = tabOrder
+              .map(s => [s, (day.sports[s]?.picks ?? []).filter(p => !p.started)] as const)
+              .filter(([, up]) => up.length > 0)
+            if (!groups.length) return null
+            return (
+              <Card key={`all-${day.date}`}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex flex-wrap items-baseline justify-between gap-2 text-base">
+                    <span>{day.date}</span>
+                    <span className="text-sm font-normal text-muted-foreground">
+                      {groups.map(([s, up]) => `${getSportConfig(s).name} ${up.length}`).join(' · ')}
+                    </span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {groups.map(([s, up]) => (
+                    <section key={s} className="space-y-2">
+                      <button type="button" onClick={() => setSport(s)}
+                        className="flex w-full items-center gap-2 border-b pb-1 text-left text-sm font-semibold hover:text-primary">
+                        <SportIcon sport={s} className="h-4 w-4" />
+                        {getSportConfig(s).name}
+                        <span className="text-xs font-normal text-muted-foreground">{up.length} upcoming{day.sports[s]?.watch ? ' · watch only' : ''}</span>
+                      </button>
+                      {up.map(p => p.locked ? <LockedCard key={p.id} p={p} /> : <PickCard key={p.id} p={p} />)}
+                    </section>
+                  ))}
+                  {!data.isSubscriber && groups.some(([, up]) => up.some(p => p.locked)) && (
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-muted/50 p-3 text-sm">
+                      <span>Locked Fan Favourites before kick-off are available in Premium</span>
+                      <Button asChild size="sm"><Link href="/pricing"><Crown className="mr-1.5 h-4 w-4" /> Unlock</Link></Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )
+          })}
+          {sport === ALL && !Object.values(counts).some(n => n > 0) && (
+            <p className="text-sm text-muted-foreground">No upcoming fan favourites pass the thresholds and odds limit right now. Pick a sport tab to see per-day stats and settled picks.</p>
+          )}
+
+          {sport !== ALL && data.days.map(day => {
             const blk = day.sports[sport]
             if (!blk) return null
             if (blk.picks.length === 0) {
@@ -392,7 +442,7 @@ export default function FanFavouritesPage() {
               </Card>
             )
           })}
-          {!data.days.some(d => (d.sports[sport]?.picks.length ?? 0) > 0) && (
+          {sport !== ALL && !data.days.some(d => (d.sports[sport]?.picks.length ?? 0) > 0) && (
             <p className="text-sm text-muted-foreground">No {getSportConfig(sport).name} fan favourites pass the thresholds and odds limit right now.</p>
           )}
         </>
