@@ -2,7 +2,7 @@
   "date": "2026-11-12",
   "sport": "volleyball",
   "source": "forebet",
-  "generatedAt": "2026-11-12T07:11:08.329187+00:00",
+  "generatedAt": "2026-11-12T08:24:02.908622+00:00",
   "matches": [
     {
       "homeTeam": "Busan OK",
@@ -19,7 +19,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "kurs_faworyta_2.98>1.41"
+        "kurs_faworyta_3.22>1.36"
       ],
       "forebet": {
         "prediction": "1",
@@ -85,7 +85,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": true,
-      "marketGapPp": 22.0,
+      "marketGapPp": 24.4,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -98,9 +98,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 2.98,
+        "home": 3.22,
         "draw": null,
-        "away": 1.405,
+        "away": 1.357,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -118,13 +118,13 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 48.7,
-        "ev": 0.45,
-        "edge": 15.1,
+        "prob": 48.0,
+        "ev": 0.546,
+        "edge": 17.0,
         "sources": 2,
         "components": {
           "forebet": 0.54,
-          "odds": 0.336
+          "odds": 0.311
         }
       },
       "predictionGrade": "D",
@@ -737,7 +737,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 71,
+        "votes": 81,
         "homeProb": 14,
         "awayProb": 86,
         "url": "https://www.sofascore.com/volleyball/match/17489341",
@@ -759,10 +759,10 @@
         }
       },
       "ai": {
-        "prediction": "Fujian will continue its perfect run and take the win on the road.",
-        "confidence": 78,
-        "recommendation": "HIGH",
-        "reasoning": "Fujian dominates the recent form metric (10‑0 in its last 10 matches) while Jiangsu has lost all 10, indicating a stark performance gap. In the head‑to‑head, Fujian leads 3‑2 and the home win rate for Jiangsu is only 40%, showing they have struggled against this opponent. Both teams have identical venue‑specific records (4/10), so home advantage is muted, but Fujian’s overall momentum outweighs that. Forebet assigns a 62 % probability to an away win and the fan vote is 86 % for Fujian, reinforcing market sentiment. Bookmaker odds are almost even (1.85 vs 1.83), suggesting the market sees a close contest, but the weight of form and H2H tilts the balance toward Fujian."
+        "prediction": "Fujian has a strong away record, having won 3 out of their last 5 matches, while Jiangsu has struggled with only 1 win in their last 5 games. Fujian's improved form and better recent performance suggest they may come out on top.",
+        "confidence": 70,
+        "recommendation": "MEDIUM",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "2",
@@ -790,7 +790,7 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 3,
-        "consensus_strength": "weak",
+        "consensus_strength": "none",
         "market_model_gap": 25.646,
         "skip_reason": null
       },
@@ -806,12 +806,14 @@
       "league": "CN1",
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/pekin-QoN62WZ7/szanghaj-OrO9sB9G/?mid=jeF54AUg",
+      "matchUrl": null,
       "forebetUrl": "https://www.forebet.com/en/volleyball/matches/cvl/beijing-shanghai/114026",
-      "qualifies": true,
-      "channelQualifies": true,
-      "emailQualifies": true,
-      "skipReasons": [],
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "brak_kursow"
+      ],
       "forebet": {
         "prediction": "2",
         "probability": 64.0,
@@ -824,68 +826,19 @@
         "gap": 28
       },
       "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 2,
-        "lastDate": "29.01.26",
-        "lastScore": "1-3",
-        "effectiveTotal": 0.0,
-        "homeWinsEff": 0.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-01-29",
-            "home": "Pekin",
-            "away": "Szanghaj",
-            "score": "1-3",
-            "winner": "Szanghaj"
-          },
-          {
-            "date": "2026-01-04",
-            "home": "Szanghaj",
-            "away": "Pekin",
-            "score": "3-0",
-            "winner": "Szanghaj"
-          },
-          {
-            "date": "2024-11-28",
-            "home": "Szanghaj",
-            "away": "Pekin",
-            "score": "3-0",
-            "winner": "Szanghaj"
-          },
-          {
-            "date": "2024-10-31",
-            "home": "Pekin",
-            "away": "Szanghaj",
-            "score": "1-3",
-            "winner": "Szanghaj"
-          },
-          {
-            "date": "2024-04-14",
-            "home": "Szanghaj",
-            "away": "Pekin",
-            "score": "3-0",
-            "winner": "Szanghaj"
-          }
-        ],
-        "last": {
-          "date": "2026-01-29",
-          "score": "1-3",
-          "winner": "Szanghaj",
-          "home": "Pekin",
-          "away": "Szanghaj"
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: Beijing 0-0-0 (even) (last: 2026-01-29 Pekin 1-3 Szanghaj)"
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null,
+        "effectiveTotal": null,
+        "homeWinsEff": null,
+        "awayWinsEff": null,
+        "allStale": null,
+        "meetings": [],
+        "last": null,
+        "edge": null,
+        "line": "No previous meetings"
       },
       "form": {
         "home": [
@@ -902,103 +855,23 @@
           "L",
           "L"
         ],
-        "homeAtHome": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "awayAtAway": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "homeDated": [
-          {
-            "date": "08.11.26",
-            "result": "L",
-            "score": "3-1",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "29.03.26",
-            "result": "W",
-            "score": "3-0",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "26.03.26",
-            "result": "W",
-            "score": "1-3",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "22.03.26",
-            "result": "L",
-            "score": "0-3",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "19.03.26",
-            "result": "L",
-            "score": "3-0",
-            "event": "CVL (Chiny)"
-          }
-        ],
-        "awayDated": [
-          {
-            "date": "08.11.26",
-            "result": "W",
-            "score": "0-3",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "29.03.26",
-            "result": "W",
-            "score": "3-0",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "26.03.26",
-            "result": "W",
-            "score": "2-3",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "22.03.26",
-            "result": "L",
-            "score": "1-3",
-            "event": "CVL (Chiny)"
-          },
-          {
-            "date": "19.03.26",
-            "result": "L",
-            "score": "3-2",
-            "event": "CVL (Chiny)"
-          }
-        ],
+        "homeAtHome": [],
+        "awayAtAway": [],
+        "homeDated": [],
+        "awayDated": [],
         "surface": null,
         "homeSurface": null,
         "awaySurface": null,
         "surfaceIsProxy": null,
-        "source": null,
-        "homeSeason": [
-          "L"
-        ],
-        "awaySeason": [
-          "W"
-        ],
-        "homeAtHomeSeason": [],
-        "awayAtAwaySeason": [
-          "W"
-        ],
-        "homeSeasonMatches": 1,
-        "awaySeasonMatches": 1,
-        "homeSeasonStart": "2026-11-08",
-        "awaySeasonStart": "2026-11-08",
+        "source": "sofascore",
+        "homeSeason": null,
+        "awaySeason": null,
+        "homeAtHomeSeason": null,
+        "awayAtAwaySeason": null,
+        "homeSeasonMatches": null,
+        "awaySeasonMatches": null,
+        "homeSeasonStart": null,
+        "awaySeasonStart": null,
         "homeClean": [
           "L",
           "W",
@@ -1013,57 +886,41 @@
           "L",
           "L"
         ],
-        "homeAtHomeClean": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "awayAtAwayClean": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
+        "homeAtHomeClean": [],
+        "awayAtAwayClean": [],
         "homeCup": [],
         "awayCup": [],
         "homeCupCompetitions": [],
         "awayCupCompetitions": [],
-        "homeCompetitions": [
-          "CVL (Chiny)"
-        ],
-        "awayCompetitions": [
-          "CVL (Chiny)"
-        ],
+        "homeCompetitions": [],
+        "awayCompetitions": [],
         "friendliesExcluded": 0
       },
       "category": null,
       "nationalFriendly": false,
-      "seasonMatchCount": 1,
-      "earlySeason": true,
+      "seasonMatchCount": null,
+      "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -5.6,
+      "marketGapPp": null,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": true,
-        "votes": 83,
-        "homeProb": 17,
-        "awayProb": 83,
-        "url": "https://www.sofascore.com/volleyball/match/17489343",
-        "orientation": "direct",
-        "unavailable": false,
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
         "skipReason": null
       },
       "odds": {
-        "home": 3.05,
+        "home": null,
         "draw": null,
-        "away": 1.33,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
+        "away": null,
+        "source": null,
+        "bookmaker": null,
+        "note": "brak_kursow|sofascore_bez_kursow",
         "forebet": {
           "home": null,
           "draw": null,
@@ -1071,39 +928,37 @@
         }
       },
       "ai": {
-        "prediction": "Shanghai should edge Beijing on the road, leveraging superior recent and venue‑specific form.",
-        "confidence": 78,
-        "recommendation": "HIGH",
-        "reasoning": "Beijing leads the recent H2H 3‑2 (60% home win), but the sample is small and recent form favours Shanghai (6.0 vs 4.0). Shanghai’s away performance (8.0) exceeds Beijing’s home rating (6.0), indicating they thrive on the road. Forebet assigns a 64% probability to an away win and the bookmaker odds (Shanghai 1.33, Beijing 3.05) reflect a strong market bias. Fan voting (83% for Shanghai) further underscores confidence in the visitors. While Beijing’s home advantage exists, the convergence of form, predictive models, and odds tilts the balance to Shanghai."
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "2",
-        "prob": 68.2,
-        "ev": -0.093,
-        "edge": -7.0,
-        "sources": 4,
+        "prob": 62.6,
+        "ev": null,
+        "edge": null,
+        "sources": 2,
         "components": {
           "forebet": 0.64,
-          "form": 0.6,
-          "sofascore": 0.83,
-          "odds": 0.752
+          "form": 0.6
         }
       },
-      "predictionGrade": "A",
+      "predictionGrade": "F",
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
+        "sources_available": 1,
+        "quality_score": 0.5,
         "h2h_available": false,
         "h2h_neutral": true,
         "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": false,
         "form_available": true,
         "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 35.413,
-        "skip_reason": null
+        "consensus_strength": "none",
+        "market_model_gap": null,
+        "skip_reason": "no_odds"
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
@@ -1358,7 +1213,7 @@
       "earlySeason": true,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -5.1,
+      "marketGapPp": -1.7,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": false,
@@ -1371,9 +1226,9 @@
         "skipReason": "zly_mecz"
       },
       "odds": {
-        "home": 2.1,
+        "home": 1.95,
         "draw": null,
-        "away": 1.58,
+        "away": 1.68,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -1384,22 +1239,22 @@
         }
       },
       "ai": {
-        "prediction": "Qingdao should secure a narrow away victory, buoyed by a strong 4‑1 head‑to‑head record and favorable betting odds despite Guangdong’s marginally better recent form.",
-        "confidence": 62,
+        "prediction": "Based on the data, we see that Guangdong has a strong home record with 4 out of 5 wins, while Qingdao has a poor away form with only 1 win in their last 5 matches. The odds value leans towards Qingdao with a lower home team odds (1.95) compared to Guangdong (2.15).",
+        "confidence": 70,
         "recommendation": "MEDIUM",
-        "reasoning": "Qingdao has won 4 of the last 5 meetings (80% win rate) against Guangdong, indicating a clear psychological edge. The bookmaker odds (1.58 for Qingdao vs 2.1 for Guangdong) translate to an implied 63% probability for the visitors, aligning with Forebet’s 52% away‑win forecast. Guangdong’s recent form (4/10) is slightly better than Qingdao’s (0/10), but both teams struggle at this venue (Guangdong 2/10 at home, Qingdao 2/10 away), reducing any home‑field advantage. The combination of historical dominance and market pricing outweighs the modest form advantage for Guangdong, though the low venue scores keep the margin thin. Overall risk is moderate due to both sides’ poor venue performance."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "2",
-        "prob": 55.6,
-        "ev": -0.122,
-        "edge": -7.7,
+        "prob": 55.0,
+        "ev": -0.075,
+        "edge": -4.5,
         "sources": 4,
         "components": {
           "forebet": 0.52,
           "h2h": 0.778,
           "form": 0.3,
-          "odds": 0.633
+          "odds": 0.595
         }
       },
       "predictionGrade": "C",
@@ -1415,7 +1270,7 @@
         "form_available": true,
         "h2h_count": 4,
         "consensus_strength": "none",
-        "market_model_gap": 7.981,
+        "market_model_gap": 3.718,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1673,9 +1528,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 35,
-        "homeProb": 57,
-        "awayProb": 43,
+        "votes": 46,
+        "homeProb": 63,
+        "awayProb": 37,
         "url": "https://www.sofascore.com/volleyball/match/17489338",
         "orientation": "direct",
         "unavailable": false,
@@ -1695,26 +1550,26 @@
         }
       },
       "ai": {
-        "prediction": "Hebei is likely to edge Tianjin at home, but the match should be tightly contested.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "Hebei holds a dominant 4‑1 record in the last five meetings (80 % win rate) and enjoys a strong home rating of 8.0/10, matching Tianjin’s away rating of 6.0/10. Tianjin’s overall form (8.0) is superior to Hebei’s (6.0), suggesting they have more recent momentum. The bookmaker odds are almost flat (1.8 vs 1.85), reflecting uncertainty, while Forebet gives the home side a 57 % win probability. The convergence of a solid H2H edge, home advantage, and a modest odds advantage tips the balance toward Hebei, though Tianjin’s better form keeps the contest close."
+        "prediction": "Hebei has an excellent home record (4/5 wins) and strong form, while Tianjin shows signs of improvement but remains weaker on the road. The odds value leans towards Hebei.",
+        "confidence": 80,
+        "recommendation": "HIGH",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 50.0,
-        "ev": -0.1,
-        "edge": -5.5,
+        "prob": 50.9,
+        "ev": -0.084,
+        "edge": -4.7,
         "sources": 5,
         "components": {
           "forebet": 0.57,
           "h2h": 0.4,
           "form": 0.4,
-          "sofascore": 0.57,
+          "sofascore": 0.63,
           "odds": 0.556
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "B",
       "dataQuality": {
         "sources_available": 4,
         "quality_score": 1.0,
@@ -1726,8 +1581,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 5,
-        "consensus_strength": "moderate",
-        "market_model_gap": -5.556,
+        "consensus_strength": "strong",
+        "market_model_gap": -4.656,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2566,9 +2421,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 163,
-        "homeProb": 64,
-        "awayProb": 36,
+        "votes": 187,
+        "homeProb": 65,
+        "awayProb": 35,
         "url": "https://www.sofascore.com/volleyball/match/16506971",
         "orientation": "direct",
         "unavailable": false,
@@ -2588,22 +2443,22 @@
         }
       },
       "ai": {
-        "prediction": "Radom W should edge out Chemik Police W at home, leveraging a modest H2H edge and a 59% win probability from Forebet.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "The last five meetings favor Radom W 3‑2, giving them a 60% home H2H win rate. Forebet assigns a 59% chance to a home victory, aligning with the bookmakers’ odds that price Radom at 1.75 versus 1.95 for Chemik. Both squads sit on identical overall (6.0/10) and venue‑specific (6.0/10) form, so the decisive factor is the slight home advantage reflected in the data. The odds differential is modest, indicating a relatively close contest, but the convergence of H2H, predictive model, and odds tilts toward Radom. Overall risk is moderate due to the parity in form and the small sample size of head‑to‑head matches."
+        "prediction": "Radom W is expected to win this match due to their strong home form, favorable odds, and a decent head-to-head record. Radom W has won four out of the last five matches against Chemik Police W, suggesting a consistent strong performance. Additionally, Radom W has a higher overall win rate (60%) compared to Chemik Police W (40%). The home team also has a better recent form, with a 6.0/10 rating compared to Chemik Police W's 5.0/10 rating. The odds value leans towards Radom W with a 1.75 odds, while Chemik Police W has higher odds of 2.05, indicating some uncertainty.",
+        "confidence": 85,
+        "recommendation": "HIGH",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 58.1,
-        "ev": 0.016,
-        "edge": 0.9,
+        "prob": 58.2,
+        "ev": 0.019,
+        "edge": 1.1,
         "sources": 5,
         "components": {
           "forebet": 0.59,
           "h2h": 0.6,
           "form": 0.5,
-          "sofascore": 0.64,
+          "sofascore": 0.65,
           "odds": 0.571
         }
       },
@@ -2619,8 +2474,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 2,
-        "consensus_strength": "moderate",
-        "market_model_gap": 0.957,
+        "consensus_strength": "strong",
+        "market_model_gap": 1.057,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3953,9 +3808,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 41,
-        "homeProb": 56,
-        "awayProb": 44,
+        "votes": 48,
+        "homeProb": 52,
+        "awayProb": 48,
         "url": "https://www.sofascore.com/volleyball/match/17246106",
         "orientation": "direct",
         "unavailable": false,
@@ -3975,21 +3830,21 @@
         }
       },
       "ai": {
-        "prediction": "Monteros are likely to edge out Sonder Rosario on the road, capitalising on a historical away advantage and strong bookmaker backing.",
-        "confidence": 65,
-        "recommendation": "MEDIUM",
-        "reasoning": "In the last five meetings Monteros lead 3‑2, giving them a 60% win rate away (home win rate only 40%). Forebet assigns a 53% probability to an away win, and the market odds (Monteros 1.33 vs Sonder 3.0) imply roughly a 75% chance for Monteros. Although Sonder’s home form (4.0/10) is better than Monteros’ away form (2.0/10), both teams are in poor recent form (Sonder 2.0/10, Monteros 0.0/10), limiting the predictive power of current performance. The combination of H2H trend, predictive model, and odds outweighs the modest home‑field edge. Overall risk is moderate due to the low scoring form of both sides."
+        "prediction": "Monteros are strong favorites to secure an away victory, supported by their superior recent form and favorable odds. The data indicates a clear performance gap between the two teams in the current league context.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "Monteros hold a slight edge in the head-to-head record with 3 wins compared to Sonder Rosario's 2, suggesting historical competitiveness. However, the most significant indicator is the recent form, where Monteros have a 0.0/10 rating (implying no points lost or a perfect record depending on the scale, but clearly superior to the opponent) versus Sonder Rosario's 2.0/10. Venue-specific data further supports the away side, as Monteros have a 2.0/10 away form which is statistically better than Sonder Rosario's 4.0/10 home form, indicating the home advantage is not a decisive factor here. The bookmaker odds heavily favor Monteros at 1.33 compared to 3.0 for the home team, aligning with the Forebet prediction of a 53% away win probability. The risk is moderate due to the relatively low sample size of H2H data, but the convergence of form and odds strongly points to an away win."
       },
       "scoring": {
         "pick": "2",
-        "prob": 51.8,
-        "ev": -0.311,
-        "edge": -23.4,
+        "prob": 52.5,
+        "ev": -0.302,
+        "edge": -22.7,
         "sources": 4,
         "components": {
           "forebet": 0.53,
           "form": 0.4,
-          "sofascore": 0.44,
+          "sofascore": 0.48,
           "odds": 0.752
         }
       },
@@ -4005,8 +3860,8 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 1,
-        "consensus_strength": "weak",
-        "market_model_gap": 18.467,
+        "consensus_strength": "moderate",
+        "market_model_gap": 19.167,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4093,7 +3948,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -5.7,
+      "marketGapPp": -6.2,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -4106,9 +3961,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 6.65,
+        "home": 6.91,
         "draw": null,
-        "away": 1.114,
+        "away": 1.108,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -4126,13 +3981,13 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 82.5,
-        "ev": -0.08,
-        "edge": -7.2,
+        "prob": 82.7,
+        "ev": -0.084,
+        "edge": -7.6,
         "sources": 2,
         "components": {
           "forebet": 0.8,
-          "odds": 0.898
+          "odds": 0.903
         }
       },
       "predictionGrade": "B",
@@ -4148,7 +4003,7 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "none",
-        "market_model_gap": 67.462,
+        "market_model_gap": 68.228,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4565,9 +4420,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 86,
-        "homeProb": 73,
-        "awayProb": 27,
+        "votes": 109,
+        "homeProb": 76,
+        "awayProb": 24,
         "url": "https://www.sofascore.com/volleyball/match/16898289",
         "orientation": "direct",
         "unavailable": false,
@@ -4587,22 +4442,22 @@
         }
       },
       "ai": {
-        "prediction": "Chaumont should edge a narrow victory at home, leveraging their dominant head‑to‑head record despite Toulouse’s superior recent form.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "Chaumont has won 4 of the last 5 meetings (80% home win rate), indicating a clear psychological edge. Their overall form (8.0) trails Toulouse’s (10.0), but both teams rate equally at the venue (6.0 each), neutralising pure home‑away bias. Forebet’s 51% home win forecast and the slightly shorter odds (1.8 vs 1.9) both signal a marginal advantage for Chaumont. However, the close odds and Toulouse’s higher recent performance introduce uncertainty, preventing a higher confidence level. Overall, the weight of H2H and odds outweighs the form gap, suggesting a home win but not a dominant one."
+        "prediction": "Chaumont has a strong head-to-head record against Toulouse, winning 4 out of the last 5 matches. Chaumont's excellent home form (60% win rate) and the favorable odds value (1.8) indicate a higher probability of a Chaumont victory.",
+        "confidence": 0,
+        "recommendation": "SKIP",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 57.1,
-        "ev": 0.029,
-        "edge": 1.6,
+        "prob": 57.6,
+        "ev": 0.036,
+        "edge": 2.0,
         "sources": 5,
         "components": {
           "forebet": 0.51,
           "h2h": 0.714,
           "form": 0.4,
-          "sofascore": 0.73,
+          "sofascore": 0.76,
           "odds": 0.556
         }
       },
@@ -4619,7 +4474,7 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "moderate",
-        "market_model_gap": 1.544,
+        "market_model_gap": 2.044,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -5630,7 +5485,7 @@
       "league": "DWC",
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/siatkowka/br-ndby-67rl0rq5/dhv-odense-MqIIUuPc/?mid=MgrqarjU",
+      "matchUrl": null,
       "forebetUrl": "https://www.forebet.com/en/volleyball/matches/landspokal-cup-women/brondby-w-dhv-odense-w/113742",
       "qualifies": false,
       "channelQualifies": false,
@@ -5650,245 +5505,56 @@
         "gap": 3
       },
       "h2h": {
-        "total": 5,
-        "homeWins": 2,
-        "awayWins": 3,
-        "lastDate": "18.01.26",
-        "lastScore": "0-3",
-        "effectiveTotal": 0.0,
-        "homeWinsEff": 0.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-01-18",
-            "home": "DHV Odense K",
-            "away": "Brøndby K",
-            "score": "0-3",
-            "winner": "Brøndby K"
-          },
-          {
-            "date": "2025-12-06",
-            "home": "Brøndby K",
-            "away": "DHV Odense K",
-            "score": "3-2",
-            "winner": "Brøndby K"
-          },
-          {
-            "date": "2024-01-27",
-            "home": "DHV Odense K",
-            "away": "Brøndby K",
-            "score": "2-3",
-            "winner": "Brøndby K"
-          },
-          {
-            "date": "2024-01-20",
-            "home": "Brøndby K",
-            "away": "DHV Odense K",
-            "score": "3-0",
-            "winner": "Brøndby K"
-          },
-          {
-            "date": "2023-10-08",
-            "home": "DHV Odense K",
-            "away": "Brøndby K",
-            "score": "0-3",
-            "winner": "Brøndby K"
-          }
-        ],
-        "last": {
-          "date": "2026-01-18",
-          "score": "0-3",
-          "winner": "Brøndby K",
-          "home": "DHV Odense K",
-          "away": "Brøndby K"
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: Brondby W 0-0-0 (even) (last: 2026-01-18 DHV Odense K 0-3 Brøndby K)"
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null,
+        "effectiveTotal": null,
+        "homeWinsEff": null,
+        "awayWinsEff": null,
+        "allStale": null,
+        "meetings": [],
+        "last": null,
+        "edge": null,
+        "line": "No previous meetings"
       },
       "form": {
-        "home": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "away": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "homeAtHome": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "awayAtAway": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeDated": [
-          {
-            "date": "07.11.26",
-            "result": "W",
-            "score": "3-0",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          },
-          {
-            "date": "02.11.26",
-            "result": "W",
-            "score": "1-3",
-            "event": "Landspokal Cup Kobiety (Dania)"
-          },
-          {
-            "date": "01.11.26",
-            "result": "L",
-            "score": "3-0",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          },
-          {
-            "date": "24.10.26",
-            "result": "W",
-            "score": "3-0",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          },
-          {
-            "date": "18.10.26",
-            "result": "L",
-            "score": "0-3",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          }
-        ],
-        "awayDated": [
-          {
-            "date": "08.11.26",
-            "result": "W",
-            "score": "3-1",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          },
-          {
-            "date": "31.10.26",
-            "result": "W",
-            "score": "3-2",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          },
-          {
-            "date": "29.10.26",
-            "result": "W",
-            "score": "0-3",
-            "event": "Landspokal Cup Kobiety (Dania)"
-          },
-          {
-            "date": "16.04.26",
-            "result": "W",
-            "score": "3-0",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          },
-          {
-            "date": "12.04.26",
-            "result": "W",
-            "score": "1-3",
-            "event": "Volleyligaen - Kobiety (Dania)"
-          }
-        ],
+        "home": [],
+        "away": [],
+        "homeAtHome": [],
+        "awayAtAway": [],
+        "homeDated": [],
+        "awayDated": [],
         "surface": null,
         "homeSurface": null,
         "awaySurface": null,
         "surfaceIsProxy": null,
         "source": null,
-        "homeSeason": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "awaySeason": [
-          "W",
-          "W",
-          "W"
-        ],
-        "homeAtHomeSeason": [
-          "W",
-          "W",
-          "L"
-        ],
-        "awayAtAwaySeason": [
-          "W"
-        ],
-        "homeSeasonMatches": 5,
-        "awaySeasonMatches": 3,
-        "homeSeasonStart": "2026-09-13",
-        "awaySeasonStart": "2026-10-29",
-        "homeClean": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "L"
-        ],
-        "awayClean": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
-        "homeAtHomeClean": [
-          "W",
-          "W",
-          "L",
-          "W",
-          "W"
-        ],
-        "awayAtAwayClean": [
-          "W",
-          "W",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeCup": [
-          "W"
-        ],
-        "awayCup": [
-          "W"
-        ],
-        "homeCupCompetitions": [
-          "Landspokal Cup Kobiety (Dania)"
-        ],
-        "awayCupCompetitions": [
-          "Landspokal Cup Kobiety (Dania)"
-        ],
-        "homeCompetitions": [
-          "Volleyligaen - Kobiety (Dania)",
-          "Landspokal Cup Kobiety (Dania)"
-        ],
-        "awayCompetitions": [
-          "Volleyligaen - Kobiety (Dania)",
-          "Landspokal Cup Kobiety (Dania)"
-        ],
+        "homeSeason": null,
+        "awaySeason": null,
+        "homeAtHomeSeason": null,
+        "awayAtAwaySeason": null,
+        "homeSeasonMatches": null,
+        "awaySeasonMatches": null,
+        "homeSeasonStart": null,
+        "awaySeasonStart": null,
+        "homeClean": [],
+        "awayClean": [],
+        "homeAtHomeClean": [],
+        "awayAtAwayClean": [],
+        "homeCup": [],
+        "awayCup": [],
+        "homeCupCompetitions": [],
+        "awayCupCompetitions": [],
+        "homeCompetitions": [],
+        "awayCompetitions": [],
         "friendliesExcluded": 0
       },
       "category": null,
       "nationalFriendly": false,
-      "seasonMatchCount": 3,
-      "earlySeason": true,
+      "seasonMatchCount": null,
+      "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
       "marketGapPp": null,
@@ -5924,26 +5590,25 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 43.7,
+        "prob": 51.0,
         "ev": null,
         "edge": null,
-        "sources": 2,
+        "sources": 1,
         "components": {
-          "forebet": 0.51,
-          "form": 0.3
+          "forebet": 0.51
         }
       },
       "predictionGrade": "F",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.5,
+        "sources_available": 1,
+        "quality_score": 0.4,
         "h2h_available": false,
         "h2h_neutral": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
         "odds_available": false,
-        "form_available": true,
+        "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
         "market_model_gap": null,
@@ -6496,20 +6161,20 @@
       "earlySeason": true,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -12.1,
+      "marketGapPp": -12.5,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 50,
-        "homeProb": 12,
-        "awayProb": 88,
+        "votes": 53,
+        "homeProb": 13,
+        "awayProb": 87,
         "url": "https://www.sofascore.com/volleyball/match/17246107",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.55,
+        "home": 2.6,
         "draw": null,
         "away": 1.43,
         "source": "pinnacle",
@@ -6522,22 +6187,22 @@
         }
       },
       "ai": {
-        "prediction": "Boca Juniors are likely to edge out San Lorenzo de Almagro despite the home‑team’s historical edge.",
-        "confidence": 62,
+        "prediction": "Boca Juniors have a chance to upset due to their improved form and close odds, but San Lorenzo de Almagro's strong home record and potential crowd support favor a home win.",
+        "confidence": 72,
         "recommendation": "MEDIUM",
-        "reasoning": "San Lorenzo leads the recent head‑to‑head 4‑1, giving them an 80 % home win rate against Boca, but they have earned 0 points in their last 10 matches, indicating a severe dip in form. Boca’s recent form is much stronger at 6 points from 10, and both teams sit at a modest 4/10 in venue‑specific performance, neutralising any home advantage. The bookmaker odds (Boca 1.43 vs San Lorenzo 2.55) and Forebet’s 52 % away‑win probability both signal a slight edge to the visitors. However, the historical dominance of San Lorenzo at home and the small margin in venue form keep the prediction from being decisive. Overall, the clash is balanced but leans toward Boca."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "2",
-        "prob": 65.4,
-        "ev": -0.065,
-        "edge": -4.6,
+        "prob": 65.2,
+        "ev": -0.067,
+        "edge": -4.7,
         "sources": 5,
         "components": {
           "forebet": 0.52,
           "h2h": 0.571,
           "form": 0.8,
-          "sofascore": 0.88,
+          "sofascore": 0.87,
           "odds": 0.699
         }
       },
@@ -6554,7 +6219,7 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "none",
-        "market_model_gap": 26.184,
+        "market_model_gap": 26.738,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -6822,9 +6487,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 189,
-        "homeProb": 71,
-        "awayProb": 29,
+        "votes": 205,
+        "homeProb": 72,
+        "awayProb": 28,
         "url": "https://www.sofascore.com/volleyball/match/17267805",
         "orientation": "direct",
         "unavailable": false,
@@ -6844,22 +6509,22 @@
         }
       },
       "ai": {
-        "prediction": "Pinheiros W should secure a comfortable home victory over Barueri W, continuing their dominance in recent meetings.",
-        "confidence": 88,
+        "prediction": "Pinheiros W is heavily favored to secure a straight-set victory, driven by a perfect 5-0 head-to-head record and a stark contrast in recent performance metrics.",
+        "confidence": 92,
         "recommendation": "HIGH",
-        "reasoning": "The head‑to‑head record is a perfect 5‑0 in favor of Pinheiros, giving them a 100 % home H2H win rate. Pinheiros’ venue‑specific rating (6.0/10) far exceeds Barueri’s away rating (0.0/10), and their overall recent form (4.0/10) is still markedly better than Barueri’s zero. The Forebet model assigns a 74 % probability to a home win, and the bookmaker odds (1.35 for Pinheiros vs 2.9 for Barueri) reflect a strong market bias. All signals point to a low‑risk home win, though a single‑match upset can never be fully ruled out."
+        "reasoning": "The head-to-head history is decisive, with Pinheiros W winning all 5 previous meetings, establishing a dominant psychological and tactical edge. Recent form data highlights a massive disparity, as Pinheiros W holds a 4.0/10 overall rating compared to Barueri W's 0.0/10, indicating the away team is currently winless in tracked matches. Venue-specific analysis reinforces this, showing Pinheiros W at 6.0/10 at home while Barueri W remains at 0.0/10 away, suggesting the home crowd and conditions significantly benefit the hosts. The bookmaker odds of 1.35 for Pinheiros W align with the 74% Forebet prediction, offering a reasonable probability assessment without excessive risk. The 48-point advantage in the selection source further validates the strong consensus that the home team will control the match."
       },
       "scoring": {
         "pick": "1",
-        "prob": 67.6,
-        "ev": -0.088,
-        "edge": -6.5,
+        "prob": 67.7,
+        "ev": -0.086,
+        "edge": -6.3,
         "sources": 5,
         "components": {
           "forebet": 0.74,
           "h2h": 0.5,
           "form": 0.7,
-          "sofascore": 0.71,
+          "sofascore": 0.72,
           "odds": 0.741
         }
       },
@@ -6876,7 +6541,7 @@
         "form_available": true,
         "h2h_count": 1,
         "consensus_strength": "strong",
-        "market_model_gap": -6.474,
+        "market_model_gap": -6.374,
         "skip_reason": null
       },
       "sidesReversed": false,
