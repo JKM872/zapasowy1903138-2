@@ -208,6 +208,8 @@ export interface Match {
     source?: string | null
     gradeBefore?: string | null
   }
+  oddsMove?: OddsMove | null
+  teamNews?: TeamNews | null
   /** Set by the backend paywall when premium (Grade A) data is masked for non-subscribers. */
   locked?: boolean
 }
@@ -292,4 +294,44 @@ export interface WeatherData {
   weatherCode: number | null
   description: string
   unit: string
+}
+
+/** Odds movement on one side (backend odds_movement.py). */
+export interface OddsMoveSide {
+  opening: number
+  current: number
+  changePct: number
+  direction: 'up' | 'down' | 'flat'
+  since?: string | null
+  source?: string | null
+}
+
+/** Dropping on our pick = market agrees ("with"); rising = against. */
+export interface OddsMove {
+  pick: OddsMoveSide | null
+  opponent: OddsMoveSide | null
+  stance: 'with' | 'against' | 'flat' | null
+  line: string
+  noPick?: boolean
+}
+
+export interface TeamNewsPlayer {
+  name: string
+  importance: 'star' | 'key' | 'other'
+  status: 'out' | 'doubtful' | 'bench'
+  reason?: string
+}
+
+export interface TeamNews {
+  home: TeamNewsPlayer[]
+  away: TeamNewsPlayer[]
+  side?: 'home' | 'away' | null
+  confirmedLineup: boolean
+  lineup?: { home?: { name: string; star?: boolean }[] | null; away?: { name: string; star?: boolean }[] | null } | null
+  source?: string | null
+  checkedAt?: string | null
+  badgePick: string
+  badgeOpponent: string
+  verdict?: string | null
+  summary?: string | null
 }

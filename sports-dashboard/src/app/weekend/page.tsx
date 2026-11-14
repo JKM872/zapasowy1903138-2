@@ -18,6 +18,7 @@ import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
 import { getWeekendSlip, type WeekendLeg, type WeekendSlip } from '@/lib/api'
 import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
+import { OddsMoveBadge, TeamNewsBadge } from '@/components/match/PickSignals'
 
 function pct(v: number | null | undefined, signed = false) {
   if (v === null || v === undefined) return '—'
@@ -70,6 +71,8 @@ function LegRow({ l }: { l: WeekendLeg }) {
               {` · implied ${pct(l.impliedPct)}`}
               {l.edgePct != null && <span className={cn(l.edgePct > 0 ? 'text-emerald-600' : 'text-red-600')}>{` · edge ${pct(l.edgePct, true)}`}</span>}
               {l.availability && l.availability !== 'unknown' && ` · line-up ${l.availability}`}
+              {l.oddsMove && <> · <OddsMoveBadge move={l.oddsMove} /></>}
+              {l.teamNews && <> · <TeamNewsBadge news={l.teamNews} /></>}
               {l.status === 'withdrawn' && l.withdrawnReason && <span className="text-amber-600">{` · withdrawn: ${l.withdrawnReason}`}</span>}
             </span>
           </span>

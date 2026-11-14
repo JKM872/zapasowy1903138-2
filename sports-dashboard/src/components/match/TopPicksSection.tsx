@@ -15,6 +15,7 @@ import { RadialProgress } from '@/components/charts/RadialProgress'
 import { StakeChip } from '@/components/top/StakeChip'
 import type { Match } from '@/lib/types'
 import { topStatus, type TopPick } from '@/lib/api'
+import { OddsMoveBadge, TeamNewsBadge } from './PickSignals'
 
 const SOURCE: Record<string, string> = {
   pinnacle: 'Pinnacle',
@@ -55,6 +56,9 @@ export function TopPickDetails({ pick: p }: { pick: TopPick }) {
   return (
     <div className="flex basis-full flex-wrap items-center gap-x-3 gap-y-1 pl-7 text-xs text-muted-foreground">
       <StakeChip stakePct={p.stakePct} />
+      <OddsMoveBadge move={p.oddsMove} />
+      <TeamNewsBadge news={p.teamNews} />
+      {p.teamNews?.summary && <span className="basis-full">🩹 {p.teamNews.summary}</span>}
       {showTwoWay && <span className="tabular-nums">2-way price {formatOdds(p.odds2)}</span>}
       {p.h2h && <span className="tabular-nums">{p.h2h.replace(/^brak$/, 'No previous meetings')}</span>}
       {typeof p.bestOdds === 'number' && (

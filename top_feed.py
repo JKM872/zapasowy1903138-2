@@ -65,7 +65,7 @@ _LOCKED_FIELDS = ('pick', 'odds', 'odds2', 'oddsMarket', 'form', 'h2h', 'signals
                   'availabilityNote', 'stakePct', 'floorOdds', 'segment', 'learnedDecision',
                   'bestOdds', 'bestOddsSource', 'bestOddsAt', 'booksCount',
                   'closingOdds', 'closingSource', 'closingAt', 'closingApprox',
-                  'closingMarket', 'clvPct')
+                  'closingMarket', 'clvPct', 'oddsMove', 'teamNews')
 
 _store_cache: Dict[str, Any] = {'mtime': None, 'index': {}}
 _odds_cache: Dict[str, Tuple[Optional[float], Dict[Tuple[str, str], Dict[str, Any]]]] = {}
@@ -564,6 +564,14 @@ def load_top(results_dir: str = RESULTS_DIR, store_path: str = STORE_PATH,
                 continue
             live = live_raw.get(f"{r.get('sport')}|{r.get('match')}")
             entry = _entry(day, r, live if isinstance(live, dict) else {}, index, results_dir)
+            try:
+                import odds_movement as om
+                h, a = _split_match(entry['match'])
+                om.enrich(entry, day, entry['sport'], h, a, om.side_of_pick(entry['pick'], h, a),
+                          live if isinstance(live, dict) else None,
+                          root=os.path.dirname(os.path.abspath(results_dir)))
+            except Exception:
+                pass
             picks.append(entry)
             everything.append(entry)
             by_sport.setdefault(entry['sport'], []).append(entry)

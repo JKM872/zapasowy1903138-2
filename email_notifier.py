@@ -948,6 +948,23 @@ _CARDS_START = '<!--MATCH-CARDS-START-->'
 _CARDS_END = '<!--MATCH-CARDS-END-->'
 
 
+def _odds_move_html(match, day, home, away, focus_team=None) -> str:
+    """One short line: are the odds on our pick rising or falling (no team news here)."""
+    try:
+        import odds_movement as om
+        sc = match.get('scoring') if isinstance(match.get('scoring'), dict) else {}
+        pick = match.get('scoring_pick') or sc.get('pick') or focus_team
+        side = om.side_of_pick(pick, str(home), str(away))
+        lines = om.mail_lines(str(day or '')[:10], str(match.get('sport') or 'football').lower(),
+                              str(home), str(away), side, news=False)
+    except Exception:
+        return ''
+    if not lines:
+        return ''
+    from html import escape as _esc
+    return f'<div style="margin-top: 6px; font-size: 12px; color: #555;">{_esc(lines[0])}</div>'
+
+
 def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = 'time', 
                       include_sorted_odds: bool = False, odds_limit: int = 15,
                       cards_only: bool = False, forebet_layout: bool = False) -> str:
@@ -1380,6 +1397,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     {f'<div style="margin-top: 8px;"><span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">🏆 Advanced Score: {advanced_score:.0f}/100</span></div>' if is_tennis and advanced_score > 0 else ''}
                     {f'<div style="margin-top: 5px; font-size: 12px; color: #666;">{ranking_info}</div>' if is_tennis and ranking_info else ''}
                     {_render_drop_badge(match)}
+                    {_odds_move_html(match, date, home, away, focus_team)}
                 </div>
                 
                 <!-- DANE MECZU - GRID -->

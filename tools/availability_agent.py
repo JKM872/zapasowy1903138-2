@@ -143,6 +143,11 @@ def parse_lineups(data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         stars = {id(p[1]) for p in valued[:STAR_COUNT]}
         median = valued[len(valued) // 2][0] if valued else None
         rows = []
+        if confirmed:
+            out.setdefault('lineup', {})[side] = [
+                {'name': (x.get('player') or {}).get('shortName') or (x.get('player') or {}).get('name'),
+                 'star': id(x) in stars}
+                for _, x, k in pool if k == 'squad' and not x.get('substitute')][:11]
         for v, x, kind in pool:
             pl = x.get('player') or {}
             name = pl.get('shortName') or pl.get('name')
@@ -186,6 +191,9 @@ def sofascore_check(m: Dict[str, Any], sport: str = '', day: str = '') -> Option
         return None
     if orient == 'reversed':
         res['home'], res['away'] = res['away'], res['home']
+        if res.get('lineup'):
+            lu = res['lineup']
+            res['lineup'] = {'home': lu.get('away'), 'away': lu.get('home')}
     # Without market values SofaScore cannot tell a star from a reserve.
     if not res.get('hasValues') and not (res['home'] or res['away']):
         return None
@@ -440,6 +448,23 @@ def candidates(day: str) -> List[Dict[str, Any]]:
         else:
             out[k] = {'sport': t.get('sport'), 'side': side, 'top': True,
                       'm': {'homeTeam': h, 'awayTeam': a, 'time': t.get('time'), 'league': t.get('league')}}
+    try:
+        fan = json.load(open(os.path.join(ROOT, 'results', f'fanvote_{day}.json'), encoding='utf-8-sig'))
+    except Exception:
+        fan = {}
+    for blk in (fan.get('sports') or {}).values():
+        for p in (blk or {}).get('picks') or []:
+            if p.get('side') not in ('home', 'away'):
+                continue
+            k = key_of(p.get('sport') or '', p.get('home') or '', p.get('away') or '')
+            if k in out:
+                out[k]['fan'] = True
+                continue
+            hit = re.search(r'/match/(?:[^/]+/)*?(\d{5,})', p.get('sofascoreUrl') or '')
+            out[k] = {'sport': p.get('sport'), 'side': p['side'], 'top': False, 'fan': True,
+                      'm': {'homeTeam': p.get('home'), 'awayTeam': p.get('away'), 'time': p.get('time'),
+                            'league': p.get('league'), 'kickoffUtc': p.get('kickoff'),
+                            'sofascore': {'url': p.get('sofascoreUrl'), 'orientation': 'direct'} if hit else {}}}
     return [{'key': k, **v} for k, v in out.items()]
 
 
@@ -480,7 +505,8 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         with open(tmp, 'w', encoding='utf-8') as fh:
             json.dump(store, fh, ensure_ascii=False, indent=1)
         os.replace(tmp, path)
-    for c in candidates(day):
+    cands = candidates(day)
+    for c in cands:
         left = budget - (_time.monotonic() - t0)
         if left <= 0:
             log(f'   availability: budżet {budget:.0f}s wyczerpany, stop po {checked} sprawdzeniach')
@@ -510,11 +536,16 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         store[c['key']] = {
             'checkedAt': now.isoformat(), 'source': res.get('source'), 'confirmed': res.get('confirmed'),
             'side': side, 'home': res['home'], 'away': res['away'],
-            'sources': res.get('sources'), **v,
+            'sources': res.get('sources'), 'lineup': res.get('lineup'), **v,
         }
         if v['board'] != 'ok' or v['top_block']:
             names = ', '.join(p['name'] for p in res[side] if p['importance'] == 'star')
             log(f"   🚑 {c['key']}: {v['board']}{' / TOP blocked' if v['top_block'] else ''} ({names})")
+    if use_llm:
+        try:
+            summarize_news(day, store, [c for c in cands if c.get('top') or c.get('fan')], log=log)
+        except Exception as e:
+            log(f'   availability summaries failed: {e}')
     _save()
     flagged = sum(1 for r in store.values() if r.get('board') != 'ok' or r.get('top_block'))
     log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)} | {STATS}")
@@ -540,6 +571,137 @@ def note(rec: Optional[Dict[str, Any]]) -> str:
         return ''
     return 'Key absences: ' + ', '.join(
         f"{p['name']}{'*' if p['importance'] == 'star' else ''} ({p.get('reason') or p['status']})" for p in rows[:4])
+
+
+NO_NEWS = 'No confirmed team news yet'
+SUMMARY_MAX_CALLS = int(os.getenv('AVAIL_SUMMARY_MAX', '60'))
+
+
+def _players(rec: Dict[str, Any], side: str) -> List[Dict[str, Any]]:
+    return [{'name': p.get('name'), 'importance': p.get('importance') or 'other',
+             'status': p.get('status') or 'out', 'reason': p.get('reason') or ''}
+            for p in rec.get(side) or [] if isinstance(p, dict) and p.get('name')]
+
+
+def badge(players: List[Dict[str, Any]]) -> str:
+    """'2 stars out', '1 star doubtful', '3 key out' — '' when nothing notable."""
+    s = sum(1 for p in players if p['importance'] == 'star' and p['status'] != 'doubtful')
+    d = sum(1 for p in players if p['importance'] == 'star' and p['status'] == 'doubtful')
+    k = sum(1 for p in players if p['importance'] == 'key' and p['status'] != 'doubtful')
+    parts = []
+    if s:
+        parts.append(f"{s} star{'s' if s > 1 else ''} out")
+    if d:
+        parts.append(f"{d} star{'s' if d > 1 else ''} doubtful")
+    if k and not s:
+        parts.append(f"{k} key out")
+    return ', '.join(parts)
+
+
+def team_news(rec: Optional[Dict[str, Any]], pick_side: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    """API shape: home/away lists, side badges, confirmed XI, AI summary."""
+    if not rec or rec.get('unknown') or not rec.get('source'):
+        return None
+    side = pick_side or rec.get('side')
+    home, away = _players(rec, 'home'), _players(rec, 'away')
+    ours, theirs = (home, away) if side == 'home' else (away, home)
+    return {'home': home, 'away': away, 'side': side,
+            'confirmedLineup': bool(rec.get('confirmed')), 'lineup': rec.get('lineup'),
+            'source': rec.get('source'), 'sources': rec.get('sources'), 'checkedAt': rec.get('checkedAt'),
+            'badgePick': badge(ours), 'badgeOpponent': badge(theirs),
+            'verdict': rec.get('board'), 'summary': rec.get('aiSummary') or None}
+
+
+def email_line(rec: Optional[Dict[str, Any]], home: str = '', away: str = '') -> str:
+    """One e-mail line: AI summary if present, else side badges, else NO_NEWS."""
+    tn = team_news(rec)
+    if not tn:
+        return f'Team news: {NO_NEWS}'
+    if tn['summary']:
+        return f"Team news: {tn['summary']}"
+    bits = []
+    for lbl, b in (('our pick', tn['badgePick']), ('opponent', tn['badgeOpponent'])):
+        if b:
+            bits.append(f'{lbl} {b}')
+    return 'Team news: ' + ('; '.join(bits) if bits else 'no key absences reported')
+
+
+_SUM_PROMPT = """You write team-news notes for a betting tip. Use ONLY the data below; do not add players or facts.
+Match: {home} vs {away} ({sport}). Our pick: {team} ({side}).
+Absences of {home} (home): {h}
+Absences of {away} (away): {a}
+Confirmed line-ups: {conf}. Source: {src}.
+In 1-2 short English sentences say whose absences matter and whether they weaken our pick.
+Answer ONLY with JSON: {{"summary": "...", "weakens": "yes|no|slightly"}}"""
+
+
+def _fmt_players(ps: List[Dict[str, Any]]) -> str:
+    return '; '.join(f"{p['name']} [{p['importance']}, {p['status']}: {p['reason']}]" for p in ps) or 'none reported'
+
+
+def parse_summary(txt: Optional[str]) -> Optional[str]:
+    """Pull 'summary' out of a model reply; None on junk. Max 2 sentences / 300 chars."""
+    if not txt:
+        return None
+    hit = re.search(r'\{.*\}', txt, re.S)
+    s = None
+    if hit:
+        try:
+            s = json.loads(hit.group(0)).get('summary')
+        except Exception:
+            s = None
+    if not isinstance(s, str) or not s.strip():
+        return None
+    s = ' '.join(s.split())
+    sent = re.split(r'(?<=[.!?])\s+', s)
+    s = ' '.join(sent[:2])
+    return s[:300]
+
+
+def summarize_news(day: str, store: Dict[str, Any], keys: List[Dict[str, Any]],
+                   chat=None, max_calls: int = SUMMARY_MAX_CALLS, log=print) -> int:
+    """AI summary per TOP / Fan Favourites match, cached in the store per day.
+    Unsourced (unknown) records get NO_NEWS without any call."""
+    if chat is None:
+        try:
+            import groq_client
+            chat = lambda p: groq_client.chat(p, max_tokens=200, log=lambda *_: None)
+        except Exception:
+            chat = None
+    calls = 0
+    for c in keys:
+        rec = store.get(c['key'])
+        if not rec:
+            continue
+        sig = f"{rec.get('checkedAt')}|{rec.get('confirmed')}"
+        if rec.get('aiSummary') and rec.get('aiSummarySig') == sig:
+            continue
+        if rec.get('unknown') or not rec.get('source'):
+            rec['aiSummary'], rec['aiSummarySig'] = NO_NEWS, sig
+            continue
+        h, a = _players(rec, 'home'), _players(rec, 'away')
+        if not h and not a:
+            rec['aiSummary'], rec['aiSummarySig'] = (
+                'No absences reported for either side.' if rec.get('source') == 'sofascore' else NO_NEWS), sig
+            continue
+        if chat is None or calls >= max_calls:
+            continue
+        m = c['m']
+        side = rec.get('side') or c.get('side')
+        prompt = _SUM_PROMPT.format(
+            home=m.get('homeTeam'), away=m.get('awayTeam'), sport=c.get('sport'),
+            team=m.get('homeTeam') if side == 'home' else m.get('awayTeam'), side=side,
+            h=_fmt_players(h), a=_fmt_players(a), conf='yes' if rec.get('confirmed') else 'not yet',
+            src=rec.get('source'))
+        calls += 1
+        try:
+            s = parse_summary(chat(prompt))
+        except Exception:
+            s = None
+        if s:
+            rec['aiSummary'], rec['aiSummarySig'] = s, sig
+    log(f'   availability summaries {day}: {calls} Groq calls')
+    return calls
 
 
 if __name__ == '__main__':

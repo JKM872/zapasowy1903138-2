@@ -160,6 +160,15 @@ def _details_html(d: Optional[Dict[str, Any]], team: Any, opp: Any) -> str:
     return out
 
 
+def _pick_lines(p: Dict[str, Any]) -> List[str]:
+    try:
+        import odds_movement as om
+        return om.mail_lines(p.get('date') or '', p.get('sport') or '', p.get('home') or '',
+                             p.get('away') or '', p.get('side'))
+    except Exception:
+        return []
+
+
 def card(p: Dict[str, Any]) -> str:
     o = p.get('odds') or {}
     bp = p.get('bestPrice') or {}
@@ -206,7 +215,8 @@ def card(p: Dict[str, Any]) -> str:
         f" · model {_e(round(mp * 100, 1) if isinstance(mp, (int, float)) else '-')}%"
         f" · Grade <b>{_e(p.get('grade'))}</b></div>"
         f"<div>Absencje: {_e(av.get('verdict'))} {_e(av.get('note'))}</div>"
-        f"<div><small>{links}</small></div></div>")
+        + ''.join(f"<div><small>{_e(x)}</small></div>" for x in _pick_lines(p))
+        + f"<div><small>{links}</small></div></div>")
 
 
 def build_html(picks: List[Dict[str, Any]], days: List[str],

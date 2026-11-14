@@ -636,6 +636,31 @@ def _apply_availability(matches: list, date_str) -> None:
         }
 
 
+def _apply_odds_and_news(matches: list, date_str) -> None:
+    """oddsMove (dropping-odds archive / TOP live checks) and teamNews per match."""
+    if not date_str:
+        return
+    try:
+        import odds_movement as om
+    except Exception:
+        return
+    for m in matches:
+        try:
+            h, a = m.get('homeTeam') or '', m.get('awayTeam') or ''
+            side = om.side_of_pick((m.get('scoring') or {}).get('pick'), h, a)
+            om.enrich(m, date_str, m.get('sport') or '', h, a, side or 'home')
+            mv = m.get('oddsMove')
+            if mv and not side:
+                # No pick on this match: report home/away moves, no verdict.
+                mv['stance'] = None
+                mv['noPick'] = True
+                bits = [f"home {om.arrow(mv['pick'])}" if mv.get('pick') else '',
+                        f"away {om.arrow(mv['opponent'])}" if mv.get('opponent') else '']
+                mv['line'] = 'Odds move: ' + ', '.join(b for b in bits if b)
+        except Exception as e:
+            logger.debug('odds/news enrich failed: %s', e)
+
+
 @app.route('/api/matches', methods=['GET'])
 @optional_auth
 def get_matches():
@@ -756,6 +781,7 @@ def get_matches():
         all_matches.sort(key=lambda m: (0 if m.get('qualifies') else 1 if (m.get('odds') or {}).get('home') else 2,
                                         _SPORT_ORDER.get(m.get('sport'), 50), m.get('time') or ''))
     _apply_availability(all_matches, date_str)
+    _apply_odds_and_news(all_matches, date_str)
 
     # ── Per-sport odds threshold filter (OR condition) ──────────────
     if only_qualifying:
@@ -2067,6 +2093,7 @@ def get_league_info():
 # =============================================================================
 
 @app.route('/api/dropping-odds', methods=['GET'])
+@optional_auth
 def get_dropping_odds():
     """Qualified price moves for a date. ?date=YYYY-MM-DD&sport=football"""
     try:
@@ -2081,6 +2108,24 @@ def get_dropping_odds():
         sport=request.args.get('sport'),
     )
     payload['summary'] = summarise(payload['events'])
+    try:
+        import odds_movement as om
+        if payload.get('date'):
+            cmp_rows = om.compare_dropping(payload['events'], om.our_picks(payload['date']))
+            subscriber = _current_user_is_subscriber()
+            counts = {'with': 0, 'against': 0, 'no_pick': 0}
+            for ev, row in zip(payload['events'], cmp_rows):
+                counts[row['relation']] += 1
+                ev['ourRelation'] = row['relation']
+                if subscriber or row['relation'] == 'no_pick':
+                    ev['ourPick'] = row['ourPick']
+                    ev['ourSource'] = row['ourSource']
+                else:
+                    ev['ourRelation'] = 'locked'  # side would reveal a paid pick
+                    ev['ourPickLocked'] = True
+            payload['comparison'] = counts
+    except Exception as e:
+        logger.warning('dropping comparison failed: %s', e)
     return jsonify(payload)
 
 

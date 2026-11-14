@@ -29,6 +29,7 @@ import { RadialProgress } from '@/components/charts/RadialProgress'
 import { H2HBar } from '@/components/charts/H2HBar'
 import { useWeather } from '@/hooks/useMatches'
 import type { Match, LiveScore } from '@/lib/types'
+import { OddsMoveLine, TeamNewsLine, TeamNewsPanel } from './PickSignals'
 
 interface Props {
   match: Match | null
@@ -90,11 +91,12 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
         {/* ── Tabs ── */}
         <div className="px-5 pb-5">
           <Tabs defaultValue="predictions" className="mt-3">
-            <TabsList className="grid w-full grid-cols-[repeat(6,minmax(0,1fr))_minmax(0,1.6fr)] h-9">
+            <TabsList className="grid w-full grid-cols-[repeat(7,minmax(0,1fr))_minmax(0,1.6fr)] h-9">
               <TabsTrigger value="predictions" className="text-xs gap-1"><Target className="h-3 w-3" /> Predict</TabsTrigger>
               <TabsTrigger value="odds" className="text-xs gap-1"><TrendingUp className="h-3 w-3" /> Odds</TabsTrigger>
               <TabsTrigger value="h2h" className="text-xs gap-1"><History className="h-3 w-3" /> H2H</TabsTrigger>
               <TabsTrigger value="teams" className="text-xs gap-1"><Users className="h-3 w-3" /> Teams</TabsTrigger>
+              <TabsTrigger value="news" className="text-xs gap-1"><Users className="h-3 w-3" /> Team news</TabsTrigger>
               <TabsTrigger value="ai" className="text-xs gap-1"><Brain className="h-3 w-3" /> AI</TabsTrigger>
               <TabsTrigger value="weather" className="text-xs gap-1"><CloudSun className="h-3 w-3" /> Weather</TabsTrigger>
               <TabsTrigger value="centre" className="text-xs gap-1"><Radio className="h-3 w-3" /> Match Centre</TabsTrigger>
@@ -102,6 +104,12 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
 
             {/* ── Predictions tab ── */}
             <TabsContent value="predictions" className="space-y-4 mt-4">
+              {(match.oddsMove || match.teamNews) && (
+                <div className="space-y-1 rounded-lg border p-2.5">
+                  <OddsMoveLine move={match.oddsMove} />
+                  {match.teamNews && <TeamNewsLine news={match.teamNews} />}
+                </div>
+              )}
               {/* Forebet */}
               {match.forebet && (
                 <div className="rounded-xl border bg-card p-4 space-y-3">
@@ -252,6 +260,7 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
                     )}
                     <OddsBox label="Away" value={match.odds.away} highlighted={match.forebet?.prediction === '2'} />
                   </div>
+                  <OddsMoveLine move={match.oddsMove} />
                   {match.value_bet && (
                     <div className="flex items-center gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 p-2.5">
                       <Zap className="h-4 w-4 text-amber-500" />
@@ -262,6 +271,10 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
               ) : (
                 <EmptyState text="No odds data available." />
               )}
+            </TabsContent>
+
+            <TabsContent value="news" className="mt-4">
+              <TeamNewsPanel news={match.teamNews} home={match.homeTeam} away={match.awayTeam} />
             </TabsContent>
 
             {/* ── H2H tab ── */}

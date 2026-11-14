@@ -572,6 +572,15 @@ def run_analyst(day: str, merged: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         return []
 
 
+def _pick_lines(r: Dict[str, Any], day: str) -> List[str]:
+    try:
+        import odds_movement as om
+        h, _, a = str(r.get('match') or '').partition(' vs ')
+        return om.mail_lines(day, r.get('sport') or '', h, a, om.side_of_pick(r.get('pick'), h, a))
+    except Exception:
+        return []
+
+
 def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = None,
                new_count: Optional[int] = None,
                analyst: Optional[List[Dict[str, Any]]] = None,
@@ -593,7 +602,8 @@ def send_email(picks: List[Dict[str, Any]], day: str, attach: Optional[str] = No
         f"<tr><td>{escape(str(r['time']))}</td><td>{escape(r['sport'])}</td>"
         f"<td>{escape(r['match'])}<br><small>{escape(str(r['league']))}</small>"
         + (f"<br><small>{escape(r['injuryLine'])}{' ⚠️' if r.get('injury_risk') else ''}</small>"
-           if r.get('injuryLine') else '') + "</td>"
+           if r.get('injuryLine') else '')
+        + ''.join(f"<br><small>{escape(x)}</small>" for x in _pick_lines(r, day)) + "</td>"
         f"<td><b>{escape(str(r['pick']))}</b> @ {r['odds']:.2f}</td>"
         f"<td>{escape(str(r['grade']))} / {r['score']}</td><td>{escape(r['form'])}</td>"
         f"<td>{escape(r['h2h'])}</td><td>{escape(r['fanvote'])}</td><td>{escape(r['signals'])}</td>"

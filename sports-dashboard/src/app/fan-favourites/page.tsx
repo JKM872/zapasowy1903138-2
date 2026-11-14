@@ -19,6 +19,7 @@ import { SportIcon } from '@/components/shared/SportIcon'
 import { formatOdds } from '@/lib/format'
 import { getFanFavourites, teamHref, type FanLastMatch, type FanPick, type FanRecentMatch, type FanRecord } from '@/lib/api'
 import { RiskDisclaimer } from '@/components/top/RiskDisclaimer'
+import { OddsMoveBadge, OddsMoveLine, TeamNewsBadge, TeamNewsLine } from '@/components/match/PickSignals'
 
 const SPORTS = ['football', 'basketball', 'hockey', 'tennis', 'volleyball', 'handball', 'baseball', 'rugby', 'table_tennis']
 const ALL = 'all'
@@ -225,7 +226,11 @@ function PickCard({ p }: { p: FanPick }) {
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className={cn('rounded px-2 py-0.5', av.cls)}>{av.label}</span>
         {p.availability?.note && <span className="text-muted-foreground">{p.availability.note}</span>}
+        <OddsMoveBadge move={p.oddsMove} />
+        <TeamNewsBadge news={p.teamNews} />
       </div>
+      <OddsMoveLine move={p.oddsMove} />
+      {p.teamNews && <TeamNewsLine news={p.teamNews} />}
     </div>
   )
 }

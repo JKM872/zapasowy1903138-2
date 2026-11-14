@@ -16,6 +16,7 @@ import { marketLayout } from './marketGrid'
 import { RadialProgress } from '@/components/charts/RadialProgress'
 import { FormTimeline } from '@/components/charts/FormTimeline'
 import type { Match, LiveScore } from '@/lib/types'
+import { OddsMoveBadge, TeamNewsBadge } from './PickSignals'
 
 interface Props {
   match: Match
@@ -180,6 +181,8 @@ export function MatchRow({
               {match.availability.gradeBefore ? `${match.availability.gradeBefore}→${match.predictionGrade}` : 'Absences'}
             </span>
           )}
+          <OddsMoveBadge move={match.oddsMove} />
+          <TeamNewsBadge news={match.teamNews} className="hidden sm:inline-flex" />
           {match.value_bet && (
             <Badge
               variant="secondary"

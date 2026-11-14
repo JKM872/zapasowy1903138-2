@@ -56,6 +56,17 @@ def _record(slips: List[Dict[str, Any]]) -> Dict[str, Any]:
             'void': sum(1 for s in slips if s.get('status') == 'void')}
 
 
+def _enrich(x, day, results_dir):
+    try:
+        import odds_movement as om
+        om.enrich(x, x.get('date') or day, x.get('sport') or '', x.get('home') or '',
+                  x.get('away') or '', x.get('side'),
+                  root=os.path.dirname(os.path.abspath(results_dir)))
+    except Exception:
+        pass
+    return x
+
+
 def load_weekend(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
                  friday: Optional[str] = None, remote: Optional[bool] = None,
                  now: Optional[datetime] = None) -> Dict[str, Any]:
@@ -85,6 +96,9 @@ def load_weekend(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
         raw = copy.deepcopy(raw)
         slips = raw.get('slips') or []
         weekend_slip.settle_slips(slips, index)
+        for s in slips:
+            for leg in s.get('legs') or []:
+                _enrich(leg, leg.get('date'), results_dir)
         weekends.append({**raw, 'slips': slips})
     record = _record([s for w in weekends for s in w['slips']])
     if friday:

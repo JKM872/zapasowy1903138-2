@@ -70,6 +70,17 @@ def _order(p: Dict[str, Any]):
             -(p.get('fanPct') or 0), -(p.get('votes') or 0))
 
 
+def _enrich(x, day, results_dir):
+    try:
+        import odds_movement as om
+        om.enrich(x, x.get('date') or day, x.get('sport') or '', x.get('home') or '',
+                  x.get('away') or '', x.get('side'),
+                  root=os.path.dirname(os.path.abspath(results_dir)))
+    except Exception:
+        pass
+    return x
+
+
 def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
              sport: Optional[str] = None, date: Optional[str] = None,
              remote: Optional[bool] = None, now: Optional[datetime] = None) -> Dict[str, Any]:
@@ -108,6 +119,7 @@ def load_fan(results_dir: str = RESULTS_DIR, is_subscriber: bool = False,
                     elif res['status'] in ('won', 'lost', 'draw'):
                         p = {**p, 'result': {'status': 'won' if res['status'] == 'won' else 'lost',
                                              'score': res.get('score'), 'draw': res['status'] == 'draw'}}
+                p = _enrich(dict(p), day, results_dir)
                 picks.append(p)
                 everything.append(p)
             if sport and sp != sport:

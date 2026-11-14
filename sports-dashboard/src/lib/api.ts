@@ -2,7 +2,7 @@
 // SPORTS DASHBOARD - API Client
 // ============================================================================
 import { API_BASE_URL } from './constants'
-import type { Match, StatsData, ApiResponse, LiveScore, WeatherData } from './types'
+import type { Match, StatsData, ApiResponse, LiveScore, WeatherData, OddsMove, TeamNews } from './types'
 
 /** Get auth token from zustand store (lazy import to avoid circular deps) */
 function getAuthToken(): string {
@@ -364,6 +364,10 @@ export interface DroppingOddsEvent {
   currentOdds: number | null
   maxOdds: number | null
   dropPct: number | null
+  /** Our pick on this event vs the move: with / against / none / locked (paywall). */
+  ourRelation?: 'with' | 'against' | 'no_pick' | 'locked'
+  ourPick?: string | null
+  ourSource?: string | null
   /** Analysis attached by the pipeline; absent on roughly half the archive. */
   homeForm: string[]
   awayForm: string[]
@@ -400,6 +404,7 @@ export interface DropVerdict {
 }
 
 export interface DroppingOddsResponse {
+  comparison?: { with: number; against: number; no_pick: number }
   date: string | null
   events: DroppingOddsEvent[]
   sportCounts: Record<string, number>
@@ -526,6 +531,8 @@ export interface TopPick {
   closingApprox?: boolean | null
   closingMarket?: TopOddsMarket | null
   clvPct?: number | null
+  oddsMove?: OddsMove | null
+  teamNews?: TeamNews | null
   withdrawReason?: string | null
   withdrawKind?: 'availability' | 'price' | null
   withdrawnAt?: string | null
@@ -640,6 +647,8 @@ export interface FanPick {
   side?: 'home' | 'away'
   team?: string
   fanPct?: number
+  oddsMove?: OddsMove | null
+  teamNews?: TeamNews | null
   votes?: number
   sofascoreUrl?: string | null
   odds?: { home: number | null; draw: number | null; away: number | null }
@@ -700,6 +709,8 @@ export interface WeekendLeg {
   kickoff: string | null
   status: 'pending' | 'won' | 'lost' | 'withdrawn'
   withdrawnReason?: string | null
+  oddsMove?: OddsMove | null
+  teamNews?: TeamNews | null
   locked?: boolean
   source?: 'top' | 'fan' | 'top+fan'
   league?: string

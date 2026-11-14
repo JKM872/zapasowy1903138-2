@@ -24,6 +24,7 @@ export default function DroppingOddsPage() {
   // Off by default: on a typical day only ~1 in 7 moves sits in a segment that
   // held up, and hiding the rest without being asked would look like missing data.
   const [onlyWorth, setOnlyWorth] = useState(false)
+  const [compare, setCompare] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dropping-odds', date ?? 'latest', sport],
@@ -36,9 +37,12 @@ export default function DroppingOddsPage() {
 
   const allEvents = data?.events ?? []
   const worthCount = allEvents.filter(e => e.verdict?.verdict === 'warto').length
-  const events = onlyWorth
-    ? allEvents.filter(e => e.verdict?.verdict === 'warto')
-    : allEvents
+  const ourCount = allEvents.filter(e => e.ourRelation && e.ourRelation !== 'no_pick').length
+  const events = compare
+    ? allEvents.filter(e => e.ourRelation && e.ourRelation !== 'no_pick')
+    : onlyWorth
+      ? allEvents.filter(e => e.verdict?.verdict === 'warto')
+      : allEvents
   const summary = data?.summary
   const sportEntries = Object.entries(data?.sportCounts ?? {})
     .sort((a, b) => b[1] - a[1])
@@ -167,11 +171,11 @@ export default function DroppingOddsPage() {
       {allEvents.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={() => setOnlyWorth(false)}
-            aria-pressed={!onlyWorth}
+            onClick={() => { setOnlyWorth(false); setCompare(false) }}
+            aria-pressed={!onlyWorth && !compare}
             className={cn(
               'rounded-md border px-3 py-1.5 text-sm transition-colors',
-              !onlyWorth
+              !onlyWorth && !compare
                 ? 'border-primary bg-primary text-primary-foreground font-semibold'
                 : 'border-border text-muted-foreground hover:bg-accent',
             )}
@@ -180,12 +184,12 @@ export default function DroppingOddsPage() {
             <span className="ml-1.5 text-[10px] tabular-nums opacity-70">{allEvents.length}</span>
           </button>
           <button
-            onClick={() => setOnlyWorth(true)}
-            aria-pressed={onlyWorth}
+            onClick={() => { setOnlyWorth(true); setCompare(false) }}
+            aria-pressed={onlyWorth && !compare}
             disabled={worthCount === 0}
             className={cn(
               'rounded-md border px-3 py-1.5 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50',
-              onlyWorth
+              onlyWorth && !compare
                 ? 'border-emerald-500 bg-emerald-500 text-white font-semibold'
                 : 'border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10',
             )}
@@ -193,13 +197,35 @@ export default function DroppingOddsPage() {
             Historically profitable only
             <span className="ml-1.5 text-[10px] tabular-nums opacity-80">{worthCount}</span>
           </button>
+          <button
+            onClick={() => setCompare(true)}
+            aria-pressed={compare}
+            className={cn(
+              'rounded-md border px-3 py-1.5 text-sm transition-colors',
+              compare
+                ? 'border-sky-500 bg-sky-500 text-white font-semibold'
+                : 'border-sky-500/40 text-sky-500 hover:bg-sky-500/10',
+            )}
+          >
+            Compare with our picks
+            <span className="ml-1.5 text-[10px] tabular-nums opacity-80">{ourCount}</span>
+          </button>
+          {compare && data?.comparison && (
+            <span className="text-xs text-muted-foreground">
+              Our pick with the move: <b className="text-emerald-500">{data.comparison.with}</b>
+              {' · '}against: <b className="text-rose-500">{data.comparison.against}</b>
+              {' · '}no pick: {data.comparison.no_pick}
+            </span>
+          )}
         </div>
       )}
 
       {!isLoading && events.length === 0 && (
         <Card>
           <CardContent className="py-12 text-center text-sm text-muted-foreground">
-            {onlyWorth
+            {compare
+              ? 'We have no TOP, Fan Favourites or Grade A/B pick on any of these drops.'
+              : onlyWorth
               ? 'No drop today falls into a historically profitable segment. That is a common, honest result. Not every day has an edge.'
               : 'No events for the selected day and sport.'}
           </CardContent>
@@ -210,7 +236,7 @@ export default function DroppingOddsPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              {onlyWorth ? 'Drops in profitable segments' : 'All drops'}
+              {compare ? 'Drops on matches we picked' : onlyWorth ? 'Drops in profitable segments' : 'All drops'}
             </CardTitle>
             <CardDescription>
               {onlyWorth
@@ -274,6 +300,22 @@ function VerdictLine({ verdict: v }: { verdict: DropVerdict }) {
   )
 }
 
+function OurPickLine({ event: e }: { event: DroppingOddsEvent }) {
+  if (!e.ourRelation || e.ourRelation === 'no_pick') return null
+  if (e.ourRelation === 'locked') {
+    return <p className="text-xs text-muted-foreground">We have a pick on this match (subscribers see whether it is with or against the move).</p>
+  }
+  const withMove = e.ourRelation === 'with'
+  return (
+    <p className={cn('text-xs', withMove ? 'text-emerald-500' : 'text-rose-500')}>
+      Our pick: <b>{e.ourPick}</b>{e.ourSource ? ` (${e.ourSource})` : ''}, {withMove
+        ? 'with the move: the market agrees'
+        : 'against the move: the market backs the other side'}
+    </p>
+  )
+}
+
+
 function DropRow({ event: e }: { event: DroppingOddsEvent }) {
   const drop = e.dropPct ?? 0
   // 20% is where the archive thins out, so it is the line worth marking.
@@ -320,6 +362,7 @@ function DropRow({ event: e }: { event: DroppingOddsEvent }) {
       )}
 
       {e.verdict && <VerdictLine verdict={e.verdict} />}
+      <OurPickLine event={e} />
 
       {/* Everything the pipeline already knew about this event. Absent on about
           half the archive, so it is shown only when present. */}
