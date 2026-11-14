@@ -1,6 +1,6 @@
 {
   "date": "2026-11-14",
-  "generated_at": "2026-11-14T16:02:33.205939+00:00",
+  "generated_at": "2026-11-14T20:03:53.882965+00:00",
   "issues": [
     {
       "level": "ALERT",
@@ -21,26 +21,6 @@
       "meaning": "W logu jest wyjątek Pythona (run mógł być zielony).",
       "action": "Zobacz Traceback w logu i popraw kod.",
       "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43567860117/job/132365542465"
-    },
-    {
-      "level": "ALERT",
-      "workflow": "daily_digest.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
-    },
-    {
-      "level": "ALERT",
-      "workflow": "coupons.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
     },
     {
       "level": "ALERT",
@@ -111,51 +91,46 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 43563339367,
+        "databaseId": 43630163115,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43563339367"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43630163115"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 5,
+      "runs_today": 6,
       "issues": [],
       "run": {
-        "databaseId": 43601195995,
+        "databaseId": 43623937187,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43601195995"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43623937187"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "daily_digest.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 43626696531,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43626696531"
+      }
     },
     {
       "workflow": "fan_favourites.yml",
-      "runs_today": 4,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 43601195976,
+        "databaseId": 43629999589,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43601195976"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43629999589"
       }
     },
     {
@@ -182,19 +157,14 @@
     },
     {
       "workflow": "coupons.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "coupons.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 43617097009,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43617097009"
+      }
     },
     {
       "workflow": "check_results.yml",
@@ -209,13 +179,13 @@
     },
     {
       "workflow": "top_live.yml",
-      "runs_today": 8,
+      "runs_today": 9,
       "issues": [],
       "run": {
-        "databaseId": 43613068168,
+        "databaseId": 43624904244,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43613068168"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43624904244"
       }
     }
   ],
@@ -258,7 +228,7 @@
     }
   ],
   "counts": {
-    "ALERT": 5,
+    "ALERT": 3,
     "WARN": 0
   }
 }
