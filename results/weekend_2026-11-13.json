@@ -102,6 +102,107 @@
    "status": "lost",
    "adjusted": false,
    "slot": "S1"
+  },
+  {
+   "id": "S2",
+   "legs": [
+    {
+     "id": "football|2026-11-14|Onze Créateurs|Stade Malien",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-14",
+     "league": "Mali – Première Division",
+     "match": "Onze Créateurs vs Stade Malien",
+     "home": "Onze Créateurs",
+     "away": "Stade Malien",
+     "kickoff": "2026-11-14T18:00:00Z",
+     "side": "away",
+     "pick": "Stade Malien",
+     "price": 3.3,
+     "bookmaker": "oddssafari",
+     "modelProb": 0.737,
+     "fanPct": 81.0,
+     "impliedPct": 30.3,
+     "edgePct": 43.4,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 17530447
+    },
+    {
+     "id": "volleyball|2026-11-14|Bisamberg K|St. Polten K",
+     "source": "fan",
+     "sport": "volleyball",
+     "date": "2026-11-14",
+     "league": "",
+     "match": "Bisamberg K vs St. Polten K",
+     "home": "Bisamberg K",
+     "away": "St. Polten K",
+     "kickoff": "2026-11-14T18:00:00Z",
+     "side": "away",
+     "pick": "St. Polten K",
+     "price": 2.15,
+     "bookmaker": "pinnacle",
+     "modelProb": null,
+     "fanPct": 87.0,
+     "impliedPct": 46.5,
+     "edgePct": 40.5,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "grade": "C",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 16506205
+    },
+    {
+     "id": "football|2026-11-14|Atl. Nacional|Once Caldas",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-14",
+     "league": "",
+     "match": "Atl. Nacional vs Once Caldas",
+     "home": "Atl. Nacional",
+     "away": "Once Caldas",
+     "kickoff": "2026-11-14T18:30:00Z",
+     "side": "home",
+     "pick": "Atl. Nacional",
+     "price": 2.39,
+     "bookmaker": "pinnacle",
+     "modelProb": null,
+     "fanPct": 80.0,
+     "impliedPct": 41.8,
+     "edgePct": 38.2,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "B",
+     "availability": "warn",
+     "availabilityNote": "Key absences: J. M. Rengifo* (national_team), I. Poveda (Physical Discomfort), J. Campuzano (Ankle Injury)",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": null
+    }
+   ],
+   "combinedOdds": 16.96,
+   "combinedModelProb": null,
+   "combinedImpliedPct": 5.9,
+   "status": "pending",
+   "adjusted": false,
+   "slot": "S2"
   }
  ],
  "days": [
@@ -110,7 +211,7 @@
   "2026-11-15"
  ],
  "generatedAt": "2026-11-13T15:18:45Z",
- "updatedAt": "2026-11-14T02:41:24Z",
+ "updatedAt": "2026-11-14T14:04:58Z",
  "note": "Accumulators multiply the bookmaker margin with every leg and lose more often than singles: three legs at ~60% each land about one time in five. Backtest on two past weekends: 0 of 3 settled slips won with the odds limits, 1 of 6 without (ROI -100% / -41%). Stake small (0.5% of bankroll) or skip.",
  "stakePct": 0.5,
  "maxLegs": 3
