@@ -129,7 +129,9 @@
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": 0
+  "netKey": 0,
+  "aiSummary": "Chicago Bulls are missing C. Wilson and D.",
+  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|True"
  },
  "basketball|New Orleans Pelicans|Memphis Grizzlies": {
   "checkedAt": "2026-11-14T08:25:26.339605+00:00",
@@ -250,7 +252,9 @@
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": 0
+  "netKey": 0,
+  "aiSummary": "New Orleans faces significant absences with D. Murray out and several key players doubtful, while Memphis's missing players are less impactful.",
+  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|True"
  },
  "basketball|Duke|Siu Edwardsville": {
   "checkedAt": "2026-11-14T08:25:26.339605+00:00",
@@ -533,7 +537,9 @@
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": 0
+  "netKey": 0,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
  },
  "basketball|MKE Ankaragucu|Darussafaka": {
   "checkedAt": "2026-11-14T13:44:39.477723+00:00",
@@ -584,7 +590,9 @@
   "side": "home",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
  },
  "basketball|Illiabum|Ginasio Olhanense": {
   "checkedAt": "2026-11-14T08:25:26.339605+00:00",
@@ -651,75 +659,218 @@
   "side": "away",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
  },
  "basketball|Galitos Barreiro|Sampaense": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.sofascore.com/basketball/match/sampaense-basket-galitos-basquetebol/RYvbsDZyc",
+   "https://www.xscores.com/basketball/match/galitos-barreiro-vs-sampaense/14-11-2026/2874284",
+   "https://basketball.eurobasket.com/team/Galitos-Barreiro/10283",
+   "https://sporteden.com/basketball/game/498957/galitos-barreiro-vs-sampaense",
+   "https://www.flashscoreusa.com/game/basketball/galitos-barreiro-MTUQb8Sq/sampaense-6qECHEOd/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Cartagena|Clavijo": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.fondosur.es/2026/11/12/proximo-rival-del-cebe-reina-proteinas-clavijo/",
+   "https://www.fondosur.es/2026/11/03/la-salud-cartagena-cb-un-mes-de-resistencia-y-lesiones/",
+   "https://www.larioja.com/deportes/baloncesto/clavijo-busca-cartagena-tranquilidad-20261113085639-nt.html",
+   "https://beta.competiciones.feb.es/segunda-feb/partido/2536340",
+   "https://www.sofascore.com/basketball/match/basket-cartagena-cb-clavijo/XYRbsCYYd"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Ourense|Caja 87": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [
+   {
+    "name": "Javi Nicolau",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury"
+   },
+   {
+    "name": "Marc García",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "limited physically"
+   },
+   {
+    "name": "Jan Zidek",
+    "importance": "other",
+    "status": "out",
+    "reason": "fell out of training"
+   }
+  ],
+  "away": [
+   {
+    "name": "Burjanadze",
+    "importance": "other",
+    "status": "out",
+    "reason": "coach will not count him in squad"
+   },
+   {
+    "name": "Sergio Cecilia",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "appears encorsetado (possible injury/fitness issue)"
+   }
+  ],
+  "sources": [
+   "https://www.diariodesevilla.es/deportes/caja-87-busca-reencontrarse-paco-paz-ourense-primera-feb_0_2008494677.html",
+   "https://www.lavozdegalicia.es/noticia/ourense/2026/11/11/cob-reune-efectivos-despues-84-entrenamientos/0003_202611O11C5991.htm",
+   "https://www.laregion.es/zona-cob/cob-no-quiere-perder-silla_1_20261114-4492519.html",
+   "https://www.clubourensebaloncesto.com/en/o-cob-recibe-o-insolac-caja-87-nunha-tarde-de-baloncesto-e-magosto-no-paco-paz/",
+   "https://www.laregion.es/zona-cob/directo-cob-recibe-caja-87_1_20261114-4492898.html"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 1
  },
  "basketball|Army|St. Thomas (Minn.)": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://betiq.teamrankings.com/college-basketball/matchups/tommies-black-knights-2026-11-14/injury-report/",
+   "https://bvmsports.com/2026/11/13/army-basketball-hosts-st-thomas-in-christl-arena-rematch/",
+   "https://www.thelowpost.com/teams/army/games/vs-stthomasmn-2026-11-14",
+   "https://goarmywestpoint.com/game-center/20251",
+   "https://betiq.teamrankings.com/college-basketball/matchups/tommies-black-knights-2026-11-14/player-stats/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Maine Black Bears|Drexel": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.covers.com/sport/basketball/ncaab/matchup/384607",
+   "https://www.teamrankings.com/ncaa-basketball/matchup/dragons-black-bears-2026-11-14/injuries",
+   "https://www.covers.com/sport/basketball/ncaab/teams/main/maine-black-bears/injuries",
+   "https://theoddsboard.com/picks/drexel-dragons-vs-maine-black-bears-nov-14-2026/",
+   "https://goblackbears.com/news/2026/11/13/mens-basketball-preview-mens-basketball-hosts-drexel-on-saturday-afternoon"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|MoraBanc Andorra|Tenerife": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
-  "board": "ok",
-  "top_block": false,
-  "unknown": true,
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "home": [
+   {
+    "name": "Rafa Luz",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury – progressive return‑to‑play process; will not make it in time"
+   },
+   {
+    "name": "Leon Radošević",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "injury – removed from list, doubtful"
+   }
+  ],
+  "away": [
+   {
+    "name": "Ethan Happ",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury – luxation of tendon in finger, estimated three‑month absence"
+   },
+   {
+    "name": "Rokas Giedraitis",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury – long‑term injury"
+   },
+   {
+    "name": "Xabi López‑Arostegui",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "injury – doubtful"
+   }
+  ],
+  "sources": [
+   "https://dailyil.com/en/team/acb-and/?view=source",
+   "https://www.superbasketcanarias.info/la-laguna-tenerife-busca-prolongar-ante-la-penya-las-buenas-sensaciones-de-la-eurocup/?view=source",
+   "https://basketballsphere.com/en/andorra-vs-tenerife-prediction-odds-liga-endesa-november-14-2026/",
+   "https://cbcanarias.net/2026/11/13/una-salida-trampa-en-la-despedida-de-marce/",
+   "https://news.bet365.es/es-es/article/andorra-vs-tenerife-plantillas-horario-donde-ver/2026111316241678231"
+  ],
+  "lineup": null,
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 1,
+  "aiSummary": "Tenerife's absences include star Ethan Happ and key player Rokas Giedraitis, which significantly weakens our pick. In contrast, Andorra's missing key player Rafa Luz is a notable loss for the home side.",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "basketball|Ramat Hasharon|Migdal Haemek": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
-  "source": null,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.xscores.com/basketball/match/as-ramat-hasharon-vs-hapoel-migdal-haemek-jezreel/14-11-2026/3001011",
+   "https://www.thesportsdb.com/event/2607310-hapoel-migdal-haemek-vs-a.s.-ramat-hasharon",
+   "https://www.flashscore.com/match/basketball/hapoel-migdal-haemek-dAyQo0Ti/ramat-hasharon-MkMgsJWg/",
+   "https://kadario.com/zh/basketball/233-liga-leumit/match/669709/ramat-hasharon-vs-migdal-haemek",
+   "https://www.sofascore.com/basketball/team/as-ramat-hasharon/328808"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Hamburg|Wurzburg": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -727,10 +878,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "basketball|Florida Gulf Coast W|Florida Atlantic W": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -739,7 +890,7 @@
   "unknown": true
  },
  "basketball|Evansville|Miami (Ohio)": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -748,7 +899,7 @@
   "unknown": true
  },
  "basketball|BC Roma|Verona": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -756,7 +907,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "basketball|Denver|Wyoming": {
   "checkedAt": "2026-11-14T08:25:26.339605+00:00",
@@ -850,7 +1001,7 @@
   "unknown": true
  },
  "handball|Kielce W|Koszalin W": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -859,7 +1010,7 @@
   "unknown": true
  },
  "handball|Erlangen|Hamburg": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -867,10 +1018,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "handball|Zug W|Neistin W (Fai)": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -879,7 +1030,7 @@
   "unknown": true
  },
  "handball|Cuenca|Caserio Ciudad Real": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -887,10 +1038,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "handball|Contazara Zaragoza|Amenabar": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1074,7 +1225,7 @@
   "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
  },
  "hockey|Guildford|Sheffield": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1083,16 +1234,18 @@
   "unknown": true
  },
  "hockey|Ajoie|Davos": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "hockey|Zurich|Zug": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1100,10 +1253,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "hockey|Fife|Glasgow": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1292,7 +1445,9 @@
   "side": "away",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
  },
  "volleyball|Altino W|Leonessa Altamura W": {
   "checkedAt": "2026-11-14T08:25:26.339605+00:00",
@@ -1313,7 +1468,7 @@
   "unknown": true
  },
  "volleyball|Perugia|Trentino": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1321,10 +1476,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Slepsk Suwalki|Kedzierzyn-Kozle": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1332,7 +1487,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Verona|Lube Civitanova": {
   "checkedAt": "2026-11-14T08:25:26.339605+00:00",
@@ -1346,7 +1501,7 @@
   "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
  },
  "volleyball|Odolena Voda|Liberec": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1355,7 +1510,7 @@
   "unknown": true
  },
  "volleyball|Union Napoli|Reggio Emilia": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1364,7 +1519,7 @@
   "unknown": true
  },
  "volleyball|Plessis Robinson|Poitiers": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1372,10 +1527,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Cambrai|St-Quentin": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1383,10 +1538,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|USC Munster W|Dresdner SC W": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1394,10 +1549,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Haching Munchen|Karlsruhe": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1405,10 +1560,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T08:25:26.339605+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Somas Activia W|Sudosa-Desto W": {
-  "checkedAt": "2026-11-14T08:25:26.339605+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -2416,7 +2571,7 @@
   "unknown": true
  },
  "football|Noblejas|Quintanar del Rey": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2425,18 +2580,129 @@
   "unknown": true
  },
  "football|CA Atlanta|Estudiantes BsAs": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "home",
-  "board": "ok",
-  "top_block": false,
-  "unknown": true,
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "home": [
+   {
+    "name": "T. Rojas",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
+   {
+    "name": "F. Cáceres",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "away": [],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "J. Rago",
+     "star": false
+    },
+    {
+     "name": "M. García",
+     "star": false
+    },
+    {
+     "name": "R. Moreira",
+     "star": false
+    },
+    {
+     "name": "P. Ostachuk",
+     "star": false
+    },
+    {
+     "name": "R. Sosa",
+     "star": false
+    },
+    {
+     "name": "B. Rivero",
+     "star": false
+    },
+    {
+     "name": "F. Álvarez",
+     "star": false
+    },
+    {
+     "name": "F. Romero",
+     "star": true
+    },
+    {
+     "name": "I. Rodríguez",
+     "star": false
+    },
+    {
+     "name": "T. C. Ponce",
+     "star": false
+    },
+    {
+     "name": "A. G. Quintana",
+     "star": false
+    }
+   ],
+   "away": [
+    {
+     "name": "J. M. Lungarzo",
+     "star": false
+    },
+    {
+     "name": "J. Benítez",
+     "star": false
+    },
+    {
+     "name": "A. Berizovsky",
+     "star": false
+    },
+    {
+     "name": "N. Torres",
+     "star": false
+    },
+    {
+     "name": "F. Quinteros",
+     "star": false
+    },
+    {
+     "name": "F. Sena",
+     "star": false
+    },
+    {
+     "name": "R. Melo",
+     "star": true
+    },
+    {
+     "name": "F. Ardiles",
+     "star": false
+    },
+    {
+     "name": "J. Correa",
+     "star": true
+    },
+    {
+     "name": "E. Acosta",
+     "star": true
+    },
+    {
+     "name": "D. Rostagno",
+     "star": false
+    }
+   ]
+  },
+  "board": "drop",
+  "top_block": true,
+  "netStars": 2,
+  "netKey": 2,
+  "aiSummary": "CA Atlanta will miss star players T. Rojas and F.",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|True"
  },
  "football|Onze Créateurs|Stade Malien": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -2444,21 +2710,119 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|VVV Venlo|FC Eindhoven": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "Y. Schoonderwaldt",
+     "star": false
+    },
+    {
+     "name": "R. Vullers",
+     "star": false
+    },
+    {
+     "name": "E. Clancy",
+     "star": false
+    },
+    {
+     "name": "G. Blancquart",
+     "star": true
+    },
+    {
+     "name": "L. d. Blok",
+     "star": true
+    },
+    {
+     "name": "A. Verstraeten",
+     "star": false
+    },
+    {
+     "name": "T. Schenkhuizen",
+     "star": false
+    },
+    {
+     "name": "E. Zuliani",
+     "star": false
+    },
+    {
+     "name": "I. M'Hand",
+     "star": false
+    },
+    {
+     "name": "T. Janssen",
+     "star": false
+    },
+    {
+     "name": "M. Tsigkas",
+     "star": true
+    }
+   ],
+   "away": [
+    {
+     "name": "J. Borgmans",
+     "star": true
+    },
+    {
+     "name": "L. Netten",
+     "star": false
+    },
+    {
+     "name": "R. Boon",
+     "star": false
+    },
+    {
+     "name": "O. Renfrum",
+     "star": true
+    },
+    {
+     "name": "R. v. d. Riet",
+     "star": true
+    },
+    {
+     "name": "R. Buifrahi",
+     "star": false
+    },
+    {
+     "name": "G. Beaumont",
+     "star": false
+    },
+    {
+     "name": "X. Blomme",
+     "star": false
+    },
+    {
+     "name": "V. Besuijen",
+     "star": false
+    },
+    {
+     "name": "N. Munsters",
+     "star": false
+    },
+    {
+     "name": "S. Baartmans",
+     "star": false
+    }
+   ]
+  },
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "netStars": 0,
+  "netKey": 0,
+  "aiSummary": "No absences reported for either side.",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|True"
  },
  "football|CD Maldonado|CA Cerro": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2466,10 +2830,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Portugal|Denmark": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "home",
@@ -2479,6 +2843,12 @@
     "importance": "other",
     "status": "out",
     "reason": "yellow_card_accumulation_suspension"
+   },
+   {
+    "name": "N. Tavares",
+    "importance": "other",
+    "status": "out",
+    "reason": "Muscle Injury"
    },
    {
     "name": "R. Leão",
@@ -2513,8 +2883,8 @@
   "top_block": false,
   "netStars": 0,
   "netKey": 1,
-  "aiSummary": "Portugal misses key forward R. Leão to a hamstring injury, while Denmark lacks three players including A.",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummary": "Portugal's absence of key player R. Leão due to a hamstring injury is significant, while Denmark's missing players are less impactful.",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Olympique Marseille W|PSG W": {
   "checkedAt": "2026-11-14T09:54:50.359536+00:00",
@@ -2588,7 +2958,9 @@
   "side": "away",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "football|Unión Coclé|CAI de La Chorrera": {
   "checkedAt": "2026-11-14T09:54:50.359536+00:00",
@@ -2715,7 +3087,7 @@
   "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "basketball|Joventut|Zaragoza": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2723,7 +3095,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "basketball|Braga|Oliveirense": {
   "checkedAt": "2026-11-14T13:44:39.477723+00:00",
@@ -2891,7 +3263,7 @@
   "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
  },
  "football|Colon|Midland": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2899,7 +3271,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Soma Spor|Arnavutkoy Bl.": {
   "checkedAt": "2026-11-14T09:54:50.359536+00:00",
@@ -3172,7 +3544,7 @@
   "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "football|Atl. Nacional|Once Caldas": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "home",
@@ -3229,7 +3601,7 @@
   "netStars": 1,
   "netKey": 3,
   "aiSummary": "Atl. Nacional is missing star J.",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Atletico Atlanta|CA Estudiantes": {
   "checkedAt": "2026-11-14T09:54:50.359536+00:00",
@@ -3520,15 +3892,113 @@
   "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "football|De Graafschap|TOP Oss": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "T. Wieggers",
+     "star": false
+    },
+    {
+     "name": "J. Wieckhoff",
+     "star": false
+    },
+    {
+     "name": "R. Besselink",
+     "star": false
+    },
+    {
+     "name": "T. Kok",
+     "star": false
+    },
+    {
+     "name": "L. Schoppema",
+     "star": false
+    },
+    {
+     "name": "C. Leemans",
+     "star": false
+    },
+    {
+     "name": "N. Martens",
+     "star": true
+    },
+    {
+     "name": "D. Warmerdam",
+     "star": true
+    },
+    {
+     "name": "M. Diemers",
+     "star": true
+    },
+    {
+     "name": "F. De Jong",
+     "star": false
+    },
+    {
+     "name": "B. v. Zijl",
+     "star": false
+    }
+   ],
+   "away": [
+    {
+     "name": "M. Havekotte",
+     "star": false
+    },
+    {
+     "name": "A. Henry",
+     "star": false
+    },
+    {
+     "name": "M. Mariani",
+     "star": false
+    },
+    {
+     "name": "D. Vianello",
+     "star": true
+    },
+    {
+     "name": "J. Kuijpers",
+     "star": false
+    },
+    {
+     "name": "R. van der Venne",
+     "star": false
+    },
+    {
+     "name": "M. Esajas",
+     "star": true
+    },
+    {
+     "name": "J. Mathieu",
+     "star": false
+    },
+    {
+     "name": "M. d. Lannoy",
+     "star": false
+    },
+    {
+     "name": "A. Visser",
+     "star": false
+    },
+    {
+     "name": "M. Hinoke",
+     "star": true
+    }
+   ]
+  },
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "netStars": 0,
+  "netKey": 0,
+  "aiSummary": "No absences reported for either side.",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|True"
  },
  "football|Stockport|Reading": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -3598,7 +4068,7 @@
   "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
  },
  "football|Coquimbo|O'Higgins": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "home",
@@ -3618,7 +4088,7 @@
   "netStars": -1,
   "netKey": -1,
   "aiSummary": "O'Higgins is missing star player N. Garrido due to a muscle injury, while Coquimbo has no reported absences.",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Waregem K|Gent K": {
   "checkedAt": "2026-11-14T09:54:50.359536+00:00",
@@ -3798,7 +4268,7 @@
   "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "football|San Francisco|Veraguas": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -3806,7 +4276,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Poole|Taunton": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -4438,7 +4908,7 @@
   "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "tennis|Branchetti G.|Bruna N.": {
-  "checkedAt": "2026-11-14T09:54:50.359536+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -4446,7 +4916,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Spor Toto|Istanbul GSK": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -4515,7 +4985,7 @@
   "aiSummarySig": "2026-11-14T09:54:50.359536+00:00|False"
  },
  "basketball|Dinamo Zagreb|Samobor": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -4523,7 +4993,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "basketball|Taurage|Lietkabelis": {
   "checkedAt": "2026-11-14T13:44:39.477723+00:00",
@@ -4614,7 +5084,7 @@
   "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
  },
  "football|Íbis|Ipojuca": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -4622,7 +5092,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Colon Santa Fe|Ferrocarril Midland": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -5005,7 +5475,7 @@
   "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
  },
  "football|Temperley|Ciudad Bolivar": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -5013,7 +5483,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|CD Ourense|Mérida AD": {
   "checkedAt": "2026-11-14T13:44:39.477723+00:00",
@@ -5093,7 +5563,7 @@
   "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
  },
  "football|RFC Meux|Charleroi Marchienne": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -5101,10 +5571,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Romania|Poland": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "away",
@@ -5161,7 +5631,7 @@
   "netStars": 0,
   "netKey": 1,
   "aiSummary": "Poland's absences include key defenders Bednarek and Mońka, as well as goalkeeper Grabara, which significantly impacts their defensive stability. Romania's missing key players Marin and Munteanu also hurt their squad depth, but Poland's defensive gaps are more critical for our pick.",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Wasl Dubai|Al Nasr Dubai": {
   "checkedAt": "2026-11-14T13:44:39.477723+00:00",
@@ -5417,7 +5887,7 @@
   "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
  },
  "football|Roda Kerkrade|Volendam": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -5425,7 +5895,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "football|Fremad Amager|Brabrand IF": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -6015,7 +6485,7 @@
   "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
  },
  "handball|Sonderjyske|Ribe-Esbjerg": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -6023,7 +6493,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "handball|Puente Genil|Morrazo Cangas": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -6048,7 +6518,7 @@
   "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
  },
  "handball|Bergischer|Eisenach": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -6056,10 +6526,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "handball|Rhein-Neckar|Lemgo": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -6067,7 +6537,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "handball|Malaga W|Oldenburg W": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -6169,7 +6639,7 @@
   "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
  },
  "volleyball|Bisamberg K|St. Polten K": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -6177,10 +6647,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Kladno|Ceske Budejovice": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -6188,10 +6658,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Narbonne|Nice": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -6199,7 +6669,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "volleyball|Montes Claros|Sesi": {
   "checkedAt": "2026-11-14T12:10:00.898786+00:00",
@@ -6213,7 +6683,7 @@
   "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
  },
  "volleyball|Panathinaikos|Olympiakos": {
-  "checkedAt": "2026-11-14T12:10:00.898786+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -6221,7 +6691,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T12:10:00.898786+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  },
  "tennis|Esposito Cogan A.|Paskauskas K.": {
   "checkedAt": "2026-11-14T13:44:39.477723+00:00",
@@ -6246,7 +6716,7 @@
   "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
  },
  "volleyball|Chamalierois K|Evreux K": {
-  "checkedAt": "2026-11-14T13:44:39.477723+00:00",
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -6254,6 +6724,87 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-14T13:44:39.477723+00:00|False"
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
+ },
+ "basketball|Slask Wroclaw|Zielona Gora": {
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
+ },
+ "football|Heist|Hoogstraten VV": {
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
+ },
+ "football|Sint Maarten|French Guiana": {
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
+ },
+ "handball|HSG Graz|Alpla Hard": {
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": "sofascore",
+  "confirmed": true,
+  "side": "away",
+  "home": [],
+  "away": [
+   {
+    "name": "D. Babic",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   }
+  ],
+  "sources": null,
+  "lineup": {
+   "home": [],
+   "away": []
+  },
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 1,
+  "aiSummary": "Alpla Hard's star player D. Babic is confirmed to be on the bench, while HSG Graz has no reported absences.",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|True"
+ },
+ "handball|Rudar|Bjelovar": {
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
+ },
+ "volleyball|Karadjordje Topola|Vojvodina": {
+  "checkedAt": "2026-11-14T17:59:07.648004+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-14T17:59:07.648004+00:00|False"
  }
 }
