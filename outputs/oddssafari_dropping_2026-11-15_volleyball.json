@@ -1,0 +1,2199 @@
+{
+  "meta": {
+    "generated_at": "2026-11-15T07:00:16.105050+01:00",
+    "target_date": "2026-11-15",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 12,
+      "qualified": 8
+    },
+    "enrichment_status_counts": {
+      "enriched": 3,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 5
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 4
+    },
+    "odds_change_counts": {
+      "down": 1,
+      "up": 0,
+      "flat": 1,
+      "new": 10
+    },
+    "elapsed_seconds": 517.4,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "China - CVL",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/china/cvl/beijing-vs-qingdao/19173272?MarketTypeID=701",
+      "match_id": "19173272",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Beijing",
+      "away_team": "Qingdao",
+      "event_date": "15/11",
+      "event_time": "07:00",
+      "outcome": "2",
+      "open_odds": 3.2,
+      "current_odds": 1.6,
+      "drop_pct": 50.0,
+      "max_odds": 1.62,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 1.0,
+        "sofascore_event_id": 17489340,
+        "home_team": "Beijing",
+        "away_team": "Qingdao",
+        "sport": "volleyball",
+        "league": "China - CVL",
+        "match_time": "07:00",
+        "sofascore_home_team_id": 213166,
+        "sofascore_away_team_id": 1158425,
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "15.01.26",
+            "home": "Qingdao",
+            "away": "Beijing Baic Motor",
+            "score": "3:0",
+            "winner": "home"
+          },
+          {
+            "date": "18.12.25",
+            "home": "Beijing Baic Motor",
+            "away": "Qingdao",
+            "score": "1:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "15.01.26",
+        "last_h2h_score": "3:0",
+        "last_h2h_home": "Qingdao",
+        "last_h2h_away": "Beijing Baic Motor",
+        "sofascore_home_win_prob": 33,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 67,
+        "sofascore_total_votes": 43,
+        "forebet_prediction": "1",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "3-1",
+        "forebet_avg_goals": 46.0,
+        "forebet_home_prob": 53,
+        "forebet_away_prob": 47
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Bulgaria - Superliga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga/metalurg-pernik-vs-montana/19173196?MarketTypeID=701",
+      "match_id": "19173196",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Metalurg Pernik",
+      "away_team": "Montana",
+      "event_date": "15/11",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 2.63,
+      "current_odds": 1.9,
+      "drop_pct": 28.0,
+      "max_odds": 1.92,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/montana-xhWqqcLA/pernik-p2ZvP5Sg/?mid=MXW5x67M",
+      "livesport_confidence": 0.667,
+      "enrichment": {
+        "home_team": "Pernik",
+        "away_team": "Montana",
+        "match_time": "15.11.2026 15:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.2,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "1",
+        "forebet_probability": 67.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "3-1",
+        "forebet_avg_goals": 44.7,
+        "sofascore_home_win_prob": 25,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 75,
+        "sofascore_total_votes": 40,
+        "h2h_last5": [
+          {
+            "date": "06.11.26",
+            "home": "CSKA Sofia",
+            "away": "Pernik",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "06.11.26 CSKA Sofia 3-1 Pernik"
+          },
+          {
+            "date": "03.11.26",
+            "home": "Pernik",
+            "away": "Dunav",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "03.11.26 Pernik 3-0 Dunav"
+          },
+          {
+            "date": "30.10.26",
+            "home": "Pirin Razlog",
+            "away": "Pernik",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "30.10.26 Pirin Razlog 3-1 Pernik"
+          },
+          {
+            "date": "23.10.26",
+            "home": "Beroe",
+            "away": "Pernik",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "23.10.26 Beroe 3-0 Pernik"
+          },
+          {
+            "date": "28.03.26",
+            "home": "Dunav",
+            "away": "Pernik",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "28.03.26 Dunav 3-0 Pernik"
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true,
+        "forebet_home_prob": 67,
+        "forebet_away_prob": 33
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Turkey - Sultanlar Ligi (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/turkey/sultanlar-ligi-w/kuzeyboru-vs-ilbank/19173279?MarketTypeID=701",
+      "match_id": "19173279",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Kuzeyboru",
+      "away_team": "Ilbank",
+      "event_date": "15/11",
+      "event_time": "14:00",
+      "outcome": "2",
+      "open_odds": 5.0,
+      "current_odds": 4.12,
+      "drop_pct": 18.0,
+      "max_odds": 4.75,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/sokol-mogilno-vs-bydgoszcz/19937439?MarketTypeID=701",
+      "match_id": "19937439",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Sokol Mogilno",
+      "away_team": "Bydgoszcz",
+      "event_date": "16/11",
+      "event_time": "16:30",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.77,
+      "drop_pct": 16.0,
+      "max_odds": 1.8,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 1.77,
+        "prev_seen_at": "2026-11-13T17:41:11+00:00",
+        "current_odds": 1.77,
+        "change_pct": 0.0,
+        "direction": "flat",
+        "runs_seen": 2,
+        "first_odds": 1.77,
+        "first_seen_at": "2026-11-13T17:41:11+00:00",
+        "change_from_first_pct": 0.0
+      },
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16506968,
+        "sofascore_home_team_id": 379930,
+        "sofascore_away_team_id": 43540,
+        "home_team": "Sokol Mogilno",
+        "away_team": "Bydgoszcz",
+        "sport": "volleyball",
+        "league": "Poland - TAURON Liga (W)",
+        "match_time": "16:30",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "15.01.26",
+            "home": "MKS Sokol Mogilno",
+            "away": "KS Pałac Bydgoszcz II",
+            "score": "3:1",
+            "winner": "home"
+          },
+          {
+            "date": "17.12.25",
+            "home": "KS Pałac Bydgoszcz II",
+            "away": "MKS Sokol Mogilno",
+            "score": "2:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "15.01.26",
+        "last_h2h_score": "3:1",
+        "last_h2h_home": "MKS Sokol Mogilno",
+        "last_h2h_away": "KS Pałac Bydgoszcz II",
+        "sofascore_home_win_prob": 48,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 52,
+        "sofascore_total_votes": 27,
+        "forebet_prediction": "2",
+        "forebet_probability": 69.0,
+        "forebet_exact_score": "1-3",
+        "forebet_avg_goals": 45.7,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 69
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Iran - Super League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/iran/super-league/moghaddam-qazvin-vs-mes-songon/20859920?MarketTypeID=701",
+      "match_id": "20859920",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Moghaddam Qazvin",
+      "away_team": "Mes Songon",
+      "event_date": "18/11",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 1.87,
+      "current_odds": 1.57,
+      "drop_pct": 16.0,
+      "max_odds": 1.57,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "sofascore_event_id": 17087612,
+        "sofascore_home_team_id": 1278343,
+        "sofascore_away_team_id": 1278342,
+        "home_team": "Moghaddam Qazvin",
+        "away_team": "Mes Songon",
+        "sport": "volleyball",
+        "league": "Iran - Super League",
+        "match_time": "12:30",
+        "home_form_home": [
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "sofascore_home_win_prob": 33,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 67,
+        "sofascore_total_votes": 3,
+        "forebet_prediction": "1",
+        "forebet_probability": 69.0,
+        "forebet_exact_score": "3-2",
+        "forebet_avg_goals": 45.7,
+        "forebet_home_prob": 69,
+        "forebet_away_prob": 31
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "International Clubs - Baltic League (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/baltic-league-w/kaunas-vdu-vs-vc-tartu/19173139?MarketTypeID=701",
+      "match_id": "19173139",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Kaunas VDU",
+      "away_team": "VC Tartu",
+      "event_date": "15/11",
+      "event_time": "10:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.7,
+      "drop_pct": 15.0,
+      "max_odds": 1.7,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/kaunas-vJMsg6mi/tartu-ulikool-r7BmV2ep/?mid=zX4aJ0TF",
+      "livesport_confidence": 0.667,
+      "enrichment": {
+        "home_team": "Kaunas K",
+        "away_team": "Tartu Ulikool K",
+        "match_time": "15.11.2026 10:00",
+        "sport": "volleyball",
+        "league": "PL1",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.8,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_odds": 1.68,
+        "draw_odds": null,
+        "away_odds": 2.0,
+        "forebet_prediction": "1",
+        "forebet_probability": 65.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "3-2",
+        "forebet_avg_goals": 46.3,
+        "forebet_home_prob": 65,
+        "forebet_draw_prob": null,
+        "forebet_away_prob": 35,
+        "sofascore_home_win_prob": 83,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 17,
+        "sofascore_total_votes": 23,
+        "h2h_last5": [
+          {
+            "date": "01.03.26",
+            "home": "Tartu Ulikool K",
+            "away": "Kaunas K",
+            "score": "1-3",
+            "winner": "away",
+            "raw": "01.03.26 Tartu Ulikool K 1-3 Kaunas K"
+          },
+          {
+            "date": "17.01.26",
+            "home": "Kaunas K",
+            "away": "Tartu Ulikool K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "17.01.26 Kaunas K 3-0 Tartu Ulikool K"
+          },
+          {
+            "date": "15.11.25",
+            "home": "Tartu Ulikool K",
+            "away": "Kaunas K",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "15.11.25 Tartu Ulikool K 3-1 Kaunas K"
+          },
+          {
+            "date": "01.12.24",
+            "home": "Kaunas K",
+            "away": "Tartu Ulikool K",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "01.12.24 Kaunas K 3-2 Tartu Ulikool K"
+          },
+          {
+            "date": "06.10.24",
+            "home": "Tartu Ulikool K",
+            "away": "Kaunas K",
+            "score": "2-3",
+            "winner": "away",
+            "raw": "06.10.24 Tartu Ulikool K 2-3 Kaunas K"
+          }
+        ],
+        "last_h2h_date": "01.03.26",
+        "last_h2h_score": "1-3",
+        "last_h2h_home": "Tartu Ulikool K",
+        "last_h2h_away": "Kaunas K",
+        "form_advantage": false,
+        "home_season_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "season_home_form": [
+          "L",
+          "L"
+        ],
+        "season_away_form": [
+          "W"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 4,
+        "season_match_count": 4,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home_nf": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_cup_form": [
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_cup_competitions": [
+          "Challenge Cup - Kobiety (Europa)",
+          "Balti Liiga Kobiety (Europa)"
+        ],
+        "away_cup_competitions": [
+          "Balti Liiga Kobiety (Europa)"
+        ],
+        "home_form_competitions": [
+          "Challenge Cup - Kobiety (Europa)",
+          "Balti Liiga Kobiety (Europa)"
+        ],
+        "away_form_competitions": [
+          "Balti Liiga Kobiety (Europa)",
+          "Meistriliiga Kobiety (Estonia)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Iran - Super League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/iran/super-league/mes-rafsanjan-vs-sanatgaran-omid/19874531?MarketTypeID=701",
+      "match_id": "19874531",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Mes Rafsanjan",
+      "away_team": "Sanatgaran Omid",
+      "event_date": "15/11",
+      "event_time": "12:30",
+      "outcome": "2",
+      "open_odds": 1.46,
+      "current_odds": 1.27,
+      "drop_pct": 13.0,
+      "max_odds": 1.27,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Iran - Super League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/iran/super-league/shahdab-yazd-vs-sanatgaran-omid/20859917?MarketTypeID=701",
+      "match_id": "20859917",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Shahdab Yazd",
+      "away_team": "Sanatgaran Omid",
+      "event_date": "18/11",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 1.62,
+      "current_odds": 1.41,
+      "drop_pct": 13.0,
+      "max_odds": 1.41,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 17087609,
+        "sofascore_home_team_id": 306914,
+        "sofascore_away_team_id": 928309,
+        "home_team": "Shahdab Yazd",
+        "away_team": "Sanatgaran Omid",
+        "sport": "volleyball",
+        "league": "Iran - Super League",
+        "match_time": "12:30",
+        "home_form_home": [
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "21.02.26",
+            "home": "Shahdab Yazd",
+            "away": "Sanatgaran Omid",
+            "score": "1:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "21.02.26",
+        "last_h2h_score": "1:3",
+        "last_h2h_home": "Shahdab Yazd",
+        "last_h2h_away": "Sanatgaran Omid",
+        "sofascore_home_win_prob": 67,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 33,
+        "sofascore_total_votes": 6,
+        "forebet_prediction": "2",
+        "forebet_probability": 57.0,
+        "forebet_exact_score": "1-3",
+        "forebet_avg_goals": 45.0,
+        "forebet_home_prob": 43,
+        "forebet_away_prob": 57
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Greece - Volley League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/greece/volley-league/panionios-vs-nop-rethymnou/19173244?MarketTypeID=701",
+      "match_id": "19173244",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Panionios",
+      "away_team": "NOP Rethymnou",
+      "event_date": "15/11",
+      "event_time": "15:00",
+      "outcome": "2",
+      "open_odds": 8.0,
+      "current_odds": 7.03,
+      "drop_pct": 12.0,
+      "max_odds": 8.0,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 7.09,
+        "prev_seen_at": "2026-11-13T17:43:25+00:00",
+        "current_odds": 7.03,
+        "change_pct": -0.85,
+        "direction": "down",
+        "runs_seen": 2,
+        "first_odds": 7.09,
+        "first_seen_at": "2026-11-13T17:43:25+00:00",
+        "change_from_first_pct": -0.85
+      }
+    },
+    {
+      "league": "Poland - 1. Liga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/1.-liga/mckis-jaworzno-vs-uks-sparta/19937446?MarketTypeID=701",
+      "match_id": "19937446",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "MCKiS Jaworzno",
+      "away_team": "UKS Sparta",
+      "event_date": "16/11",
+      "event_time": "17:30",
+      "outcome": "2",
+      "open_odds": 2.7,
+      "current_odds": 2.39,
+      "drop_pct": 12.0,
+      "max_odds": 2.41,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16506841,
+        "sofascore_home_team_id": 327843,
+        "sofascore_away_team_id": 308601,
+        "home_team": "MCKiS Jaworzno",
+        "away_team": "UKS Sparta",
+        "sport": "volleyball",
+        "league": "Poland - 1. Liga",
+        "match_time": "17:30",
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "10.10.26",
+            "home": "UKS Mickiewicz Kluczbork",
+            "away": "MCKiS Jaworzno",
+            "score": "1:3",
+            "winner": "away"
+          },
+          {
+            "date": "21.02.26",
+            "home": "MCKiS Jaworzno",
+            "away": "UKS Mickiewicz Kluczbork",
+            "score": "3:0",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "10.10.26",
+        "last_h2h_score": "1:3",
+        "last_h2h_home": "UKS Mickiewicz Kluczbork",
+        "last_h2h_away": "MCKiS Jaworzno",
+        "sofascore_home_win_prob": 100,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 0,
+        "sofascore_total_votes": 1
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Iran - Super League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/iran/super-league/tehran-bisheh-chamestan-vs-esteghlal-gonbad/20859914?MarketTypeID=701",
+      "match_id": "20859914",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Tehran Bisheh Chamestan",
+      "away_team": "Esteghlal Gonbad",
+      "event_date": "18/11",
+      "event_time": "12:30",
+      "outcome": "2",
+      "open_odds": 1.33,
+      "current_odds": 1.17,
+      "drop_pct": 12.0,
+      "max_odds": 1.17,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Belgium - Lotto Volley League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/belgium/lotto-volley-league/guibertin-volley-vs-brabo-antwerp/19173194?MarketTypeID=701",
+      "match_id": "19173194",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Guibertin Volley",
+      "away_team": "Brabo Antwerp",
+      "event_date": "15/11",
+      "event_time": "17:00",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.64,
+      "drop_pct": 11.0,
+      "max_odds": 1.7,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/brabo-antwerp-jJjkNZW4/guibertin-tOgUx7xD/?mid=48lR02F7",
+      "livesport_confidence": 0.75,
+      "enrichment": {
+        "home_team": "Guibertin",
+        "away_team": "Brabo Antwerp",
+        "match_time": "15.11.2026 17:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "win_rate": 0.2,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "2",
+        "forebet_probability": 61.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "0-3",
+        "forebet_avg_goals": 44.3,
+        "sofascore_home_win_prob": 9,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 91,
+        "sofascore_total_votes": 23,
+        "h2h_last5": [
+          {
+            "date": "08.04.26",
+            "home": "Brabo Antwerp",
+            "away": "Guibertin",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "08.04.26 Brabo Antwerp 3-1 Guibertin"
+          },
+          {
+            "date": "18.03.26",
+            "home": "Guibertin",
+            "away": "Brabo Antwerp",
+            "score": "1-3",
+            "winner": "away",
+            "raw": "18.03.26 Guibertin 1-3 Brabo Antwerp"
+          },
+          {
+            "date": "14.02.26",
+            "home": "Brabo Antwerp",
+            "away": "Guibertin",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "14.02.26 Brabo Antwerp 3-0 Guibertin"
+          },
+          {
+            "date": "29.10.25",
+            "home": "Guibertin",
+            "away": "Brabo Antwerp",
+            "score": "0-3",
+            "winner": "away",
+            "raw": "29.10.25 Guibertin 0-3 Brabo Antwerp"
+          },
+          {
+            "date": "23.03.25",
+            "home": "Guibertin",
+            "away": "Brabo Antwerp",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "23.03.25 Guibertin 3-0 Brabo Antwerp"
+          }
+        ],
+        "last_h2h_date": "08.04.26",
+        "last_h2h_score": "3-1",
+        "last_h2h_home": "Brabo Antwerp",
+        "last_h2h_away": "Guibertin",
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true,
+        "forebet_home_prob": 39,
+        "forebet_away_prob": 61
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "China - CVL",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/china/cvl/beijing-vs-qingdao/19173272?MarketTypeID=701",
+      "match_id": "19173272",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Beijing",
+      "away_team": "Qingdao",
+      "event_date": "15/11",
+      "event_time": "07:00",
+      "outcome": "2",
+      "open_odds": 3.2,
+      "current_odds": 1.6,
+      "drop_pct": 50.0,
+      "max_odds": 1.62,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 2,
+        "h2h_source": "sofascore_api",
+        "win_rate": 1.0,
+        "sofascore_event_id": 17489340,
+        "home_team": "Beijing",
+        "away_team": "Qingdao",
+        "sport": "volleyball",
+        "league": "China - CVL",
+        "match_time": "07:00",
+        "sofascore_home_team_id": 213166,
+        "sofascore_away_team_id": 1158425,
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "15.01.26",
+            "home": "Qingdao",
+            "away": "Beijing Baic Motor",
+            "score": "3:0",
+            "winner": "home"
+          },
+          {
+            "date": "18.12.25",
+            "home": "Beijing Baic Motor",
+            "away": "Qingdao",
+            "score": "1:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "15.01.26",
+        "last_h2h_score": "3:0",
+        "last_h2h_home": "Qingdao",
+        "last_h2h_away": "Beijing Baic Motor",
+        "sofascore_home_win_prob": 33,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 67,
+        "sofascore_total_votes": 43,
+        "forebet_prediction": "1",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "3-1",
+        "forebet_avg_goals": 46.0,
+        "forebet_home_prob": 53,
+        "forebet_away_prob": 47
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Bulgaria - Superliga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/bulgaria/superliga/metalurg-pernik-vs-montana/19173196?MarketTypeID=701",
+      "match_id": "19173196",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Metalurg Pernik",
+      "away_team": "Montana",
+      "event_date": "15/11",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 2.63,
+      "current_odds": 1.9,
+      "drop_pct": 28.0,
+      "max_odds": 1.92,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/montana-xhWqqcLA/pernik-p2ZvP5Sg/?mid=MXW5x67M",
+      "livesport_confidence": 0.667,
+      "enrichment": {
+        "home_team": "Pernik",
+        "away_team": "Montana",
+        "match_time": "15.11.2026 15:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.2,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "1",
+        "forebet_probability": 67.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "3-1",
+        "forebet_avg_goals": 44.7,
+        "sofascore_home_win_prob": 25,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 75,
+        "sofascore_total_votes": 40,
+        "h2h_last5": [
+          {
+            "date": "06.11.26",
+            "home": "CSKA Sofia",
+            "away": "Pernik",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "06.11.26 CSKA Sofia 3-1 Pernik"
+          },
+          {
+            "date": "03.11.26",
+            "home": "Pernik",
+            "away": "Dunav",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "03.11.26 Pernik 3-0 Dunav"
+          },
+          {
+            "date": "30.10.26",
+            "home": "Pirin Razlog",
+            "away": "Pernik",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "30.10.26 Pirin Razlog 3-1 Pernik"
+          },
+          {
+            "date": "23.10.26",
+            "home": "Beroe",
+            "away": "Pernik",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "23.10.26 Beroe 3-0 Pernik"
+          },
+          {
+            "date": "28.03.26",
+            "home": "Dunav",
+            "away": "Pernik",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "28.03.26 Dunav 3-0 Pernik"
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true,
+        "forebet_home_prob": 67,
+        "forebet_away_prob": 33
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Poland - TAURON Liga (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/tauron-liga-w/sokol-mogilno-vs-bydgoszcz/19937439?MarketTypeID=701",
+      "match_id": "19937439",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Sokol Mogilno",
+      "away_team": "Bydgoszcz",
+      "event_date": "16/11",
+      "event_time": "16:30",
+      "outcome": "2",
+      "open_odds": 2.1,
+      "current_odds": 1.77,
+      "drop_pct": 16.0,
+      "max_odds": 1.8,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "odds_change": {
+        "prev_odds": 1.77,
+        "prev_seen_at": "2026-11-13T17:41:11+00:00",
+        "current_odds": 1.77,
+        "change_pct": 0.0,
+        "direction": "flat",
+        "runs_seen": 2,
+        "first_odds": 1.77,
+        "first_seen_at": "2026-11-13T17:41:11+00:00",
+        "change_from_first_pct": 0.0
+      },
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.4,
+        "sofascore_event_id": 16506968,
+        "sofascore_home_team_id": 379930,
+        "sofascore_away_team_id": 43540,
+        "home_team": "Sokol Mogilno",
+        "away_team": "Bydgoszcz",
+        "sport": "volleyball",
+        "league": "Poland - TAURON Liga (W)",
+        "match_time": "16:30",
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "15.01.26",
+            "home": "MKS Sokol Mogilno",
+            "away": "KS Pałac Bydgoszcz II",
+            "score": "3:1",
+            "winner": "home"
+          },
+          {
+            "date": "17.12.25",
+            "home": "KS Pałac Bydgoszcz II",
+            "away": "MKS Sokol Mogilno",
+            "score": "2:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "15.01.26",
+        "last_h2h_score": "3:1",
+        "last_h2h_home": "MKS Sokol Mogilno",
+        "last_h2h_away": "KS Pałac Bydgoszcz II",
+        "sofascore_home_win_prob": 48,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 52,
+        "sofascore_total_votes": 27,
+        "forebet_prediction": "2",
+        "forebet_probability": 69.0,
+        "forebet_exact_score": "1-3",
+        "forebet_avg_goals": 45.7,
+        "forebet_home_prob": 31,
+        "forebet_away_prob": 69
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Iran - Super League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/iran/super-league/moghaddam-qazvin-vs-mes-songon/20859920?MarketTypeID=701",
+      "match_id": "20859920",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Moghaddam Qazvin",
+      "away_team": "Mes Songon",
+      "event_date": "18/11",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 1.87,
+      "current_odds": 1.57,
+      "drop_pct": 16.0,
+      "max_odds": 1.57,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "sofascore_event_id": 17087612,
+        "sofascore_home_team_id": 1278343,
+        "sofascore_away_team_id": 1278342,
+        "home_team": "Moghaddam Qazvin",
+        "away_team": "Mes Songon",
+        "sport": "volleyball",
+        "league": "Iran - Super League",
+        "match_time": "12:30",
+        "home_form_home": [
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "sofascore_home_win_prob": 33,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 67,
+        "sofascore_total_votes": 3,
+        "forebet_prediction": "1",
+        "forebet_probability": 69.0,
+        "forebet_exact_score": "3-2",
+        "forebet_avg_goals": 45.7,
+        "forebet_home_prob": 69,
+        "forebet_away_prob": 31
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "International Clubs - Baltic League (W)",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/baltic-league-w/kaunas-vdu-vs-vc-tartu/19173139?MarketTypeID=701",
+      "match_id": "19173139",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Kaunas VDU",
+      "away_team": "VC Tartu",
+      "event_date": "15/11",
+      "event_time": "10:00",
+      "outcome": "1",
+      "open_odds": 2.0,
+      "current_odds": 1.7,
+      "drop_pct": 15.0,
+      "max_odds": 1.7,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/kaunas-vJMsg6mi/tartu-ulikool-r7BmV2ep/?mid=zX4aJ0TF",
+      "livesport_confidence": 0.667,
+      "enrichment": {
+        "home_team": "Kaunas K",
+        "away_team": "Tartu Ulikool K",
+        "match_time": "15.11.2026 10:00",
+        "sport": "volleyball",
+        "league": "PL1",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.8,
+        "qualifies": true,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_odds": 1.68,
+        "draw_odds": null,
+        "away_odds": 2.0,
+        "forebet_prediction": "1",
+        "forebet_probability": 65.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "3-2",
+        "forebet_avg_goals": 46.3,
+        "forebet_home_prob": 65,
+        "forebet_draw_prob": null,
+        "forebet_away_prob": 35,
+        "sofascore_home_win_prob": 83,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 17,
+        "sofascore_total_votes": 23,
+        "h2h_last5": [
+          {
+            "date": "01.03.26",
+            "home": "Tartu Ulikool K",
+            "away": "Kaunas K",
+            "score": "1-3",
+            "winner": "away",
+            "raw": "01.03.26 Tartu Ulikool K 1-3 Kaunas K"
+          },
+          {
+            "date": "17.01.26",
+            "home": "Kaunas K",
+            "away": "Tartu Ulikool K",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "17.01.26 Kaunas K 3-0 Tartu Ulikool K"
+          },
+          {
+            "date": "15.11.25",
+            "home": "Tartu Ulikool K",
+            "away": "Kaunas K",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "15.11.25 Tartu Ulikool K 3-1 Kaunas K"
+          },
+          {
+            "date": "01.12.24",
+            "home": "Kaunas K",
+            "away": "Tartu Ulikool K",
+            "score": "3-2",
+            "winner": "home",
+            "raw": "01.12.24 Kaunas K 3-2 Tartu Ulikool K"
+          },
+          {
+            "date": "06.10.24",
+            "home": "Tartu Ulikool K",
+            "away": "Kaunas K",
+            "score": "2-3",
+            "winner": "away",
+            "raw": "06.10.24 Tartu Ulikool K 2-3 Kaunas K"
+          }
+        ],
+        "last_h2h_date": "01.03.26",
+        "last_h2h_score": "1-3",
+        "last_h2h_home": "Tartu Ulikool K",
+        "last_h2h_away": "Kaunas K",
+        "form_advantage": false,
+        "home_season_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_season_form": [
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "season_home_form": [
+          "L",
+          "L"
+        ],
+        "season_away_form": [
+          "W"
+        ],
+        "home_season_match_count": 5,
+        "away_season_match_count": 4,
+        "season_match_count": 4,
+        "early_season": false,
+        "season_form_conflict": false,
+        "home_form_nf": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_nf": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "home_form_home_nf": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_away_nf": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_friendlies_excluded": 0,
+        "away_friendlies_excluded": 0,
+        "home_home_friendlies_excluded": 0,
+        "away_away_friendlies_excluded": 0,
+        "friendlies_excluded": 0,
+        "home_cup_form": [
+          "L",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_cup_form": [
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_cup_competitions": [
+          "Challenge Cup - Kobiety (Europa)",
+          "Balti Liiga Kobiety (Europa)"
+        ],
+        "away_cup_competitions": [
+          "Balti Liiga Kobiety (Europa)"
+        ],
+        "home_form_competitions": [
+          "Challenge Cup - Kobiety (Europa)",
+          "Balti Liiga Kobiety (Europa)"
+        ],
+        "away_form_competitions": [
+          "Balti Liiga Kobiety (Europa)",
+          "Meistriliiga Kobiety (Estonia)"
+        ],
+        "national_friendly": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Iran - Super League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/iran/super-league/shahdab-yazd-vs-sanatgaran-omid/20859917?MarketTypeID=701",
+      "match_id": "20859917",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Shahdab Yazd",
+      "away_team": "Sanatgaran Omid",
+      "event_date": "18/11",
+      "event_time": "12:30",
+      "outcome": "1",
+      "open_odds": 1.62,
+      "current_odds": 1.41,
+      "drop_pct": 13.0,
+      "max_odds": 1.41,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.5,
+        "sofascore_event_id": 17087609,
+        "sofascore_home_team_id": 306914,
+        "sofascore_away_team_id": 928309,
+        "home_team": "Shahdab Yazd",
+        "away_team": "Sanatgaran Omid",
+        "sport": "volleyball",
+        "league": "Iran - Super League",
+        "match_time": "12:30",
+        "home_form_home": [
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "21.02.26",
+            "home": "Shahdab Yazd",
+            "away": "Sanatgaran Omid",
+            "score": "1:3",
+            "winner": "away"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "21.02.26",
+        "last_h2h_score": "1:3",
+        "last_h2h_home": "Shahdab Yazd",
+        "last_h2h_away": "Sanatgaran Omid",
+        "sofascore_home_win_prob": 67,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 33,
+        "sofascore_total_votes": 6,
+        "forebet_prediction": "2",
+        "forebet_probability": 57.0,
+        "forebet_exact_score": "1-3",
+        "forebet_avg_goals": 45.0,
+        "forebet_home_prob": 43,
+        "forebet_away_prob": 57
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Poland - 1. Liga",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/poland/1.-liga/mckis-jaworzno-vs-uks-sparta/19937446?MarketTypeID=701",
+      "match_id": "19937446",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "MCKiS Jaworzno",
+      "away_team": "UKS Sparta",
+      "event_date": "16/11",
+      "event_time": "17:30",
+      "outcome": "2",
+      "open_odds": 2.7,
+      "current_odds": 2.39,
+      "drop_pct": 12.0,
+      "max_odds": 2.41,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.6,
+        "sofascore_event_id": 16506841,
+        "sofascore_home_team_id": 327843,
+        "sofascore_away_team_id": 308601,
+        "home_team": "MCKiS Jaworzno",
+        "away_team": "UKS Sparta",
+        "sport": "volleyball",
+        "league": "Poland - 1. Liga",
+        "match_time": "17:30",
+        "home_form_home": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_away": [
+          "L",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "venue_form_source": "sofascore_api",
+        "h2h_last5": [
+          {
+            "date": "10.10.26",
+            "home": "UKS Mickiewicz Kluczbork",
+            "away": "MCKiS Jaworzno",
+            "score": "1:3",
+            "winner": "away"
+          },
+          {
+            "date": "21.02.26",
+            "home": "MCKiS Jaworzno",
+            "away": "UKS Mickiewicz Kluczbork",
+            "score": "3:0",
+            "winner": "home"
+          }
+        ],
+        "draws_in_h2h_last5": 0,
+        "last_h2h_date": "10.10.26",
+        "last_h2h_score": "1:3",
+        "last_h2h_home": "UKS Mickiewicz Kluczbork",
+        "last_h2h_away": "MCKiS Jaworzno",
+        "sofascore_home_win_prob": 100,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 0,
+        "sofascore_total_votes": 1
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Belgium - Lotto Volley League",
+      "match_url": "https://www.oddssafari.com/matches/volleyball/belgium/lotto-volley-league/guibertin-volley-vs-brabo-antwerp/19173194?MarketTypeID=701",
+      "match_id": "19173194",
+      "sport_slug": "volleyball",
+      "sport": "volleyball",
+      "home_team": "Guibertin Volley",
+      "away_team": "Brabo Antwerp",
+      "event_date": "15/11",
+      "event_time": "17:00",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.64,
+      "drop_pct": 11.0,
+      "max_odds": 1.7,
+      "sport_page_id": "70",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/siatkowka/brabo-antwerp-jJjkNZW4/guibertin-tOgUx7xD/?mid=48lR02F7",
+      "livesport_confidence": 0.75,
+      "enrichment": {
+        "home_team": "Guibertin",
+        "away_team": "Brabo Antwerp",
+        "match_time": "15.11.2026 17:00",
+        "sport": "volleyball",
+        "league": null,
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 4,
+        "win_rate": 0.2,
+        "qualifies": false,
+        "home_form": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [
+          "L",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_away": [
+          "L",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_odds": null,
+        "draw_odds": null,
+        "away_odds": null,
+        "forebet_prediction": "2",
+        "forebet_probability": 61.0,
+        "forebet_over_under": null,
+        "forebet_btts": null,
+        "forebet_exact_score": "0-3",
+        "forebet_avg_goals": 44.3,
+        "sofascore_home_win_prob": 9,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 91,
+        "sofascore_total_votes": 23,
+        "h2h_last5": [
+          {
+            "date": "08.04.26",
+            "home": "Brabo Antwerp",
+            "away": "Guibertin",
+            "score": "3-1",
+            "winner": "home",
+            "raw": "08.04.26 Brabo Antwerp 3-1 Guibertin"
+          },
+          {
+            "date": "18.03.26",
+            "home": "Guibertin",
+            "away": "Brabo Antwerp",
+            "score": "1-3",
+            "winner": "away",
+            "raw": "18.03.26 Guibertin 1-3 Brabo Antwerp"
+          },
+          {
+            "date": "14.02.26",
+            "home": "Brabo Antwerp",
+            "away": "Guibertin",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "14.02.26 Brabo Antwerp 3-0 Guibertin"
+          },
+          {
+            "date": "29.10.25",
+            "home": "Guibertin",
+            "away": "Brabo Antwerp",
+            "score": "0-3",
+            "winner": "away",
+            "raw": "29.10.25 Guibertin 0-3 Brabo Antwerp"
+          },
+          {
+            "date": "23.03.25",
+            "home": "Guibertin",
+            "away": "Brabo Antwerp",
+            "score": "3-0",
+            "winner": "home",
+            "raw": "23.03.25 Guibertin 3-0 Brabo Antwerp"
+          }
+        ],
+        "last_h2h_date": "08.04.26",
+        "last_h2h_score": "3-1",
+        "last_h2h_home": "Brabo Antwerp",
+        "last_h2h_away": "Guibertin",
+        "form_advantage": false,
+        "venue_form_source": "livesport_h2h_pages",
+        "away_advantage": true,
+        "forebet_home_prob": 39,
+        "forebet_away_prob": 61
+      },
+      "enrichment_error": null
+    }
+  ]
+}
