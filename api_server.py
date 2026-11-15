@@ -594,6 +594,7 @@ def apply_paywall(match: dict, is_subscriber: bool) -> dict:
     match['scoring'] = None
     match['gemini'] = None
     match['forebet'] = None          # hides the exact pick / probabilities
+    match['oddsMove'] = None         # its verdict would reveal the side
     match['confidence'] = 0
     match['value_bet'] = False
     return match
@@ -647,7 +648,8 @@ def _apply_odds_and_news(matches: list, date_str) -> None:
     for m in matches:
         try:
             h, a = m.get('homeTeam') or '', m.get('awayTeam') or ''
-            side = om.side_of_pick((m.get('scoring') or {}).get('pick'), h, a)
+            # Same pick the row shows (MatchRow.tsx): engine, Forebet, SofaScore vote.
+            side = om.side_of_pick(om.displayed_pick(m), h, a)
             om.enrich(m, date_str, m.get('sport') or '', h, a, side or 'home')
             mv = m.get('oddsMove')
             if mv and not side:

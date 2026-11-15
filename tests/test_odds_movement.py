@@ -85,3 +85,88 @@ def test_team_news_badges():
     assert tn['badgePick'] == '2 stars out' and tn['badgeOpponent'] == '1 star out'
     assert aa.team_news({'unknown': True}) is None
     assert aa.email_line(None) == f'Team news: {aa.NO_NEWS}'
+
+
+def test_displayed_pick_order():
+    assert om.displayed_pick({'scoring': {'pick': '2'}, 'forebet': {'prediction': '1'}}) == '2'
+    assert om.displayed_pick({'scoring': None, 'forebet': {'prediction': 'X'}}) == 'X'
+    assert om.displayed_pick({'forebet_prediction': '1'}) == '1'
+    assert om.displayed_pick({'sofascore': {'home': 20, 'draw': 10, 'away': 70}}) == '2'
+    assert om.displayed_pick({}) is None
+    assert om.side_of_pick('X', 'A', 'B') == 'draw'
+
+
+def test_api_verdict_uses_displayed_pick(tmp_path, monkeypatch):
+    import api_server
+    root = str(tmp_path)
+    _drop_file(root, '2026-11-14', [
+        {'sport': 'football', 'home_team': 'Alpha', 'away_team': 'Beta', 'outcome': '2',
+         'open_odds': 2.4, 'current_odds': 2.0, 'event_date': '14/11'},
+        {'sport': 'football', 'home_team': 'Gamma', 'away_team': 'Delta', 'outcome': 'X',
+         'open_odds': 3.0, 'current_odds': 3.6, 'event_date': '14/11'},
+    ])
+    monkeypatch.setattr(om, 'ROOT', root)
+    om._CTX.clear()
+    real = om.enrich
+    monkeypatch.setattr(om, 'enrich', lambda *a, **k: real(*a, **{**k, 'root': root}))
+    ms = [{'homeTeam': 'Alpha', 'awayTeam': 'Beta', 'sport': 'football', 'scoring': None,
+           'forebet': {'prediction': '2'}},
+          {'homeTeam': 'Gamma', 'awayTeam': 'Delta', 'sport': 'football',
+           'forebet': {'prediction': 'X'}}]
+    api_server._apply_odds_and_news(ms, '2026-11-14')
+    assert ms[0]['oddsMove']['stance'] == 'with'          # forebet pick 2, away odds dropping
+    assert ms[1]['oddsMove']['stance'] == 'against'       # draw pick, X odds rising
+    assert not ms[0]['oddsMove'].get('noPick')
+
+
+def test_snapshots_record_and_fallback(tmp_path):
+    root = str(tmp_path)
+    day = '2026-11-14'
+    rows = [{'sport': 'hockey', 'home': 'H', 'away': 'A', 'odds': {'home': 2.0, 'away': 1.9}}]
+    assert om.record_snapshots(day, 'top', rows, root, ts='2026-11-14T08:00:00Z') == 1
+    assert om.record_snapshots(day, 'top', rows, root, ts='2026-11-14T09:00:00Z') == 0  # unchanged
+    rows2 = [{'sport': 'hockey', 'home': 'H', 'away': 'A', 'odds': {'home': 1.8, 'away': 2.1}}]
+    assert om.record_snapshots(day, 'live', rows2, root, ts='2026-11-14T10:00:00Z') == 1
+    ix = om.build_index(day, root)
+    mv = om.for_pick(ix, 'hockey', 'H', 'A', 'home')
+    assert mv['pick']['source'] == 'snapshots' and mv['stance'] == 'with'
+    assert mv['opponent']['direction'] == 'up'
+    assert om.for_pick(ix, 'hockey', 'A', 'H', 'away')['stance'] == 'with'  # swapped order
+
+
+def test_snapshot_writers_read_our_files(tmp_path):
+    root = str(tmp_path)
+    day = '2026-11-14'
+    res = tmp_path / 'results'
+    res.mkdir()
+    (res / f'top_{day}.json').write_text(json.dumps([
+        {'sport': 'tennis', 'match': 'P1 vs P2', 'pick': 'P1', 'odds': 1.8, 'bestOdds': 1.75}]))
+    (res / f'fanvote_{day}.json').write_text(json.dumps({'sports': {'football': {'picks': [
+        {'sport': 'football', 'home': 'F1', 'away': 'F2', 'side': 'home',
+         'odds': {'home': 1.6, 'draw': 3.5, 'away': 5.0}, 'bestPrice': {'price': 1.65}}]}}}))
+    (res / f'weekend_2026-11-13.json').write_text(json.dumps({'slips': [{'legs': [
+        {'sport': 'football', 'date': day, 'home': 'W1', 'away': 'W2', 'side': 'away', 'price': 1.7}]}]}))
+    assert om.snapshot('top', [day], root) == 1
+    assert om.snapshot('fan', [day], root) == 1
+    assert om.snapshot('weekend', [day], root) == 1
+    snaps = om.load_snapshots(day, root)
+    assert snaps['tennis|P1 vs P2'][0]['home'] == 1.75
+    assert snaps['football|F1 vs F2'][0]['home'] == 1.6  # board feed, not best price
+    assert any(p['source'] == 'Weekend' for p in om.our_picks(day, root))
+
+
+def test_remote_read_with_local_fallback(tmp_path, monkeypatch):
+    monkeypatch.setenv('ODDS_MOVE_REMOTE', '1')
+    monkeypatch.setattr(om, 'ROOT', str(tmp_path))
+    (tmp_path / 'results').mkdir()
+    (tmp_path / 'results' / 'x.json').write_text('{"local": 1}')
+    om._remote_cache.clear()
+    calls = []
+
+    def boom(*a, **k):
+        calls.append(1)
+        raise OSError('down')
+    monkeypatch.setattr(om.urllib.request, 'urlopen', boom)
+    assert om._load('results/x.json', str(tmp_path)) == {'local': 1}
+    assert om._load('results/x.json', str(tmp_path)) == {'local': 1}
+    assert len(calls) == 1  # miss cached for the TTL

@@ -91,15 +91,16 @@ export function MatchDetails({ match, open, onOpenChange, liveScore }: Props) {
         {/* ── Tabs ── */}
         <div className="px-5 pb-5">
           <Tabs defaultValue="predictions" className="mt-3">
-            <TabsList className="grid w-full grid-cols-[repeat(7,minmax(0,1fr))_minmax(0,1.6fr)] h-9">
-              <TabsTrigger value="predictions" className="text-xs gap-1"><Target className="h-3 w-3" /> Predict</TabsTrigger>
-              <TabsTrigger value="odds" className="text-xs gap-1"><TrendingUp className="h-3 w-3" /> Odds</TabsTrigger>
-              <TabsTrigger value="h2h" className="text-xs gap-1"><History className="h-3 w-3" /> H2H</TabsTrigger>
-              <TabsTrigger value="teams" className="text-xs gap-1"><Users className="h-3 w-3" /> Teams</TabsTrigger>
-              <TabsTrigger value="news" className="text-xs gap-1"><Users className="h-3 w-3" /> Team news</TabsTrigger>
-              <TabsTrigger value="ai" className="text-xs gap-1"><Brain className="h-3 w-3" /> AI</TabsTrigger>
-              <TabsTrigger value="weather" className="text-xs gap-1"><CloudSun className="h-3 w-3" /> Weather</TabsTrigger>
-              <TabsTrigger value="centre" className="text-xs gap-1"><Radio className="h-3 w-3" /> Match Centre</TabsTrigger>
+            {/* 8 tabs: wrap onto a second row instead of overlapping on narrow widths */}
+            <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 p-1 group-data-[orientation=horizontal]/tabs:h-auto">
+              <TabsTrigger value="predictions" className="h-7 flex-none text-xs gap-1 px-2.5"><Target className="h-3 w-3" /> Predict</TabsTrigger>
+              <TabsTrigger value="odds" className="h-7 flex-none text-xs gap-1 px-2.5"><TrendingUp className="h-3 w-3" /> Odds</TabsTrigger>
+              <TabsTrigger value="h2h" className="h-7 flex-none text-xs gap-1 px-2.5"><History className="h-3 w-3" /> H2H</TabsTrigger>
+              <TabsTrigger value="teams" className="h-7 flex-none text-xs gap-1 px-2.5"><Users className="h-3 w-3" /> Teams</TabsTrigger>
+              <TabsTrigger value="news" className="h-7 flex-none text-xs gap-1 px-2.5"><Users className="h-3 w-3" /> Team news</TabsTrigger>
+              <TabsTrigger value="ai" className="h-7 flex-none text-xs gap-1 px-2.5"><Brain className="h-3 w-3" /> AI</TabsTrigger>
+              <TabsTrigger value="weather" className="h-7 flex-none text-xs gap-1 px-2.5"><CloudSun className="h-3 w-3" /> Weather</TabsTrigger>
+              <TabsTrigger value="centre" className="h-7 flex-none text-xs gap-1 px-2.5"><Radio className="h-3 w-3" /> Match Centre</TabsTrigger>
             </TabsList>
 
             {/* ── Predictions tab ── */}

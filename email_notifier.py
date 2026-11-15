@@ -953,7 +953,8 @@ def _odds_move_html(match, day, home, away, focus_team=None) -> str:
     try:
         import odds_movement as om
         sc = match.get('scoring') if isinstance(match.get('scoring'), dict) else {}
-        pick = match.get('scoring_pick') or sc.get('pick') or focus_team
+        # Same pick the card's "Typ modelu" line shows (scoring_pick, else Forebet).
+        pick = _model_pick_code(match, _is_tennis_match(match))[0] or om.displayed_pick(match)
         side = om.side_of_pick(pick, str(home), str(away))
         lines = om.mail_lines(str(day or '')[:10], str(match.get('sport') or 'football').lower(),
                               str(home), str(away), side, news=False)

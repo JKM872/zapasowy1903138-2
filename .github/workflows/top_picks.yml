@@ -89,6 +89,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Odds snapshot of our picks from files this run wrote (no page loads);
+          # odds_movement.py uses first vs latest when the archive has nothing.
+          python odds_movement.py top || true
+          git add results/odds_snapshots_*_top.json 2>/dev/null || true
           git add results/top_*.json results/status_top_*.json results/TOP.xlsx 2>/dev/null || true
           git add results/availability_*.json 2>/dev/null || true
           git add results/ai_analyst_*.json 2>/dev/null || true
