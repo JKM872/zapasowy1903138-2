@@ -2,7 +2,7 @@
   "date": "2026-11-16",
   "sport": "volleyball",
   "source": "forebet",
-  "generatedAt": "2026-11-16T06:45:37.741797+00:00",
+  "generatedAt": "2026-11-16T08:01:03.377680+00:00",
   "matches": [
     {
       "homeTeam": "Zalau",
@@ -952,10 +952,10 @@
         }
       },
       "ai": {
-        "prediction": "Bydgoszcz W will secure the win, leveraging their superior recent form and better away performance.",
+        "prediction": "Bydgoszcz W will win the match, as their recent form (6.0/10) and away performance (4.0/10) far outpace Mogilno’s 0.0/10 at home, and the odds (1.75 vs 1.90) and Forebet’s 70% away win probability reinforce this advantage.",
         "confidence": 80,
         "recommendation": "SKIP",
-        "reasoning": "The head‑to‑head record shows Bydgoszcz with 3 wins out of 5, and the home win rate for Mogilno is only 40%, indicating limited home advantage. Bydgoszcz’s overall form is 6.0/10 compared to Mogilno’s 0.0/10, and their away form is 4.0/10 versus Mogilno’s 0.0/10 at home. Bookmakers offer slightly better odds for Bydgoszcz (1.75 vs 1.9) and Forebet predicts a 70% chance of an away win. These signals combine to create a low‑risk scenario for Bydgoszcz, with no significant counter‑arguments."
+        "reasoning": "The head‑to‑head record shows Bydgoszcz winning 3 of the last 5 encounters, and their home win rate in those matches is only 40%, indicating a modest advantage for the visitors. Mogilno’s overall and home form are both at 0.0/"
       },
       "scoring": {
         "pick": "2",
@@ -1333,7 +1333,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "brak_kursow"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
         "prediction": "1",
@@ -1584,7 +1584,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": null,
+      "marketGapPp": -13.3,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -1597,12 +1597,12 @@
         "skipReason": null
       },
       "odds": {
-        "home": null,
+        "home": 1.23,
         "draw": null,
-        "away": null,
-        "source": null,
-        "bookmaker": null,
-        "note": "brak_kursow|sofascore_bez_kursow",
+        "away": 3.55,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
         "forebet": {
           "home": null,
           "draw": null,
@@ -1617,31 +1617,32 @@
       },
       "scoring": {
         "pick": "1",
-        "prob": 62.5,
-        "ev": null,
-        "edge": null,
-        "sources": 3,
+        "prob": 65.1,
+        "ev": -0.199,
+        "edge": -16.2,
+        "sources": 4,
         "components": {
           "forebet": 0.61,
           "h2h": 0.75,
-          "form": 0.5
+          "form": 0.5,
+          "odds": 0.813
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "C",
       "dataQuality": {
         "sources_available": 2,
-        "quality_score": 0.55,
+        "quality_score": 0.8,
         "h2h_available": true,
         "h2h_neutral": false,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
-        "odds_available": false,
+        "odds_available": true,
         "form_available": true,
         "h2h_count": 4,
         "consensus_strength": "weak",
-        "market_model_gap": null,
-        "skip_reason": "no_odds"
+        "market_model_gap": -16.201,
+        "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
