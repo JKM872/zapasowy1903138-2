@@ -1,0 +1,364 @@
+{
+  "date": "2026-11-16",
+  "generated_at": "2026-11-16T19:48:13.272546+00:00",
+  "issues": [
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "hockey",
+      "code": "forebet_low",
+      "problem": "Forebet hockey: 21 meczów (min 30)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163089998"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "handball",
+      "code": "forebet_low",
+      "problem": "Forebet handball: 10 meczów (min 30)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163090253"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "volleyball",
+      "code": "forebet_low",
+      "problem": "Forebet volleyball: 12 meczów (min 30)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163090310"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "scrape_forebet.yml",
+      "sport": "football",
+      "code": "forebet_low",
+      "problem": "Forebet football: 55 meczów (min 200)",
+      "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+      "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163090374"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "oddssafari_dropping.yml",
+      "sport": "football",
+      "code": "traceback",
+      "problem": "Traceback w logu",
+      "meaning": "W logu jest wyjątek Pythona (run mógł być zielony).",
+      "action": "Zobacz Traceback w logu i popraw kod.",
+      "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43812693173/job/133117677088"
+    },
+    {
+      "level": "ALERT",
+      "workflow": "daily_digest.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "coupons.yml",
+      "sport": "",
+      "code": "no_run",
+      "problem": "Brak runu mimo harmonogramu",
+      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "empty_output",
+      "problem": "Empty matches_2026-11-16_football_forebet.json",
+      "meaning": "Output file exists but has no data.",
+      "action": "Check the source site / scraper log for that run; re-run it.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "empty_output",
+      "problem": "Empty matches_2026-11-16_handball_forebet.json",
+      "meaning": "Output file exists but has no data.",
+      "action": "Check the source site / scraper log for that run; re-run it.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "empty_output",
+      "problem": "Empty matches_2026-11-16_hockey_forebet.json",
+      "meaning": "Output file exists but has no data.",
+      "action": "Check the source site / scraper log for that run; re-run it.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "empty_output",
+      "problem": "Empty matches_2026-11-16_rugby_forebet.json",
+      "meaning": "Output file exists but has no data.",
+      "action": "Check the source site / scraper log for that run; re-run it.",
+      "url": ""
+    },
+    {
+      "level": "ALERT",
+      "workflow": "outputs",
+      "sport": "",
+      "code": "empty_output",
+      "problem": "Empty matches_2026-11-16_volleyball_forebet.json",
+      "meaning": "Output file exists but has no data.",
+      "action": "Check the source site / scraper log for that run; re-run it.",
+      "url": ""
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "scrape_forebet.yml",
+      "runs_today": 2,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "hockey",
+          "code": "forebet_low",
+          "problem": "Forebet hockey: 21 meczów (min 30)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163089998"
+        },
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "handball",
+          "code": "forebet_low",
+          "problem": "Forebet handball: 10 meczów (min 30)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163090253"
+        },
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "volleyball",
+          "code": "forebet_low",
+          "problem": "Forebet volleyball: 12 meczów (min 30)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163090310"
+        },
+        {
+          "level": "ALERT",
+          "workflow": "scrape_forebet.yml",
+          "sport": "football",
+          "code": "forebet_low",
+          "problem": "Forebet football: 55 meczów (min 200)",
+          "meaning": "Listing Forebet prawie pusty — zła data, Cloudflare lub zmiana HTML.",
+          "action": "Sprawdź log forebet_listing / zrzut HTML; uruchom ponownie sport.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069/job/133163090374"
+        }
+      ],
+      "run": {
+        "databaseId": 43826996069,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43826996069"
+      }
+    },
+    {
+      "workflow": "scrape.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 43815460957,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43815460957"
+      }
+    },
+    {
+      "workflow": "scrape_away.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 43819540761,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43819540761"
+      }
+    },
+    {
+      "workflow": "oddssafari_dropping.yml",
+      "runs_today": 1,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "oddssafari_dropping.yml",
+          "sport": "football",
+          "code": "traceback",
+          "problem": "Traceback w logu",
+          "meaning": "W logu jest wyjątek Pythona (run mógł być zielony).",
+          "action": "Zobacz Traceback w logu i popraw kod.",
+          "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43812693173/job/133117677088"
+        }
+      ],
+      "run": {
+        "databaseId": 43812693173,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43812693173"
+      }
+    },
+    {
+      "workflow": "top_picks.yml",
+      "runs_today": 3,
+      "issues": [],
+      "run": {
+        "databaseId": 43877330587,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43877330587"
+      }
+    },
+    {
+      "workflow": "daily_digest.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "daily_digest.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "workflow": "fan_favourites.yml",
+      "runs_today": 4,
+      "issues": [],
+      "run": {
+        "databaseId": 43897731363,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43897731363"
+      }
+    },
+    {
+      "workflow": "scrape_table_tennis_aiscore_home.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 43880844599,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43880844599"
+      }
+    },
+    {
+      "workflow": "scrape_table_tennis_aiscore_away.yml",
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 43906155680,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43906155680"
+      }
+    },
+    {
+      "workflow": "coupons.yml",
+      "runs_today": 0,
+      "issues": [
+        {
+          "level": "ALERT",
+          "workflow": "coupons.yml",
+          "sport": "",
+          "code": "no_run",
+          "problem": "Brak runu mimo harmonogramu",
+          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
+          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "workflow": "check_results.yml",
+      "runs_today": 2,
+      "issues": [],
+      "run": {
+        "databaseId": 43897573118,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43897573118"
+      }
+    },
+    {
+      "workflow": "top_live.yml",
+      "runs_today": 5,
+      "issues": [],
+      "run": {
+        "databaseId": 43879004826,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/43879004826"
+      }
+    }
+  ],
+  "relays": [
+    {
+      "relay": 1,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 2,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 3,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 4,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 5,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    },
+    {
+      "relay": 6,
+      "status": 200,
+      "exhausted": false,
+      "ok": true
+    }
+  ],
+  "counts": {
+    "ALERT": 12,
+    "WARN": 0
+  }
+}
