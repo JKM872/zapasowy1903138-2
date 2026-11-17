@@ -3,10 +3,10 @@
   "key": "basketball|Minnesota Timberwolves vs Portland Trail Blazers|Minnesota Timberwolves",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Gospodarze przystępują do meczu z poważnymi osłabieniami w składzie (kontuzje kluczowych graczy jak A. Edwards). Kurs 1.80 nie rekompensuje ryzyka związanego z brakami kadrowymi.",
+  "reason": "Gospodarze przystępują do meczu z poważnymi osłabieniami w składzie (brak kluczowych graczy takich jak A. Edwards). Kurs 1.80 nie kompensuje ryzyka związanego z brakami kadrowymi.",
   "risks": [
-   "Brak lidera zespołu (A. Edwards)",
-   "Wysokie ryzyko osłabienia typowanej strony"
+   "Brak A. Edwardsa i D. DiVincenzo",
+   "Wysokie ryzyko osłabienia (injury_risk: true)"
   ],
   "match": "Minnesota Timberwolves vs Portland Trail Blazers",
   "pick": "Minnesota Timberwolves",
@@ -19,10 +19,10 @@
   "key": "hockey|Lida vs Gomel|Gomel",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Gomel dominuje w bezpośrednich pojedynkach (5 zwycięstw w ostatnich 5 meczach) i prezentuje świetną formę wyjazdową. Kurs 2.10 na gości przy wysokim prawdopodobieństwie wg Forebet to value.",
+  "reason": "Gomel prezentuje znacznie lepszą formę wyjazdową i ma korzystny bilans bezpośrednich pojedynków. Kurs 2.10 na zwycięstwo gości dobrze odzwierciedla ich przewagę w obecnym sezonie.",
   "risks": [
-   "Mecze wyjazdowe bywają nieprzewidywalne",
-   "Gospodarze walczą o przełamanie"
+   "Gospodarze potrafią być groźni u siebie",
+   "Hokej bywa nieprzewidywalny w końcówkach"
   ],
   "match": "Lida vs Gomel",
   "pick": "Gomel",
@@ -34,11 +34,11 @@
  {
   "key": "handball|Nexe vs Elverum|Nexe",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Nexe jest w znakomitej formie na własnym parkiecie i wygrało ostatni bezpośredni pojedynek. Wysokie poparcie kibiców (85%) oraz solidne statystyki domowe przemawiają za gospodarzami.",
+  "confidence": 4,
+  "reason": "Nexe gra u siebie znakomicie w obecnym sezonie i wygrało ostatni bezpośredni mecz z Elverum. Wysokie poparcie fanów oraz stabilna forma dają solidne podstawy do typu.",
   "risks": [
-   "Bliski wynik w pierwszym starciu (37-39)",
-   "Elverum potrafi groźnie grać na wyjazdach"
+   "Elverum to silny zespół w pucharach",
+   "Wąski margines błędu przy kursie 1.68"
   ],
   "match": "Nexe vs Elverum",
   "pick": "Nexe",
@@ -49,12 +49,12 @@
  },
  {
   "key": "hockey|Skellefteå vs Rögle|Skellefteå",
-  "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Skellefteå ma patent na Röglem (3 wygrane w H2H) i komplet zwycięstw na własnym lodowisku w ostatnich spotkaniach. Goście są w katastrofalnej formie (brak wygranych).",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Mimo niskiego kursu na gospodarzy, niska ocena predykcji (grade D) oraz brak pełnych danych o aktualnej formie w bloku wskazują na ostrożność.",
   "risks": [
-   "Ostatni mecz H2H zakończył się remisem",
-   "Hokej bywa podatny na niespodzianki w końcówkach"
+   "Niski kurs w stosunku do niepewności modelu",
+   "Brak pełnych danych o formie"
   ],
   "match": "Skellefteå vs Rögle",
   "pick": "Skellefteå",
@@ -67,10 +67,10 @@
   "key": "hockey|Frölunda vs Vaxjo|Frölunda",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Kurs 1.60 jest zbyt niski w stosunku do ryzyka, mimo że Frölunda radzi sobie dobrze. Vaxjo potrafi sprawić niespodziankę w pojedynkach bezpośrednich.",
+  "reason": "Niski kurs (1.60) przy ocenie D oraz ujemna wartość Expected Value (EV) odradzają inwestycję.",
   "risks": [
-   "Niski kurs bazowy",
-   "Niejednolita forma gości w delegacjach"
+   "Ujemne EV",
+   "Niska ocena predykcji (grade D)"
   ],
   "match": "Frölunda vs Vaxjo",
   "pick": "Frölunda",
@@ -80,13 +80,75 @@
   "injuryLine": ""
  },
  {
-  "key": "basketball|Defensor vs Hebraica y Macabi|Defensor",
+  "key": "football|Independiente Riva. Res. vs Platense Res.|Independiente Riva. Res.",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Gospodarze są w dobrej formie, podczas gdy Platense Res. przegrało 5 ostatnich spotkań. Spotkania rezerw bywają jednak specyficzne i podatne na niespodzianki.",
+  "risks": [
+   "Specyfika lig rezerwowych",
+   "Niska przewidywalność formy młodzieży"
+  ],
+  "match": "Independiente Riva. Res. vs Platense Res.",
+  "pick": "Independiente Riva. Res.",
+  "odds": 2.2,
+  "sport": "football",
+  "source": "TOP",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Clemson vs Citadel|Clemson",
   "verdict": "ODPUŚĆ",
   "confidence": 1,
-  "reason": "Negatywne Expected Value (EV) oraz ujemny edge wskazują, że kurs nie odzwierciedla realnych szans gospodarzy. H2H również przemawia lekko na korzyść rywali.",
+  "reason": "Kurs 1.01 jest całkowicie nieopłacalny do gry z perspektywy analitycznej.",
   "risks": [
-   "Ujemne EV (-0.098)",
-   "Niski grade C i trudny rywal w H2H"
+   "Brak value przy kursie 1.01"
+  ],
+  "match": "Clemson vs Citadel",
+  "pick": "Clemson",
+  "odds": 1.01,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Virginia Tech vs Richmond Spiders|Virginia Tech",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.13 nie zapewnia żadnego marginesu opłacalności (ujemne EV).",
+  "risks": [
+   "Bardzo niski kurs",
+   "Ujemne Expected Value"
+  ],
+  "match": "Virginia Tech vs Richmond Spiders",
+  "pick": "Virginia Tech",
+  "odds": 1.13,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Rutgers K vs Albany Great Danes K|Rutgers K",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.02 uniemożliwia osiągnięcie zysku w dłuższej perspektywie.",
+  "risks": [
+   "Brak value przy kursie 1.02"
+  ],
+  "match": "Rutgers K vs Albany Great Danes K",
+  "pick": "Rutgers K",
+  "odds": 1.02,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Defensor vs Hebraica y Macabi|Defensor",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Mimo że Forebet i gospodarze mają swoje atuty, H2H przemawia lekko dla gości, a ujemne EV odradza ten zakład.",
+  "risks": [
+   "Ujemne EV",
+   "Niejednoznaczna forma bezpośrednia"
   ],
   "match": "Defensor vs Hebraica y Macabi",
   "pick": "Defensor",
@@ -96,179 +158,466 @@
   "injuryLine": ""
  },
  {
+  "key": "basketball|Kansas State vs Montana|Kansas State",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Niski kurs 1.10 przy ocenie D oraz silnie ujemne EV.",
+  "risks": [
+   "Ujemne EV",
+   "Niska ocena analityczna"
+  ],
+  "match": "Kansas State vs Montana",
+  "pick": "Kansas State",
+  "odds": 1.1,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
   "key": "basketball|Missouri State vs Abilene Christian|Missouri State",
   "verdict": "GRAJ",
-  "confidence": 5,
-  "reason": "Wysokie prawdopodobieństwo wygranej (79% Forebet) oraz dominacja gospodarzy u siebie i w H2H. Świetna okazja przy kursie 1.50.",
+  "confidence": 4,
+  "reason": "Gospodarze dominują u siebie, mają świetną formę i dodatni bilans H2H. Kurs 1.50 przy solidnych wskaźnikach statystycznych stanowi dobrą okazję.",
   "risks": [
-   "Abilene Christian może zaskoczyć lepszą defensywą",
-   "Wczesna faza sezonu w NCAA"
+   "Początek sezonu w NCAA bywa zmienny",
+   "Potencjalne zmęczenie gospodarzy"
   ],
   "match": "Missouri State vs Abilene Christian",
   "pick": "Missouri State",
   "odds": 1.5,
   "sport": "basketball",
-  "source": "Forebet",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Oklahoma State vs Central Arkansas|Oklahoma State",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.05 i ujemne EV wykluczają ten zakład z opłacalnych inwestycji.",
+  "risks": [
+   "Brak value",
+   "Ujemne EV"
+  ],
+  "match": "Oklahoma State vs Central Arkansas",
+  "pick": "Oklahoma State",
+  "odds": 1.05,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Oregon State vs East Texas A&M|Oregon State",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.05 oraz ujemne EV nie uzasadniają zaangażowania kapitału.",
+  "risks": [
+   "Brak value",
+   "Ujemne EV"
+  ],
+  "match": "Oregon State vs East Texas A&M",
+  "pick": "Oregon State",
+  "odds": 1.05,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|UC San Diego vs Texas Southern|UC San Diego",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.05 i ujemne EV czynią ten typ nieopłacalnym.",
+  "risks": [
+   "Brak value",
+   "Ujemne EV"
+  ],
+  "match": "UC San Diego vs Texas Southern",
+  "pick": "UC San Diego",
+  "odds": 1.05,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|UCLA vs Long Beach State|UCLA",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.01 nie oferuje żadnej wartości inwestycyjnej.",
+  "risks": [
+   "Minimalny kurs",
+   "Ujemne EV"
+  ],
+  "match": "UCLA vs Long Beach State",
+  "pick": "UCLA",
+  "odds": 1.01,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "hockey|Torpedo vs Kulager|Torpedo",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Niski kurs 1.23 przy ujemnym EV i ocenie D nie warrantuje ryzyka.",
+  "risks": [
+   "Ujemne EV",
+   "Niska ocena modelu"
+  ],
+  "match": "Torpedo vs Kulager",
+  "pick": "Torpedo",
+  "odds": 1.23,
+  "sport": "hockey",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Jindrichuv Hradec vs Liberecko|Jindrichuv Hradec",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.07 jest zbyt niski, aby grać go z zyskiem w dłuższej perspektywie.",
+  "risks": [
+   "Brak value",
+   "Ujemne EV"
+  ],
+  "match": "Jindrichuv Hradec vs Liberecko",
+  "pick": "Jindrichuv Hradec",
+  "odds": 1.071,
+  "sport": "basketball",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
   "key": "basketball|Dubai vs Anadolu Efes|Dubai",
-  "verdict": "ODPUŚĆ",
+  "verdict": "OBSERWUJ",
   "confidence": 2,
-  "reason": "Mimo dobrej formy gospodarzy, ujemne EV (-0.105) i mocny rywal z Euroligi czynią ten zakład matematycznie nieopłacalnym przy obecnym kursie.",
+  "reason": "Dubai gra u siebie solidnie, ale Anadolu Efes to klasowy zespół z Euroligi, który może zaskoczyć pomimo słabszej serii.",
   "risks": [
-   "Ujemne Expected Value",
-   "Anadolu Efes to klasowy zespół z potencjałem"
+   "Różnica klas rozgrywkowych",
+   "Doświadczenie gości na międzynarodowej scenie"
   ],
   "match": "Dubai vs Anadolu Efes",
   "pick": "Dubai",
   "odds": 1.35,
   "sport": "basketball",
-  "source": "Forebet",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
-  "key": "hockey|Unia Oswiecim vs Bytom|Unia Oswiecim",
+  "key": "hockey|Mountfield HK U20 vs Pardubice U20|Mountfield HK U20",
+  "verdict": "OBSERWUJ",
+  "confidence": 2,
+  "reason": "Wysoki kurs 3.40 na gospodarzy przy sprzyjających statystykach formy, jednak hokej młodzieżowy cechuje się dużą niestabilnością.",
+  "risks": [
+   "Młodzieżowy hokej jest bardzo zmienny",
+   "Wysoki kurs sugeruje trudne spotkanie"
+  ],
+  "match": "Mountfield HK U20 vs Pardubice U20",
+  "pick": "Mountfield HK U20",
+  "odds": 3.4,
+  "sport": "hockey",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Karhu Basket vs Helsinki Seagulls|Karhu Basket",
   "verdict": "GRAJ",
   "confidence": 3,
-  "reason": "Unia Oświęcim jest silna na własnym lodowisku i ma lepszy bilans w ostatnich spotkaniach. Kurs 1.90 daje dobre value.",
+  "reason": "Karhu Basket dominuje w bezpośrednich meczach (5-0) i ma silną formę na własnym parkiecie. Kurs 1.48 jest rozsądny do AKO.",
   "risks": [
-   "Polonia Bytom potrafi zaskoczyć na wyjeździe",
-   "Nierówna forma w ostatnich kolejkach"
+   "Helsinki Seagulls potrafią sprawić niespodziankę",
+   "Ostatni pucharowy mecz był wyrównany"
   ],
-  "match": "Unia Oswiecim vs Bytom",
-  "pick": "Unia Oswiecim",
-  "odds": 1.9,
-  "sport": "hockey",
-  "source": "Forebet",
+  "match": "Karhu Basket vs Helsinki Seagulls",
+  "pick": "Karhu Basket",
+  "odds": 1.48,
+  "sport": "basketball",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
   "key": "basketball|Maccabi Raanana vs Otef Darom|Maccabi Raanana",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Zdecydowana przewaga gospodarzy w H2H (2-0) oraz bardzo wysokie poparcie kibiców (92%). Kurs 1.50 dobrze odzwierciedla szanse.",
+  "reason": "Gospodarze mają świetną formę u siebie i komplet zwycięstw w bezpośrednich starciach z rywalem. Kurs 1.50 daje dobre value.",
   "risks": [
-   "Rywal notuje serię dobrych meczów",
-   "Niski margines błędu w lidze izraelskiej"
+   "Potencjalny przestój w grze gospodarzy",
+   "Goście grają nierówno na wyjazdach"
   ],
   "match": "Maccabi Raanana vs Otef Darom",
   "pick": "Maccabi Raanana",
   "odds": 1.5,
   "sport": "basketball",
-  "source": "Forebet",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
-  "key": "basketball|Karhu Basket vs Helsinki Seagulls|Karhu Basket",
+  "key": "volleyball|Loimu vs Hurrikaani|Hurrikaani",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Karhu wygrywało bezpośrednie mecze, ale ich obecna forma (WWWLL) jest zbyt chwiejna, by bezpiecznie grać po kursie 1.48.",
+  "reason": "Kurs 1.10 jest zbyt niski w stosunku do ryzyka w siatkówce halowej.",
   "risks": [
-   "Dwa ostatnie mecze gospodarzy zakończyły się porażkami",
-   "Niski spread w prognozach"
+   "Niski kurs",
+   "Ujemne EV"
   ],
-  "match": "Karhu Basket vs Helsinki Seagulls",
-  "pick": "Karhu Basket",
-  "odds": 1.48,
-  "sport": "basketball",
-  "source": "Forebet",
+  "match": "Loimu vs Hurrikaani",
+  "pick": "Hurrikaani",
+  "odds": 1.1,
+  "sport": "volleyball",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
-  "key": "basketball|Maccabi Tel Aviv vs Olympiacos|Olympiacos",
+  "key": "hockey|GKS Tychy vs Podhale|GKS Tychy",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.0 praktycznie uniemożliwia zawieranie zakładu.",
+  "risks": [
+   "Brak kursu bukmacherskiego o wartości",
+   "Skrajnie ujemne EV"
+  ],
+  "match": "GKS Tychy vs Podhale",
+  "pick": "GKS Tychy",
+  "odds": 1.0,
+  "sport": "hockey",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Fenerbahce vs Lyon-Villeurbanne|Fenerbahce",
   "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Mimo że Olympiacos jest faworytem, ujemne EV oraz trudny teren w Izraelu czynią ten typ ryzykownym.",
+  "reason": "Kurs 1.18 jest zbyt niski do gry pojedynczej, mimo wyraźnej dominacji gospodarzy.",
   "risks": [
-   "Ujemne Expected Value",
-   "Maccabi potrafi grać u siebie na wysokim poziomie"
+   "Niski kurs",
+   "Ujemne EV"
   ],
-  "match": "Maccabi Tel Aviv vs Olympiacos",
-  "pick": "Olympiacos",
-  "odds": 1.45,
+  "match": "Fenerbahce vs Lyon-Villeurbanne",
+  "pick": "Fenerbahce",
+  "odds": 1.18,
   "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "hockey|Skelleftea vs Rogle|Skelleftea",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Skelleftea gra u siebie rewelacyjnie (5 zwycięstw z rzędu) i ma solidną przewagę w H2H oraz statystykach.",
+  "risks": [
+   "Rogle może powalczyć o niespodziankę w defensywie",
+   "Stosunkowo niski kurs na czystą jedynkę"
+  ],
+  "match": "Skelleftea vs Rogle",
+  "pick": "Skelleftea",
+  "odds": 1.85,
+  "sport": "hockey",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "hockey|Unia Oswiecim vs Bytom|Unia Oswiecim",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Unia Oświęcim prezentuje znacznie lepszą formę na własnym lodowisku niż Bytom na wyjazdach.",
+  "risks": [
+   "Bytom potrafił sprawiać problemy w przeszłości",
+   "H2H bezpośrednie bywa wyrównane"
+  ],
+  "match": "Unia Oswiecim vs Bytom",
+  "pick": "Unia Oswiecim",
+  "odds": 1.93,
+  "sport": "hockey",
   "source": "Forebet",
   "injuryLine": ""
  },
  {
   "key": "basketball|Jamtland vs BC Lulea|Jamtland",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Jamtland dominuje w historii spotkań (4-1) i gra u siebie w znakomitej formie. Kurs 1.60 jest w pełni akceptowalny.",
+  "confidence": 4,
+  "reason": "Jamtland dominuje w bezpośrednich starciach (4-1 w H2H) i świetnie radzi sobie u siebie.",
   "risks": [
-   "BC Lulea jest groźna w ofensywie",
-   "Potencjał do zaciętej końcówki"
+   "BC Lulea jest w stabilnej formie punktowej",
+   "Potencjalnie zacięta końcówka meczu"
   ],
   "match": "Jamtland vs BC Lulea",
   "pick": "Jamtland",
-  "odds": 1.6,
+  "odds": 1.58,
   "sport": "basketball",
-  "source": "Forebet",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
-  "key": "football|Luton Town vs Peterborough|Luton Town",
-  "verdict": "GRAJ",
-  "confidence": 5,
-  "reason": "Luton Town gra u siebie kapitalnie (seria zwycięств), podczas gdy Peterborough przegrywa wszystko na wyjazdach. Statystyki H2H i Forebet mocno wspierają gospodarzy.",
+  "key": "basketball|Næstved vs Gladsaxe|Næstved",
+  "verdict": "ODPUŚĆ",
+  "confidence": 1,
+  "reason": "Kurs 1.01 jest całkowicie nieopłacalny do gry i nie oferuje żadnego value.",
   "risks": [
-   "Pucharowy charakter rozgrywek (EFL Trophy) może przynieść rotacje w składach",
-   "Peterborough może zagrać bardziej defensywnie"
+   "Minimalne błędy bukmachera lub całkowity brak zysku przy niespodziance"
   ],
-  "match": "Luton Town vs Peterborough",
-  "pick": "Luton Town",
-  "odds": 1.5,
-  "sport": "football",
-  "source": "Forebet",
+  "match": "Næstved vs Gladsaxe",
+  "pick": "Næstved",
+  "odds": 1.01,
+  "sport": "basketball",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
-  "key": "basketball|Antibes vs Le Havre|Antibes",
+  "key": "hockey|Düsseldorf vs Rosenheim|Düsseldorf",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Antibes ma świetny bilans domowy (4 wygrane z rzędu w lidze), a Le Havre gra dramatycznie na wyjazdach. Kurs 1.40 ma solidne podstawy statystyczne.",
+  "reason": "Düsseldorf u siebie punktuje regularnie, a Rosenheim ma spore problemy na wyjazdach.",
   "risks": [
-   "Ostatnia porażka gospodarzy w pucharze",
-   "Niski kurs główny"
+   "Rosenheim potrafi zaskoczyć w ofensywie",
+   "H2H z przeszłości bywało zacięte"
   ],
-  "match": "Antibes vs Le Havre",
-  "pick": "Antibes",
-  "odds": 1.4,
+  "match": "Düsseldorf vs Rosenheim",
+  "pick": "Düsseldorf",
+  "odds": 1.68,
+  "sport": "hockey",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Maccabi Tel Aviv vs Olympiacos|Olympiacos",
+  "verdict": "GRAJ",
+  "confidence": 3,
+  "reason": "Olympiacos prezentuje wyższą kulturę gry i świetnie radzi sobie na wyjazdach, co potwierdzają wskazania Forebet.",
+  "risks": [
+   "Maccabi gra na trudnym terenie domowym",
+   "Spotkania w Eurolidze często są bardzo wyrównane"
+  ],
+  "match": "Maccabi Tel Aviv vs Olympiacos",
+  "pick": "Olympiacos",
+  "odds": 1.43,
   "sport": "basketball",
   "source": "Forebet",
   "injuryLine": ""
  },
  {
   "key": "basketball|Barcelona vs Paris|Barcelona",
-  "verdict": "ODPUŚĆ",
+  "verdict": "OBSERWUJ",
   "confidence": 2,
-  "reason": "Mecz na szczycie Euroligi z ujemnym EV dla Barcelony. Paris to niezwykle groźna drużyna, która potrafi zaskoczyć na wyjeździe.",
+  "reason": "Mimo świetnej formy Barcelony, Paris ma korzystny bilans bezpośredni i potrafi urwać zwycięstwo.",
   "risks": [
-   "Ujemne Expected Value (-0.066)",
-   "Wysoka jakość kadrowa gości"
+   "Ujemne EV pomimo wysokiego wsparcia kibiców",
+   "Paris gra bardzo dobrze na wyjazdach w Europie"
   ],
   "match": "Barcelona vs Paris",
   "pick": "Barcelona",
-  "odds": 1.45,
+  "odds": 1.48,
   "sport": "basketball",
-  "source": "Forebet",
+  "source": "Sports",
   "injuryLine": ""
  },
  {
-  "key": "football|Independiente Riva. Res. vs Platense Res.|Independiente Riva. Res.",
+  "key": "basketball|Antibes vs Le Havre|Antibes",
   "verdict": "GRAJ",
   "confidence": 4,
-  "reason": "Gospodarze w doskonałej formie (4 zwycięstwa w 5 meczach), podczas gdy goście przegrali ostatnich 5 spotkań. Kurs 2.20 przy słabej dyspozycji Platense Reserve daje duże value.",
+  "reason": "Antibes u siebie gra bardzo solidnie (4 zwycięstwa z rzędu), podczas gdy Le Havre na wyjazdach zawodzi.",
   "risks": [
-   "Brak danych o meczach domowych/wyjazdowych",
-   "Mecz rezerw bywa nieprzewidywalny"
+   "Historyczne mecze H2H są bardzo stare i mało miarodajne",
+   "Le Havre może zamurować kosz w defensywie"
   ],
-  "match": "Independiente Riva. Res. vs Platense Res.",
-  "pick": "Independiente Riva. Res.",
-  "odds": 2.2,
+  "match": "Antibes vs Le Havre",
+  "pick": "Antibes",
+  "odds": 1.4,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "football|Clydebank FC vs Albion Rovers|Clydebank FC",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Mecz pucharowy (Scottish Challenge Cup) z niższych lig niesie ze sobą ryzyko niespodzianki przy niskim kursie.",
+  "risks": [
+   "Specyfika pucharu i niższych lig szkockich",
+   "Albion Rovers mimo słabej formy może zagrać defensywnie"
+  ],
+  "match": "Clydebank FC vs Albion Rovers",
+  "pick": "Clydebank FC",
+  "odds": 1.25,
   "sport": "football",
-  "source": "TOP",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "handball|Slovan vs Mors|Slovan",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Bardzo ujemne EV (-0.206) przy kursie 1.16 czyni ten zakład nieopłacalnym matematycznie.",
+  "risks": [
+   "Wysoki współczynnik opłacalności na niekorzyść typu",
+   "Brak pełnych danych ligowych gości"
+  ],
+  "match": "Slovan vs Mors",
+  "pick": "Slovan",
+  "odds": 1.16,
+  "sport": "handball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Florida vs Notre Dame|Florida",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Niski kurs (1.06) połączony z ujemnym EV (-0.124) nie rekompensuje ryzyka w koszykówce akademickiej.",
+  "risks": [
+   "NCAA bywa bardzo nieprzewidywalne na początku sezonu",
+   "Ujemne Expected Value"
+  ],
+  "match": "Florida vs Notre Dame",
+  "pick": "Florida",
+  "odds": 1.06,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Unifacisa vs Botafogo RJ|Unifacisa",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Unifacisa u siebie prezentuje ogromną siłę, a Botafogo RJ regularnie przegrywa mecze wyjazdowe.",
+  "risks": [
+   "Botafogo potrafi czasami sprawić niespodziankę",
+   "Niski kurs na gospodarzy"
+  ],
+  "match": "Unifacisa vs Botafogo RJ",
+  "pick": "Unifacisa",
+  "odds": 1.15,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|UMass Lowell vs St. Peters|UMass Lowell",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Gospodarze mają lepszą formę u siebie, ale ujemne EV sugeruje ostrożność przy tym kursie.",
+  "risks": [
+   "Mecz uniwersytecki z potencjałem na zacięty wynik",
+   "Niewielka próbka spotkań w nowym sezonie"
+  ],
+  "match": "UMass Lowell vs St. Peters",
+  "pick": "UMass Lowell",
+  "odds": 1.4,
+  "sport": "basketball",
+  "source": "Sports",
+  "injuryLine": ""
+ },
+ {
+  "key": "basketball|Ada Blois vs ASA|Ada Blois",
+  "verdict": "ODPUŚĆ",
+  "confidence": 2,
+  "reason": "Ada Blois gra bardzo dobrze u siebie, jednak niska ocena modelu (grade D) oraz słaby bilans meczów bezpośrednich na własnym parkiecie z ASA budzą wątpliwości.",
+  "risks": [
+   "Niski wskaźnik EV (-0.234) przy niskim kursie 1.20",
+   "Niekorzystna historia spotkań H2H u siebie"
+  ],
+  "match": "Ada Blois vs ASA",
+  "pick": "Ada Blois",
+  "odds": 1.2,
+  "sport": "basketball",
+  "source": "Sports",
   "injuryLine": ""
  }
 ]
