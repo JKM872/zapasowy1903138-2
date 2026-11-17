@@ -283,7 +283,9 @@
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": 0
+  "netKey": 0,
+  "aiSummary": "Both teams lose a star – Adelaide without Steph Talbot and Geelong without Bec Cole – but Adelaide’s loss hurts our pick.",
+  "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
  },
  "basketball|Nagasaki|SeaHorses Mikawa": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -310,55 +312,67 @@
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": -1
+  "netKey": -1,
+  "aiSummary": "Nagaski are missing key player P. Aguilar, while SeaHorses Mikawa have no reported absences.",
+  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "basketball|Dubai|Anadolu Efes": {
-  "checkedAt": "2026-11-17T06:54:42.266644+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": "llm",
   "confirmed": false,
   "side": "home",
   "home": [
    {
-    "name": "Thomas Walkup",
+    "name": "Mouhammadou Jaiteh",
     "importance": "key",
     "status": "out",
-    "reason": "Back injury, not travelling for the game"
+    "reason": "Achilles"
    },
    {
     "name": "Davis Bertans",
-    "importance": "key",
+    "importance": "star",
     "status": "out",
-    "reason": "Hamstring injury"
+    "reason": "hamstring"
+   },
+   {
+    "name": "Kosta Kondić",
+    "importance": "other",
+    "status": "out",
+    "reason": "hip/psoas"
    }
   ],
   "away": [
    {
-    "name": "Mike James",
-    "importance": "star",
+    "name": "Isaia Cordinier",
+    "importance": "other",
     "status": "out",
-    "reason": "Achilles tendon injury, out 7‑9 months"
+    "reason": "recovery from surgery"
    },
    {
     "name": "Bruno Fernando",
     "importance": "key",
     "status": "out",
-    "reason": "Calf injury, out 3‑4 weeks"
+    "reason": "calf"
+   },
+   {
+    "name": "Mike James",
+    "importance": "star",
+    "status": "out",
+    "reason": "Achilles"
    }
   ],
   "sources": [
-   "https://basketballstats.eu/en/game/dubai-anadolu-efes-12/",
+   "https://sportando.basketball/en/euroleague-injury-report-november-17-2026-round-12-absences-and-game-time-calls/",
+   "https://basketnews.com/news-212393-euroleague-injury-report-updated.html",
    "https://www.eurohoops.net/en/euroleague/2032675/thomas-walkup-will-miss-the-clash-against-olympiacos-due-to-injury/",
-   "https://piratasdelbasket.net/en/injury-report-matchday-12-gibson-latest-casualty-for-barcelona",
    "https://dailyil.com/en/team/euroleague-dub/",
-   "https://basketnews.com/news-212393-euroleague-injury-report-updated.html"
+   "https://www.eurohoops.net/en/euroleague/2036247/injury-report-round-12-willis-gtd-melli-key-milutinov-out/"
   ],
   "lineup": null,
   "board": "ok",
   "top_block": false,
-  "netStars": -1,
-  "netKey": 0,
-  "aiSummary": "Dubai is missing key players Thomas Walkup and Davis Bertans, while Anadolu Efes is without star Mike James and key player Bruno Fernando. The absence of two key players significantly weakens our pick, Dubai.",
-  "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Maccabi Raanana|Otef Darom": {
   "checkedAt": "2026-11-17T06:54:42.266644+00:00",
@@ -447,7 +461,9 @@
   "side": "away",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
  },
  "basketball|Umea|Nassjo": {
   "checkedAt": "2026-11-17T06:54:42.266644+00:00",
@@ -503,10 +519,12 @@
   "side": "home",
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
  },
  "football|Togo|Algeria": {
-  "checkedAt": "2026-11-17T06:54:42.266644+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "away",
@@ -543,9 +561,7 @@
   "board": "ok",
   "top_block": false,
   "netStars": -2,
-  "netKey": -2,
-  "aiSummary": "Togo is missing three key players, including star J. Homawoo, while Algeria is only without A.",
-  "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
+  "netKey": -2
  },
  "football|Independiente Riva. Res.|Platense Res.": {
   "checkedAt": "2026-11-17T06:54:42.266644+00:00",
@@ -747,33 +763,116 @@
   "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
  },
  "hockey|Lida|Gomel": {
-  "checkedAt": "2026-11-17T06:54:42.266644+00:00",
-  "source": null,
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "http://gomel.hockey.by/news/sobytie/news464430.html",
+   "https://stavka.tv/matches/ice-hockey/17-11-2026-lida-gomel",
+   "https://hockey.by/news/match/news464578.html",
+   "https://belarushockey.com/rb/news/2026/11/16/artem-goncharov-o-porazhenii-ot-gomelja-i-problemah-s-realizaciej/",
+   "https://statshub.sportradar.com/sportradar/en/match/74232040"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T06:54:42.266644+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "hockey|Vitkovice U20|Trinec U20": {
-  "checkedAt": "2026-11-17T06:54:42.266644+00:00",
-  "source": null,
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.livesport.cz/tym/vitkovice/pGJKZok5/",
+   "https://www.sofascore.com/ice-hockey/match/hc-vitkovice-ridera-u20-trinec-u20/uqfcstahc",
+   "https://www.hc-vitkovice.cz/news",
+   "https://scores24.live/en/ice-hockey/m-17-11-2026-hc-vitkovice-ridera-u20-hc-ocelari-trinec-u20",
+   "https://www.eliteprospects.com/team/3402/hc-vitkovice-u20"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "hockey|Hartford Wolf Pack|Charlotte Checkers": {
-  "checkedAt": "2026-11-17T06:54:42.266644+00:00",
-  "source": null,
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [
+   {
+    "name": "Marc Del Gaizo",
+    "importance": "star",
+    "status": "out",
+    "reason": "Recalled by New York Rangers; week‑to‑week upper‑body injury"
+   }
+  ],
+  "away": [
+   {
+    "name": "Ludvig Jansson",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   },
+   {
+    "name": "Mitch Vande Sompel",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   },
+   {
+    "name": "Nate Bastian",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   },
+   {
+    "name": "Riese Gaber",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   },
+   {
+    "name": "MacKenzie Entwistle",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   },
+   {
+    "name": "Samu Salminen",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   },
+   {
+    "name": "Tobias Bjornfot",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Scratch (rest/rotation)"
+   }
+  ],
+  "sources": [
+   "https://www.foreverblueshirts.com/new-york-rangers-news/wolf-pack-will-miss-captain-marc-del-gaizo-nhl-recall",
+   "https://charlottecheckers.com/articles/checkers-fall-short-against-providence",
+   "https://stavka.tv/matches/ice-hockey/17-11-2026-hartford-wolf-pack-charlotte-checkers",
+   "https://insidetherink.com/ahl-game-preview-charlotte-checkers-at-hartford-wolf-pack-with-projected-lines-11-17-2026/",
+   "https://www.peoplesbankarena.com/events/detail/hartford-wolf-pack-2026-6"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": -1,
+  "netKey": -1
  },
  "hockey|Pyry|IPK": {
   "checkedAt": "2026-11-17T06:54:42.266644+00:00",
@@ -1256,15 +1355,80 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|True"
  },
  "basketball|Czarnogóra K|Izrael K": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
-  "source": null,
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [
+   {
+    "name": "Milena Bigović",
+    "importance": "other",
+    "status": "out",
+    "reason": "not selected for the squad due to college commitments"
+   },
+   {
+    "name": "Maja Bigović",
+    "importance": "other",
+    "status": "out",
+    "reason": "not selected for the squad due to college commitments"
+   },
+   {
+    "name": "Ksenija Šćepanović",
+    "importance": "other",
+    "status": "out",
+    "reason": "not selected for the squad due to college commitments"
+   },
+   {
+    "name": "Jelena Bulajić",
+    "importance": "other",
+    "status": "out",
+    "reason": "not selected for the squad due to college commitments"
+   },
+   {
+    "name": "Janja Dragišić",
+    "importance": "other",
+    "status": "out",
+    "reason": "not selected for the squad due to college commitments"
+   },
+   {
+    "name": "Lana Vukčević",
+    "importance": "other",
+    "status": "out",
+    "reason": "not selected for the squad due to college commitments"
+   }
+  ],
+  "away": [
+   {
+    "name": "Roman Sorkin",
+    "importance": "other",
+    "status": "out",
+    "reason": "not invited to the squad for the November window"
+   },
+   {
+    "name": "Cadin Krington",
+    "importance": "other",
+    "status": "out",
+    "reason": "not invited to the squad for the November window"
+   },
+   {
+    "name": "Yam Madar",
+    "importance": "other",
+    "status": "out",
+    "reason": "not invited to the squad for the November window"
+   }
+  ],
+  "sources": [
+   "https://en.vijesti.me/sports-e/basketball/836529/Montenegro-welcomes-Israel--we-had-time-to-prepare--the-defense-must-be-at-the-level",
+   "https://ibasketball.co.il/news/2026/11/%d7%a1%d7%92%d7%9c-%d7%a0%d7%91%d7%97%d7%a8%d7%aa-%d7%99%d7%a9%d7%a8%d7%90%d7%9c-%d7%9c%d7%9e%d7%a9%d7%97%d7%a7%d7%99-%d7%97%d7%9c%d7%95%d7%9f-%d7%a0%d7%95%d7%91%d7%9e%d7%91%d7%a8/",
+   "https://www.fiba.basketball/en/events/fiba-womens-eurobasket-2027-qualifiers/games/129098-MNE-ISR",
+   "https://www.sofascore.com/basketball/match/montenegro-israel/Kposvuu",
+   "https://rtcg.me/sport/kosarka/903615/crna-gora-protiv-izraela-za-nastavak-pobjednickog-niza-i-korak-ka-eurobasketu-tvcg2-18h.html"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "netStars": 0,
+  "netKey": 0
  },
  "basketball|Portugal W|Germany W": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -1344,7 +1508,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "football|Arabia Saudyjska U23|Kuwejt U23": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1352,7 +1516,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "football|Anglia U17|Ukraina U17": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -1366,7 +1530,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "football|Portugalia U21|Norwegia U21": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1374,7 +1538,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "football|Saint Kitts i Nevis|Bonaire": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -1388,7 +1552,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "football|USA U20|Paragwaj U20": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1396,10 +1560,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "football|Hajduk Split II|Jadran KS": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1407,7 +1571,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "football|Dania|Norwegia": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -1498,7 +1662,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "football|Chorwacja U21|Niemcy U21": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1506,7 +1670,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "football|Luton|Peterborough": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -1811,7 +1975,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "tennis|Maloney P.|Gray A.": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -1819,7 +1983,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "tennis|V. Gogineni|M. Wiskandt": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -2042,7 +2206,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "tennis|Bronzetti L.|Herrero Linana A.": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2050,7 +2214,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "tennis|A. Ghibaudo|F. Moroni": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -2108,7 +2272,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "tennis|N. Podoroska|V. Lepchenko": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2116,7 +2280,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "tennis|Soto M.|Barrena A.": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -2328,7 +2492,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "tennis|J. Forejtek|P. Herbert": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -2336,10 +2500,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "tennis|Forejtek J.|Herbert P.H.": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -2347,7 +2511,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "tennis|Glushkova D.|Schnyder S.": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -2493,7 +2657,7 @@
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
  },
  "tennis|Donski A.|Gille S.": {
-  "checkedAt": "2026-11-17T09:38:23.853168+00:00",
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -2501,7 +2665,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  },
  "tennis|Ewald W.|Voloshchuk A.": {
   "checkedAt": "2026-11-17T09:38:23.853168+00:00",
@@ -2568,5 +2732,137 @@
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
   "aiSummarySig": "2026-11-17T09:38:23.853168+00:00|False"
+ },
+ "basketball|Baskonia|Hapoel Tel-Aviv": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "basketball|Polzela|Perspektiva Ilirija": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "football|Guiseley AFC|Ashton United": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "football|Warrenpoint Town|Glenavon": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "football|Cleethorpes Town|FC United": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "football|Hyde FC|Warrington Rylands": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "football|Quorn|Bury": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "football|Havant & Waterlooville|Bracknell Town": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "tennis|Gaines Jr J.|Oliveira N.": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "tennis|Dummer Macedo T.|Rodrigues Longobardi P.": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "tennis|Homberg M.|Almeida J.": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
+ },
+ "tennis|H. Heck|J. Lee": {
+  "checkedAt": "2026-11-17T14:21:55.471277+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-17T14:21:55.471277+00:00|False"
  }
 }
