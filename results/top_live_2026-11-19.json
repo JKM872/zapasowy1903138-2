@@ -86,7 +86,8 @@
   "closingMarket": "3way",
   "closingMinsToKick": 20,
   "closingApprox": false,
-  "clvPct": 7.4
+  "clvPct": 7.4,
+  "finalCheckMissed": true
  },
  "football|Aldosivi Res. vs Godoy Cruz Res.": {
   "checks": [
@@ -111,7 +112,8 @@
   "closingMarket": "3way",
   "closingMinsToKick": 20,
   "closingApprox": false,
-  "clvPct": -29.7
+  "clvPct": -29.7,
+  "finalCheckMissed": true
  },
  "hockey|Vipiteno vs Unterland": {
   "checks": [
@@ -131,6 +133,35 @@
   "bestOdds": 1.46,
   "bestOddsSource": "pinnacle",
   "bestOddsAt": "2026-11-19T17:40:18Z",
-  "booksCount": 2
+  "booksCount": 2,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
+ },
+ "hockey|Massachusetts Minutemen vs Providence Friars": {
+  "checks": [
+   {
+    "at": "2026-11-19T22:36:36Z",
+    "minsToKick": 23,
+    "best": 1.36,
+    "bestSource": "livesport",
+    "books": 1,
+    "quote": null,
+    "quoteSource": null,
+    "quoteMarket": null,
+    "avail": "ok",
+    "availAgeMin": 8
+   }
+  ],
+  "bestOdds": 1.36,
+  "bestOddsSource": "livesport",
+  "bestOddsAt": "2026-11-19T22:36:36Z",
+  "booksCount": 1
+ },
+ "hockey|Cortina vs Salzburg 2": {
+  "checks": [],
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": true
  }
 }
