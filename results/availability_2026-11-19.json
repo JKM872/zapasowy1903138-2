@@ -364,15 +364,26 @@
   "unknown": true
  },
  "basketball|Pato|Corinthians Paulista": {
-  "checkedAt": "2026-11-19T06:11:35.485321+00:00",
-  "source": null,
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.meutimao.com.br/noticias-do-corinthians/544305/corinthians-enfrenta-o-pato-basquete-para-continuar-bom-momento-no-nbb-saiba-tudo",
+   "https://onefootball.com/pt-br/noticias/pato-x-corinthians-basquete-onde-assistir-e-provavel-escalacao-43798023",
+   "https://dalecoringao.com.br/noticias-do-corinthians/461414526/corinthians-enfrenta-pato-basquete-nbb",
+   "https://basketora.app/brazil-nbb/corinthians-paulista-vs-pato/lineups",
+   "https://basketball.realgm.com/international/preview/2026-11-19/Corinthians-at-Pato-Basquete/545213"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T06:11:35.485321+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "football|Omiya Ardija Ventus W|INAC Kobe Leonessa W": {
   "checkedAt": "2026-11-19T06:11:35.485321+00:00",
@@ -468,17 +479,11 @@
   "aiSummarySig": "2026-11-19T06:11:35.485321+00:00|False"
  },
  "football|Vitória|RB Bragantino": {
-  "checkedAt": "2026-11-19T06:11:35.485321+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
   "home": [
-   {
-    "name": "Camutanga",
-    "importance": "other",
-    "status": "out",
-    "reason": "Broken Toe"
-   },
    {
     "name": "D. Rodrigues",
     "importance": "other",
@@ -499,7 +504,7 @@
    },
    {
     "name": "I. Laquintana",
-    "importance": "other",
+    "importance": "key",
     "status": "out",
     "reason": "other"
    },
@@ -514,12 +519,6 @@
     "importance": "key",
     "status": "out",
     "reason": "Cruciate Ligament Injury"
-   },
-   {
-    "name": "Ramon",
-    "importance": "key",
-    "status": "out",
-    "reason": "Leg Injury"
    },
    {
     "name": "Riccieli",
@@ -546,16 +545,103 @@
     "importance": "star",
     "status": "out",
     "reason": "1"
-   },
-   {
-    "name": "J. A. Hurtado",
-    "importance": "other",
-    "status": "doubtful",
-    "reason": "1"
    }
   ],
   "sources": null,
-  "lineup": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "L. Arcanjo",
+     "star": true
+    },
+    {
+     "name": "Mateusinho",
+     "star": false
+    },
+    {
+     "name": "Cacá",
+     "star": false
+    },
+    {
+     "name": "E. Brítez",
+     "star": false
+    },
+    {
+     "name": "Jamerson",
+     "star": false
+    },
+    {
+     "name": "E. Martinez",
+     "star": false
+    },
+    {
+     "name": "G. Baralhas",
+     "star": false
+    },
+    {
+     "name": "Erick",
+     "star": true
+    },
+    {
+     "name": "Matheuzinho",
+     "star": false
+    },
+    {
+     "name": "D. Tarzia",
+     "star": false
+    },
+    {
+     "name": "Renê",
+     "star": true
+    }
+   ],
+   "away": [
+    {
+     "name": "T. Volpi",
+     "star": false
+    },
+    {
+     "name": "A. Sant Anna",
+     "star": false
+    },
+    {
+     "name": "G. Marques",
+     "star": false
+    },
+    {
+     "name": "G. Rodríguez",
+     "star": false
+    },
+    {
+     "name": "J. Capixaba",
+     "star": true
+    },
+    {
+     "name": "E. Ramires",
+     "star": false
+    },
+    {
+     "name": "Fabinho",
+     "star": false
+    },
+    {
+     "name": "J. Herrera",
+     "star": false
+    },
+    {
+     "name": "Wallace",
+     "star": false
+    },
+    {
+     "name": "Fernando",
+     "star": false
+    },
+    {
+     "name": "E. Sasha",
+     "star": false
+    }
+   ]
+  },
   "board": "drop",
   "top_block": true,
   "netStars": 2,
@@ -708,15 +794,33 @@
   "aiSummarySig": "2026-11-19T06:11:35.485321+00:00|False"
  },
  "hockey|Massachusetts Minutemen|Providence Friars": {
-  "checkedAt": "2026-11-19T06:11:35.485321+00:00",
-  "source": null,
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [
+   {
+    "name": "Cam O'Neill",
+    "importance": "key",
+    "status": "out",
+    "reason": "Season‑ending injury suffered in preseason camp"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://umassathletics.com/news/2026/11/17/hockey-minutemen-face-11-providence-in-home-and-home-series",
+   "https://friars.com/documents/download/2026/11/18/11-19_UMass.pdf",
+   "https://umassathletics.com/documents/download/2026/11/17/2026-27gamenotes-14-15-pc.pdf",
+   "https://insidetherink.com/ncaa-series-preview-providence-college-friars-vs-umass-minutemen-11-19-2026-11-21-2026/",
+   "https://amherstwire.com/40782/campus/sports-campus/umass-hockey-looks-to-snap-losing-streak-against-no-11-providence/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T06:11:35.485321+00:00|False"
+  "netStars": 0,
+  "netKey": -1,
+  "aiSummary": "Massachusetts is missing key player Cam O'Neill due to a season-ending injury, while Providence has no reported absences. This absence weakens the opponent, strengthening our pick for Providence.",
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "tennis|J. D. Hara Friend|R. Noguchi": {
   "checkedAt": "2026-11-19T06:11:35.485321+00:00",
@@ -770,13 +874,24 @@
   "aiSummarySig": "2026-11-19T06:11:35.485321+00:00|False"
  },
  "tennis|F. Roncadelli|J. M. La Serna": {
-  "checkedAt": "2026-11-19T06:11:35.485321+00:00",
-  "source": null,
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.protennislive.com/posting/2026/544/mds.pdf",
+   "https://tennisgrandstand.com/franco-roncadelli-first-challenger-title/",
+   "https://thetennistrader.com/player/franco-roncadelli.html",
+   "https://tennistonic.com/tennis-news/1081557/prediction-preview-h2h-alcala-gurri-sanchez-izquierdo-lucas-reis-da-and-roncadelli-to-play-on-court-1-on-saturday-lima-3-challenger/",
+   "https://www.atptour.com/en/scores/current-challenger/lima/6579/results"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true
+  "netStars": 0,
+  "netKey": 0
  },
  "volleyball|Hungkuk W|GS Caltex W": {
   "checkedAt": "2026-11-19T09:11:58.954147+00:00",
@@ -1226,15 +1341,26 @@
   "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|True"
  },
  "basketball|Malvin|Larranaga": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
-  "source": null,
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.elpais.com.uy/ovacion/basquetbol/malvin-vs-larranaga-en-vivo-el-playero-va-por-cambiar-la-pisada-frente-a-un-rival-necesitado-de-sumar",
+   "https://www.elobservador.com.uy/basquetbol/liga-uruguaya-basquetbol-malvin-vencio-larranaga-y-hoy-hay-choque-candidatos-penarol-y-goes-asi-va-la-tabla-posiciones-n6064408",
+   "https://www.bball.is/basketball/game/match-malvin-vs-larranaga/x7lm73t3l3xkr2w",
+   "https://www.flashscore.com/match/basketball/cs-larranaga-0WN4ediS/malvin-SCoizIuE/",
+   "https://enelaro.com.uy/partido/malvin-vs-larranaga-18-11-2026-1692"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "basketball|Anyang JungKwanJang|KCC Egis": {
   "checkedAt": "2026-11-19T09:11:58.954147+00:00",
@@ -1527,9 +1653,9 @@
   "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
  },
  "football|Vasco da Gama|Internacional": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "home",
   "home": [
    {
@@ -1543,9 +1669,27 @@
     "importance": "key",
     "status": "out",
     "reason": "1"
+   },
+   {
+    "name": "N. Moreira",
+    "importance": "key",
+    "status": "out",
+    "reason": "Thigh Injury"
+   },
+   {
+    "name": "Tchê Tchê",
+    "importance": "other",
+    "status": "out",
+    "reason": "Leg Injury"
    }
   ],
   "away": [
+   {
+    "name": "J. Carbonero",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)"
+   },
    {
     "name": "G. Maripán",
     "importance": "other",
@@ -1553,20 +1697,14 @@
     "reason": "red_card_suspension"
    },
    {
-    "name": "Anthoni",
-    "importance": "key",
+    "name": "A. Bernabei",
+    "importance": "star",
     "status": "out",
-    "reason": "1"
-   },
-   {
-    "name": "A. Sanabria",
-    "importance": "other",
-    "status": "out",
-    "reason": "Calf Injury"
+    "reason": "Sprained Knee Injury"
    },
    {
     "name": "Kayky",
-    "importance": "star",
+    "importance": "key",
     "status": "out",
     "reason": "Ankle Injury"
    },
@@ -1586,17 +1724,110 @@
     "name": "T. Maia",
     "importance": "other",
     "status": "out",
-    "reason": "Physical Discomfort"
+    "reason": "Thigh Injury"
    }
   ],
   "sources": null,
-  "lineup": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "L. Jardim",
+     "star": false
+    },
+    {
+     "name": "P. Rodríguez",
+     "star": false
+    },
+    {
+     "name": "A. Saldivia",
+     "star": false
+    },
+    {
+     "name": "R. Renan",
+     "star": true
+    },
+    {
+     "name": "Cuiabano",
+     "star": true
+    },
+    {
+     "name": "S. Sosa",
+     "star": false
+    },
+    {
+     "name": "T. Mendes",
+     "star": false
+    },
+    {
+     "name": "F. Colidio",
+     "star": false
+    },
+    {
+     "name": "A. Lescano",
+     "star": false
+    },
+    {
+     "name": "A. Gómez",
+     "star": true
+    },
+    {
+     "name": "B. Duarte",
+     "star": false
+    }
+   ],
+   "away": [
+    {
+     "name": "Kauan",
+     "star": false
+    },
+    {
+     "name": "B. Gomes",
+     "star": true
+    },
+    {
+     "name": "G. Mercado",
+     "star": false
+    },
+    {
+     "name": "J. Juninho",
+     "star": false
+    },
+    {
+     "name": "B. Aguirre",
+     "star": false
+    },
+    {
+     "name": "R. Villagra",
+     "star": false
+    },
+    {
+     "name": "B. Henrique",
+     "star": false
+    },
+    {
+     "name": "V. Gabriel",
+     "star": false
+    },
+    {
+     "name": "Alerrandro",
+     "star": false
+    },
+    {
+     "name": "Vitinho",
+     "star": false
+    },
+    {
+     "name": "A. Patrick",
+     "star": false
+    }
+   ]
+  },
   "board": "ok",
   "top_block": false,
-  "netStars": -1,
+  "netStars": -2,
   "netKey": -1,
-  "aiSummary": "Internacional's absences are more significant, featuring star Kayky and key players Anthoni and M. Cunha, while Vasco da Gama is missing key defender C.",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummary": "Internacional's absences are more significant, featuring star players A. Bernabei and J.",
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|True"
  },
  "football|Al Masry|Asyut Petroleum": {
   "checkedAt": "2026-11-19T09:11:58.954147+00:00",
@@ -1820,18 +2051,29 @@
   "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
  },
  "hockey|Grand Rapids Griffins|Manitoba Moose": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
-  "source": null,
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://griffinshockey.com/news/game-notes-griffins-vs-moose-nov-18-2026",
+   "https://illegalcurve.com/undermanned-manitoba-moose-fall-6-3-to-ahl-leading-griffins-in-grand-rapids-to-end-road-trip/",
+   "https://insidetherink.com/ahl-game-preview-grand-rapids-griffins-at-iowa-wild-with-projected-lines-11-14-2026/",
+   "https://insidetherink.com/ahl-game-preview-grand-rapids-griffins-at-iowa-wild-with-projected-lines-11-13-2026/",
+   "https://syckos.com/stories/postava-returning-to-red-wings-5PSF7R"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "hockey|New Jersey Devils|Montreal Canadiens": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1839,7 +2081,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "hockey|Ceske Budejovice|Sparta Prague": {
   "checkedAt": "2026-11-19T09:11:58.954147+00:00",
@@ -2051,7 +2293,7 @@
   "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
  },
  "tennis|Milavsky D.|Draxl L.": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -2059,7 +2301,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "tennis|Gaines Jr J.|Oliveira N.": {
   "checkedAt": "2026-11-19T14:25:08.799242+00:00",
@@ -2546,7 +2788,7 @@
   "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
  },
  "tennis|P. Sekulic|E. Aguiard": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2554,10 +2796,10 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "tennis|Sekulic P.|Aguiard E.": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2565,7 +2807,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "tennis|Morais D.|Rossi L.": {
   "checkedAt": "2026-11-19T09:11:58.954147+00:00",
@@ -2722,7 +2964,7 @@
   "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
  },
  "volleyball|Mackenzie W|ABEL Moda Volei W": {
-  "checkedAt": "2026-11-19T09:11:58.954147+00:00",
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -2730,7 +2972,7 @@
   "top_block": false,
   "unknown": true,
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-19T09:11:58.954147+00:00|False"
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  },
  "volleyball|Mackenzie K|ABEL Moda Volei K": {
   "checkedAt": "2026-11-19T09:11:58.954147+00:00",
@@ -2953,5 +3195,49 @@
   "netKey": -2,
   "aiSummary": "Utah Mammoth is missing seven key players, including Dylan Guenther and Nick Schmaltz, which significantly weakens the home team. Colorado Avalanche's absences of stars Nathan MacKinnon and Cale Makar are notable but do not outweigh the home team's extensive injury list.",
   "aiSummarySig": "2026-11-19T14:25:08.799242+00:00|False"
+ },
+ "table_tennis|Efimenko I.|Merzlikin V.": {
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
+ },
+ "table_tennis|Sharpay V.|Boltnekov D.": {
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
+ },
+ "tennis|Echazu M.|Alujas R.": {
+  "checkedAt": "2026-11-19T22:28:12.297303+00:00",
+  "source": "llm",
+  "confirmed": false,
+  "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://deepcourt.ai/matches/2026-11-19-chihuahua-r16-mauricio-echazu-vs-rodrigo-alujas-m2w42bx1j3s8w",
+   "https://www.tennisexplorer.com/match-detail/?id=3383335",
+   "https://tellwave.eu/match/mauricio-echazu-vs-rodrigo-alujas-2026-11-19-o202611187C3FDE00",
+   "https://kalshi.com/markets/kxitfmatch/echazu-vs-alujas/kxitfmatch-26nov19echalu",
+   "https://footyaro.com/tennis/match/m-echazu-vs-r-alujas-12181111"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-19T22:28:12.297303+00:00|False"
  }
 }
