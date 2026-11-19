@@ -2,11 +2,11 @@
  {
   "key": "hockey|Massachusetts Minutemen vs Providence Friars|Providence Friars",
   "verdict": "ODPUŚĆ",
-  "confidence": 2,
-  "reason": "Mimo lepszej ostatniej serii wyjazdowej Providence, przeliczony kurs 2-way (1.37) jest zbyt niski przy ujemnym bilansie H2H (2-3). Fan Vote jest podzielony po równo.",
+  "confidence": 3,
+  "reason": "Mimo lepszej formy wyjazdowej Providence, mecze bezpośrednie bywają wyrównane. Niski kurs na gości nie w pełni odzwierciedla wyrównany charakter tej rywalizacji.",
   "risks": [
-   "Niski przelicznik kursu 2-way (1.37)",
-   "Ujemny bilans H2H (2-3)"
+   "Niejednolite H2H",
+   "Niski kurs na wyjazd"
   ],
   "match": "Massachusetts Minutemen vs Providence Friars",
   "pick": "Providence Friars",
@@ -18,11 +18,10 @@
  {
   "key": "hockey|Henderson Silver Knights vs San Jose Barracuda|Henderson Silver Knights",
   "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Gospodarze bezwzględnie dominują w H2H (5-0-0) i prezentują wysoką formę u siebie, podczas gdy San Jose gra fatalnie na wyjazdach. Wysoka ocena modelu A i 82% poparcia kibiców.",
+  "confidence": 5,
+  "reason": "Henderson dominuje w bezpośrednich starciach (5-0) i prezentuje stabilniejszą formę. Wysokie poparcie kibiców i silne sygnały analityczne wspierają ten typ.",
   "risks": [
-   "Mecz rewanżowy w krótkim odstępie czasu",
-   "Model uczenia wyklucza ten przedział kursowy"
+   "Losowość meczów hokejowych"
   ],
   "match": "Henderson Silver Knights vs San Jose Barracuda",
   "pick": "Henderson Silver Knights",
@@ -33,12 +32,12 @@
  },
  {
   "key": "volleyball|Hungkuk W vs GS Caltex W|GS Caltex W",
-  "verdict": "ODPUŚĆ",
-  "confidence": 2,
-  "reason": "GS Caltex wygrało ostatnie mecze bezpośrednie, jednak niski kurs 1.35 generuje ujemną wartość oczekiwaną (EV -0.064). Brak wartości w typowaniu faworyta po tym kursie.",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "GS Caltex ma lepszą formę na wyjazdach i korzystny bilans bezpośredni w tym sezonie. Ujemne EV sugeruje jednak ostrożność przy obecnym kursie.",
   "risks": [
-   "Ujemna wartość oczekiwana (EV -0.064)",
-   "Niski kurs nieprzeliczalny na zysk"
+   "Ujemne EV",
+   "Wyrównany potencjał zespołów"
   ],
   "match": "Hungkuk W vs GS Caltex W",
   "pick": "GS Caltex W",
@@ -50,11 +49,11 @@
  {
   "key": "handball|Spor Toto vs Bursa Nilufer Belediyespor|Bursa Nilufer Belediyespor",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Bursa Nilufer wygrała 4 z ostatnich 5 meczów H2H i spisuje się świetnie w meczach wyjazdowych. Model zatwierdza wybór przy EV +0.185 i dodatnim pCal.",
+  "confidence": 4,
+  "reason": "Bursa ma świetną formę wyjazdową i przewagę w bezpośrednich meczach. Wysokie poparcie fanów oraz dodatnie EV potwierdzają value w tym typie.",
   "risks": [
-   "Wysokie wyniki na styku w H2H",
-   "Ryzyko remisu w piłce ręcznej"
+   "Gra na wyjeździe",
+   "Podobny bilans punktowy w lidze"
   ],
   "match": "Spor Toto vs Bursa Nilufer Belediyespor",
   "pick": "Bursa Nilufer Belediyespor",
@@ -66,11 +65,10 @@
  {
   "key": "volleyball|Norwid Czestochowa vs Projekt Warszawa|Projekt Warszawa",
   "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Projekt Warszawa wygrał 4 z 5 ostatnich meczów i dominuje nad Norwidem w H2H (4 wygrane). Bardzo wysoka ocena A, świetne EV (+0.329) oraz 91% głosów kibiców.",
+  "confidence": 5,
+  "reason": "Projekt Warszawa ma miażdżącą przewagę w H2H oraz świetne statystyki meczowe. Bardzo wysokie poparcie (91%) i silne wskaźniki dają wysokie prawdopodobieństwo wejścia.",
   "risks": [
-   "Mecz wyjazdowy w ligowych realiach",
-   "Segment siatkówki objęty regułą cienia"
+   "Potencjalny przestój w secie wyjazdowym"
   ],
   "match": "Norwid Czestochowa vs Projekt Warszawa",
   "pick": "Projekt Warszawa",
@@ -82,11 +80,11 @@
  {
   "key": "handball|Oldenburg W vs Bensheim-Auerbach W|Oldenburg W",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Oldenburg wygrał 4 z 5 ostatnich pojedynków ligowych oraz dwa ostatnie mecze bezpośrednie. Pozytywna wartość oczekiwana (+0.205) przemawia za gospodarzem.",
+  "confidence": 4,
+  "reason": "Oldenburg jest w świetnej formie i wygrał ostatnie bezpośrednie starcie. Dodatnie EV oraz silna gra na własnym parkiecie dają dobre perspektywy.",
   "risks": [
-   "Słabsza postawa obu ekip w pucharach europejskich",
-   "Prawdopodobieństwo wyrównanego meczu"
+   "Wysoki kurs na remis w piłce ręcznej",
+   "Niewielka różnica w potencjale"
   ],
   "match": "Oldenburg W vs Bensheim-Auerbach W",
   "pick": "Oldenburg W",
@@ -97,12 +95,12 @@
  },
  {
   "key": "volleyball|BIGBANK Tartu vs Nafels|BIGBANK Tartu",
-  "verdict": "ODPUŚĆ",
-  "confidence": 2,
-  "reason": "BIGBANK Tartu wygrał pierwszy mecz 3:2, jednak kurs 1.376 daje ujemną wartość oczekiwaną. Mimo poparcia kibiców, zakład jest nieopłacalny matematycznie.",
+  "verdict": "OBSERWUJ",
+  "confidence": 3,
+  "reason": "Tartu wygrało ostatni mecz H2H po zaciętym boju, jednak ujemne EV przy niskim kursie home nie czyni tego zakładu w pełni opłacalnym.",
   "risks": [
-   "Ujemna wartość oczekiwana (EV -0.052)",
-   "Zacięty przebieg pierwszego starcia (3-2)"
+   "Ujemne EV",
+   "Ostatni mecz H2H zakończył się tie-breakiem"
   ],
   "match": "BIGBANK Tartu vs Nafels",
   "pick": "BIGBANK Tartu",
@@ -114,11 +112,10 @@
  {
   "key": "handball|Ystads IF vs Alingsas|Ystads IF",
   "verdict": "GRAJ",
-  "confidence": 4,
-  "reason": "Ystads IF ma komplet wygranych u siebie w tym sezonie i wygrał ostatnie bezpośrednie starcie. Pozytywne sygnały, ocena A oraz wysokie poparcie w fanvote (89%).",
+  "confidence": 5,
+  "reason": "Ystads IF gra u siebie rewelacyjnie (komplet zwycięstw) i ma patent na Alingsas (3-0 w ostatnich meczach). Silne wsparcie statystyczne i wysokie poparcie kibiców.",
   "risks": [
-   "Alingsas jest w dobrej ogólnej formie (4 wygrane w 5 meczach)",
-   "Niski margines dodatniego EV (+0.052)"
+   "Wysoki remisowy potencjal w lidze szwedzkiej"
   ],
   "match": "Ystads IF vs Alingsas",
   "pick": "Ystads IF",
@@ -129,12 +126,12 @@
  },
  {
   "key": "football|Aldosivi Res. vs Godoy Cruz Res.|Godoy Cruz Res.",
-  "verdict": "OBSERWUJ",
+  "verdict": "ODPUŚĆ",
   "confidence": 2,
-  "reason": "Godoy Cruz Res. prezentuje lepszą formę bez porażki w 5 meczach, lecz mecze rezerw w Argentynie cechują się dużą zmiennością. H2H jest wyrównane.",
+  "reason": "Mecz drużyn rezerw charakteryzuje się dużą niestabilnością formy i częstymi remisami. Mimo wyższych notowań gości, brak wyraźnej dominacji H2H odradza grę.",
   "risks": [
-   "Nieprzewidywalność rozgrywek rezerw",
-   "Model wyklucza ten segment kursowy na wyjeździe"
+   "Specyfika rozgrywek rezerw",
+   "Częste remisy w historii spotkań"
   ],
   "match": "Aldosivi Res. vs Godoy Cruz Res.",
   "pick": "Godoy Cruz Res.",
@@ -145,12 +142,11 @@
  },
  {
   "key": "hockey|Vipiteno vs Unterland|Vipiteno",
-  "verdict": "OBSERWUJ",
-  "confidence": 3,
-  "reason": "Vipiteno ma bardzo dobry bilans H2H (4-1) i gra solidnie u siebie, ale brak weryfikacji ze strony Sofascore oraz niska wartość 2-way zalecają wstrzemięźliwość.",
+  "verdict": "GRAJ",
+  "confidence": 4,
+  "reason": "Vipiteno ma wyraźną przewagę w bezpośrednich starciach i solidną formę u siebie. Forebet mocno stawia na gospodarzy.",
   "risks": [
-   "Nieweryfikowalny mecz na Sofascore",
-   "Przelicznik 2-way na poziomie 1.45"
+   "Nieregularne wyniki w ostatnich kolejkach"
   ],
   "match": "Vipiteno vs Unterland",
   "pick": "Vipiteno",
@@ -162,11 +158,10 @@
  {
   "key": "hockey|Cortina vs Salzburg 2|Salzburg 2",
   "verdict": "GRAJ",
-  "confidence": 3,
-  "reason": "Salzburg 2 wygrał 4 z 5 ostatnich meczów bezpośrednich i jest w znacznie lepszej dyspozycji ogólnej. Bardzo wysokie EV (+0.346) i wysoka korelacja wyników H2H.",
+  "confidence": 4,
+  "reason": "Salzburg 2 historycznie radzi sobie bardzo dobrze z Cortiną i prezentuje solidną formę wyjazdową. Atrakcyjny kurs daje dobre value na gości.",
   "risks": [
-   "Brak potwierdzenia danych z Sofascore",
-   "Wyjazdowa specyfika ligi AHL"
+   "Zmienna forma gospodarzy u siebie"
   ],
   "match": "Cortina vs Salzburg 2",
   "pick": "Salzburg 2",
