@@ -208,6 +208,12 @@ export interface Match {
     source?: string | null
     gradeBefore?: string | null
   }
+  /** Availability signal for the picked side (information only, never changes the grade). */
+  availabilityInfo?: {
+    badge: string
+    status: 'star_out' | 'star_doubtful' | 'reserves' | 'lineups_ok' | 'no_key_absence' | 'unknown'
+    keyPlayers: string[]
+  } | null
   oddsMove?: OddsMove | null
   teamNews?: TeamNews | null
   /** Set by the backend paywall when premium (Grade A) data is masked for non-subscribers. */

@@ -232,7 +232,7 @@ def send_noon_email(
                 emoji = SPORT_EMOJI.get(sport, '🏆')
                 label = SPORT_LABEL.get(sport, sport.capitalize())
 
-                html = create_html_email(sport_matches, date, sort_by='time')
+                html = create_html_email(sport_matches, date, sort_by='time', availability=True)
                 subj = f"🔄 {emoji} {label} Update 12:00 — {len(sport_matches)} meczów — {date}"
 
                 msg = MIMEMultipart('alternative')

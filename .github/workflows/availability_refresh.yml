@@ -1,0 +1,90 @@
+name: Availability refresh (player availability for the main e-mails)
+# Refreshes results/availability_<day>.json for EVERY qualifying Forebet row
+# (information only for grade C/D rows), plus key players and the next-fixture
+# rotation signal (results/key_players_<day>.json).
+#   11:37 UTC – feeds the noon refresh e-mail (12:07 UTC)
+#   14:07 / 15:07 UTC – 15:00-17:00 Polish time in winter: missing players for
+#   the evening games; official line-ups (~1 h before kick-off) are picked up by
+#   the half-hourly top_picks.yml runs.
+# Never fails the pipeline: the agent step ends with `|| echo`.
+on:
+  schedule:
+    - cron: '37 11 * * *'
+    - cron: '7 14 * * *'
+    - cron: '7 15 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date YYYY-MM-DD (empty = today UTC)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: availability
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONIOENCODING: utf-8
+      SOFASCORE_LISTING_CACHE_DIR: /tmp/sofa_listing
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          pip install -q -r requirements.txt
+          pip install -q curl-cffi 'requests[socks]' 'PySocks>=1.7.1'
+      # Same Tor exit as refresh_qualified_noon.yml: SofaScore blocks GHA datacenter IPs.
+      - name: Setup Tor (SOCKS5 on :9050)
+        continue-on-error: true
+        run: bash tools/setup_tor.sh
+      - name: Availability agent (all qualifying rows)
+        timeout-minutes: 26
+        env:
+          AVAIL_BUDGET_S: '1400'
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_PROXY_PRIMARY: "1"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          DAY="${{ github.event.inputs.date }}"; [ -z "$DAY" ] && DAY=$(date -u +%F)
+          echo "DAY=$DAY" >> "$GITHUB_ENV"
+          python tools/availability_agent.py "$DAY" --all-qualifying || echo "availability agent failed – e-mails show 'brak danych'"
+          python tools/availability_coverage.py "$DAY" || true
+      - name: Commit availability
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/availability_*.json results/key_players_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "ℹ️ No availability changes"
+            exit 0
+          fi
+          git commit -q -m "data: availability refresh ${DAY:-$(date -u +%F)} [skip ci]"
+          pushed=false
+          for attempt in 1 2 3 4 5 6; do
+            if git push origin HEAD:main; then
+              pushed=true
+              break
+            fi
+            echo "⚠️ Push rejected (attempt $attempt) — rebasing onto origin/main..."
+            git pull --rebase -X theirs origin main || git rebase --abort 2>/dev/null || true
+            sleep $(( (RANDOM % 6) + 2 ))
+          done
+          if [ "$pushed" != "true" ]; then
+            echo "::warning::Could not push availability after retries — leaving for next run"
+          fi

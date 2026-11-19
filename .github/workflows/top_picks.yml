@@ -94,7 +94,7 @@ jobs:
           python odds_movement.py top || true
           git add results/odds_snapshots_*_top.json 2>/dev/null || true
           git add results/top_*.json results/status_top_*.json results/TOP.xlsx 2>/dev/null || true
-          git add results/availability_*.json 2>/dev/null || true
+          git add results/availability_*.json results/key_players_*.json 2>/dev/null || true
           git add results/ai_analyst_*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "TOP picks $DAY"

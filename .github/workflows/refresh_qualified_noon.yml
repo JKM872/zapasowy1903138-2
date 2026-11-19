@@ -119,6 +119,22 @@ jobs:
             echo "ℹ️ No morning manifest for $TODAY — skipping refresh"
           fi
 
+      # Player availability for the noon e-mail, in case the 11:37
+      # availability_refresh.yml run failed or has not been pushed yet.
+      # Information only; never blocks the refresh.
+      - name: Availability agent (all qualifying rows)
+        if: steps.manifest.outputs.exists == 'true'
+        continue-on-error: true
+        timeout-minutes: 15
+        env:
+          AVAIL_BUDGET_S: '600'
+          SOFASCORE_PROXY: "socks5h://localhost:9050"
+          SOFASCORE_RELAY: ${{ secrets.SOFASCORE_RELAY }}
+          SOFASCORE_PROXY_PRIMARY: "1"
+          SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
+        run: |
+          python tools/availability_agent.py "${{ steps.date.outputs.today }}" --all-qualifying --no-llm || echo "availability agent failed – mail shows 'brak danych'"
+
       # ── Run noon refresh ──
       - name: Run noon refresh
         if: steps.manifest.outputs.exists == 'true'

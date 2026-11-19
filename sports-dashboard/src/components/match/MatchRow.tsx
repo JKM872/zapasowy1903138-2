@@ -181,6 +181,20 @@ export function MatchRow({
               {match.availability.gradeBefore ? `${match.availability.gradeBefore}→${match.predictionGrade}` : 'Absences'}
             </span>
           )}
+          {match.availabilityInfo && match.availabilityInfo.status !== 'unknown' && (
+            <span
+              title={[match.availabilityInfo.badge, ...(match.availabilityInfo.keyPlayers || [])].join('\n')}
+              className={`hidden shrink-0 rounded border px-1 py-0 text-[9px] font-semibold sm:inline ${
+                match.availabilityInfo.status === 'star_out'
+                  ? 'border-rose-500/40 text-rose-400'
+                  : match.availabilityInfo.status === 'lineups_ok' || match.availabilityInfo.status === 'no_key_absence'
+                    ? 'border-emerald-500/40 text-emerald-400'
+                    : 'border-amber-500/40 text-amber-400'
+              }`}
+            >
+              {match.availabilityInfo.badge}
+            </span>
+          )}
           <OddsMoveBadge move={match.oddsMove} />
           <TeamNewsBadge news={match.teamNews} className="hidden sm:inline-flex" />
           {match.value_bet && (

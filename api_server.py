@@ -595,6 +595,7 @@ def apply_paywall(match: dict, is_subscriber: bool) -> dict:
     match['gemini'] = None
     match['forebet'] = None          # hides the exact pick / probabilities
     match['oddsMove'] = None         # its verdict would reveal the side
+    match['availabilityInfo'] = None  # refers to the picked side
     match['confidence'] = 0
     match['value_bet'] = False
     return match
@@ -624,9 +625,24 @@ def _apply_availability(matches: list, date_str) -> None:
     avail = load(date_str)
     if not avail:
         return
+    try:
+        from tools.availability_agent import badge_pl, key_lines
+    except Exception:
+        badge_pl = key_lines = None
     for m in matches:
         rec = avail.get(f"{m.get('sport')}|{m.get('homeTeam')}|{m.get('awayTeam')}")
-        if not rec or rec.get('unknown'):
+        if not rec:
+            continue
+        info = {}
+        if badge_pl:
+            try:   # information only: badge + key players, no grade change
+                b = badge_pl(rec, rec.get('side'), str(m.get('sport') or ''), lang='en')
+                info = {'badge': b['text'], 'status': b['kind'], 'keyPlayers': key_lines(rec, rec.get('side'))}
+            except Exception:
+                info = {}
+        if info:
+            m['availabilityInfo'] = info
+        if rec.get('unknown'):
             continue
         before = m.get('predictionGrade')
         m['predictionGrade'] = apply_grade(before, rec.get('board'))

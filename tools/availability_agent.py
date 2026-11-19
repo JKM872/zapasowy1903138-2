@@ -44,6 +44,7 @@ if ROOT not in sys.path:
 STAR_COUNT = 3            # a team's 3 most valuable players are its "stars"
 LOOKAHEAD_H = float(os.getenv('AVAIL_LOOKAHEAD_H', '30'))
 RECHECK_BEFORE_MIN = 120  # confirmed line-ups appear ~60 min before kick-off
+UNKNOWN_RECHECK_H = 3     # unknown records are re-checked when older than this
 LLM_SPORTS = {'hockey', 'basketball', 'handball', 'volleyball', 'tennis', 'baseball',
               'rugby', 'football'}
 SITE_TZ = timezone(timedelta(hours=int(os.getenv('SITE_TZ_OFFSET_H', '2'))))  # Europe/Warsaw (CEST)
@@ -144,9 +145,12 @@ def parse_lineups(data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         median = valued[len(valued) // 2][0] if valued else None
         rows = []
         if confirmed:
+            out.setdefault('squad', {})[side] = [
+                {'id': (x.get('player') or {}).get('id'), 'name': (x.get('player') or {}).get('shortName')
+                 or (x.get('player') or {}).get('name'), 'sub': bool(x.get('substitute'))} for x in squad]
             out.setdefault('lineup', {})[side] = [
                 {'name': (x.get('player') or {}).get('shortName') or (x.get('player') or {}).get('name'),
-                 'star': id(x) in stars}
+                 'id': (x.get('player') or {}).get('id'), 'star': id(x) in stars}
                 for _, x, k in pool if k == 'squad' and not x.get('substitute')][:11]
         for v, x, kind in pool:
             pl = x.get('player') or {}
@@ -161,13 +165,15 @@ def parse_lineups(data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                 status, reason = 'out', 'on the bench (confirmed line-up)'
             else:
                 continue
-            rows.append({'name': name, 'importance': imp, 'status': status, 'reason': str(reason)})
+            rows.append({'name': name, 'importance': imp, 'status': status, 'reason': str(reason),
+                         'id': pl.get('id'), 'source': 'sofascore'})
         out[side] = rows
     out['hasValues'] = any_values
     return out
 
 
-def sofascore_check(m: Dict[str, Any], sport: str = '', day: str = '') -> Optional[Dict[str, Any]]:
+def resolve_event(m: Dict[str, Any], sport: str = '', day: str = ''):
+    """(event_id, orientation) of the verified SofaScore event, or (None, None)."""
     eid = _event_id(m)
     orient = (m.get('sofascore') or {}).get('orientation')
     if not eid and sport and day:
@@ -179,24 +185,43 @@ def sofascore_check(m: Dict[str, Any], sport: str = '', day: str = '') -> Option
         if ev:
             eid, orient = ev
             _stat('sofa_resolved')
+    return (eid, orient) if eid else (None, None)
+
+
+def sofascore_check(m: Dict[str, Any], sport: str = '', day: str = '',
+                    ev=None, keep_lineup: bool = False) -> Optional[Dict[str, Any]]:
+    """keep_lineup: a confirmed line-up without market values or missing players
+    comes back flagged ``lineupOnly`` (display data, not a verdict source)."""
+    eid, orient = ev if ev else resolve_event(m, sport, day)
     if not eid:
+        _stat('sofa_no_event')
         return None
     try:
         import sofascore_scraper as ss
         data = ss._api_get_json(f"https://api.sofascore.com/api/v1/event/{eid}/lineups", timeout=10)
     except Exception:
+        data = None
+    if not isinstance(data, dict) or not data:
+        _stat('sofa_http_fail')   # 403/404/timeout: SofaScore has no line-ups for us (yet)
         return None
-    res = parse_lineups(data) if isinstance(data, dict) else None
+    res = parse_lineups(data)
     if res is None:
+        _stat('sofa_empty')
         return None
     if orient == 'reversed':
         res['home'], res['away'] = res['away'], res['home']
-        if res.get('lineup'):
-            lu = res['lineup']
-            res['lineup'] = {'home': lu.get('away'), 'away': lu.get('home')}
+        for f in ('lineup', 'squad'):
+            if res.get(f):
+                lu = res[f]
+                res[f] = {'home': lu.get('away'), 'away': lu.get('home')}
     # Without market values SofaScore cannot tell a star from a reserve.
     if not res.get('hasValues') and not (res['home'] or res['away']):
+        if keep_lineup and res.get('confirmed') and res.get('lineup'):
+            _stat('sofa_lineup_only')
+            return {**res, 'lineupOnly': True}
+        _stat('sofa_empty')
         return None
+    _stat('sofa_ok')
     return res
 
 
@@ -238,9 +263,10 @@ def _gemini_grounded(prompt: str):
         _stat('no_keys')
         return None, []
     models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or GEMINI_MODELS
-    if all((k, m) in _DEAD for k in keys for m in models):
+    if ('provider', 'gemini') in _DEAD or all((k, m) in _DEAD for k in keys for m in models):
         _stat('llm_off_quota')  # every key x model is quota-exhausted: no more requests this run
         return None, []
+    failed_all = True
     for key in keys:
         for model in models:
             if (key, model) in _DEAD:
@@ -257,8 +283,10 @@ def _gemini_grounded(prompt: str):
                 continue
             if r.status_code != 200:
                 _stat(f'http_{r.status_code}')
-                if r.status_code == 429:
+                if r.status_code in (404, 429):
                     _DEAD.add((key, model))
+                else:
+                    failed_all = False
                 if model not in ERRORS:
                     try:
                         msg = (r.json().get('error') or {}).get('message') or ''
@@ -277,7 +305,10 @@ def _gemini_grounded(prompt: str):
             if txt:
                 _stat('answered')
                 return txt, urls
+            failed_all = False
             _stat('empty')
+    if failed_all:
+        _DEAD.add(('provider', 'gemini'))   # every pair 404/429/unreachable: provider off for this run
     return None, []
 
 
@@ -311,9 +342,10 @@ def _groq_compound(prompt: str):
         _stat('groq_no_keys')
         return None, []
     models = [m.strip() for m in os.getenv('AVAIL_GROQ_MODELS', '').split(',') if m.strip()] or GROQ_COMPOUND_MODELS
-    if all(('groq', k, m) in _DEAD for k in keys for m in models):
+    if ('provider', 'groq') in _DEAD or all(('groq', k, m) in _DEAD for k in keys for m in models):
         _stat('groq_off_quota')
         return None, []
+    failed_all = True
     for model in models:
         for key in keys:
             if ('groq', key, model) in _DEAD:
@@ -332,6 +364,8 @@ def _groq_compound(prompt: str):
                 _stat(f'groq_http_{r.status_code}')
                 if r.status_code in (401, 403, 404, 429):
                     _DEAD.add(('groq', key, model))
+                else:
+                    failed_all = False
                 if 'groq:' + model not in ERRORS:
                     try:
                         msg = (r.json().get('error') or {}).get('message') or ''
@@ -348,7 +382,10 @@ def _groq_compound(prompt: str):
             if txt:
                 _stat('groq_answered')
                 return txt, urls
+            failed_all = False
             _stat('groq_empty')
+    if failed_all:
+        _DEAD.add(('provider', 'groq'))
     return None, []
 
 
@@ -415,8 +452,12 @@ def _kickoff(day: str, hhmm: Optional[str], explicit: Optional[str] = None,
         return None
 
 
-def candidates(day: str) -> List[Dict[str, Any]]:
-    """Today's A/B rows plus every TOP pick, deduplicated."""
+def candidates(day: str, all_qualifying: bool = False) -> List[Dict[str, Any]]:
+    """Today's A/B rows plus every TOP pick, deduplicated.
+
+    ``all_qualifying``: also every other qualifying row the main Forebet e-mail
+    lists (grade C, D ...). Those carry ``info_only``: their records are for
+    display and never change a grade, a TOP pick or a Fan Favourites verdict."""
     out: Dict[str, Dict[str, Any]] = {}
     for p in sorted(glob.glob(os.path.join(ROOT, 'results', f'matches_{day}_*_forebet.json'))):
         sport = os.path.basename(p)[len(f'matches_{day}_'):-len('_forebet.json')]
@@ -427,13 +468,16 @@ def candidates(day: str) -> List[Dict[str, Any]]:
         for m in ms:
             if not isinstance(m, dict) or not m.get('qualifies'):
                 continue
-            if (m.get('predictionGrade') or '') not in ('A', 'B'):
+            ab = (m.get('predictionGrade') or '') in ('A', 'B')
+            if not ab and not all_qualifying:
                 continue
             pick = (m.get('scoring') or {}).get('pick')
             if pick not in ('1', '2'):
                 continue
             k = key_of(sport, m.get('homeTeam') or '', m.get('awayTeam') or '')
             out[k] = {'sport': sport, 'm': m, 'side': 'home' if pick == '1' else 'away', 'top': False}
+            if not ab:
+                out[k]['info_only'] = True
     try:
         tops = json.load(open(os.path.join(ROOT, 'results', f'top_{day}.json'), encoding='utf-8-sig'))
     except Exception:
@@ -445,6 +489,7 @@ def candidates(day: str) -> List[Dict[str, Any]]:
         if k in out:
             out[k]['top'] = True
             out[k]['side'] = side
+            out[k].pop('info_only', None)
         else:
             out[k] = {'sport': t.get('sport'), 'side': side, 'top': True,
                       'm': {'homeTeam': h, 'awayTeam': a, 'time': t.get('time'), 'league': t.get('league')}}
@@ -459,6 +504,8 @@ def candidates(day: str) -> List[Dict[str, Any]]:
             k = key_of(p.get('sport') or '', p.get('home') or '', p.get('away') or '')
             if k in out:
                 out[k]['fan'] = True
+                if out[k].pop('info_only', None):
+                    out[k]['side'] = p['side']   # as before --all-qualifying: the fan side decides
                 continue
             hit = re.search(r'/match/(?:[^/]+/)*?(\d{5,})', p.get('sofascoreUrl') or '')
             out[k] = {'sport': p.get('sport'), 'side': p['side'], 'top': False, 'fan': True,
@@ -471,26 +518,182 @@ def candidates(day: str) -> List[Dict[str, Any]]:
 def needs_check(prev: Optional[Dict[str, Any]], ko: Optional[datetime], now: datetime) -> bool:
     if prev is None:
         return True
-    if prev.get('confirmed'):
+    if prev.get('confirmed') or (prev.get('lineupInfo') or {}).get('confirmed'):
         return False  # confirmed line-up already seen; nothing will improve
-    if ko is None:
-        return False
     try:
         last = datetime.fromisoformat(prev.get('checkedAt'))
     except Exception:
         return True
+    # An unknown record (or one written before key players / signals existed)
+    # is not frozen: SofaScore publishes missing players 1-24 h before kick-off.
+    if (prev.get('source') is None or 'signals' not in prev) and now - last >= timedelta(hours=UNKNOWN_RECHECK_H):
+        return True
+    if ko is None:
+        return False
     window_start = ko - timedelta(minutes=RECHECK_BEFORE_MIN)
     if now < window_start:
         return False
     # Inside the line-up window: SofaScore is cheap, so keep looking until the
-    # line-up is confirmed. The search-grounded LLM is asked once more at most.
-    if prev.get('source') == 'sofascore':
+    # line-up is confirmed (also for unknown records). The search-grounded LLM
+    # is asked once more at most.
+    if prev.get('source') in ('sofascore', None):
         return True
     return last < window_start
 
 
-def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[str, Any]:
-    path = os.path.join(ROOT, 'results', f'availability_{day}.json')
+# ── information signals (never change grades, TOP or Fan Favourites) ─────────
+
+def enrich(rec: Dict[str, Any], m: Dict[str, Any], sport: str, day: str, side: str,
+           ev=None, deadline: Optional[float] = None) -> Dict[str, Any]:
+    """Add free-source rows, key players, next fixture and signals to ``rec``."""
+    import time as _time
+    from tools import availability_sources as src, key_players as kp
+    rec['sport'] = sport
+    extra = src.rows_for_match(sport, m.get('league'), m.get('country'),
+                               m.get('homeTeam') or '', m.get('awayTeam') or '', day)
+    if extra['home'] or extra['away']:
+        rec['extra'] = {'home': extra['home'], 'away': extra['away']}
+        rec['extraSources'] = extra['sources']
+    eid, orient = ev or (None, None)
+    if eid and sport in kp.SPORTS and (deadline is None or _time.monotonic() < deadline):
+        e = (kp._get(f'event/{eid}') or {}).get('event') or {}
+        ids = {'home': (e.get('homeTeam') or {}).get('id'), 'away': (e.get('awayTeam') or {}).get('id')}
+        if orient == 'reversed':
+            ids = {'home': ids['away'], 'away': ids['home']}
+        tid = ids.get(side)
+        if tid:
+            tn = e.get('tournament') or {}
+            name = (tn.get('uniqueTournament') or {}).get('name') or tn.get('name')
+            rec['eventId'], rec['teams'] = eid, ids
+            rec['competition'] = {'name': name, 'ts': e.get('startTimestamp'),
+                                  'tier': kp.tier(name, (e.get('roundInfo') or {}).get('name'))}
+            rec['keyPlayers'] = {side: kp.team_key_players(sport, tid, day, deadline=deadline)}
+            rec['nextFixture'] = {side: kp.next_fixture(tid, e.get('startTimestamp'), eid, day)}
+    rec['signals'] = signals(rec, side)
+    rec['status'] = status_of(rec, side)
+    return rec
+
+
+def signals(rec: Optional[Dict[str, Any]], side: Optional[str] = None) -> List[Dict[str, Any]]:
+    """star_out / star_doubtful / reserves / lineups_ok for the picked side.
+
+    star_out = a key player (>= KEY_SHARE of the team's output over the last
+    matches) listed out, or benched in the confirmed line-up. Without key-player
+    data the SofaScore market-value star counts (basis 'market value').
+    No data -> [] (shown as "unknown"); signals inform only."""
+    if not rec:
+        return []
+    from tools import key_players as kp
+    side = side or rec.get('side')
+    if side not in ('home', 'away'):
+        return []
+    out: List[Dict[str, Any]] = []
+    kps = kp.status_for(((rec.get('keyPlayers') or {}).get(side) or []), rec, side, rec.get('sport') or 'football')
+    for p in kps:
+        if (p.get('share') or 0) < kp.KEY_SHARE:
+            continue
+        if p['status'] in ('out', 'bench'):
+            out.append({'kind': 'star_out', 'name': p['name'], 'share': p['share'], 'unit': p.get('unit'),
+                        'reason': p.get('reason'), 'source': p.get('source')})
+        elif p['status'] == 'doubtful':
+            out.append({'kind': 'star_doubtful', 'name': p['name'], 'share': p['share'], 'unit': p.get('unit'),
+                        'reason': p.get('reason'), 'source': p.get('source')})
+    if not kps:
+        for r in rec.get(side) or []:
+            if isinstance(r, dict) and r.get('importance') == 'star':
+                kind = 'star_doubtful' if r.get('status') == 'doubtful' else 'star_out'
+                out.append({'kind': kind, 'name': r.get('name'), 'share': None, 'basis': 'market value',
+                            'reason': r.get('reason'), 'source': r.get('source') or rec.get('source')})
+    comp = rec.get('competition') or {}
+    rs = kp.reserves_reason(comp.get('tier') or 1, comp.get('ts'), (rec.get('nextFixture') or {}).get(side))
+    benched = [p for p in kps if p['status'] == 'bench']
+    if rs:
+        out.append(rs)
+    elif len(benched) >= 2:
+        out.append({'kind': 'reserves', 'reason': f'{len(benched)} key players on the bench',
+                    'reasonPl': f'{len(benched)} kluczowych na ławce'})
+    confirmed = rec.get('confirmed') or (rec.get('lineupInfo') or {}).get('confirmed')
+    if confirmed and not any(s['kind'] == 'star_out' for s in out):
+        out.append({'kind': 'lineups_ok'})
+    return out
+
+
+_STATUS_ORDER = ('star_out', 'reserves', 'star_doubtful', 'lineups_ok')
+
+
+def status_of(rec: Optional[Dict[str, Any]], side: Optional[str] = None) -> str:
+    """One status per record: star_out | reserves | star_doubtful | lineups_ok |
+    no_key_absence (sources checked, nothing important) | unknown."""
+    if not rec:
+        return 'unknown'
+    side = side or rec.get('side')
+    sigs = signals(rec, side)
+    kinds = {s['kind'] for s in sigs}
+    for k in _STATUS_ORDER:
+        if k in kinds:
+            return k
+    extra = rec.get('extra') or {}
+    if (rec.get('source') and not rec.get('unknown')) or extra.get('home') or extra.get('away'):
+        return 'no_key_absence'
+    return 'unknown'
+
+
+_BADGE = {
+    'pl': {'unknown': 'brak danych', 'star_out': 'Gwiazda nie gra', 'star_doubtful': 'Gwiazda niepewna',
+           'reserves': 'Możliwe rezerwy', 'lineups_ok': 'Składy OK', 'no_key_absence': 'Bez absencji kluczowych',
+           'market': 'top-3 wartości rynkowej', 'saves': 'obron'},
+    'en': {'unknown': 'unknown', 'star_out': 'Star out', 'star_doubtful': 'Star doubtful',
+           'reserves': 'Likely reserves', 'lineups_ok': 'Line-ups OK', 'no_key_absence': 'No key absences',
+           'market': 'top-3 market value', 'saves': 'of saves'},
+}
+
+
+def badge_pl(rec: Optional[Dict[str, Any]], side: Optional[str] = None, sport: str = '',
+             lang: str = 'pl') -> Dict[str, str]:
+    """{'kind', 'text'}: Polish for the main e-mail, ``lang='en'`` for the site."""
+    from tools import key_players as kp
+    t = _BADGE.get(lang) or _BADGE['pl']
+    st = status_of(rec, side)
+    if st == 'unknown':
+        return {'kind': st, 'text': t['unknown']}
+    sigs = signals(rec, side or (rec or {}).get('side'))
+    s = next((x for x in sigs if x['kind'] == st), {})
+    if st in ('star_out', 'star_doubtful'):
+        if s.get('share') is not None:
+            if s.get('unit') == 'saves':
+                lbl = t['saves']
+            elif lang == 'en':
+                lbl = f"of {(kp.METRIC.get(sport) or ('', 'output', ''))[1]}"
+            else:
+                lbl = (kp.METRIC.get(sport) or ('', '', 'dorobku'))[2]
+            why = f"{s['share'] * 100:.0f}% {lbl}"
+        else:
+            why = t['market']
+        return {'kind': st, 'text': f"{t[st]}: {s.get('name')} ({why})"}
+    if st == 'reserves':
+        why = s.get('reasonPl') if lang == 'pl' else s.get('reason')
+        return {'kind': st, 'text': f"{t[st]}: {why or s.get('reason')}"}
+    return {'kind': st, 'text': t[st]}
+
+
+def key_lines(rec: Optional[Dict[str, Any]], side: Optional[str] = None, n: int = 3) -> List[str]:
+    from tools import key_players as kp
+    if not rec:
+        return []
+    side = side or rec.get('side')
+    return [kp.fmt_line(p) for p in kp.status_for(((rec.get('keyPlayers') or {}).get(side) or [])[:n], rec, side,
+                                                  rec.get('sport') or 'football')]
+
+
+def run(day: str, use_llm: bool = True, force: bool = False, log=print,
+        all_qualifying: bool = False, path: Optional[str] = None,
+        ignore_kickoff: bool = False) -> Dict[str, Any]:
+    """Check every candidate and write the store.
+
+    all_qualifying: also every qualifying row of the main e-mail (info only).
+    path / ignore_kickoff: dry runs write elsewhere and also look at matches
+    that already started (to measure coverage after the fact)."""
+    path = path or os.path.join(ROOT, 'results', f'availability_{day}.json')
     try:
         store = json.load(open(path, encoding='utf-8-sig'))
     except Exception:
@@ -505,39 +708,78 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         with open(tmp, 'w', encoding='utf-8') as fh:
             json.dump(store, fh, ensure_ascii=False, indent=1)
         os.replace(tmp, path)
-    cands = candidates(day)
+    cands = candidates(day, all_qualifying=all_qualifying)
+    # A/B, TOP and Fan Favourites first: they can lose the budget race otherwise.
+    cands.sort(key=lambda c: bool(c.get('info_only')))
     for c in cands:
         left = budget - (_time.monotonic() - t0)
         if left <= 0:
             log(f'   availability: budżet {budget:.0f}s wyczerpany, stop po {checked} sprawdzeniach')
             break
         m, sport, side = c['m'], c['sport'], c['side']
+        info_only = bool(c.get('info_only'))
         ko = _kickoff(day, m.get('time'), m.get('kickoffUtc'), sport)
-        if ko and ko < now - timedelta(minutes=10):
-            continue  # already started
-        if ko and ko > now + timedelta(hours=LOOKAHEAD_H):
-            continue
+        if not ignore_kickoff:
+            if ko and ko < now - timedelta(minutes=10):
+                continue  # already started
+            if ko and ko > now + timedelta(hours=LOOKAHEAD_H):
+                continue
         prev = store.get(c['key'])
+        if prev and prev.get('infoOnly') and not info_only:
+            prev = None   # promoted to A/B/TOP/fan: judge it properly now
         if not force and not needs_check(prev, ko, now):
             continue
-        res = sofascore_check(m, sport, day)
-        if res is None and use_llm and left >= 60:
+        ev = resolve_event(m, sport, day)
+        res = sofascore_check(m, sport, day, ev=ev if ev[0] else None, keep_lineup=True)
+        lineup_info = None
+        if res is not None and res.get('lineupOnly'):
+            # Confirmed XI without values/missing list: shown (key players on the
+            # bench, "line-ups OK"), but legacy verdict fields stay "unknown".
+            lineup_info, res = {'confirmed': True, 'lineup': res.get('lineup'), 'squad': res.get('squad')}, None
+        elif res is not None and res.get('squad'):
+            lineup_info = {'confirmed': True, 'lineup': res.get('lineup'), 'squad': res.get('squad')}
+        llm_at = (prev or {}).get('llmAt')
+        llm_due = not llm_at or now - datetime.fromisoformat(llm_at) >= timedelta(hours=UNKNOWN_RECHECK_H)
+        if res is None and use_llm and not info_only and left >= 60 and llm_due:
             res = llm_check(m, sport, day)
             llm_calls += 1
+            llm_at = now.isoformat()
         checked += 1
         if checked % 10 == 0:
             _save()
+        if res is None and prev and prev.get('source') and not prev.get('unknown'):
+            # A failed re-check (403/404/timeout) never wipes what an earlier run found.
+            rec = {k: v for k, v in prev.items() if k not in ('signals', 'status')}
+            rec['lastFailAt'] = now.isoformat()
+            v = {'board': rec.get('infoVerdict') or rec.get('board'), 'top_block': rec.get('top_block')}
+            _stat('kept_previous')
+        elif res is None:
+            rec = {'checkedAt': now.isoformat(), 'source': None, 'confirmed': False,
+                   'side': side, 'board': 'ok', 'top_block': False, 'unknown': True}
+            v = {'board': 'ok', 'top_block': False}
+        else:
+            op = 'away' if side == 'home' else 'home'
+            v = verdict(summarize(res[side]), summarize(res[op]))
+            rec = {
+                'checkedAt': now.isoformat(), 'source': res.get('source'), 'confirmed': res.get('confirmed'),
+                'side': side, 'home': res['home'], 'away': res['away'],
+                'sources': res.get('sources'), 'lineup': res.get('lineup'), **v,
+            }
+        if llm_at:
+            rec['llmAt'] = llm_at
+        if lineup_info:
+            rec['lineupInfo'] = lineup_info
+        if info_only:
+            # Display only: the record never downgrades, blocks or withdraws anything.
+            rec.update(infoOnly=True, infoVerdict=v.get('board'), board='ok', top_block=False)
+        try:
+            enrich(rec, m, sport, day, side, ev, deadline=t0 + budget)
+        except Exception as e:
+            _stat('enrich_error')
+            log(f"   availability enrich {c['key']}: {type(e).__name__}: {e}")
+        store[c['key']] = rec
         if res is None:
-            store[c['key']] = {'checkedAt': now.isoformat(), 'source': None, 'confirmed': False,
-                               'side': side, 'board': 'ok', 'top_block': False, 'unknown': True}
             continue
-        op = 'away' if side == 'home' else 'home'
-        v = verdict(summarize(res[side]), summarize(res[op]))
-        store[c['key']] = {
-            'checkedAt': now.isoformat(), 'source': res.get('source'), 'confirmed': res.get('confirmed'),
-            'side': side, 'home': res['home'], 'away': res['away'],
-            'sources': res.get('sources'), 'lineup': res.get('lineup'), **v,
-        }
         if v['board'] != 'ok' or v['top_block']:
             names = ', '.join(p['name'] for p in res[side] if p['importance'] == 'star')
             log(f"   🚑 {c['key']}: {v['board']}{' / TOP blocked' if v['top_block'] else ''} ({names})")
@@ -547,6 +789,12 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print) -> Dict[
         except Exception as e:
             log(f'   availability summaries failed: {e}')
     _save()
+    try:
+        from tools import key_players as _kp, availability_sources as _src
+        _kp.save(day)
+        log(f"   availability sources: {_src.STATS} | key players: {_kp.STATS}")
+    except Exception:
+        pass
     flagged = sum(1 for r in store.values() if r.get('board') != 'ok' or r.get('top_block'))
     log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)} | {STATS}")
     if ERRORS:
@@ -710,5 +958,20 @@ if __name__ == '__main__':
     ap.add_argument('day', nargs='?', default=datetime.now(ZoneInfo('Europe/Warsaw')).date().isoformat())
     ap.add_argument('--no-llm', action='store_true')
     ap.add_argument('--force', action='store_true')
+    ap.add_argument('--all-qualifying', action='store_true',
+                    help='also every qualifying row of the main e-mail (information only)')
+    ap.add_argument('--dry-run', action='store_true',
+                    help='write outputs/availability_dryrun_<day>.json (copy of the store), include started matches')
     a = ap.parse_args()
-    run(a.day, use_llm=not a.no_llm, force=a.force)
+    out_path = None
+    if a.dry_run:
+        import shutil
+        from tools import key_players as _kp
+        os.makedirs(os.path.join(ROOT, 'outputs'), exist_ok=True)
+        out_path = os.path.join(ROOT, 'outputs', f'availability_dryrun_{a.day}.json')
+        src_path = os.path.join(ROOT, 'results', f'availability_{a.day}.json')
+        if os.path.exists(src_path) and not os.path.exists(out_path):
+            shutil.copy(src_path, out_path)
+        _kp.CACHE_PATH = os.path.join(ROOT, 'outputs', f'key_players_dryrun_{a.day}.json')
+    run(a.day, use_llm=not a.no_llm, force=a.force, all_qualifying=a.all_qualifying,
+        path=out_path, ignore_kickoff=a.dry_run)

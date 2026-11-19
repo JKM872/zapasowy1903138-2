@@ -966,9 +966,47 @@ def _odds_move_html(match, day, home, away, focus_team=None) -> str:
     return f'<div style="margin-top: 6px; font-size: 12px; color: #555;">{_esc(lines[0])}</div>'
 
 
+_AVAIL_CACHE: Dict[str, Dict[str, Any]] = {}
+_AVAIL_COLORS = {'star_out': '#d32f2f', 'star_doubtful': '#f57c00', 'reserves': '#f57c00',
+                 'lineups_ok': '#388e3c', 'no_key_absence': '#607d8b', 'unknown': '#9e9e9e'}
+
+
+def _availability_html(match, day, home, away, focus_team=None) -> str:
+    """Availability badge + up to 3 key-player lines (information only: it never
+    changes which matches are listed, their order or their grade)."""
+    try:
+        from tools import availability_agent as aa
+        d = str(day or '')[:10]
+        if d not in _AVAIL_CACHE:
+            _AVAIL_CACHE[d] = aa.load(d) if d else {}
+        sport = str(match.get('sport') or 'football').lower()
+        rec = _AVAIL_CACHE[d].get(aa.key_of(sport, str(home), str(away)))
+        side = None
+        try:
+            import odds_movement as om
+            pick = _model_pick_code(match, _is_tennis_match(match))[0] or om.displayed_pick(match)
+            side = om.side_of_pick(pick, str(home), str(away))
+        except Exception:
+            side = None
+        side = side or (focus_team if focus_team in ('home', 'away') else None) or (rec or {}).get('side')
+        b = aa.badge_pl(rec, side, sport)
+        lines = aa.key_lines(rec, side) if rec else []
+    except Exception:
+        return ''
+    from html import escape as _esc
+    color = _AVAIL_COLORS.get(b['kind'], '#9e9e9e')
+    out = (f'<div class="availability" style="margin-top: 6px; font-size: 12px;">'
+           f'<span style="background: {color}; color: white; padding: 3px 9px; border-radius: 10px; '
+           f'font-weight: bold;">🩺 Dostępność: {_esc(b["text"])}</span></div>')
+    for ln in lines:
+        out += f'<div style="font-size: 11px; color: #555; margin-top: 2px;">{_esc(ln)}</div>'
+    return out
+
+
 def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = 'time', 
                       include_sorted_odds: bool = False, odds_limit: int = 15,
-                      cards_only: bool = False, forebet_layout: bool = False) -> str:
+                      cards_only: bool = False, forebet_layout: bool = False,
+                      availability: Optional[bool] = None) -> str:
     """
     Tworzy ładny HTML email z listą meczów
 
@@ -982,7 +1020,10 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
         sort_by: 'time' (godzina), 'wins' (liczba wygranych), 'team' (alfabetycznie)
         include_sorted_odds: Parametr zachowany dla kompatybilności; sekcje kursów nie są już renderowane w mailu
         odds_limit: Parametr zachowany dla kompatybilności; nie wpływa już na HTML maila
+        availability: badge dostępności zawodników (results/availability_<date>.json);
+            domyślnie tylko w mailu Forebet. Wyłącznie informacja.
     """
+    show_availability = forebet_layout if availability is None else bool(availability)
     
     # SORTOWANIE MECZÓW
     sorted_matches = matches.copy()
@@ -1399,6 +1440,7 @@ def create_html_email(matches: List[Dict[str, Any]], date: str, sort_by: str = '
                     {f'<div style="margin-top: 5px; font-size: 12px; color: #666;">{ranking_info}</div>' if is_tennis and ranking_info else ''}
                     {_render_drop_badge(match)}
                     {_odds_move_html(match, date, home, away, focus_team)}
+                    {_availability_html(match, date, home, away, focus_team) if show_availability else ''}
                 </div>
                 
                 <!-- DANE MECZU - GRID -->

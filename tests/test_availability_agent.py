@@ -169,6 +169,120 @@ def test_mismatch_row_url_is_ignored_and_verified_row_uses_its_event(monkeypatch
     assert [p['name'] for p in res['away']] == ['Star'] and res['home'] == []   # sides swapped
 
 
+from datetime import datetime, timedelta, timezone
+
+NOW = datetime(2026, 11, 19, 12, 0, tzinfo=timezone.utc)
+
+
+def _rec(source=None, hours_ago=1, **kw):
+    return {'checkedAt': (NOW - timedelta(hours=hours_ago)).isoformat(), 'source': source,
+            'confirmed': False, 'signals': [], **kw}
+
+
+def test_unknown_record_is_rechecked_after_3h_and_inside_the_window():
+    ko_far = NOW + timedelta(hours=8)
+    assert not av.needs_check(_rec(None, hours_ago=1), ko_far, NOW)
+    assert av.needs_check(_rec(None, hours_ago=3.5), ko_far, NOW)
+    ko_soon = NOW + timedelta(minutes=90)            # inside the 120-min line-up window
+    assert av.needs_check(_rec(None, hours_ago=0.4), ko_soon, NOW)
+    assert av.needs_check(_rec('sofascore', hours_ago=0.4), ko_soon, NOW)
+    assert not av.needs_check(_rec('sofascore', hours_ago=5), ko_far, NOW)   # known stays until the window
+    assert not av.needs_check(_rec('sofascore', confirmed=True, hours_ago=5), ko_soon, NOW)
+    old = _rec('sofascore', hours_ago=4)
+    old.pop('signals')                                  # written before key players existed
+    assert av.needs_check(old, ko_far, NOW)
+
+
+def _write_day(tmp_path, day, rows):
+    import json
+    (tmp_path / 'results').mkdir(exist_ok=True)
+    (tmp_path / 'results' / f'matches_{day}_football_forebet.json').write_text(
+        json.dumps({'matches': rows}), encoding='utf-8')
+
+
+def test_candidates_all_qualifying_adds_info_only_rows(monkeypatch, tmp_path):
+    day = '2026-11-19'
+    rows = [{'homeTeam': 'A', 'awayTeam': 'B', 'qualifies': True, 'predictionGrade': 'A', 'scoring': {'pick': '1'}},
+            {'homeTeam': 'C', 'awayTeam': 'D', 'qualifies': True, 'predictionGrade': 'C', 'scoring': {'pick': '2'}},
+            {'homeTeam': 'E', 'awayTeam': 'F', 'qualifies': False, 'predictionGrade': 'C', 'scoring': {'pick': '1'}}]
+    _write_day(tmp_path, day, rows)
+    monkeypatch.setattr(av, 'ROOT', str(tmp_path))
+    assert [c['key'] for c in av.candidates(day)] == ['football|A|B']
+    allq = {c['key']: c for c in av.candidates(day, all_qualifying=True)}
+    assert set(allq) == {'football|A|B', 'football|C|D'}
+    assert allq['football|C|D']['info_only'] and allq['football|C|D']['side'] == 'away'
+    assert not allq['football|A|B'].get('info_only')
+
+
+def _kp(name, share, pid=None):
+    return {'id': pid, 'name': name, 'share': share, 'avg': 1.0, 'last': 1, 'unit': 'G+A', 'goalie': False}
+
+
+def test_star_out_needs_20pct_share():
+    rec = {'side': 'home', 'source': 'sofascore', 'home': [{'id': 7, 'name': 'H. Kane', 'status': 'out',
+                                                            'importance': 'key', 'reason': 'knee'}], 'away': [],
+           'keyPlayers': {'home': [_kp('Harry Kane', 0.32, 7)]}}
+    sig = av.signals(rec, 'home')
+    assert sig[0]['kind'] == 'star_out' and sig[0]['share'] == 0.32
+    assert av.badge_pl(rec, 'home', 'football')['text'] == 'Gwiazda nie gra: Harry Kane (32% goli i asyst)'
+    rec['keyPlayers']['home'][0]['share'] = 0.10
+    assert not [s for s in av.signals(rec, 'home') if s['kind'] == 'star_out']
+    assert av.status_of(rec, 'home') == 'no_key_absence'
+
+
+def test_reserves_when_next_match_is_cl_in_two_days_not_league_in_six():
+    ts = 1_800_000_000
+    rec = {'side': 'away', 'source': None, 'unknown': True,
+           'competition': {'name': 'LaLiga', 'tier': 1, 'ts': ts},
+           'nextFixture': {'away': {'ts': ts + 2 * 86400, 'tier': 3, 'tournament': 'UEFA Champions League'}}}
+    assert av.status_of(rec, 'away') == 'reserves'
+    assert av.badge_pl(rec, 'away')['text'].startswith('Możliwe rezerwy: puchary')
+    rec['nextFixture']['away'] = {'ts': ts + 6 * 86400, 'tier': 1, 'tournament': 'LaLiga'}
+    assert av.status_of(rec, 'away') == 'unknown'
+
+
+def test_unknown_never_downgrades_or_blocks_and_renders_as_brak_danych():
+    rec = {'checkedAt': NOW.isoformat(), 'source': None, 'confirmed': False, 'side': 'home',
+           'board': 'ok', 'top_block': False, 'unknown': True}
+    assert av.signals(rec) == [] and av.status_of(rec) == 'unknown'
+    assert av.apply_grade('A', rec['board']) == 'A' and not rec['top_block']
+    assert av.badge_pl(rec)['text'] == 'brak danych' and av.badge_pl(None)['text'] == 'brak danych'
+
+
+def test_info_only_record_keeps_board_ok_even_with_stars_out(monkeypatch, tmp_path):
+    import json
+    day = '2026-11-19'
+    _write_day(tmp_path, day, [{'homeTeam': 'C', 'awayTeam': 'D', 'qualifies': True, 'predictionGrade': 'C',
+                                'scoring': {'pick': '1'}, 'time': '23:59'}])
+    monkeypatch.setattr(av, 'ROOT', str(tmp_path))
+    two_stars = {'home': [P('S1'), P('S2')], 'away': [], 'confirmed': False, 'source': 'sofascore'}
+    monkeypatch.setattr(av, 'resolve_event', lambda *a: (None, None))
+    monkeypatch.setattr(av, 'sofascore_check', lambda *a, **k: two_stars)
+    monkeypatch.setattr(av, 'enrich', lambda rec, *a, **k: rec)
+    store = av.run(day, use_llm=False, all_qualifying=True, ignore_kickoff=True, log=lambda *_: None)
+    rec = store['football|C|D']
+    assert rec['infoOnly'] and rec['infoVerdict'] == 'drop'
+    assert rec['board'] == 'ok' and rec['top_block'] is False
+    assert json.load(open(tmp_path / 'results' / f'availability_{day}.json'))['football|C|D']['board'] == 'ok'
+
+
+def test_failed_recheck_keeps_what_an_earlier_run_found(monkeypatch, tmp_path):
+    import json
+    day = '2026-11-19'
+    _write_day(tmp_path, day, [{'homeTeam': 'A', 'awayTeam': 'B', 'qualifies': True, 'predictionGrade': 'A',
+                                'scoring': {'pick': '1'}, 'time': '23:59'}])
+    prev = {'checkedAt': '2026-11-19T06:00:00+00:00', 'source': 'sofascore', 'confirmed': False, 'side': 'home',
+            'home': [P('S1')], 'away': [], 'board': 'downgrade', 'top_block': True}
+    (tmp_path / 'results' / f'availability_{day}.json').write_text(json.dumps({'football|A|B': prev}))
+    monkeypatch.setattr(av, 'ROOT', str(tmp_path))
+    monkeypatch.setattr(av, 'resolve_event', lambda *a: (None, None))
+    monkeypatch.setattr(av, 'sofascore_check', lambda *a, **k: None)
+    monkeypatch.setattr(av, 'enrich', lambda rec, *a, **k: rec)
+    rec = av.run(day, use_llm=False, force=True, ignore_kickoff=True, log=lambda *_: None)['football|A|B']
+    assert rec['source'] == 'sofascore' and rec['board'] == 'downgrade' and rec['top_block']
+    assert rec['home'][0]['name'] == 'S1' and 'lastFailAt' in rec
+
+
 def test_kickoff_uses_warsaw_time_and_explicit_utc():
     from tools import availability_agent as aa
     assert aa._kickoff('2026-10-26', '18:00').strftime('%H:%MZ') == '17:00Z'

@@ -1,0 +1,73 @@
+{
+  "_doc": "Availability source registry. sport -> league key (or 'default') -> ordered list of free sources. A league key is matched against the Forebet row's league code/name (case-insensitive, exact). Each source names a fetcher in tools/availability_sources.py (FETCHERS). Adding a source = one entry here + one fetcher function. 'enabled': false entries are documented but never fetched. 'provides' is informational: injuries, suspensions, predicted_lineup, confirmed_lineup, starting_goalie, player_stats, fixtures. Verified 2026-11-19 from a residential IP with plain requests (10 s timeout); SofaScore needs the curl_cffi/relay/Tor path in sofascore_scraper.",
+  "sofascore": {
+    "fetcher": "sofascore_lineups",
+    "timeout": 10,
+    "provides": ["injuries", "suspensions", "confirmed_lineup", "player_stats", "fixtures"],
+    "enabled": true,
+    "note": "Primary for every team sport. missingPlayers appear 1-24 h before kick-off in football/NBA; hockey/volleyball/handball/lower leagues usually have no missingPlayers and often no player statistics."
+  },
+  "sports": {
+    "football": {
+      "default": ["sofascore"],
+      "leagues": {
+        "england|premier league": ["sofascore", "transfermarkt_gb1"],
+        "spain|laliga": ["sofascore", "transfermarkt_es1"],
+        "spain|la liga": ["sofascore", "transfermarkt_es1"],
+        "italy|serie a": ["sofascore", "transfermarkt_it1"],
+        "germany|bundesliga": ["sofascore", "transfermarkt_l1"],
+        "france|ligue 1": ["sofascore", "transfermarkt_fr1"],
+        "poland|ekstraklasa": ["sofascore", "transfermarkt_pl1"]
+      }
+    },
+    "basketball": {
+      "default": ["sofascore"],
+      "leagues": {
+        "nba": ["sofascore", "rotowire_nba", "nba_official_injury_report"],
+        "eur": ["sofascore", "rotowire_euroleague"],
+        "euroleague": ["sofascore", "rotowire_euroleague"]
+      }
+    },
+    "hockey": {
+      "default": ["sofascore"],
+      "leagues": {
+        "nhl": ["sofascore", "rotowire_nhl", "dailyfaceoff_goalies"]
+      }
+    },
+    "handball": {"default": ["sofascore"], "leagues": {}},
+    "volleyball": {"default": ["sofascore"], "leagues": {}},
+    "tennis": {"default": ["sofascore"], "leagues": {}},
+    "baseball": {"default": ["sofascore"], "leagues": {"mlb": ["sofascore", "rotowire_mlb"]}},
+    "rugby": {"default": ["sofascore"], "leagues": {}},
+    "american_football": {"default": ["sofascore"], "leagues": {"nfl": ["sofascore", "rotowire_nfl"]}}
+  },
+  "sources": {
+    "rotowire_nba": {
+      "fetcher": "rotowire_nba", "url": "https://www.rotowire.com/basketball/nba-lineups.php",
+      "timeout": 10, "provides": ["injuries", "predicted_lineup", "confirmed_lineup"], "enabled": true,
+      "note": "200 OK, ~400 KB HTML; expected/confirmed starters plus Out/GTD/Ques per team. robots.txt allows the page."
+    },
+    "rotowire_nhl": {
+      "fetcher": "rotowire_nhl", "url": "https://www.rotowire.com/hockey/nhl-lineups.php",
+      "timeout": 10, "provides": ["injuries", "predicted_lineup", "starting_goalie"], "enabled": true,
+      "note": "200 OK, ~470 KB HTML; goalie (Confirmed/Likely) plus injuries per team."
+    },
+    "dailyfaceoff_goalies": {
+      "fetcher": "dailyfaceoff_goalies", "url": "https://www.dailyfaceoff.com/starting-goalies",
+      "timeout": 10, "provides": ["starting_goalie"], "enabled": true,
+      "note": "200 OK; __NEXT_DATA__ JSON with home/away goalie and news strength (Confirmed/Likely/Unconfirmed)."
+    },
+    "transfermarkt_gb1": {"fetcher": "transfermarkt_injuries", "league_code": "GB1", "url": "https://www.transfermarkt.com/premier-league/verletztespieler/wettbewerb/GB1", "timeout": 10, "provides": ["injuries"], "enabled": true, "note": "200 OK, ~195 KB HTML table (player, club, injury)."},
+    "transfermarkt_es1": {"fetcher": "transfermarkt_injuries", "league_code": "ES1", "url": "https://www.transfermarkt.com/laliga/verletztespieler/wettbewerb/ES1", "timeout": 10, "provides": ["injuries"], "enabled": true, "note": "Same page layout as GB1."},
+    "transfermarkt_it1": {"fetcher": "transfermarkt_injuries", "league_code": "IT1", "url": "https://www.transfermarkt.com/serie-a/verletztespieler/wettbewerb/IT1", "timeout": 10, "provides": ["injuries"], "enabled": true, "note": "Same page layout as GB1."},
+    "transfermarkt_l1": {"fetcher": "transfermarkt_injuries", "league_code": "L1", "url": "https://www.transfermarkt.com/bundesliga/verletztespieler/wettbewerb/L1", "timeout": 10, "provides": ["injuries"], "enabled": true, "note": "Same page layout as GB1."},
+    "transfermarkt_fr1": {"fetcher": "transfermarkt_injuries", "league_code": "FR1", "url": "https://www.transfermarkt.com/ligue-1/verletztespieler/wettbewerb/FR1", "timeout": 10, "provides": ["injuries"], "enabled": true, "note": "Same page layout as GB1."},
+    "transfermarkt_pl1": {"fetcher": "transfermarkt_injuries", "league_code": "PL1", "url": "https://www.transfermarkt.com/pko-bp-ekstraklasa/verletztespieler/wettbewerb/PL1", "timeout": 10, "provides": ["injuries"], "enabled": true, "note": "Same page layout as GB1."},
+    "transfermarkt_suspensions": {"fetcher": null, "timeout": 10, "provides": ["suspensions"], "enabled": false, "note": "Not probed; suspensions come from SofaScore missingPlayers. Add a fetcher for /sperrenausfaelle/wettbewerb/<code> if needed."},
+    "nba_official_injury_report": {"fetcher": null, "url": "https://official.nba.com/nba-injury-report-2025-26-season/", "timeout": 10, "provides": ["injuries"], "enabled": false, "note": "Page returns 200 but the report is a PDF; no PDF parser yet. RotoWire NBA covers the same statuses."},
+    "rotowire_euroleague": {"fetcher": null, "url": "https://www.rotowire.com/euroleague/lineups.php", "timeout": 10, "provides": ["predicted_lineup"], "enabled": false, "note": "404 at both /euroleague/lineups.php and /basketball/euroleague-lineups.php on 2026-11-19."},
+    "rotowire_mlb": {"fetcher": null, "url": "https://www.rotowire.com/baseball/daily-lineups.php", "timeout": 10, "provides": ["predicted_lineup", "confirmed_lineup"], "enabled": false, "note": "Off-season (Nov); not probed. Our baseball picks are ABL/NPB, not MLB."},
+    "rotowire_nfl": {"fetcher": null, "url": "https://www.rotowire.com/football/lineups.php", "timeout": 10, "provides": ["injuries"], "enabled": false, "note": "Not probed; we have no NFL picks."},
+    "livesport_missing": {"fetcher": null, "timeout": 10, "provides": ["injuries", "suspensions"], "enabled": false, "note": "JS-rendered; existing H2H scrapers already depend on Livesport, so no extra load."}
+  }
+}
