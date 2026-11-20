@@ -1,0 +1,24 @@
+name: gemini_list_models
+on: workflow_dispatch
+permissions: {contents: read}
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Gemini models (no key printed)
+        env:
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python3 - <<'EOF'
+          import os, json, urllib.request
+          keys=[k.strip() for k in (os.environ.get('GEMINI_API_KEYS','')+','+os.environ.get('GEMINI_API_KEY','')).split(',') if k.strip()]
+          print('keys:',len(keys))
+          url='https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000&key='+keys[0]
+          try:
+              d=json.load(urllib.request.urlopen(url,timeout=30))
+          except Exception as e:
+              print('ERR',getattr(e,'code',type(e).__name__)); raise SystemExit(1)
+          for m in d.get('models',[]):
+              print(m['name'],'|',m.get('displayName'),'|',','.join(m.get('supportedGenerationMethods',[])))
+          EOF
