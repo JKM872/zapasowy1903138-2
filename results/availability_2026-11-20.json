@@ -11334,14 +11334,14 @@
   "aiSummarySig": "2026-11-20T19:15:17.556735+00:00|False"
  },
  "tennis|Y. Watanuki|T. Daniel": {
-  "checkedAt": "2026-11-20T18:00:40.282292+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-20T18:00:40.282292+00:00",
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown"
@@ -11451,57 +11451,84 @@
   "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
  },
  "tennis|D. Blanch|L. Draxl": {
-  "checkedAt": "2026-11-20T18:00:40.282292+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-20T18:00:40.282292+00:00",
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown"
  },
  "tennis|O. Jasika|P. Sekulic": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://thetennistrader.com/news/atp-challenger-sydney-2026-preview.html",
+   "https://tennistonic.com/tennis-news/1083255/h2h-prediction-of-omar-jasika-vs-philip-sekulic-in-sydney-challenger-with-odds-preview-pick-21st-november-2026/",
+   "https://scores24.live/en/tennis/m-21-11-2026-jasika-omar-sekulic-philip-prediction",
+   "https://tennispredictions.ai/blog/omar-jasika-vs-philip-sekulic-prediction-2026-11-21/",
+   "https://tennistonic.com/tennis-news/1083317/prediction-preview-h2h-jasika-sekulic-gorzny-and-tu-to-play-on-court-2-on-saturday-sydney-challenger/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-20T17:37:47.012802+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|S. Gorzny|L. Tu": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "Li Tu",
+    "importance": "star",
+    "status": "doubtful",
+    "reason": "1 medical timeout(s) in the past 14 days"
+   }
+  ],
+  "sources": [
+   "https://thetennistrader.com/news/atp-challenger-sydney-2026-preview.html",
+   "https://scores.sir.sportradar.com/en/match/76687404/report",
+   "https://www.tennis.com/tournaments/nsw-open/matches/s-gorzny-vs-l-tu-2026-11-21",
+   "https://www.tennisexplorer.com/match-detail/?id=3384529",
+   "https://www.atptour.com/en/scores/current-challenger/sydney/2817/daily-schedule?day=7"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-20T17:37:47.012802+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "status": "no_key_absence"
  },
  "tennis|G. I. Justo|F. Roncadelli": {
-  "checkedAt": "2026-11-20T18:00:40.282292+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-20T18:00:40.282292+00:00",
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown"
@@ -12461,32 +12488,56 @@
   "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
  },
  "tennis|Djoubri S.|Drenser-Hagmann K.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.tennislive.net/wta/match/salma-djoubri-VS-kennedy-drenser-hagmann/w35-orlando-2026/",
+   "https://www.tennisgauge.com/match/kennedy-drenser-hagmann-vs-salma-djoubri/",
+   "https://tenisradar.cz/en/match/2026-11-20-salma-djoubri-kennedy-drenser-hagmann/",
+   "https://fantasy.tennistonic.com/stat-tournaments/wta/17419/50817-104810/salma-djoubri-vs-kennedy-drenser-hagmann/",
+   "https://umpiry.com/match/2026-11-20/djoubri-vs-hagmann-w35-orlando-r32"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Alcantara F. C.|Ann S.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://psitennis.com/scores/2651570",
+   "https://chatroom.bet/pt/match/alcantara-lomakin-vs-ann-kim-2026-11-20",
+   "https://www.tennisexplorer.com/match-detail/?id=3384237",
+   "https://www.tennislive.net/atp/match/francis-casey-alcantara-grigoriy-lomakin-VS-suk-ann-geun-jun-kim/m15-kuala-lumpur-2026/",
+   "https://argbet.co/live-scores/match/111111114704899"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Rodriguez L. J.|Zarate C. M.": {
   "checkedAt": "2026-11-20T13:59:45.909516+00:00",
@@ -12500,18 +12551,30 @@
   "aiSummarySig": "2026-11-20T13:59:45.909516+00:00|False"
  },
  "tennis|Kubler J.|Hoeyeraal H.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.tennis.com/tournaments/nsw-open/matches/kubler-j-puttergill-c-vs-hoeyeraal-h-padgham-e-2026-11-20",
+   "https://www.tennis.com.au/nsw/news/2026/11/14/australian-open-wildcard-race-heats-up-as-star-studded-field-heads-to-nsw-open",
+   "https://www.tennis.com.au/fan-zone/news/2026/10/19/jason-kubler-return-almaty",
+   "https://thetennistrader.com/player/jason-kubler.html",
+   "https://ausopen.com/articles/news/aussie-pair-kubler-and-polmans-through-ao-2026-doubles-final"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Hernandez C.|Plans J.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12536,18 +12599,19 @@
   "aiSummarySig": "2026-11-20T13:59:45.909516+00:00|False"
  },
  "tennis|Jasika O.|Sekulic P.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Fomin S.|Ghetu G.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12605,18 +12669,19 @@
   "aiSummarySig": "2026-11-20T09:36:18.835068+00:00|False"
  },
  "tennis|Harris B.|Hassan B.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Boskovic L.|Taraba Wallberg N.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12663,18 +12728,19 @@
   "aiSummarySig": "2026-11-20T13:59:45.909516+00:00|False"
  },
  "tennis|Plekhanova D.|Collins K.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Maxted L.|Mitsui S.": {
   "checkedAt": "2026-11-20T18:31:02.407326+00:00",
@@ -12703,18 +12769,19 @@
   "aiSummarySig": "2026-11-20T18:31:02.407326+00:00|False"
  },
  "tennis|Barry C.|Blancaneaux G.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Yaneva E.|Bolkvadze M.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12750,46 +12817,49 @@
   "aiSummarySig": "2026-11-20T09:36:18.835068+00:00|False"
  },
  "tennis|Reyes-Varela M. A.|Boulais J.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Samrej K.|Broady L.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Sekulic P.|Aguiard E.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Popa G. S.|Serban R.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12818,18 +12888,19 @@
   "aiSummarySig": "2026-11-20T19:15:17.556735+00:00|False"
  },
  "tennis|Bakonyi D.|Chopra K.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Meligeni Alves F.|Pucinelli de Almeida M.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12953,18 +13024,19 @@
   "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
  },
  "tennis|Garland J.|Jones E.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Brooks M.|Appleton E.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -12978,18 +13050,19 @@
   "aiSummarySig": "2026-11-20T09:36:18.835068+00:00|False"
  },
  "tennis|Masarova R.|Samson L.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Di Girolami T.|Iliev S.": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -13051,13 +13124,14 @@
   "aiSummarySig": "2026-11-20T09:36:18.835068+00:00|False"
  },
  "volleyball|Goias|Montes Claros": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "volleyball",
   "eventId": 17276041,
   "teams": {
@@ -13084,7 +13158,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "volleyball|Indykpol AZS Olsztyn|GKS Katowice": {
   "checkedAt": "2026-11-20T09:36:18.835068+00:00",
@@ -13319,14 +13393,38 @@
   "status": "lineups_ok"
  },
  "basketball|Toros del Valle|Paisas": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "Romario Roque Martínez",
+    "importance": "star",
+    "status": "out",
+    "reason": "Three‑month suspension for physical aggression against a league official"
+   },
+   {
+    "name": "Charles García Jr.",
+    "importance": "star",
+    "status": "out",
+    "reason": "Ten‑game suspension for aggression toward officials during a match"
+   }
+  ],
+  "sources": [
+   "https://ifmnoticias.com/deportes/paisas-de-medellin-enfrentara-la-final-diezmado-por-severas-sanciones-disciplinarias-a-dos-de-su-mejores-fichas/",
+   "https://basketballpredicts.com/en/game/535207/",
+   "https://elperiodicodeportivo.com.co/noticias/toros-del-valle-busca-recuperarse-en-la-final-frente-a-paisas",
+   "https://caracol.com.co/2026/11/20/toros-del-valle-obligado-a-remontar-y-hacer-la-epica-en-medellin/",
+   "https://basketballsphere.com/en/toros-del-valle-vs-paisas-prediction-colombian-lbp-clausura-november-20-2026/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-20T17:37:47.012802+00:00",
+  "netStars": -2,
+  "netKey": -2,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "basketball",
   "eventId": 17558657,
   "teams": {
@@ -13388,9 +13486,9 @@
    }
   },
   "signals": [],
-  "status": "unknown",
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "status": "no_key_absence",
+  "aiSummary": "The absences of star players Romario Roque Martínez and Charles García Jr. from Paisas matter, but they weaken the away side, not our pick.",
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "basketball|St. Thomas (Minn.)|Southeast Missouri State": {
   "checkedAt": "2026-11-20T17:37:47.012802+00:00",
@@ -13678,19 +13776,52 @@
   "aiSummarySig": "2026-11-20T19:15:17.556735+00:00|False"
  },
  "basketball|UNLV|Rutgers": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
-  "board": "ok",
-  "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-20T17:37:47.012802+00:00",
+  "home": [
+   {
+    "name": "Tyler Harris",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "questionable knee injury"
+   },
+   {
+    "name": "AJ Storr",
+    "importance": "star",
+    "status": "out",
+    "reason": "out indefinitely (gout/eligibility issue)"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://tipoffstatus.com/games/2026-11-19-rutgers-at-unlv/",
+   "https://www.sportsline.com/college-basketball/game-forecast/NCAAB_20261119_RUT@UNLV/",
+   "https://www.covers.com/sport/basketball/ncaab/teams/main/unlv-runnin-rebels/injuries",
+   "https://www.mygamesim.com/mbb/college-basketball-injuries.asp?Conference=Mountain+West",
+   "https://www.rotowire.com/cbasketball/player/tyler-harris-22405"
+  ],
+  "lineup": null,
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 1,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "basketball",
-  "signals": [],
-  "status": "unknown",
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "signals": [
+   {
+    "kind": "star_out",
+    "name": "AJ Storr",
+    "share": null,
+    "basis": "market value",
+    "reason": "out indefinitely (gout/eligibility issue)",
+    "source": "llm"
+   }
+  ],
+  "status": "star_out",
+  "aiSummary": "UNLV is missing key player Tyler Harris and star AJ Storr, while Rutgers has no absences. These gaps weaken our pick.",
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "basketball|Houston Christian|Georgia Southern": {
   "checkedAt": "2026-11-20T17:37:47.012802+00:00",
@@ -22071,18 +22202,19 @@
   "aiSummarySig": "2026-11-20T13:59:45.909516+00:00|False"
  },
  "tennis|B. Harris|B. Hassan": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Remondy Pagotto V. H.|Cuellar Lorberg A. E.": {
   "checkedAt": "2026-11-20T18:00:40.282292+00:00",
@@ -22111,18 +22243,19 @@
   "aiSummarySig": "2026-11-20T13:59:45.909516+00:00|False"
  },
  "tennis|K. Samrej|L. Broady": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Re T.|Del Pino M.": {
   "checkedAt": "2026-11-20T13:59:45.909516+00:00",
@@ -22136,18 +22269,19 @@
   "aiSummarySig": "2026-11-20T13:59:45.909516+00:00|False"
  },
  "tennis|P. Sekulic|E. Aguiard": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|E. Moeller|T. Boyer": {
   "checkedAt": "2026-11-20T18:31:02.407326+00:00",
@@ -22190,18 +22324,19 @@
   "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
  },
  "tennis|R. Masarova|L. Samsonova": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|H. Wendelken|J. Lee": {
   "checkedAt": "2026-11-20T18:31:02.407326+00:00",
@@ -22620,32 +22755,45 @@
   "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
  },
  "tennis|Magadan A.|Alvarez Y.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
-  "source": null,
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.tennisexplorer.com/match-detail/?id=3383983",
+   "https://www.flashscore.com/match/tennis/alvarez-yannik-rmlebGE8/magadan-alan-AsgIC9uN/",
+   "https://umpiry.com/match/2026-11-20/alvarez-vs-magadan-m25-chihuahua-qf",
+   "https://live4sport.net/tennis/match/2651511/a-magadan-vs-y-alvarez/",
+   "https://www.live-result.com/tennis/matches/match569741_Alan_Magadan-Yannik_Alvarez-online"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "tennis|Gorzny S.|Tu L.": {
-  "checkedAt": "2026-11-20T17:37:47.012802+00:00",
+  "checkedAt": "2026-11-20T21:48:16.800122+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-20T21:48:16.800122+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-20T17:37:47.012802+00:00|False"
+  "aiSummarySig": "2026-11-20T21:48:16.800122+00:00|False"
  },
  "basketball|New Mexico State|UTEP": {
   "checkedAt": "2026-11-20T18:00:40.282292+00:00",
