@@ -1,28 +1,7 @@
 {
   "date": "2026-11-20",
-  "generated_at": "2026-11-20T17:58:35.778087+00:00",
-  "issues": [
-    {
-      "level": "ALERT",
-      "workflow": "daily_digest.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
-    },
-    {
-      "level": "ALERT",
-      "workflow": "coupons.yml",
-      "sport": "",
-      "code": "no_run",
-      "problem": "Brak runu mimo harmonogramu",
-      "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-      "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-      "url": ""
-    }
-  ],
+  "generated_at": "2026-11-20T22:20:04.131429+00:00",
+  "issues": [],
   "workflows": [
     {
       "workflow": "scrape_forebet.yml",
@@ -59,41 +38,36 @@
     },
     {
       "workflow": "oddssafari_dropping.yml",
-      "runs_today": 1,
+      "runs_today": 5,
       "issues": [],
       "run": {
-        "databaseId": 44689674451,
+        "databaseId": 44823187705,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44689674451"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44823187705"
       }
     },
     {
       "workflow": "top_picks.yml",
-      "runs_today": 3,
+      "runs_today": 4,
       "issues": [],
       "run": {
-        "databaseId": 44784939376,
+        "databaseId": 44823374445,
         "status": "completed",
         "conclusion": "success",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44784939376"
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44823374445"
       }
     },
     {
       "workflow": "daily_digest.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "daily_digest.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 44813611604,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44813611604"
+      }
     },
     {
       "workflow": "fan_favourites.yml",
@@ -130,19 +104,14 @@
     },
     {
       "workflow": "coupons.yml",
-      "runs_today": 0,
-      "issues": [
-        {
-          "level": "ALERT",
-          "workflow": "coupons.yml",
-          "sport": "",
-          "code": "no_run",
-          "problem": "Brak runu mimo harmonogramu",
-          "meaning": "Workflow zaplanowany na dziś, a nie ma żadnego runu.",
-          "action": "Sprawdź, czy workflow nie jest wyłączony; uruchom ręcznie.",
-          "url": ""
-        }
-      ]
+      "runs_today": 1,
+      "issues": [],
+      "run": {
+        "databaseId": 44796130268,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44796130268"
+      }
     },
     {
       "workflow": "check_results.yml",
@@ -157,13 +126,13 @@
     },
     {
       "workflow": "top_live.yml",
-      "runs_today": 5,
+      "runs_today": 7,
       "issues": [],
       "run": {
-        "databaseId": 44788379136,
-        "status": "in_progress",
-        "conclusion": "",
-        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44788379136"
+        "databaseId": 44824527233,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/JKM872/zapasowy1903138-2/actions/runs/44824527233"
       }
     }
   ],
@@ -206,7 +175,7 @@
     }
   ],
   "counts": {
-    "ALERT": 2,
+    "ALERT": 0,
     "WARN": 0
   }
 }
