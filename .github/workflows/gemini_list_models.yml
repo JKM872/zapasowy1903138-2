@@ -27,13 +27,15 @@ jobs:
           for k in keys+[os.environ.get('GEMINI_API_KEY_2','').strip()]:
               if k and k not in allk: allk.append(k)
           print('unique keys:',len(allk))
-          body=json.dumps({'contents':[{'parts':[{'text':'Who won the most recent Premier League match? One sentence.'}]}],'tools':[{'google_search':{}}]}).encode()
-          for i,k in enumerate(allk):
-              r=urllib.request.Request(f'https://generativelanguage.googleapis.com/v1beta/models/{M}:generateContent?key={k}',data=body,headers={'Content-Type':'application/json'})
-              try:
-                  d=json.load(urllib.request.urlopen(r,timeout=60)); g=d['candidates'][0].get('groundingMetadata') or {}
-                  print('probe key',i,'200 grounded_chunks=',len(g.get('groundingChunks',[])))
-              except Exception as e:
-                  b=e.read().decode()[:160] if hasattr(e,'read') else ''
-                  print('probe key',i,getattr(e,'code',type(e).__name__),b.replace(k,'***'))
+          for M,tool in [('gemini-4-hydrogen',1),('gemini-4-hydrogen',0),('gemini-3.8-flash',1)]:
+           body=json.dumps({'contents':[{'parts':[{'text':'Who won the most recent Premier League match? One sentence.'}]}],**({'tools':[{'google_search':{}}]} if tool else {})}).encode()
+           print('== model',M,'tool',tool)
+           for i,k in enumerate(allk):
+               r=urllib.request.Request(f'https://generativelanguage.googleapis.com/v1beta/models/{M}:generateContent?key={k}',data=body,headers={'Content-Type':'application/json'})
+               try:
+                   d=json.load(urllib.request.urlopen(r,timeout=60)); g=d['candidates'][0].get('groundingMetadata') or {}
+                   print('probe key',i,'200 grounded_chunks=',len(g.get('groundingChunks',[])))
+               except Exception as e:
+                   b=e.read().decode()[:160] if hasattr(e,'read') else ''
+                   print('probe key',i,getattr(e,'code',type(e).__name__),b.replace(k,'***'))
           EOF
