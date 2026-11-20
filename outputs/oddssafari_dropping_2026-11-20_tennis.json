@@ -1,0 +1,1699 @@
+{
+  "meta": {
+    "generated_at": "2026-11-20T07:50:46.040965+01:00",
+    "target_date": "2026-11-20",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 9,
+      "qualified": 6
+    },
+    "enrichment_status_counts": {
+      "enriched": 5,
+      "resolve_failed": 0,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 3
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 9
+    },
+    "elapsed_seconds": 354.8,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "ATP - Finals",
+      "match_url": "https://www.oddssafari.com/matches/tennis/atp-finals/alcaraz-c.-vs-cobolli-f./22730302?MarketTypeID=301",
+      "match_id": "22730302",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Alcaraz C.",
+      "away_team": "Cobolli F.",
+      "event_date": "20/11",
+      "event_time": "13:00",
+      "outcome": "2",
+      "open_odds": 6.8,
+      "current_odds": 4.35,
+      "drop_pct": 36.0,
+      "max_odds": 4.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Champaign",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-champaign/tarvet-o.-vs-johnson-sp./23643796?MarketTypeID=301",
+      "match_id": "23643796",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Tarvet O.",
+      "away_team": "Johnson Sp.",
+      "event_date": "20/11",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 4.8,
+      "current_odds": 3.52,
+      "drop_pct": 27.0,
+      "max_odds": 3.8,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Helsinki Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-helsinki-doubles/rojer-j.j.winegar-t.-vs-liutarevich-i.pieczonka-f./23976869?MarketTypeID=301",
+      "match_id": "23976869",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Rojer J.J./Winegar T.",
+      "away_team": "Liutarevich I./Pieczonka F.",
+      "event_date": "20/11",
+      "event_time": "16:40",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.11,
+      "drop_pct": 19.0,
+      "max_odds": 2.47,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 17537900,
+        "home_team": "Rojer J.J./Winegar T.",
+        "away_team": "Liutarevich I./Pieczonka F.",
+        "sport": "tennis",
+        "league": "Challenger - Helsinki Doubles",
+        "match_time": "16:40",
+        "sofascore_home_win_prob": 82,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 18,
+        "sofascore_total_votes": 97,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Montevideo",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-montevideo/meligeni-rodrigues-f.-vs-de-almeida-m.p./23665280?MarketTypeID=301",
+      "match_id": "23665280",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Meligeni Rodrigues F.",
+      "away_team": "De Almeida M.P.",
+      "event_date": "20/11",
+      "event_time": "18:50",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.54,
+      "drop_pct": 18.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/meligeni-rodrigues-alves-felipe-rLEXNv74/pucinelli-de-almeida-matheus-6J1eXqaF/?mid=UqkTWIrB",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Meligeni Alves F.",
+        "away_team": "Pucinelli de Almeida M.",
+        "match_time": "20.11.2026 16:30",
+        "sport": "tennis",
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.25,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.3,
+        "away_odds": 1.55,
+        "favorite": "player_b",
+        "advanced_score": 3.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "30.03.24",
+            "home": "Pucinelli de Almeida M.",
+            "away": "Meligeni Alves F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "30.03.24 Pucinelli de Almeida M. 1-2 Meligeni Alves F."
+          },
+          {
+            "date": "13.06.23",
+            "home": "Pucinelli de Almeida M.",
+            "away": "Meligeni Alves F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.06.23 Pucinelli de Almeida M. 1-2 Meligeni Alves F."
+          },
+          {
+            "date": "03.11.22",
+            "home": "Pucinelli de Almeida M.",
+            "away": "Meligeni Alves F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.11.22 Pucinelli de Almeida M. 2-0 Meligeni Alves F."
+          },
+          {
+            "date": "16.10.21",
+            "home": "Meligeni Alves F.",
+            "away": "Pucinelli de Almeida M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.10.21 Meligeni Alves F. 2-0 Pucinelli de Almeida M."
+          }
+        ],
+        "last_h2h_date": "30.03.24",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Pucinelli de Almeida M.",
+        "last_h2h_away": "Meligeni Alves F.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Meligeni Alves F.)",
+          "missing_recent_matches_B (Pucinelli de Almeida M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 345,
+        "ranking_b": 219,
+        "forebet_prediction": "1",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.2,
+        "forebet_home_prob": 53,
+        "forebet_away_prob": 46
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Metz",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-metz/gueymard-wayenburg-s.-vs-nardi-l./23936750?MarketTypeID=301",
+      "match_id": "23936750",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gueymard Wayenburg S.",
+      "away_team": "Nardi L.",
+      "event_date": "20/11",
+      "event_time": "13:40",
+      "outcome": "2",
+      "open_odds": 1.87,
+      "current_odds": 1.62,
+      "drop_pct": 14.0,
+      "max_odds": 1.63,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/gueymard-wayenburg-sascha-OdbfkgxD/nardi-luca-pfrQxVu7/?mid=hnG0vsuI",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Gueymard Wayenburg S.",
+        "away_team": "Nardi L.",
+        "match_time": "20.11.2026 14:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 39.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.11.26",
+            "home": "Gueymard Wayenburg S.",
+            "away": "Nagel A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "19.11.26 Gueymard Wayenburg S. 2-0 Nagel A."
+          },
+          {
+            "date": "17.11.26",
+            "home": "Bonzi B.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "17.11.26 Bonzi B. 1-2 Gueymard Wayenburg S."
+          },
+          {
+            "date": "13.11.26",
+            "home": "Gueymard Wayenburg S.",
+            "away": "Virtanen O.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "13.11.26 Gueymard Wayenburg S. 0-2 Virtanen O."
+          },
+          {
+            "date": "11.11.26",
+            "home": "Bellucci M.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "11.11.26 Bellucci M. 1-2 Gueymard Wayenburg S."
+          },
+          {
+            "date": "09.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "09.11.26 Budkov Kjaer N. 1-2 Gueymard Wayenburg S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Gueymard Wayenburg S.)",
+          "missing_recent_matches_B (Nardi L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 191,
+        "ranking_b": 258,
+        "forebet_prediction": "2",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 10.7,
+        "forebet_home_prob": 48,
+        "forebet_away_prob": 52
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Helsinki",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-helsinki/budkov-kjaer-n.-vs-djere-l./23558156?MarketTypeID=301",
+      "match_id": "23558156",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Budkov Kjaer N.",
+      "away_team": "Djere L.",
+      "event_date": "20/11",
+      "event_time": "11:30",
+      "outcome": "1",
+      "open_odds": 1.95,
+      "current_odds": 1.69,
+      "drop_pct": 13.0,
+      "max_odds": 1.73,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/budkov-kjaer-nicolai-Gj3CGbX5/djere-laslo-4GGnypTh/?mid=fH3aj2zH",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Budkov Kjaer N.",
+        "away_team": "Djere L.",
+        "match_time": "20.11.2026 11:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.68,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 16.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "18.11.26",
+            "home": "Rodionov J.",
+            "away": "Budkov Kjaer N.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "18.11.26 Rodionov J. 0-2 Budkov Kjaer N."
+          },
+          {
+            "date": "16.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Brunold M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "16.11.26 Budkov Kjaer N. 2-1 Brunold M."
+          },
+          {
+            "date": "09.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "09.11.26 Budkov Kjaer N. 1-2 Gueymard Wayenburg S."
+          },
+          {
+            "date": "05.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Coppejans K.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "05.11.26 Budkov Kjaer N. 1-2 Coppejans K."
+          },
+          {
+            "date": "03.11.26",
+            "home": "Mochizuki S.",
+            "away": "Budkov Kjaer N.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.11.26 Mochizuki S. 0-2 Budkov Kjaer N."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Budkov Kjaer N.)",
+          "missing_recent_matches_B (Djere L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 176,
+        "ranking_b": 137,
+        "forebet_prediction": "2",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 45,
+        "forebet_away_prob": 55
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Montevideo Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-montevideo-doubles/nijboer-r.nikles-j.-vs-drzewiecki-k.matuszewski-p./23974630?MarketTypeID=301",
+      "match_id": "23974630",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Nijboer R./Nikles J.",
+      "away_team": "Drzewiecki K./Matuszewski P.",
+      "event_date": "20/11",
+      "event_time": "16:30",
+      "outcome": "1",
+      "open_odds": 3.6,
+      "current_odds": 3.17,
+      "drop_pct": 12.0,
+      "max_odds": 3.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Metz",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-metz/kwon-soon-woo-vs-prizmic-d./23892810?MarketTypeID=301",
+      "match_id": "23892810",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kwon Soon Woo",
+      "away_team": "Prizmic D.",
+      "event_date": "20/11",
+      "event_time": "12:30",
+      "outcome": "2",
+      "open_odds": 1.65,
+      "current_odds": 1.47,
+      "drop_pct": 11.0,
+      "max_odds": 1.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/kwon-soon-woo-pKuUGzw2/prizmic-dino-YcluY2Zi/?mid=0rtMBQEN",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kwon S.",
+        "away_team": "Prizmic D.",
+        "match_time": "20.11.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.5,
+        "away_odds": 1.48,
+        "favorite": "player_b",
+        "advanced_score": 29.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.11.26",
+            "home": "Donald M.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.11.26 Donald M. 0-2 Kwon S."
+          },
+          {
+            "date": "17.11.26",
+            "home": "Sachko V.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "17.11.26 Sachko V. 0-2 Kwon S."
+          },
+          {
+            "date": "19.09.26",
+            "home": "Kwon S.",
+            "away": "Nagal S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "19.09.26 Kwon S. 2-0 Nagal S."
+          },
+          {
+            "date": "18.09.26",
+            "home": "Kwon S.",
+            "away": "Suresh D.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "18.09.26 Kwon S. 2-1 Suresh D."
+          },
+          {
+            "date": "25.08.26",
+            "home": "Kwon S.",
+            "away": "Lajovic D.",
+            "score": "1-1",
+            "winner": "draw",
+            "raw": "25.08.26 Kwon S. 1-1 Lajovic D."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 1.0
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Kwon S.)",
+          "missing_recent_matches_B (Prizmic D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 156,
+        "ranking_b": 89,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 11.2,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Colina",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-colina/romero-gormaz-l.-vs-burillo-escorihuela-i./23998757?MarketTypeID=301",
+      "match_id": "23998757",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Romero Gormaz L.",
+      "away_team": "Burillo Escorihuela I.",
+      "event_date": "20/11",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 1.52,
+      "current_odds": 1.35,
+      "drop_pct": 11.0,
+      "max_odds": 1.44,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/burillo-escorihuela-irene-YZQnwtm9/romero-gormaz-leyre-KzaX6MH4/?mid=fTwbdqyp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Romero Gormaz L.",
+        "away_team": "Burillo Escorihuela I.",
+        "match_time": "20.11.2026 15:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [],
+        "away_form": [],
+        "home_form_overall": [],
+        "away_form_overall": [],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.3,
+        "away_odds": 3.05,
+        "favorite": "unknown",
+        "advanced_score": 0.0,
+        "tennis_skip_reason": "odds_below_threshold: A (1.30) < 1.35",
+        "h2h_last5": [],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": null,
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "fast_path_odds_gate"
+        ],
+        "tennis_phase_path": "fast_odds_skip",
+        "ranking_a": null,
+        "ranking_b": null,
+        "h2h_source": "sofascore_api",
+        "sofascore_event_id": 17537221,
+        "sofascore_home_win_prob": 80,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 20,
+        "sofascore_total_votes": 419,
+        "forebet_prediction": "1",
+        "forebet_probability": 60.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 60,
+        "forebet_away_prob": 40
+      },
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Helsinki Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-helsinki-doubles/rojer-j.j.winegar-t.-vs-liutarevich-i.pieczonka-f./23976869?MarketTypeID=301",
+      "match_id": "23976869",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Rojer J.J./Winegar T.",
+      "away_team": "Liutarevich I./Pieczonka F.",
+      "event_date": "20/11",
+      "event_time": "16:40",
+      "outcome": "2",
+      "open_odds": 2.6,
+      "current_odds": 2.11,
+      "drop_pct": 19.0,
+      "max_odds": 2.47,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 17537900,
+        "home_team": "Rojer J.J./Winegar T.",
+        "away_team": "Liutarevich I./Pieczonka F.",
+        "sport": "tennis",
+        "league": "Challenger - Helsinki Doubles",
+        "match_time": "16:40",
+        "sofascore_home_win_prob": 82,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 18,
+        "sofascore_total_votes": 97,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Montevideo",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-montevideo/meligeni-rodrigues-f.-vs-de-almeida-m.p./23665280?MarketTypeID=301",
+      "match_id": "23665280",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Meligeni Rodrigues F.",
+      "away_team": "De Almeida M.P.",
+      "event_date": "20/11",
+      "event_time": "18:50",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.54,
+      "drop_pct": 18.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/meligeni-rodrigues-alves-felipe-rLEXNv74/pucinelli-de-almeida-matheus-6J1eXqaF/?mid=UqkTWIrB",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Meligeni Alves F.",
+        "away_team": "Pucinelli de Almeida M.",
+        "match_time": "20.11.2026 16:30",
+        "sport": "tennis",
+        "h2h_count": 4,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.25,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.3,
+        "away_odds": 1.55,
+        "favorite": "player_b",
+        "advanced_score": 3.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "30.03.24",
+            "home": "Pucinelli de Almeida M.",
+            "away": "Meligeni Alves F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "30.03.24 Pucinelli de Almeida M. 1-2 Meligeni Alves F."
+          },
+          {
+            "date": "13.06.23",
+            "home": "Pucinelli de Almeida M.",
+            "away": "Meligeni Alves F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "13.06.23 Pucinelli de Almeida M. 1-2 Meligeni Alves F."
+          },
+          {
+            "date": "03.11.22",
+            "home": "Pucinelli de Almeida M.",
+            "away": "Meligeni Alves F.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.11.22 Pucinelli de Almeida M. 2-0 Meligeni Alves F."
+          },
+          {
+            "date": "16.10.21",
+            "home": "Meligeni Alves F.",
+            "away": "Pucinelli de Almeida M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "16.10.21 Meligeni Alves F. 2-0 Pucinelli de Almeida M."
+          }
+        ],
+        "last_h2h_date": "30.03.24",
+        "last_h2h_score": "1-2",
+        "last_h2h_home": "Pucinelli de Almeida M.",
+        "last_h2h_away": "Meligeni Alves F.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.8
+        },
+        "surface_stats_b": {
+          "clay": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Meligeni Alves F.)",
+          "missing_recent_matches_B (Pucinelli de Almeida M.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 345,
+        "ranking_b": 219,
+        "forebet_prediction": "1",
+        "forebet_probability": 53.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.2,
+        "forebet_home_prob": 53,
+        "forebet_away_prob": 46
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Metz",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-metz/gueymard-wayenburg-s.-vs-nardi-l./23936750?MarketTypeID=301",
+      "match_id": "23936750",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Gueymard Wayenburg S.",
+      "away_team": "Nardi L.",
+      "event_date": "20/11",
+      "event_time": "13:40",
+      "outcome": "2",
+      "open_odds": 1.87,
+      "current_odds": 1.62,
+      "drop_pct": 14.0,
+      "max_odds": 1.63,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/gueymard-wayenburg-sascha-OdbfkgxD/nardi-luca-pfrQxVu7/?mid=hnG0vsuI",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Gueymard Wayenburg S.",
+        "away_team": "Nardi L.",
+        "match_time": "20.11.2026 14:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 39.2,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.11.26",
+            "home": "Gueymard Wayenburg S.",
+            "away": "Nagel A.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "19.11.26 Gueymard Wayenburg S. 2-0 Nagel A."
+          },
+          {
+            "date": "17.11.26",
+            "home": "Bonzi B.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "17.11.26 Bonzi B. 1-2 Gueymard Wayenburg S."
+          },
+          {
+            "date": "13.11.26",
+            "home": "Gueymard Wayenburg S.",
+            "away": "Virtanen O.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "13.11.26 Gueymard Wayenburg S. 0-2 Virtanen O."
+          },
+          {
+            "date": "11.11.26",
+            "home": "Bellucci M.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "11.11.26 Bellucci M. 1-2 Gueymard Wayenburg S."
+          },
+          {
+            "date": "09.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "09.11.26 Budkov Kjaer N. 1-2 Gueymard Wayenburg S."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.8
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Gueymard Wayenburg S.)",
+          "missing_recent_matches_B (Nardi L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 191,
+        "ranking_b": 258,
+        "forebet_prediction": "2",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "1-2",
+        "forebet_avg_goals": 10.7,
+        "forebet_home_prob": 48,
+        "forebet_away_prob": 52
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Helsinki",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-helsinki/budkov-kjaer-n.-vs-djere-l./23558156?MarketTypeID=301",
+      "match_id": "23558156",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Budkov Kjaer N.",
+      "away_team": "Djere L.",
+      "event_date": "20/11",
+      "event_time": "11:30",
+      "outcome": "1",
+      "open_odds": 1.95,
+      "current_odds": 1.69,
+      "drop_pct": 13.0,
+      "max_odds": 1.73,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/budkov-kjaer-nicolai-Gj3CGbX5/djere-laslo-4GGnypTh/?mid=fH3aj2zH",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Budkov Kjaer N.",
+        "away_team": "Djere L.",
+        "match_time": "20.11.2026 11:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.68,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 16.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "18.11.26",
+            "home": "Rodionov J.",
+            "away": "Budkov Kjaer N.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "18.11.26 Rodionov J. 0-2 Budkov Kjaer N."
+          },
+          {
+            "date": "16.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Brunold M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "16.11.26 Budkov Kjaer N. 2-1 Brunold M."
+          },
+          {
+            "date": "09.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Gueymard Wayenburg S.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "09.11.26 Budkov Kjaer N. 1-2 Gueymard Wayenburg S."
+          },
+          {
+            "date": "05.11.26",
+            "home": "Budkov Kjaer N.",
+            "away": "Coppejans K.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "05.11.26 Budkov Kjaer N. 1-2 Coppejans K."
+          },
+          {
+            "date": "03.11.26",
+            "home": "Mochizuki S.",
+            "away": "Budkov Kjaer N.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "03.11.26 Mochizuki S. 0-2 Budkov Kjaer N."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.8
+        },
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Budkov Kjaer N.)",
+          "missing_recent_matches_B (Djere L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 176,
+        "ranking_b": 137,
+        "forebet_prediction": "2",
+        "forebet_probability": 55.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 9.4,
+        "forebet_home_prob": 45,
+        "forebet_away_prob": 55
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Metz",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-metz/kwon-soon-woo-vs-prizmic-d./23892810?MarketTypeID=301",
+      "match_id": "23892810",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kwon Soon Woo",
+      "away_team": "Prizmic D.",
+      "event_date": "20/11",
+      "event_time": "12:30",
+      "outcome": "2",
+      "open_odds": 1.65,
+      "current_odds": 1.47,
+      "drop_pct": 11.0,
+      "max_odds": 1.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/kwon-soon-woo-pKuUGzw2/prizmic-dino-YcluY2Zi/?mid=0rtMBQEN",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Kwon S.",
+        "away_team": "Prizmic D.",
+        "match_time": "20.11.2026 12:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 4,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.5,
+        "away_odds": 1.48,
+        "favorite": "player_b",
+        "advanced_score": 29.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "19.11.26",
+            "home": "Donald M.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.11.26 Donald M. 0-2 Kwon S."
+          },
+          {
+            "date": "17.11.26",
+            "home": "Sachko V.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "17.11.26 Sachko V. 0-2 Kwon S."
+          },
+          {
+            "date": "19.09.26",
+            "home": "Kwon S.",
+            "away": "Nagal S.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "19.09.26 Kwon S. 2-0 Nagal S."
+          },
+          {
+            "date": "18.09.26",
+            "home": "Kwon S.",
+            "away": "Suresh D.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "18.09.26 Kwon S. 2-1 Suresh D."
+          },
+          {
+            "date": "25.08.26",
+            "home": "Kwon S.",
+            "away": "Lajovic D.",
+            "score": "1-1",
+            "winner": "draw",
+            "raw": "25.08.26 Kwon S. 1-1 Lajovic D."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 1.0
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Kwon S.)",
+          "missing_recent_matches_B (Prizmic D.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 156,
+        "ranking_b": 89,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 11.2,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Colina",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-colina/romero-gormaz-l.-vs-burillo-escorihuela-i./23998757?MarketTypeID=301",
+      "match_id": "23998757",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Romero Gormaz L.",
+      "away_team": "Burillo Escorihuela I.",
+      "event_date": "20/11",
+      "event_time": "15:00",
+      "outcome": "1",
+      "open_odds": 1.52,
+      "current_odds": 1.35,
+      "drop_pct": 11.0,
+      "max_odds": 1.44,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/burillo-escorihuela-irene-YZQnwtm9/romero-gormaz-leyre-KzaX6MH4/?mid=fTwbdqyp",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Romero Gormaz L.",
+        "away_team": "Burillo Escorihuela I.",
+        "match_time": "20.11.2026 15:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [],
+        "away_form": [],
+        "home_form_overall": [],
+        "away_form_overall": [],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.3,
+        "away_odds": 3.05,
+        "favorite": "unknown",
+        "advanced_score": 0.0,
+        "tennis_skip_reason": "odds_below_threshold: A (1.30) < 1.35",
+        "h2h_last5": [],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": null,
+        "surface_form_a": [],
+        "surface_form_b": [],
+        "surface_stats_a": null,
+        "surface_stats_b": null,
+        "form_a": [],
+        "form_b": [],
+        "tennis_data_warnings": [
+          "fast_path_odds_gate"
+        ],
+        "tennis_phase_path": "fast_odds_skip",
+        "ranking_a": null,
+        "ranking_b": null,
+        "h2h_source": "sofascore_api",
+        "sofascore_event_id": 17537221,
+        "sofascore_home_win_prob": 80,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 20,
+        "sofascore_total_votes": 419,
+        "forebet_prediction": "1",
+        "forebet_probability": 60.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.5,
+        "forebet_home_prob": 60,
+        "forebet_away_prob": 40
+      },
+      "enrichment_error": null
+    }
+  ]
+}
