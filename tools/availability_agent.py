@@ -262,12 +262,13 @@ def _gemini_grounded(prompt: str):
     if not keys:
         _stat('no_keys')
         return None, []
-    models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or GEMINI_MODELS
+    models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or \
+        list(dict.fromkeys(['gemini-4-hydrogen'] + list(GEMINI_MODELS)))
     if ('provider', 'gemini') in _DEAD or all((k, m) in _DEAD for k in keys for m in models):
         _stat('llm_off_quota')  # every key x model is quota-exhausted: no more requests this run
         return None, []
     failed_all = True
-    for key in keys:
+    for ki, key in enumerate(keys, 1):
         for model in models:
             if (key, model) in _DEAD:
                 _stat('skipped_429')
@@ -283,7 +284,8 @@ def _gemini_grounded(prompt: str):
                 continue
             if r.status_code != 200:
                 _stat(f'http_{r.status_code}')
-                if r.status_code in (404, 429):
+                _stat(f'k{ki}_{model}_http_{r.status_code}')   # per-key reason (no key value)
+                if r.status_code in (403, 404, 429):
                     _DEAD.add((key, model))
                 else:
                     failed_all = False
@@ -292,7 +294,7 @@ def _gemini_grounded(prompt: str):
                         msg = (r.json().get('error') or {}).get('message') or ''
                     except Exception:
                         msg = (r.text or '')[:200]
-                    ERRORS[model] = f"{r.status_code}: {' '.join(str(msg).split())[:200]}"
+                    ERRORS[model] = f"{r.status_code}: {' '.join(str(msg).split())[:200]} (k{ki})"
                 continue
             try:
                 cand = (r.json().get('candidates') or [{}])[0]
@@ -304,6 +306,7 @@ def _gemini_grounded(prompt: str):
                 txt, urls = '', []
             if txt:
                 _stat('answered')
+                _stat(f'k{ki}_{model}_http_200')
                 return txt, urls
             failed_all = False
             _stat('empty')
@@ -744,8 +747,9 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print,
         os.replace(tmp, path)
     cands = candidates(day, all_qualifying=all_qualifying)
     # A/B, TOP and Fan Favourites first: they can lose the budget race otherwise.
-    cands.sort(key=lambda c: (bool(c.get('info_only')), not (c.get('top') or c.get('fan'))))
-    llm_max = int(os.getenv('AVAIL_LLM_MAX', '60'))
+    # Grounded-call priority: TOP, then Fan Favourites, then Forebet A/B.
+    cands.sort(key=lambda c: (bool(c.get('info_only')), 0 if c.get('top') else 1 if c.get('fan') else 2))
+    llm_max = int(os.getenv('AVAIL_LLM_MAX', '200'))
     for c in cands:
         left = budget - (_time.monotonic() - t0)
         if left <= 0:

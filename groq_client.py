@@ -532,7 +532,7 @@ def chat(prompt: str, max_tokens: int = 800, temperature: float = 0.0,
 GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent'
 GEMINI_MODELS: List[str] = [m.strip() for m in os.getenv(
     'GEMINI_MODELS',
-    'gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite'
+    'gemini-4-hydrogen,gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite'
 ).split(',') if m.strip()]
 _gem_cooldowns: dict = {}
 _gem_cursor = 0

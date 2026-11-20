@@ -297,6 +297,8 @@ jobs:
           SOFASCORE_PROXY_PRIMARY: "1"
           SOFASCORE_COOKIES: ${{ secrets.SOFASCORE_COOKIES }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
         run: |
           EXTRA=""
           if [ -n "${{ needs.plan.outputs.kickoff_from }}" ]; then

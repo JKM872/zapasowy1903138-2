@@ -5774,6 +5774,8 @@ _GROQ_MODULE = None
 # zapamiętany w `_gemini_active_model` aby nie marnować quoty na sondaże.
 # Model można nadpisać env var `SOFASCORE_GEMINI_MODELS=model1,model2,...`.
 _GEMINI_MODEL_CHAIN_DEFAULT = [
+    'gemini-4-hydrogen',        # Gemini 4 Hydrogen (2026-11, cena jak Flash)
+    'gemini-3.8-flash',
     'gemini-2.5-flash',         # Najnowszy production flash (maj 2025)
     'gemini-2.0-flash-001',     # Stable production
     'gemini-2.0-flash',          # Alias bieżącej generacji

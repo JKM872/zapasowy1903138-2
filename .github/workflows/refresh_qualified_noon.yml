@@ -141,6 +141,8 @@ jobs:
         env:
           FLARESOLVERR_URL: "http://localhost:8191/v1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           # v10.9: SofaScore przez Tor (socks5h = DNS przez Tor). proxy-primary,
           # bo direct (IP datacenter GHA) jest blokowane.
           SOFASCORE_PROXY: "socks5h://localhost:9050"

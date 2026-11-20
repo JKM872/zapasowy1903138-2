@@ -342,7 +342,7 @@ def ai_summary(day: str, data: Dict[str, List[List[Any]]]) -> str:
         return f'AI błąd: {type(e).__name__}'
 
 
-GEMINI_MODELS = os.getenv('GEMINI_MODELS', 'gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite').split(',')
+GEMINI_MODELS = os.getenv('GEMINI_MODELS', 'gemini-4-hydrogen,gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite').split(',')
 
 
 def gemini_chat(prompt: str) -> Optional[str]:
