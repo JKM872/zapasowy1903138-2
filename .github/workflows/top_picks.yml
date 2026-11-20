@@ -69,6 +69,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
+          TAVILY_API_KEYS: ${{ secrets.TAVILY_API_KEYS }}
+          BRAVE_API_KEYS: ${{ secrets.BRAVE_API_KEYS }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
           GROQ_API_KEY_3: ${{ secrets.GROQ_API_KEY_3 }}
@@ -95,6 +97,7 @@ jobs:
           git add results/odds_snapshots_*_top.json 2>/dev/null || true
           git add results/top_*.json results/status_top_*.json results/TOP.xlsx 2>/dev/null || true
           git add results/availability_*.json results/key_players_*.json 2>/dev/null || true
+          git add -f outputs/search_usage_*.json 2>/dev/null || true
           git add results/ai_analyst_*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "TOP picks $DAY"
@@ -108,6 +111,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
+          TAVILY_API_KEYS: ${{ secrets.TAVILY_API_KEYS }}
+          BRAVE_API_KEYS: ${{ secrets.BRAVE_API_KEYS }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}

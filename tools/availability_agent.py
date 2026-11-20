@@ -429,15 +429,100 @@ def parse_llm(txt: Optional[str], grounding: Optional[List[str]] = None) -> Opti
     return clean
 
 
-def llm_check(m: Dict[str, Any], sport: str, day: str) -> Optional[Dict[str, Any]]:
+_SEARCH_PROMPT = """You extract sports team news from web search results. Use ONLY the results below.
+Match: {home} vs {away} ({sport}, {league}), {day}.
+List players of EACH side reported as out or doubtful (injury, suspension, illness,
+rest, national duty; tennis: withdrawal / injury concern) for THIS match.
+Every player MUST cite the url of the result that states it. Ignore other matches/seasons.
+importance: "star" = one of the team's 2-3 most important players (for tennis the player himself),
+"key" = regular starter, "other" = squad player.
+Answer ONLY with JSON:
+{{"home":[{{"name":"","importance":"star|key|other","status":"out|doubtful","reason":"","url":""}}],
+ "away":[...], "confidence":"high|medium|low"}}
+If the results say nothing reliable, return empty lists and "confidence":"low".
+
+RESULTS:
+{results}"""
+
+
+def parse_search_llm(txt: Optional[str], urls: List[str]) -> Optional[Dict[str, Any]]:
+    """Groq answer over search snippets -> record; every claim must cite a returned URL."""
+    if not txt or not urls:
+        return None
+    hit = re.search(r'\{.*\}', txt, re.S)
+    if not hit:
+        _stat('search_no_json')
+        return None
+    try:
+        d = json.loads(hit.group(0))
+    except Exception:
+        _stat('search_bad_json')
+        return None
+    allowed = set(urls)
+    used: List[str] = []
+    clean: Dict[str, Any] = {'confirmed': False, 'source': 'search', 'confidence': d.get('confidence') or 'low'}
+    for side in ('home', 'away'):
+        rows = []
+        for p in d.get(side) or []:
+            if not isinstance(p, dict) or not p.get('name'):
+                continue
+            u = p.get('url') or p.get('source')
+            if u not in allowed:
+                _stat('search_unsourced_claim')
+                continue
+            imp = p.get('importance') if p.get('importance') in ('star', 'key', 'other') else 'other'
+            st = 'doubtful' if (p.get('status') == 'doubtful' or clean['confidence'] == 'low') else 'out'
+            rows.append({'name': str(p['name'])[:60], 'importance': imp, 'status': st,
+                         'reason': str(p.get('reason') or '')[:80], 'url': u})
+            if u not in used:
+                used.append(u)
+        clean[side] = rows
+    if not used:
+        _stat('search_nothing_sourced')
+        return None   # no sourced claim -> stays unknown, never "no absences"
+    clean['sources'] = used[:5]
+    return clean
+
+
+def search_check(m: Dict[str, Any], sport: str, day: str, key: str = '',
+                 tier: str = 'ab') -> Optional[Dict[str, Any]]:
+    from tools import web_search as ws
+    home, away = m.get('homeTeam') or '', m.get('awayTeam') or ''
+    res, prov = ws.search(key or key_of(sport, home, away), sport, home, away, day, tier=tier)
+    if not res:
+        return None
+    _stat(f'search_{prov}')
+    body = '\n'.join(f"- url: {r['url']}\n  title: {r['title']}\n  text: {r['snippet']}" for r in res)
+    import groq_client
+    txt = groq_client.chat(_SEARCH_PROMPT.format(home=home, away=away, sport=sport, league=m.get('league') or '',
+                                                 day=day, results=body), max_tokens=900, log=lambda *_: None)
+    out = parse_search_llm(txt, [r['url'] for r in res])
+    if out:
+        _stat('search_sourced_verdict')
+        out['provider'] = prov
+    return out
+
+
+def llm_check(m: Dict[str, Any], sport: str, day: str, key: str = '',
+              tier: str = 'ab') -> Optional[Dict[str, Any]]:
     if sport not in LLM_SPORTS:
         return None
     prompt = _PROMPT.format(home=m.get('homeTeam'), away=m.get('awayTeam'), sport=sport,
                             league=m.get('league') or '', day=day, time=m.get('time') or '')
     try:
         txt, urls = _gemini_grounded(prompt)
-        if not txt:
-            txt, urls = _groq_compound(prompt)
+        if txt:
+            out = parse_llm(txt, urls)
+            if out:
+                return out
+        try:
+            out = search_check(m, sport, day, key, tier)
+        except Exception:
+            _stat('search_exception')
+            out = None
+        if out:
+            return out
+        txt, urls = _groq_compound(prompt)
         return parse_llm(txt, urls)
     except Exception:
         _stat('exception')
@@ -780,7 +865,8 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print,
         llm_at = (prev or {}).get('llmAt')
         llm_due = not llm_at or now - datetime.fromisoformat(llm_at) >= timedelta(hours=UNKNOWN_RECHECK_H)
         if res is None and use_llm and not info_only and left >= 60 and llm_due and llm_calls < llm_max:
-            res = llm_check(m, sport, day)
+            res = llm_check(m, sport, day, c['key'],
+                            'top' if c.get('top') else 'fan' if c.get('fan') else 'ab')
             llm_calls += 1
             llm_at = now.isoformat()
         checked += 1
@@ -838,6 +924,11 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print,
     log(f"   availability {day}: checked {checked} (LLM {llm_calls}), flagged {flagged}/{len(store)} | {STATS}")
     if ERRORS:
         log(f"   availability gemini errors: {ERRORS}")
+    try:
+        from tools import web_search as _ws
+        log(f"   web search: {_ws.STATS} | credits {_ws.month_summary(day)}")
+    except Exception:
+        pass
     return store
 
 
