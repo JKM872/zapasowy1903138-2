@@ -816,7 +816,7 @@ Do not add any explanation or additional text."""
             try:
                 import google.generativeai as genai
                 genai.configure(api_key=gemini_key)
-                model = genai.GenerativeModel('gemini-4-hydrogen')
+                model = genai.GenerativeModel('gemini-3.8-flash')
                 response = model.generate_content(prompt)
                 answer = response.text.strip()
             except Exception as e:
@@ -914,7 +914,7 @@ Do not add any explanation or additional text."""
         try:
             import google.generativeai as genai
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel('gemini-4-hydrogen')  # Najnowszy model Gemini
+            model = genai.GenerativeModel('gemini-3.8-flash')  # Najnowszy model Gemini
             
             # Retry logic for rate limiting
             max_retries = 2

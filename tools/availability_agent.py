@@ -263,7 +263,7 @@ def _gemini_grounded(prompt: str):
         _stat('no_keys')
         return None, []
     models = [m.strip() for m in os.getenv('AVAIL_GEMINI_MODELS', '').split(',') if m.strip()] or \
-        list(dict.fromkeys(['gemini-4-hydrogen'] + list(GEMINI_MODELS)))
+        list(GEMINI_MODELS)
     if ('provider', 'gemini') in _DEAD or all((k, m) in _DEAD for k in keys for m in models):
         _stat('llm_off_quota')  # every key x model is quota-exhausted: no more requests this run
         return None, []
@@ -278,7 +278,7 @@ def _gemini_grounded(prompt: str):
                                   json={'contents': [{'parts': [{'text': prompt}]}],
                                         'tools': [{'google_search': {}}],
                                         'generationConfig': {'temperature': 0.0, 'maxOutputTokens': 1500}},
-                                  timeout=60)
+                                  timeout=30)
             except Exception:
                 _stat('net_error')
                 continue

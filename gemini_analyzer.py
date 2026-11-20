@@ -59,13 +59,12 @@ except ImportError:
     GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', None)
 
 # Model - Gemini 2.0 Flash (fast + free tier)
-GEMINI_MODEL = "models/gemini-4-hydrogen"
+GEMINI_MODEL = "models/gemini-3.8-flash"
 
 # v7.3 — łańcuch modeli próbowanych w kolejności przy quota/deprecated.
 # Pierwszy działający zostaje zapamiętany w `_GEMINI_ACTIVE_MODEL`.
 # Override przez env var: GEMINI_MODEL_CHAIN=model1,model2,...
 _GEMINI_MODEL_CHAIN_DEFAULT = [
-    "models/gemini-4-hydrogen",
     "models/gemini-3.8-flash",
     "models/gemini-2.5-flash",
     "models/gemini-2.0-flash-001",
