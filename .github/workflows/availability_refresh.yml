@@ -59,6 +59,10 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEYS: ${{ secrets.GROQ_API_KEYS }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          GROQ_API_KEY_3: ${{ secrets.GROQ_API_KEY_3 }}
+          GROQ_API_KEY_4: ${{ secrets.GROQ_API_KEY_4 }}
+          AVAIL_LLM_MAX: '60'
         run: |
           DAY="${{ github.event.inputs.date }}"; [ -z "$DAY" ] && DAY=$(date -u +%F)
           echo "DAY=$DAY" >> "$GITHUB_ENV"

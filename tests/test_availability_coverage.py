@@ -19,4 +19,4 @@ def test_coverage_counts_known_vs_unknown_per_sport(tmp_path):
     assert c['status']['no_key_absence'] == 1
     txt = cov.render(day, {'basketball': c}, q)
     assert '| basketball | 3 | 2 | 1 | 2 | 33% |' in txt
-    assert '| basketball | NBA | 2 | 1 (50%) | sofascore, rotowire_nba |' in txt
+    assert '| basketball | NBA | 2 | 1 (50%) | sofascore, espn_nba, rotowire_nba |' in txt

@@ -319,7 +319,52 @@ def transfermarkt_injuries(league_code: str, day: Optional[str] = None) -> Dict[
         fetch_page(f'transfermarkt_{code}', url, meta.get('timeout', 10), day) or '', url))
 
 
+_ESPN_STATUS = {'out': 'out', 'injured reserve': 'out', 'suspension': 'out', 'suspended': 'out',
+                'doubtful': 'doubtful', 'questionable': 'doubtful', 'day-to-day': 'doubtful',
+                'game time decision': 'doubtful', 'probable': 'plays', 'active': 'plays'}
+
+
+def parse_espn_injuries(data: Any, url: str = '') -> Dict[str, List[Dict[str, Any]]]:
+    """ESPN public ``/sports/<sport>/<league>/injuries`` JSON -> {team: rows}.
+    Unknown statuses (e.g. '7-day IL', 'Out For Season') with 'out'/'il' count as out."""
+    out: Dict[str, List[Dict[str, Any]]] = {}
+    for t in (data or {}).get('injuries') or []:
+        team = norm(t.get('displayName'))
+        if not team:
+            continue
+        rows = []
+        for i in t.get('injuries') or []:
+            a = i.get('athlete') or {}
+            name = a.get('displayName') or a.get('shortName')
+            raw = str(i.get('status') or (i.get('type') or {}).get('description') or '').strip()
+            st = _ESPN_STATUS.get(raw.lower())
+            if st is None:
+                low = raw.lower()
+                st = 'out' if ('out' in low or ' il' in f' {low}' or 'reserve' in low) else 'doubtful'
+            if not name or st == 'plays':
+                continue
+            pos = ((a.get('position') or {}).get('abbreviation')) or None
+            rows.append({'name': name, 'status': st, 'reason': raw + (f" ({i.get('shortComment')[:120]})"
+                         if i.get('shortComment') else ''), 'position': pos, 'date': i.get('date'),
+                         'source': 'espn', 'url': url})
+        if rows:
+            out[team] = rows
+    return out
+
+
+def espn_injuries(path: str, timeout: float = 12, day: Optional[str] = None) -> Dict[str, List[Dict[str, Any]]]:
+    url = f'https://site.api.espn.com/apis/site/v2/sports/{path}/injuries'
+
+    def _get():
+        import requests
+        r = requests.get(url, timeout=timeout, headers={'User-Agent': UA})
+        _stat(f'espn_http_{r.status_code}')
+        return parse_espn_injuries(r.json() if r.status_code == 200 else {}, url)
+    return _cached_parse(f'espn_{path}', _get)
+
+
 FETCHERS: Dict[str, Callable[..., Dict[str, List[Dict[str, Any]]]]] = {
+    'espn_injuries': lambda meta, day=None: espn_injuries(meta.get('path'), meta.get('timeout', 12), day),
     'rotowire_nba': lambda meta, day=None: rotowire_nba(day),
     'rotowire_nhl': lambda meta, day=None: rotowire_nhl(day),
     'dailyfaceoff_goalies': lambda meta, day=None: dailyfaceoff_goalies(day),

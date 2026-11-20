@@ -50,9 +50,9 @@ def test_team_matching_is_strict():
 
 
 def test_registry_routes_by_sport_and_league_and_skips_disabled():
-    assert src.sources_for('basketball', 'NBA') == ['sofascore', 'rotowire_nba']   # official report disabled
+    assert src.sources_for('basketball', 'NBA') == ['sofascore', 'espn_nba', 'rotowire_nba']   # official report disabled
     assert src.sources_for('basketball', 'EUR') == ['sofascore']                      # RotoWire EL 404
-    assert src.sources_for('hockey', 'NHL') == ['sofascore', 'rotowire_nhl', 'dailyfaceoff_goalies']
+    assert src.sources_for('hockey', 'NHL') == ['sofascore', 'espn_nhl', 'rotowire_nhl', 'dailyfaceoff_goalies']
     assert src.sources_for('football', 'Premier League', 'England') == ['sofascore', 'transfermarkt_gb1']
     assert src.sources_for('football', 'Premier League', 'Ghana') == ['sofascore']
     assert src.sources_for('volleyball', 'PL1') == ['sofascore']
@@ -106,6 +106,7 @@ def test_rows_for_match_uses_cached_page(monkeypatch, tmp_path):
     monkeypatch.setattr(src, 'CACHE_DIR', str(tmp_path))
     shutil.copy(os.path.join(FIX, 'rotowire_nba.html'), tmp_path / 'avail_src_rotowire_nba_2026-11-19.html')
     src._parsed.clear()
+    src._parsed['espn_basketball/nba'] = {}   # no network in tests
     res = src.rows_for_match('basketball', 'NBA', '', 'Milwaukee Bucks', 'Portland Trail Blazers', '2026-11-19')
     assert res['sources'] == ['rotowire_nba']
     assert any(r['name'] == 'Ja Morant' and r['status'] == 'out' for r in res['away'])

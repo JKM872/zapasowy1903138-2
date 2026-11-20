@@ -555,6 +555,13 @@ def enrich(rec: Dict[str, Any], m: Dict[str, Any], sport: str, day: str, side: s
         rec['extra'] = {'home': extra['home'], 'away': extra['away']}
         rec['extraSources'] = extra['sources']
     eid, orient = ev or (None, None)
+    if eid and sport == 'tennis' and (deadline is None or _time.monotonic() < deadline):
+        wo = parse_tennis_status((kp._get(f'event/{eid}') or {}).get('event') or {}, orient)
+        if wo:
+            ex = rec.setdefault('extra', {'home': [], 'away': []})
+            for s in ('home', 'away'):
+                ex.setdefault(s, []).extend(wo[s])
+            rec['extraSources'] = sorted(set((rec.get('extraSources') or []) + ['sofascore_status']))
     if eid and sport in kp.SPORTS and (deadline is None or _time.monotonic() < deadline):
         e = (kp._get(f'event/{eid}') or {}).get('event') or {}
         ids = {'home': (e.get('homeTeam') or {}).get('id'), 'away': (e.get('awayTeam') or {}).get('id')}
@@ -572,6 +579,33 @@ def enrich(rec: Dict[str, Any], m: Dict[str, Any], sport: str, day: str, side: s
     rec['signals'] = signals(rec, side)
     rec['status'] = status_of(rec, side)
     return rec
+
+
+def parse_tennis_status(e: Dict[str, Any], orient: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    """SofaScore tennis event -> rows for a walkover / withdrawal / retirement.
+
+    Walkover or retirement: the side that did not win (winnerCode) is 'out'.
+    Cancelled before the start without a winner: both players unknown -> None
+    (a cancelled match is voided, not a signal about one player)."""
+    if not isinstance(e, dict):
+        return None
+    st = e.get('status') or {}
+    desc = str(st.get('description') or '').lower()
+    typ = str(st.get('type') or '').lower()
+    wc = e.get('winnerCode')
+    kind = 'walkover' if ('walkover' in desc or desc in ('wo', 'w/o')) else \
+        'retired' if ('retired' in desc or 'retirement' in desc) else None
+    if not kind and typ == 'canceled' and wc in (1, 2):
+        kind = 'withdrawal'
+    if not kind or wc not in (1, 2):
+        return None
+    loser = 'away' if wc == 1 else 'home'
+    if orient == 'reversed':
+        loser = 'home' if loser == 'away' else 'away'
+    team = e.get('awayTeam' if (wc == 1) else 'homeTeam') or {}
+    row = {'name': team.get('shortName') or team.get('name') or loser, 'importance': 'star', 'status': 'out',
+           'reason': kind, 'id': team.get('id'), 'source': 'sofascore_status'}
+    return {'home': [row] if loser == 'home' else [], 'away': [row] if loser == 'away' else []}
 
 
 def signals(rec: Optional[Dict[str, Any]], side: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -599,8 +633,8 @@ def signals(rec: Optional[Dict[str, Any]], side: Optional[str] = None) -> List[D
             out.append({'kind': 'star_doubtful', 'name': p['name'], 'share': p['share'], 'unit': p.get('unit'),
                         'reason': p.get('reason'), 'source': p.get('source')})
     if not kps:
-        for r in rec.get(side) or []:
-            if isinstance(r, dict) and r.get('importance') == 'star':
+        for r in (rec.get(side) or []) + ((rec.get('extra') or {}).get(side) or []):
+            if isinstance(r, dict) and r.get('importance') == 'star' and r.get('status') in ('out', 'doubtful'):
                 kind = 'star_doubtful' if r.get('status') == 'doubtful' else 'star_out'
                 out.append({'kind': kind, 'name': r.get('name'), 'share': None, 'basis': 'market value',
                             'reason': r.get('reason'), 'source': r.get('source') or rec.get('source')})
@@ -710,7 +744,8 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print,
         os.replace(tmp, path)
     cands = candidates(day, all_qualifying=all_qualifying)
     # A/B, TOP and Fan Favourites first: they can lose the budget race otherwise.
-    cands.sort(key=lambda c: bool(c.get('info_only')))
+    cands.sort(key=lambda c: (bool(c.get('info_only')), not (c.get('top') or c.get('fan'))))
+    llm_max = int(os.getenv('AVAIL_LLM_MAX', '60'))
     for c in cands:
         left = budget - (_time.monotonic() - t0)
         if left <= 0:
@@ -740,7 +775,7 @@ def run(day: str, use_llm: bool = True, force: bool = False, log=print,
             lineup_info = {'confirmed': True, 'lineup': res.get('lineup'), 'squad': res.get('squad')}
         llm_at = (prev or {}).get('llmAt')
         llm_due = not llm_at or now - datetime.fromisoformat(llm_at) >= timedelta(hours=UNKNOWN_RECHECK_H)
-        if res is None and use_llm and not info_only and left >= 60 and llm_due:
+        if res is None and use_llm and not info_only and left >= 60 and llm_due and llm_calls < llm_max:
             res = llm_check(m, sport, day)
             llm_calls += 1
             llm_at = now.isoformat()
