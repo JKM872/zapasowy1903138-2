@@ -1,6 +1,6 @@
 {
  "baseball|Gigantes del Cibao|Leones del Escogido": {
-  "checkedAt": "2026-11-21T10:43:40.270966+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": "llm",
   "confirmed": false,
   "side": "away",
@@ -8,29 +8,34 @@
    {
     "name": "Leury García",
     "importance": "key",
-    "status": "out",
-    "reason": "knee injury, still in rehabilitation with no return date"
+    "status": "doubtful",
+    "reason": "rehabilitación por molestias en la rodilla, sin fecha definida de regreso"
    }
   ],
-  "away": [],
+  "away": [
+   {
+    "name": "Junior Bruján",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "en proceso de recuperación, podría regresar a la alineación entre miércoles y ju"
+   }
+  ],
   "sources": [
-   "https://enelfocord.com/gigantes-del-cibao-alistan-refuerzos-lidom-2026-2027/",
+   "https://lidom.com/gigantes-del-cibao/pimentel-anuncia-nuevas-incorporaciones-y-proyecta-cambios-100861.html",
+   "https://lidom.com/leones-del-escogido/leones-esperan-regreso-de-brito-y-brujan-mientras-liz-asume-apertura-ante-los-toros-100551.html",
    "https://deultimominuto.com/deportes/escogido-erick-gonzalez-winston/",
-   "https://www.mlb.com/gameday/gigantes-vs-leones/2026/11/20/851483/preview",
-   "https://lidom.com/lidom/jornada-con-tres-duelos-clave-en-santo-domingo-santiago-y-la-romana-100910.html",
-   "https://lidom.com/leones-del-escogido/leones-esperan-regreso-de-brito-y-brujan-mientras-liz-asume-apertura-ante-los-toros-100551.html"
+   "https://gigantes.do/",
+   "https://lidom.com/lidom/jornada-con-tres-duelos-clave-en-santo-domingo-santiago-y-la-romana-100910.html"
   ],
   "lineup": null,
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": -1,
-  "llmAt": "2026-11-21T10:43:40.270966+00:00",
+  "netKey": 0,
+  "llmAt": "2026-11-21T20:16:10.707828+00:00",
   "sport": "baseball",
   "signals": [],
-  "status": "no_key_absence",
-  "aiSummary": "Gigantes del Cibao are missing key player Leury García due to a knee injury, while Leones del Escogido have no reported absences. This absence weakens the home team, strengthening our pick for the away side.",
-  "aiSummarySig": "2026-11-21T10:43:40.270966+00:00|False"
+  "status": "no_key_absence"
  },
  "basketball|Chicago Bulls|Washington Wizards": {
   "checkedAt": "2026-11-21T10:43:40.270966+00:00",
@@ -3796,7 +3801,7 @@
   "status": "unknown"
  },
  "basketball|San Diego Toreros|UC Irvine": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -15788,10 +15793,11 @@
     "eid": 17087238
    }
   },
-  "signals": [],
-  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False",
+  "lastFailAt": "2026-11-21T20:16:10.707828+00:00",
+  "signals": [],
+  "status": "no_key_absence"
  },
  "football|Polonia Warszawa|Stal Mielec": {
   "checkedAt": "2026-11-21T13:27:56.405476+00:00",
@@ -23146,27 +23152,475 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "football|O Higgins|Univ de Chile": {
-  "checkedAt": "2026-11-21T13:27:56.405476+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "away",
-  "home": [
+  "home": [],
+  "away": [
    {
-    "name": "N. Garrido",
-    "importance": "other",
+    "name": "F. Hormazábal",
+    "importance": "star",
     "status": "out",
-    "reason": "Muscle Injury",
-    "id": 1002945,
+    "reason": "on the bench (confirmed line-up)",
+    "id": 818897,
+    "source": "sofascore"
+   },
+   {
+    "name": "J. Altamirano",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)",
+    "id": 925337,
     "source": "sofascore"
    }
   ],
-  "away": [],
   "sources": null,
-  "lineup": null,
-  "board": "ok",
-  "top_block": false,
-  "netStars": 0,
-  "netKey": 0,
+  "lineup": {
+   "home": [
+    {
+     "name": "O. Carabalí",
+     "id": 831242,
+     "star": true
+    },
+    {
+     "name": "F. Faúndez",
+     "id": 1482408,
+     "star": true
+    },
+    {
+     "name": "A. Robledo",
+     "id": 892450,
+     "star": false
+    },
+    {
+     "name": "M. Brizuela",
+     "id": 990283,
+     "star": false
+    },
+    {
+     "name": "L. Pavez Munoz",
+     "id": 339699,
+     "star": false
+    },
+    {
+     "name": "T. Avilés",
+     "id": 1411695,
+     "star": true
+    },
+    {
+     "name": "J. Leiva",
+     "id": 844183,
+     "star": false
+    },
+    {
+     "name": "J. Tapia",
+     "id": 1798260,
+     "star": false
+    },
+    {
+     "name": "F. Ogaz",
+     "id": 1177211,
+     "star": false
+    },
+    {
+     "name": "B. Yáñez",
+     "id": 942415,
+     "star": false
+    },
+    {
+     "name": "A. Castillo",
+     "id": 849177,
+     "star": false
+    }
+   ],
+   "away": [
+    {
+     "name": "G. Castellón",
+     "id": 805183,
+     "star": false
+    },
+    {
+     "name": "I. Lichnovsky",
+     "id": 221566,
+     "star": false
+    },
+    {
+     "name": "M. Zaldivia",
+     "id": 789979,
+     "star": false
+    },
+    {
+     "name": "N. Ramírez",
+     "id": 831012,
+     "star": false
+    },
+    {
+     "name": "M. Guerrero",
+     "id": 906105,
+     "star": false
+    },
+    {
+     "name": "L. Barrera",
+     "id": 2184978,
+     "star": false
+    },
+    {
+     "name": "I. Vásquez",
+     "id": 1482412,
+     "star": false
+    },
+    {
+     "name": "C. Aránguiz",
+     "id": 18304,
+     "star": false
+    },
+    {
+     "name": "M. Morales",
+     "id": 1087387,
+     "star": true
+    },
+    {
+     "name": "E. Vargas",
+     "id": 37006,
+     "star": false
+    },
+    {
+     "name": "A. Arce",
+     "id": 1388813,
+     "star": false
+    }
+   ]
+  },
+  "board": "drop",
+  "top_block": true,
+  "netStars": 2,
+  "netKey": 2,
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [
+     {
+      "name": "O. Carabalí",
+      "id": 831242,
+      "star": true
+     },
+     {
+      "name": "F. Faúndez",
+      "id": 1482408,
+      "star": true
+     },
+     {
+      "name": "A. Robledo",
+      "id": 892450,
+      "star": false
+     },
+     {
+      "name": "M. Brizuela",
+      "id": 990283,
+      "star": false
+     },
+     {
+      "name": "L. Pavez Munoz",
+      "id": 339699,
+      "star": false
+     },
+     {
+      "name": "T. Avilés",
+      "id": 1411695,
+      "star": true
+     },
+     {
+      "name": "J. Leiva",
+      "id": 844183,
+      "star": false
+     },
+     {
+      "name": "J. Tapia",
+      "id": 1798260,
+      "star": false
+     },
+     {
+      "name": "F. Ogaz",
+      "id": 1177211,
+      "star": false
+     },
+     {
+      "name": "B. Yáñez",
+      "id": 942415,
+      "star": false
+     },
+     {
+      "name": "A. Castillo",
+      "id": 849177,
+      "star": false
+     }
+    ],
+    "away": [
+     {
+      "name": "G. Castellón",
+      "id": 805183,
+      "star": false
+     },
+     {
+      "name": "I. Lichnovsky",
+      "id": 221566,
+      "star": false
+     },
+     {
+      "name": "M. Zaldivia",
+      "id": 789979,
+      "star": false
+     },
+     {
+      "name": "N. Ramírez",
+      "id": 831012,
+      "star": false
+     },
+     {
+      "name": "M. Guerrero",
+      "id": 906105,
+      "star": false
+     },
+     {
+      "name": "L. Barrera",
+      "id": 2184978,
+      "star": false
+     },
+     {
+      "name": "I. Vásquez",
+      "id": 1482412,
+      "star": false
+     },
+     {
+      "name": "C. Aránguiz",
+      "id": 18304,
+      "star": false
+     },
+     {
+      "name": "M. Morales",
+      "id": 1087387,
+      "star": true
+     },
+     {
+      "name": "E. Vargas",
+      "id": 37006,
+      "star": false
+     },
+     {
+      "name": "A. Arce",
+      "id": 1388813,
+      "star": false
+     }
+    ]
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 831242,
+      "name": "O. Carabalí",
+      "sub": false
+     },
+     {
+      "id": 1482408,
+      "name": "F. Faúndez",
+      "sub": false
+     },
+     {
+      "id": 892450,
+      "name": "A. Robledo",
+      "sub": false
+     },
+     {
+      "id": 990283,
+      "name": "M. Brizuela",
+      "sub": false
+     },
+     {
+      "id": 339699,
+      "name": "L. Pavez Munoz",
+      "sub": false
+     },
+     {
+      "id": 1411695,
+      "name": "T. Avilés",
+      "sub": false
+     },
+     {
+      "id": 844183,
+      "name": "J. Leiva",
+      "sub": false
+     },
+     {
+      "id": 1798260,
+      "name": "J. Tapia",
+      "sub": false
+     },
+     {
+      "id": 1177211,
+      "name": "F. Ogaz",
+      "sub": false
+     },
+     {
+      "id": 942415,
+      "name": "B. Yáñez",
+      "sub": false
+     },
+     {
+      "id": 849177,
+      "name": "A. Castillo",
+      "sub": false
+     },
+     {
+      "id": 975502,
+      "name": "J. Peña",
+      "sub": true
+     },
+     {
+      "id": 1482396,
+      "name": "C. Morales",
+      "sub": true
+     },
+     {
+      "id": 975291,
+      "name": "L. Díaz",
+      "sub": true
+     },
+     {
+      "id": 1002945,
+      "name": "N. Garrido",
+      "sub": true
+     },
+     {
+      "id": 1092305,
+      "name": "‪I. Schor",
+      "sub": true
+     },
+     {
+      "id": 2469212,
+      "name": "B. Pérez",
+      "sub": true
+     },
+     {
+      "id": 126376,
+      "name": "B. Rabello",
+      "sub": true
+     },
+     {
+      "id": 1018410,
+      "name": "S. Toloza",
+      "sub": true
+     },
+     {
+      "id": 1022946,
+      "name": "E. Moreira",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 805183,
+      "name": "G. Castellón",
+      "sub": false
+     },
+     {
+      "id": 221566,
+      "name": "I. Lichnovsky",
+      "sub": false
+     },
+     {
+      "id": 789979,
+      "name": "M. Zaldivia",
+      "sub": false
+     },
+     {
+      "id": 831012,
+      "name": "N. Ramírez",
+      "sub": false
+     },
+     {
+      "id": 906105,
+      "name": "M. Guerrero",
+      "sub": false
+     },
+     {
+      "id": 2184978,
+      "name": "L. Barrera",
+      "sub": false
+     },
+     {
+      "id": 1482412,
+      "name": "I. Vásquez",
+      "sub": false
+     },
+     {
+      "id": 18304,
+      "name": "C. Aránguiz",
+      "sub": false
+     },
+     {
+      "id": 1087387,
+      "name": "M. Morales",
+      "sub": false
+     },
+     {
+      "id": 37006,
+      "name": "E. Vargas",
+      "sub": false
+     },
+     {
+      "id": 1388813,
+      "name": "A. Arce",
+      "sub": false
+     },
+     {
+      "id": 26457,
+      "name": "C. Toselli",
+      "sub": true
+     },
+     {
+      "id": 818897,
+      "name": "F. Hormazábal",
+      "sub": true
+     },
+     {
+      "id": 889500,
+      "name": "N. Fernández",
+      "sub": true
+     },
+     {
+      "id": 589542,
+      "name": "I. Poblete",
+      "sub": true
+     },
+     {
+      "id": 925337,
+      "name": "J. Altamirano",
+      "sub": true
+     },
+     {
+      "id": 946304,
+      "name": "T. Reinhart",
+      "sub": true
+     },
+     {
+      "id": 26480,
+      "name": "M. Díaz",
+      "sub": true
+     },
+     {
+      "id": 790149,
+      "name": "O. Rivero",
+      "sub": true
+     },
+     {
+      "id": 359024,
+      "name": "J. M. Lucero",
+      "sub": true
+     }
+    ]
+   }
+  },
   "sport": "football",
   "eventId": 15353169,
   "teams": {
@@ -23227,10 +23681,12 @@
     "eid": 15353181
    }
   },
-  "signals": [],
-  "status": "no_key_absence",
-  "aiSummary": "O Higgins are missing N. Garrido due to a muscle injury, while Univ de Chile have no reported absences.",
-  "aiSummarySig": "2026-11-21T13:27:56.405476+00:00|False"
+  "signals": [
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "lineups_ok"
  },
  "handball|Nava|Puente Genil": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -23475,16 +23931,16 @@
   "aiSummarySig": "2026-11-21T14:53:37.701520+00:00|False"
  },
  "hockey|Calgary Flames|Chicago Blackhawks": {
-  "checkedAt": "2026-11-21T13:27:56.405476+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": "search",
   "confirmed": false,
   "side": "home",
   "home": [
    {
     "name": "Jonathan Huberdeau",
-    "importance": "key",
+    "importance": "star",
     "status": "out",
-    "reason": "Hip injury (placed on injured reserve)",
+    "reason": "injured reserve",
     "url": "https://www.nytimes.com/athletic/nhl/game/calgary-flames-vs-chicago-blackhawks/xsKipaif3YEClMah/"
    }
   ],
@@ -23493,14 +23949,14 @@
     "name": "Ryan Ellis",
     "importance": "key",
     "status": "out",
-    "reason": "Back injury (placed on injured reserve)",
+    "reason": "injured reserve",
     "url": "https://www.nytimes.com/athletic/nhl/game/calgary-flames-vs-chicago-blackhawks/xsKipaif3YEClMah/"
    },
    {
     "name": "Andrew Mangiapane",
-    "importance": "other",
+    "importance": "key",
     "status": "out",
-    "reason": "Lower-Body injury (placed on injured reserve)",
+    "reason": "injured reserve",
     "url": "https://www.nytimes.com/athletic/nhl/game/calgary-flames-vs-chicago-blackhawks/xsKipaif3YEClMah/"
    }
   ],
@@ -23508,11 +23964,11 @@
    "https://www.nytimes.com/athletic/nhl/game/calgary-flames-vs-chicago-blackhawks/xsKipaif3YEClMah/"
   ],
   "lineup": null,
-  "board": "ok",
-  "top_block": false,
-  "netStars": 0,
-  "netKey": 0,
-  "llmAt": "2026-11-21T13:27:56.405476+00:00",
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": -1,
+  "llmAt": "2026-11-21T20:16:10.707828+00:00",
   "sport": "hockey",
   "extra": {
    "home": [
@@ -23545,8 +24001,8 @@
     },
     {
      "name": "Dustin Wolf",
-     "status": "doubtful",
-     "reason": "starting goalie (expected)",
+     "status": "plays",
+     "reason": "starting goalie (confirmed)",
      "source": "rotowire",
      "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
     },
@@ -23588,6 +24044,15 @@
    ],
    "away": [
     {
+     "name": "Bowen Byram",
+     "status": "out",
+     "reason": "Injured Reserve (Byram (upper body) didn't accompany his teammates on Chicago's three-game road trip, per Mark Lazerus of The Athletic on)",
+     "position": "D",
+     "date": "2026-11-21T19:21Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
      "name": "Connor Bedard",
      "status": "out",
      "reason": "Out (out)",
@@ -23597,18 +24062,9 @@
      "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
     },
     {
-     "name": "Bowen Byram",
-     "status": "out",
-     "reason": "Injured Reserve (Byram (upper body) will not play in the Blackhawks' next two games, per CHGO Blackhawks.)",
-     "position": "D",
-     "date": "2026-11-17T15:51Z",
-     "source": "espn",
-     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
-    },
-    {
      "name": "Spencer Knight",
-     "status": "doubtful",
-     "reason": "starting goalie (expected)",
+     "status": "plays",
+     "reason": "starting goalie (confirmed)",
      "source": "rotowire",
      "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
     },
@@ -23732,19 +24188,8 @@
     "eid": 16550819
    }
   },
-  "signals": [
-   {
-    "kind": "star_doubtful",
-    "name": "D. Wolf",
-    "share": 0.581,
-    "unit": "saves",
-    "reason": "starting goalie (expected)",
-    "source": "rotowire"
-   }
-  ],
-  "status": "star_doubtful",
-  "aiSummary": "Calgary Flames face Chicago Blackhawks in a hockey match.",
-  "aiSummarySig": "2026-11-21T13:27:56.405476+00:00|False"
+  "signals": [],
+  "status": "no_key_absence"
  },
  "rugby|Italy|Fijian Drua": {
   "checkedAt": "2026-11-21T13:27:56.405476+00:00",
@@ -23857,7 +24302,7 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "tennis|J. K. Trotter|L. Draxl": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -23869,10 +24314,10 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "tennis|E. Moeller|T. Seyboth Wild": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -23884,7 +24329,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "volleyball|JTEKT|Tokyo Great Bears": {
   "checkedAt": "2026-11-21T18:11:56.060228+00:00",
@@ -25551,7 +25996,7 @@
   "aiSummarySig": "2026-11-21T13:27:56.405476+00:00|False"
  },
  "basketball|Pinheiros|Minas": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -25622,7 +26067,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "basketball|Trento|Basket Napoli": {
   "checkedAt": "2026-11-21T13:27:56.405476+00:00",
@@ -26822,7 +27267,7 @@
   "aiSummarySig": "2026-11-21T14:53:37.701520+00:00|False"
  },
  "football|Inter Miami|Columbus Crew": {
-  "checkedAt": "2026-11-21T13:27:56.405476+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "home",
@@ -26905,8 +27350,8 @@
   },
   "signals": [],
   "status": "no_key_absence",
-  "aiSummary": "Inter Miami is missing E. Abadia-Reda due to a groin injury, while Columbus Crew has no reported absences.",
-  "aiSummarySig": "2026-11-21T13:27:56.405476+00:00|False"
+  "aiSummary": "E. Abadia‑Reda’s absence matters but does not significantly weaken Inter Miami’s pick.",
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Hereford Utd|Darlington 1883": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -26946,7 +27391,7 @@
   "aiSummarySig": "2026-11-21T14:53:37.701520+00:00|False"
  },
  "football|Inter Moengotapoe|SV Voorwaarts": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -26980,7 +27425,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Lancaster City|Ashton United": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -29118,7 +29563,7 @@
   "aiSummarySig": "2026-11-21T14:53:37.701520+00:00|False"
  },
  "football|CD Águila|Platense (SLV)": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -29183,7 +29628,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Stourbridge FC|Redditch Utd": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -31242,7 +31687,7 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "football|Auckland City|Napier City": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -31276,10 +31721,10 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Deportivo Tachira|Caracas": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -31313,7 +31758,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Paracatu|Venda Nova": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -40173,14 +40618,423 @@
   "aiSummarySig": "2026-11-21T14:53:37.701520+00:00|False"
  },
  "football|Vitória|Sporting Braga": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
-  "source": null,
-  "confirmed": false,
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
+  "source": "sofascore",
+  "confirmed": true,
   "side": "away",
+  "home": [
+   {
+    "name": "O. Camara",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)",
+    "id": 1563640,
+    "source": "sofascore"
+   }
+  ],
+  "away": [],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "L. Furtado",
+     "id": 1466549,
+     "star": false
+    },
+    {
+     "name": "T. Strata",
+     "id": 1488511,
+     "star": false
+    },
+    {
+     "name": "T. Borevković",
+     "id": 886843,
+     "star": false
+    },
+    {
+     "name": "F. A. Sidibé",
+     "id": 1920327,
+     "star": false
+    },
+    {
+     "name": "J. Mendes",
+     "id": 1133568,
+     "star": false
+    },
+    {
+     "name": "G. Nogueira",
+     "id": 1161004,
+     "star": true
+    },
+    {
+     "name": "B. Mukendi",
+     "id": 1002367,
+     "star": false
+    },
+    {
+     "name": "V. Andersson",
+     "id": 1186298,
+     "star": false
+    },
+    {
+     "name": "Alan",
+     "id": 905455,
+     "star": true
+    },
+    {
+     "name": "G. Silva",
+     "id": 1468082,
+     "star": false
+    },
+    {
+     "name": "A. Jakupović",
+     "id": 794957,
+     "star": false
+    }
+   ],
+   "away": [
+    {
+     "name": "B. Fontes",
+     "id": 1394935,
+     "star": false
+    },
+    {
+     "name": "V. Gómez",
+     "id": 877918,
+     "star": true
+    },
+    {
+     "name": "G. Lagerbielke",
+     "id": 965263,
+     "star": true
+    },
+    {
+     "name": "A. L. Barišić",
+     "id": 959592,
+     "star": false
+    },
+    {
+     "name": "D. Travassos",
+     "id": 1142578,
+     "star": false
+    },
+    {
+     "name": "J. Moutinho",
+     "id": 6562,
+     "star": false
+    },
+    {
+     "name": "J. Gorby",
+     "id": 1120039,
+     "star": false
+    },
+    {
+     "name": "G. Martínez",
+     "id": 1134430,
+     "star": false
+    },
+    {
+     "name": "P. Víctor",
+     "id": 1031567,
+     "star": true
+    },
+    {
+     "name": "F. Navarro",
+     "id": 914772,
+     "star": false
+    },
+    {
+     "name": "R. Horta",
+     "id": 314380,
+     "star": false
+    }
+   ]
+  },
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": -1,
+  "netKey": -1,
   "llmAt": "2026-11-21T18:11:56.060228+00:00",
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [
+     {
+      "name": "L. Furtado",
+      "id": 1466549,
+      "star": false
+     },
+     {
+      "name": "T. Strata",
+      "id": 1488511,
+      "star": false
+     },
+     {
+      "name": "T. Borevković",
+      "id": 886843,
+      "star": false
+     },
+     {
+      "name": "F. A. Sidibé",
+      "id": 1920327,
+      "star": false
+     },
+     {
+      "name": "J. Mendes",
+      "id": 1133568,
+      "star": false
+     },
+     {
+      "name": "G. Nogueira",
+      "id": 1161004,
+      "star": true
+     },
+     {
+      "name": "B. Mukendi",
+      "id": 1002367,
+      "star": false
+     },
+     {
+      "name": "V. Andersson",
+      "id": 1186298,
+      "star": false
+     },
+     {
+      "name": "Alan",
+      "id": 905455,
+      "star": true
+     },
+     {
+      "name": "G. Silva",
+      "id": 1468082,
+      "star": false
+     },
+     {
+      "name": "A. Jakupović",
+      "id": 794957,
+      "star": false
+     }
+    ],
+    "away": [
+     {
+      "name": "B. Fontes",
+      "id": 1394935,
+      "star": false
+     },
+     {
+      "name": "V. Gómez",
+      "id": 877918,
+      "star": true
+     },
+     {
+      "name": "G. Lagerbielke",
+      "id": 965263,
+      "star": true
+     },
+     {
+      "name": "A. L. Barišić",
+      "id": 959592,
+      "star": false
+     },
+     {
+      "name": "D. Travassos",
+      "id": 1142578,
+      "star": false
+     },
+     {
+      "name": "J. Moutinho",
+      "id": 6562,
+      "star": false
+     },
+     {
+      "name": "J. Gorby",
+      "id": 1120039,
+      "star": false
+     },
+     {
+      "name": "G. Martínez",
+      "id": 1134430,
+      "star": false
+     },
+     {
+      "name": "P. Víctor",
+      "id": 1031567,
+      "star": true
+     },
+     {
+      "name": "F. Navarro",
+      "id": 914772,
+      "star": false
+     },
+     {
+      "name": "R. Horta",
+      "id": 314380,
+      "star": false
+     }
+    ]
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 1466549,
+      "name": "L. Furtado",
+      "sub": false
+     },
+     {
+      "id": 1488511,
+      "name": "T. Strata",
+      "sub": false
+     },
+     {
+      "id": 886843,
+      "name": "T. Borevković",
+      "sub": false
+     },
+     {
+      "id": 1920327,
+      "name": "F. A. Sidibé",
+      "sub": false
+     },
+     {
+      "id": 1133568,
+      "name": "J. Mendes",
+      "sub": false
+     },
+     {
+      "id": 1161004,
+      "name": "G. Nogueira",
+      "sub": false
+     },
+     {
+      "id": 1002367,
+      "name": "B. Mukendi",
+      "sub": false
+     },
+     {
+      "id": 1186298,
+      "name": "V. Andersson",
+      "sub": false
+     },
+     {
+      "id": 905455,
+      "name": "Alan",
+      "sub": false
+     },
+     {
+      "id": 1468082,
+      "name": "G. Silva",
+      "sub": false
+     },
+     {
+      "id": 794957,
+      "name": "A. Jakupović",
+      "sub": false
+     },
+     {
+      "id": 1009362,
+      "name": "O. Zych",
+      "sub": true
+     },
+     {
+      "id": 1148442,
+      "name": "T. Balieiro",
+      "sub": true
+     },
+     {
+      "id": 1131047,
+      "name": "M. Maga",
+      "sub": true
+     },
+     {
+      "id": 2140143,
+      "name": "M. Nogueira",
+      "sub": true
+     },
+     {
+      "id": 1170523,
+      "name": "L. Doucet",
+      "sub": true
+     },
+     {
+      "id": 1166097,
+      "name": "M. Mitrović",
+      "sub": true
+     },
+     {
+      "id": 785808,
+      "name": "Samu",
+      "sub": true
+     },
+     {
+      "id": 1563640,
+      "name": "O. Camara",
+      "sub": true
+     },
+     {
+      "id": 1063255,
+      "name": "A. Ndoye",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 1394935,
+      "name": "B. Fontes",
+      "sub": false
+     },
+     {
+      "id": 877918,
+      "name": "V. Gómez",
+      "sub": false
+     },
+     {
+      "id": 965263,
+      "name": "G. Lagerbielke",
+      "sub": false
+     },
+     {
+      "id": 959592,
+      "name": "A. L. Barišić",
+      "sub": false
+     },
+     {
+      "id": 1142578,
+      "name": "D. Travassos",
+      "sub": false
+     },
+     {
+      "id": 6562,
+      "name": "J. Moutinho",
+      "sub": false
+     },
+     {
+      "id": 1120039,
+      "name": "J. Gorby",
+      "sub": false
+     },
+     {
+      "id": 1134430,
+      "name": "G. Martínez",
+      "sub": false
+     },
+     {
+      "id": 1031567,
+      "name": "P. Víctor",
+      "sub": false
+     },
+     {
+      "id": 914772,
+      "name": "F. Navarro",
+      "sub": false
+     },
+     {
+      "id": 314380,
+      "name": "R. Horta",
+      "sub": false
+     }
+    ]
+   }
+  },
   "sport": "football",
   "eventId": 17417743,
   "teams": {
@@ -40241,10 +41095,12 @@
     "eid": 16945610
    }
   },
-  "signals": [],
-  "status": "unknown",
-  "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "signals": [
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "lineups_ok"
  },
  "football|Kidderminster|AFC Fylde": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -41700,7 +42556,7 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "football|Chapulineros|Purepechas": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -41734,10 +42590,10 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Atlético Balboa|Luís Ángel Firpo": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -41802,7 +42658,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "football|Rumilly Vallières|Nîmes Olympique": {
   "checkedAt": "2026-11-21T14:53:37.701520+00:00",
@@ -46069,7 +46925,7 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "tennis|A. Zverev|D. Medvedev": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -46081,7 +46937,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "volleyball|Conqueridor Valencia|Rio Duero Soria": {
   "checkedAt": "2026-11-21T18:11:56.060228+00:00",
@@ -46277,11 +47133,20 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "football|FC Dallas|Portland Timbers": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": "sofascore",
-  "confirmed": false,
+  "confirmed": true,
   "side": "home",
-  "home": [],
+  "home": [
+   {
+    "name": "L. Farrington",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)",
+    "id": 1647759,
+    "source": "sofascore"
+   }
+  ],
   "away": [
    {
     "name": "J. Mosquera",
@@ -46301,11 +47166,451 @@
    }
   ],
   "sources": null,
-  "lineup": null,
-  "board": "ok",
-  "top_block": false,
-  "netStars": 0,
-  "netKey": -1,
+  "lineup": {
+   "home": [
+    {
+     "name": "Daniel",
+     "id": 850038,
+     "star": false
+    },
+    {
+     "name": "H. Johansson",
+     "id": 1099794,
+     "star": false
+    },
+    {
+     "name": "O. Urhoghide",
+     "id": 915129,
+     "star": false
+    },
+    {
+     "name": "S. Moore",
+     "id": 813511,
+     "star": false
+    },
+    {
+     "name": "N. Norris",
+     "id": 1435240,
+     "star": false
+    },
+    {
+     "name": "J. Valiente",
+     "id": 1049223,
+     "star": false
+    },
+    {
+     "name": "Kaick",
+     "id": 1631872,
+     "star": false
+    },
+    {
+     "name": "Ramiro",
+     "id": 330693,
+     "star": false
+    },
+    {
+     "name": "R. Binyamin",
+     "id": 1392847,
+     "star": false
+    },
+    {
+     "name": "P. Musa",
+     "id": 827668,
+     "star": true
+    },
+    {
+     "name": "D. Job",
+     "id": 1805067,
+     "star": true
+    }
+   ],
+   "away": [
+    {
+     "name": "J. Pantemis",
+     "id": 928432,
+     "star": false
+    },
+    {
+     "name": "R. Hernández",
+     "id": 881223,
+     "star": false
+    },
+    {
+     "name": "F. Surman",
+     "id": 1167100,
+     "star": true
+    },
+    {
+     "name": "J. Waterman",
+     "id": 1020472,
+     "star": false
+    },
+    {
+     "name": "J. Fory",
+     "id": 1014825,
+     "star": false
+    },
+    {
+     "name": "C. Bassett",
+     "id": 945420,
+     "star": false
+    },
+    {
+     "name": "J. Caicedo",
+     "id": 988775,
+     "star": false
+    },
+    {
+     "name": "D. Da Costa",
+     "id": 1023091,
+     "star": true
+    },
+    {
+     "name": "K. Velde",
+     "id": 877656,
+     "star": true
+    },
+    {
+     "name": "V. Janssen",
+     "id": 339901,
+     "star": false
+    },
+    {
+     "name": "A. Lassiter",
+     "id": 1125092,
+     "star": false
+    }
+   ]
+  },
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 0,
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [
+     {
+      "name": "Daniel",
+      "id": 850038,
+      "star": false
+     },
+     {
+      "name": "H. Johansson",
+      "id": 1099794,
+      "star": false
+     },
+     {
+      "name": "O. Urhoghide",
+      "id": 915129,
+      "star": false
+     },
+     {
+      "name": "S. Moore",
+      "id": 813511,
+      "star": false
+     },
+     {
+      "name": "N. Norris",
+      "id": 1435240,
+      "star": false
+     },
+     {
+      "name": "J. Valiente",
+      "id": 1049223,
+      "star": false
+     },
+     {
+      "name": "Kaick",
+      "id": 1631872,
+      "star": false
+     },
+     {
+      "name": "Ramiro",
+      "id": 330693,
+      "star": false
+     },
+     {
+      "name": "R. Binyamin",
+      "id": 1392847,
+      "star": false
+     },
+     {
+      "name": "P. Musa",
+      "id": 827668,
+      "star": true
+     },
+     {
+      "name": "D. Job",
+      "id": 1805067,
+      "star": true
+     }
+    ],
+    "away": [
+     {
+      "name": "J. Pantemis",
+      "id": 928432,
+      "star": false
+     },
+     {
+      "name": "R. Hernández",
+      "id": 881223,
+      "star": false
+     },
+     {
+      "name": "F. Surman",
+      "id": 1167100,
+      "star": true
+     },
+     {
+      "name": "J. Waterman",
+      "id": 1020472,
+      "star": false
+     },
+     {
+      "name": "J. Fory",
+      "id": 1014825,
+      "star": false
+     },
+     {
+      "name": "C. Bassett",
+      "id": 945420,
+      "star": false
+     },
+     {
+      "name": "J. Caicedo",
+      "id": 988775,
+      "star": false
+     },
+     {
+      "name": "D. Da Costa",
+      "id": 1023091,
+      "star": true
+     },
+     {
+      "name": "K. Velde",
+      "id": 877656,
+      "star": true
+     },
+     {
+      "name": "V. Janssen",
+      "id": 339901,
+      "star": false
+     },
+     {
+      "name": "A. Lassiter",
+      "id": 1125092,
+      "star": false
+     }
+    ]
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 850038,
+      "name": "Daniel",
+      "sub": false
+     },
+     {
+      "id": 1099794,
+      "name": "H. Johansson",
+      "sub": false
+     },
+     {
+      "id": 915129,
+      "name": "O. Urhoghide",
+      "sub": false
+     },
+     {
+      "id": 813511,
+      "name": "S. Moore",
+      "sub": false
+     },
+     {
+      "id": 1435240,
+      "name": "N. Norris",
+      "sub": false
+     },
+     {
+      "id": 1049223,
+      "name": "J. Valiente",
+      "sub": false
+     },
+     {
+      "id": 1631872,
+      "name": "Kaick",
+      "sub": false
+     },
+     {
+      "id": 330693,
+      "name": "Ramiro",
+      "sub": false
+     },
+     {
+      "id": 1392847,
+      "name": "R. Binyamin",
+      "sub": false
+     },
+     {
+      "id": 827668,
+      "name": "P. Musa",
+      "sub": false
+     },
+     {
+      "id": 1805067,
+      "name": "D. Job",
+      "sub": false
+     },
+     {
+      "id": 1022962,
+      "name": "J. Sirois",
+      "sub": true
+     },
+     {
+      "id": 577012,
+      "name": "S. Ibeagha",
+      "sub": true
+     },
+     {
+      "id": 867751,
+      "name": "L. Abubakar",
+      "sub": true
+     },
+     {
+      "id": 1118141,
+      "name": "B. Kamungo",
+      "sub": true
+     },
+     {
+      "id": 1002530,
+      "name": "P. Delgado",
+      "sub": true
+     },
+     {
+      "id": 966456,
+      "name": "C. Cappis",
+      "sub": true
+     },
+     {
+      "id": 100203,
+      "name": "S. Moreno",
+      "sub": true
+     },
+     {
+      "id": 2060299,
+      "name": "S. Sarver",
+      "sub": true
+     },
+     {
+      "id": 1647759,
+      "name": "L. Farrington",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 928432,
+      "name": "J. Pantemis",
+      "sub": false
+     },
+     {
+      "id": 881223,
+      "name": "R. Hernández",
+      "sub": false
+     },
+     {
+      "id": 1167100,
+      "name": "F. Surman",
+      "sub": false
+     },
+     {
+      "id": 1020472,
+      "name": "J. Waterman",
+      "sub": false
+     },
+     {
+      "id": 1014825,
+      "name": "J. Fory",
+      "sub": false
+     },
+     {
+      "id": 945420,
+      "name": "C. Bassett",
+      "sub": false
+     },
+     {
+      "id": 988775,
+      "name": "J. Caicedo",
+      "sub": false
+     },
+     {
+      "id": 1023091,
+      "name": "D. Da Costa",
+      "sub": false
+     },
+     {
+      "id": 877656,
+      "name": "K. Velde",
+      "sub": false
+     },
+     {
+      "id": 339901,
+      "name": "V. Janssen",
+      "sub": false
+     },
+     {
+      "id": 1125092,
+      "name": "A. Lassiter",
+      "sub": false
+     },
+     {
+      "id": 1020286,
+      "name": "H. Sulte",
+      "sub": true
+     },
+     {
+      "id": 2048687,
+      "name": "I. Smith",
+      "sub": true
+     },
+     {
+      "id": 934841,
+      "name": "K. Miller",
+      "sub": true
+     },
+     {
+      "id": 329613,
+      "name": "E. Miller",
+      "sub": true
+     },
+     {
+      "id": 1887189,
+      "name": "E. Izoita",
+      "sub": true
+     },
+     {
+      "id": 47278,
+      "name": "D. Chará",
+      "sub": true
+     },
+     {
+      "id": 588630,
+      "name": "J. Ortíz",
+      "sub": true
+     },
+     {
+      "id": 1000502,
+      "name": "A. Aravena",
+      "sub": true
+     },
+     {
+      "id": 974589,
+      "name": "O. Fernandez",
+      "sub": true
+     }
+    ]
+   }
+  },
   "sport": "football",
   "eventId": 17524296,
   "teams": {
@@ -46366,10 +47671,12 @@
     "eid": 17524300
    }
   },
-  "signals": [],
-  "status": "no_key_absence",
-  "aiSummary": "Portland Timbers are missing key defender J. Mosquera and Z.",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "signals": [
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "lineups_ok"
  },
  "football|Radomiak Radom|Wisla Krakow": {
   "checkedAt": "2026-11-21T18:11:56.060228+00:00",
@@ -47227,7 +48534,7 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "tennis|De Dios F.|Gay F.": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -47239,7 +48546,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "tennis|Penickova K.|Shcherbinina A.": {
   "checkedAt": "2026-11-21T18:11:56.060228+00:00",
@@ -47421,7 +48728,7 @@
   "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
  },
  "volleyball|Novara W|Chieri '76 W": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -47455,7 +48762,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-21T18:11:56.060228+00:00|False"
+  "aiSummarySig": "2026-11-21T20:16:10.707828+00:00|False"
  },
  "baseball|Tigres del Licey|Toros del Este": {
   "checkedAt": "2026-11-21T18:11:56.060228+00:00",
@@ -48204,7 +49511,7 @@
   "status": "unknown"
  },
  "hockey|Shawinigan Cataractes|Halifax Mooseheads": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
@@ -48239,7 +49546,7 @@
   "status": "unknown"
  },
  "hockey|Sacred Heart Pioneers|Robert Morris": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -48392,7 +49699,7 @@
   "status": "unknown"
  },
  "tennis|L. Romero Gormaz|L. Bronzetti": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -51064,15 +52371,63 @@
   "status": "unknown"
  },
  "hockey|Nashville Predators|Pittsburgh Penguins": {
-  "checkedAt": "2026-11-21T18:11:56.060228+00:00",
-  "source": null,
+  "checkedAt": "2026-11-21T20:16:10.707828+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [
+   {
+    "name": "William Trudeau",
+    "importance": "other",
+    "status": "out",
+    "reason": "Injured Reserve (upper body)"
+   }
+  ],
+  "away": [
+   {
+    "name": "Evgeni Malkin",
+    "importance": "star",
+    "status": "doubtful",
+    "reason": "Out (day‑to‑day, lower‑body)"
+   },
+   {
+    "name": "Nick Robertson",
+    "importance": "other",
+    "status": "out",
+    "reason": "Injured Reserve (lower body)"
+   },
+   {
+    "name": "Elmer Soderblom",
+    "importance": "other",
+    "status": "out",
+    "reason": "Injured Reserve (upper body)"
+   },
+   {
+    "name": "Bryan Rust",
+    "importance": "key",
+    "status": "out",
+    "reason": "Injured Reserve (lower body)"
+   },
+   {
+    "name": "Ryan Graves",
+    "importance": "key",
+    "status": "out",
+    "reason": "Injured Reserve (knee)"
+   }
+  ],
+  "sources": [
+   "https://www.si.com/nhl/predators/onsi/news/pittsburgh-penguins-nashville-predators-game-central-how-watch-injury-updates",
+   "https://www.nhl.com/news/nhl-status-report-news-and-notes-november-21-2026",
+   "https://www.espn.com/nhl/game/_/gameId/401892757/penguins-predators",
+   "https://www.nhl.com/predators/news/game-day-penguins-vs-preds-november-21-2026-11-21",
+   "https://int-reactjs.sportsnet.ca/hockey/nhl/games/624c0bc3-c610-485b-a986-772f9d579424/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "infoOnly": true,
-  "infoVerdict": "ok",
+  "netStars": 0,
+  "netKey": -2,
+  "llmAt": "2026-11-21T20:16:10.707828+00:00",
   "sport": "hockey",
   "extra": {
    "home": [
