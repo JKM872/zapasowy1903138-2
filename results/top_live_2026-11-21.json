@@ -82,7 +82,8 @@
   "closingMarket": "2way",
   "closingMinsToKick": 25,
   "closingApprox": false,
-  "clvPct": -2.1
+  "clvPct": -2.1,
+  "finalCheckMissed": false
  },
  "football|Pisa U19 vs Palermo U19": {
   "checks": [],
@@ -108,7 +109,15 @@
   "bestOdds": 1.3,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 5
+  "booksCount": 5,
+  "closingOdds": 1.304,
+  "closingAt": "2026-11-21T13:50:29Z",
+  "closingSource": "oddssafari",
+  "closingMarket": "2way_equiv",
+  "closingMinsToKick": 40,
+  "closingApprox": true,
+  "clvPct": 21.2,
+  "finalCheckMissed": false
  },
  "handball|Vendsyssel vs Tonder": {
   "checks": [
@@ -132,7 +141,10 @@
   "withdrawn": true,
   "withdrawKind": "price",
   "withdrawReason": "Price fell to 1.47, below the profitable minimum 1.60",
-  "withdrawnAt": "2026-11-21T13:50:29Z"
+  "withdrawnAt": "2026-11-21T13:50:29Z",
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|AS Trencin vs Sport Podbrezova": {
   "checks": [
@@ -152,7 +164,15 @@
   "bestOdds": 2.15,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 14
+  "booksCount": 14,
+  "closingOdds": 2.11,
+  "closingAt": "2026-11-21T13:50:29Z",
+  "closingSource": "pinnacle",
+  "closingMarket": "3way",
+  "closingMinsToKick": 40,
+  "closingApprox": true,
+  "clvPct": -0.5,
+  "finalCheckMissed": false
  },
  "football|H&W Welders vs Annagh United": {
   "checks": [
@@ -172,7 +192,10 @@
   "bestOdds": 2.05,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 13
+  "booksCount": 13,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|Sporting Charleroi vs Sint-Truiden": {
   "checks": [
@@ -192,7 +215,10 @@
   "bestOdds": 2.08,
   "bestOddsSource": "pinnacle",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 15
+  "booksCount": 15,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|Wimborne Town vs Bath City": {
   "checks": [
@@ -212,7 +238,10 @@
   "bestOdds": 2.46,
   "bestOddsSource": "pinnacle",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 6
+  "booksCount": 6,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|Bournemouth vs Nottingham Forest": {
   "checks": [
@@ -232,7 +261,10 @@
   "bestOdds": 2.05,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 14
+  "booksCount": 14,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|Atzeneta UE vs Villarreal C": {
   "checks": [
@@ -252,7 +284,10 @@
   "bestOdds": 2.1,
   "bestOddsSource": "oddssafari",
   "bestOddsAt": "2026-11-21T13:50:29Z",
-  "booksCount": 12
+  "booksCount": 12,
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
  },
  "football|Alhassam vs Shabab Manama": {
   "checks": [
@@ -268,6 +303,54 @@
     "avail": "ok",
     "availAgeMin": 23
    }
-  ]
+  ],
+  "closingOdds": null,
+  "clvPct": null,
+  "finalCheckMissed": false
+ },
+ "volleyball|TSV Jona vs Colombier": {
+  "checks": [
+   {
+    "at": "2026-11-21T15:16:16Z",
+    "minsToKick": 44,
+    "best": 1.5,
+    "bestSource": "oddssafari",
+    "books": 9,
+    "quote": 1.395,
+    "quoteSource": "pinnacle",
+    "quoteMarket": "2way",
+    "avail": "unknown",
+    "availAgeMin": 108
+   }
+  ],
+  "bestOdds": 1.5,
+  "bestOddsSource": "oddssafari",
+  "bestOddsAt": "2026-11-21T15:16:16Z",
+  "booksCount": 9
+ },
+ "football|AFAD Djékanou vs ISCA": {
+  "checks": [
+   {
+    "at": "2026-11-21T15:16:16Z",
+    "minsToKick": 14,
+    "best": 2.25,
+    "bestSource": "oddssafari",
+    "books": 6,
+    "quote": 2.25,
+    "quoteSource": "oddssafari",
+    "quoteMarket": "3way"
+   }
+  ],
+  "bestOdds": 2.25,
+  "bestOddsSource": "oddssafari",
+  "bestOddsAt": "2026-11-21T15:16:16Z",
+  "booksCount": 6,
+  "closingOdds": 2.25,
+  "closingAt": "2026-11-21T15:16:16Z",
+  "closingSource": "oddssafari",
+  "closingMarket": "3way",
+  "closingMinsToKick": 14,
+  "closingApprox": false,
+  "clvPct": -8.9
  }
 }
