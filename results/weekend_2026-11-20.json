@@ -102,6 +102,107 @@
    "status": "lost",
    "adjusted": false,
    "slot": "S1"
+  },
+  {
+   "id": "S2",
+   "legs": [
+    {
+     "id": "football|2026-11-21|Lens|Toulouse",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-21",
+     "league": "",
+     "match": "Lens vs Toulouse",
+     "home": "Lens",
+     "away": "Toulouse",
+     "kickoff": "2026-11-21T17:45:00Z",
+     "side": "home",
+     "pick": "Lens",
+     "price": 2.25,
+     "bookmaker": "oddssafari",
+     "modelProb": null,
+     "fanPct": 76.0,
+     "impliedPct": 44.4,
+     "edgePct": 31.6,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "C",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 16311011
+    },
+    {
+     "id": "football|2026-11-21|UE Santa Coloma|FC Santa Coloma B",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-21",
+     "league": "Andorra – 2. Division",
+     "match": "UE Santa Coloma vs FC Santa Coloma B",
+     "home": "UE Santa Coloma",
+     "away": "FC Santa Coloma B",
+     "kickoff": "2026-11-21T19:30:00Z",
+     "side": "home",
+     "pick": "UE Santa Coloma",
+     "price": 4.7,
+     "bookmaker": "Pinnacle",
+     "modelProb": 0.602,
+     "fanPct": 83.0,
+     "impliedPct": 21.3,
+     "edgePct": 38.9,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "D",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 16990474
+    },
+    {
+     "id": "football|2026-11-21|Stuttgarter Kickers U19|Freiburg U19",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-21",
+     "league": "Germany – Junioren Bundesliga",
+     "match": "Stuttgarter Kickers U19 vs Freiburg U19",
+     "home": "Stuttgarter Kickers U19",
+     "away": "Freiburg U19",
+     "kickoff": "2026-11-22T13:00:00Z",
+     "side": "away",
+     "pick": "Freiburg U19",
+     "price": 2.43,
+     "bookmaker": "pinnacle",
+     "modelProb": 0.72,
+     "fanPct": 87.0,
+     "impliedPct": 41.2,
+     "edgePct": 30.8,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "D",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 17368413
+    }
+   ],
+   "combinedOdds": 25.7,
+   "combinedModelProb": null,
+   "combinedImpliedPct": 3.9,
+   "status": "pending",
+   "adjusted": false,
+   "slot": "S2"
   }
  ],
  "days": [
@@ -110,7 +211,7 @@
   "2026-11-22"
  ],
  "generatedAt": "2026-11-20T16:03:16Z",
- "updatedAt": "2026-11-21T14:54:16Z",
+ "updatedAt": "2026-11-21T15:16:36Z",
  "note": "Accumulators multiply the bookmaker margin with every leg and lose more often than singles: three legs at ~60% each land about one time in five. Backtest on two past weekends: 0 of 3 settled slips won with the odds limits, 1 of 6 without (ROI -100% / -41%). Stake small (0.5% of bankroll) or skip.",
  "stakePct": 0.5,
  "maxLegs": 3
