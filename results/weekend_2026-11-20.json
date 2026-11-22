@@ -203,6 +203,107 @@
    "status": "lost",
    "adjusted": false,
    "slot": "S2"
+  },
+  {
+   "id": "S3",
+   "legs": [
+    {
+     "id": "football|2026-11-22|FC Nordsjælland|København",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-22",
+     "league": "Denmark – Superliga",
+     "match": "FC Nordsjælland vs København",
+     "home": "FC Nordsjælland",
+     "away": "København",
+     "kickoff": "2026-11-22T17:00:00Z",
+     "side": "away",
+     "pick": "København",
+     "price": 2.82,
+     "bookmaker": "oddssafari",
+     "modelProb": 0.55,
+     "fanPct": 69.0,
+     "impliedPct": 35.5,
+     "edgePct": 19.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "C",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 16278750
+    },
+    {
+     "id": "football|2026-11-22|Colo Colo|U. Catolica",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-22",
+     "league": "",
+     "match": "Colo Colo vs U. Catolica",
+     "home": "Colo Colo",
+     "away": "U. Catolica",
+     "kickoff": "2026-11-22T19:00:00Z",
+     "side": "home",
+     "pick": "Colo Colo",
+     "price": 2.32,
+     "bookmaker": "oddssafari",
+     "modelProb": null,
+     "fanPct": 78.0,
+     "impliedPct": 43.1,
+     "edgePct": 34.9,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "C",
+     "availability": "ok",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 15353163
+    },
+    {
+     "id": "football|2026-11-22|Chapelton|Cavalier FC",
+     "source": "fan",
+     "sport": "football",
+     "date": "2026-11-22",
+     "league": "Jamaica – Premier League",
+     "match": "Chapelton vs Cavalier FC",
+     "home": "Chapelton",
+     "away": "Cavalier FC",
+     "kickoff": "2026-11-22T20:00:00Z",
+     "side": "away",
+     "pick": "Cavalier FC",
+     "price": 2.0,
+     "bookmaker": "oddssafari",
+     "modelProb": 0.695,
+     "fanPct": 84.0,
+     "impliedPct": 50.0,
+     "edgePct": 19.5,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "grade": "B",
+     "availability": "unknown",
+     "availabilityNote": "",
+     "status": "pending",
+     "withdrawnReason": null,
+     "score": null,
+     "eventId": 17095692
+    }
+   ],
+   "combinedOdds": 13.08,
+   "combinedModelProb": null,
+   "combinedImpliedPct": 7.6,
+   "status": "pending",
+   "adjusted": false,
+   "slot": "S3"
   }
  ],
  "days": [
@@ -211,7 +312,7 @@
   "2026-11-22"
  ],
  "generatedAt": "2026-11-20T16:03:16Z",
- "updatedAt": "2026-11-22T14:51:14Z",
+ "updatedAt": "2026-11-22T15:14:00Z",
  "note": "Accumulators multiply the bookmaker margin with every leg and lose more often than singles: three legs at ~60% each land about one time in five. Backtest on two past weekends: 0 of 3 settled slips won with the odds limits, 1 of 6 without (ROI -100% / -41%). Stake small (0.5% of bankroll) or skip.",
  "stakePct": 0.5,
  "maxLegs": 3
