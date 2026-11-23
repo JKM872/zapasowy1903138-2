@@ -1,14 +1,14 @@
 # TOP rules – holdout report
 
-Generated 2026-11-16T11:02:24Z. Tuning 2026-09-12..2026-10-30 (n=3301, halves split at 2026-10-16); holdout 2026-10-31..2026-11-15 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
+Generated 2026-11-23T12:21:13Z. Tuning 2026-09-12..2026-11-06 (n=4566, halves split at 2026-10-23); holdout 2026-11-07..2026-11-22 (16 days). The learner never reads holdout rows. Flat 1u, draw = loss, ROI −5% = profit × 0.95; hockey/basketball/baseball 3-way quotes re-priced to the 2-way equivalent ("2-way"); "as stored" = published prices. Max DD in units at −5%. CI = bootstrap 95% (1000×) of ROI −5%.
 
-Segment decisions: {'exclude': 63, 'inherit': 78, 'allow': 6}
+Segment decisions: {'exclude': 68, 'inherit': 74, 'allow': 6}
 
 ## Gate in use by TOP
 
 Mode: **shadow**. The learned rules are enforced automatically only when a rebuild keeps >= 3 TOP picks/day on the holdout with ROI −5% > +0% (TOP replay after rules + floor). Otherwise TOP applies the safe gate (tennis and basketball priced below 1.80 excluded, everything else as evaluate()) and each pick records the learned decision (`learnedDecision`, `learnedSegment`).
 
-This build: enforce = False; holdout TOP replay after rules: 5 picks, 0.3/day, ROI -5% -3.9% (needs >= 3/day and > +0%).
+This build: enforce = False; holdout TOP replay after rules: 20 picks, 1.2/day, ROI -5% +3.2% (needs >= 3/day and > +0%).
 
 **Caveat (holdout leak):** the 1.80 cut of the safe gate was chosen in the data audit, which also looked at the holdout days, so its holdout numbers below ("as applied") are optimistic. It is re-validated forward on the first 14 settled days from 2026-10-27.
 
@@ -19,7 +19,7 @@ Status: **NOT confirmed: picks removed by the 1.80 cut were profitable forward -
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
 | removed by the cut | 106 | 106.0 | 68.9% | +5.5% | +3.7% | — | 9.7 |
-| kept | 131 | 131.0 | 54.2% | -1.8% | -4.0% | — | 15.71 |
+| kept | 132 | 132.0 | 53.8% | -2.5% | -4.7% | — | 16.71 |
 | removed, basketball | 47 | 47.0 | 63.8% | -4.1% | -5.8% | — | 7.89 |
 | removed, tennis | 59 | 59.0 | 72.9% | +13.2% | +11.2% | — | 2.89 |
 
@@ -29,38 +29,38 @@ Status: **NOT confirmed: picks removed by the 1.80 cut were profitable forward -
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 3264 | 204.0 | 55.5% | -3.5% | -5.6% | -8.3 .. -2.4 | 198.56 |
-| after (rules + floor) | 49 | 3.1 | 59.2% | +0.7% | -1.4% | -24.8 .. +21.4 | 4.49 |
-| as applied (shadow) | 2636 | 164.8 | 54.4% | -2.3% | -4.4% | -7.9 .. -1.1 | 132.52 |
+| before | 3156 | 197.2 | 56.1% | -4.6% | -6.6% | -9.6 .. -3.6 | 216.96 |
+| after (rules + floor) | 130 | 8.1 | 61.5% | +1.3% | -0.7% | -14.2 .. +11.7 | 11.29 |
+| as applied (shadow) | 2449 | 153.1 | 54.1% | -4.3% | -6.4% | -10.2 .. -3.1 | 161.77 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
-| baseball | 9 | 66.7% | +0.3% | -1.4% | 0 | — | — | — |
-| basketball | 464 | 60.8% | -6.2% | -7.9% | 0 | — | — | — |
-| football | 2039 | 52.6% | -1.8% | -4.1% | 0 | — | — | — |
-| handball | 87 | 57.5% | -2.0% | -4.0% | 49 | 59.2% | +0.7% | -1.4% |
-| hockey | 295 | 60.0% | -6.9% | -8.6% | 0 | — | — | — |
-| rugby | 9 | 66.7% | -5.7% | -7.1% | 0 | — | — | — |
-| tennis | 238 | 56.3% | -13.1% | -14.6% | 0 | — | — | — |
-| volleyball | 123 | 68.3% | +2.9% | +1.1% | 0 | — | — | — |
+| baseball | 4 | 50.0% | -19.8% | -21.3% | 0 | — | — | — |
+| basketball | 571 | 60.9% | -5.9% | -7.6% | 0 | — | — | — |
+| football | 1694 | 51.9% | -4.0% | -6.2% | 0 | — | — | — |
+| handball | 122 | 50.8% | -13.6% | -15.4% | 64 | 53.1% | -10.8% | -12.6% |
+| hockey | 392 | 61.0% | -5.5% | -7.2% | 0 | — | — | — |
+| rugby | 10 | 60.0% | -14.3% | -15.6% | 0 | — | — | — |
+| tennis | 189 | 62.4% | -3.3% | -5.0% | 0 | — | — | — |
+| volleyball | 174 | 66.1% | +0.9% | -0.9% | 66 | 69.7% | +13.0% | +10.9% |
 
 ### as stored
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 3264 | 204.0 | 55.5% | -1.3% | -3.5% | — | 129.58 |
-| after (rules + floor) | 49 | 3.1 | 59.2% | +0.7% | -1.4% | — | 4.49 |
+| before | 3156 | 197.2 | 56.1% | -1.5% | -3.6% | — | 126.93 |
+| after (rules + floor) | 130 | 8.1 | 61.5% | +1.3% | -0.7% | — | 11.29 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
-| baseball | 9 | 66.7% | +5.7% | +3.7% | 0 | — | — | — |
-| basketball | 464 | 60.8% | -6.2% | -7.9% | 0 | — | — | — |
-| football | 2039 | 52.6% | -1.8% | -4.1% | 0 | — | — | — |
-| handball | 87 | 57.5% | -2.0% | -4.0% | 49 | 59.2% | +0.7% | -1.4% |
-| hockey | 295 | 60.0% | +17.7% | +14.8% | 0 | — | — | — |
-| rugby | 9 | 66.7% | -5.7% | -7.1% | 0 | — | — | — |
-| tennis | 238 | 56.3% | -13.1% | -14.6% | 0 | — | — | — |
-| volleyball | 123 | 68.3% | +2.9% | +1.1% | 0 | — | — | — |
+| baseball | 4 | 50.0% | -15.0% | -16.8% | 0 | — | — | — |
+| basketball | 571 | 60.9% | -5.9% | -7.6% | 0 | — | — | — |
+| football | 1694 | 51.9% | -4.0% | -6.2% | 0 | — | — | — |
+| handball | 122 | 50.8% | -13.6% | -15.4% | 64 | 53.1% | -10.8% | -12.6% |
+| hockey | 392 | 61.0% | +19.9% | +16.9% | 0 | — | — | — |
+| rugby | 10 | 60.0% | -14.3% | -15.6% | 0 | — | — | — |
+| tennis | 189 | 62.4% | -3.3% | -5.0% | 0 | — | — | — |
+| volleyball | 174 | 66.1% | +0.9% | -0.9% | 66 | 69.7% | +13.0% | +10.9% |
 
 ## TOP replay (current evaluate())
 
@@ -68,121 +68,124 @@ Status: **NOT confirmed: picks removed by the 1.80 cut were profitable forward -
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 304 | 19.0 | 59.5% | -1.3% | -3.2% | -12.4 .. +5.9 | 22.95 |
-| after (rules + floor) | 5 | 0.3 | 60.0% | -2.0% | -3.9% | -69.0 .. +60.4 | 1.45 |
-| as applied (shadow) | 182 | 11.4 | 54.9% | -2.8% | -4.9% | -17.4 .. +7.1 | 16.86 |
+| before | 345 | 21.6 | 61.7% | -0.2% | -2.1% | -10.6 .. +6.2 | 19.91 |
+| after (rules + floor) | 20 | 1.2 | 65.0% | +5.2% | +3.2% | -29.3 .. +35.0 | 3.1 |
+| as applied (shadow) | 203 | 12.7 | 56.7% | -2.8% | -4.8% | -16.3 .. +6.9 | 15.21 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
-| baseball | 4 | 75.0% | +7.6% | +5.9% | 0 | — | — | — |
-| basketball | 74 | 63.5% | -3.4% | -5.1% | 0 | — | — | — |
-| football | 88 | 42.0% | -9.3% | -11.7% | 0 | — | — | — |
-| handball | 7 | 71.4% | +17.6% | +15.3% | 5 | 60.0% | -2.0% | -3.9% |
-| hockey | 51 | 72.5% | +9.8% | +7.9% | 0 | — | — | — |
-| rugby | 1 | 100.0% | +40.0% | +38.0% | 0 | — | — | — |
-| tennis | 62 | 64.5% | +1.3% | -0.6% | 0 | — | — | — |
-| volleyball | 17 | 64.7% | -4.9% | -6.4% | 0 | — | — | — |
+| basketball | 98 | 69.4% | +5.4% | +3.6% | 0 | — | — | — |
+| football | 81 | 38.3% | -19.4% | -21.5% | 0 | — | — | — |
+| handball | 14 | 57.1% | -6.4% | -8.3% | 11 | 54.5% | -11.2% | -12.9% |
+| hockey | 72 | 72.2% | +10.1% | +8.2% | 0 | — | — | — |
+| rugby | 2 | 100.0% | +37.5% | +35.6% | 0 | — | — | — |
+| tennis | 56 | 66.1% | +5.0% | +3.1% | 0 | — | — | — |
+| volleyball | 22 | 68.2% | -0.3% | -1.9% | 9 | 77.8% | +25.2% | +22.8% |
 
 ### as stored
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| before | 304 | 19.0 | 59.5% | +3.3% | +1.1% | — | 16.86 |
-| after (rules + floor) | 5 | 0.3 | 60.0% | -2.0% | -3.9% | — | 1.45 |
+| before | 345 | 21.6 | 61.7% | +5.9% | +3.7% | — | 13.23 |
+| after (rules + floor) | 20 | 1.2 | 65.0% | +5.2% | +3.2% | — | 3.1 |
 
 | sport | before n | before hit | before ROI raw | before ROI −5% | after n | after hit | after ROI raw | after ROI −5% |
 |---|---|---|---|---|---|---|---|---|
-| baseball | 4 | 75.0% | +15.0% | +13.0% | 0 | — | — | — |
-| basketball | 74 | 63.5% | -3.4% | -5.1% | 0 | — | — | — |
-| football | 88 | 42.0% | -9.3% | -11.7% | 0 | — | — | — |
-| handball | 7 | 71.4% | +17.6% | +15.3% | 5 | 60.0% | -2.0% | -3.9% |
-| hockey | 51 | 72.5% | +36.5% | +33.3% | 0 | — | — | — |
-| rugby | 1 | 100.0% | +40.0% | +38.0% | 0 | — | — | — |
-| tennis | 62 | 64.5% | +1.3% | -0.6% | 0 | — | — | — |
-| volleyball | 17 | 64.7% | -4.9% | -6.4% | 0 | — | — | — |
+| basketball | 98 | 69.4% | +5.4% | +3.6% | 0 | — | — | — |
+| football | 81 | 38.3% | -19.4% | -21.5% | 0 | — | — | — |
+| handball | 14 | 57.1% | -6.4% | -8.3% | 11 | 54.5% | -11.2% | -12.9% |
+| hockey | 72 | 72.2% | +39.1% | +35.8% | 0 | — | — | — |
+| rugby | 2 | 100.0% | +37.5% | +35.6% | 0 | — | — | — |
+| tennis | 56 | 66.1% | +5.0% | +3.1% | 0 | — | — | — |
+| volleyball | 22 | 68.2% | -0.3% | -1.9% | 9 | 77.8% | +25.2% | +22.8% |
 
 ## Published TOP files in the holdout window
 
-272 published (not withdrawn), 249 joined to settled holdout rows.
+269 published (not withdrawn), 233 joined to settled holdout rows.
 
 | set | n | picks/day | hit | ROI raw | ROI −5% | CI ROI −5% | max DD |
 |---|---|---|---|---|---|---|---|
-| as stored | 249 | 15.6 | 54.6% | +5.8% | +3.3% | — | 14.61 |
-| 2-way | 249 | 15.6 | 54.6% | -1.4% | -3.6% | — | 23.64 |
+| as stored | 233 | 14.6 | 54.1% | +3.2% | +0.7% | — | 14.61 |
+| 2-way | 233 | 14.6 | 54.1% | -6.7% | -8.7% | — | 26.52 |
 
 ## Rules (tuning window, non-inherit segments)
 
 | segment | level | n | hit | ROI −5% | H1 | H2 | decision | pCal | floor |
 |---|---|---|---|---|---|---|---|---|---|
-| baseball | sport | 111 | 60.4% | -9.8% | -7.1% | -19.9% | exclude | — | — |
-| baseball|1.4-1.6 | sport×band | 51 | 56.9% | -16.0% | -21.5% | +1.8% | exclude | — | — |
-| baseball|grade:B | sport×grade | 53 | 60.4% | -11.1% | -3.3% | -49.4% | exclude | — | — |
-| baseball|tier:T1 | sport×tier | 85 | 60.0% | -12.4% | -11.6% | -19.7% | exclude | — | — |
-| basketball | sport | 604 | 64.9% | -1.9% | -3.7% | -0.1% | exclude | — | — |
-| basketball|1.0-1.4 | sport×band | 112 | 75.9% | +1.0% | -2.5% | +8.1% | exclude | — | — |
-| basketball|1.0-1.4|home | sport×band×side | 66 | 75.8% | +0.9% | -4.2% | +10.4% | exclude | — | — |
-| basketball|1.4-1.6 | sport×band | 264 | 64.4% | -6.3% | -9.8% | -3.2% | exclude | — | — |
-| basketball|1.4-1.6|away | sport×band×side | 118 | 58.5% | -14.8% | -17.8% | -11.7% | exclude | — | — |
-| basketball|1.4-1.6|home | sport×band×side | 146 | 69.2% | +0.6% | -2.2% | +2.9% | exclude | — | — |
-| basketball|1.6-1.8 | sport×band | 151 | 62.9% | +3.0% | +12.3% | -5.0% | exclude | — | — |
-| basketball|1.6-1.8|away | sport×band×side | 60 | 66.7% | +9.7% | +8.5% | +11.2% | allow | 0.665 | 1.6 |
-| basketball|1.6-1.8|home | sport×band×side | 91 | 60.4% | -1.4% | +15.5% | -13.6% | exclude | — | — |
-| basketball|1.8-2.0 | sport×band | 77 | 54.5% | -0.8% | -17.6% | +11.9% | exclude | — | — |
-| basketball|1.8-2.0|home | sport×band×side | 52 | 53.8% | -1.7% | -8.7% | +4.3% | exclude | — | — |
-| basketball|grade:B | sport×grade | 239 | 66.9% | +1.3% | -0.5% | +2.8% | exclude | — | — |
-| basketball|grade:C | sport×grade | 335 | 63.6% | -4.3% | -5.6% | -2.5% | exclude | — | — |
-| basketball|tier:T2 | sport×tier | 484 | 64.0% | -3.2% | -5.0% | -1.4% | exclude | — | — |
-| basketball|tier:T3 | sport×tier | 91 | 73.6% | +10.7% | +14.5% | +6.3% | allow | 0.734 | 1.39 |
-| football | sport | 1202 | 52.7% | -4.9% | -4.0% | -5.4% | exclude | — | — |
-| football|1.4-1.6 | sport×band | 173 | 65.9% | -0.4% | -4.6% | +2.2% | exclude | — | — |
-| football|1.4-1.6|away | sport×band×side | 71 | 67.6% | +2.2% | -6.3% | +10.0% | exclude | — | — |
-| football|1.4-1.6|home | sport×band×side | 102 | 64.7% | -2.2% | -2.8% | -1.9% | exclude | — | — |
-| football|1.6-1.8 | sport×band | 358 | 55.3% | -8.8% | -4.6% | -11.6% | exclude | — | — |
-| football|1.6-1.8|away | sport×band×side | 147 | 61.9% | +2.2% | +10.6% | -6.1% | exclude | — | — |
-| football|1.6-1.8|home | sport×band×side | 211 | 50.7% | -16.4% | -20.1% | -14.6% | exclude | — | — |
-| football|1.8-2.0 | sport×band | 248 | 53.2% | -2.3% | -10.7% | +2.0% | exclude | — | — |
-| football|1.8-2.0|away | sport×band×side | 120 | 54.2% | -0.7% | -5.5% | +3.2% | exclude | — | — |
-| football|1.8-2.0|home | sport×band×side | 128 | 52.3% | -3.9% | -20.3% | +1.1% | exclude | — | — |
-| football|2.0-2.5 | sport×band | 400 | 45.0% | -5.1% | -0.9% | -7.2% | exclude | — | — |
-| football|2.0-2.5|away | sport×band×side | 214 | 43.9% | -8.0% | -2.1% | -11.2% | exclude | — | — |
-| football|2.0-2.5|home | sport×band×side | 186 | 46.2% | -1.9% | +0.7% | -3.0% | exclude | — | — |
-| football|grade:B | sport×grade | 352 | 56.0% | -1.1% | +0.3% | -1.7% | exclude | — | — |
-| football|grade:C | sport×grade | 813 | 51.0% | -6.7% | -5.7% | -7.5% | exclude | — | — |
-| football|tier:T1 | sport×tier | 155 | 45.8% | -18.8% | -11.0% | -21.9% | exclude | — | — |
-| football|tier:T2 | sport×tier | 817 | 53.6% | -3.3% | -1.0% | -4.8% | exclude | — | — |
-| football|tier:T3 | sport×tier | 230 | 53.9% | -1.4% | -12.6% | +4.2% | exclude | — | — |
-| handball | sport | 136 | 61.8% | +0.4% | +3.8% | -5.9% | exclude | — | — |
-| handball|1.6-1.8 | sport×band | 63 | 65.1% | +5.8% | +4.5% | +7.7% | allow | 0.65 | 1.6 |
-| handball|grade:B | sport×grade | 53 | 73.6% | +18.8% | +13.2% | +28.8% | allow | 0.732 | 1.39 |
-| handball|grade:C | sport×grade | 75 | 56.0% | -8.4% | -0.1% | -24.1% | exclude | — | — |
-| handball|tier:T2 | sport×tier | 108 | 64.8% | +6.0% | +9.3% | +0.5% | allow | 0.648 | 1.58 |
-| hockey | sport | 774 | 63.4% | -6.6% | -3.6% | -11.0% | exclude | — | — |
-| hockey|1.0-1.4 | sport×band | 247 | 70.4% | -9.1% | -5.0% | -26.8% | exclude | — | — |
-| hockey|1.0-1.4|away | sport×band×side | 100 | 63.0% | -18.6% | -9.4% | -55.2% | exclude | — | — |
-| hockey|1.0-1.4|home | sport×band×side | 147 | 75.5% | -2.6% | -2.1% | -5.0% | exclude | — | — |
-| hockey|1.4-1.6 | sport×band | 257 | 63.0% | -7.3% | -10.3% | -4.1% | exclude | — | — |
-| hockey|1.4-1.6|away | sport×band×side | 98 | 58.2% | -14.0% | -17.5% | -10.4% | exclude | — | — |
-| hockey|1.4-1.6|home | sport×band×side | 159 | 66.0% | -3.1% | -5.9% | -0.2% | exclude | — | — |
-| hockey|1.6-1.8 | sport×band | 233 | 59.7% | -0.8% | +11.5% | -11.6% | exclude | — | — |
-| hockey|1.6-1.8|away | sport×band×side | 106 | 60.4% | +0.5% | +13.4% | -12.3% | exclude | — | — |
-| hockey|1.6-1.8|home | sport×band×side | 127 | 59.1% | -1.8% | +9.8% | -11.0% | exclude | — | — |
-| hockey|grade:A | sport×grade | 67 | 67.2% | +0.1% | -3.6% | +2.3% | exclude | — | — |
-| hockey|grade:B | sport×grade | 309 | 64.1% | -6.1% | -3.3% | -10.3% | exclude | — | — |
-| hockey|grade:C | sport×grade | 398 | 62.3% | -8.1% | -3.8% | -15.4% | exclude | — | — |
-| hockey|tier:T1 | sport×tier | 74 | 67.6% | +5.1% | +5.2% | +4.9% | allow | 0.675 | 1.51 |
-| hockey|tier:T2 | sport×tier | 654 | 64.1% | -6.2% | -3.0% | -11.0% | exclude | — | — |
-| rugby | sport | 25 | 64.0% | -9.7% | -7.8% | -12.6% | exclude | — | — |
-| tennis | sport | 373 | 58.2% | -12.2% | -18.2% | -6.3% | exclude | — | — |
-| tennis|1.4-1.6 | sport×band | 177 | 64.4% | -6.5% | -16.3% | +0.9% | exclude | — | — |
-| tennis|1.4-1.6|away | sport×band×side | 69 | 62.3% | -10.3% | -7.8% | -11.7% | exclude | — | — |
-| tennis|1.4-1.6|home | sport×band×side | 108 | 65.7% | -4.1% | -20.4% | +10.5% | exclude | — | — |
-| tennis|1.6-1.8 | sport×band | 111 | 52.3% | -14.7% | -19.9% | -7.8% | exclude | — | — |
-| tennis|1.6-1.8|home | sport×band×side | 66 | 51.5% | -15.8% | -20.7% | -7.9% | exclude | — | — |
-| tennis|grade:B | sport×grade | 94 | 62.8% | -5.6% | -28.9% | +11.7% | exclude | — | — |
-| tennis|grade:C | sport×grade | 247 | 56.7% | -14.6% | -15.6% | -13.1% | exclude | — | — |
-| tennis|tier:T2 | sport×tier | 67 | 53.7% | -19.0% | -28.4% | -9.4% | exclude | — | — |
-| tennis|tier:T? | sport×tier | 289 | 59.2% | -10.8% | -15.6% | -6.1% | exclude | — | — |
-| volleyball | sport | 76 | 71.1% | +2.2% | -8.4% | +16.1% | exclude | — | — |
+| baseball | sport | 119 | 60.5% | -9.7% | -8.7% | -15.0% | exclude | — | — |
+| baseball|1.4-1.6 | sport×band | 53 | 54.7% | -19.2% | -21.6% | -5.6% | exclude | — | — |
+| baseball|grade:B | sport×grade | 56 | 58.9% | -13.0% | -7.5% | -38.6% | exclude | — | — |
+| baseball|tier:T1 | sport×tier | 87 | 60.9% | -11.4% | -12.1% | -5.3% | exclude | — | — |
+| basketball | sport | 728 | 64.3% | -2.7% | -3.6% | -0.9% | exclude | — | — |
+| basketball|1.0-1.4 | sport×band | 142 | 72.5% | -3.5% | +2.2% | -16.7% | exclude | — | — |
+| basketball|1.0-1.4|away | sport×band×side | 55 | 69.1% | -8.1% | +3.9% | -43.0% | exclude | — | — |
+| basketball|1.0-1.4|home | sport×band×side | 87 | 74.7% | -0.6% | +1.1% | -3.9% | exclude | — | — |
+| basketball|1.4-1.6 | sport×band | 308 | 64.0% | -6.9% | -8.3% | -3.7% | exclude | — | — |
+| basketball|1.4-1.6|away | sport×band×side | 132 | 59.8% | -12.8% | -18.0% | +2.6% | exclude | — | — |
+| basketball|1.4-1.6|home | sport×band×side | 176 | 67.0% | -2.5% | -0.0% | -7.1% | exclude | — | — |
+| basketball|1.6-1.8 | sport×band | 186 | 62.4% | +2.2% | +4.5% | -1.6% | exclude | — | — |
+| basketball|1.6-1.8|away | sport×band×side | 74 | 67.6% | +11.4% | -3.3% | +35.7% | exclude | — | — |
+| basketball|1.6-1.8|home | sport×band×side | 112 | 58.9% | -3.9% | +9.6% | -26.4% | exclude | — | — |
+| basketball|1.8-2.0 | sport×band | 92 | 56.5% | +2.6% | -12.7% | +26.4% | exclude | — | — |
+| basketball|1.8-2.0|home | sport×band×side | 59 | 54.2% | -1.3% | -11.2% | +21.3% | exclude | — | — |
+| basketball|grade:B | sport×grade | 301 | 65.1% | -1.3% | -0.4% | -2.6% | exclude | — | — |
+| basketball|grade:C | sport×grade | 381 | 63.8% | -4.0% | -5.2% | -0.2% | exclude | — | — |
+| basketball|tier:T2 | sport×tier | 574 | 63.4% | -4.1% | -5.8% | -0.6% | exclude | — | — |
+| basketball|tier:T3 | sport×tier | 111 | 73.0% | +10.0% | +13.5% | +2.2% | allow | 0.728 | 1.4 |
+| football | sport | 2107 | 53.1% | -3.4% | -2.9% | -3.7% | exclude | — | — |
+| football|1.4-1.6 | sport×band | 290 | 64.5% | -2.6% | +1.1% | -4.3% | exclude | — | — |
+| football|1.4-1.6|away | sport×band×side | 114 | 67.5% | +2.0% | -2.6% | +4.7% | exclude | — | — |
+| football|1.4-1.6|home | sport×band×side | 176 | 62.5% | -5.5% | +4.2% | -9.5% | exclude | — | — |
+| football|1.6-1.8 | sport×band | 600 | 55.8% | -7.8% | -3.7% | -9.7% | exclude | — | — |
+| football|1.6-1.8|away | sport×band×side | 220 | 60.5% | -0.1% | +12.0% | -7.6% | exclude | — | — |
+| football|1.6-1.8|home | sport×band×side | 380 | 53.2% | -12.3% | -16.0% | -10.8% | exclude | — | — |
+| football|1.8-2.0 | sport×band | 441 | 53.5% | -1.8% | -3.3% | -1.3% | exclude | — | — |
+| football|1.8-2.0|away | sport×band×side | 192 | 57.3% | +5.3% | -0.7% | +8.5% | exclude | — | — |
+| football|1.8-2.0|home | sport×band×side | 249 | 50.6% | -7.3% | -7.3% | -7.3% | exclude | — | — |
+| football|2.0-2.5 | sport×band | 731 | 46.8% | -1.3% | -6.6% | +0.5% | exclude | — | — |
+| football|2.0-2.5|away | sport×band×side | 367 | 45.0% | -5.2% | -2.1% | -6.5% | exclude | — | — |
+| football|2.0-2.5|home | sport×band×side | 364 | 48.6% | +2.6% | -12.5% | +6.9% | exclude | — | — |
+| football|grade:A | sport×grade | 64 | 56.2% | -2.1% | +8.5% | -4.8% | exclude | — | — |
+| football|grade:B | sport×grade | 616 | 57.6% | +3.4% | +5.8% | +2.6% | allow | 0.576 | 1.78 |
+| football|grade:C | sport×grade | 1427 | 50.9% | -6.5% | -6.5% | -6.4% | exclude | — | — |
+| football|tier:T1 | sport×tier | 277 | 49.8% | -10.1% | -16.2% | -8.0% | exclude | — | — |
+| football|tier:T2 | sport×tier | 1404 | 54.5% | -0.9% | +0.4% | -1.4% | exclude | — | — |
+| football|tier:T3 | sport×tier | 426 | 50.5% | -7.6% | -7.4% | -7.7% | exclude | — | — |
+| handball | sport | 150 | 60.7% | -1.3% | -0.7% | -3.3% | exclude | — | — |
+| handball|1.6-1.8 | sport×band | 69 | 66.7% | +8.4% | +5.8% | +14.7% | allow | 0.665 | 1.6 |
+| handball|grade:B | sport×grade | 59 | 71.2% | +15.3% | +15.0% | +16.0% | allow | 0.708 | 1.44 |
+| handball|grade:C | sport×grade | 80 | 55.0% | -10.1% | -7.6% | -23.2% | exclude | — | — |
+| handball|tier:T2 | sport×tier | 112 | 65.2% | +6.5% | +4.0% | +17.4% | allow | 0.651 | 1.57 |
+| hockey | sport | 831 | 62.5% | -8.0% | -5.8% | -14.0% | exclude | — | — |
+| hockey|1.0-1.4 | sport×band | 262 | 70.6% | -8.8% | -7.5% | -19.6% | exclude | — | — |
+| hockey|1.0-1.4|away | sport×band×side | 104 | 64.4% | -16.5% | -15.7% | -24.5% | exclude | — | — |
+| hockey|1.0-1.4|home | sport×band×side | 158 | 74.7% | -3.7% | -1.8% | -17.2% | exclude | — | — |
+| hockey|1.4-1.6 | sport×band | 273 | 62.3% | -8.3% | -8.6% | -7.8% | exclude | — | — |
+| hockey|1.4-1.6|away | sport×band×side | 106 | 57.5% | -14.8% | -15.5% | -13.6% | exclude | — | — |
+| hockey|1.4-1.6|home | sport×band×side | 167 | 65.3% | -4.2% | -4.5% | -3.5% | exclude | — | — |
+| hockey|1.6-1.8 | sport×band | 254 | 57.5% | -4.4% | +3.0% | -16.9% | exclude | — | — |
+| hockey|1.6-1.8|away | sport×band×side | 120 | 57.5% | -4.3% | +8.1% | -22.2% | exclude | — | — |
+| hockey|1.6-1.8|home | sport×band×side | 134 | 57.5% | -4.4% | -1.0% | -11.1% | exclude | — | — |
+| hockey|grade:A | sport×grade | 74 | 66.2% | -1.0% | -8.2% | +6.7% | exclude | — | — |
+| hockey|grade:B | sport×grade | 341 | 63.3% | -7.1% | -2.9% | -15.5% | exclude | — | — |
+| hockey|grade:C | sport×grade | 416 | 61.1% | -10.0% | -7.4% | -21.8% | exclude | — | — |
+| hockey|tier:T1 | sport×tier | 80 | 65.0% | +1.2% | +4.0% | -7.0% | exclude | — | — |
+| hockey|tier:T2 | sport×tier | 705 | 63.1% | -7.5% | -5.0% | -14.3% | exclude | — | — |
+| rugby | sport | 29 | 65.5% | -7.8% | -12.9% | +1.9% | exclude | — | — |
+| tennis | sport | 500 | 58.2% | -12.0% | -14.5% | -8.8% | exclude | — | — |
+| tennis|1.0-1.4 | sport×band | 61 | 65.6% | -11.9% | -15.7% | -6.7% | exclude | — | — |
+| tennis|1.4-1.6 | sport×band | 239 | 61.9% | -10.0% | -9.9% | -10.1% | exclude | — | — |
+| tennis|1.4-1.6|away | sport×band×side | 99 | 58.6% | -15.1% | -5.0% | -23.2% | exclude | — | — |
+| tennis|1.4-1.6|home | sport×band×side | 140 | 64.3% | -6.4% | -12.6% | +1.5% | exclude | — | — |
+| tennis|1.6-1.8 | sport×band | 154 | 54.5% | -10.7% | -16.7% | -2.4% | exclude | — | — |
+| tennis|1.6-1.8|away | sport×band×side | 58 | 55.2% | -9.8% | -20.9% | +6.9% | exclude | — | — |
+| tennis|1.6-1.8|home | sport×band×side | 96 | 54.2% | -11.3% | -14.0% | -7.6% | exclude | — | — |
+| tennis|grade:B | sport×grade | 144 | 65.3% | -1.3% | -9.2% | +6.4% | exclude | — | — |
+| tennis|grade:C | sport×grade | 308 | 54.9% | -17.3% | -16.0% | -19.4% | exclude | — | — |
+| tennis|tier:T2 | sport×tier | 100 | 49.0% | -26.0% | -27.3% | -25.1% | exclude | — | — |
+| tennis|tier:T? | sport×tier | 378 | 60.1% | -9.2% | -12.6% | -4.4% | exclude | — | — |
+| volleyball | sport | 102 | 72.5% | +3.8% | +3.3% | +5.1% | allow | 0.723 | 1.41 |
+| volleyball|tier:T3 | sport×tier | 57 | 73.7% | +5.6% | +9.0% | -0.7% | exclude | — | — |
 
 ## Context (not used for decisions)
 
@@ -190,12 +193,12 @@ Livesport-era qualified graded rows up to tuning.end (older engine, grade semant
 
 | sport | n | hit | ROI −5% |
 |---|---|---|---|
-| baseball | 523 | 59.1% | +8.0% |
-| basketball | 3862 | 62.8% | -0.2% |
-| football | 14303 | 41.3% | -6.8% |
-| handball | 874 | 67.0% | -1.6% |
-| hockey | 1893 | 60.6% | -6.3% |
-| tennis | 1189 | 60.4% | -7.8% |
-| volleyball | 944 | 68.1% | -7.8% |
+| baseball | 538 | 59.5% | +8.8% |
+| basketball | 4089 | 62.3% | -0.6% |
+| football | 14691 | 41.5% | -6.5% |
+| handball | 928 | 66.7% | -2.5% |
+| hockey | 1970 | 60.8% | -5.7% |
+| tennis | 1266 | 60.4% | -7.9% |
+| volleyball | 1013 | 68.6% | -6.9% |
 
 Supabase cross-check (settled predictions in tuning window): {'skipped': 'SUPABASE_URL / key not set'}
