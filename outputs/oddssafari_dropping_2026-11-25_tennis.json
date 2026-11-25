@@ -1,0 +1,1689 @@
+{
+  "meta": {
+    "generated_at": "2026-11-25T09:02:00.431467+01:00",
+    "target_date": "2026-11-25",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 11,
+      "qualified": 6
+    },
+    "enrichment_status_counts": {
+      "enriched": 4,
+      "resolve_failed": 1,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 1
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 5
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 11
+    },
+    "elapsed_seconds": 333.4,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/huertas-del-pino-c.-vs-storck-franca-l./25979600?MarketTypeID=301",
+      "match_id": "25979600",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Huertas Del Pino C.",
+      "away_team": "Storck Franca L.",
+      "event_date": "25/11",
+      "event_time": "13:55",
+      "outcome": "2",
+      "open_odds": 2.18,
+      "current_odds": 1.61,
+      "drop_pct": 26.0,
+      "max_odds": 1.64,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/huertas-del-pino-conner-dvetkyid/storck-franca-leonardo-QuZGg2gJ/?mid=bFNCJWMM",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Huertas Del Pino C.",
+        "away_team": "Storck F. L.",
+        "match_time": "25.11.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 13.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.11.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Schenekenberg G.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.11.26 Huertas Del Pino C. 2-0 Schenekenberg G."
+          },
+          {
+            "date": "23.11.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Braga B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.11.26 Huertas Del Pino C. 2-0 Braga B."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Leite W.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "28.07.26 Huertas Del Pino C. 1-2 Leite W."
+          },
+          {
+            "date": "21.07.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Kohlmann E.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "21.07.26 Huertas Del Pino C. 1-2 Kohlmann E."
+          },
+          {
+            "date": "06.07.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Tenti F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "06.07.26 Huertas Del Pino C. 1-2 Tenti F."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": null,
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Huertas Del Pino C.)",
+          "missing_recent_matches_B (Storck F. L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 631,
+        "ranking_b": 1257,
+        "forebet_prediction": "1",
+        "forebet_probability": 61.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 9.8,
+        "forebet_home_prob": 61,
+        "forebet_away_prob": 39
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/aguilar-cardozo-j.-vs-olivieri-g.a./26193584?MarketTypeID=301",
+      "match_id": "26193584",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Aguilar Cardozo J.",
+      "away_team": "Olivieri G.A.",
+      "event_date": "26/11",
+      "event_time": "13:00",
+      "outcome": "2",
+      "open_odds": 3.15,
+      "current_odds": 2.39,
+      "drop_pct": 24.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "sofascore_event_id": 17583991,
+        "sofascore_home_team_id": 452586,
+        "sofascore_away_team_id": 169486,
+        "home_team": "Aguilar Cardozo J.",
+        "away_team": "Olivieri G.A.",
+        "sport": "tennis",
+        "league": "Challenger - Florianopolis",
+        "match_time": "13:00",
+        "sofascore_home_win_prob": 41,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 59,
+        "sofascore_total_votes": 83,
+        "forebet_prediction": "1",
+        "forebet_probability": 61.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.7,
+        "forebet_home_prob": 61,
+        "forebet_away_prob": 39
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - San Salvador Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-san-salvador-doubles/covato-m.voelzke-g.-vs-maginley-j.poling-k./25185105?MarketTypeID=301",
+      "match_id": "25185105",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Covato M./Voelzke G.",
+      "away_team": "Maginley J./Poling K.",
+      "event_date": "25/11",
+      "event_time": "18:00",
+      "outcome": "2",
+      "open_odds": 1.41,
+      "current_odds": 1.1,
+      "drop_pct": 22.0,
+      "max_odds": 1.11,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Hersonissos Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos-doubles/cukierman-d.neos-e.-vs-caripi-v.pietri-b./25219298?MarketTypeID=301",
+      "match_id": "25219298",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cukierman D./Neos E.",
+      "away_team": "Caripi V./Pietri B.",
+      "event_date": "25/11",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 1.35,
+      "current_odds": 1.09,
+      "drop_pct": 19.0,
+      "max_odds": 1.13,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Ankara",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-ankara/donald-m.w-vs-catry-r./25788422?MarketTypeID=301",
+      "match_id": "25788422",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Donald M.W",
+      "away_team": "Catry R.",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 1.87,
+      "current_odds": 1.52,
+      "drop_pct": 19.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/catry-robin-8Ase3tht/donald-matthew-CvEGpt6B/?mid=r3qkPb9D",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Donald M.",
+        "away_team": "Catry R.",
+        "match_time": "25.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.35,
+        "favorite": "player_a",
+        "advanced_score": 47.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.11.26",
+            "home": "Donald M.",
+            "away": "Ilkel C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "23.11.26 Donald M. 2-1 Ilkel C."
+          },
+          {
+            "date": "19.11.26",
+            "home": "Donald M.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.11.26 Donald M. 0-2 Kwon S."
+          },
+          {
+            "date": "18.11.26",
+            "home": "Taberner C.",
+            "away": "Donald M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "18.11.26 Taberner C. 1-2 Donald M."
+          },
+          {
+            "date": "16.11.26",
+            "home": "Hemery C.",
+            "away": "Donald M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "16.11.26 Hemery C. 2-1 Donald M."
+          },
+          {
+            "date": "15.11.26",
+            "home": "Donald M.",
+            "away": "Krumich M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "15.11.26 Donald M. 2-1 Krumich M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Donald M.)",
+          "missing_recent_matches_B (Catry R.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 361,
+        "ranking_b": 642,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Ankara",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-ankara/kirkin-e.-vs-martin-an./24955282?MarketTypeID=301",
+      "match_id": "24955282",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Kirkin E.",
+      "away_team": "Martin An.",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "2",
+      "open_odds": 3.4,
+      "current_odds": 2.75,
+      "drop_pct": 19.0,
+      "max_odds": 3.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true
+    },
+    {
+      "league": "Challenger - Hersonissos",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos/martin-manzano-j.c.-vs-martin-andres/26024309?MarketTypeID=301",
+      "match_id": "26024309",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Martin Manzano J.C.",
+      "away_team": "Martin Andres",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 2.6,
+      "current_odds": 2.16,
+      "drop_pct": 17.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/martin-andres-h2AG5rdm/martin-manzano-juan-cruz-UHa9B19E/?mid=0ORtkUbm",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Martin Manzano J. C.",
+        "away_team": "Martin A.",
+        "match_time": "25.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 15.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "24.11.26",
+            "home": "Martin Manzano J. C.",
+            "away": "Orlov V.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "24.11.26 Martin Manzano J. C. 2-1 Orlov V."
+          },
+          {
+            "date": "10.11.26",
+            "home": "Geerts M.",
+            "away": "Martin Manzano J. C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "10.11.26 Geerts M. 2-1 Martin Manzano J. C."
+          },
+          {
+            "date": "04.10.26",
+            "home": "Martin Manzano J. C.",
+            "away": "Pieri S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "04.10.26 Martin Manzano J. C. 0-2 Pieri S."
+          },
+          {
+            "date": "03.10.26",
+            "home": "Martin Manzano J. C.",
+            "away": "Donald M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.10.26 Martin Manzano J. C. 2-0 Donald M."
+          },
+          {
+            "date": "02.10.26",
+            "home": "Dalla Valle E.",
+            "away": "Martin Manzano J. C.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "02.10.26 Dalla Valle E. 0-2 Martin Manzano J. C."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.5
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Martin Manzano J. C.)",
+          "missing_recent_matches_B (Martin A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 395,
+        "ranking_b": 362,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.3,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hersonissos",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos/efstathiou-m.-vs-ghetu-g./26018146?MarketTypeID=301",
+      "match_id": "26018146",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Efstathiou M.",
+      "away_team": "Ghetu G.",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 1.88,
+      "current_odds": 1.64,
+      "drop_pct": 13.0,
+      "max_odds": 1.71,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/efstathiou-menelaos-pCP9mPxp/ghetu-gabriel-hKlKZQLd/?mid=xU6lBEGr",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Efstathiou M.",
+        "away_team": "Ghetu G.",
+        "match_time": "25.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.63,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 40.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.11.26",
+            "home": "Cadenasso G.",
+            "away": "Efstathiou M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "23.11.26 Cadenasso G. 0-2 Efstathiou M."
+          },
+          {
+            "date": "20.11.26",
+            "home": "Krutykh O.",
+            "away": "Efstathiou M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "20.11.26 Krutykh O. 2-0 Efstathiou M."
+          },
+          {
+            "date": "19.11.26",
+            "home": "Efstathiou M.",
+            "away": "Kravchenko G.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "19.11.26 Efstathiou M. 2-0 Kravchenko G."
+          },
+          {
+            "date": "18.11.26",
+            "home": "Efstathiou M.",
+            "away": "Azoidis D.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "18.11.26 Efstathiou M. 2-0 Azoidis D."
+          },
+          {
+            "date": "10.11.26",
+            "home": "Gill F.",
+            "away": "Efstathiou M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "10.11.26 Gill F. 2-0 Efstathiou M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Efstathiou M.)",
+          "missing_recent_matches_B (Ghetu G.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 561,
+        "ranking_b": 599,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 8.5,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 47
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Florianopolis Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis-doubles/bagnis-f.kestelboim-m.-vs-aguilar-cardozo-j.villanueva-g./25354758?MarketTypeID=301",
+      "match_id": "25354758",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Bagnis F./Kestelboim M.",
+      "away_team": "Aguilar Cardozo J./Villanueva G.",
+      "event_date": "25/11",
+      "event_time": "14:10",
+      "outcome": "1",
+      "open_odds": 1.43,
+      "current_odds": 1.24,
+      "drop_pct": 13.0,
+      "max_odds": 1.25,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/nikles-j.-vs-boscardin-dias-p./25184018?MarketTypeID=301",
+      "match_id": "25184018",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Nikles J.",
+      "away_team": "Boscardin Dias P.",
+      "event_date": "25/11",
+      "event_time": "15:25",
+      "outcome": "1",
+      "open_odds": 3.2,
+      "current_odds": 2.86,
+      "drop_pct": 11.0,
+      "max_odds": 3.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Florianopolis Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis-doubles/justo-g.i.roncadelli-f.-vs-merino-a.ribero-f./25353252?MarketTypeID=301",
+      "match_id": "25353252",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Justo G.I./Roncadelli F.",
+      "away_team": "Merino A./Ribero F.",
+      "event_date": "25/11",
+      "event_time": "16:35",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.64,
+      "drop_pct": 11.0,
+      "max_odds": 1.65,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/huertas-del-pino-c.-vs-storck-franca-l./25979600?MarketTypeID=301",
+      "match_id": "25979600",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Huertas Del Pino C.",
+      "away_team": "Storck Franca L.",
+      "event_date": "25/11",
+      "event_time": "13:55",
+      "outcome": "2",
+      "open_odds": 2.18,
+      "current_odds": 1.61,
+      "drop_pct": 26.0,
+      "max_odds": 1.64,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/huertas-del-pino-conner-dvetkyid/storck-franca-leonardo-QuZGg2gJ/?mid=bFNCJWMM",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Huertas Del Pino C.",
+        "away_team": "Storck F. L.",
+        "match_time": "25.11.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.6,
+        "favorite": "player_b",
+        "advanced_score": 13.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.11.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Schenekenberg G.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.11.26 Huertas Del Pino C. 2-0 Schenekenberg G."
+          },
+          {
+            "date": "23.11.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Braga B.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "23.11.26 Huertas Del Pino C. 2-0 Braga B."
+          },
+          {
+            "date": "28.07.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Leite W.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "28.07.26 Huertas Del Pino C. 1-2 Leite W."
+          },
+          {
+            "date": "21.07.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Kohlmann E.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "21.07.26 Huertas Del Pino C. 1-2 Kohlmann E."
+          },
+          {
+            "date": "06.07.26",
+            "home": "Huertas Del Pino C.",
+            "away": "Tenti F.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "06.07.26 Huertas Del Pino C. 1-2 Tenti F."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [],
+        "surface_stats_a": {
+          "clay": 0.4
+        },
+        "surface_stats_b": null,
+        "form_a": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "L",
+          "W",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Huertas Del Pino C.)",
+          "missing_recent_matches_B (Storck F. L.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 631,
+        "ranking_b": 1257,
+        "forebet_prediction": "1",
+        "forebet_probability": 61.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 9.8,
+        "forebet_home_prob": 61,
+        "forebet_away_prob": 39
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/aguilar-cardozo-j.-vs-olivieri-g.a./26193584?MarketTypeID=301",
+      "match_id": "26193584",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Aguilar Cardozo J.",
+      "away_team": "Olivieri G.A.",
+      "event_date": "26/11",
+      "event_time": "13:00",
+      "outcome": "2",
+      "open_odds": 3.15,
+      "current_odds": 2.39,
+      "drop_pct": 24.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "sofascore_event_id": 17583991,
+        "sofascore_home_team_id": 452586,
+        "sofascore_away_team_id": 169486,
+        "home_team": "Aguilar Cardozo J.",
+        "away_team": "Olivieri G.A.",
+        "sport": "tennis",
+        "league": "Challenger - Florianopolis",
+        "match_time": "13:00",
+        "sofascore_home_win_prob": 41,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 59,
+        "sofascore_total_votes": 83,
+        "forebet_prediction": "1",
+        "forebet_probability": 61.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.7,
+        "forebet_home_prob": 61,
+        "forebet_away_prob": 39
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Ankara",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-ankara/donald-m.w-vs-catry-r./25788422?MarketTypeID=301",
+      "match_id": "25788422",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Donald M.W",
+      "away_team": "Catry R.",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 1.87,
+      "current_odds": 1.52,
+      "drop_pct": 19.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/catry-robin-8Ase3tht/donald-matthew-CvEGpt6B/?mid=r3qkPb9D",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Donald M.",
+        "away_team": "Catry R.",
+        "match_time": "25.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.53,
+        "away_odds": 2.35,
+        "favorite": "player_a",
+        "advanced_score": 47.0,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.11.26",
+            "home": "Donald M.",
+            "away": "Ilkel C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "23.11.26 Donald M. 2-1 Ilkel C."
+          },
+          {
+            "date": "19.11.26",
+            "home": "Donald M.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "19.11.26 Donald M. 0-2 Kwon S."
+          },
+          {
+            "date": "18.11.26",
+            "home": "Taberner C.",
+            "away": "Donald M.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "18.11.26 Taberner C. 1-2 Donald M."
+          },
+          {
+            "date": "16.11.26",
+            "home": "Hemery C.",
+            "away": "Donald M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "16.11.26 Hemery C. 2-1 Donald M."
+          },
+          {
+            "date": "15.11.26",
+            "home": "Donald M.",
+            "away": "Krumich M.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "15.11.26 Donald M. 2-1 Krumich M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Donald M.)",
+          "missing_recent_matches_B (Catry R.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 361,
+        "ranking_b": 642,
+        "forebet_prediction": "1",
+        "forebet_probability": 56.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 56,
+        "forebet_away_prob": 44
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hersonissos",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos/martin-manzano-j.c.-vs-martin-andres/26024309?MarketTypeID=301",
+      "match_id": "26024309",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Martin Manzano J.C.",
+      "away_team": "Martin Andres",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 2.6,
+      "current_odds": 2.16,
+      "drop_pct": 17.0,
+      "max_odds": 2.5,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/martin-andres-h2AG5rdm/martin-manzano-juan-cruz-UHa9B19E/?mid=0ORtkUbm",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Martin Manzano J. C.",
+        "away_team": "Martin A.",
+        "match_time": "25.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 0.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.15,
+        "away_odds": 1.63,
+        "favorite": "player_b",
+        "advanced_score": 15.8,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "24.11.26",
+            "home": "Martin Manzano J. C.",
+            "away": "Orlov V.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "24.11.26 Martin Manzano J. C. 2-1 Orlov V."
+          },
+          {
+            "date": "10.11.26",
+            "home": "Geerts M.",
+            "away": "Martin Manzano J. C.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "10.11.26 Geerts M. 2-1 Martin Manzano J. C."
+          },
+          {
+            "date": "04.10.26",
+            "home": "Martin Manzano J. C.",
+            "away": "Pieri S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "04.10.26 Martin Manzano J. C. 0-2 Pieri S."
+          },
+          {
+            "date": "03.10.26",
+            "home": "Martin Manzano J. C.",
+            "away": "Donald M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "03.10.26 Martin Manzano J. C. 2-0 Donald M."
+          },
+          {
+            "date": "02.10.26",
+            "home": "Dalla Valle E.",
+            "away": "Martin Manzano J. C.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "02.10.26 Dalla Valle E. 0-2 Martin Manzano J. C."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.5
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Martin Manzano J. C.)",
+          "missing_recent_matches_B (Martin A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 395,
+        "ranking_b": 362,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.3,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 48
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hersonissos",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos/efstathiou-m.-vs-ghetu-g./26018146?MarketTypeID=301",
+      "match_id": "26018146",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Efstathiou M.",
+      "away_team": "Ghetu G.",
+      "event_date": "25/11",
+      "event_time": "09:10",
+      "outcome": "1",
+      "open_odds": 1.88,
+      "current_odds": 1.64,
+      "drop_pct": 13.0,
+      "max_odds": 1.71,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/efstathiou-menelaos-pCP9mPxp/ghetu-gabriel-hKlKZQLd/?mid=xU6lBEGr",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Efstathiou M.",
+        "away_team": "Ghetu G.",
+        "match_time": "25.11.2026 09:30",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.63,
+        "away_odds": 2.15,
+        "favorite": "player_a",
+        "advanced_score": 40.5,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "23.11.26",
+            "home": "Cadenasso G.",
+            "away": "Efstathiou M.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "23.11.26 Cadenasso G. 0-2 Efstathiou M."
+          },
+          {
+            "date": "20.11.26",
+            "home": "Krutykh O.",
+            "away": "Efstathiou M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "20.11.26 Krutykh O. 2-0 Efstathiou M."
+          },
+          {
+            "date": "19.11.26",
+            "home": "Efstathiou M.",
+            "away": "Kravchenko G.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "19.11.26 Efstathiou M. 2-0 Kravchenko G."
+          },
+          {
+            "date": "18.11.26",
+            "home": "Efstathiou M.",
+            "away": "Azoidis D.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "18.11.26 Efstathiou M. 2-0 Azoidis D."
+          },
+          {
+            "date": "10.11.26",
+            "home": "Gill F.",
+            "away": "Efstathiou M.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "10.11.26 Gill F. 2-0 Efstathiou M."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_stats_a": {
+          "hard": 0.6
+        },
+        "surface_stats_b": {
+          "hard": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Efstathiou M.)",
+          "missing_recent_matches_B (Ghetu G.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 561,
+        "ranking_b": 599,
+        "forebet_prediction": "1",
+        "forebet_probability": 52.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 8.5,
+        "forebet_home_prob": 52,
+        "forebet_away_prob": 47
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Florianopolis Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis-doubles/justo-g.i.roncadelli-f.-vs-merino-a.ribero-f./25353252?MarketTypeID=301",
+      "match_id": "25353252",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Justo G.I./Roncadelli F.",
+      "away_team": "Merino A./Ribero F.",
+      "event_date": "25/11",
+      "event_time": "16:35",
+      "outcome": "1",
+      "open_odds": 1.85,
+      "current_odds": 1.64,
+      "drop_pct": 11.0,
+      "max_odds": 1.65,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ]
+}
