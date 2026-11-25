@@ -2,7 +2,7 @@
   "date": "2026-11-25",
   "sport": "tennis",
   "source": "forebet",
-  "generatedAt": "2026-11-25T07:31:47.201445+00:00",
+  "generatedAt": "2026-11-25T09:59:09.007137+00:00",
   "matches": [
     {
       "homeTeam": "N. McDonald",
@@ -614,10 +614,10 @@
         }
       },
       "ai": {
-        "prediction": "Imamura is likely to pull off a home win despite a poorer head‑to‑head record, buoyed by his superior recent form and marginally better odds.",
-        "confidence": 62,
+        "prediction": "Based on the data, we see Y. Chung has a strong head-to-head record against M. Imamura, winning 4 out of 5 matches. Y. Chung's recent form is also better, with a rating of 6.0/10 compared to M. Imamura's 8.0/10. The odds suggest Y. Chung as the favorite with a lower implied probability, indicating uncertainty in the outcome.",
+        "confidence": 75,
         "recommendation": "MEDIUM",
-        "reasoning": "Imamura has won only 25% of the last four meetings (1‑3) against Chung, indicating a clear H2H edge for Chung. However, Imamura’s current form rating of 8.0 out of 10 is two points higher than Chung’s 6.0, suggesting he is playing at a higher level now. Bookmaker odds are almost even but slightly favor Imamura (1.9 vs 1.8), reflecting the market’s view of his form advantage. The Forebet model predicts a 60% chance of an away win, but this conflicts with the form and odds data. With no venue‑specific stats, the home factor is neutral, leaving recent performance as the decisive element. Overall, the signals are mixed, giving a moderate confidence level."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "2",
@@ -941,7 +941,7 @@
     {
       "homeTeam": "A. Mazdrashki",
       "awayTeam": "P. Henning",
-      "time": "09:00",
+      "time": "09:05",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": "GrC",
@@ -1019,7 +1019,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -27.7,
+      "marketGapPp": -31.0,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -1032,11 +1032,11 @@
         "skipReason": null
       },
       "odds": {
-        "home": 6.69,
+        "home": 9.09,
         "draw": null,
-        "away": 1.112,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
+        "away": 1.12,
+        "source": "livesport_bulk",
+        "bookmaker": "Livesport (bukm. 1221)",
         "note": null,
         "forebet": {
           "home": 500.0,
@@ -1052,13 +1052,13 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 71.3,
-        "ev": -0.207,
-        "edge": -18.6,
+        "prob": 71.0,
+        "ev": -0.204,
+        "edge": -18.2,
         "sources": 2,
         "components": {
           "forebet": 0.58,
-          "odds": 0.899
+          "odds": 0.893
         }
       },
       "predictionGrade": "D",
@@ -1074,93 +1074,65 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -18.628,
+        "market_model_gap": -18.286,
         "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "J. Sels",
-      "awayTeam": "M. Wiskandt",
-      "time": "09:00",
+      "homeTeam": "A. Sanchez Quilez",
+      "awayTeam": "D. Azoides",
+      "time": "09:05",
       "kickoffUtc": null,
       "kickoffSource": null,
-      "league": "TrC",
+      "league": "GrC",
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/sels-jelle-b98aFqya/wiskandt-max-lzBiylEd/?mid=SMaA9frK",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/j-sels-m-wiskandt/363989",
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/azoides-demetris-vPLaVwl9/sanchez-quilez-alejo-KG5iw4Ad/?mid=02Oxapvm",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-4/a-sanchez-quilez-d-azoides/364152",
       "qualifies": false,
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_47.2<51.0"
+        "kurs_ponizej_progu"
       ],
       "forebet": {
-        "prediction": "2",
-        "probability": 57.0,
-        "homeProb": 43,
+        "prediction": "1",
+        "probability": 70.0,
+        "homeProb": 70,
         "drawProb": null,
-        "awayProb": 57,
-        "exactScore": "1-2",
+        "awayProb": 30,
+        "exactScore": "2-0",
         "avgGoals": 8.2,
-        "favorite": "away",
-        "gap": 14
+        "favorite": "home",
+        "gap": 40
       },
       "h2h": {
-        "total": 5,
-        "homeWins": 2,
+        "total": 1,
+        "homeWins": 1,
         "awayWins": 0,
-        "lastDate": "28.10.26",
-        "lastScore": "0-2",
-        "effectiveTotal": 2.0,
-        "homeWinsEff": 2.0,
+        "lastDate": "25.11.26",
+        "lastScore": "2-0",
+        "effectiveTotal": 1.0,
+        "homeWinsEff": 1.0,
         "awayWinsEff": 0.0,
         "allStale": false,
         "meetings": [
           {
-            "date": "2026-10-28",
-            "home": "Sels J.",
-            "away": "Durasovic V.",
-            "score": "0-2",
-            "winner": "Durasovic V."
-          },
-          {
-            "date": "2026-10-27",
-            "home": "Sels J.",
-            "away": "Blaydes B.",
+            "date": "2026-11-25",
+            "home": "Sanchez Quilez A.",
+            "away": "Azoidis D.",
             "score": "2-0",
-            "winner": "Sels J."
-          },
-          {
-            "date": "2026-10-20",
-            "home": "Petkovic M.",
-            "away": "Sels J.",
-            "score": "2-0",
-            "winner": "Petkovic M."
-          },
-          {
-            "date": "2026-10-15",
-            "home": "Mueller C.",
-            "away": "Sels J.",
-            "score": "2-0",
-            "winner": "Mueller C."
-          },
-          {
-            "date": "2026-10-14",
-            "home": "Verwerft L. G.",
-            "away": "Sels J.",
-            "score": "0-2",
-            "winner": "Sels J."
+            "winner": "Sanchez Quilez A."
           }
         ],
         "last": {
-          "date": "2026-10-28",
-          "score": "0-2",
-          "winner": "Durasovic V.",
-          "home": "Sels J.",
-          "away": "Durasovic V."
+          "date": "2026-11-25",
+          "score": "2-0",
+          "winner": "Sanchez Quilez A.",
+          "home": "Sanchez Quilez A.",
+          "away": "Azoidis D."
         },
         "edge": {
           "team": "even",
@@ -1170,11 +1142,11 @@
           "record": "0-0-0",
           "even": true
         },
-        "line": "H2H: J. Sels 0-0-0 (even) (last: 2026-10-28 Sels J. 0-2 Durasovic V.)"
+        "line": "H2H: A. Sanchez Quilez 0-0-0 (even) (last: 2026-11-25 Sanchez Quilez A. 2-0 Azoidis D.)"
       },
       "form": {
         "home": [
-          "L",
+          "W",
           "W",
           "L",
           "L",
@@ -1182,9 +1154,9 @@
         ],
         "away": [
           "L",
+          "W",
           "L",
-          "W",
-          "W",
+          "L",
           "L"
         ],
         "homeAtHome": [],
@@ -1193,17 +1165,17 @@
         "awayDated": [],
         "surface": "hard",
         "homeSurface": [
-          "L",
+          "W",
           "W",
           "L",
           "L",
-          "W"
+          "L"
         ],
         "awaySurface": [
           "L",
           "L",
-          "W",
-          "W",
+          "L",
+          "L",
           "L"
         ],
         "surfaceIsProxy": null,
@@ -1217,7 +1189,7 @@
         "homeSeasonStart": null,
         "awaySeasonStart": null,
         "homeClean": [
-          "L",
+          "W",
           "W",
           "L",
           "L",
@@ -1225,9 +1197,9 @@
         ],
         "awayClean": [
           "L",
+          "W",
           "L",
-          "W",
-          "W",
+          "L",
           "L"
         ],
         "homeAtHomeClean": [],
@@ -1246,100 +1218,97 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -5.0,
+      "marketGapPp": -15.8,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": true,
-        "votes": 947,
-        "homeProb": 16,
-        "awayProb": 84,
-        "url": "https://www.sofascore.com/tennis/match/17606756",
-        "orientation": "direct",
-        "unavailable": false,
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
         "skipReason": null
       },
       "odds": {
-        "home": 2.45,
+        "home": 1.08,
         "draw": null,
-        "away": 1.5,
+        "away": 6.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 150.0,
+          "home": 909.0,
           "draw": null,
-          "away": 200.0
+          "away": 500.0
         }
       },
       "ai": {
-        "prediction": "M. Wiskandt is likely to win the match, driven by strong bookmaker odds (1.5) and a 57% probability from Forebet.",
-        "confidence": 70,
-        "recommendation": "SKIP",
-        "reasoning": "The head‑to‑head record shows no wins for Wiskandt but 60% draws, which in tennis implies many close contests; however, the odds heavily favor the away side (1.5 vs 2.45 for Sels). Forebet’s 57% away win probability aligns with the bookmaker edge. Recent form is identical (4.0"
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
-        "pick": "2",
-        "prob": 47.2,
-        "ev": -0.291,
-        "edge": -19.4,
-        "sources": 7,
+        "pick": "1",
+        "prob": 63.9,
+        "ev": -0.31,
+        "edge": -28.7,
+        "sources": 5,
         "components": {
-          "forebet": 0.57,
-          "h2h": 0.0,
-          "form": 0.4,
-          "opponent": 0.6,
+          "forebet": 0.7,
+          "form": 0.6,
+          "opponent": 0.8,
           "surface": 0.4,
-          "sofascore": 0.84,
-          "odds": 0.667
+          "odds": 0.926
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
+        "sources_available": 2,
+        "quality_score": 0.75,
         "h2h_available": true,
         "h2h_neutral": false,
         "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
         "odds_available": true,
         "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "moderate",
-        "market_model_gap": -19.467,
+        "h2h_count": 1,
+        "consensus_strength": "weak",
+        "market_model_gap": -28.693,
         "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "T. Faurel",
-      "awayTeam": "N. Belozertsev",
-      "time": "09:00",
+      "homeTeam": "J. Sels",
+      "awayTeam": "M. Wiskandt",
+      "time": "09:10",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": "TrC",
       "country": null,
       "source": "forebet",
       "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/t-faurel-n-belozertsev/364161",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/j-sels-m-wiskandt/363989",
       "qualifies": false,
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "kurs_faworyta_2.69>1.49",
-        "score_49.3<51.0"
+        "kurs_faworyta_2.24>1.66"
       ],
       "forebet": {
         "prediction": "2",
-        "probability": 58.0,
-        "homeProb": 42,
+        "probability": 57.0,
+        "homeProb": 43,
         "drawProb": null,
-        "awayProb": 58,
-        "exactScore": "0-2",
-        "avgGoals": 10.2,
+        "awayProb": 57,
+        "exactScore": "1-2",
+        "avgGoals": 8.2,
         "favorite": "away",
-        "gap": 16
+        "gap": 14
       },
       "h2h": {
         "total": 0,
@@ -1393,8 +1362,8 @@
       "seasonMatchCount": null,
       "earlySeason": false,
       "seasonFormConflict": false,
-      "staleModel": true,
-      "marketGapPp": 22.4,
+      "staleModel": false,
+      "marketGapPp": 14.4,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -1407,16 +1376,16 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.49,
+        "home": 1.662,
         "draw": null,
-        "away": 2.69,
+        "away": 2.24,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": null,
+          "home": 150.0,
           "draw": null,
-          "away": null
+          "away": 200.0
         }
       },
       "ai": {
@@ -1427,13 +1396,13 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 49.3,
-        "ev": 0.327,
-        "edge": 12.1,
+        "prob": 51.9,
+        "ev": 0.161,
+        "edge": 7.2,
         "sources": 2,
         "components": {
-          "forebet": 0.58,
-          "odds": 0.372
+          "forebet": 0.57,
+          "odds": 0.446
         }
       },
       "predictionGrade": "D",
@@ -1449,7 +1418,7 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": 0.0,
+        "market_model_gap": 7.257,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -1458,7 +1427,7 @@
     {
       "homeTeam": "M. N. Turker",
       "awayTeam": "T. Duran",
-      "time": "09:00",
+      "time": "09:10",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": "TrC",
@@ -1536,7 +1505,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -30.6,
+      "marketGapPp": -40.0,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -1549,9 +1518,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 5.84,
+        "home": 14.04,
         "draw": null,
-        "away": 1.143,
+        "away": 1.063,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -1569,13 +1538,13 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 67.4,
-        "ev": -0.23,
-        "edge": -20.1,
+        "prob": 70.1,
+        "ev": -0.255,
+        "edge": -24.0,
         "sources": 2,
         "components": {
           "forebet": 0.53,
-          "odds": 0.875
+          "odds": 0.941
         }
       },
       "predictionGrade": "D",
@@ -1591,527 +1560,110 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -20.089,
+        "market_model_gap": -23.973,
         "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "A. Sanchez Quilez",
-      "awayTeam": "D. Azoides",
-      "time": "09:00",
-      "kickoffUtc": null,
-      "kickoffSource": null,
-      "league": "GrC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/azoides-demetris-vPLaVwl9/sanchez-quilez-alejo-KG5iw4Ad/?mid=02Oxapvm",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-4/a-sanchez-quilez-d-azoides/364152",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "1",
-        "probability": 70.0,
-        "homeProb": 70,
-        "drawProb": null,
-        "awayProb": 30,
-        "exactScore": "2-0",
-        "avgGoals": 8.2,
-        "favorite": "home",
-        "gap": 40
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 0,
-        "lastDate": "23.11.26",
-        "lastScore": "2-0",
-        "effectiveTotal": 3.0,
-        "homeWinsEff": 3.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-11-23",
-            "home": "Sanchez Quilez A.",
-            "away": "Geerts M.",
-            "score": "2-0",
-            "winner": "Sanchez Quilez A."
-          },
-          {
-            "date": "2026-11-08",
-            "home": "Gobat A.",
-            "away": "Sanchez Quilez A.",
-            "score": "2-1",
-            "winner": "Gobat A."
-          },
-          {
-            "date": "2026-10-20",
-            "home": "Nagal S.",
-            "away": "Sanchez Quilez A.",
-            "score": "2-0",
-            "winner": "Nagal S."
-          },
-          {
-            "date": "2026-10-19",
-            "home": "Sanchez Quilez A.",
-            "away": "Wehnelt K.",
-            "score": "2-1",
-            "winner": "Sanchez Quilez A."
-          },
-          {
-            "date": "2026-10-18",
-            "home": "Sanchez Quilez A.",
-            "away": "Lima S. D.",
-            "score": "2-0",
-            "winner": "Sanchez Quilez A."
-          }
-        ],
-        "last": {
-          "date": "2026-11-23",
-          "score": "2-0",
-          "winner": "Sanchez Quilez A.",
-          "home": "Sanchez Quilez A.",
-          "away": "Geerts M."
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: A. Sanchez Quilez 0-0-0 (even) (last: 2026-11-23 Sanchez Quilez A. 2-0 Geerts M.)"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "away": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "homeDated": [],
-        "awayDated": [],
-        "surface": "hard",
-        "homeSurface": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "awaySurface": [
-          "L",
-          "L",
-          "L",
-          "L",
-          "W"
-        ],
-        "surfaceIsProxy": null,
-        "source": null,
-        "homeSeason": null,
-        "awaySeason": null,
-        "homeAtHomeSeason": null,
-        "awayAtAwaySeason": null,
-        "homeSeasonMatches": null,
-        "awaySeasonMatches": null,
-        "homeSeasonStart": null,
-        "awaySeasonStart": null,
-        "homeClean": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "awayClean": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHomeClean": [],
-        "awayAtAwayClean": [],
-        "homeCup": [],
-        "awayCup": [],
-        "homeCupCompetitions": [],
-        "awayCupCompetitions": [],
-        "homeCompetitions": [],
-        "awayCompetitions": [],
-        "friendliesExcluded": 0
-      },
-      "category": null,
-      "nationalFriendly": false,
-      "seasonMatchCount": null,
-      "earlySeason": false,
-      "seasonFormConflict": false,
-      "staleModel": false,
-      "marketGapPp": -15.8,
-      "predictionGradeRaw": null,
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.08,
-        "draw": null,
-        "away": 6.5,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 909.0,
-          "draw": null,
-          "away": 500.0
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 62.4,
-        "ev": -0.326,
-        "edge": -30.2,
-        "sources": 6,
-        "components": {
-          "forebet": 0.7,
-          "h2h": 1.0,
-          "form": 0.6,
-          "opponent": 0.8,
-          "surface": 0.2,
-          "odds": 0.926
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.8,
-        "h2h_available": true,
-        "h2h_neutral": false,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -30.193,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "M. Donald",
-      "awayTeam": "R. Catry",
-      "time": "10:30",
+      "homeTeam": "T. Faurel",
+      "awayTeam": "N. Belozertsev",
+      "time": "09:10",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": "TrC",
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/catry-robin-8Ase3tht/donald-matthew-CvEGpt6B/?mid=r3qkPb9D",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/m-donald-r-catry/364114",
-      "qualifies": true,
-      "channelQualifies": true,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 56.0,
-        "homeProb": 56,
-        "drawProb": null,
-        "awayProb": 44,
-        "exactScore": "2-0",
-        "avgGoals": 10.2,
-        "favorite": "home",
-        "gap": 12
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 0,
-        "lastDate": "23.11.26",
-        "lastScore": "2-1",
-        "effectiveTotal": 3.0,
-        "homeWinsEff": 3.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-11-23",
-            "home": "Donald M.",
-            "away": "Ilkel C.",
-            "score": "2-1",
-            "winner": "Donald M."
-          },
-          {
-            "date": "2026-11-19",
-            "home": "Donald M.",
-            "away": "Kwon S.",
-            "score": "0-2",
-            "winner": "Kwon S."
-          },
-          {
-            "date": "2026-11-18",
-            "home": "Taberner C.",
-            "away": "Donald M.",
-            "score": "1-2",
-            "winner": "Donald M."
-          },
-          {
-            "date": "2026-11-16",
-            "home": "Hemery C.",
-            "away": "Donald M.",
-            "score": "2-1",
-            "winner": "Hemery C."
-          },
-          {
-            "date": "2026-11-15",
-            "home": "Donald M.",
-            "away": "Krumich M.",
-            "score": "2-1",
-            "winner": "Donald M."
-          }
-        ],
-        "last": {
-          "date": "2026-11-23",
-          "score": "2-1",
-          "winner": "Donald M.",
-          "home": "Donald M.",
-          "away": "Ilkel C."
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: M. Donald 0-0-0 (even) (last: 2026-11-23 Donald M. 2-1 Ilkel C.)"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "away": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "homeDated": [],
-        "awayDated": [],
-        "surface": "hard",
-        "homeSurface": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "awaySurface": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "L"
-        ],
-        "surfaceIsProxy": null,
-        "source": null,
-        "homeSeason": null,
-        "awaySeason": null,
-        "homeAtHomeSeason": null,
-        "awayAtAwaySeason": null,
-        "homeSeasonMatches": null,
-        "awaySeasonMatches": null,
-        "homeSeasonStart": null,
-        "awaySeasonStart": null,
-        "homeClean": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "W"
-        ],
-        "awayClean": [
-          "W",
-          "L",
-          "W",
-          "L",
-          "L"
-        ],
-        "homeAtHomeClean": [],
-        "awayAtAwayClean": [],
-        "homeCup": [],
-        "awayCup": [],
-        "homeCupCompetitions": [],
-        "awayCupCompetitions": [],
-        "homeCompetitions": [],
-        "awayCompetitions": [],
-        "friendliesExcluded": 0
-      },
-      "category": null,
-      "nationalFriendly": false,
-      "seasonMatchCount": null,
-      "earlySeason": false,
-      "seasonFormConflict": false,
-      "staleModel": false,
-      "marketGapPp": -4.6,
-      "predictionGradeRaw": null,
-      "sofascore": {
-        "found": true,
-        "votes": 868,
-        "homeProb": 85,
-        "awayProb": 15,
-        "url": "https://www.sofascore.com/tennis/match/17584289",
-        "orientation": "direct",
-        "unavailable": false,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.53,
-        "draw": null,
-        "away": 2.35,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": 175.0,
-          "draw": null,
-          "away": 125.0
-        }
-      },
-      "ai": {
-        "prediction": "M. Donald is set to win at home, riding a 3‑0 H2H advantage, a 6.0/10 recent form versus 4.0/10 for Catry, and odds of 1.53.",
-        "confidence": 90,
-        "recommendation": "SKIP",
-        "reasoning": "The head‑to‑head record shows Donald winning 3 of the last 5 encounters and a 60 % home win rate, indicating a clear dominance. His recent form score of 6.0/10 outpaces Catry’s 4.0/10, suggesting better current performance. The bookmaker odds (1.53 vs"
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 64.0,
-        "ev": -0.02,
-        "edge": -1.3,
-        "sources": 7,
-        "components": {
-          "forebet": 0.56,
-          "h2h": 1.0,
-          "form": 0.6,
-          "opponent": 0.6,
-          "surface": 0.6,
-          "sofascore": 0.85,
-          "odds": 0.654
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
-        "h2h_available": true,
-        "h2h_neutral": false,
-        "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "moderate",
-        "market_model_gap": -1.359,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
-      "homeTeam": "E. Kirkin",
-      "awayTeam": "A. Martin",
-      "time": "10:30",
-      "kickoffUtc": null,
-      "kickoffSource": null,
-      "league": "TrC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/e-kirkin-a-martin/363992",
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/belozertsev-nikita-6J2eXT05/faurel-thomas-vgfc2Q2F/?mid=SboAErjm",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/t-faurel-n-belozertsev/364161",
       "qualifies": false,
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "kurs_faworyta_2.90>1.43",
-        "score_45.9<51.0"
+        "kurs_faworyta_2.50>1.45"
       ],
       "forebet": {
         "prediction": "2",
-        "probability": 54.0,
-        "homeProb": 46,
+        "probability": 58.0,
+        "homeProb": 42,
         "drawProb": null,
-        "awayProb": 54,
-        "exactScore": "1-2",
-        "avgGoals": 10.1,
+        "awayProb": 58,
+        "exactScore": "0-2",
+        "avgGoals": 10.2,
         "favorite": "away",
-        "gap": 8
+        "gap": 16
       },
       "h2h": {
-        "total": 0,
-        "homeWins": 0,
+        "total": 1,
+        "homeWins": 1,
         "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null,
-        "effectiveTotal": null,
-        "homeWinsEff": null,
-        "awayWinsEff": null,
-        "allStale": null,
-        "meetings": [],
-        "last": null,
-        "edge": null,
-        "line": "No previous meetings"
+        "lastDate": "25.11.26",
+        "lastScore": "2-0",
+        "effectiveTotal": 1.0,
+        "homeWinsEff": 1.0,
+        "awayWinsEff": 0.0,
+        "allStale": false,
+        "meetings": [
+          {
+            "date": "2026-11-25",
+            "home": "Faurel T.",
+            "away": "Belozertsev N.",
+            "score": "2-0",
+            "winner": "Faurel T."
+          }
+        ],
+        "last": {
+          "date": "2026-11-25",
+          "score": "2-0",
+          "winner": "Faurel T.",
+          "home": "Faurel T.",
+          "away": "Belozertsev N."
+        },
+        "edge": {
+          "team": "even",
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "record": "0-0-0",
+          "even": true
+        },
+        "line": "H2H: T. Faurel 0-0-0 (even) (last: 2026-11-25 Faurel T. 2-0 Belozertsev N.)"
       },
       "form": {
-        "home": [],
-        "away": [],
+        "home": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
         "homeAtHome": [],
         "awayAtAway": [],
         "homeDated": [],
         "awayDated": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
+        "surface": "hard",
+        "homeSurface": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "awaySurface": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
         "surfaceIsProxy": null,
         "source": null,
         "homeSeason": null,
@@ -2122,8 +1674,20 @@
         "awaySeasonMatches": null,
         "homeSeasonStart": null,
         "awaySeasonStart": null,
-        "homeClean": [],
-        "awayClean": [],
+        "homeClean": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "awayClean": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
         "homeAtHomeClean": [],
         "awayAtAwayClean": [],
         "homeCup": [],
@@ -2140,29 +1704,29 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": true,
-      "marketGapPp": 21.0,
+      "marketGapPp": 21.3,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
+        "found": true,
+        "votes": 1123,
+        "homeProb": 92,
+        "awayProb": 8,
+        "url": "https://www.sofascore.com/tennis/match/17584285",
+        "orientation": "direct",
+        "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 1.431,
+        "home": 1.45,
         "draw": null,
-        "away": 2.9,
+        "away": 2.5,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 227.0,
+          "home": null,
           "draw": null,
-          "away": 162.0
+          "away": null
         }
       },
       "ai": {
@@ -2173,27 +1737,31 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 45.9,
-        "ev": 0.33,
-        "edge": 11.4,
-        "sources": 2,
+        "prob": 51.7,
+        "ev": 0.294,
+        "edge": 11.7,
+        "sources": 6,
         "components": {
-          "forebet": 0.54,
-          "odds": 0.345
+          "forebet": 0.58,
+          "form": 0.6,
+          "opponent": 0.4,
+          "surface": 0.6,
+          "sofascore": 0.08,
+          "odds": 0.4
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.65,
-        "h2h_available": false,
-        "h2h_neutral": true,
+        "sources_available": 3,
+        "quality_score": 0.9,
+        "h2h_available": true,
+        "h2h_neutral": false,
         "forebet_available": true,
-        "sofascore_available": false,
+        "sofascore_available": true,
         "gemini_available": false,
         "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
+        "form_available": true,
+        "h2h_count": 1,
         "consensus_strength": "weak",
         "market_model_gap": 0.0,
         "skip_reason": null
@@ -2204,7 +1772,7 @@
     {
       "homeTeam": "M. Efstathiou",
       "awayTeam": "G. Ghetu",
-      "time": "10:30",
+      "time": "10:35",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": "GrC",
@@ -2365,42 +1933,42 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -4.0,
+      "marketGapPp": -4.9,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 585,
-        "homeProb": 78,
-        "awayProb": 22,
+        "votes": 835,
+        "homeProb": 79,
+        "awayProb": 21,
         "url": "https://www.sofascore.com/tennis/match/17584208",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 1.65,
+        "home": 1.63,
         "draw": null,
-        "away": 2.1,
+        "away": 2.15,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 149.0,
+          "home": 161.0,
           "draw": null,
-          "away": 110.0
+          "away": 120.0
         }
       },
       "ai": {
-        "prediction": "M. Efstathiou should edge G. Ghetu to claim the home victory.",
-        "confidence": 68,
-        "recommendation": "MEDIUM",
-        "reasoning": "The head‑to‑head record heavily favors Efstathiou (3 wins, 0 losses, 2 draws) giving him a 60 % win rate in their last five meetings. His recent form rating of 6.0/10 outperforms Ghetu’s 4.0/10, indicating better current performance. The Forebet model assigns a 52 % probability to a home win, and the bookmaker odds (1.65 vs 2.10) also reflect a modest edge for the home player. While there is no specific venue‑specific data, the fan vote (78 % for the home side) adds a psychological boost. Overall, the signals point to a home win but the margin is not overwhelming, keeping confidence in the mid‑high range."
+        "prediction": "Based on the data, I believe M. Efstathiou has a higher chance of winning this match due to their strong head-to-head record (4/5 wins), including a recent victory in their last meeting. Additionally, M. Efstathiou has an impressive home form, with a 60% win rate at home. The odds value leans towards M. Efstathiou as well, with a lower odds ratio (1.63) compared to G. Ghetu (2.15).",
+        "confidence": 85,
+        "recommendation": "HIGH",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 62.6,
-        "ev": 0.034,
-        "edge": 2.0,
+        "prob": 62.8,
+        "ev": 0.023,
+        "edge": 1.4,
         "sources": 7,
         "components": {
           "forebet": 0.52,
@@ -2408,8 +1976,8 @@
           "form": 0.6,
           "opponent": 0.6,
           "surface": 0.6,
-          "sofascore": 0.78,
-          "odds": 0.606
+          "sofascore": 0.79,
+          "odds": 0.613
         }
       },
       "predictionGrade": "B",
@@ -2424,67 +1992,137 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 3,
-        "consensus_strength": "moderate",
-        "market_model_gap": 1.994,
+        "consensus_strength": "strong",
+        "market_model_gap": 1.45,
         "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "J. C. Martin Manzano",
-      "awayTeam": "A. Martin",
-      "time": "10:30",
+      "homeTeam": "M. Donald",
+      "awayTeam": "R. Catry",
+      "time": "10:50",
       "kickoffUtc": null,
       "kickoffSource": null,
-      "league": "GrC",
+      "league": "TrC",
       "country": null,
       "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-4/j-c-martin-manzano-a-martin/364150",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_faworyta_2.19>1.71",
-        "score_49.4<51.0"
-      ],
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/catry-robin-8Ase3tht/donald-matthew-CvEGpt6B/?mid=r3qkPb9D",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/m-donald-r-catry/364114",
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
       "forebet": {
         "prediction": "1",
-        "probability": 52.0,
-        "homeProb": 52,
+        "probability": 56.0,
+        "homeProb": 56,
         "drawProb": null,
-        "awayProb": 48,
+        "awayProb": 44,
         "exactScore": "2-0",
-        "avgGoals": 9.3,
+        "avgGoals": 10.2,
         "favorite": "home",
-        "gap": 4
+        "gap": 12
       },
       "h2h": {
-        "total": 0,
-        "homeWins": 0,
+        "total": 5,
+        "homeWins": 3,
         "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null,
-        "effectiveTotal": null,
-        "homeWinsEff": null,
-        "awayWinsEff": null,
-        "allStale": null,
-        "meetings": [],
-        "last": null,
-        "edge": null,
-        "line": "No previous meetings"
+        "lastDate": "23.11.26",
+        "lastScore": "2-1",
+        "effectiveTotal": 3.0,
+        "homeWinsEff": 3.0,
+        "awayWinsEff": 0.0,
+        "allStale": false,
+        "meetings": [
+          {
+            "date": "2026-11-23",
+            "home": "Donald M.",
+            "away": "Ilkel C.",
+            "score": "2-1",
+            "winner": "Donald M."
+          },
+          {
+            "date": "2026-11-19",
+            "home": "Donald M.",
+            "away": "Kwon S.",
+            "score": "0-2",
+            "winner": "Kwon S."
+          },
+          {
+            "date": "2026-11-18",
+            "home": "Taberner C.",
+            "away": "Donald M.",
+            "score": "1-2",
+            "winner": "Donald M."
+          },
+          {
+            "date": "2026-11-16",
+            "home": "Hemery C.",
+            "away": "Donald M.",
+            "score": "2-1",
+            "winner": "Hemery C."
+          },
+          {
+            "date": "2026-11-15",
+            "home": "Donald M.",
+            "away": "Krumich M.",
+            "score": "2-1",
+            "winner": "Donald M."
+          }
+        ],
+        "last": {
+          "date": "2026-11-23",
+          "score": "2-1",
+          "winner": "Donald M.",
+          "home": "Donald M.",
+          "away": "Ilkel C."
+        },
+        "edge": {
+          "team": "even",
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "record": "0-0-0",
+          "even": true
+        },
+        "line": "H2H: M. Donald 0-0-0 (even) (last: 2026-11-23 Donald M. 2-1 Ilkel C.)"
       },
       "form": {
-        "home": [],
-        "away": [],
+        "home": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
         "homeAtHome": [],
         "awayAtAway": [],
         "homeDated": [],
         "awayDated": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
+        "surface": "hard",
+        "homeSurface": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "awaySurface": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
         "surfaceIsProxy": null,
         "source": null,
         "homeSeason": null,
@@ -2495,8 +2133,20 @@
         "awaySeasonMatches": null,
         "homeSeasonStart": null,
         "awaySeasonStart": null,
-        "homeClean": [],
-        "awayClean": [],
+        "homeClean": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "awayClean": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
         "homeAtHomeClean": [],
         "awayAtAwayClean": [],
         "homeCup": [],
@@ -2513,62 +2163,67 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": 8.2,
+      "marketGapPp": -5.5,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
+        "found": true,
+        "votes": 1155,
+        "homeProb": 86,
+        "awayProb": 14,
+        "url": "https://www.sofascore.com/tennis/match/17584289",
+        "orientation": "direct",
+        "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.19,
+        "home": 1.5,
         "draw": null,
-        "away": 1.709,
+        "away": 2.4,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": null,
+          "home": 189.0,
           "draw": null,
-          "away": null
+          "away": 138.0
         }
       },
       "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
+        "prediction": "Based on the strong home record (4/5 wins) and M. Donald's recent form, I predict M. Donald to win this match with a confidence of 80%. M. Donald has not lost at home and has been performing consistently better, while R. Catry has shown slight improvement but remains behind in form and odds value.",
+        "confidence": 0,
+        "recommendation": "HIGH",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 49.4,
-        "ev": 0.081,
-        "edge": 3.7,
-        "sources": 2,
+        "prob": 64.2,
+        "ev": -0.037,
+        "edge": -2.5,
+        "sources": 7,
         "components": {
-          "forebet": 0.52,
-          "odds": 0.457
+          "forebet": 0.56,
+          "h2h": 1.0,
+          "form": 0.6,
+          "opponent": 0.6,
+          "surface": 0.6,
+          "sofascore": 0.86,
+          "odds": 0.667
         }
       },
-      "predictionGrade": "D",
+      "predictionGrade": "B",
       "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.65,
-        "h2h_available": false,
-        "h2h_neutral": true,
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "h2h_neutral": false,
         "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
+        "sofascore_available": true,
+        "gemini_available": true,
         "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": 3.738,
+        "form_available": true,
+        "h2h_count": 3,
+        "consensus_strength": "strong",
+        "market_model_gap": -2.467,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -2797,7 +2452,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -8.5,
+      "marketGapPp": -9.1,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -2810,9 +2465,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 3.61,
+        "home": 3.7,
         "draw": null,
-        "away": 1.304,
+        "away": 1.293,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -2830,13 +2485,13 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 69.9,
-        "ev": -0.089,
-        "edge": -6.8,
+        "prob": 70.1,
+        "ev": -0.093,
+        "edge": -7.2,
         "sources": 2,
         "components": {
           "forebet": 0.65,
-          "odds": 0.767
+          "odds": 0.773
         }
       },
       "predictionGrade": "D",
@@ -2852,7 +2507,7 @@
         "form_available": false,
         "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -6.787,
+        "market_model_gap": -7.24,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3022,11 +2677,11 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -9.2,
+      "marketGapPp": -7.8,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 770,
+        "votes": 1020,
         "homeProb": 31,
         "awayProb": 69,
         "url": "https://www.sofascore.com/tennis/match/17584159",
@@ -3035,9 +2690,9 @@
         "skipReason": null
       },
       "odds": {
-        "home": 2.6,
+        "home": 2.5,
         "draw": null,
-        "away": 1.45,
+        "away": 1.48,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -3048,16 +2703,16 @@
         }
       },
       "ai": {
-        "prediction": "G. Debru is likely to win, riding his superior recent form and clear market backing.",
-        "confidence": 68,
+        "prediction": "Given the recent form of G. Debru and the close odds, I predict a draw between R. Strombachs and G. Debru. G. Debru has been in better form, winning 2 out of their last 3 matches, while R. Strombachs has not been as consistent, winning only 1 out of their last 3 matches.",
+        "confidence": 70,
         "recommendation": "MEDIUM",
-        "reasoning": "In the last five meetings Strombachs has 2 wins, Debru none, and 3 draws, giving Strombachs a 40 % win rate but no decisive edge for Debru. However, Debru’s current form rating (6.0/10) is markedly better than Strombachs’s (4.0/10). The market reflects this: Forebet forecasts a 55 % chance of an away win and the bookmaker odds price Debru at 1.45 versus 2.6 for Strombachs, indicating strong betting confidence. Fan voting also leans heavily to the away side (69 %). While the H2H record is inconclusive, the combination of form, odds, and predictive models tips the balance toward Debru."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "2",
-        "prob": 56.4,
-        "ev": -0.182,
-        "edge": -12.5,
+        "prob": 56.3,
+        "ev": -0.167,
+        "edge": -11.3,
         "sources": 7,
         "components": {
           "forebet": 0.55,
@@ -3066,7 +2721,7 @@
           "opponent": 0.6,
           "surface": 0.6,
           "sofascore": 0.69,
-          "odds": 0.69
+          "odds": 0.676
         }
       },
       "predictionGrade": "C",
@@ -3082,136 +2737,66 @@
         "form_available": true,
         "h2h_count": 2,
         "consensus_strength": "moderate",
-        "market_model_gap": -12.566,
+        "market_model_gap": -11.268,
         "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "D. Dedura-Palomero",
-      "awayTeam": "O. Prihodko",
-      "time": "12:00",
+      "homeTeam": "E. Kirkin",
+      "awayTeam": "A. Martin",
+      "time": "11:00",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": "TrC",
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/dedura-palomero-diego-IXM4oGM3/prihodko-oleg-Qku8VLoC/?mid=0npbO07b",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/d-dedura-palomero-o-prihodko/364153",
-      "qualifies": true,
-      "channelQualifies": true,
-      "emailQualifies": true,
-      "skipReasons": [],
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/e-kirkin-a-martin/363992",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_faworyta_2.70>1.49",
+        "score_46.9<51.0"
+      ],
       "forebet": {
-        "prediction": "1",
-        "probability": 59.0,
-        "homeProb": 59,
+        "prediction": "2",
+        "probability": 54.0,
+        "homeProb": 46,
         "drawProb": null,
-        "awayProb": 41,
-        "exactScore": "2-1",
+        "awayProb": 54,
+        "exactScore": "1-2",
         "avgGoals": 10.1,
-        "favorite": "home",
-        "gap": 18
+        "favorite": "away",
+        "gap": 8
       },
       "h2h": {
-        "total": 5,
-        "homeWins": 2,
+        "total": 0,
+        "homeWins": 0,
         "awayWins": 0,
-        "lastDate": "24.11.26",
-        "lastScore": "2-0",
-        "effectiveTotal": 2.0,
-        "homeWinsEff": 2.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-11-24",
-            "home": "Dedura D.",
-            "away": "Sheehy J.",
-            "score": "2-0",
-            "winner": "Dedura D."
-          },
-          {
-            "date": "2026-11-16",
-            "home": "Dedura D.",
-            "away": "Prizmic D.",
-            "score": "0-2",
-            "winner": "Prizmic D."
-          },
-          {
-            "date": "2026-10-29",
-            "home": "Dedura D.",
-            "away": "Aboian V.",
-            "score": "0-2",
-            "winner": "Aboian V."
-          },
-          {
-            "date": "2026-10-27",
-            "home": "Dedura D.",
-            "away": "Olivieri G. A.",
-            "score": "2-0",
-            "winner": "Dedura D."
-          },
-          {
-            "date": "2026-10-22",
-            "home": "Dedura D.",
-            "away": "Meligeni Alves F.",
-            "score": "0-2",
-            "winner": "Meligeni Alves F."
-          }
-        ],
-        "last": {
-          "date": "2026-11-24",
-          "score": "2-0",
-          "winner": "Dedura D.",
-          "home": "Dedura D.",
-          "away": "Sheehy J."
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: D. Dedura-Palomero 0-0-0 (even) (last: 2026-11-24 Dedura D. 2-0 Sheehy J.)"
+        "lastDate": null,
+        "lastScore": null,
+        "effectiveTotal": null,
+        "homeWinsEff": null,
+        "awayWinsEff": null,
+        "allStale": null,
+        "meetings": [],
+        "last": null,
+        "edge": null,
+        "line": "No previous meetings"
       },
       "form": {
-        "home": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "away": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
+        "home": [],
+        "away": [],
         "homeAtHome": [],
         "awayAtAway": [],
         "homeDated": [],
         "awayDated": [],
-        "surface": "hard",
-        "homeSurface": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "awaySurface": [
-          "W",
-          "W",
-          "W",
-          "W",
-          "W"
-        ],
+        "surface": null,
+        "homeSurface": null,
+        "awaySurface": null,
         "surfaceIsProxy": null,
         "source": null,
         "homeSeason": null,
@@ -3222,20 +2807,8 @@
         "awaySeasonMatches": null,
         "homeSeasonStart": null,
         "awaySeasonStart": null,
-        "homeClean": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "L"
-        ],
-        "awayClean": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
+        "homeClean": [],
+        "awayClean": [],
         "homeAtHomeClean": [],
         "awayAtAwayClean": [],
         "homeCup": [],
@@ -3252,67 +2825,205 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -6.0,
+      "marketGapPp": 18.5,
       "predictionGradeRaw": null,
       "sofascore": {
-        "found": true,
-        "votes": 830,
-        "homeProb": 89,
-        "awayProb": 11,
-        "url": "https://www.sofascore.com/tennis/match/17584282",
-        "orientation": "direct",
-        "unavailable": false,
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
         "skipReason": null
       },
       "odds": {
-        "home": 1.43,
+        "home": 1.488,
         "draw": null,
-        "away": 2.65,
+        "away": 2.7,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 227.0,
+          "home": 200.0,
           "draw": null,
-          "away": 162.0
+          "away": 150.0
         }
       },
       "ai": {
-        "prediction": "Błąd API (po 6 modelach)",
-        "confidence": 0,
-        "recommendation": "SKIP",
-        "reasoning": "404 models/gemini-1.5-flash-8b is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 46.9,
+        "ev": 0.267,
+        "edge": 9.9,
+        "sources": 2,
+        "components": {
+          "forebet": 0.54,
+          "odds": 0.37
+        }
+      },
+      "predictionGrade": "D",
+      "dataQuality": {
+        "sources_available": 1,
+        "quality_score": 0.65,
+        "h2h_available": false,
+        "h2h_neutral": true,
+        "forebet_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
+        "odds_available": true,
+        "form_available": false,
+        "h2h_count": 0,
+        "consensus_strength": "weak",
+        "market_model_gap": 9.863,
+        "skip_reason": null
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
+      "homeTeam": "J. C. Martin Manzano",
+      "awayTeam": "A. Martin",
+      "time": "11:30",
+      "kickoffUtc": null,
+      "kickoffSource": null,
+      "league": "GrC",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/hersonissos-4/j-c-martin-manzano-a-martin/364150",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_faworyta_2.81>1.46",
+        "score_45.2<51.0"
+      ],
+      "forebet": {
+        "prediction": "1",
+        "probability": 52.0,
+        "homeProb": 52,
+        "drawProb": null,
+        "awayProb": 48,
+        "exactScore": "2-0",
+        "avgGoals": 9.3,
+        "favorite": "home",
+        "gap": 4
+      },
+      "h2h": {
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null,
+        "effectiveTotal": null,
+        "homeWinsEff": null,
+        "awayWinsEff": null,
+        "allStale": null,
+        "meetings": [],
+        "last": null,
+        "edge": null,
+        "line": "No previous meetings"
+      },
+      "form": {
+        "home": [],
+        "away": [],
+        "homeAtHome": [],
+        "awayAtAway": [],
+        "homeDated": [],
+        "awayDated": [],
+        "surface": null,
+        "homeSurface": null,
+        "awaySurface": null,
+        "surfaceIsProxy": null,
+        "source": null,
+        "homeSeason": null,
+        "awaySeason": null,
+        "homeAtHomeSeason": null,
+        "awayAtAwaySeason": null,
+        "homeSeasonMatches": null,
+        "awaySeasonMatches": null,
+        "homeSeasonStart": null,
+        "awaySeasonStart": null,
+        "homeClean": [],
+        "awayClean": [],
+        "homeAtHomeClean": [],
+        "awayAtAwayClean": [],
+        "homeCup": [],
+        "awayCup": [],
+        "homeCupCompetitions": [],
+        "awayCupCompetitions": [],
+        "homeCompetitions": [],
+        "awayCompetitions": [],
+        "friendliesExcluded": 0
+      },
+      "category": null,
+      "nationalFriendly": false,
+      "seasonMatchCount": null,
+      "earlySeason": false,
+      "seasonFormConflict": false,
+      "staleModel": false,
+      "marketGapPp": 17.9,
+      "predictionGradeRaw": null,
+      "sofascore": {
+        "found": null,
+        "votes": null,
+        "homeProb": null,
+        "awayProb": null,
+        "url": null,
+        "orientation": null,
+        "unavailable": null,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 2.81,
+        "draw": null,
+        "away": 1.455,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": null,
+          "draw": null,
+          "away": null
+        }
+      },
+      "ai": {
+        "prediction": null,
+        "confidence": null,
+        "recommendation": null,
+        "reasoning": null
       },
       "scoring": {
         "pick": "1",
-        "prob": 53.9,
-        "ev": -0.229,
-        "edge": -16.0,
-        "sources": 7,
+        "prob": 45.2,
+        "ev": 0.269,
+        "edge": 9.6,
+        "sources": 2,
         "components": {
-          "forebet": 0.59,
-          "h2h": 1.0,
-          "form": 0.4,
-          "opponent": 0.8,
-          "surface": 0.2,
-          "sofascore": 0.89,
-          "odds": 0.699
+          "forebet": 0.52,
+          "odds": 0.356
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
-        "h2h_available": true,
-        "h2h_neutral": false,
+        "sources_available": 1,
+        "quality_score": 0.65,
+        "h2h_available": false,
+        "h2h_neutral": true,
         "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
+        "sofascore_available": false,
+        "gemini_available": false,
         "odds_available": true,
-        "form_available": true,
-        "h2h_count": 2,
-        "consensus_strength": "moderate",
-        "market_model_gap": -16.03,
+        "form_available": false,
+        "h2h_count": 0,
+        "consensus_strength": "weak",
+        "market_model_gap": 9.613,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -3486,7 +3197,7 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 724,
+        "votes": 953,
         "homeProb": 90,
         "awayProb": 10,
         "url": "https://www.sofascore.com/tennis/match/17584169",
@@ -3508,10 +3219,10 @@
         }
       },
       "ai": {
-        "prediction": "Coppejans will likely win at home, as the recent H2H advantage and strong odds support a home victory.",
-        "confidence": 72,
-        "recommendation": "SKIP",
-        "reasoning": "In the last five meetings Coppejans has won 3 times, while Djuric has not won any, giving Coppejans a 60% home win rate. The recent form scores (6.0 for Coppejans vs 8.0 for Djuric) favor Djuric, but the overall odds (1.35 for Coppejans vs 2.9 for Djuric) and the Forebet 66% home win probability heavily tilt the balance toward the home side. Fan support is overwhelmingly in favor of Coppejans (90%/10%), adding psychological pressure on Djuric. The lack of venue‑specific form data for both players means we rely on the broader indicators, which collectively favor the home team. The main risk is Djuric’s superior recent form, but his zero wins in the head‑to‑head series mitigate that concern."
+        "prediction": "Based on the data, I predict K. Coppejans to win this match with a high level of confidence (85/100). K. Coppejans has a strong head-to-head record against B. Djuric, winning 4 out of the last 5 meetings. K. Coppejans also exhibits excellent home form, having won 3 out of their last 4 matches on their home court. Furthermore, the odds value leans in favor of K. Coppejans with a 1.35 odds compared to B. Djuric's 3.5 odds.",
+        "confidence": 0,
+        "recommendation": "HIGH",
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
@@ -3529,7 +3240,7 @@
           "odds": 0.741
         }
       },
-      "predictionGrade": "C",
+      "predictionGrade": "B",
       "dataQuality": {
         "sources_available": 4,
         "quality_score": 1.0,
@@ -3541,8 +3252,238 @@
         "odds_available": true,
         "form_available": true,
         "h2h_count": 3,
-        "consensus_strength": "moderate",
+        "consensus_strength": "strong",
         "market_model_gap": -13.174,
+        "skip_reason": null
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
+      "homeTeam": "D. Dedura-Palomero",
+      "awayTeam": "O. Prihodko",
+      "time": "12:55",
+      "kickoffUtc": null,
+      "kickoffSource": null,
+      "league": "TrC",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/dedura-palomero-diego-IXM4oGM3/prihodko-oleg-Qku8VLoC/?mid=0npbO07b",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/ankara/d-dedura-palomero-o-prihodko/364153",
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
+      "forebet": {
+        "prediction": "1",
+        "probability": 59.0,
+        "homeProb": 59,
+        "drawProb": null,
+        "awayProb": 41,
+        "exactScore": "2-1",
+        "avgGoals": 10.1,
+        "favorite": "home",
+        "gap": 18
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 2,
+        "awayWins": 0,
+        "lastDate": "24.11.26",
+        "lastScore": "2-0",
+        "effectiveTotal": 2.0,
+        "homeWinsEff": 2.0,
+        "awayWinsEff": 0.0,
+        "allStale": false,
+        "meetings": [
+          {
+            "date": "2026-11-24",
+            "home": "Dedura D.",
+            "away": "Sheehy J.",
+            "score": "2-0",
+            "winner": "Dedura D."
+          },
+          {
+            "date": "2026-11-16",
+            "home": "Dedura D.",
+            "away": "Prizmic D.",
+            "score": "0-2",
+            "winner": "Prizmic D."
+          },
+          {
+            "date": "2026-10-29",
+            "home": "Dedura D.",
+            "away": "Aboian V.",
+            "score": "0-2",
+            "winner": "Aboian V."
+          },
+          {
+            "date": "2026-10-27",
+            "home": "Dedura D.",
+            "away": "Olivieri G. A.",
+            "score": "2-0",
+            "winner": "Dedura D."
+          },
+          {
+            "date": "2026-10-22",
+            "home": "Dedura D.",
+            "away": "Meligeni Alves F.",
+            "score": "0-2",
+            "winner": "Meligeni Alves F."
+          }
+        ],
+        "last": {
+          "date": "2026-11-24",
+          "score": "2-0",
+          "winner": "Dedura D.",
+          "home": "Dedura D.",
+          "away": "Sheehy J."
+        },
+        "edge": {
+          "team": "even",
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "record": "0-0-0",
+          "even": true
+        },
+        "line": "H2H: D. Dedura-Palomero 0-0-0 (even) (last: 2026-11-24 Dedura D. 2-0 Sheehy J.)"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [],
+        "awayAtAway": [],
+        "homeDated": [],
+        "awayDated": [],
+        "surface": "hard",
+        "homeSurface": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "awaySurface": [
+          "W",
+          "W",
+          "W",
+          "W",
+          "W"
+        ],
+        "surfaceIsProxy": null,
+        "source": null,
+        "homeSeason": null,
+        "awaySeason": null,
+        "homeAtHomeSeason": null,
+        "awayAtAwaySeason": null,
+        "homeSeasonMatches": null,
+        "awaySeasonMatches": null,
+        "homeSeasonStart": null,
+        "awaySeasonStart": null,
+        "homeClean": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "L"
+        ],
+        "awayClean": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHomeClean": [],
+        "awayAtAwayClean": [],
+        "homeCup": [],
+        "awayCup": [],
+        "homeCupCompetitions": [],
+        "awayCupCompetitions": [],
+        "homeCompetitions": [],
+        "awayCompetitions": [],
+        "friendliesExcluded": 0
+      },
+      "category": null,
+      "nationalFriendly": false,
+      "seasonMatchCount": null,
+      "earlySeason": false,
+      "seasonFormConflict": false,
+      "staleModel": false,
+      "marketGapPp": -6.9,
+      "predictionGradeRaw": null,
+      "sofascore": {
+        "found": true,
+        "votes": 1180,
+        "homeProb": 89,
+        "awayProb": 11,
+        "url": "https://www.sofascore.com/tennis/match/17584282",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.4,
+        "draw": null,
+        "away": 2.7,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": 227.0,
+          "draw": null,
+          "away": 162.0
+        }
+      },
+      "ai": {
+        "prediction": "D. Dedura-Palomero is expected to secure a victory, supported by a dominant head-to-head record and significantly stronger recent form compared to O. Prihodko. The home advantage further solidifies the favorite status indicated by the odds.",
+        "confidence": 78,
+        "recommendation": "HIGH",
+        "reasoning": "The head-to-head record is heavily skewed in favor of Dedura-Palomero, who has won 2 of the last 5 meetings while Prihodko has no wins, although 3 draws indicate potential for stalemates. Recent form metrics strongly favor the home player, with a 4.0/10 rating compared to Prihodko's 2.0/10, suggesting a clear performance gap. The bookmaker odds of 1.4 for the home win align with the Forebet prediction of a 59% win probability, confirming the market's confidence in the home side. While the lack of specific venue-specific form data introduces a minor variable, the overall statistical edge is substantial. The 89% fan vote further corroborates the expectation of a home victory, reducing the perceived risk of an upset."
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 54.1,
+        "ev": -0.243,
+        "edge": -17.4,
+        "sources": 7,
+        "components": {
+          "forebet": 0.59,
+          "h2h": 1.0,
+          "form": 0.4,
+          "opponent": 0.8,
+          "surface": 0.2,
+          "sofascore": 0.89,
+          "odds": 0.714
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "h2h_neutral": false,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 2,
+        "consensus_strength": "strong",
+        "market_model_gap": -17.329,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -4664,6 +4605,236 @@
       "oddsOrientationUnknown": false
     },
     {
+      "homeTeam": "J. Guilleme",
+      "awayTeam": "L. E. Ambrogi",
+      "time": "17:00",
+      "kickoffUtc": null,
+      "kickoffSource": null,
+      "league": "SvC",
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/ambrogi-luciano-emanuel-zuhsTKYK/guilleme-joaquin-U9TnwRSi/?mid=UJHzrlnn",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/san-salvador/j-guilleme-l-e-ambrogi/364186",
+      "qualifies": true,
+      "channelQualifies": true,
+      "emailQualifies": true,
+      "skipReasons": [],
+      "forebet": {
+        "prediction": "1",
+        "probability": 61.0,
+        "homeProb": 61,
+        "drawProb": null,
+        "awayProb": 39,
+        "exactScore": "2-0",
+        "avgGoals": 9.7,
+        "favorite": "home",
+        "gap": 22
+      },
+      "h2h": {
+        "total": 5,
+        "homeWins": 3,
+        "awayWins": 0,
+        "lastDate": "24.11.26",
+        "lastScore": "0-2",
+        "effectiveTotal": 3.0,
+        "homeWinsEff": 3.0,
+        "awayWinsEff": 0.0,
+        "allStale": false,
+        "meetings": [
+          {
+            "date": "2026-11-24",
+            "home": "Cruz C.",
+            "away": "Guilleme J.",
+            "score": "0-2",
+            "winner": "Guilleme J."
+          },
+          {
+            "date": "2026-10-30",
+            "home": "Soto M.",
+            "away": "Guilleme J.",
+            "score": "2-0",
+            "winner": "Soto M."
+          },
+          {
+            "date": "2026-10-30",
+            "home": "Cervantes Tomas L.",
+            "away": "Guilleme J.",
+            "score": "0-2",
+            "winner": "Guilleme J."
+          },
+          {
+            "date": "2026-10-27",
+            "home": "Salvestre D.",
+            "away": "Guilleme J.",
+            "score": "0-2",
+            "winner": "Guilleme J."
+          },
+          {
+            "date": "2026-07-30",
+            "home": "Chopra K.",
+            "away": "Guilleme J.",
+            "score": "2-1",
+            "winner": "Chopra K."
+          }
+        ],
+        "last": {
+          "date": "2026-11-24",
+          "score": "0-2",
+          "winner": "Guilleme J.",
+          "home": "Cruz C.",
+          "away": "Guilleme J."
+        },
+        "edge": {
+          "team": "even",
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "record": "0-0-0",
+          "even": true
+        },
+        "line": "H2H: J. Guilleme 0-0-0 (even) (last: 2026-11-24 Cruz C. 0-2 Guilleme J.)"
+      },
+      "form": {
+        "home": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "away": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHome": [],
+        "awayAtAway": [],
+        "homeDated": [],
+        "awayDated": [],
+        "surface": "hard",
+        "homeSurface": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "awaySurface": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "surfaceIsProxy": null,
+        "source": null,
+        "homeSeason": null,
+        "awaySeason": null,
+        "homeAtHomeSeason": null,
+        "awayAtAwaySeason": null,
+        "homeSeasonMatches": null,
+        "awaySeasonMatches": null,
+        "homeSeasonStart": null,
+        "awaySeasonStart": null,
+        "homeClean": [
+          "W",
+          "L",
+          "W",
+          "W",
+          "L"
+        ],
+        "awayClean": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "homeAtHomeClean": [],
+        "awayAtAwayClean": [],
+        "homeCup": [],
+        "awayCup": [],
+        "homeCupCompetitions": [],
+        "awayCupCompetitions": [],
+        "homeCompetitions": [],
+        "awayCompetitions": [],
+        "friendliesExcluded": 0
+      },
+      "category": null,
+      "nationalFriendly": false,
+      "seasonMatchCount": null,
+      "earlySeason": false,
+      "seasonFormConflict": false,
+      "staleModel": false,
+      "marketGapPp": 9.0,
+      "predictionGradeRaw": null,
+      "sofascore": {
+        "found": true,
+        "votes": 264,
+        "homeProb": 25,
+        "awayProb": 75,
+        "url": "https://www.sofascore.com/tennis/match/17584243",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.78,
+        "draw": null,
+        "away": 1.93,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": 125.0,
+          "draw": null,
+          "away": 110.0
+        }
+      },
+      "ai": {
+        "prediction": "Based on the data, I predict J. Guilleme to win this match with a high level of confidence (90%). J. Guilleme has a strong head-to-head record against L. E. Ambrogi, winning 4 out of the last 5 encounters. Additionally, J. Guilleme has an impressive home form, with a win rate of 100% in the last 3 matches played at their home court. The odds value leans in favor of J. Guilleme with a lower implied probability (1.08) compared to L. E. Ambrogi (1.25).",
+        "confidence": 0,
+        "recommendation": "HIGH",
+        "reasoning": ""
+      },
+      "scoring": {
+        "pick": "1",
+        "prob": 63.6,
+        "ev": 0.132,
+        "edge": 7.4,
+        "sources": 7,
+        "components": {
+          "forebet": 0.61,
+          "h2h": 1.0,
+          "form": 0.6,
+          "opponent": 0.8,
+          "surface": 0.6,
+          "sofascore": 0.25,
+          "odds": 0.562
+        }
+      },
+      "predictionGrade": "B",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": true,
+        "h2h_neutral": false,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 3,
+        "consensus_strength": "moderate",
+        "market_model_gap": 7.42,
+        "skip_reason": null
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
       "homeTeam": "R. Tabata",
       "awayTeam": "F. Meligeni Alves",
       "time": "17:00",
@@ -4761,7 +4932,7 @@
       "odds": {
         "home": 4.29,
         "draw": null,
-        "away": 1.228,
+        "away": 1.234,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -5093,236 +5264,6 @@
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "J. Guilleme",
-      "awayTeam": "L. E. Ambrogi",
-      "time": "17:00",
-      "kickoffUtc": null,
-      "kickoffSource": null,
-      "league": "SvC",
-      "country": null,
-      "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/ambrogi-luciano-emanuel-zuhsTKYK/guilleme-joaquin-U9TnwRSi/?mid=UJHzrlnn",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/san-salvador/j-guilleme-l-e-ambrogi/364186",
-      "qualifies": true,
-      "channelQualifies": true,
-      "emailQualifies": true,
-      "skipReasons": [],
-      "forebet": {
-        "prediction": "1",
-        "probability": 61.0,
-        "homeProb": 61,
-        "drawProb": null,
-        "awayProb": 39,
-        "exactScore": "2-0",
-        "avgGoals": 9.7,
-        "favorite": "home",
-        "gap": 22
-      },
-      "h2h": {
-        "total": 5,
-        "homeWins": 3,
-        "awayWins": 0,
-        "lastDate": "24.11.26",
-        "lastScore": "0-2",
-        "effectiveTotal": 3.0,
-        "homeWinsEff": 3.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-11-24",
-            "home": "Cruz C.",
-            "away": "Guilleme J.",
-            "score": "0-2",
-            "winner": "Guilleme J."
-          },
-          {
-            "date": "2026-10-30",
-            "home": "Soto M.",
-            "away": "Guilleme J.",
-            "score": "2-0",
-            "winner": "Soto M."
-          },
-          {
-            "date": "2026-10-30",
-            "home": "Cervantes Tomas L.",
-            "away": "Guilleme J.",
-            "score": "0-2",
-            "winner": "Guilleme J."
-          },
-          {
-            "date": "2026-10-27",
-            "home": "Salvestre D.",
-            "away": "Guilleme J.",
-            "score": "0-2",
-            "winner": "Guilleme J."
-          },
-          {
-            "date": "2026-07-30",
-            "home": "Chopra K.",
-            "away": "Guilleme J.",
-            "score": "2-1",
-            "winner": "Chopra K."
-          }
-        ],
-        "last": {
-          "date": "2026-11-24",
-          "score": "0-2",
-          "winner": "Guilleme J.",
-          "home": "Cruz C.",
-          "away": "Guilleme J."
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: J. Guilleme 0-0-0 (even) (last: 2026-11-24 Cruz C. 0-2 Guilleme J.)"
-      },
-      "form": {
-        "home": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "L"
-        ],
-        "away": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "homeDated": [],
-        "awayDated": [],
-        "surface": "hard",
-        "homeSurface": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "L"
-        ],
-        "awaySurface": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "surfaceIsProxy": null,
-        "source": null,
-        "homeSeason": null,
-        "awaySeason": null,
-        "homeAtHomeSeason": null,
-        "awayAtAwaySeason": null,
-        "homeSeasonMatches": null,
-        "awaySeasonMatches": null,
-        "homeSeasonStart": null,
-        "awaySeasonStart": null,
-        "homeClean": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "L"
-        ],
-        "awayClean": [
-          "W",
-          "L",
-          "L",
-          "L",
-          "L"
-        ],
-        "homeAtHomeClean": [],
-        "awayAtAwayClean": [],
-        "homeCup": [],
-        "awayCup": [],
-        "homeCupCompetitions": [],
-        "awayCupCompetitions": [],
-        "homeCompetitions": [],
-        "awayCompetitions": [],
-        "friendliesExcluded": 0
-      },
-      "category": null,
-      "nationalFriendly": false,
-      "seasonMatchCount": null,
-      "earlySeason": false,
-      "seasonFormConflict": false,
-      "staleModel": false,
-      "marketGapPp": 1.8,
-      "predictionGradeRaw": null,
-      "sofascore": {
-        "found": true,
-        "votes": 188,
-        "homeProb": 20,
-        "awayProb": 80,
-        "url": "https://www.sofascore.com/tennis/match/17584243",
-        "orientation": "direct",
-        "unavailable": false,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 1.55,
-        "draw": null,
-        "away": 2.25,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": "J. Guilleme should win comfortably at home, leveraging his superior head‑to‑head edge and much better recent form.",
-        "confidence": 80,
-        "recommendation": "SKIP",
-        "reasoning": "The last five meetings show Guilleme leading 3‑0 with two draws, giving him a 60 % win rate against Ambrogi. Guilleme’s overall recent form rating of 6.0 far exceeds Ambrogi’s 2.0, indicating a clear performance gap. Forebet assigns a 61 % probability to a home win and the bookmaker odds (1.55 vs 2.25) reflect that market bias. Although no venue‑specific data are available, the home advantage typically adds a marginal edge in tennis. Overall the convergence of H2H, form and odds creates a low‑risk outlook for a Guilleme victory."
-      },
-      "scoring": {
-        "pick": "1",
-        "prob": 64.2,
-        "ev": -0.005,
-        "edge": -0.3,
-        "sources": 7,
-        "components": {
-          "forebet": 0.61,
-          "h2h": 1.0,
-          "form": 0.6,
-          "opponent": 0.8,
-          "surface": 0.6,
-          "sofascore": 0.2,
-          "odds": 0.645
-        }
-      },
-      "predictionGrade": "C",
-      "dataQuality": {
-        "sources_available": 4,
-        "quality_score": 1.0,
-        "h2h_available": true,
-        "h2h_neutral": false,
-        "forebet_available": true,
-        "sofascore_available": true,
-        "gemini_available": true,
-        "odds_available": true,
-        "form_available": true,
-        "h2h_count": 3,
-        "consensus_strength": "weak",
-        "market_model_gap": -0.316,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
       "homeTeam": "B. Bicknell",
       "awayTeam": "T. Dean",
       "time": "18:30",
@@ -5337,7 +5278,8 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "kurs_faworyta_3.85>1.32"
+        "kurs_ponizej_progu",
+        "kurs_faworyta_3.52>1.31"
       ],
       "forebet": {
         "prediction": "2",
@@ -5403,7 +5345,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": true,
-      "marketGapPp": 44.5,
+      "marketGapPp": 42.9,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -5416,16 +5358,16 @@
         "skipReason": null
       },
       "odds": {
-        "home": 1.32,
+        "home": 1.309,
         "draw": null,
-        "away": 3.85,
-        "source": "livesport_bulk",
-        "bookmaker": "Livesport (bukm. 1221)",
+        "away": 3.52,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 345.0,
+          "home": 303.0,
           "draw": null,
-          "away": 250.0
+          "away": 225.0
         }
       },
       "ai": {
@@ -5436,13 +5378,13 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 51.7,
-        "ev": 0.989,
-        "edge": 25.7,
+        "prob": 52.7,
+        "ev": 0.854,
+        "edge": 24.3,
         "sources": 2,
         "components": {
           "forebet": 0.7,
-          "odds": 0.26
+          "odds": 0.284
         }
       },
       "predictionGrade": "D",
@@ -5690,148 +5632,6 @@
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "S. A. Larraya Guidi",
-      "awayTeam": "M. L. Carle",
-      "time": "19:00",
-      "kickoffUtc": null,
-      "kickoffSource": null,
-      "league": null,
-      "country": null,
-      "source": "forebet",
-      "matchUrl": null,
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/buenos-aires/s-a-larraya-guidi-m-l-carle/363963",
-      "qualifies": false,
-      "channelQualifies": false,
-      "emailQualifies": false,
-      "skipReasons": [
-        "kurs_ponizej_progu"
-      ],
-      "forebet": {
-        "prediction": "2",
-        "probability": 55.0,
-        "homeProb": 45,
-        "drawProb": null,
-        "awayProb": 55,
-        "exactScore": "1-2",
-        "avgGoals": 9.3,
-        "favorite": "away",
-        "gap": 10
-      },
-      "h2h": {
-        "total": 0,
-        "homeWins": 0,
-        "awayWins": 0,
-        "lastDate": null,
-        "lastScore": null,
-        "effectiveTotal": null,
-        "homeWinsEff": null,
-        "awayWinsEff": null,
-        "allStale": null,
-        "meetings": [],
-        "last": null,
-        "edge": null,
-        "line": "No previous meetings"
-      },
-      "form": {
-        "home": [],
-        "away": [],
-        "homeAtHome": [],
-        "awayAtAway": [],
-        "homeDated": [],
-        "awayDated": [],
-        "surface": null,
-        "homeSurface": null,
-        "awaySurface": null,
-        "surfaceIsProxy": null,
-        "source": null,
-        "homeSeason": null,
-        "awaySeason": null,
-        "homeAtHomeSeason": null,
-        "awayAtAwaySeason": null,
-        "homeSeasonMatches": null,
-        "awaySeasonMatches": null,
-        "homeSeasonStart": null,
-        "awaySeasonStart": null,
-        "homeClean": [],
-        "awayClean": [],
-        "homeAtHomeClean": [],
-        "awayAtAwayClean": [],
-        "homeCup": [],
-        "awayCup": [],
-        "homeCupCompetitions": [],
-        "awayCupCompetitions": [],
-        "homeCompetitions": [],
-        "awayCompetitions": [],
-        "friendliesExcluded": 0
-      },
-      "category": null,
-      "nationalFriendly": false,
-      "seasonMatchCount": null,
-      "earlySeason": false,
-      "seasonFormConflict": false,
-      "staleModel": false,
-      "marketGapPp": -39.4,
-      "predictionGradeRaw": null,
-      "sofascore": {
-        "found": null,
-        "votes": null,
-        "homeProb": null,
-        "awayProb": null,
-        "url": null,
-        "orientation": null,
-        "unavailable": null,
-        "skipReason": null
-      },
-      "odds": {
-        "home": 17.16,
-        "draw": null,
-        "away": 1.023,
-        "source": "pinnacle",
-        "bookmaker": "Pinnacle",
-        "note": null,
-        "forebet": {
-          "home": null,
-          "draw": null,
-          "away": null
-        }
-      },
-      "ai": {
-        "prediction": null,
-        "confidence": null,
-        "recommendation": null,
-        "reasoning": null
-      },
-      "scoring": {
-        "pick": "2",
-        "prob": 72.8,
-        "ev": -0.255,
-        "edge": -24.9,
-        "sources": 2,
-        "components": {
-          "forebet": 0.55,
-          "odds": 0.978
-        }
-      },
-      "predictionGrade": "D",
-      "dataQuality": {
-        "sources_available": 1,
-        "quality_score": 0.65,
-        "h2h_available": false,
-        "h2h_neutral": true,
-        "forebet_available": true,
-        "sofascore_available": false,
-        "gemini_available": false,
-        "odds_available": true,
-        "form_available": false,
-        "h2h_count": 0,
-        "consensus_strength": "weak",
-        "market_model_gap": -24.952,
-        "skip_reason": null
-      },
-      "sidesReversed": false,
-      "oddsOrientationUnknown": false
-    },
-    {
       "homeTeam": "M. Trevisan",
       "awayTeam": "V. Erjavec",
       "time": "19:00",
@@ -5992,9 +5792,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 582,
-        "homeProb": 42,
-        "awayProb": 58,
+        "votes": 761,
+        "homeProb": 43,
+        "awayProb": 57,
         "url": "https://www.sofascore.com/tennis/match/17584139",
         "orientation": "direct",
         "unavailable": false,
@@ -6014,14 +5814,14 @@
         }
       },
       "ai": {
-        "prediction": "M. Trevisan is likely to win at home, leveraging his dominant head‑to‑head record and superior recent form.",
-        "confidence": 78,
+        "prediction": "Based on the strong head-to-head record (4/5 wins) and Trevisan's better recent form (6.0/10 vs. Erjavec's 4.0/10), I predict a home win for Trevisan. The 61% Forebet prediction and the 1.65 odds indicate favorable value for supporting Trevisan.",
+        "confidence": 85,
         "recommendation": "HIGH",
-        "reasoning": "Trevisan leads the recent H2H 3‑0‑1, a 75 % win rate against Erjavec, indicating a clear psychological edge. His current form rating (6.0/10) is two points higher than Erjavec’s (4.0/10), suggesting better recent performance. The Forebet model assigns a 61 % probability to a home win, and the bookmaker odds (1.65) reflect a modest but meaningful price advantage. No venue‑specific data are available, but the home setting typically adds a marginal boost. Overall, the convergence of H2H dominance, form gap, and odds value points to a solid home‑win case, with limited downside."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 62.1,
+        "prob": 62.2,
         "ev": 0.025,
         "edge": 1.5,
         "sources": 7,
@@ -6031,7 +5831,7 @@
           "form": 0.6,
           "opponent": 0.6,
           "surface": 0.6,
-          "sofascore": 0.42,
+          "sofascore": 0.43,
           "odds": 0.606
         }
       },
@@ -6048,23 +5848,23 @@
         "form_available": true,
         "h2h_count": 3,
         "consensus_strength": "moderate",
-        "market_model_gap": 1.494,
+        "market_model_gap": 1.594,
         "skip_reason": null
       },
       "sidesReversed": false,
       "oddsOrientationUnknown": false
     },
     {
-      "homeTeam": "I. Oz",
-      "awayTeam": "J. Riera",
-      "time": "20:30",
+      "homeTeam": "S. A. Larraya Guidi",
+      "awayTeam": "M. L. Carle",
+      "time": "19:00",
       "kickoffUtc": null,
       "kickoffSource": null,
       "league": null,
       "country": null,
       "source": "forebet",
-      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/oz-ipek-Oxue6Cgb/riera-julia-K4Sih0XH/?mid=C4nLeIgL",
-      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/buenos-aires/i-oz-j-riera/364129",
+      "matchUrl": null,
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/buenos-aires/s-a-larraya-guidi-m-l-carle/363963",
       "qualifies": false,
       "channelQualifies": false,
       "emailQualifies": false,
@@ -6073,94 +5873,42 @@
       ],
       "forebet": {
         "prediction": "2",
-        "probability": 64.0,
-        "homeProb": 36,
+        "probability": 55.0,
+        "homeProb": 45,
         "drawProb": null,
-        "awayProb": 64,
-        "exactScore": "0-2",
-        "avgGoals": 10.0,
+        "awayProb": 55,
+        "exactScore": "1-2",
+        "avgGoals": 9.3,
         "favorite": "away",
-        "gap": 28
+        "gap": 10
       },
       "h2h": {
-        "total": 2,
-        "homeWins": 1,
-        "awayWins": 1,
-        "lastDate": "18.06.26",
-        "lastScore": "1-2",
-        "effectiveTotal": 1.0,
-        "homeWinsEff": 1.0,
-        "awayWinsEff": 0.0,
-        "allStale": false,
-        "meetings": [
-          {
-            "date": "2026-06-18",
-            "home": "Riera J.",
-            "away": "Oz I.",
-            "score": "1-2",
-            "winner": "Oz I."
-          },
-          {
-            "date": "2023-12-06",
-            "home": "Oz I.",
-            "away": "Riera J.",
-            "score": "1-2",
-            "winner": "Riera J."
-          }
-        ],
-        "last": {
-          "date": "2026-06-18",
-          "score": "1-2",
-          "winner": "Oz I.",
-          "home": "Riera J.",
-          "away": "Oz I."
-        },
-        "edge": {
-          "team": "even",
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "record": "0-0-0",
-          "even": true
-        },
-        "line": "H2H: I. Oz 0-0-0 (even) (last: 2026-06-18 Riera J. 1-2 Oz I.)"
+        "total": 0,
+        "homeWins": 0,
+        "awayWins": 0,
+        "lastDate": null,
+        "lastScore": null,
+        "effectiveTotal": null,
+        "homeWinsEff": null,
+        "awayWinsEff": null,
+        "allStale": null,
+        "meetings": [],
+        "last": null,
+        "edge": null,
+        "line": "No previous meetings"
       },
       "form": {
-        "home": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "away": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
+        "home": [],
+        "away": [],
         "homeAtHome": [],
         "awayAtAway": [],
         "homeDated": [],
         "awayDated": [],
-        "surface": "clay",
-        "homeSurface": [
-          "W",
-          "L",
-          "W",
-          "W",
-          "W"
-        ],
-        "awaySurface": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
+        "surface": null,
+        "homeSurface": null,
+        "awaySurface": null,
         "surfaceIsProxy": null,
-        "source": "sofascore",
+        "source": null,
         "homeSeason": null,
         "awaySeason": null,
         "homeAtHomeSeason": null,
@@ -6169,20 +5917,8 @@
         "awaySeasonMatches": null,
         "homeSeasonStart": null,
         "awaySeasonStart": null,
-        "homeClean": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
-        "awayClean": [
-          "W",
-          "L",
-          "L",
-          "W",
-          "W"
-        ],
+        "homeClean": [],
+        "awayClean": [],
         "homeAtHomeClean": [],
         "awayAtAwayClean": [],
         "homeCup": [],
@@ -6199,7 +5935,7 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -6.8,
+      "marketGapPp": -39.4,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": null,
@@ -6212,16 +5948,16 @@
         "skipReason": null
       },
       "odds": {
-        "home": 3.15,
+        "home": 17.16,
         "draw": null,
-        "away": 1.3,
+        "away": 1.023,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": 210.0,
+          "home": null,
           "draw": null,
-          "away": 278.0
+          "away": null
         }
       },
       "ai": {
@@ -6232,32 +5968,29 @@
       },
       "scoring": {
         "pick": "2",
-        "prob": 59.4,
-        "ev": -0.228,
-        "edge": -17.5,
-        "sources": 5,
+        "prob": 72.8,
+        "ev": -0.255,
+        "edge": -24.9,
+        "sources": 2,
         "components": {
-          "forebet": 0.64,
-          "form": 0.6,
-          "opponent": 0.4,
-          "surface": 0.6,
-          "odds": 0.769
+          "forebet": 0.55,
+          "odds": 0.978
         }
       },
       "predictionGrade": "D",
       "dataQuality": {
-        "sources_available": 2,
-        "quality_score": 0.75,
-        "h2h_available": true,
-        "h2h_neutral": false,
+        "sources_available": 1,
+        "quality_score": 0.65,
+        "h2h_available": false,
+        "h2h_neutral": true,
         "forebet_available": true,
         "sofascore_available": false,
         "gemini_available": false,
         "odds_available": true,
-        "form_available": true,
-        "h2h_count": 1,
+        "form_available": false,
+        "h2h_count": 0,
         "consensus_strength": "weak",
-        "market_model_gap": -17.523,
+        "market_model_gap": -24.952,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -6431,9 +6164,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 334,
-        "homeProb": 47,
-        "awayProb": 53,
+        "votes": 408,
+        "homeProb": 46,
+        "awayProb": 54,
         "url": "https://www.sofascore.com/tennis/match/17584146",
         "orientation": "direct",
         "unavailable": false,
@@ -6453,10 +6186,10 @@
         }
       },
       "ai": {
-        "prediction": "A. Geerlings Martinez is likely to edge out the home player, riding the statistical edge from the odds and predictive model.",
-        "confidence": 60,
+        "prediction": "I believe in a draw, as both players have shown competitive performances recently. A. Herrero Linana's recent form is slightly better, but A. Geerlings Martinez has a strong home record and could capitalize on it.",
+        "confidence": 75,
         "recommendation": "MEDIUM",
-        "reasoning": "The head‑to‑head record is modestly in favor of Herrero Linana (3‑0 with 2 draws, 60 % home win rate) but only spans five matches, limiting its predictive power. Both players share identical recent form scores of 6.0/10, indicating no clear momentum advantage. Forebet assigns a 57 % probability to an away win, and the bookmaker odds (1.55 for Geerlings vs 2.25 for Herrero) price the visitor as the clear favorite, suggesting market confidence. No venue‑specific data is available to offset the away advantage. Overall, the convergence of predictive model, odds, and neutral form tilts the balance toward an away victory, though the limited H2H sample introduces uncertainty."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "2",
@@ -6470,7 +6203,7 @@
           "form": 0.6,
           "opponent": 0.4,
           "surface": 0.6,
-          "sofascore": 0.53,
+          "sofascore": 0.54,
           "odds": 0.645
         }
       },
@@ -6488,6 +6221,209 @@
         "h2h_count": 3,
         "consensus_strength": "moderate",
         "market_model_gap": -11.816,
+        "skip_reason": null
+      },
+      "sidesReversed": false,
+      "oddsOrientationUnknown": false
+    },
+    {
+      "homeTeam": "I. Oz",
+      "awayTeam": "J. Riera",
+      "time": "20:30",
+      "kickoffUtc": null,
+      "kickoffSource": null,
+      "league": null,
+      "country": null,
+      "source": "forebet",
+      "matchUrl": "https://www.livesport.com/pl/mecz/tenis/belozertsev-nikita-6J2eXT05/faurel-thomas-vgfc2Q2F/?mid=SboAErjm",
+      "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-women/buenos-aires/i-oz-j-riera/364129",
+      "qualifies": false,
+      "channelQualifies": false,
+      "emailQualifies": false,
+      "skipReasons": [
+        "kurs_faworyta_2.50>1.45"
+      ],
+      "forebet": {
+        "prediction": "2",
+        "probability": 64.0,
+        "homeProb": 36,
+        "drawProb": null,
+        "awayProb": 64,
+        "exactScore": "0-2",
+        "avgGoals": 10.0,
+        "favorite": "away",
+        "gap": 28
+      },
+      "h2h": {
+        "total": 1,
+        "homeWins": 1,
+        "awayWins": 0,
+        "lastDate": "25.11.26",
+        "lastScore": "2-0",
+        "effectiveTotal": 0.0,
+        "homeWinsEff": 0.0,
+        "awayWinsEff": 0.0,
+        "allStale": false,
+        "meetings": [
+          {
+            "date": "2026-11-25",
+            "home": "Faurel T.",
+            "away": "Belozertsev N.",
+            "score": "2-0",
+            "winner": "Faurel T."
+          }
+        ],
+        "last": {
+          "date": "2026-11-25",
+          "score": "2-0",
+          "winner": "Faurel T.",
+          "home": "Faurel T.",
+          "away": "Belozertsev N."
+        },
+        "edge": {
+          "team": "even",
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "record": "0-0-0",
+          "even": true
+        },
+        "line": "H2H: I. Oz 0-0-0 (even) (last: 2026-11-25 Faurel T. 2-0 Belozertsev N.)"
+      },
+      "form": {
+        "home": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "away": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "homeAtHome": [],
+        "awayAtAway": [],
+        "homeDated": [],
+        "awayDated": [],
+        "surface": "hard",
+        "homeSurface": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "L"
+        ],
+        "awaySurface": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "surfaceIsProxy": null,
+        "source": null,
+        "homeSeason": null,
+        "awaySeason": null,
+        "homeAtHomeSeason": null,
+        "awayAtAwaySeason": null,
+        "homeSeasonMatches": null,
+        "awaySeasonMatches": null,
+        "homeSeasonStart": null,
+        "awaySeasonStart": null,
+        "homeClean": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "awayClean": [
+          "L",
+          "W",
+          "W",
+          "W",
+          "L"
+        ],
+        "homeAtHomeClean": [],
+        "awayAtAwayClean": [],
+        "homeCup": [],
+        "awayCup": [],
+        "homeCupCompetitions": [],
+        "awayCupCompetitions": [],
+        "homeCompetitions": [],
+        "awayCompetitions": [],
+        "friendliesExcluded": 0
+      },
+      "category": null,
+      "nationalFriendly": false,
+      "seasonMatchCount": null,
+      "earlySeason": false,
+      "seasonFormConflict": false,
+      "staleModel": true,
+      "marketGapPp": 27.3,
+      "predictionGradeRaw": "B",
+      "sofascore": {
+        "found": true,
+        "votes": 719,
+        "homeProb": 26,
+        "awayProb": 74,
+        "url": "https://www.sofascore.com/tennis/match/17584136",
+        "orientation": "direct",
+        "unavailable": false,
+        "skipReason": null
+      },
+      "odds": {
+        "home": 1.45,
+        "draw": null,
+        "away": 2.5,
+        "source": "pinnacle",
+        "bookmaker": "Pinnacle",
+        "note": null,
+        "forebet": {
+          "home": 210.0,
+          "draw": null,
+          "away": 278.0
+        }
+      },
+      "ai": {
+        "prediction": "Based on the strong home record (4/5 wins) and I. Oz's excellent form, I predict a draw between I. Oz and J. Riera. I. Oz's recent victories against J. Riera (2021) and consistent home performance suggest a competitive match.",
+        "confidence": 85,
+        "recommendation": "HIGH",
+        "reasoning": ""
+      },
+      "scoring": {
+        "pick": "2",
+        "prob": 56.2,
+        "ev": 0.405,
+        "edge": 16.2,
+        "sources": 6,
+        "components": {
+          "forebet": 0.64,
+          "form": 0.6,
+          "opponent": 0.4,
+          "surface": 0.6,
+          "sofascore": 0.74,
+          "odds": 0.4
+        }
+      },
+      "predictionGrade": "C",
+      "dataQuality": {
+        "sources_available": 4,
+        "quality_score": 1.0,
+        "h2h_available": false,
+        "h2h_neutral": true,
+        "forebet_available": true,
+        "sofascore_available": true,
+        "gemini_available": true,
+        "odds_available": true,
+        "form_available": true,
+        "h2h_count": 0,
+        "consensus_strength": "strong",
+        "market_model_gap": 0.0,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -6640,9 +6576,9 @@
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 370,
-        "homeProb": 80,
-        "awayProb": 20,
+        "votes": 524,
+        "homeProb": 81,
+        "awayProb": 19,
         "url": "https://www.sofascore.com/tennis/match/17584141",
         "orientation": "direct",
         "unavailable": false,
@@ -6656,21 +6592,21 @@
         "bookmaker": "Pinnacle",
         "note": null,
         "forebet": {
-          "home": null,
+          "home": 149.0,
           "draw": null,
-          "away": null
+          "away": 120.0
         }
       },
       "ai": {
-        "prediction": "S. Sierra should edge a tight contest at home, leveraging a modest home‑win probability and slightly better odds.",
-        "confidence": 65,
+        "prediction": "Based on the data, we have a close matchup between S. Sierra and C. Monnet. Sierra has a strong home advantage, with a 50% H2H record against Monnet, and both players have similar recent form ratings (6.0/10). The odds value leans towards Monnet with a higher away win probability (2.1), indicating some uncertainty in the outcome.",
+        "confidence": 75,
         "recommendation": "MEDIUM",
-        "reasoning": "The head‑to‑head record is dead‑even (1‑1, 50% home win rate), indicating no clear dominance. Both players share identical recent form scores of 6.0/10, so form does not differentiate them. Forebet assigns a 53% win probability to Sierra, and the bookmaker odds (1.63 vs 2.1) give Sierra a 38% implied probability versus 48% for Monnet, reflecting a modest market edge. Fan voting heavily favors the home player (80% to 20%), suggesting psychological advantage. However, the lack of venue‑specific performance data for Sierra and the balanced H2H keep the edge limited."
+        "reasoning": ""
       },
       "scoring": {
         "pick": "1",
-        "prob": 57.8,
-        "ev": -0.058,
+        "prob": 57.9,
+        "ev": -0.057,
         "edge": -3.5,
         "sources": 7,
         "components": {
@@ -6679,7 +6615,7 @@
           "form": 0.6,
           "opponent": 0.4,
           "surface": 0.6,
-          "sofascore": 0.8,
+          "sofascore": 0.81,
           "odds": 0.613
         }
       },
@@ -6696,7 +6632,7 @@
         "form_available": true,
         "h2h_count": 1,
         "consensus_strength": "moderate",
-        "market_model_gap": -3.55,
+        "market_model_gap": -3.45,
         "skip_reason": null
       },
       "sidesReversed": false,
@@ -6717,7 +6653,7 @@
       "channelQualifies": false,
       "emailQualifies": false,
       "skipReasons": [
-        "score_49.1<51.0"
+        "score_48.7<51.0"
       ],
       "forebet": {
         "prediction": "2",
@@ -6834,22 +6770,22 @@
       "earlySeason": false,
       "seasonFormConflict": false,
       "staleModel": false,
-      "marketGapPp": -2.0,
+      "marketGapPp": 0.3,
       "predictionGradeRaw": null,
       "sofascore": {
         "found": true,
-        "votes": 146,
-        "homeProb": 11,
-        "awayProb": 89,
+        "votes": 224,
+        "homeProb": 12,
+        "awayProb": 88,
         "url": "https://www.sofascore.com/tennis/match/17584240",
         "orientation": "direct",
         "unavailable": false,
         "skipReason": null
       },
       "odds": {
-        "home": 2.05,
+        "home": 1.95,
         "draw": null,
-        "away": 1.68,
+        "away": 1.75,
         "source": "pinnacle",
         "bookmaker": "Pinnacle",
         "note": null,
@@ -6860,23 +6796,23 @@
         }
       },
       "ai": {
-        "prediction": "L. A. Miguel is likely to win, as the odds (1.68) and Forebet’s 53% away win probability favor him despite Bonding’s",
-        "confidence": 0,
-        "recommendation": "SKIP",
+        "prediction": "Based on the data, we see L. A. Miguel has a slight advantage due to their recent form and being the away team. However, O. Bonding has no recent H2H record against Miguel, and their home advantage could potentially swing the match in their favor.",
+        "confidence": 72,
+        "recommendation": "MEDIUM",
         "reasoning": ""
       },
       "scoring": {
         "pick": "2",
-        "prob": 49.1,
-        "ev": -0.176,
-        "edge": -10.5,
+        "prob": 48.7,
+        "ev": -0.148,
+        "edge": -8.5,
         "sources": 5,
         "components": {
           "forebet": 0.53,
           "form": 0.6,
           "opponent": 0.0,
-          "sofascore": 0.89,
-          "odds": 0.595
+          "sofascore": 0.88,
+          "odds": 0.571
         }
       },
       "predictionGrade": "C",
@@ -6892,7 +6828,7 @@
         "form_available": true,
         "h2h_count": 0,
         "consensus_strength": "moderate",
-        "market_model_gap": -10.424,
+        "market_model_gap": -8.443,
         "skip_reason": null
       },
       "sidesReversed": false,
