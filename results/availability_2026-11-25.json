@@ -789,14 +789,112 @@
   "status": "no_key_absence"
  },
  "basketball|Loyola Maryland Greyhounds W|Washington Adventist W": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [],
+    "away": []
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 1972530,
+      "name": "G. Betton",
+      "sub": true
+     },
+     {
+      "id": 2841962,
+      "name": "D. Wilson-Osuide",
+      "sub": true
+     },
+     {
+      "id": 1973779,
+      "name": "T. Edwards",
+      "sub": true
+     },
+     {
+      "id": 1972531,
+      "name": "A. Simmons",
+      "sub": true
+     },
+     {
+      "id": 2400797,
+      "name": "O. Shaughnessy",
+      "sub": true
+     },
+     {
+      "id": 1602329,
+      "name": "K. Kalet",
+      "sub": true
+     },
+     {
+      "id": 1602328,
+      "name": "A. Amorich",
+      "sub": true
+     },
+     {
+      "id": 2402333,
+      "name": "S. Bass",
+      "sub": true
+     },
+     {
+      "id": 1970922,
+      "name": "T. Ramey",
+      "sub": true
+     },
+     {
+      "id": 2841953,
+      "name": "T. Shumate",
+      "sub": true
+     },
+     {
+      "id": 2397842,
+      "name": "A. Langley",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 2400870,
+      "name": "L. Lujan-Gonzales",
+      "sub": true
+     },
+     {
+      "id": 1995700,
+      "name": "N. Powell",
+      "sub": true
+     },
+     {
+      "id": 2879128,
+      "name": "M. Latney",
+      "sub": true
+     },
+     {
+      "id": 2398296,
+      "name": "A. Mulero",
+      "sub": true
+     },
+     {
+      "id": 2879125,
+      "name": "C. Genece",
+      "sub": true
+     },
+     {
+      "id": 2879123,
+      "name": "A. Crankfield",
+      "sub": true
+     }
+    ]
+   }
+  },
   "sport": "basketball",
   "eventId": 16941878,
   "teams": {
@@ -857,8 +955,12 @@
     "eid": 16941880
    }
   },
-  "signals": [],
-  "status": "unknown"
+  "signals": [
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "lineups_ok"
  },
  "basketball|Flammes Carolo W|Valencia W": {
   "checkedAt": "2026-11-25T15:34:43.015896+00:00",
@@ -1078,14 +1180,14 @@
   "aiSummarySig": "2026-11-25T08:11:25.634513+00:00|False"
  },
  "basketball|New Orleans|Grambling St.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "basketball",
   "eventId": 16824414,
   "teams": {
@@ -1222,14 +1324,14 @@
   "status": "unknown"
  },
  "basketball|UC Riverside|Portland State": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "basketball",
   "eventId": 17459337,
   "teams": {
@@ -6925,7 +7027,7 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "basketball|Providence|Brigham Young": {
-  "checkedAt": "2026-11-25T10:43:36.230653+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": "search",
   "confirmed": false,
   "side": "away",
@@ -6954,12 +7056,12 @@
   "top_block": false,
   "netStars": 0,
   "netKey": 0,
-  "llmAt": "2026-11-25T10:43:36.230653+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "basketball",
   "signals": [],
   "status": "no_key_absence",
   "aiSummary": "Providence is missing key players A. Page and D.",
-  "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "basketball|Air Force|Army": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -11371,19 +11473,30 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "tennis|Kesharwani M.|Kalyanpur A.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://thetennistrader.com/player/maan-kesharwani.html",
+   "https://www.sofascore.com/tennis/player/kesarwani-maan/455662",
+   "https://www.betexplorer.com/tennis/player/kesharwani-maan/0hA42uF9/results/",
+   "https://deepcourt.ai/players/maan-kesharwani-50581",
+   "https://www.atptour.com/en/players/maan-kesharwani/k0mw/overview"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|Chetouane M.|Thies C.": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -11515,34 +11628,56 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "tennis|Bonding O.|Miguel L. A.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.flashscore.com/match/tennis/bonding-oliver-SGkttdYl/miguel-luis-guto-nD2LfGzQ/",
+   "https://www.tenisnews.com.br/guto-miguel-x-bonding-oitavas-el-salvador-assista-ao-vivo/",
+   "https://livescore.tennis365.com/El-Salvador-ATP-Challanger-San-Salvador-Bonding,Oliver-vs-Miguel,-Luis-Guto-3400172",
+   "https://live4sport.net/tennis/match/o-bonding-155153-vs-l-a-miguel-258342/",
+   "https://www.oddssafari.com/matches/tennis/challenger-san-salvador/bonding-o.-vs-miguel-guto-l./26381339"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|O. Bonding|L. A. Miguel": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://tennistonic.com/tennis-news/1084451/h2h-prediction-of-luis-queiroz-miguel-vs-oliver-bonding-in-san-salvador-challenger-with-odds-preview-pick-25th-november-2026/",
+   "https://livescore.tennis365.com/El-Salvador-ATP-Challanger-San-Salvador-Bonding,Oliver-vs-Miguel,-Luis-Guto-3400172",
+   "https://tennisforesight.com/match/12182684-bonding-vs-miguel-san-salvador-el-salvador",
+   "https://www.skysports.com/tennis/scores-schedule",
+   "https://oddspedia.com/us/tennis/oliver-bonding-luis-guto-miguel-1538702"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|Martinez L. D.|Kelm Y.": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -11713,34 +11848,56 @@
   "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
  },
  "tennis|Hoedt M.|Cabrera L.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://thetennistrader.com/player/merel-hoedt.html",
+   "https://thetennistrader.com/news/tennis-injury-report.html",
+   "https://www.betexplorer.com/tennis/player/hoedt-merel/zaFHvp8f/results/",
+   "https://www.tennisexplorer.com/player/hoedt/",
+   "https://tennisdatabaseapi.com/players/pl_1jzpsbcd"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|Sierra S.|Monnet C.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.espn.cl/tenis/nota/_/id/17557877/wta-125-de-buenos-aires-solana-sierra-mejor-jugadora-argentina",
+   "https://www.tennisactu.net/news-wta-buenos-aires-carole-monnet-a-une-revanche-a-prendre-en-argentine-128477.html",
+   "https://www.abc.es/deportes/orgullodenervion/noticias-sevilla-fc/miguel-sierra-toca-balon-trabaja-recortar-plazos-20261119125742-nts.html",
+   "https://sevillafc.es/en/actualidad/noticias/parte-medico-miguel-sierra-octubre-2026",
+   "https://www.rotowire.com/soccer/headlines/miguel-sierra-injury-resumes-ball-work-in-recovery-547292"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|Anavatan M.|Funk A.": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -11805,51 +11962,30 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "tennis|S. Sierra|C. Monnet": {
-  "checkedAt": "2026-11-25T10:43:36.230653+00:00",
-  "source": "search",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
-  "home": [
-   {
-    "name": "Solana Sierra",
-    "importance": "star",
-    "status": "out",
-    "reason": "injury",
-    "url": "https://www.sportsgambler.com/betting-tips/tennis/"
-   }
-  ],
-  "away": [
-   {
-    "name": "Carole Monnet",
-    "importance": "star",
-    "status": "out",
-    "reason": "injury",
-    "url": "https://www.sportsgambler.com/betting-tips/tennis/"
-   }
-  ],
+  "home": [],
+  "away": [],
   "sources": [
-   "https://www.sportsgambler.com/betting-tips/tennis/"
+   "https://hurbra.se/solana-sierra-carole-monnet-speltips-2026-11-25/",
+   "https://hoydia.com.ar/deportes/tenis/solana-sierra-se-repuso-de-un-inicio-adverso-y-avanzo-de-ronda-en-buenos-aires/",
+   "https://www.tennisactu.net/news-wta-buenos-aires-carole-monnet-a-une-revanche-a-prendre-en-argentine-128477.html",
+   "https://www.ole.com.ar/tenis/solana-sierra-remontada-victoria-wta-argentina-open_0_cIIbLOa8lR.html",
+   "https://thetennistrader.com/news/tennis-injury-report.html"
   ],
   "lineup": null,
   "board": "ok",
   "top_block": false,
   "netStars": 0,
   "netKey": 0,
-  "llmAt": "2026-11-25T10:43:36.230653+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
-  "signals": [
-   {
-    "kind": "star_out",
-    "name": "Solana Sierra",
-    "share": null,
-    "basis": "market value",
-    "reason": "injury",
-    "source": "search"
-   }
-  ],
-  "status": "star_out",
-  "aiSummary": "Solana Sierra and Carole Monnet are the key players absent for S. Sierra (home) and C.",
-  "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|J. Guilleme|L. E. Ambrogi": {
   "checkedAt": "2026-11-25T15:34:43.015896+00:00",
@@ -11867,19 +12003,30 @@
   "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
  },
  "tennis|Shepp A.|Bouzige M.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.atptour.com/en/scores/current-challenger/playford/7586/results",
+   "https://results.tennisdata.com/en/results/b7ad2da5-f92e-471e-b83a-4019ce9e3ba7",
+   "https://www.atptour.com/en/scores/stats-centre/archive/2026/7586/ms014",
+   "https://fantasy.tennistonic.com/stat-tournaments/atp/22211/50146-82975/moerani-bouzige-vs-anton-shepp/",
+   "https://livescore.tennis365.com/Australia-Challenger-Playford-Shepp,-Anton-vs-Bouzige,-Moerani-3400020"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|Duran T.|Bianchi J. J.": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -11972,19 +12119,19 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "tennis|Cook E.|Becroft I.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|P. A. Saraiva Dos Santos|T. Cigarran": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -12062,34 +12209,34 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "tennis|N. McDonald|L. Staeheli": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|McDonald N.|Staeheli L.": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "tennis|Klimovicova L.|Kovackova J.": {
   "checkedAt": "2026-11-25T10:43:36.230653+00:00",
@@ -12356,14 +12503,14 @@
   "aiSummarySig": "2026-11-25T10:43:36.230653+00:00|False"
  },
  "volleyball|Reggio Calabria|Union Napoli": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "volleyball",
   "eventId": 16893431,
   "teams": {
@@ -12390,7 +12537,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "volleyball|GEN-I Volley NG W|Sliedrecht W": {
   "checkedAt": "2026-11-25T15:34:43.015896+00:00",
@@ -13514,14 +13661,25 @@
   "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
  },
  "football|Deportivo Tachira|Carabobo": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
-  "source": null,
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.zerozero.com.ve/noticias/deportivo-tachira-vs-carabobo-prediccion-noticias-de-equipos-y-alineaciones-copa-venezuela-25-11/1269261",
+   "https://lanoticiadehoy.com/delvin-alfonzo-operado-tachira-baja-final/",
+   "https://www.elnacional.com/2026/11/deportivo-tachira-confirma-la-baja-de-delvin-alfonzo-por-una-lesion-en-la-rodilla-derecha/",
+   "https://www.elnacional.com/2026/11/carabobo-mantiene-el-foco-en-la-copa-venezuela-y-el-torneo-clausura-para-cerrar-el-ano/",
+   "https://www.elnacional.com/2026/11/carabobo-enfrenta-a-tachira-con-la-intencion-de-seguir-compitiendo-en-dos-frentes/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "football",
   "eventId": 17620814,
   "teams": {
@@ -13583,9 +13741,9 @@
    }
   },
   "signals": [],
-  "status": "unknown",
+  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "football|Lille|Bayern Monachium": {
   "checkedAt": "2026-11-25T15:34:43.015896+00:00",
@@ -13710,19 +13868,19 @@
   "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
  },
  "tennis|I. Oz|J. Riera": {
-  "checkedAt": "2026-11-25T15:34:43.015896+00:00",
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-25T15:34:43.015896+00:00",
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
   "sport": "tennis",
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
  },
  "volleyball|Indykpol AZS Olsztyn|Asseco Resovia": {
   "checkedAt": "2026-11-25T15:34:43.015896+00:00",
@@ -13760,5 +13918,310 @@
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
   "aiSummarySig": "2026-11-25T15:34:43.015896+00:00|False"
+ },
+ "table_tennis|Zaika B.|Solomko S.": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
+  "sport": "table_tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
+ },
+ "table_tennis|Rak S.|Romaniak I.": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
+  "sport": "table_tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
+ },
+ "table_tennis|Shyshman O.|Populovskyi E.": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
+  "sport": "table_tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
+ },
+ "table_tennis|Treshchetka M.|Maksymkiv O.": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
+  "sport": "table_tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
+ },
+ "table_tennis|Maslovskyi A.|Melnik O.": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-25T20:39:31.099935+00:00",
+  "sport": "table_tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-25T20:39:31.099935+00:00|False"
+ },
+ "basketball|Philadelphia 76ers|Miami Heat": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": "sofascore",
+  "confirmed": false,
+  "side": "home",
+  "home": [
+   {
+    "name": "A. Hukporti",
+    "importance": "other",
+    "status": "out",
+    "reason": "1",
+    "id": 1184822,
+    "source": "sofascore"
+   },
+   {
+    "name": "J. Embiid",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "2",
+    "id": 817081,
+    "source": "sofascore"
+   }
+  ],
+  "away": [
+   {
+    "name": "G. Antetokounmpo",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "1",
+    "id": 816960,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "sport": "basketball",
+  "extra": {
+   "home": [
+    {
+     "name": "Joel Embiid",
+     "status": "out",
+     "reason": "Out (Embiid (illness) is out for Wednesday's game against Miami, Ira Winderman of the South Florida Sun Sentinel reports.)",
+     "position": "C",
+     "date": "2026-11-25T20:07Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries"
+    },
+    {
+     "name": "Ariel Hukporti",
+     "status": "out",
+     "reason": "Out (Hukporti has sustained a season-ending ruptured right Achilles tendon, per Shams Charania of ESPN.)",
+     "position": "C",
+     "date": "2026-10-06T19:17Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries"
+    },
+    {
+     "name": "Tyrese Maxey",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "VJ Edgecombe",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "Jaylen Brown",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "LeBron James",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "Jabari Walker",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    }
+   ],
+   "away": [
+    {
+     "name": "Giannis Antetokounmpo",
+     "status": "doubtful",
+     "reason": "Day-To-Day (Antetokounmpo (groin) has been upgraded to probable for Wednesday's game against the 76ers.)",
+     "position": "F",
+     "date": "2026-11-25T20:20Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries"
+    },
+    {
+     "name": "Davion Mitchell",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "Klay Thompson",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "Pelle Larsson",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    },
+    {
+     "name": "Bam Adebayo",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/basketball/nba-lineups.php"
+    }
+   ]
+  },
+  "extraSources": [
+   "espn_nba",
+   "rotowire_nba"
+  ],
+  "eventId": 16814857,
+  "teams": {
+   "home": 3420,
+   "away": 3435
+  },
+  "competition": {
+   "name": "NBA",
+   "ts": 1795644000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1092926,
+     "name": "T. Maxey",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 22.5,
+     "last": 22.0,
+     "share": 0.143,
+     "minutes": 35.2,
+     "unit": "pts"
+    },
+    {
+     "id": 817081,
+     "name": "J. Embiid",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 29.7,
+     "last": 0.0,
+     "share": 0.141,
+     "minutes": 34.1,
+     "unit": "pts"
+    },
+    {
+     "id": 846898,
+     "name": "J. Brown",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 27.3,
+     "last": 20.0,
+     "share": 0.13,
+     "minutes": 31.7,
+     "unit": "pts"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795825800,
+    "tournament": "NBA",
+    "round": "",
+    "tier": 1,
+    "eid": 16814876
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence"
+ },
+ "tennis|M. Imamura|Y. Chung": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "infoOnly": true,
+  "infoVerdict": "ok",
+  "sport": "tennis",
+  "signals": [],
+  "status": "unknown"
+ },
+ "tennis|A. Herrero Linana|A. Geerlings Martinez": {
+  "checkedAt": "2026-11-25T20:39:31.099935+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "infoOnly": true,
+  "infoVerdict": "ok",
+  "sport": "tennis",
+  "signals": [],
+  "status": "unknown"
  }
 }
