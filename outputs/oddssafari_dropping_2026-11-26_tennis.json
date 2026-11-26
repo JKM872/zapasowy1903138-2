@@ -1,0 +1,1344 @@
+{
+  "meta": {
+    "generated_at": "2026-11-26T08:56:37.907869+01:00",
+    "target_date": "2026-11-26",
+    "filter": {
+      "min_odds": 1.35,
+      "max_odds": 2.5,
+      "per_sport_range": true
+    },
+    "totals": {
+      "events": 8,
+      "qualified": 6
+    },
+    "enrichment_status_counts": {
+      "enriched": 3,
+      "resolve_failed": 1,
+      "process_match_error": 0,
+      "enriched_sofascore_only": 2
+    },
+    "skip_reason_counts": {
+      "odds_out_of_range": 2
+    },
+    "odds_change_counts": {
+      "down": 0,
+      "up": 0,
+      "flat": 0,
+      "new": 8
+    },
+    "elapsed_seconds": 359.7,
+    "dry_run": false
+  },
+  "events": [
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/aguilar-cardozo-j.-vs-olivieri-g.a./26193584?MarketTypeID=301",
+      "match_id": "26193584",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Aguilar Cardozo J.",
+      "away_team": "Olivieri G.A.",
+      "event_date": "26/11",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 3.15,
+      "current_odds": 2.09,
+      "drop_pct": 34.0,
+      "max_odds": 2.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/aguilar-cardozo-joaquin-rsXrDrGP/olivieri-genaro-alberto-lnHtsdAT/?mid=MgzcpsuC",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Aguilar Cardozo J.",
+        "away_team": "Olivieri G. A.",
+        "match_time": "26.11.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.65,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 11.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "24.11.26",
+            "home": "Ratti L.",
+            "away": "Aguilar Cardozo J.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "24.11.26 Ratti L. 1-2 Aguilar Cardozo J."
+          },
+          {
+            "date": "17.11.26",
+            "home": "Aguilar Cardozo J.",
+            "away": "Sanchez Jover C.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "17.11.26 Aguilar Cardozo J. 1-2 Sanchez Jover C."
+          },
+          {
+            "date": "02.11.26",
+            "home": "Aguilar Cardozo J.",
+            "away": "Dellien H.",
+            "score": "0-1",
+            "winner": "away",
+            "raw": "02.11.26 Aguilar Cardozo J. 0-1 Dellien H."
+          },
+          {
+            "date": "31.10.26",
+            "home": "Reis Da Silva J.",
+            "away": "Aguilar Cardozo J.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "31.10.26 Reis Da Silva J. 0-2 Aguilar Cardozo J."
+          },
+          {
+            "date": "30.10.26",
+            "home": "Aguilar Cardozo J.",
+            "away": "Midon L.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.10.26 Aguilar Cardozo J. 2-0 Midon L."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Aguilar Cardozo J.)",
+          "missing_recent_matches_B (Olivieri G. A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 297,
+        "ranking_b": 238,
+        "forebet_prediction": "1",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 59,
+        "forebet_away_prob": 41
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Monastir Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-monastir-doubles/martinez-l.d.nedunchezhiyan-j.-vs-abderrahman-w.ouakaa-a./27185861?MarketTypeID=301",
+      "match_id": "27185861",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Martinez L.D./Nedunchezhiyan J.",
+      "away_team": "Abderrahman W./Ouakaa A.",
+      "event_date": "26/11",
+      "event_time": "12:20",
+      "outcome": "1",
+      "open_odds": 1.55,
+      "current_odds": 1.21,
+      "drop_pct": 22.0,
+      "max_odds": 1.23,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "WTA - Buenos Aires",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-buenos-aires/costoulas-s.-vs-lepchenko-v./26266021?MarketTypeID=301",
+      "match_id": "26266021",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Costoulas S.",
+      "away_team": "Lepchenko V.",
+      "event_date": "26/11",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 2.05,
+      "current_odds": 1.67,
+      "drop_pct": 19.0,
+      "max_odds": 1.7,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/costoulas-sofia-WK42lFJU/lepchenko-varvara-vkOnO123/?mid=bZHVeVCD",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Costoulas S.",
+        "away_team": "Lepchenko V.",
+        "match_time": "26.11.2026 18:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.65,
+        "away_odds": 2.05,
+        "favorite": "player_a",
+        "advanced_score": 72.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "07.03.24",
+            "home": "Lepchenko V.",
+            "away": "Costoulas S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "07.03.24 Lepchenko V. 0-2 Costoulas S."
+          }
+        ],
+        "last_h2h_date": "07.03.24",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Lepchenko V.",
+        "last_h2h_away": "Costoulas S.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Costoulas S.)",
+          "missing_recent_matches_B (Lepchenko V.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 176,
+        "ranking_b": 218,
+        "forebet_prediction": "1",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.2,
+        "forebet_home_prob": 65,
+        "forebet_away_prob": 35
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Monastir",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-monastir/pankin-s.-vs-bar-biryukov-p./26136141?MarketTypeID=301",
+      "match_id": "26136141",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Pankin S.",
+      "away_team": "Bar Biryukov P.",
+      "event_date": "26/11",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.54,
+      "drop_pct": 18.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/bar-biryukov-petr-KtZmtx2f/pankin-semen-AqOZJFvK/?mid=UZwYYqqR",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Pankin S.",
+        "away_team": "Bar Biryukov P.",
+        "match_time": "26.11.2026 10:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.4,
+        "away_odds": 1.5,
+        "favorite": "player_b",
+        "advanced_score": 70.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "27.10.26",
+            "home": "Bar Biryukov P.",
+            "away": "Pankin S.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "27.10.26 Bar Biryukov P. 2-1 Pankin S."
+          }
+        ],
+        "last_h2h_date": "27.10.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Bar Biryukov P.",
+        "last_h2h_away": "Pankin S.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Pankin S.)",
+          "missing_recent_matches_B (Bar Biryukov P.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 423,
+        "ranking_b": 274,
+        "forebet_prediction": "2",
+        "forebet_probability": 66.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 11.9,
+        "forebet_home_prob": 34,
+        "forebet_away_prob": 66
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Yokohama",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-yokohama/imamura-m.-vs-jorda-sanchis-d./26554070?MarketTypeID=301",
+      "match_id": "26554070",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Imamura M.",
+      "away_team": "Jorda Sanchis D.",
+      "event_date": "27/11",
+      "event_time": "03:10",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.89,
+      "drop_pct": 18.0,
+      "max_odds": 1.98,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 17584101,
+        "sofascore_home_team_id": 197935,
+        "sofascore_away_team_id": 57155,
+        "home_team": "Imamura M.",
+        "away_team": "Jorda Sanchis D.",
+        "sport": "tennis",
+        "league": "Challenger - Yokohama",
+        "match_time": "03:10",
+        "sofascore_home_win_prob": 34,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 66,
+        "sofascore_total_votes": 220,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hersonissos",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos/ghetu-g.-vs-martin-andres/26773348?MarketTypeID=301",
+      "match_id": "26773348",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Ghetu G.",
+      "away_team": "Martin Andres",
+      "event_date": "27/11",
+      "event_time": "08:00",
+      "outcome": "1",
+      "open_odds": 5.5,
+      "current_odds": 4.52,
+      "drop_pct": 18.0,
+      "max_odds": 5.0,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": false,
+      "skip_reason": "odds_out_of_range",
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false
+    },
+    {
+      "league": "Challenger - Yokohama",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-yokohama/uchida-k.-vs-milic-o./26595009?MarketTypeID=301",
+      "match_id": "26595009",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Uchida K.",
+      "away_team": "Milic O.",
+      "event_date": "27/11",
+      "event_time": "03:10",
+      "outcome": "2",
+      "open_odds": 1.75,
+      "current_odds": 1.53,
+      "drop_pct": 13.0,
+      "max_odds": 1.55,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 17584104,
+        "sofascore_home_team_id": 82579,
+        "sofascore_away_team_id": 479273,
+        "home_team": "Uchida K.",
+        "away_team": "Milic O.",
+        "sport": "tennis",
+        "league": "Challenger - Yokohama",
+        "match_time": "03:10",
+        "sofascore_home_win_prob": 28,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 72,
+        "sofascore_total_votes": 267,
+        "forebet_prediction": "1",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 11.9,
+        "forebet_home_prob": 59,
+        "forebet_away_prob": 41
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hersonissos Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos-doubles/cukierman-d.neos-e.-vs-cadenasso-g.vasami-j./26888722?MarketTypeID=301",
+      "match_id": "26888722",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cukierman D./Neos E.",
+      "away_team": "Cadenasso G./Vasami J.",
+      "event_date": "26/11",
+      "event_time": "09:10",
+      "outcome": "2",
+      "open_odds": 2.45,
+      "current_odds": 2.17,
+      "drop_pct": 12.0,
+      "max_odds": 2.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ],
+  "qualified": [
+    {
+      "league": "Challenger - Florianopolis",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-florianopolis/aguilar-cardozo-j.-vs-olivieri-g.a./26193584?MarketTypeID=301",
+      "match_id": "26193584",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Aguilar Cardozo J.",
+      "away_team": "Olivieri G.A.",
+      "event_date": "26/11",
+      "event_time": "16:00",
+      "outcome": "2",
+      "open_odds": 3.15,
+      "current_odds": 2.09,
+      "drop_pct": 34.0,
+      "max_odds": 2.2,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/aguilar-cardozo-joaquin-rsXrDrGP/olivieri-genaro-alberto-lnHtsdAT/?mid=MgzcpsuC",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Aguilar Cardozo J.",
+        "away_team": "Olivieri G. A.",
+        "match_time": "26.11.2026 16:00",
+        "sport": "tennis",
+        "h2h_count": 5,
+        "home_wins_in_h2h_last5": 3,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": false,
+        "home_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.65,
+        "away_odds": 2.1,
+        "favorite": "player_a",
+        "advanced_score": 11.4,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "24.11.26",
+            "home": "Ratti L.",
+            "away": "Aguilar Cardozo J.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "24.11.26 Ratti L. 1-2 Aguilar Cardozo J."
+          },
+          {
+            "date": "17.11.26",
+            "home": "Aguilar Cardozo J.",
+            "away": "Sanchez Jover C.",
+            "score": "1-2",
+            "winner": "away",
+            "raw": "17.11.26 Aguilar Cardozo J. 1-2 Sanchez Jover C."
+          },
+          {
+            "date": "02.11.26",
+            "home": "Aguilar Cardozo J.",
+            "away": "Dellien H.",
+            "score": "0-1",
+            "winner": "away",
+            "raw": "02.11.26 Aguilar Cardozo J. 0-1 Dellien H."
+          },
+          {
+            "date": "31.10.26",
+            "home": "Reis Da Silva J.",
+            "away": "Aguilar Cardozo J.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "31.10.26 Reis Da Silva J. 0-2 Aguilar Cardozo J."
+          },
+          {
+            "date": "30.10.26",
+            "home": "Aguilar Cardozo J.",
+            "away": "Midon L.",
+            "score": "2-0",
+            "winner": "home",
+            "raw": "30.10.26 Aguilar Cardozo J. 2-0 Midon L."
+          }
+        ],
+        "last_h2h_date": null,
+        "last_h2h_score": null,
+        "last_h2h_home": null,
+        "last_h2h_away": null,
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_h2h",
+          "missing_recent_matches_A (Aguilar Cardozo J.)",
+          "missing_recent_matches_B (Olivieri G. A.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 297,
+        "ranking_b": 238,
+        "forebet_prediction": "1",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "2-1",
+        "forebet_avg_goals": 10.2,
+        "forebet_home_prob": 59,
+        "forebet_away_prob": 41
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "WTA - Buenos Aires",
+      "match_url": "https://www.oddssafari.com/matches/tennis/wta-buenos-aires/costoulas-s.-vs-lepchenko-v./26266021?MarketTypeID=301",
+      "match_id": "26266021",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Costoulas S.",
+      "away_team": "Lepchenko V.",
+      "event_date": "26/11",
+      "event_time": "18:00",
+      "outcome": "1",
+      "open_odds": 2.05,
+      "current_odds": 1.67,
+      "drop_pct": 19.0,
+      "max_odds": 1.7,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "1",
+      "focus_team": "home",
+      "away_team_focus": false,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/costoulas-sofia-WK42lFJU/lepchenko-varvara-vkOnO123/?mid=bZHVeVCD",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Costoulas S.",
+        "away_team": "Lepchenko V.",
+        "match_time": "26.11.2026 18:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 1.65,
+        "away_odds": 2.05,
+        "favorite": "player_a",
+        "advanced_score": 72.7,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "07.03.24",
+            "home": "Lepchenko V.",
+            "away": "Costoulas S.",
+            "score": "0-2",
+            "winner": "away",
+            "raw": "07.03.24 Lepchenko V. 0-2 Costoulas S."
+          }
+        ],
+        "last_h2h_date": "07.03.24",
+        "last_h2h_score": "0-2",
+        "last_h2h_home": "Lepchenko V.",
+        "last_h2h_away": "Costoulas S.",
+        "form_advantage": false,
+        "surface": "clay",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "W"
+        ],
+        "surface_stats_a": {
+          "clay": 0.6
+        },
+        "surface_stats_b": {
+          "clay": 0.4
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "W"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "L",
+          "L",
+          "L"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Costoulas S.)",
+          "missing_recent_matches_B (Lepchenko V.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 176,
+        "ranking_b": 218,
+        "forebet_prediction": "1",
+        "forebet_probability": 65.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 9.2,
+        "forebet_home_prob": 65,
+        "forebet_away_prob": 35
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Monastir",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-monastir/pankin-s.-vs-bar-biryukov-p./26136141?MarketTypeID=301",
+      "match_id": "26136141",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Pankin S.",
+      "away_team": "Bar Biryukov P.",
+      "event_date": "26/11",
+      "event_time": "10:00",
+      "outcome": "2",
+      "open_odds": 1.88,
+      "current_odds": 1.54,
+      "drop_pct": 18.0,
+      "max_odds": 1.57,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched",
+      "livesport_url": "https://www.livesport.com/pl/mecz/tenis/bar-biryukov-petr-KtZmtx2f/pankin-semen-AqOZJFvK/?mid=UZwYYqqR",
+      "livesport_confidence": 1.0,
+      "enrichment": {
+        "home_team": "Pankin S.",
+        "away_team": "Bar Biryukov P.",
+        "match_time": "26.11.2026 10:00",
+        "sport": "tennis",
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 0,
+        "away_wins_in_h2h_last5": 1,
+        "win_rate": 1.0,
+        "qualifies": true,
+        "home_form": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_home": [],
+        "away_form_away": [],
+        "home_odds": 2.4,
+        "away_odds": 1.5,
+        "favorite": "player_b",
+        "advanced_score": 70.1,
+        "tennis_skip_reason": null,
+        "h2h_last5": [
+          {
+            "date": "27.10.26",
+            "home": "Bar Biryukov P.",
+            "away": "Pankin S.",
+            "score": "2-1",
+            "winner": "home",
+            "raw": "27.10.26 Bar Biryukov P. 2-1 Pankin S."
+          }
+        ],
+        "last_h2h_date": "27.10.26",
+        "last_h2h_score": "2-1",
+        "last_h2h_home": "Bar Biryukov P.",
+        "last_h2h_away": "Pankin S.",
+        "form_advantage": false,
+        "surface": "hard",
+        "surface_form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "surface_form_b": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "surface_stats_a": {
+          "hard": 0.4
+        },
+        "surface_stats_b": {
+          "hard": 0.6
+        },
+        "form_a": [
+          "W",
+          "L",
+          "W",
+          "L",
+          "L"
+        ],
+        "form_b": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "tennis_data_warnings": [
+          "missing_recent_matches_A (Pankin S.)",
+          "missing_recent_matches_B (Bar Biryukov P.)"
+        ],
+        "tennis_phase_path": "full_pipeline",
+        "ranking_a": 423,
+        "ranking_b": 274,
+        "forebet_prediction": "2",
+        "forebet_probability": 66.0,
+        "forebet_exact_score": "0-2",
+        "forebet_avg_goals": 11.9,
+        "forebet_home_prob": 34,
+        "forebet_away_prob": 66
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Yokohama",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-yokohama/imamura-m.-vs-jorda-sanchis-d./26554070?MarketTypeID=301",
+      "match_id": "26554070",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Imamura M.",
+      "away_team": "Jorda Sanchis D.",
+      "event_date": "27/11",
+      "event_time": "03:10",
+      "outcome": "2",
+      "open_odds": 2.3,
+      "current_odds": 1.89,
+      "drop_pct": 18.0,
+      "max_odds": 1.98,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "W",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "away_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "L"
+        ],
+        "h2h_count": 2,
+        "home_wins_in_h2h_last5": 2,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 17584101,
+        "sofascore_home_team_id": 197935,
+        "sofascore_away_team_id": 57155,
+        "home_team": "Imamura M.",
+        "away_team": "Jorda Sanchis D.",
+        "sport": "tennis",
+        "league": "Challenger - Yokohama",
+        "match_time": "03:10",
+        "sofascore_home_win_prob": 34,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 66,
+        "sofascore_total_votes": 220,
+        "forebet_prediction": "1",
+        "forebet_probability": 71.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 10.6,
+        "forebet_home_prob": 71,
+        "forebet_away_prob": 29
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Yokohama",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-yokohama/uchida-k.-vs-milic-o./26595009?MarketTypeID=301",
+      "match_id": "26595009",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Uchida K.",
+      "away_team": "Milic O.",
+      "event_date": "27/11",
+      "event_time": "03:10",
+      "outcome": "2",
+      "open_odds": 1.75,
+      "current_odds": 1.53,
+      "drop_pct": 13.0,
+      "max_odds": 1.55,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "enriched_sofascore_only",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": {
+        "home_form": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "home_form_overall": [
+          "W",
+          "W",
+          "L",
+          "L",
+          "W"
+        ],
+        "form_source": "sofascore_api",
+        "away_form": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "away_form_overall": [
+          "W",
+          "L",
+          "L",
+          "W",
+          "W"
+        ],
+        "h2h_count": 1,
+        "home_wins_in_h2h_last5": 1,
+        "away_wins_in_h2h_last5": 0,
+        "h2h_source": "sofascore_api",
+        "win_rate": 0.0,
+        "sofascore_event_id": 17584104,
+        "sofascore_home_team_id": 82579,
+        "sofascore_away_team_id": 479273,
+        "home_team": "Uchida K.",
+        "away_team": "Milic O.",
+        "sport": "tennis",
+        "league": "Challenger - Yokohama",
+        "match_time": "03:10",
+        "sofascore_home_win_prob": 28,
+        "sofascore_draw_prob": null,
+        "sofascore_away_win_prob": 72,
+        "sofascore_total_votes": 267,
+        "forebet_prediction": "1",
+        "forebet_probability": 59.0,
+        "forebet_exact_score": "2-0",
+        "forebet_avg_goals": 11.9,
+        "forebet_home_prob": 59,
+        "forebet_away_prob": 41
+      },
+      "enrichment_error": null
+    },
+    {
+      "league": "Challenger - Hersonissos Doubles",
+      "match_url": "https://www.oddssafari.com/matches/tennis/challenger-hersonissos-doubles/cukierman-d.neos-e.-vs-cadenasso-g.vasami-j./26888722?MarketTypeID=301",
+      "match_id": "26888722",
+      "sport_slug": "tennis",
+      "sport": "tennis",
+      "home_team": "Cukierman D./Neos E.",
+      "away_team": "Cadenasso G./Vasami J.",
+      "event_date": "26/11",
+      "event_time": "09:10",
+      "outcome": "2",
+      "open_odds": 2.45,
+      "current_odds": 2.17,
+      "drop_pct": 12.0,
+      "max_odds": 2.3,
+      "sport_page_id": "30",
+      "notes": [],
+      "qualifies": true,
+      "skip_reason": null,
+      "dropped_outcome": "2",
+      "focus_team": "away",
+      "away_team_focus": true,
+      "enrichment_status": "resolve_failed",
+      "livesport_url": null,
+      "livesport_confidence": 0.0,
+      "enrichment": null,
+      "enrichment_error": null
+    }
+  ]
+}
