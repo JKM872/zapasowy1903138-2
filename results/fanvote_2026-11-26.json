@@ -1,6 +1,6 @@
 {
  "day": "2026-11-26",
- "generatedAt": "2026-11-26T09:53:57Z",
+ "generatedAt": "2026-11-26T16:50:12Z",
  "thresholds": {
   "minVotes": 30,
   "minVotesBySport": {
@@ -15,7 +15,7 @@
  },
  "sports": {
   "baseball": {
-   "generatedAt": "2026-11-26T09:50:00Z",
+   "generatedAt": "2026-11-26T16:47:23Z",
    "watch": false,
    "picks": [
     {
@@ -109,21 +109,26 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "won",
+      "score": "2-8",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     }
    ],
    "stats": {
     "rows": 21,
-    "withVote": 19,
-    "fanOk": 16,
+    "withVote": 13,
+    "fanOk": 8,
     "belowLimit": 0,
-    "noOdds": 15,
-    "voteRequested": 18,
-    "voteFound": 17,
+    "noOdds": 7,
+    "voteRequested": 11,
+    "voteFound": 11,
     "wrongEvent": 0,
-    "fanThr": 16,
+    "fanThr": 8,
     "oddsOk": 1,
-    "calls": 18,
+    "calls": 11,
     "budgetHit": 0,
     "details": 0,
     "picks": 1
@@ -136,12 +141,6 @@
     "baseball|2026-11-26|Aguilas de Mexicali|Jalisco",
     "baseball|2026-11-26|Sydney|Adelaide",
     "baseball|2026-11-26|Brisbane|Perth",
-    "baseball|2026-11-26|Sancti Spiritus|Guantanamo",
-    "baseball|2026-11-26|Mayabeque|Isla Juventud",
-    "baseball|2026-11-26|Artemisa|Cienfuegos",
-    "baseball|2026-11-26|Ciego de Avila|Santiago de Cuba",
-    "baseball|2026-11-26|Industriales|Matanzas",
-    "baseball|2026-11-26|Villa Clara|Pinar del Rio",
     "baseball|2026-11-26|Camaguey|Holguin",
     "baseball|2026-11-26|Las Tunas|Granma",
     "baseball|2026-11-26|Caracas|Aragua",
@@ -151,7 +150,7 @@
    ]
   },
   "basketball": {
-   "generatedAt": "2026-11-26T09:50:02Z",
+   "generatedAt": "2026-11-26T16:47:28Z",
    "watch": false,
    "picks": [
     {
@@ -182,10 +181,10 @@
      "oddsMarket": "2way",
      "bestPrice": {
       "price": 1.33,
-      "bookmaker": "livesport",
-      "pinnacle": 1.302,
+      "bookmaker": "oddssafari",
+      "pinnacle": 1.312,
       "books": 15,
-      "at": "2026-11-26T09:51:02Z"
+      "at": "2026-11-26T16:48:29Z"
      },
      "impliedPct": 75.2,
      "edgePct": 18.8,
@@ -242,8 +241,9 @@
      "modelProb": 0.703,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: X. Booker (Concussion), F. Jovic (Ankle)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -375,10 +375,10 @@
      "oddsMarket": "2way",
      "bestPrice": {
       "price": 1.35,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:50:58Z"
+      "at": null
      },
      "impliedPct": 74.1,
      "edgePct": 16.9,
@@ -435,10 +435,16 @@
      "modelProb": 0.766,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: Zachary Paschal (Limited playing time (Lim PT))",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "81-72",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "NCAA Men's Division I, Regular season",
       "category": "USA (College)",
@@ -614,7 +620,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "won",
+      "score": "80-78",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "basketball|2026-11-26|Telsiai|BC Olimpas Palanga",
@@ -644,10 +655,10 @@
      "oddsMarket": "2way",
      "bestPrice": {
       "price": 1.48,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.334,
-      "books": 12,
-      "at": "2026-11-26T09:50:58Z"
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
      "impliedPct": 67.6,
      "edgePct": 20.4,
@@ -704,8 +715,9 @@
      "modelProb": 0.735,
      "grade": "A",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -810,6 +822,205 @@
      }
     },
     {
+     "id": "basketball|2026-11-26|Memphis Grizzlies|Los Angeles Clippers",
+     "sport": "basketball",
+     "date": "2026-11-26",
+     "league": "NBA",
+     "kickoff": "2026-11-27T01:00:00Z",
+     "time": "03:00",
+     "home": "Memphis Grizzlies",
+     "away": "Los Angeles Clippers",
+     "match": "Memphis Grizzlies vs Los Angeles Clippers",
+     "side": "home",
+     "team": "Memphis Grizzlies",
+     "fanPct": 86.0,
+     "votes": 10291,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16814860",
+     "matchUrl": "https://www.sofascore.com/basketball/match/16814860",
+     "forebetUrl": "https://www.forebet.com/en/basketball/matches/nba/memphis-grizzlies-los-angeles-clippers/299405",
+     "eventId": null,
+     "odds": {
+      "home": 1.4,
+      "draw": null,
+      "away": 3.15
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.4,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 71.4,
+     "edgePct": 14.6,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWLWW",
+      "venue": "WWWLL",
+      "opponentOverall": "LLLLL",
+      "opponentVenue": "LLLLL",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "115-97",
+      "lastDate": "26.11.26",
+      "line": "H2H: Memphis Grizzlies 4-0-1 (last: 2026-11-26 Memphis Grizzlies 115-97 Los Angeles Clippers)",
+      "last": "2026-11-26 Memphis Grizzlies 115-97 Los Angeles Clippers (Memphis Grizzlies won)",
+      "edge": {
+       "team": "Memphis Grizzlies",
+       "wins": 4,
+       "draws": 0,
+       "losses": 1,
+       "record": "4-0-1",
+       "even": false
+      }
+     },
+     "lastMatch": {
+      "team": {
+       "date": "26.11.26",
+       "result": "W",
+       "score": "115-97",
+       "event": "NBA (USA)"
+      },
+      "opponent": {
+       "date": "26.11.26",
+       "result": "L",
+       "score": "115-97",
+       "event": "NBA (USA)"
+      }
+     },
+     "forebet": {
+      "prob": 58.0,
+      "pick": "1",
+      "exactScore": "120-110"
+     },
+     "modelProb": 0.741,
+     "grade": "B",
+     "availability": {
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
+     },
+     "result": {
+      "status": "won",
+      "score": "115-97",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
+     "details": {
+      "tournament": "NBA",
+      "category": "USA",
+      "round": "",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Los Angeles Clippers",
+        "venue": "H",
+        "result": "W",
+        "score": "115-97",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-24",
+        "opponent": "Charlotte Hornets",
+        "venue": "A",
+        "result": "W",
+        "score": "117-111",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-22",
+        "opponent": "Minnesota Timberwolves",
+        "venue": "A",
+        "result": "L",
+        "score": "95-104",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-20",
+        "opponent": "Golden State Warriors",
+        "venue": "H",
+        "result": "W",
+        "score": "126-98",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "Cleveland Cavaliers",
+        "venue": "A",
+        "result": "W",
+        "score": "124-121",
+        "tournament": "NBA",
+        "round": ""
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Memphis Grizzlies",
+        "venue": "A",
+        "result": "L",
+        "score": "97-115",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-24",
+        "opponent": "Houston Rockets",
+        "venue": "A",
+        "result": "L",
+        "score": "104-116",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-22",
+        "opponent": "Dallas Mavericks",
+        "venue": "A",
+        "result": "L",
+        "score": "100-110",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-20",
+        "opponent": "San Antonio Spurs",
+        "venue": "A",
+        "result": "L",
+        "score": "112-124",
+        "tournament": "NBA",
+        "round": ""
+       },
+       {
+        "date": "2026-11-18",
+        "opponent": "Utah Jazz",
+        "venue": "H",
+        "result": "L",
+        "score": "107-132",
+        "tournament": "NBA",
+        "round": ""
+       }
+      ]
+     }
+    },
+    {
      "id": "basketball|2026-11-26|Iceland|Bosnia & Herzegovina",
      "sport": "basketball",
      "date": "2026-11-26",
@@ -821,8 +1032,8 @@
      "match": "Iceland vs Bosnia & Herzegovina",
      "side": "away",
      "team": "Bosnia & Herzegovina",
-     "fanPct": 87.0,
-     "votes": 1736,
+     "fanPct": 85.0,
+     "votes": 2788,
      "band": "80-90",
      "sofascoreUrl": "https://www.sofascore.com/basketball/match/16461378",
      "matchUrl": "https://www.sofascore.com/basketball/match/16461378",
@@ -836,14 +1047,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.65,
+      "price": 1.72,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.518,
+      "pinnacle": 1.68,
       "books": 13,
-      "at": "2026-11-26T09:51:02Z"
+      "at": "2026-11-26T16:48:29Z"
      },
-     "impliedPct": 60.6,
-     "edgePct": 26.4,
+     "impliedPct": 58.1,
+     "edgePct": 26.9,
      "limit": {
       "min": 1.3,
       "source": "standard"
@@ -971,199 +1182,6 @@
         "result": "L",
         "score": "82-99",
         "tournament": "FIBA World Cup, European Qualifiers, Group D",
-        "round": ""
-       }
-      ]
-     }
-    },
-    {
-     "id": "basketball|2026-11-26|Memphis Grizzlies|Los Angeles Clippers",
-     "sport": "basketball",
-     "date": "2026-11-26",
-     "league": "NBA",
-     "kickoff": "2026-11-27T01:00:00Z",
-     "time": "03:00",
-     "home": "Memphis Grizzlies",
-     "away": "Los Angeles Clippers",
-     "match": "Memphis Grizzlies vs Los Angeles Clippers",
-     "side": "home",
-     "team": "Memphis Grizzlies",
-     "fanPct": 86.0,
-     "votes": 10291,
-     "band": "80-90",
-     "sofascoreUrl": "https://www.sofascore.com/basketball/match/16814860",
-     "matchUrl": "https://www.sofascore.com/basketball/match/16814860",
-     "forebetUrl": "https://www.forebet.com/en/basketball/matches/nba/memphis-grizzlies-los-angeles-clippers/299405",
-     "eventId": null,
-     "odds": {
-      "home": 1.4,
-      "draw": null,
-      "away": 3.15
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.4,
-      "bookmaker": "livesport",
-      "pinnacle": null,
-      "books": 1,
-      "at": "2026-11-26T09:50:58Z"
-     },
-     "impliedPct": 71.4,
-     "edgePct": 14.6,
-     "limit": {
-      "min": 1.3,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "WWLWW",
-      "venue": "WWWLL",
-      "opponentOverall": "LLLLL",
-      "opponentVenue": "LLLLL",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": {
-      "total": 5,
-      "wins": 2,
-      "losses": 3,
-      "lastScore": "115-97",
-      "lastDate": "26.11.26",
-      "line": "H2H: Memphis Grizzlies 4-0-1 (last: 2026-11-26 Memphis Grizzlies 115-97 Los Angeles Clippers)",
-      "last": "2026-11-26 Memphis Grizzlies 115-97 Los Angeles Clippers (Memphis Grizzlies won)",
-      "edge": {
-       "team": "Memphis Grizzlies",
-       "wins": 4,
-       "draws": 0,
-       "losses": 1,
-       "record": "4-0-1",
-       "even": false
-      }
-     },
-     "lastMatch": {
-      "team": {
-       "date": "26.11.26",
-       "result": "W",
-       "score": "115-97",
-       "event": "NBA (USA)"
-      },
-      "opponent": {
-       "date": "26.11.26",
-       "result": "L",
-       "score": "115-97",
-       "event": "NBA (USA)"
-      }
-     },
-     "forebet": {
-      "prob": 58.0,
-      "pick": "1",
-      "exactScore": "120-110"
-     },
-     "modelProb": 0.741,
-     "grade": "B",
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "NBA",
-      "category": "USA",
-      "round": "",
-      "surface": "",
-      "team": [
-       {
-        "date": "2026-11-26",
-        "opponent": "Los Angeles Clippers",
-        "venue": "H",
-        "result": "W",
-        "score": "115-97",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-24",
-        "opponent": "Charlotte Hornets",
-        "venue": "A",
-        "result": "W",
-        "score": "117-111",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-22",
-        "opponent": "Minnesota Timberwolves",
-        "venue": "A",
-        "result": "L",
-        "score": "95-104",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-20",
-        "opponent": "Golden State Warriors",
-        "venue": "H",
-        "result": "W",
-        "score": "126-98",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-19",
-        "opponent": "Cleveland Cavaliers",
-        "venue": "A",
-        "result": "W",
-        "score": "124-121",
-        "tournament": "NBA",
-        "round": ""
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-26",
-        "opponent": "Memphis Grizzlies",
-        "venue": "A",
-        "result": "L",
-        "score": "97-115",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-24",
-        "opponent": "Houston Rockets",
-        "venue": "A",
-        "result": "L",
-        "score": "104-116",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-22",
-        "opponent": "Dallas Mavericks",
-        "venue": "A",
-        "result": "L",
-        "score": "100-110",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-20",
-        "opponent": "San Antonio Spurs",
-        "venue": "A",
-        "result": "L",
-        "score": "112-124",
-        "tournament": "NBA",
-        "round": ""
-       },
-       {
-        "date": "2026-11-18",
-        "opponent": "Utah Jazz",
-        "venue": "H",
-        "result": "L",
-        "score": "107-132",
-        "tournament": "NBA",
         "round": ""
        }
       ]
@@ -1363,14 +1381,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.74,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.725,
-      "books": 8,
-      "at": "2026-11-26T09:51:02Z"
+      "price": 1.68,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 57.5,
-     "edgePct": 25.5,
+     "impliedPct": 59.5,
+     "edgePct": 23.5,
      "limit": {
       "min": 1.3,
       "source": "standard"
@@ -1503,7 +1521,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "lost",
+      "score": "116-111",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "basketball|2026-11-26|Michigan State|Arkansas",
@@ -1534,9 +1557,9 @@
      "bestPrice": {
       "price": 1.48,
       "bookmaker": "pinnacle",
-      "pinnacle": 1.452,
+      "pinnacle": 1.457,
       "books": 15,
-      "at": "2026-11-26T09:51:02Z"
+      "at": "2026-11-26T16:48:29Z"
      },
      "impliedPct": 67.6,
      "edgePct": 11.4,
@@ -1593,8 +1616,9 @@
      "modelProb": 0.676,
      "grade": "A",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "warn",
+      "note": "Key absences: Jordan Scott* (shoulder injury; held out of previous game and status uncertain), Coen Carr (tendinitis; held out of previous game and status uncertain)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -1727,9 +1751,9 @@
      "bestPrice": {
       "price": 1.4,
       "bookmaker": "oddssafari",
-      "pinnacle": null,
-      "books": 9,
-      "at": "2026-11-26T09:51:02Z"
+      "pinnacle": 1.119,
+      "books": 13,
+      "at": "2026-11-26T16:48:29Z"
      },
      "impliedPct": 71.4,
      "edgePct": 6.6,
@@ -1920,9 +1944,9 @@
      "bestPrice": {
       "price": 1.4,
       "bookmaker": "oddssafari",
-      "pinnacle": null,
-      "books": 9,
-      "at": "2026-11-26T09:51:02Z"
+      "pinnacle": 1.119,
+      "books": 13,
+      "at": "2026-11-26T16:48:29Z"
      },
      "impliedPct": 71.4,
      "edgePct": 5.6,
@@ -1995,10 +2019,10 @@
      "oddsMarket": "2way",
      "bestPrice": {
       "price": 1.68,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:02Z"
+      "at": null
      },
      "impliedPct": 59.5,
      "edgePct": 15.5,
@@ -2041,7 +2065,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "65-68",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "NCAA Men's Division I, Regular season",
       "category": "USA (College)",
@@ -2171,10 +2200,10 @@
      "oddsMarket": "2way",
      "bestPrice": {
       "price": 1.55,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.413,
-      "books": 4,
-      "at": "2026-11-26T09:50:58Z"
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
      "impliedPct": 64.5,
      "edgePct": 7.5,
@@ -2410,7 +2439,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "lost",
+      "score": "5-5",
+      "draw": true,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "basketball|2026-11-26|Lithuania|Serbia",
@@ -2749,19 +2783,19 @@
    ],
    "stats": {
     "rows": 169,
-    "withVote": 128,
-    "fanOk": 57,
-    "belowLimit": 19,
-    "noOdds": 23,
-    "voteRequested": 130,
-    "voteFound": 100,
+    "withVote": 99,
+    "fanOk": 43,
+    "belowLimit": 13,
+    "noOdds": 18,
+    "voteRequested": 86,
+    "voteFound": 71,
     "wrongEvent": 0,
-    "fanThr": 101,
-    "oddsOk": 15,
-    "calls": 130,
+    "fanThr": 73,
+    "oddsOk": 12,
+    "calls": 86,
     "budgetHit": 0,
-    "details": 11,
-    "picks": 15
+    "details": 0,
+    "picks": 12
    },
    "evaluated": [
     "basketball|2026-11-26|Memphis Grizzlies|Los Angeles Clippers",
@@ -2774,24 +2808,11 @@
     "basketball|2026-11-26|Utah Tech W|San Diego W",
     "basketball|2026-11-26|Portland Trail Blazers|San Antonio Spurs",
     "basketball|2026-11-26|Mongolia|Indonesia",
-    "basketball|2026-11-26|Sichuan W|Jiangsu Phoenix W",
-    "basketball|2026-11-26|Shanxi Xing Rui W|Shanghai W",
     "basketball|2026-11-26|Wuhan W|Hebei W",
-    "basketball|2026-11-26|Saudi Arabia|China",
     "basketball|2026-11-26|Vilkaviskis|Alytaus Patriotai",
     "basketball|2026-11-26|Telsiai|BC Olimpas Palanga",
-    "basketball|2026-11-26|Silute|Rytas 2",
     "basketball|2026-11-26|Mazeikiai|Omega-Tauras",
-    "basketball|2026-11-26|Kauno Atletas|Ukmerges Stekas",
-    "basketball|2026-11-26|Qatar|South Korea",
-    "basketball|2026-11-26|Cincinnati|Georgia",
-    "basketball|2026-11-26|Md.-East. Shore W|Oregon W",
-    "basketball|2026-11-26|Southern Jaguars W|Auburn W",
     "basketball|2026-11-26|Kedainiai BC|Kretinga",
-    "basketball|2026-11-26|Siroki Brijeg|Zrinjski Mostar",
-    "basketball|2026-11-26|Panathinaikos W|San Giovanni W",
-    "basketball|2026-11-26|Lithuania|Serbia",
-    "basketball|2026-11-26|Notre Dame W|West Virginia W",
     "basketball|2026-11-26|Plunges Olimpas|Vytis VDU",
     "basketball|2026-11-26|Slovakia|Switzerland",
     "basketball|2026-11-26|Jurbarkas|Suduva-Mantinga",
@@ -2832,7 +2853,6 @@
     "basketball|2026-11-26|UCLA|St. Marys (CA)",
     "basketball|2026-11-26|Uruguay|Canada",
     "basketball|2026-11-26|Texas Tech W|Air Force W",
-    "basketball|2026-11-26|Bochnia K|Polonia Warszawa K",
     "basketball|2026-11-26|Charlotte Hornets|Chicago Bulls",
     "basketball|2026-11-26|New York Knicks|Cleveland Cavaliers",
     "basketball|2026-11-26|Oklahoma City Thunder|Minnesota Timberwolves",
@@ -2842,18 +2862,11 @@
     "basketball|2026-11-26|Arabia Saudyjska|Chiny",
     "basketball|2026-11-26|Katar|Korea Południowa",
     "basketball|2026-11-26|Fidżi|Hong Kong",
-    "basketball|2026-11-26|BK Havirov K|Basket Ostrava K",
-    "basketball|2026-11-26|Macedonia Północna|Cypr",
     "basketball|2026-11-26|Portugalia|Ukraina",
-    "basketball|2026-11-26|Panathinaikos K|San Giovanni K",
-    "basketball|2026-11-26|CBK Mersin K|Ferrol K",
-    "basketball|2026-11-26|TTT Riga K|Cluj Napoca K",
-    "basketball|2026-11-26|Gorzów K|Ensino K",
     "basketball|2026-11-26|ESB Villeneuve K|Maccabi Ashdod K",
     "basketball|2026-11-26|Lattes Montpellier K|Panseraikos K",
     "basketball|2026-11-26|Namur K|MBK Ruzomberok K",
     "basketball|2026-11-26|Benfica K|Nis K",
-    "basketball|2026-11-26|Sibenik K|Buducnost K",
     "basketball|2026-11-26|Alte Kanti Aarau K|Zurich K",
     "basketball|2026-11-26|Westchester|Greensboro Swarm",
     "basketball|2026-11-26|Laketown Squadron|Osceola Magic",
@@ -2871,20 +2884,12 @@
     "basketball|2026-11-26|UTEP|Eastern Michigan",
     "basketball|2026-11-26|Colorado|Grand Canyon",
     "basketball|2026-11-26|Jacksonville St.|Pacific",
-    "basketball|2026-11-26|Maryland|San Diego State",
     "basketball|2026-11-26|Iowa State|Tennessee",
     "basketball|2026-11-26|Alabama K|Samford Bulldogs K",
     "basketball|2026-11-26|Northern Iowa Panthers K|St. Louis Billikens K",
     "basketball|2026-11-26|Texas Longhorns K|SE Louisiana K",
     "basketball|2026-11-26|Texas State K|Pacific K",
     "basketball|2026-11-26|Utah Tech K|San Diego K",
-    "basketball|2026-11-26|Southern Jaguars K|Auburn K",
-    "basketball|2026-11-26|Md.-East. Shore K|Oregon K",
-    "basketball|2026-11-26|Notre Dame K|West Virginia K",
-    "basketball|2026-11-26|Tennessee Tech K|AR Little Rock K",
-    "basketball|2026-11-26|Wisconsin Badgers K|Syracuse K",
-    "basketball|2026-11-26|Charleston K|Mcneese State K",
-    "basketball|2026-11-26|Colorado Buffaloes K|Georgia K",
     "basketball|2026-11-26|Binghamton K|UTSA Roadrunners K",
     "basketball|2026-11-26|Florida Gators K|Davidson K",
     "basketball|2026-11-26|Colorado State K|Grambling St. K",
@@ -2895,7 +2900,7 @@
    ]
   },
   "football": {
-   "generatedAt": "2026-11-26T09:50:00Z",
+   "generatedAt": "2026-11-26T16:47:16Z",
    "watch": false,
    "picks": [
     {
@@ -2972,7 +2977,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "lost",
+      "score": "1-1",
+      "draw": true,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "football|2026-11-26|Hearts|Monaco",
@@ -3001,14 +3011,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.57,
+      "price": 1.56,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.541,
-      "books": 12,
-      "at": "2026-11-26T09:51:30Z"
+      "pinnacle": 1.532,
+      "books": 15,
+      "at": "2026-11-26T16:48:09Z"
      },
-     "impliedPct": 63.7,
-     "edgePct": 18.3,
+     "impliedPct": 64.1,
+     "edgePct": 17.9,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -3062,8 +3072,9 @@
      "modelProb": 0.446,
      "grade": "C",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: A. Golovin (Calf Injury), A. Fati (Hamstring Injury), P. Brunner (Hamstring Injury)",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
      "result": null,
      "details": {
@@ -3241,7 +3252,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "won",
+      "score": "1-0",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "football|2026-11-26|Independiente Res.|Gimnasia Mendoza Res",
@@ -3274,7 +3290,7 @@
       "bookmaker": "pinnacle",
       "pinnacle": 1.741,
       "books": 5,
-      "at": "2026-11-26T09:51:30Z"
+      "at": "2026-11-26T16:48:10Z"
      },
      "impliedPct": 57.5,
      "edgePct": 22.5,
@@ -3463,14 +3479,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.6,
-      "bookmaker": "oddssafari",
+      "price": 1.53,
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
-      "books": 11,
-      "at": "2026-11-26T09:51:30Z"
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 62.5,
-     "edgePct": 16.5,
+     "impliedPct": 65.4,
+     "edgePct": 13.6,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -3656,14 +3672,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 2.18,
-      "bookmaker": "oddssafari",
-      "pinnacle": 2.13,
-      "books": 12,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 2.45,
+      "bookmaker": "livesport",
+      "pinnacle": 2.36,
+      "books": 15,
+      "at": "2026-11-26T16:48:09Z"
      },
-     "impliedPct": 45.9,
-     "edgePct": 32.1,
+     "impliedPct": 40.8,
+     "edgePct": 37.2,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -3717,8 +3733,9 @@
      "modelProb": 0.466,
      "grade": "C",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
      "result": null,
      "details": {
@@ -3849,14 +3866,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.85,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.8,
-      "books": 15,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 1.78,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 54.1,
-     "edgePct": 23.9,
+     "impliedPct": 56.2,
+     "edgePct": 21.8,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -3910,8 +3927,9 @@
      "modelProb": 0.638,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
      "result": null,
      "details": {
@@ -4028,10 +4046,10 @@
      "side": "away",
      "team": "Al Shabab",
      "fanPct": 78.0,
-     "votes": 3439,
+     "votes": 3320,
      "band": "70-80",
-     "sofascoreUrl": "https://www.sofascore.com/football/match/17528400",
-     "matchUrl": "https://www.sofascore.com/football/match/17528400",
+     "sofascoreUrl": null,
+     "matchUrl": null,
      "forebetUrl": null,
      "eventId": null,
      "odds": {
@@ -4042,14 +4060,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.85,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.8,
-      "books": 15,
-      "at": "2026-11-26T09:51:31Z"
+      "price": 1.78,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 54.1,
-     "edgePct": 23.9,
+     "impliedPct": 56.2,
+     "edgePct": 21.8,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -4218,14 +4236,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.56,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.538,
-      "books": 10,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 1.53,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 64.1,
-     "edgePct": 13.9,
+     "impliedPct": 65.4,
+     "edgePct": 12.6,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -4412,10 +4430,10 @@
      "oddsMarket": "3way",
      "bestPrice": {
       "price": 1.8,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.649,
-      "books": 13,
-      "at": "2026-11-26T09:51:30Z"
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
      "impliedPct": 55.6,
      "edgePct": 22.4,
@@ -4607,8 +4625,8 @@
       "price": 2.2,
       "bookmaker": "oddssafari",
       "pinnacle": null,
-      "books": 12,
-      "at": "2026-11-26T09:51:30Z"
+      "books": 15,
+      "at": "2026-11-26T16:48:10Z"
      },
      "impliedPct": 45.5,
      "edgePct": 31.5,
@@ -4665,8 +4683,9 @@
      "modelProb": 0.526,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "warn",
+      "note": "Key absences: Eggert Aron Guðmundsson* (Leg Injury), J. L. Sørensen (Ankle Injury), S. Tronstad (Cruciate Ligament Injury)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -4877,7 +4896,7 @@
       "bookmaker": "oddssafari",
       "pinnacle": null,
       "books": 10,
-      "at": "2026-11-26T09:51:31Z"
+      "at": "2026-11-26T16:48:10Z"
      },
      "impliedPct": 45.5,
      "edgePct": 31.5,
@@ -4951,9 +4970,9 @@
      "bestPrice": {
       "price": 2.05,
       "bookmaker": "oddssafari",
-      "pinnacle": 2.02,
-      "books": 11,
-      "at": "2026-11-26T09:51:30Z"
+      "pinnacle": 2.03,
+      "books": 14,
+      "at": "2026-11-26T16:48:05Z"
      },
      "impliedPct": 48.8,
      "edgePct": 27.2,
@@ -5010,8 +5029,9 @@
      "modelProb": 0.499,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: A. Tóth (Hamstring Injury)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -5142,14 +5162,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.71,
+      "price": 1.65,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.68,
+      "pinnacle": 1.602,
       "books": 15,
-      "at": "2026-11-26T09:51:30Z"
+      "at": "2026-11-26T16:48:10Z"
      },
-     "impliedPct": 58.5,
-     "edgePct": 17.5,
+     "impliedPct": 60.6,
+     "edgePct": 15.4,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -5203,8 +5223,9 @@
      "modelProb": 0.606,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
      "result": null,
      "details": {
@@ -5335,14 +5356,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.57,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.529,
-      "books": 14,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 1.53,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 63.7,
-     "edgePct": 11.3,
+     "impliedPct": 65.4,
+     "edgePct": 9.6,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -5528,14 +5549,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.91,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.781,
-      "books": 10,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 1.85,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 52.4,
-     "edgePct": 19.6,
+     "impliedPct": 54.1,
+     "edgePct": 17.9,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -5721,14 +5742,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 2.1,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.952,
-      "books": 13,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 2.0,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 47.6,
-     "edgePct": 21.4,
+     "impliedPct": 50.0,
+     "edgePct": 19.0,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -5961,7 +5982,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "lost",
+      "score": "0-1",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "football|2026-11-26|Monachium 1860 II|Pfaffenhofen",
@@ -5976,10 +6002,10 @@
      "side": "away",
      "team": "Pfaffenhofen",
      "fanPct": 67.0,
-     "votes": 104,
+     "votes": 103,
      "band": "60-70",
-     "sofascoreUrl": "https://www.sofascore.com/football/match/16482270",
-     "matchUrl": "https://www.sofascore.com/football/match/16482270",
+     "sofascoreUrl": null,
+     "matchUrl": null,
      "forebetUrl": null,
      "eventId": null,
      "odds": {
@@ -5991,10 +6017,10 @@
      "oddsMarket": "3way",
      "bestPrice": {
       "price": 1.89,
-      "bookmaker": "oddssafari",
+      "bookmaker": "oddssafari_coupon",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:31Z"
+      "at": null
      },
      "impliedPct": 52.9,
      "edgePct": 14.1,
@@ -6166,14 +6192,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.72,
+      "price": 1.65,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.69,
-      "books": 11,
-      "at": "2026-11-26T09:51:30Z"
+      "pinnacle": 1.633,
+      "books": 14,
+      "at": "2026-11-26T16:48:09Z"
      },
-     "impliedPct": 58.1,
-     "edgePct": 7.9,
+     "impliedPct": 60.6,
+     "edgePct": 5.4,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -6227,8 +6253,9 @@
      "modelProb": 0.505,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: K. Eichhorn (Illness)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -6333,182 +6360,6 @@
      }
     },
     {
-     "id": "football|2026-11-26|Sparta Praga|Alkmaar",
-     "sport": "football",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T18:00:00Z",
-     "time": "20:00",
-     "home": "Sparta Praga",
-     "away": "Alkmaar",
-     "match": "Sparta Praga vs Alkmaar",
-     "side": "away",
-     "team": "Alkmaar",
-     "fanPct": 66.0,
-     "votes": 14716,
-     "band": "60-70",
-     "sofascoreUrl": "https://www.sofascore.com/football/match/16944499",
-     "matchUrl": "https://www.sofascore.com/football/match/16944499",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 2.95,
-      "draw": 3.55,
-      "away": 2.3
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "3way",
-     "bestPrice": {
-      "price": 2.35,
-      "bookmaker": "oddssafari",
-      "pinnacle": 2.33,
-      "books": 11,
-      "at": "2026-11-26T09:51:30Z"
-     },
-     "impliedPct": 42.6,
-     "edgePct": 23.4,
-     "limit": {
-      "min": 1.5,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "WWLLL",
-      "venue": "WLWDL",
-      "opponentOverall": "LDLDL",
-      "opponentVenue": "LLLWD",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": {
-      "total": 2,
-      "wins": null,
-      "losses": null,
-      "lastScore": null,
-      "lastDate": null,
-      "line": "H2H: Alkmaar 0-2-0 (even)",
-      "last": "No previous meetings",
-      "edge": null
-     },
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": "2",
-      "exactScore": "1 - 2"
-     },
-     "modelProb": 0.462,
-     "grade": "C",
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "UEFA Europa League",
-      "category": "Europe",
-      "round": "Round 5",
-      "surface": "",
-      "team": [
-       {
-        "date": "2026-11-22",
-        "opponent": "Sparta Rotterdam",
-        "venue": "A",
-        "result": "W",
-        "score": "5-1",
-        "tournament": "VriendenLoterij Eredivisie",
-        "round": ""
-       },
-       {
-        "date": "2026-11-08",
-        "opponent": "FC Groningen",
-        "venue": "H",
-        "result": "W",
-        "score": "4-3",
-        "tournament": "VriendenLoterij Eredivisie",
-        "round": ""
-       },
-       {
-        "date": "2026-11-05",
-        "opponent": "Juventus",
-        "venue": "H",
-        "result": "L",
-        "score": "1-2",
-        "tournament": "UEFA Europa League",
-        "round": ""
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "AFC Ajax",
-        "venue": "A",
-        "result": "L",
-        "score": "0-1",
-        "tournament": "VriendenLoterij Eredivisie",
-        "round": ""
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "FC Twente",
-        "venue": "H",
-        "result": "L",
-        "score": "0-2",
-        "tournament": "VriendenLoterij Eredivisie",
-        "round": ""
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-22",
-        "opponent": "FC Slovan Liberec",
-        "venue": "H",
-        "result": "L",
-        "score": "1-3",
-        "tournament": "Czech First League",
-        "round": ""
-       },
-       {
-        "date": "2026-11-08",
-        "opponent": "FC Viktoria Plzeň",
-        "venue": "A",
-        "result": "D",
-        "score": "1-1",
-        "tournament": "Czech First League",
-        "round": ""
-       },
-       {
-        "date": "2026-11-05",
-        "opponent": "Bournemouth",
-        "venue": "H",
-        "result": "L",
-        "score": "1-3",
-        "tournament": "UEFA Europa League",
-        "round": ""
-       },
-       {
-        "date": "2026-11-01",
-        "opponent": "Bohemians Praha 1905",
-        "venue": "A",
-        "result": "D",
-        "score": "0-0",
-        "tournament": "Czech First League",
-        "round": ""
-       },
-       {
-        "date": "2026-10-28",
-        "opponent": "Baník Ostrava",
-        "venue": "H",
-        "result": "L",
-        "score": "0-2",
-        "tournament": "MOL Cup",
-        "round": "Round 4"
-       }
-      ]
-     }
-    },
-    {
      "id": "football|2026-11-26|Sparta Praha|AZ Alkmaar",
      "sport": "football",
      "date": "2026-11-26",
@@ -6535,14 +6386,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 2.35,
+      "price": 2.45,
       "bookmaker": "oddssafari",
-      "pinnacle": 2.33,
-      "books": 11,
-      "at": "2026-11-26T09:51:30Z"
+      "pinnacle": 2.44,
+      "books": 14,
+      "at": "2026-11-26T16:48:10Z"
      },
-     "impliedPct": 42.6,
-     "edgePct": 23.4,
+     "impliedPct": 40.8,
+     "edgePct": 25.2,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -6596,8 +6447,9 @@
      "modelProb": 0.642,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: K. Smit* (Groin Injury), S. Resink (Knee Injury)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -6775,7 +6627,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "lost",
+      "score": "1-1",
+      "draw": true,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
     },
     {
      "id": "football|2026-11-26|Freiburg|Twente",
@@ -6804,14 +6661,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.9,
+      "price": 1.85,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.82,
-      "books": 12,
-      "at": "2026-11-26T09:51:30Z"
+      "pinnacle": 1.769,
+      "books": 15,
+      "at": "2026-11-26T16:48:10Z"
      },
-     "impliedPct": 52.6,
-     "edgePct": 12.4,
+     "impliedPct": 54.1,
+     "edgePct": 10.9,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -6865,8 +6722,9 @@
      "modelProb": 0.631,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -6997,14 +6855,14 @@
      "oddsSource": "SofaScore",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 1.85,
+      "price": 1.83,
       "bookmaker": "oddssafari",
       "pinnacle": null,
-      "books": 11,
-      "at": "2026-11-26T09:51:30Z"
+      "books": 14,
+      "at": "2026-11-26T16:48:10Z"
      },
-     "impliedPct": 54.1,
-     "edgePct": 10.9,
+     "impliedPct": 54.6,
+     "edgePct": 10.4,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -7032,8 +6890,9 @@
      "modelProb": 0.528,
      "grade": "C",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: L. Hey (Broken Leg)",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
      "result": null,
      "details": {
@@ -7211,7 +7070,189 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": {
+      "status": "lost",
+      "score": "1-1",
+      "draw": true,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
+    },
+    {
+     "id": "football|2026-11-26|Sparta Praga|Alkmaar",
+     "sport": "football",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T18:00:00Z",
+     "time": "20:00",
+     "home": "Sparta Praga",
+     "away": "Alkmaar",
+     "match": "Sparta Praga vs Alkmaar",
+     "side": "away",
+     "team": "Alkmaar",
+     "fanPct": 64.0,
+     "votes": 23164,
+     "band": "60-70",
+     "sofascoreUrl": "https://www.sofascore.com/football/match/16944499",
+     "matchUrl": "https://www.sofascore.com/football/match/16944499",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 2.95,
+      "draw": 3.55,
+      "away": 2.3
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "3way",
+     "bestPrice": {
+      "price": 2.45,
+      "bookmaker": "oddssafari",
+      "pinnacle": 2.44,
+      "books": 14,
+      "at": "2026-11-26T16:48:10Z"
+     },
+     "impliedPct": 40.8,
+     "edgePct": 23.2,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WWLLL",
+      "venue": "WLWDL",
+      "opponentOverall": "LDLDL",
+      "opponentVenue": "LLLWD",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 2,
+      "wins": null,
+      "losses": null,
+      "lastScore": null,
+      "lastDate": null,
+      "line": "H2H: Alkmaar 0-2-0 (even)",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": "2",
+      "exactScore": "1 - 2"
+     },
+     "modelProb": 0.462,
+     "grade": "C",
+     "availability": {
+      "verdict": "warn",
+      "note": "Key absences: E. Dijkstra (Unknown), K. Smit* (Groin Injury), M. Meerdink (Unknown), S. Resink (Knee Injury)",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
+     },
+     "result": null,
+     "details": {
+      "tournament": "UEFA Europa League",
+      "category": "Europe",
+      "round": "Round 5",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-22",
+        "opponent": "Sparta Rotterdam",
+        "venue": "A",
+        "result": "W",
+        "score": "5-1",
+        "tournament": "VriendenLoterij Eredivisie",
+        "round": ""
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "FC Groningen",
+        "venue": "H",
+        "result": "W",
+        "score": "4-3",
+        "tournament": "VriendenLoterij Eredivisie",
+        "round": ""
+       },
+       {
+        "date": "2026-11-05",
+        "opponent": "Juventus",
+        "venue": "H",
+        "result": "L",
+        "score": "1-2",
+        "tournament": "UEFA Europa League",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "AFC Ajax",
+        "venue": "A",
+        "result": "L",
+        "score": "0-1",
+        "tournament": "VriendenLoterij Eredivisie",
+        "round": ""
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "FC Twente",
+        "venue": "H",
+        "result": "L",
+        "score": "0-2",
+        "tournament": "VriendenLoterij Eredivisie",
+        "round": ""
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-22",
+        "opponent": "FC Slovan Liberec",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3",
+        "tournament": "Czech First League",
+        "round": ""
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "FC Viktoria Plzeň",
+        "venue": "A",
+        "result": "D",
+        "score": "1-1",
+        "tournament": "Czech First League",
+        "round": ""
+       },
+       {
+        "date": "2026-11-05",
+        "opponent": "Bournemouth",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3",
+        "tournament": "UEFA Europa League",
+        "round": ""
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Bohemians Praha 1905",
+        "venue": "A",
+        "result": "D",
+        "score": "0-0",
+        "tournament": "Czech First League",
+        "round": ""
+       },
+       {
+        "date": "2026-10-28",
+        "opponent": "Baník Ostrava",
+        "venue": "H",
+        "result": "L",
+        "score": "0-2",
+        "tournament": "MOL Cup",
+        "round": "Round 4"
+       }
+      ]
+     }
     },
     {
      "id": "football|2026-11-26|PKR Svay Rieng|Machida Zelvia",
@@ -7240,14 +7281,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 2.1,
-      "bookmaker": "oddssafari",
-      "pinnacle": 2.02,
-      "books": 13,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 2.0,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 47.6,
-     "edgePct": 15.4,
+     "impliedPct": 50.0,
+     "edgePct": 13.0,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -7433,14 +7474,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "3way",
      "bestPrice": {
-      "price": 2.25,
-      "bookmaker": "oddssafari",
-      "pinnacle": 2.07,
-      "books": 14,
-      "at": "2026-11-26T09:51:30Z"
+      "price": 2.1,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 44.4,
-     "edgePct": 18.6,
+     "impliedPct": 47.6,
+     "edgePct": 15.4,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -7678,47 +7719,33 @@
    ],
    "stats": {
     "rows": 225,
-    "withVote": 172,
-    "fanOk": 114,
-    "belowLimit": 24,
-    "noOdds": 66,
-    "voteRequested": 162,
-    "voteFound": 136,
+    "withVote": 94,
+    "fanOk": 66,
+    "belowLimit": 16,
+    "noOdds": 26,
+    "voteRequested": 60,
+    "voteFound": 56,
     "wrongEvent": 0,
-    "fanThr": 114,
+    "fanThr": 66,
     "oddsOk": 24,
-    "calls": 162,
+    "calls": 60,
     "budgetHit": 0,
-    "details": 22,
+    "details": 0,
     "picks": 24
    },
    "evaluated": [
     "football|2026-11-26|Dusheti Aragvi|Merani Martvili",
-    "football|2026-11-26|Tampines Rovers|Shanghai Shenhua",
-    "football|2026-11-26|Serbia U19 W|Azerbaijan U19 W",
-    "football|2026-11-26|Bentonit Ijevan|Shirak-2",
-    "football|2026-11-26|Andranik|Araks Ararat",
-    "football|2026-11-26|Baku Sporting|Shahdagh Qusar",
     "football|2026-11-26|Uttaradit FC|Songkhla FC",
-    "football|2026-11-26|Mika Yerevan|Olympia Yerevan",
-    "football|2026-11-26|Olympia Yerevan|Mika Yerevan",
     "football|2026-11-26|Nong Bua Pitchaya|Muang Loei Utd",
     "football|2026-11-26|Murang'a SEAL|KCB Nairobi",
-    "football|2026-11-26|Tishreen SC|Wathba Homs",
     "football|2026-11-26|PKR Svay Rieng|Machida Zelvia",
-    "football|2026-11-26|Tai Po FC|Adelaide United",
     "football|2026-11-26|Chadormalu SC|Mes Shahr-e Babak",
-    "football|2026-11-26|Costa do Sol Maputo|Baía de Pemba",
     "football|2026-11-26|Mutondo Stars|Green Eagles",
-    "football|2026-11-26|Makeni All Stars|Power Dynamos",
     "football|2026-11-26|Montenegro U19 W|North Macedonia U19 W",
-    "football|2026-11-26|KCC Kampala|Bul FC",
     "football|2026-11-26|Muaither SC|Al Waab SC",
     "football|2026-11-26|Salmiya SC|Tadamon (KUW)",
     "football|2026-11-26|Gloria Bistrita|CSM Slatina",
     "football|2026-11-26|Abha Club|Shabab Riyadh",
-    "football|2026-11-26|Kairat Almaty|Mjällby AIF",
-    "football|2026-11-26|URA Kampala|Kigezi Home Boyz",
     "football|2026-11-26|Al Arabi Kuwait|Khaitan SC",
     "football|2026-11-26|Celta Vigo|Bournemouth",
     "football|2026-11-26|Viktoria Plzen|SL Benfica",
@@ -7754,11 +7781,6 @@
     "football|2026-11-26|Deportes Colina|General Velásquez",
     "football|2026-11-26|Jalapa ART|San Marcos",
     "football|2026-11-26|Independiente Res.|Gimnasia Mendoza Res",
-    "football|2026-11-26|Besiktas|H. Beer Sheva",
-    "football|2026-11-26|Dinamo Zagrzeb|Bayer Leverkusen",
-    "football|2026-11-26|FC Viktoria Pilzno|Benfica",
-    "football|2026-11-26|Olympiakos|AC Milan",
-    "football|2026-11-26|Royale Union SG|Lech Poznań",
     "football|2026-11-26|Juventus|Omonia",
     "football|2026-11-26|Lyon|Lilleström",
     "football|2026-11-26|NEC Nijmegen|Rennes",
@@ -7767,13 +7789,6 @@
     "football|2026-11-26|Sunderland|Jagiellonia Białystok",
     "football|2026-11-26|Torreense|Celtic",
     "football|2026-11-26|TSG Hoffenheim|Sturm Graz",
-    "football|2026-11-26|Kairat Almaty|Mjallby",
-    "football|2026-11-26|Ajax|Thun",
-    "football|2026-11-26|Brighton|Univ. Craiova",
-    "football|2026-11-26|Egnatia|Lincoln",
-    "football|2026-11-26|Iberia 1999|Getafe",
-    "football|2026-11-26|Jablonec|Lugano",
-    "football|2026-11-26|Pafos|Midtjylland",
     "football|2026-11-26|Borac Banja Luka|Atalanta",
     "football|2026-11-26|CSKA Sofia|Trabzonspor",
     "football|2026-11-26|Hajduk Split|St. Truiden",
@@ -7781,72 +7796,28 @@
     "football|2026-11-26|SC Freiburg|Twente",
     "football|2026-11-26|Doncaster|Huddersfield",
     "football|2026-11-26|Burnley U21|Wolves U21",
-    "football|2026-11-26|Al Fateh|Al Riyadh",
     "football|2026-11-26|Abha|Al Shabab",
-    "football|2026-11-26|Al Faysaly|Al Diriyah",
     "football|2026-11-26|Boca Juniors|Ind. Rivadavia",
     "football|2026-11-26|Velez Sarsfield 2|Boca Juniors 2",
     "football|2026-11-26|Independiente 2|Gimnasia Mendoza 2",
     "football|2026-11-26|Gancabasar|Moik Baku",
-    "football|2026-11-26|Pathum United (THA)|Lion City (SGP)",
-    "football|2026-11-26|Svay Rieng (CAM)|Machida (JPN)",
-    "football|2026-11-26|Tai Po (HKG)|Adelaide United (AUS)",
-    "football|2026-11-26|Centre Chiefs|Orapa United",
     "football|2026-11-26|Sao Paulo|Remo",
-    "football|2026-11-26|AD Boquinhense|Santa Cruz SE",
-    "football|2026-11-26|Coritiba SE|Marata",
-    "football|2026-11-26|Mocidade|Amadense",
     "football|2026-11-26|Palmeiras U20|Operario U20",
     "football|2026-11-26|Tirol|Guarani de Juazeiro",
     "football|2026-11-26|Treze|Nacional de Patos",
-    "football|2026-11-26|Tesla U20|Venus U20",
     "football|2026-11-26|Botafogo U20 K|Internacional U20 K",
-    "football|2026-11-26|Paysandu K|Tiradentes PA K",
     "football|2026-11-26|S. Wanderers|Recoleta",
     "football|2026-11-26|Atletico Colina|General Velasquez",
-    "football|2026-11-26|Aigles du Congo|Ufalya Simba",
-    "football|2026-11-26|Malole|Saint-Luc",
-    "football|2026-11-26|AC Rangers|FC Renaissance",
-    "football|2026-11-26|Al Nasr|Tersana",
-    "football|2026-11-26|Al Sekka|Proxy",
-    "football|2026-11-26|Delta United|La Viena",
-    "football|2026-11-26|El Entag El Harby|Kahrabaa Ismailia",
     "football|2026-11-26|Barcelona SC|Ind. del Valle",
     "football|2026-11-26|Stoke U21|AC Milan U23",
-    "football|2026-11-26|Kolkheti 1913|Bolnisi",
     "football|2026-11-26|Gardabani|Din. Tbilisi 2",
     "football|2026-11-26|Municipal|Aurora F.C.",
-    "football|2026-11-26|HOPS K|Sethu K",
-    "football|2026-11-26|Perseden Denpasar|Pasuruan United",
-    "football|2026-11-26|Persika Karanganyar|Persipa Pati",
-    "football|2026-11-26|Chadormalu|Mes Shahr Babak",
-    "football|2026-11-26|Nof Hagalil|M. Kiryat Ata-Bialik",
-    "football|2026-11-26|Hapoel Mahane Yehuda|H. Marmorek",
     "football|2026-11-26|Cavalier|Portmore",
-    "football|2026-11-26|Al Buqaa|Al Jazeera Amman",
-    "football|2026-11-26|Muaither SC|Al Waab",
-    "football|2026-11-26|Al Mesaimeer|Katar U23",
-    "football|2026-11-26|Umm-Salal|Al-Rayyan 2",
-    "football|2026-11-26|Mara Sugar|Police FC",
-    "football|2026-11-26|Muranga|KCB",
-    "football|2026-11-26|Gor Mahia|Mombasa United",
     "football|2026-11-26|Atl. Nacional|Ind. Medellin",
-    "football|2026-11-26|Ferizaj|Liria",
-    "football|2026-11-26|Mitrovica|Trepca Mitrovice",
-    "football|2026-11-26|Ramiz Sadiku|Kika",
     "football|2026-11-26|Rilindja|Dinamo Ferizaj",
-    "football|2026-11-26|Trepca 89|Prishtina e Re",
-    "football|2026-11-26|Vellaznimi|Tefik Canga",
-    "football|2026-11-26|Vjosa|Besa Peja",
-    "football|2026-11-26|Al Salmiya|Al Tadamon",
-    "football|2026-11-26|Al Arabi|Khaitan",
-    "football|2026-11-26|Discoveries|Gardnersville",
-    "football|2026-11-26|Golden Dream|LPRC Oiler",
     "football|2026-11-26|Assabah|Al Ahly Tripoli",
     "football|2026-11-26|Toluca|Atlas",
     "football|2026-11-26|Monterrey|Club America",
-    "football|2026-11-26|Monterrey U21|Toluca U21",
-    "football|2026-11-26|Costa do Sol|Baia de Pemba",
     "football|2026-11-26|Monachium 1860 II|Pfaffenhofen",
     "football|2026-11-26|Esteli|Rancho Santana",
     "football|2026-11-26|Managua FC|Ferretti",
@@ -7854,21 +7825,13 @@
     "football|2026-11-26|Cerro Porteno|Libertad",
     "football|2026-11-26|Platense Municipal|FAS",
     "football|2026-11-26|Inter Santa Tecla|Aguila",
-    "football|2026-11-26|Real Maldives|Foresters FC",
     "football|2026-11-26|Robinhood|Flora",
-    "football|2026-11-26|Tishreen|Homs Al Fidaa",
-    "football|2026-11-26|Wietnam U17|Mali U17",
     "football|2026-11-26|Uzbekistan U17|Włochy U17",
-    "football|2026-11-26|Parvoz-Aeroport Khujand|CSKA Pomir Dushanbe",
-    "football|2026-11-26|Nong Bua Pitchaya|Muang Loei",
-    "football|2026-11-26|Kampala City|BUL",
-    "football|2026-11-26|URA SC|Kigezi HomeBoyz",
-    "football|2026-11-26|Chirundu Utd|Zesco Utd",
-    "football|2026-11-26|Red Arrows|Green Buffaloes"
+    "football|2026-11-26|Parvoz-Aeroport Khujand|CSKA Pomir Dushanbe"
    ]
   },
   "handball": {
-   "generatedAt": "2026-11-26T09:50:04Z",
+   "generatedAt": "2026-11-26T16:47:25Z",
    "watch": false,
    "picks": [],
    "stats": {
@@ -7877,12 +7840,12 @@
     "fanOk": 12,
     "belowLimit": 7,
     "noOdds": 5,
-    "voteRequested": 17,
+    "voteRequested": 15,
     "voteFound": 12,
     "wrongEvent": 0,
     "fanThr": 12,
     "oddsOk": 0,
-    "calls": 17,
+    "calls": 15,
     "budgetHit": 0,
     "details": 0,
     "picks": 0
@@ -7903,7 +7866,7 @@
    ]
   },
   "hockey": {
-   "generatedAt": "2026-11-26T09:50:11Z",
+   "generatedAt": "2026-11-26T16:47:21Z",
    "watch": false,
    "picks": [
     {
@@ -7934,10 +7897,10 @@
      "oddsMarket": "2way_equiv",
      "bestPrice": {
       "price": 1.56,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:26Z"
+      "at": null
      },
      "impliedPct": 63.9,
      "edgePct": 27.1,
@@ -7977,10 +7940,209 @@
      "modelProb": 0.691,
      "grade": "A",
      "availability": {
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
+     },
+     "result": {
+      "status": "won",
+      "score": "3-5",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     }
+    },
+    {
+     "id": "hockey|2026-11-26|Timrå|Farjestad",
+     "sport": "hockey",
+     "date": "2026-11-26",
+     "league": "SE1",
+     "kickoff": "2026-11-26T18:00:00Z",
+     "time": "19:00",
+     "home": "Timrå",
+     "away": "Farjestad",
+     "match": "Timrå vs Farjestad",
+     "side": "away",
+     "team": "Farjestad",
+     "fanPct": 85.0,
+     "votes": 238,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16230833",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16230833",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/shl/timrå-farjestad/375851",
+     "eventId": null,
+     "odds": {
+      "home": 3.6,
+      "draw": 4.1,
+      "away": 1.8
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.51,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.508,
+      "books": 11,
+      "at": "2026-11-26T16:48:19Z"
+     },
+     "impliedPct": 66.2,
+     "edgePct": 18.8,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "LDWWW",
+      "venue": "WWWWW",
+      "opponentOverall": "WWLLD",
+      "opponentVenue": "WDWLW",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "lastScore": "0-4",
+      "lastDate": "22.10.26",
+      "line": "H2H: Farjestad 2-0-3 (last: 2026-10-22 Timra 0-4 Farjestad)",
+      "last": "2026-10-22 Timra 0-4 Farjestad (Farjestad won)",
+      "edge": {
+       "team": "Timrå",
+       "wins": 3,
+       "draws": 0,
+       "losses": 2,
+       "record": "3-0-2",
+       "even": false
+      }
+     },
+     "lastMatch": {
+      "team": {
+       "date": "21.11.26",
+       "result": "L",
+       "score": "0-3",
+       "event": "SHL (Szwecja)"
+      },
+      "opponent": {
+       "date": "21.11.26",
+       "result": "W",
+       "score": "2-3",
+       "event": "SHL (Szwecja)"
+      }
+     },
+     "forebet": {
+      "prob": 54.0,
+      "pick": "2",
+      "exactScore": "3-4"
+     },
+     "modelProb": 0.587,
+     "grade": "B",
+     "availability": {
       "verdict": "unknown",
       "note": ""
      },
-     "result": null
+     "result": null,
+     "details": {
+      "tournament": "SHL",
+      "category": "Sweden",
+      "round": "Round 1",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-21",
+        "opponent": "Malmö Redhawks",
+        "venue": "H",
+        "result": "L",
+        "score": "0-3",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "Frölunda HC",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-14",
+        "opponent": "Luleå Hockey",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Djurgårdens IF",
+        "venue": "H",
+        "result": "W",
+        "score": "3-1",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Växjö Lakers HC",
+        "venue": "A",
+        "result": "W",
+        "score": "5-1",
+        "tournament": "SHL",
+        "round": ""
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-21",
+        "opponent": "Rögle BK",
+        "venue": "A",
+        "result": "W",
+        "score": "3-2",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "Örebro HK",
+        "venue": "H",
+        "result": "W",
+        "score": "8-2",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-14",
+        "opponent": "HV71",
+        "venue": "A",
+        "result": "L",
+        "score": "3-4",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Växjö Lakers HC",
+        "venue": "A",
+        "result": "L",
+        "score": "0-5",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Luleå Hockey",
+        "venue": "H",
+        "result": "L",
+        "score": "2-3",
+        "tournament": "SHL",
+        "round": ""
+       }
+      ]
+     }
     },
     {
      "id": "hockey|2026-11-26|Henderson Silver Knights|Abbotsford Canucks",
@@ -8012,8 +8174,8 @@
       "price": 1.56,
       "bookmaker": "pinnacle",
       "pinnacle": 1.559,
-      "books": 2,
-      "at": "2026-11-26T09:51:26Z"
+      "books": 1,
+      "at": "2026-11-26T16:48:19Z"
      },
      "impliedPct": 64.1,
      "edgePct": 18.9,
@@ -8070,10 +8232,16 @@
      "modelProb": 0.784,
      "grade": "A",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "4-1",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "AHL",
       "category": "North America",
@@ -8202,14 +8370,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way_equiv",
      "bestPrice": {
-      "price": 1.57,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.529,
+      "price": 1.73,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.73,
       "books": 14,
-      "at": "2026-11-26T09:51:26Z"
+      "at": "2026-11-26T16:48:19Z"
      },
-     "impliedPct": 63.7,
-     "edgePct": 17.3,
+     "impliedPct": 57.8,
+     "edgePct": 23.2,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -8396,10 +8564,10 @@
      "oddsMarket": "2way_equiv",
      "bestPrice": {
       "price": 2.1,
-      "bookmaker": "livesport",
+      "bookmaker": "Livesport (bukm. 1205)",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:26Z"
+      "at": null
      },
      "impliedPct": 47.6,
      "edgePct": 33.4,
@@ -8433,7 +8601,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "5-7",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "AHL",
       "category": "North America",
@@ -8563,10 +8736,10 @@
      "oddsMarket": "2way_equiv",
      "bestPrice": {
       "price": 1.62,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:26Z"
+      "at": null
      },
      "impliedPct": 61.9,
      "edgePct": 18.1,
@@ -8623,10 +8796,16 @@
      "modelProb": 0.513,
      "grade": "C",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "Key absences: B. Byram (Upper-body)",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
-     "result": null,
+     "result": {
+      "status": "lost",
+      "score": "1-3",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "NHL",
       "category": "North America",
@@ -8756,13 +8935,13 @@
      "oddsMarket": "2way_equiv",
      "bestPrice": {
       "price": 1.66,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:26Z"
+      "at": null
      },
-     "impliedPct": 60.2,
-     "edgePct": 17.8,
+     "impliedPct": 60.4,
+     "edgePct": 17.6,
      "limit": {
       "min": 1.5,
       "source": "standard"
@@ -8799,10 +8978,16 @@
      "modelProb": 0.533,
      "grade": "C",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "0-3",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "AHL",
       "category": "North America",
@@ -8932,10 +9117,10 @@
      "oddsMarket": "2way_equiv",
      "bestPrice": {
       "price": 1.84,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:26Z"
+      "at": null
      },
      "impliedPct": 54.4,
      "edgePct": 21.6,
@@ -8975,10 +9160,16 @@
      "modelProb": 0.492,
      "grade": "C",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "1-3",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "NHL",
       "category": "North America",
@@ -9108,10 +9299,10 @@
      "oddsMarket": "2way_equiv",
      "bestPrice": {
       "price": 1.67,
-      "bookmaker": "livesport",
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:26Z"
+      "at": null
      },
      "impliedPct": 59.9,
      "edgePct": 10.1,
@@ -9171,7 +9362,12 @@
       "verdict": "unknown",
       "note": ""
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "7-0",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "NHL",
       "category": "North America",
@@ -9272,23 +9468,190 @@
        }
       ]
      }
+    },
+    {
+     "id": "hockey|2026-11-26|Linkoping|Brynas",
+     "sport": "hockey",
+     "date": "2026-11-26",
+     "league": "SE1",
+     "kickoff": "2026-11-26T18:00:00Z",
+     "time": "19:00",
+     "home": "Linkoping",
+     "away": "Brynas",
+     "match": "Linkoping vs Brynas",
+     "side": "away",
+     "team": "Brynas",
+     "fanPct": 70.0,
+     "votes": 367,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/ice-hockey/match/16230831",
+     "matchUrl": "https://www.sofascore.com/ice-hockey/match/16230831",
+     "forebetUrl": "https://www.forebet.com/en/hockey/matches/shl/linkoping-brynas/375855",
+     "eventId": null,
+     "odds": {
+      "home": 3.4,
+      "draw": 4.5,
+      "away": 1.86
+     },
+     "oddsSource": "Livesport (bukm. 549)",
+     "oddsMarket": "2way_equiv",
+     "bestPrice": {
+      "price": 1.58,
+      "bookmaker": "pinnacle",
+      "pinnacle": 1.578,
+      "books": 14,
+      "at": "2026-11-26T16:48:19Z"
+     },
+     "impliedPct": 63.3,
+     "edgePct": 6.7,
+     "limit": {
+      "min": 1.5,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": 44.0,
+      "pick": "1",
+      "exactScore": "7-2"
+     },
+     "modelProb": 0.44,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "SHL",
+      "category": "Sweden",
+      "round": "Round 1",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-21",
+        "opponent": "Frölunda HC",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "Luleå Hockey",
+        "venue": "H",
+        "result": "W",
+        "score": "4-2",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-14",
+        "opponent": "IF Björklöven",
+        "venue": "A",
+        "result": "W",
+        "score": "4-1",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Skellefteå AIK",
+        "venue": "H",
+        "result": "W",
+        "score": "10-4",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Djurgårdens IF",
+        "venue": "A",
+        "result": "L",
+        "score": "2-3",
+        "tournament": "SHL",
+        "round": ""
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-21",
+        "opponent": "IF Björklöven",
+        "venue": "A",
+        "result": "L",
+        "score": "1-2",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "HV71",
+        "venue": "H",
+        "result": "W",
+        "score": "3-1",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-14",
+        "opponent": "Skellefteå AIK",
+        "venue": "A",
+        "result": "L",
+        "score": "2-5",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Rögle BK",
+        "venue": "H",
+        "result": "W",
+        "score": "9-4",
+        "tournament": "SHL",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Frölunda HC",
+        "venue": "A",
+        "result": "L",
+        "score": "1-4",
+        "tournament": "SHL",
+        "round": ""
+       }
+      ]
+     }
     }
    ],
    "stats": {
     "rows": 113,
-    "withVote": 104,
+    "withVote": 101,
     "fanOk": 30,
-    "belowLimit": 10,
+    "belowLimit": 8,
     "noOdds": 12,
-    "voteRequested": 78,
-    "voteFound": 70,
+    "voteRequested": 73,
+    "voteFound": 66,
     "wrongEvent": 0,
-    "fanThr": 79,
-    "oddsOk": 8,
-    "calls": 78,
+    "fanThr": 77,
+    "oddsOk": 10,
+    "calls": 73,
     "budgetHit": 0,
-    "details": 6,
-    "picks": 8
+    "details": 2,
+    "picks": 10
    },
    "evaluated": [
     "hockey|2026-11-26|New Mexico Goatheads|Florida Everblades",
@@ -9305,8 +9668,6 @@
     "hockey|2026-11-26|Spokane Chiefs|Kelowna Rockets",
     "hockey|2026-11-26|Fresno Falcons|Oceanside Shock",
     "hockey|2026-11-26|Stockton Thunder|Minnesota Northern Lights",
-    "hockey|2026-11-26|Martin|Slovakia U18",
-    "hockey|2026-11-26|Novopolotsk|Soligorsk",
     "hockey|2026-11-26|Mogilev|Baranavichy",
     "hockey|2026-11-26|Yunost Minsk|Lokomotiv Orsha",
     "hockey|2026-11-26|Zhlobin|Slavutych",
@@ -9354,7 +9715,6 @@
     "hockey|2026-11-26|Detroit Red Wings|Vancouver Canucks",
     "hockey|2026-11-26|Dallas Stars|Nashville Predators",
     "hockey|2026-11-26|Minnesota Wild|Utah Mammoth",
-    "hockey|2026-11-26|Pardubice B|Kolin",
     "hockey|2026-11-26|Jesenice|Gherdeina",
     "hockey|2026-11-26|Ritten|Zeller Eisbaren",
     "hockey|2026-11-26|Brantford Bulldogs|Sudbury Wolves",
@@ -9398,7 +9758,7 @@
    ]
   },
   "rugby": {
-   "generatedAt": "2026-11-26T09:50:08Z",
+   "generatedAt": "2026-11-26T16:47:19Z",
    "watch": true,
    "picks": [],
    "stats": {
@@ -9422,29 +9782,1011 @@
    ]
   },
   "table_tennis": {
-   "generatedAt": "2026-11-26T09:50:09Z",
+   "generatedAt": "2026-11-26T16:47:21Z",
    "watch": true,
-   "picks": [],
+   "picks": [
+    {
+     "id": "table_tennis|2026-11-26|Moshovskyi V.|Maltsev D.",
+     "sport": "table_tennis",
+     "date": "2026-11-26",
+     "league": "Ukraine — Setka Cup",
+     "kickoff": null,
+     "time": "26.11.2026 17:55",
+     "home": "Moshovskyi V.",
+     "away": "Maltsev D.",
+     "match": "Moshovskyi V. vs Maltsev D.",
+     "side": "home",
+     "team": "Moshovskyi V.",
+     "fanPct": 100.0,
+     "votes": 36,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/table-tennis/match/17635795",
+     "matchUrl": "https://www.sofascore.com/table-tennis/match/17635795",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.62,
+      "draw": null,
+      "away": 2.2
+     },
+     "oddsSource": "SofaScore",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.62,
+      "bookmaker": "SofaScore",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 61.7,
+     "edgePct": 38.3,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "WWLWW",
+      "venue": "",
+      "opponentOverall": "LWLLL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 10,
+      "wins": 8,
+      "losses": 2,
+      "lastScore": "",
+      "lastDate": "",
+      "line": "H2H: Moshovskyi V. 8-0-2",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": null,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Setka Cup",
+      "category": "Ukraine",
+      "round": "",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Slozka M.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-2 (12-10 5-11 13-11 10-12 11-8)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Prus S.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (6-11 11-5 11-6 11-8)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kozoriz D.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-0 (11-9 12-10 11-9)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kozoriz D.",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (10-12 9-11 13-11 10-12)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Volodymyr Korobko",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (7-11 11-3 11-9 11-7)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Kozoriz D.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (6-11 6-11 6-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Prus S.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-0 (11-1 11-5 11-6)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Slozka M.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (8-11 9-11 10-12)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Tebenko Y.",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (13-11 10-12 8-11 6-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Maksym Khomenko",
+        "venue": "H",
+        "result": "L",
+        "score": "2-3 (11-7 9-11 4-11 14-12 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
+     "id": "table_tennis|2026-11-26|Storozhenko O.|Tebenko Y.",
+     "sport": "table_tennis",
+     "date": "2026-11-26",
+     "league": "Ukraine — Setka Cup",
+     "kickoff": null,
+     "time": "26.11.2026 17:05",
+     "home": "Storozhenko O.",
+     "away": "Tebenko Y.",
+     "match": "Storozhenko O. vs Tebenko Y.",
+     "side": "home",
+     "team": "Storozhenko O.",
+     "fanPct": 100.0,
+     "votes": 30,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/table-tennis/match/17636159",
+     "matchUrl": "https://www.sofascore.com/table-tennis/match/17636159",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.67,
+      "draw": null,
+      "away": 2.1
+     },
+     "oddsSource": "SofaScore",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.67,
+      "bookmaker": "SofaScore",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 59.9,
+     "edgePct": 40.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "WLLLL",
+      "venue": "",
+      "opponentOverall": "WWWLL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 10,
+      "wins": 7,
+      "losses": 3,
+      "lastScore": "",
+      "lastDate": "",
+      "line": "H2H: Storozhenko O. 7-0-3",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": null,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Setka Cup",
+      "category": "Ukraine",
+      "round": "",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Tebenko Y.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-1 (11-7 12-10 10-12 11-6)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Parahailo Yurii",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (11-8 8-11 11-5 8-11 11-9)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Fashchevskiy I.",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (7-11 11-13 11-3 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Novak R.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (9-11 10-12 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Parahailo Yurii",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (4-11 5-11 11-7 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Storozhenko O.",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (7-11 10-12 12-10 6-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Fashchevskiy I.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (11-5 7-11 11-3 10-12 11-7)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kuzmych V.",
+        "venue": "A",
+        "result": "",
+        "score": "0-0 (0-0)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Maltsev D.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (11-13 12-10 11-8 11-6)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Novak R.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-0 (11-7 12-10 11-8)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
+     "id": "table_tennis|2026-11-26|Kasyanov A.|Chuhai S.",
+     "sport": "table_tennis",
+     "date": "2026-11-26",
+     "league": "Ukraine — Setka Cup",
+     "kickoff": null,
+     "time": "26.11.2026 18:00",
+     "home": "Kasyanov A.",
+     "away": "Chuhai S.",
+     "match": "Kasyanov A. vs Chuhai S.",
+     "side": "home",
+     "team": "Kasyanov A.",
+     "fanPct": 94.0,
+     "votes": 32,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/table-tennis/match/17636081",
+     "matchUrl": "https://www.sofascore.com/table-tennis/match/17636081",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.67,
+      "draw": null,
+      "away": 2.1
+     },
+     "oddsSource": "SofaScore",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.67,
+      "bookmaker": "SofaScore",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 59.9,
+     "edgePct": 34.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "LWLLL",
+      "venue": "",
+      "opponentOverall": "WLWWW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 10,
+      "wins": 6,
+      "losses": 4,
+      "lastScore": "",
+      "lastDate": "",
+      "line": "H2H: Kasyanov A. 6-0-4",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": null,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Setka Cup",
+      "category": "Ukraine",
+      "round": "",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Ivanov R.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (13-15 2-11 6-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Badai M.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (3-11 7-11 7-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Fedoryshyn I.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (9-11 11-8 11-8 11-7)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-24",
+        "opponent": "Fedoryshyn I.",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (8-11 11-8 5-11 3-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-24",
+        "opponent": "Badai M.",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (9-11 8-11 11-6 10-12)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Fedoryshyn I.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-0 (11-9 15-13 12-10)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Badai M.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-0 (11-6 12-10 11-9)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Ivanov R.",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (4-11 10-12 11-7 5-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-25",
+        "opponent": "Kurylenko O.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (11-6 7-11 11-5 11-4)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-25",
+        "opponent": "Hubenko  M.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-0 (13-11 11-8 11-9)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
+     "id": "table_tennis|2026-11-26|Mishchenko O.|Eduard Rubtsov",
+     "sport": "table_tennis",
+     "date": "2026-11-26",
+     "league": "Ukraine — Setka Cup",
+     "kickoff": null,
+     "time": "26.11.2026 17:25",
+     "home": "Mishchenko O.",
+     "away": "Eduard Rubtsov",
+     "match": "Mishchenko O. vs Eduard Rubtsov",
+     "side": "home",
+     "team": "Mishchenko O.",
+     "fanPct": 91.0,
+     "votes": 35,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/table-tennis/match/17636216",
+     "matchUrl": "https://www.sofascore.com/table-tennis/match/17636216",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.4,
+      "draw": null,
+      "away": 2.75
+     },
+     "oddsSource": "SofaScore",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.4,
+      "bookmaker": "SofaScore",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 71.4,
+     "edgePct": 19.6,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "WLWLL",
+      "venue": "",
+      "opponentOverall": "LWWLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 10,
+      "wins": 6,
+      "losses": 4,
+      "lastScore": "",
+      "lastDate": "",
+      "line": "H2H: Mishchenko O. 6-0-4",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": null,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Setka Cup",
+      "category": "Ukraine",
+      "round": "",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Eduard Rubtsov",
+        "venue": "H",
+        "result": "W",
+        "score": "3-0 (11-8 12-10 11-6)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Artem Chepurnyi",
+        "venue": "A",
+        "result": "W",
+        "score": "3-2 (10-12 11-1 11-9 2-11 11-6)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kovalenko V.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (7-11 10-12 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Artem Chepurnyi",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (8-11 11-8 11-2 13-15 11-5)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-25",
+        "opponent": "Eduard Rubtsov",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (4-11 11-7 6-11 14-16)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Mishchenko O.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (8-11 10-12 6-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kovalenko V.",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (13-11 12-14 11-13 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Panasenko V.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-1 (5-11 11-9 11-9 11-8)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kovalchuk A.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (11-8 7-11 8-11 11-2 11-8)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Kovalenko V.",
+        "venue": "H",
+        "result": "L",
+        "score": "2-3 (11-6 11-8 9-11 5-11 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
+     "id": "table_tennis|2026-11-26|Mezera O.|Provaznik L.",
+     "sport": "table_tennis",
+     "date": "2026-11-26",
+     "league": "Ukraine — Setka Cup",
+     "kickoff": null,
+     "time": "26.11.2026 17:15",
+     "home": "Mezera O.",
+     "away": "Provaznik L.",
+     "match": "Mezera O. vs Provaznik L.",
+     "side": "home",
+     "team": "Mezera O.",
+     "fanPct": 91.0,
+     "votes": 32,
+     "band": "90+",
+     "sofascoreUrl": "https://www.sofascore.com/table-tennis/match/17636187",
+     "matchUrl": "https://www.sofascore.com/table-tennis/match/17636187",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.8,
+      "draw": null,
+      "away": 1.91
+     },
+     "oddsSource": "SofaScore",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.8,
+      "bookmaker": "SofaScore",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 55.6,
+     "edgePct": 35.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "watch",
+     "form": {
+      "overall": "WLLLL",
+      "venue": "",
+      "opponentOverall": "WLLLW",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 10,
+      "wins": 6,
+      "losses": 4,
+      "lastScore": "",
+      "lastDate": "",
+      "line": "H2H: Mezera O. 6-0-4",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": null,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Setka Cup",
+      "category": "Ukraine",
+      "round": "",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Provaznik L.",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (16-14 14-16 5-11 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Semrad P.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (13-15 11-9 11-0 9-11 11-5)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Horak D.",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (8-11 12-10 7-11 2-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-25",
+        "opponent": "Hucko T.",
+        "venue": "A",
+        "result": "L",
+        "score": "0-3 (8-11 8-11 10-12)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-25",
+        "opponent": "Vana M.",
+        "venue": "H",
+        "result": "L",
+        "score": "2-3 (8-11 11-9 6-11 15-13 6-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-26",
+        "opponent": "Mezera O.",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (14-16 16-14 11-5 11-8)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Horak D.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (4-11 12-10 3-11 14-12 12-10)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-26",
+        "opponent": "Semrad P.",
+        "venue": "H",
+        "result": "W",
+        "score": "3-1 (11-9 11-8 5-11 12-10)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-24",
+        "opponent": "Hajek Miroslav",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (3-11 14-12 7-11 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-24",
+        "opponent": "Drbohlav M.",
+        "venue": "A",
+        "result": "L",
+        "score": "2-3 (5-11 11-3 11-7 8-11 8-11)",
+        "tournament": "Setka Cup",
+        "round": "",
+        "durationMin": null
+       }
+      ]
+     }
+    }
+   ],
    "stats": {
-    "rows": 0,
-    "withVote": 0,
-    "fanOk": 0,
-    "belowLimit": 0,
-    "noOdds": 0,
-    "voteRequested": 0,
-    "voteFound": 0,
+    "rows": 50,
+    "withVote": 50,
+    "fanOk": 10,
+    "belowLimit": 4,
+    "noOdds": 1,
+    "voteRequested": 50,
+    "voteFound": 50,
     "wrongEvent": 0,
-    "fanThr": 0,
-    "oddsOk": 0,
-    "calls": 0,
+    "fanThr": 48,
+    "oddsOk": 5,
+    "calls": 50,
     "budgetHit": 0,
-    "details": 0,
-    "picks": 0
+    "details": 5,
+    "picks": 5
    },
-   "evaluated": []
+   "evaluated": [
+    "table_tennis|2026-11-26|Artem Chepurnyi|Mishchenko O.",
+    "table_tennis|2026-11-26|Fedoryshyn I.|Chuhai S.",
+    "table_tennis|2026-11-26|Iskander C.|Ghimp F.",
+    "table_tennis|2026-11-26|Slozka M.|Moshovskyi V.",
+    "table_tennis|2026-11-26|Honcharenko S.|Hyriavyi V.",
+    "table_tennis|2026-11-26|Savoliuk V.|Deynega M.",
+    "table_tennis|2026-11-26|Storozhenko O.|Tebenko Y.",
+    "table_tennis|2026-11-26|Mezera O.|Provaznik L.",
+    "table_tennis|2026-11-26|Mishchenko O.|Eduard Rubtsov",
+    "table_tennis|2026-11-26|Levytskyi O.|Badanin O.",
+    "table_tennis|2026-11-26|Moshovskyi V.|Maltsev D.",
+    "table_tennis|2026-11-26|Kasyanov A.|Chuhai S.",
+    "table_tennis|2026-11-26|Andrii Lifanov|Azarov A.",
+    "table_tennis|2026-11-26|Todiras I.|Stanciu D.",
+    "table_tennis|2026-11-26|Kovalenko V.|Mishchenko O.",
+    "table_tennis|2026-11-26|Badai M.|Ivanov R.",
+    "table_tennis|2026-11-26|Elfemov I.|Boltnekov D.",
+    "table_tennis|2026-11-26|Artem Chepurnyi|Kovalchuk A.",
+    "table_tennis|2026-11-26|Maksym Khomenko|Tebenko Y.",
+    "table_tennis|2026-11-26|Sydorenko V.|Andrii Lifanov",
+    "table_tennis|2026-11-26|Demchenko I.|Eduard Rubtsov",
+    "table_tennis|2026-11-26|Kucherovskiy S.|Turcan V.",
+    "table_tennis|2026-11-26|Elfemov I.|Hainiuk V.",
+    "table_tennis|2026-11-26|Demchenko I.|Mishchenko O.",
+    "table_tennis|2026-11-26|Dubrovin V.|Turcan V.",
+    "table_tennis|2026-11-26|Strutinskiy O.|Maksuta V.",
+    "table_tennis|2026-11-26|Kovalchuk A.|Eduard Rubtsov",
+    "table_tennis|2026-11-26|Nemecek Snr J.|Hanacek J.",
+    "table_tennis|2026-11-26|Andrii Lifanov|Boltnekov D.",
+    "table_tennis|2026-11-26|Alexandru D.|Spivacov O.",
+    "table_tennis|2026-11-26|Artem Chepurnyi|Eduard Rubtsov",
+    "table_tennis|2026-11-26|Farsky K.|Hanacek J.",
+    "table_tennis|2026-11-26|Rak S.|Denys Shcherbak",
+    "table_tennis|2026-11-26|Yavorskiy O.|Cherdivar V.",
+    "table_tennis|2026-11-26|Molochko A.|Kohut B.",
+    "table_tennis|2026-11-26|Kozachuk I.|Napirko O.",
+    "table_tennis|2026-11-26|Nazar Danyliuk|Zeniuk D.",
+    "table_tennis|2026-11-26|Plescaci V.|Spivacov O.",
+    "table_tennis|2026-11-26|Bindas O.|Kovalchuk N.",
+    "table_tennis|2026-11-26|Alexandru D.|Plescaci V.",
+    "table_tennis|2026-11-26|Oleksandr Naida|Ponomarenko T.",
+    "table_tennis|2026-11-26|Rak S.|Napirko O.",
+    "table_tennis|2026-11-26|Verbianyi V.|Zeniuk D.",
+    "table_tennis|2026-11-26|Nazar Danyliuk|Kohut B.",
+    "table_tennis|2026-11-26|Molochko A.|Zeniuk D.",
+    "table_tennis|2026-11-26|Skachenko S.|Ponomarenko T.",
+    "table_tennis|2026-11-26|Rehotun D.|Khandetskyi S.",
+    "table_tennis|2026-11-26|Verbianyi V.|Nazar Danyliuk",
+    "table_tennis|2026-11-26|Hnoievoi R.|Ponomarenko T.",
+    "table_tennis|2026-11-26|Kobets V.|Khandetskyi S."
+   ]
   },
   "tennis": {
-   "generatedAt": "2026-11-26T09:50:00Z",
+   "generatedAt": "2026-11-26T16:47:16Z",
    "watch": false,
    "picks": [
     {
@@ -9626,14 +10968,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.78,
-      "bookmaker": "oddssafari",
+      "price": 1.75,
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
-      "books": 10,
-      "at": "2026-11-26T09:51:04Z"
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 56.2,
-     "edgePct": 38.8,
+     "impliedPct": 57.1,
+     "edgePct": 37.9,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -9693,14 +11035,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.43,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.431,
-      "books": 14,
-      "at": "2026-11-26T09:51:04Z"
+      "price": 1.4,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 69.9,
-     "edgePct": 22.1,
+     "impliedPct": 71.4,
+     "edgePct": 20.6,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -9886,14 +11228,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.43,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.431,
-      "books": 14,
-      "at": "2026-11-26T09:51:04Z"
+      "price": 1.35,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 69.9,
-     "edgePct": 22.1,
+     "impliedPct": 74.1,
+     "edgePct": 17.9,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -9962,14 +11304,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.54,
-      "bookmaker": "livesport",
-      "pinnacle": 1.515,
-      "books": 12,
-      "at": "2026-11-26T09:51:04Z"
+      "price": 1.45,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 64.9,
-     "edgePct": 27.1,
+     "impliedPct": 69.0,
+     "edgePct": 23.0,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -10155,14 +11497,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.54,
-      "bookmaker": "livesport",
-      "pinnacle": 1.515,
-      "books": 12,
-      "at": "2026-11-26T09:51:04Z"
+      "price": 1.45,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 64.9,
-     "edgePct": 27.1,
+     "impliedPct": 69.0,
+     "edgePct": 23.0,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -10581,14 +11923,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.64,
-      "bookmaker": "livesport",
-      "pinnacle": 1.592,
-      "books": 12,
-      "at": "2026-11-26T09:51:01Z"
+      "price": 1.5,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 61.0,
-     "edgePct": 30.0,
+     "impliedPct": 66.7,
+     "edgePct": 24.3,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -11627,14 +12969,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.64,
-      "bookmaker": "livesport",
-      "pinnacle": 1.592,
-      "books": 12,
-      "at": "2026-11-26T09:51:04Z"
+      "price": 1.5,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 61.0,
-     "edgePct": 29.0,
+     "impliedPct": 66.7,
+     "edgePct": 23.3,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -12053,14 +13395,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.48,
+      "price": 1.51,
       "bookmaker": "pinnacle",
-      "pinnacle": 1.478,
+      "pinnacle": 1.508,
       "books": 1,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 67.6,
-     "edgePct": 20.4,
+     "impliedPct": 66.2,
+     "edgePct": 21.8,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -12494,183 +13836,6 @@
      }
     },
     {
-     "id": "tennis|2026-11-26|A. Nefve|B. Willwerth",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "SvC",
-     "kickoff": "2026-11-26T19:30:00Z",
-     "time": "19:30",
-     "home": "A. Nefve",
-     "away": "B. Willwerth",
-     "match": "A. Nefve vs B. Willwerth",
-     "side": "away",
-     "team": "B. Willwerth",
-     "fanPct": 86.0,
-     "votes": 299,
-     "band": "80-90",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17584249",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17584249",
-     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/san-salvador/a-nefve-b-willwerth/364190",
-     "eventId": null,
-     "odds": {
-      "home": 3.07,
-      "draw": null,
-      "away": 1.385
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.39,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.385,
-      "books": 13,
-      "at": "2026-11-26T09:51:04Z"
-     },
-     "impliedPct": 71.9,
-     "edgePct": 14.1,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "",
-      "venue": "",
-      "opponentOverall": "",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": null,
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": 34.0,
-      "pick": "1",
-      "exactScore": "2-0"
-     },
-     "modelProb": 0.34,
-     "grade": "D",
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "San Salvador, El Salvador",
-      "category": "Challenger",
-      "round": "Round of 16",
-      "surface": "Hardcourt outdoor",
-      "team": [
-       {
-        "date": "2026-11-24",
-        "opponent": "Mateus Alves",
-        "venue": "H",
-        "result": "W",
-        "score": "2-1 (4-6 7-5 6-4)",
-        "tournament": "San Salvador, El Salvador",
-        "round": "Round of 32",
-        "durationMin": 142
-       },
-       {
-        "date": "2026-10-26",
-        "opponent": "Sebastian Dominko",
-        "venue": "A",
-        "result": "L",
-        "score": "0-2 (5-7 3-6)",
-        "tournament": "Sioux Falls, USA, Qualifying",
-        "round": "Qualification Final",
-        "durationMin": 68
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Duncan Chan",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (7-6 7-5)",
-        "tournament": "Sioux Falls, USA, Qualifying",
-        "round": "Qualification Round 1",
-        "durationMin": 116
-       },
-       {
-        "date": "2026-10-22",
-        "opponent": "Jack Secord",
-        "venue": "A",
-        "result": "L",
-        "score": "0-2 (2-6 3-6)",
-        "tournament": "ITF M15 Ithaca, NY Men",
-        "round": "Round of 16",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-21",
-        "opponent": "Noah Zamora",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-3 6-3)",
-        "tournament": "ITF M15 Ithaca, NY Men",
-        "round": "Round of 32",
-        "durationMin": null
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-24",
-        "opponent": "Alan Fernando Rubio Fierros",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-4 6-4)",
-        "tournament": "San Salvador, El Salvador",
-        "round": "Round of 32",
-        "durationMin": 100
-       },
-       {
-        "date": "2026-11-23",
-        "opponent": "Brandon Perez",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-2 6-4)",
-        "tournament": "San Salvador, El Salvador, Qualifying",
-        "round": "Qualification Final",
-        "durationMin": 72
-       },
-       {
-        "date": "2026-11-15",
-        "opponent": "David Bakonyi",
-        "venue": "A",
-        "result": "L",
-        "score": "1-2 (6-2 4-6 6-7)",
-        "tournament": "Champaign, USA, Qualifying",
-        "round": "Qualification Round 1",
-        "durationMin": 120
-       },
-       {
-        "date": "2026-11-12",
-        "opponent": "Cannon Kingsley",
-        "venue": "A",
-        "result": "L",
-        "score": "1-2 (6-4 3-6 5-7)",
-        "tournament": "ITF M25 Montreal Men",
-        "round": "Round of 16",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-10",
-        "opponent": "Alvin Nicholas Tudorica",
-        "venue": "H",
-        "result": "W",
-        "score": "2-1 (6-2 5-7 6-2)",
-        "tournament": "ITF M25 Montreal Men",
-        "round": "Round of 32",
-        "durationMin": null
-       }
-      ]
-     }
-    },
-    {
      "id": "tennis|2026-11-26|Nefve A.|Willwerth B.",
      "sport": "tennis",
      "date": "2026-11-26",
@@ -12697,14 +13862,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.39,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.385,
+      "price": 1.43,
+      "bookmaker": "livesport",
+      "pinnacle": 1.391,
       "books": 13,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 71.9,
-     "edgePct": 14.1,
+     "impliedPct": 69.9,
+     "edgePct": 16.1,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -12741,8 +13906,9 @@
      "modelProb": 0.683,
      "grade": "B",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T15:09:54.108890+00:00"
      },
      "result": null
     },
@@ -13047,14 +14213,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.65,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.654,
+      "price": 1.63,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:04Z"
+      "at": null
      },
-     "impliedPct": 60.6,
-     "edgePct": 25.4,
+     "impliedPct": 61.3,
+     "edgePct": 24.7,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -13536,6 +14702,320 @@
      }
     },
     {
+     "id": "tennis|2026-11-26|A. Nefve|B. Willwerth",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "SvC",
+     "kickoff": "2026-11-26T19:30:00Z",
+     "time": "19:30",
+     "home": "A. Nefve",
+     "away": "B. Willwerth",
+     "match": "A. Nefve vs B. Willwerth",
+     "side": "away",
+     "team": "B. Willwerth",
+     "fanPct": 85.0,
+     "votes": 563,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17584249",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17584249",
+     "forebetUrl": "https://www.forebet.com/en/tennis/matches/challenger-men/san-salvador/a-nefve-b-willwerth/364190",
+     "eventId": null,
+     "odds": {
+      "home": 3.07,
+      "draw": null,
+      "away": 1.385
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.43,
+      "bookmaker": "livesport",
+      "pinnacle": 1.391,
+      "books": 13,
+      "at": "2026-11-26T16:47:56Z"
+     },
+     "impliedPct": 69.9,
+     "edgePct": 15.1,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": 34.0,
+      "pick": "1",
+      "exactScore": "2-0"
+     },
+     "modelProb": 0.34,
+     "grade": "D",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "San Salvador, El Salvador",
+      "category": "Challenger",
+      "round": "Round of 16",
+      "surface": "Hardcourt outdoor",
+      "team": [
+       {
+        "date": "2026-11-24",
+        "opponent": "Mateus Alves",
+        "venue": "H",
+        "result": "W",
+        "score": "2-1 (4-6 7-5 6-4)",
+        "tournament": "San Salvador, El Salvador",
+        "round": "Round of 32",
+        "durationMin": 142
+       },
+       {
+        "date": "2026-10-26",
+        "opponent": "Sebastian Dominko",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2 (5-7 3-6)",
+        "tournament": "Sioux Falls, USA, Qualifying",
+        "round": "Qualification Final",
+        "durationMin": 68
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Duncan Chan",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (7-6 7-5)",
+        "tournament": "Sioux Falls, USA, Qualifying",
+        "round": "Qualification Round 1",
+        "durationMin": 116
+       },
+       {
+        "date": "2026-10-22",
+        "opponent": "Jack Secord",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2 (2-6 3-6)",
+        "tournament": "ITF M15 Ithaca, NY Men",
+        "round": "Round of 16",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-21",
+        "opponent": "Noah Zamora",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-3 6-3)",
+        "tournament": "ITF M15 Ithaca, NY Men",
+        "round": "Round of 32",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-24",
+        "opponent": "Alan Fernando Rubio Fierros",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-4 6-4)",
+        "tournament": "San Salvador, El Salvador",
+        "round": "Round of 32",
+        "durationMin": 100
+       },
+       {
+        "date": "2026-11-23",
+        "opponent": "Brandon Perez",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-2 6-4)",
+        "tournament": "San Salvador, El Salvador, Qualifying",
+        "round": "Qualification Final",
+        "durationMin": 72
+       },
+       {
+        "date": "2026-11-15",
+        "opponent": "David Bakonyi",
+        "venue": "A",
+        "result": "L",
+        "score": "1-2 (6-2 4-6 6-7)",
+        "tournament": "Champaign, USA, Qualifying",
+        "round": "Qualification Round 1",
+        "durationMin": 120
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Cannon Kingsley",
+        "venue": "A",
+        "result": "L",
+        "score": "1-2 (6-4 3-6 5-7)",
+        "tournament": "ITF M25 Montreal Men",
+        "round": "Round of 16",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-10",
+        "opponent": "Alvin Nicholas Tudorica",
+        "venue": "H",
+        "result": "W",
+        "score": "2-1 (6-2 5-7 6-2)",
+        "tournament": "ITF M25 Montreal Men",
+        "round": "Round of 32",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
+     "id": "tennis|2026-11-26|Nikles J.|Zeballos F.",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T19:00:00Z",
+     "time": "19:00",
+     "home": "Nikles J.",
+     "away": "Zeballos F.",
+     "match": "Nikles J. vs Zeballos F.",
+     "side": "away",
+     "team": "Zeballos F.",
+     "fanPct": 85.0,
+     "votes": 113,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17583998",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17583998",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 2.55,
+      "draw": null,
+      "away": 1.45
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.45,
+      "bookmaker": "oddssafari",
+      "pinnacle": null,
+      "books": 6,
+      "at": "2026-11-26T16:47:56Z"
+     },
+     "impliedPct": 69.0,
+     "edgePct": 16.0,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": 0.611,
+     "grade": null,
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Florianopolis, Brazil, Doubles",
+      "category": "Challenger",
+      "round": "Quarterfinals",
+      "surface": "Red clay",
+      "team": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Tosetto R / Zanellato N",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-4 6-2)",
+        "tournament": "Florianopolis, Brazil, Doubles",
+        "round": "Round of 16",
+        "durationMin": 69
+       },
+       {
+        "date": "2026-11-05",
+        "opponent": "Ribeiro E / Rodrigues N",
+        "venue": "A",
+        "result": "L",
+        "score": "1-2 (7-6 5-7 8-10)",
+        "tournament": "Costa do Sauipe, Brazil, Doubles",
+        "round": "Quarterfinals",
+        "durationMin": 129
+       },
+       {
+        "date": "2026-11-04",
+        "opponent": "Boscardin Dias P / Heide G",
+        "venue": "A",
+        "result": "W",
+        "score": "",
+        "tournament": "Costa do Sauipe, Brazil, Doubles",
+        "round": "Round of 16",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Magadan A / Pacheco Mendez R",
+        "venue": "A",
+        "result": "W",
+        "score": "0-0 (5-5)",
+        "tournament": "Cali, Colombia, Doubles",
+        "round": "Final",
+        "durationMin": 36
+       },
+       {
+        "date": "2026-10-23",
+        "opponent": "Oliveira B / Rodrigues N",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-4 6-4)",
+        "tournament": "Cali, Colombia, Doubles",
+        "round": "Semifinals",
+        "durationMin": 83
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Fernandez B / Rebelo D V C",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-2 6-2)",
+        "tournament": "Florianopolis, Brazil, Doubles",
+        "round": "Round of 16",
+        "durationMin": 51
+       }
+      ]
+     }
+    },
+    {
      "id": "tennis|2026-11-26|Ivanov S.|Iakubenko V.",
      "sport": "tennis",
      "date": "2026-11-26",
@@ -13642,7 +15122,7 @@
       "bookmaker": "oddssafari",
       "pinnacle": 1.415,
       "books": 15,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
      "impliedPct": 69.4,
      "edgePct": 14.6,
@@ -13835,7 +15315,7 @@
       "bookmaker": "oddssafari",
       "pinnacle": 1.415,
       "books": 15,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
      "impliedPct": 69.4,
      "edgePct": 14.6,
@@ -14093,14 +15573,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.42,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.413,
+      "price": 1.47,
+      "bookmaker": "livesport",
+      "pinnacle": 1.42,
       "books": 15,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 70.4,
-     "edgePct": 12.6,
+     "impliedPct": 68.0,
+     "edgePct": 15.0,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -14260,6 +15740,143 @@
      }
     },
     {
+     "id": "tennis|2026-11-26|Gatica B.|Candiotto A.",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T19:00:00Z",
+     "time": "19:00",
+     "home": "Gatica B.",
+     "away": "Candiotto A.",
+     "match": "Gatica B. vs Candiotto A.",
+     "side": "home",
+     "team": "Gatica B.",
+     "fanPct": 83.0,
+     "votes": 46,
+     "band": "80-90",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17636833",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17636833",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.83,
+      "draw": null,
+      "away": 1.83
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.83,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 54.6,
+     "edgePct": 28.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": 0.523,
+     "grade": null,
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "ITF W75 Florianopolis Women Doubles",
+      "category": "ITF Women",
+      "round": "Quarterfinals",
+      "surface": "Clay",
+      "team": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Dourado J / Lollia M",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-2 6-3)",
+        "tournament": "ITF W75 Florianopolis Women Doubles",
+        "round": "Round of 16",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-14",
+        "opponent": "Dias S / Garcia Vidal L",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-2 6-0)",
+        "tournament": "ITF W15 São Carlos Women Doubles",
+        "round": "Final",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-13",
+        "opponent": "Boyden M / Hrda L",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-4 6-2)",
+        "tournament": "ITF W15 São Carlos Women Doubles",
+        "round": "Semifinals",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Mettraux M / Meyer auf der Heide L",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (5-7 6-3 10-7)",
+        "tournament": "ITF W15 São Carlos Women Doubles",
+        "round": "Quarterfinals",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-10",
+        "opponent": "Plaza L / Rodriguez J",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-1 6-0)",
+        "tournament": "ITF W15 São Carlos Women Doubles",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-25",
+        "opponent": "dos Santos M / Turchetto M",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-4 6-1)",
+        "tournament": "ITF W75 Florianopolis Women Doubles",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
      "id": "tennis|2026-11-26|Jasika O.|Tu L.",
      "sport": "tennis",
      "date": "2026-11-26",
@@ -14286,14 +15903,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 2.05,
+      "price": 2.15,
       "bookmaker": "oddssafari",
       "pinnacle": null,
-      "books": 7,
-      "at": "2026-11-26T09:51:04Z"
+      "books": 11,
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 48.8,
-     "edgePct": 33.2,
+     "impliedPct": 46.5,
+     "edgePct": 35.5,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -14539,14 +16156,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.42,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.413,
+      "price": 1.47,
+      "bookmaker": "livesport",
+      "pinnacle": 1.42,
       "books": 15,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 70.4,
-     "edgePct": 11.6,
+     "impliedPct": 68.0,
+     "edgePct": 14.0,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -14961,192 +16578,6 @@
      }
     },
     {
-     "id": "tennis|2026-11-26|Ngounoue C.|Palicova B.",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T10:30:00Z",
-     "time": "10:30",
-     "home": "Ngounoue C.",
-     "away": "Palicova B.",
-     "match": "Ngounoue C. vs Palicova B.",
-     "side": "away",
-     "team": "Palicova B.",
-     "fanPct": 81.0,
-     "votes": 105,
-     "band": "80-90",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17634809",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17634809",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 2.25,
-      "draw": null,
-      "away": 1.53
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.59,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.592,
-      "books": 1,
-      "at": "2026-11-26T09:51:04Z"
-     },
-     "impliedPct": 62.9,
-     "edgePct": 18.1,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "WLWLW",
-      "venue": "",
-      "opponentOverall": "WLLWL",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": {
-      "total": 1,
-      "wins": null,
-      "losses": null,
-      "lastScore": null,
-      "lastDate": null,
-      "line": "H2H: Palicova B. 0-1-0 (even)",
-      "last": "No previous meetings",
-      "edge": null
-     },
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": "2",
-      "exactScore": "0-2"
-     },
-     "modelProb": 0.614,
-     "grade": "C",
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "ITF W75 Trnava 5 Women",
-      "category": "ITF Women",
-      "round": "Round of 16",
-      "surface": "Hardcourt indoor",
-      "team": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Lea Bošković",
-        "venue": "A",
-        "result": "W",
-        "score": "2-1 (6-7 6-2 6-2)",
-        "tournament": "ITF W75 Trnava 5 Women",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-29",
-        "opponent": "Julieta Pareja",
-        "venue": "A",
-        "result": "L",
-        "score": "0-2 (4-6 4-6)",
-        "tournament": "ITF W100 New Braunfels, TX Women",
-        "round": "Round of 16",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-28",
-        "opponent": "Maria Kononova",
-        "venue": "A",
-        "result": "W",
-        "score": "2-1 (6-1 4-6 6-0)",
-        "tournament": "ITF W100 New Braunfels, TX Women",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-22",
-        "opponent": "Elizabeth Mandlik",
-        "venue": "H",
-        "result": "L",
-        "score": "0-2 (6-7 6-7)",
-        "tournament": "ITF W50 Austin, TX Women",
-        "round": "Quarterfinals",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-21",
-        "opponent": "Malaika Rapolu",
-        "venue": "H",
-        "result": "W",
-        "score": "2-1 (6-4 6-7 6-1)",
-        "tournament": "ITF W50 Austin, TX Women",
-        "round": "Round of 16",
-        "durationMin": null
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Jana Otzipka",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-4 7-5)",
-        "tournament": "ITF W75 Trnava 5 Women",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-03",
-        "opponent": "Jessika Ponchet",
-        "venue": "A",
-        "result": "L",
-        "score": "0-2 (6-7 6-7)",
-        "tournament": "ITF W75 Petange Women",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-02",
-        "opponent": "Stephanie Judith Visscher",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-2 7-6)",
-        "tournament": "ITF W75 Petange Women",
-        "round": "Qualifications",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-01",
-        "opponent": "Martina Lo Pumo",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-1 6-1)",
-        "tournament": "ITF W75 Petange Women",
-        "round": "Qualifications",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-29",
-        "opponent": "Reese Brantmeier",
-        "venue": "A",
-        "result": "L",
-        "score": "0-2 (3-6 0-6)",
-        "tournament": "ITF W75 Toronto Women",
-        "round": "Round of 16",
-        "durationMin": null
-       }
-      ]
-     }
-    },
-    {
      "id": "tennis|2026-11-26|Adeshina E.|Andrienko M.",
      "sport": "tennis",
      "date": "2026-11-26",
@@ -15536,14 +16967,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.69,
-      "bookmaker": "livesport",
-      "pinnacle": 1.633,
-      "books": 13,
-      "at": "2026-11-26T09:51:04Z"
+      "price": 1.58,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 59.2,
-     "edgePct": 20.8,
+     "impliedPct": 63.3,
+     "edgePct": 16.7,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -15612,14 +17043,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.46,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.461,
+      "price": 1.45,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:04Z"
+      "at": null
      },
-     "impliedPct": 68.5,
-     "edgePct": 11.5,
+     "impliedPct": 69.0,
+     "edgePct": 11.0,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -15688,14 +17119,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.48,
+      "price": 1.49,
       "bookmaker": "pinnacle",
-      "pinnacle": 1.481,
+      "pinnacle": 1.49,
       "books": 1,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 67.6,
-     "edgePct": 12.4,
+     "impliedPct": 67.1,
+     "edgePct": 12.9,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -15879,6 +17310,192 @@
       "note": ""
      },
      "result": null
+    },
+    {
+     "id": "tennis|2026-11-26|Ngounoue C.|Palicova B.",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T10:30:00Z",
+     "time": "10:30",
+     "home": "Ngounoue C.",
+     "away": "Palicova B.",
+     "match": "Ngounoue C. vs Palicova B.",
+     "side": "away",
+     "team": "Palicova B.",
+     "fanPct": 79.0,
+     "votes": 97,
+     "band": "70-80",
+     "sofascoreUrl": null,
+     "matchUrl": null,
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 2.25,
+      "draw": null,
+      "away": 1.53
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.53,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 65.4,
+     "edgePct": 13.6,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLWLW",
+      "venue": "",
+      "opponentOverall": "WLLWL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 1,
+      "wins": null,
+      "losses": null,
+      "lastScore": null,
+      "lastDate": null,
+      "line": "H2H: Palicova B. 0-1-0 (even)",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.614,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "ITF W75 Trnava 5 Women",
+      "category": "ITF Women",
+      "round": "Round of 16",
+      "surface": "Hardcourt indoor",
+      "team": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Lea Bošković",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (6-7 6-2 6-2)",
+        "tournament": "ITF W75 Trnava 5 Women",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Julieta Pareja",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2 (4-6 4-6)",
+        "tournament": "ITF W100 New Braunfels, TX Women",
+        "round": "Round of 16",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-28",
+        "opponent": "Maria Kononova",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (6-1 4-6 6-0)",
+        "tournament": "ITF W100 New Braunfels, TX Women",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-22",
+        "opponent": "Elizabeth Mandlik",
+        "venue": "H",
+        "result": "L",
+        "score": "0-2 (6-7 6-7)",
+        "tournament": "ITF W50 Austin, TX Women",
+        "round": "Quarterfinals",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-21",
+        "opponent": "Malaika Rapolu",
+        "venue": "H",
+        "result": "W",
+        "score": "2-1 (6-4 6-7 6-1)",
+        "tournament": "ITF W50 Austin, TX Women",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Jana Otzipka",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-4 7-5)",
+        "tournament": "ITF W75 Trnava 5 Women",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-03",
+        "opponent": "Jessika Ponchet",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2 (6-7 6-7)",
+        "tournament": "ITF W75 Petange Women",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-02",
+        "opponent": "Stephanie Judith Visscher",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-2 7-6)",
+        "tournament": "ITF W75 Petange Women",
+        "round": "Qualifications",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Martina Lo Pumo",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-1 6-1)",
+        "tournament": "ITF W75 Petange Women",
+        "round": "Qualifications",
+        "durationMin": null
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Reese Brantmeier",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2 (3-6 0-6)",
+        "tournament": "ITF W75 Toronto Women",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ]
+     }
     },
     {
      "id": "tennis|2026-11-26|Gonzalez E.|Tkemaladze Z.",
@@ -16067,6 +17684,103 @@
      }
     },
     {
+     "id": "tennis|2026-11-26|Mujakic A.|Aytekin M.",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T11:30:00Z",
+     "time": "11:30",
+     "home": "Mujakic A.",
+     "away": "Aytekin M.",
+     "match": "Mujakic A. vs Aytekin M.",
+     "side": "home",
+     "team": "Mujakic A.",
+     "fanPct": 79.0,
+     "votes": 43,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17634519",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17634519",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.48,
+      "draw": null,
+      "away": 2.3
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.48,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 67.6,
+     "edgePct": 11.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": 0.614,
+     "grade": null,
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "ITF M15 Antalya 13 Men Doubles",
+      "category": "ITF Men",
+      "round": "Quarterfinals",
+      "surface": "Clay",
+      "team": [
+       {
+        "date": "2026-11-24",
+        "opponent": "Constantin A / Jianu F C",
+        "venue": "A",
+        "result": "W",
+        "score": "",
+        "tournament": "ITF M15 Antalya 13 Men Doubles",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-24",
+        "opponent": "Laporta Osante D / Steindl F",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-1 6-2)",
+        "tournament": "ITF M15 Antalya 13 Men Doubles",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
      "id": "tennis|2026-11-26|Gagliardo L.|Torrealba B.",
      "sport": "tennis",
      "date": "2026-11-26",
@@ -16078,8 +17792,8 @@
      "match": "Gagliardo L. vs Torrealba B.",
      "side": "away",
      "team": "Torrealba B.",
-     "fanPct": 79.0,
-     "votes": 53,
+     "fanPct": 78.0,
+     "votes": 67,
      "band": "70-80",
      "sofascoreUrl": "https://www.sofascore.com/tennis/match/17630286",
      "matchUrl": "https://www.sofascore.com/tennis/match/17630286",
@@ -16100,7 +17814,7 @@
       "at": null
      },
      "impliedPct": 58.8,
-     "edgePct": 20.2,
+     "edgePct": 19.2,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -16238,426 +17952,6 @@
         "score": "",
         "tournament": "ITF M15 Mar del Plata Men Doubles",
         "round": "Quarterfinals",
-        "durationMin": null
-       }
-      ]
-     }
-    },
-    {
-     "id": "tennis|2026-11-26|Mujakic A.|Aytekin M.",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T11:30:00Z",
-     "time": "11:30",
-     "home": "Mujakic A.",
-     "away": "Aytekin M.",
-     "match": "Mujakic A. vs Aytekin M.",
-     "side": "home",
-     "team": "Mujakic A.",
-     "fanPct": 79.0,
-     "votes": 43,
-     "band": "70-80",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17634519",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17634519",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 1.48,
-      "draw": null,
-      "away": 2.3
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.48,
-      "bookmaker": "Pinnacle",
-      "pinnacle": null,
-      "books": 1,
-      "at": null
-     },
-     "impliedPct": 67.6,
-     "edgePct": 11.4,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "",
-      "venue": "",
-      "opponentOverall": "",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": null,
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": null,
-      "exactScore": null
-     },
-     "modelProb": 0.614,
-     "grade": null,
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "ITF M15 Antalya 13 Men Doubles",
-      "category": "ITF Men",
-      "round": "Quarterfinals",
-      "surface": "Clay",
-      "team": [
-       {
-        "date": "2026-11-24",
-        "opponent": "Constantin A / Jianu F C",
-        "venue": "A",
-        "result": "W",
-        "score": "",
-        "tournament": "ITF M15 Antalya 13 Men Doubles",
-        "round": "Round of 16",
-        "durationMin": null
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-24",
-        "opponent": "Laporta Osante D / Steindl F",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-1 6-2)",
-        "tournament": "ITF M15 Antalya 13 Men Doubles",
-        "round": "Round of 16",
-        "durationMin": null
-       }
-      ]
-     }
-    },
-    {
-     "id": "tennis|2026-11-26|Nikles J.|Zeballos F.",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T19:00:00Z",
-     "time": "19:00",
-     "home": "Nikles J.",
-     "away": "Zeballos F.",
-     "match": "Nikles J. vs Zeballos F.",
-     "side": "away",
-     "team": "Zeballos F.",
-     "fanPct": 79.0,
-     "votes": 38,
-     "band": "70-80",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17583998",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17583998",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 2.55,
-      "draw": null,
-      "away": 1.45
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.49,
-      "bookmaker": "oddssafari",
-      "pinnacle": null,
-      "books": 4,
-      "at": "2026-11-26T09:51:04Z"
-     },
-     "impliedPct": 67.1,
-     "edgePct": 11.9,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "",
-      "venue": "",
-      "opponentOverall": "",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": null,
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": null,
-      "exactScore": null
-     },
-     "modelProb": 0.611,
-     "grade": null,
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "Florianopolis, Brazil, Doubles",
-      "category": "Challenger",
-      "round": "Quarterfinals",
-      "surface": "Red clay",
-      "team": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Tosetto R / Zanellato N",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-4 6-2)",
-        "tournament": "Florianopolis, Brazil, Doubles",
-        "round": "Round of 16",
-        "durationMin": 69
-       },
-       {
-        "date": "2026-11-05",
-        "opponent": "Ribeiro E / Rodrigues N",
-        "venue": "A",
-        "result": "L",
-        "score": "1-2 (7-6 5-7 8-10)",
-        "tournament": "Costa do Sauipe, Brazil, Doubles",
-        "round": "Quarterfinals",
-        "durationMin": 129
-       },
-       {
-        "date": "2026-11-04",
-        "opponent": "Boscardin Dias P / Heide G",
-        "venue": "A",
-        "result": "W",
-        "score": "",
-        "tournament": "Costa do Sauipe, Brazil, Doubles",
-        "round": "Round of 16",
-        "durationMin": null
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Magadan A / Pacheco Mendez R",
-        "venue": "A",
-        "result": "W",
-        "score": "0-0 (5-5)",
-        "tournament": "Cali, Colombia, Doubles",
-        "round": "Final",
-        "durationMin": 36
-       },
-       {
-        "date": "2026-10-23",
-        "opponent": "Oliveira B / Rodrigues N",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-4 6-4)",
-        "tournament": "Cali, Colombia, Doubles",
-        "round": "Semifinals",
-        "durationMin": 83
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Fernandez B / Rebelo D V C",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-2 6-2)",
-        "tournament": "Florianopolis, Brazil, Doubles",
-        "round": "Round of 16",
-        "durationMin": 51
-       }
-      ]
-     }
-    },
-    {
-     "id": "tennis|2026-11-26|De Schepper K.|Perez Ramos P.",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T10:30:00Z",
-     "time": "10:30",
-     "home": "De Schepper K.",
-     "away": "Perez Ramos P.",
-     "match": "De Schepper K. vs Perez Ramos P.",
-     "side": "away",
-     "team": "Perez Ramos P.",
-     "fanPct": 77.0,
-     "votes": 83,
-     "band": "70-80",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17635148",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17635148",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 2.0,
-      "draw": null,
-      "away": 1.65
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.7,
-      "bookmaker": "pinnacle",
-      "pinnacle": 1.704,
-      "books": 1,
-      "at": "2026-11-26T09:51:04Z"
-     },
-     "impliedPct": 58.8,
-     "edgePct": 18.2,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "WLWWW",
-      "venue": "",
-      "opponentOverall": "WLLLL",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": {
-      "total": 5,
-      "wins": null,
-      "losses": null,
-      "lastScore": null,
-      "lastDate": null,
-      "line": "H2H: Perez Ramos P. 0-5-0 (even)",
-      "last": "No previous meetings",
-      "edge": null
-     },
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": "2",
-      "exactScore": "0-2"
-     },
-     "modelProb": 0.569,
-     "grade": "C",
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "ITF M15 Madrid 2 Men",
-      "category": "ITF Men",
-      "round": "Round of 16",
-      "surface": "Hardcourt outdoor",
-      "team": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Daniel Lara Salmeron",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (7-5 6-3)",
-        "tournament": "ITF M15 Madrid 2 Men",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-22",
-        "opponent": "Bernardo Munk Mesa",
-        "venue": "A",
-        "result": "L",
-        "score": "1-2 (7-6 1-6 6-7)",
-        "tournament": "ITF M15 Alcala De Henares Men",
-        "round": "Final",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-21",
-        "opponent": "Alejandro Garcia Carbajal",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-3 6-4)",
-        "tournament": "ITF M15 Alcala De Henares Men",
-        "round": "Semifinals",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-20",
-        "opponent": "Enrique Carrascosa Diaz",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (7-5 6-1)",
-        "tournament": "ITF M15 Alcala De Henares Men",
-        "round": "Quarterfinals",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-19",
-        "opponent": "Borys Zgola",
-        "venue": "A",
-        "result": "W",
-        "score": "2-1 (5-7 6-3 7-5)",
-        "tournament": "ITF M15 Alcala De Henares Men",
-        "round": "Round of 16",
-        "durationMin": null
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Adan Freire Da Silva",
-        "venue": "A",
-        "result": "W",
-        "score": "2-1 (6-7 6-2 6-4)",
-        "tournament": "ITF M15 Madrid 2 Men",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-19",
-        "opponent": "Enrique Carrascosa Diaz",
-        "venue": "A",
-        "result": "L",
-        "score": "0-2 (4-6 6-7)",
-        "tournament": "ITF M15 Alcala De Henares Men",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-12",
-        "opponent": "Garrett Johns",
-        "venue": "H",
-        "result": "L",
-        "score": "1-2 (3-6 6-4 4-6)",
-        "tournament": "ITF M25 Vale Do Lobo 2 Men",
-        "round": "Round of 32",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-09",
-        "opponent": "Justin Lenders",
-        "venue": "H",
-        "result": "W",
-        "score": "2-1 (6-4 3-6 10-7)",
-        "tournament": "ITF M25 Vale Do Lobo 2 Men",
-        "round": "Qualifications",
-        "durationMin": null
-       },
-       {
-        "date": "2026-11-09",
-        "opponent": "Conor Brady",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-1 6-2)",
-        "tournament": "ITF M25 Vale Do Lobo 2 Men",
-        "round": "Qualifications",
         "durationMin": null
        }
       ]
@@ -17223,7 +18517,7 @@
      "side": "home",
      "team": "Costoulas S.",
      "fanPct": 75.0,
-     "votes": 923,
+     "votes": 1590,
      "band": "70-80",
      "sofascoreUrl": "https://www.sofascore.com/tennis/match/17584142",
      "matchUrl": "https://www.sofascore.com/tennis/match/17584142",
@@ -17237,14 +18531,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.67,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.641,
+      "price": 1.69,
+      "bookmaker": "livesport",
+      "pinnacle": 1.595,
       "books": 15,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 59.9,
-     "edgePct": 15.1,
+     "impliedPct": 59.2,
+     "edgePct": 15.8,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -17423,14 +18717,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.67,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.641,
+      "price": 1.69,
+      "bookmaker": "livesport",
+      "pinnacle": 1.595,
       "books": 15,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
-     "impliedPct": 59.9,
-     "edgePct": 15.1,
+     "impliedPct": 59.2,
+     "edgePct": 15.8,
      "limit": {
       "min": 1.35,
       "source": "standard"
@@ -17583,6 +18877,192 @@
         "result": "W",
         "score": "2-0 (6-0 6-4)",
         "tournament": "ITF W50 Austin, TX Women",
+        "round": "Qualifications",
+        "durationMin": null
+       }
+      ]
+     }
+    },
+    {
+     "id": "tennis|2026-11-26|De Schepper K.|Perez Ramos P.",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T10:30:00Z",
+     "time": "10:30",
+     "home": "De Schepper K.",
+     "away": "Perez Ramos P.",
+     "match": "De Schepper K. vs Perez Ramos P.",
+     "side": "away",
+     "team": "Perez Ramos P.",
+     "fanPct": 75.0,
+     "votes": 77,
+     "band": "70-80",
+     "sofascoreUrl": null,
+     "matchUrl": null,
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 2.0,
+      "draw": null,
+      "away": 1.65
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.65,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
+     },
+     "impliedPct": 60.6,
+     "edgePct": 14.4,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "WLWWW",
+      "venue": "",
+      "opponentOverall": "WLLLL",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": {
+      "total": 5,
+      "wins": null,
+      "losses": null,
+      "lastScore": null,
+      "lastDate": null,
+      "line": "H2H: Perez Ramos P. 0-5-0 (even)",
+      "last": "No previous meetings",
+      "edge": null
+     },
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": "2",
+      "exactScore": "0-2"
+     },
+     "modelProb": 0.569,
+     "grade": "C",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "ITF M15 Madrid 2 Men",
+      "category": "ITF Men",
+      "round": "Round of 16",
+      "surface": "Hardcourt outdoor",
+      "team": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Daniel Lara Salmeron",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (7-5 6-3)",
+        "tournament": "ITF M15 Madrid 2 Men",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-22",
+        "opponent": "Bernardo Munk Mesa",
+        "venue": "A",
+        "result": "L",
+        "score": "1-2 (7-6 1-6 6-7)",
+        "tournament": "ITF M15 Alcala De Henares Men",
+        "round": "Final",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-21",
+        "opponent": "Alejandro Garcia Carbajal",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-3 6-4)",
+        "tournament": "ITF M15 Alcala De Henares Men",
+        "round": "Semifinals",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-20",
+        "opponent": "Enrique Carrascosa Diaz",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (7-5 6-1)",
+        "tournament": "ITF M15 Alcala De Henares Men",
+        "round": "Quarterfinals",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "Borys Zgola",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (5-7 6-3 7-5)",
+        "tournament": "ITF M15 Alcala De Henares Men",
+        "round": "Round of 16",
+        "durationMin": null
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-25",
+        "opponent": "Adan Freire Da Silva",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (6-7 6-2 6-4)",
+        "tournament": "ITF M15 Madrid 2 Men",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-19",
+        "opponent": "Enrique Carrascosa Diaz",
+        "venue": "A",
+        "result": "L",
+        "score": "0-2 (4-6 6-7)",
+        "tournament": "ITF M15 Alcala De Henares Men",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-12",
+        "opponent": "Garrett Johns",
+        "venue": "H",
+        "result": "L",
+        "score": "1-2 (3-6 6-4 4-6)",
+        "tournament": "ITF M25 Vale Do Lobo 2 Men",
+        "round": "Round of 32",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-09",
+        "opponent": "Justin Lenders",
+        "venue": "H",
+        "result": "W",
+        "score": "2-1 (6-4 3-6 10-7)",
+        "tournament": "ITF M25 Vale Do Lobo 2 Men",
+        "round": "Qualifications",
+        "durationMin": null
+       },
+       {
+        "date": "2026-11-09",
+        "opponent": "Conor Brady",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (6-1 6-2)",
+        "tournament": "ITF M25 Vale Do Lobo 2 Men",
         "round": "Qualifications",
         "durationMin": null
        }
@@ -17787,7 +19267,7 @@
       "bookmaker": "livesport",
       "pinnacle": null,
       "books": 1,
-      "at": "2026-11-26T09:51:04Z"
+      "at": "2026-11-26T16:47:56Z"
      },
      "impliedPct": 45.0,
      "edgePct": 29.0,
@@ -17938,6 +19418,153 @@
         "tournament": "Kobe, Japan, Qualifying",
         "round": "Qualification Final",
         "durationMin": 149
+       }
+      ]
+     }
+    },
+    {
+     "id": "tennis|2026-11-26|Kulambayeva Z.|Brancaccio N.",
+     "sport": "tennis",
+     "date": "2026-11-26",
+     "league": "",
+     "kickoff": "2026-11-26T20:00:00Z",
+     "time": "20:00",
+     "home": "Kulambayeva Z.",
+     "away": "Brancaccio N.",
+     "match": "Kulambayeva Z. vs Brancaccio N.",
+     "side": "home",
+     "team": "Kulambayeva Z.",
+     "fanPct": 74.0,
+     "votes": 171,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17628486",
+     "matchUrl": "https://www.sofascore.com/tennis/match/17628486",
+     "forebetUrl": null,
+     "eventId": null,
+     "odds": {
+      "home": 1.35,
+      "draw": null,
+      "away": 2.9
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.4,
+      "bookmaker": "oddssafari",
+      "pinnacle": null,
+      "books": 14,
+      "at": "2026-11-26T16:47:56Z"
+     },
+     "impliedPct": 71.4,
+     "edgePct": 2.6,
+     "limit": {
+      "min": 1.35,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": null,
+      "pick": null,
+      "exactScore": null
+     },
+     "modelProb": 0.667,
+     "grade": null,
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Buenos Aires, Argentina, Doubles",
+      "category": "WTA 125",
+      "round": "Quarterfinals",
+      "surface": "Red clay",
+      "team": [
+       {
+        "date": "2023-09-08",
+        "opponent": "Grammatikopoulou V / Lechemia E",
+        "venue": "H",
+        "result": "L",
+        "score": "0-2 (1-6 1-6)",
+        "tournament": "Bari, Italy, Doubles",
+        "round": "Semifinals",
+        "durationMin": 57
+       },
+       {
+        "date": "2023-09-07",
+        "opponent": "Bassols Ribera M / Pigossi L",
+        "venue": "H",
+        "result": "W",
+        "score": "2-0 (7-6 6-0)",
+        "tournament": "Bari, Italy, Doubles",
+        "round": "Quarterfinals",
+        "durationMin": 78
+       },
+       {
+        "date": "2023-09-06",
+        "opponent": "Pedone G / Ruggeri J",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (6-2 6-7 10-2)",
+        "tournament": "Bari, Italy, Doubles",
+        "round": "Round of 16",
+        "durationMin": 90
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2021-07-03",
+        "opponent": "Hertel A / Kubka M",
+        "venue": "H",
+        "result": "L",
+        "score": "1-2 (7-6 3-6 7-10)",
+        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
+        "round": "Final",
+        "durationMin": 93
+       },
+       {
+        "date": "2021-07-02",
+        "opponent": "Ferrando C / Simion O G",
+        "venue": "H",
+        "result": "W",
+        "score": "",
+        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
+        "round": "Semifinals",
+        "durationMin": null
+       },
+       {
+        "date": "2021-06-30",
+        "opponent": "Anshba A / Gamiz A",
+        "venue": "A",
+        "result": "W",
+        "score": "2-1 (6-4 3-6 10-7)",
+        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
+        "round": "Quarterfinals",
+        "durationMin": 92
+       },
+       {
+        "date": "2021-06-29",
+        "opponent": "Podlinska M / Rutkowska W",
+        "venue": "A",
+        "result": "W",
+        "score": "2-0 (6-4 6-1)",
+        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
+        "round": "Round of 16",
+        "durationMin": 61
        }
       ]
      }
@@ -18176,103 +19803,6 @@
      }
     },
     {
-     "id": "tennis|2026-11-26|Barrientos N.|Bagnis F.",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T17:30:00Z",
-     "time": "17:30",
-     "home": "Barrientos N.",
-     "away": "Bagnis F.",
-     "match": "Barrientos N. vs Bagnis F.",
-     "side": "home",
-     "team": "Barrientos N.",
-     "fanPct": 73.0,
-     "votes": 79,
-     "band": "70-80",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17584004",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17584004",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 1.85,
-      "draw": null,
-      "away": 1.85
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.85,
-      "bookmaker": "oddssafari",
-      "pinnacle": null,
-      "books": 6,
-      "at": "2026-11-26T09:51:04Z"
-     },
-     "impliedPct": 54.1,
-     "edgePct": 18.9,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "",
-      "venue": "",
-      "opponentOverall": "",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": null,
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": null,
-      "exactScore": null
-     },
-     "modelProb": null,
-     "grade": null,
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "Florianopolis, Brazil, Doubles",
-      "category": "Challenger",
-      "round": "Quarterfinals",
-      "surface": "Red clay",
-      "team": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Oliveira B / Rodrigues N",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-3 7-5)",
-        "tournament": "Florianopolis, Brazil, Doubles",
-        "round": "Round of 16",
-        "durationMin": 93
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2026-11-25",
-        "opponent": "Aguilar Cardozo J / Villanueva G",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (6-3 6-3)",
-        "tournament": "Florianopolis, Brazil, Doubles",
-        "round": "Round of 16",
-        "durationMin": 69
-       }
-      ]
-     }
-    },
-    {
      "id": "tennis|2026-11-26|Marrero Curbelo I.|Garcia A.",
      "sport": "tennis",
      "date": "2026-11-26",
@@ -18345,153 +19875,6 @@
       "surface": "Hardcourt outdoor",
       "team": [],
       "opponent": []
-     }
-    },
-    {
-     "id": "tennis|2026-11-26|Kulambayeva Z.|Brancaccio N.",
-     "sport": "tennis",
-     "date": "2026-11-26",
-     "league": "",
-     "kickoff": "2026-11-26T20:00:00Z",
-     "time": "20:00",
-     "home": "Kulambayeva Z.",
-     "away": "Brancaccio N.",
-     "match": "Kulambayeva Z. vs Brancaccio N.",
-     "side": "home",
-     "team": "Kulambayeva Z.",
-     "fanPct": 71.0,
-     "votes": 111,
-     "band": "70-80",
-     "sofascoreUrl": "https://www.sofascore.com/tennis/match/17628486",
-     "matchUrl": "https://www.sofascore.com/tennis/match/17628486",
-     "forebetUrl": null,
-     "eventId": null,
-     "odds": {
-      "home": 1.35,
-      "draw": null,
-      "away": 2.9
-     },
-     "oddsSource": "Pinnacle",
-     "oddsMarket": "2way",
-     "bestPrice": {
-      "price": 1.4,
-      "bookmaker": "oddssafari",
-      "pinnacle": null,
-      "books": 14,
-      "at": "2026-11-26T09:51:04Z"
-     },
-     "impliedPct": 71.4,
-     "edgePct": -0.4,
-     "limit": {
-      "min": 1.35,
-      "source": "standard"
-     },
-     "status": "pick",
-     "form": {
-      "overall": "",
-      "venue": "",
-      "opponentOverall": "",
-      "opponentVenue": "",
-      "season": "",
-      "opponentSeason": "",
-      "venueSeason": ""
-     },
-     "h2h": null,
-     "lastMatch": {
-      "team": null,
-      "opponent": null
-     },
-     "forebet": {
-      "prob": null,
-      "pick": null,
-      "exactScore": null
-     },
-     "modelProb": 0.667,
-     "grade": null,
-     "availability": {
-      "verdict": "unknown",
-      "note": ""
-     },
-     "result": null,
-     "details": {
-      "tournament": "Buenos Aires, Argentina, Doubles",
-      "category": "WTA 125",
-      "round": "Quarterfinals",
-      "surface": "Red clay",
-      "team": [
-       {
-        "date": "2023-09-08",
-        "opponent": "Grammatikopoulou V / Lechemia E",
-        "venue": "H",
-        "result": "L",
-        "score": "0-2 (1-6 1-6)",
-        "tournament": "Bari, Italy, Doubles",
-        "round": "Semifinals",
-        "durationMin": 57
-       },
-       {
-        "date": "2023-09-07",
-        "opponent": "Bassols Ribera M / Pigossi L",
-        "venue": "H",
-        "result": "W",
-        "score": "2-0 (7-6 6-0)",
-        "tournament": "Bari, Italy, Doubles",
-        "round": "Quarterfinals",
-        "durationMin": 78
-       },
-       {
-        "date": "2023-09-06",
-        "opponent": "Pedone G / Ruggeri J",
-        "venue": "A",
-        "result": "W",
-        "score": "2-1 (6-2 6-7 10-2)",
-        "tournament": "Bari, Italy, Doubles",
-        "round": "Round of 16",
-        "durationMin": 90
-       }
-      ],
-      "opponent": [
-       {
-        "date": "2021-07-03",
-        "opponent": "Hertel A / Kubka M",
-        "venue": "H",
-        "result": "L",
-        "score": "1-2 (7-6 3-6 7-10)",
-        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
-        "round": "Final",
-        "durationMin": 93
-       },
-       {
-        "date": "2021-07-02",
-        "opponent": "Ferrando C / Simion O G",
-        "venue": "H",
-        "result": "W",
-        "score": "",
-        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
-        "round": "Semifinals",
-        "durationMin": null
-       },
-       {
-        "date": "2021-06-30",
-        "opponent": "Anshba A / Gamiz A",
-        "venue": "A",
-        "result": "W",
-        "score": "2-1 (6-4 3-6 10-7)",
-        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
-        "round": "Quarterfinals",
-        "durationMin": 92
-       },
-       {
-        "date": "2021-06-29",
-        "opponent": "Podlinska M / Rutkowska W",
-        "venue": "A",
-        "result": "W",
-        "score": "2-0 (6-4 6-1)",
-        "tournament": "Wroclaw, Doubles W-ITF-POL-01A",
-        "round": "Round of 16",
-        "durationMin": 61
-       }
-      ]
      }
     },
     {
@@ -18896,19 +20279,19 @@
    ],
    "stats": {
     "rows": 316,
-    "withVote": 201,
-    "fanOk": 154,
-    "belowLimit": 82,
-    "noOdds": 5,
-    "voteRequested": 184,
-    "voteFound": 167,
+    "withVote": 93,
+    "fanOk": 76,
+    "belowLimit": 31,
+    "noOdds": 3,
+    "voteRequested": 64,
+    "voteFound": 57,
     "wrongEvent": 0,
-    "fanThr": 171,
-    "oddsOk": 67,
-    "calls": 184,
+    "fanThr": 76,
+    "oddsOk": 42,
+    "calls": 64,
     "budgetHit": 0,
-    "details": 14,
-    "picks": 67
+    "details": 1,
+    "picks": 42
    },
    "evaluated": [
     "tennis|2026-11-26|K. Isomura|H. Matsuoka",
@@ -18916,21 +20299,9 @@
     "tennis|2026-11-26|D. Sweeny|H. Jones",
     "tennis|2026-11-26|R. Noguchi|B. Hassan",
     "tennis|2026-11-26|D. Pham|A. Bolt",
-    "tennis|2026-11-26|C. Norrie|J-L. Struff",
-    "tennis|2026-11-26|R. Guna|M. Wiskandt",
-    "tennis|2026-11-26|J. Maute|E. Kirkin",
     "tennis|2026-11-26|S. Pankin|P. Bar Biryukov",
-    "tennis|2026-11-26|F. Bondioli|M. Scaglia",
-    "tennis|2026-11-26|E. Coulibaly|G. Tabacco",
-    "tennis|2026-11-26|A. Fery|A. Zverev",
-    "tennis|2026-11-26|R. Peniston|I. Xilas",
     "tennis|2026-11-26|Y. Kelm|F. Romano",
-    "tennis|2026-11-26|C. J. Barranco|G. I. Justo",
-    "tennis|2026-11-26|M. Alcala Gurri|E. Ribeiro",
-    "tennis|2026-11-26|J. M. La Serna|T. Cigarran",
-    "tennis|2026-11-26|I. Marcondes|J. Nikles",
     "tennis|2026-11-26|R. Nijboer|F. Roncadelli",
-    "tennis|2026-11-26|C. M. Zarate|F. Meligeni Alves",
     "tennis|2026-11-26|J. Aguilar Cardozo|G. A. Olivieri",
     "tennis|2026-11-26|N. Zanellato|E. Moeller",
     "tennis|2026-11-26|S. Heredia|A. Vales",
@@ -18942,20 +20313,9 @@
     "tennis|2026-11-26|L. Andrade da Silva|D. Duran",
     "tennis|2026-11-26|M. L. Carle|N. Podoroska",
     "tennis|2026-11-26|T. Legout|K. Poling",
-    "tennis|2026-11-26|Fery A.|Zverev A.",
-    "tennis|2026-11-26|Patten H.|Krawietz K.",
-    "tennis|2026-11-26|Alcala Gurri M.|Ribeiro E.",
-    "tennis|2026-11-26|Barranco Cosano J.|Justo G. I.",
-    "tennis|2026-11-26|La Serna J. M.|Cigarran T.",
-    "tennis|2026-11-26|Marcondes I.|Nikles J.",
     "tennis|2026-11-26|Nijboer R.|Roncadelli F.",
-    "tennis|2026-11-26|Zarate C. M.|Meligeni Alves F.",
-    "tennis|2026-11-26|Aguilar Cardozo J.|Olivieri G. A.",
-    "tennis|2026-11-26|Zanellato N.|Moller E.",
     "tennis|2026-11-26|Kravchenko G.|Ovcharenko O.",
     "tennis|2026-11-26|Peniston R.|Xilas I.",
-    "tennis|2026-11-26|Bondioli F.|Scaglia M.",
-    "tennis|2026-11-26|Coulibaly E.|Tabacco G.",
     "tennis|2026-11-26|Pankin S.|Bar Biryukov P.",
     "tennis|2026-11-26|Kelm Y.|Romano F.",
     "tennis|2026-11-26|Jasika O.|Tu L.",
@@ -18975,19 +20335,11 @@
     "tennis|2026-11-26|Maristany G.|Brancaccio N.",
     "tennis|2026-11-26|Burillo Escorihuela I.|Samson L.",
     "tennis|2026-11-26|Carle M. L.|Podoroska N.",
-    "tennis|2026-11-26|Matuszewski P.|Bianchi J. J.",
-    "tennis|2026-11-26|Ozdemir S. M.|Gulin S.",
-    "tennis|2026-11-26|Oetzbach A.|Funk A.",
-    "tennis|2026-11-26|Poritskyi A.|Agafonov E.",
     "tennis|2026-11-26|Arias B.|Loureiro J. V. C.",
     "tennis|2026-11-26|Barrientos N.|Bagnis F.",
     "tennis|2026-11-26|Sakamoto P.|Merino A.",
     "tennis|2026-11-26|Nikles J.|Zeballos F.",
-    "tennis|2026-11-26|Demin Y.|Ovcharenko O.",
-    "tennis|2026-11-26|Kravchenko G.|Lopez Morillo I.",
-    "tennis|2026-11-26|Agostini S.|Mansouri S.",
     "tennis|2026-11-26|Burdet A.|Barroso Campos A.",
-    "tennis|2026-11-26|Kalender A.|Bar Biryukov P.",
     "tennis|2026-11-26|Bayldon B.|Aguiard E.",
     "tennis|2026-11-26|Hazawa S.|Puttergill C.",
     "tennis|2026-11-26|Becroft I.|Jung J.",
@@ -18997,18 +20349,8 @@
     "tennis|2026-11-26|Kulambayeva Z.|Brancaccio N.",
     "tennis|2026-11-26|Akli A.|Costoulas S.",
     "tennis|2026-11-26|De Schepper K.|Perez Ramos P.",
-    "tennis|2026-11-26|Gonzalez E.|Tkemaladze Z.",
-    "tennis|2026-11-26|Hernandez C.|Garcia E.",
-    "tennis|2026-11-26|Morais D.|Manzano Lapuerta P.",
     "tennis|2026-11-26|Cocola S.|Herrmann T.",
-    "tennis|2026-11-26|Barun B.|Kupcic J.",
     "tennis|2026-11-26|Castagnola L.|Neimanis R.",
-    "tennis|2026-11-26|Salvestre D.|Marino P.",
-    "tennis|2026-11-26|Shah K. S.|Thies C.",
-    "tennis|2026-11-26|Eldin R.|Cundom J.",
-    "tennis|2026-11-26|Guadagno V.|Biletic I.",
-    "tennis|2026-11-26|Scramin do Lago J. V.|Gagliardo L.",
-    "tennis|2026-11-26|Valente R.|Ortiz Gamonal D.",
     "tennis|2026-11-26|De La Pena B.|Braga V.",
     "tennis|2026-11-26|Lora S.|Price S.",
     "tennis|2026-11-26|Sverzut Corsini L.|Monzon I.",
@@ -19020,39 +20362,15 @@
     "tennis|2026-11-26|Singh K.|Krivoshchekov M.",
     "tennis|2026-11-26|Sureshkumar M.|Kshitij A.",
     "tennis|2026-11-26|Duhan C.|Kalyanpur A.",
-    "tennis|2026-11-26|Duda A.|Gengel M.",
-    "tennis|2026-11-26|Sesko Z.|Beaven J.",
-    "tennis|2026-11-26|Paroulek T.|Braynin A.",
-    "tennis|2026-11-26|Pieczonka F.|Piening C.",
     "tennis|2026-11-26|Lacinova A.|Obradovic A.",
     "tennis|2026-11-26|Bhatia K.|Dekkers F.",
     "tennis|2026-11-26|Jamshidi E.|Dipakbhai Kanabar J.",
     "tennis|2026-11-26|Oigawa S.|Rao S. S.",
-    "tennis|2026-11-26|Almeida S.|Firman A.",
-    "tennis|2026-11-26|Losciale V.|Wobker I.",
-    "tennis|2026-11-26|Makarova M.|Fontenel C.",
-    "tennis|2026-11-26|Adeshina E.|Andrienko M.",
-    "tennis|2026-11-26|Jialin T.|Tomase E.",
-    "tennis|2026-11-26|Voracek E. M.|Reva A.",
-    "tennis|2026-11-26|Blazkova K.|Honer A.",
-    "tennis|2026-11-26|Iliev S.|Shkutova A.",
     "tennis|2026-11-26|Marinkovic I.|Taranova V.",
-    "tennis|2026-11-26|Ben Ezzedine M.|Hageman M.",
-    "tennis|2026-11-26|Dal S.|Lim A.",
-    "tennis|2026-11-26|Horvit M.|Bonelli E.",
-    "tennis|2026-11-26|Taraba Wallberg N.|Pawlak L.",
     "tennis|2026-11-26|El Sayed A.|Snigireva A.",
     "tennis|2026-11-26|Cvetkovic A.|Stankovic A.",
-    "tennis|2026-11-26|Kuzmova K.|Perelygina E.",
-    "tennis|2026-11-26|De Stefano S.|Brockmann T. J.",
-    "tennis|2026-11-26|Vlasselaer C.|Stojsavljevic M.",
-    "tennis|2026-11-26|Mazzola A.|Ewald W.",
     "tennis|2026-11-26|Rodriguez V.|Sanchez A. S.",
-    "tennis|2026-11-26|Semenistaja D.|Konishi Silva J.",
-    "tennis|2026-11-26|Perez Alarcon L.|Gatica B.",
     "tennis|2026-11-26|Strakhova V.|Ce G.",
-    "tennis|2026-11-26|Egorova D.|Labrana F.",
-    "tennis|2026-11-26|Tran D.|Pigossi L.",
     "tennis|2026-11-26|Bulgaru M.|Carbone dos Santos M. E.",
     "tennis|2026-11-26|Roura Llaverias R.|Alves C.",
     "tennis|2026-11-26|Swan K.|Sharma A.",
@@ -19060,62 +20378,19 @@
     "tennis|2026-11-26|Kokkinis T.|Micic E.",
     "tennis|2026-11-26|Kinoshita H.|Koike E.",
     "tennis|2026-11-26|Swan K.|Micic E.",
-    "tennis|2026-11-26|Laboutkova A.|Ponchet J.",
     "tennis|2026-11-26|Ngounoue C.|Palicova B.",
-    "tennis|2026-11-26|Vladson L.|Malygina E.",
-    "tennis|2026-11-26|Yaneva E.|Zeltina B.",
-    "tennis|2026-11-26|Misasi G.|Khotchenkov E.",
-    "tennis|2026-11-26|Radjenovic V.|Cerelli G.",
-    "tennis|2026-11-26|Mujakic A.|Aytekin M.",
-    "tennis|2026-11-26|Alam P.|Curras Abasolo T.",
-    "tennis|2026-11-26|Basile P.|Haddorff T.",
-    "tennis|2026-11-26|Delicata L.|Kontopoulos T.",
-    "tennis|2026-11-26|Dimitriou G.|Cizek J.",
-    "tennis|2026-11-26|Carrascosa Diaz E.|Rojas C.",
-    "tennis|2026-11-26|Manrique-Velazquez D.|Arce Fernandez M.",
-    "tennis|2026-11-26|Marrero Curbelo I.|Garcia A.",
-    "tennis|2026-11-26|Marques D.|Carroll M.",
-    "tennis|2026-11-26|Chetouane M.|Elamin A.",
-    "tennis|2026-11-26|Domingos D.|Primucci L.",
-    "tennis|2026-11-26|Lumsden E.|Dimic M.",
-    "tennis|2026-11-26|Castagnola L.|Cocola S.",
     "tennis|2026-11-26|Bruna N.|Cundom J.",
     "tennis|2026-11-26|Gagliardo L.|Torrealba B.",
-    "tennis|2026-11-26|Bieldiugin T.|Fumagalli F.",
-    "tennis|2026-11-26|Ehab M.|Lechno-Wasiutyński F.",
-    "tennis|2026-11-26|Doig C.|Ivanov S.",
     "tennis|2026-11-26|Kalyanpur A.|Lakshmanan A.",
-    "tennis|2026-11-26|Petrofsky D.|Bozemoj B.",
-    "tennis|2026-11-26|Recek D.|Fidler T.",
-    "tennis|2026-11-26|Baum S.|Blazka D.",
-    "tennis|2026-11-26|Brady C.|Beaven J.",
-    "tennis|2026-11-26|Sevcikova L.|Kenzhibayeva S.",
-    "tennis|2026-11-26|Ghosh A.|Lin F. A.",
-    "tennis|2026-11-26|Firman A.|Amorim G.",
-    "tennis|2026-11-26|Adeshina E.|Brown B.",
-    "tennis|2026-11-26|Pawelska M.|Boehner L.",
-    "tennis|2026-11-26|Blazkova K.|Iliev S.",
-    "tennis|2026-11-26|Allani S.|Grekul E.",
-    "tennis|2026-11-26|Choi S. Y.|Sahnoun N.",
-    "tennis|2026-11-26|Pascual Montalvo I.|Inisan E.",
-    "tennis|2026-11-26|Hrabavets U.|Dmitruk K.",
-    "tennis|2026-11-26|Martianova S.|Bartone K.",
-    "tennis|2026-11-26|Korokozidi E.|Allen V.",
-    "tennis|2026-11-26|Gavrila O.|Panagiotidou L.",
     "tennis|2026-11-26|Nepliy E.|Dorofeeva-Rybas F.",
-    "tennis|2026-11-26|Pochtovyk K.|Krolitzky S.",
-    "tennis|2026-11-26|Peer L.|Arseneault A.",
     "tennis|2026-11-26|Garcia Vidal L.|Navarro M. F.",
     "tennis|2026-11-26|Gomez Pezuela Cano M.|Fullana L.",
     "tennis|2026-11-26|Gatica B.|Candiotto A.",
-    "tennis|2026-11-26|Hoedt M.|Cui A.",
-    "tennis|2026-11-26|Farkasova N.|Appleton E.",
-    "tennis|2026-11-26|Kovackova A.|Paszun A.",
-    "tennis|2026-11-26|Ngounoue C.|Gimbrere J."
+    "tennis|2026-11-26|Hoedt M.|Cui A."
    ]
   },
   "volleyball": {
-   "generatedAt": "2026-11-26T09:50:04Z",
+   "generatedAt": "2026-11-26T16:47:25Z",
    "watch": false,
    "picks": [
     {
@@ -19145,14 +20420,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.57,
-      "bookmaker": "oddssafari",
-      "pinnacle": 1.485,
-      "books": 13,
-      "at": "2026-11-26T09:51:13Z"
+      "price": 1.5,
+      "bookmaker": "Pinnacle",
+      "pinnacle": null,
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 63.7,
-     "edgePct": 32.3,
+     "impliedPct": 66.7,
+     "edgePct": 29.3,
      "limit": {
       "min": 1.3,
       "source": "standard"
@@ -19223,9 +20498,9 @@
      "bestPrice": {
       "price": 1.57,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.485,
+      "pinnacle": null,
       "books": 13,
-      "at": "2026-11-26T09:51:13Z"
+      "at": "2026-11-26T16:48:54Z"
      },
      "impliedPct": 63.7,
      "edgePct": 31.3,
@@ -19414,14 +20689,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.36,
+      "price": 1.38,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.357,
+      "pinnacle": 1.372,
       "books": 10,
-      "at": "2026-11-26T09:51:13Z"
+      "at": "2026-11-26T16:48:54Z"
      },
-     "impliedPct": 73.5,
-     "edgePct": 16.5,
+     "impliedPct": 72.5,
+     "edgePct": 17.5,
      "limit": {
       "min": 1.3,
       "source": "standard"
@@ -19776,9 +21051,9 @@
      "bestPrice": {
       "price": 1.48,
       "bookmaker": "oddssafari",
-      "pinnacle": 1.353,
+      "pinnacle": 1.37,
       "books": 14,
-      "at": "2026-11-26T09:51:13Z"
+      "at": "2026-11-26T16:48:54Z"
      },
      "impliedPct": 67.6,
      "edgePct": 14.4,
@@ -19835,8 +21110,9 @@
      "modelProb": 0.778,
      "grade": "A",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
      "result": null,
      "details": {
@@ -19967,14 +21243,14 @@
      "oddsSource": "Pinnacle",
      "oddsMarket": "2way",
      "bestPrice": {
-      "price": 1.61,
-      "bookmaker": "oddssafari",
+      "price": 1.55,
+      "bookmaker": "Pinnacle",
       "pinnacle": null,
-      "books": 13,
-      "at": "2026-11-26T09:51:10Z"
+      "books": 1,
+      "at": null
      },
-     "impliedPct": 62.1,
-     "edgePct": 15.9,
+     "impliedPct": 64.5,
+     "edgePct": 13.5,
      "limit": {
       "min": 1.3,
       "source": "standard"
@@ -20028,10 +21304,16 @@
      "modelProb": 0.718,
      "grade": "A",
      "availability": {
-      "verdict": "unknown",
-      "note": ""
+      "verdict": "ok",
+      "note": "",
+      "checkedAt": "2026-11-26T09:50:11.268054+00:00"
      },
-     "result": null,
+     "result": {
+      "status": "won",
+      "score": "2-1",
+      "draw": false,
+      "settledAt": "2026-11-26T16:50:13Z"
+     },
      "details": {
       "tournament": "SV League",
       "category": "Japan",
@@ -20164,7 +21446,7 @@
       "bookmaker": "oddssafari",
       "pinnacle": 1.617,
       "books": 13,
-      "at": "2026-11-26T09:51:13Z"
+      "at": "2026-11-26T16:48:54Z"
      },
      "impliedPct": 61.7,
      "edgePct": 13.3,
@@ -20401,33 +21683,193 @@
       "note": ""
      },
      "result": null
+    },
+    {
+     "id": "volleyball|2026-11-26|Opole W|Mulhouse W",
+     "sport": "volleyball",
+     "date": "2026-11-26",
+     "league": "CLW",
+     "kickoff": "2026-11-26T18:00:00Z",
+     "time": "18:00",
+     "home": "Opole W",
+     "away": "Mulhouse W",
+     "match": "Opole W vs Mulhouse W",
+     "side": "home",
+     "team": "Opole W",
+     "fanPct": 70.0,
+     "votes": 599,
+     "band": "70-80",
+     "sofascoreUrl": "https://www.sofascore.com/volleyball/match/17314334",
+     "matchUrl": "https://www.sofascore.com/volleyball/match/17314334",
+     "forebetUrl": "https://www.forebet.com/en/volleyball/matches/champions-league-women/opole-w-mulhouse-w/114502",
+     "eventId": null,
+     "odds": {
+      "home": 1.645,
+      "draw": null,
+      "away": 2.16
+     },
+     "oddsSource": "Pinnacle",
+     "oddsMarket": "2way",
+     "bestPrice": {
+      "price": 1.73,
+      "bookmaker": "oddssafari",
+      "pinnacle": null,
+      "books": 15,
+      "at": "2026-11-26T16:48:54Z"
+     },
+     "impliedPct": 57.8,
+     "edgePct": 12.2,
+     "limit": {
+      "min": 1.3,
+      "source": "standard"
+     },
+     "status": "pick",
+     "form": {
+      "overall": "",
+      "venue": "",
+      "opponentOverall": "",
+      "opponentVenue": "",
+      "season": "",
+      "opponentSeason": "",
+      "venueSeason": ""
+     },
+     "h2h": null,
+     "lastMatch": {
+      "team": null,
+      "opponent": null
+     },
+     "forebet": {
+      "prob": 44.0,
+      "pick": "2",
+      "exactScore": "1-3"
+     },
+     "modelProb": 0.44,
+     "grade": "F",
+     "availability": {
+      "verdict": "unknown",
+      "note": ""
+     },
+     "result": null,
+     "details": {
+      "tournament": "Champions League Women, Pool A",
+      "category": "International",
+      "round": "Round 1",
+      "surface": "",
+      "team": [
+       {
+        "date": "2026-11-20",
+        "opponent": "KS Developres Rzeszów",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (25-22 15-25 19-25 21-25)",
+        "tournament": "Liga Siatkowki, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-11-14",
+        "opponent": "ŁKS Commercecon Łódź",
+        "venue": "A",
+        "result": "L",
+        "score": "1-3 (25-27 17-25 25-22 17-25)",
+        "tournament": "Liga Siatkowki, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-11-09",
+        "opponent": "MKS Sokol Mogilno",
+        "venue": "H",
+        "result": "W",
+        "score": "3-2 (25-19 25-18 23-25 23-25 18-16)",
+        "tournament": "Liga Siatkowki, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Impel Wrocław",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (25-21 25-22 23-25 25-14)",
+        "tournament": "Liga Siatkowki, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-10-27",
+        "opponent": "KS Pałac Bydgoszcz II",
+        "venue": "H",
+        "result": "W",
+        "score": "3-0 (26-24 25-22 25-19)",
+        "tournament": "Liga Siatkowki, Women",
+        "round": ""
+       }
+      ],
+      "opponent": [
+       {
+        "date": "2026-11-14",
+        "opponent": "Racing Club de Cannes",
+        "venue": "H",
+        "result": "L",
+        "score": "1-3 (23-25 25-14 28-30 18-25)",
+        "tournament": "Ligue A, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-11-11",
+        "opponent": "Vandœuvre Nancy Volley-Ball",
+        "venue": "A",
+        "result": "W",
+        "score": "3-1 (25-16 20-25 25-20 25-18)",
+        "tournament": "Super Coupe, Women",
+        "round": "Final"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Institut Federal De Volley-Ball",
+        "venue": "A",
+        "result": "W",
+        "score": "3-0 (25-20 25-14 25-19)",
+        "tournament": "Ligue A, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Paris St-Cloud",
+        "venue": "H",
+        "result": "L",
+        "score": "2-3 (25-18 25-22 17-25 21-25 19-21)",
+        "tournament": "Ligue A, Women",
+        "round": ""
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Evreux VB",
+        "venue": "A",
+        "result": "W",
+        "score": "3-0 (25-19 25-21 25-14)",
+        "tournament": "Ligue A, Women",
+        "round": ""
+       }
+      ]
+     }
     }
    ],
    "stats": {
     "rows": 49,
-    "withVote": 33,
-    "fanOk": 29,
-    "belowLimit": 14,
+    "withVote": 25,
+    "fanOk": 24,
+    "belowLimit": 9,
     "noOdds": 8,
-    "voteRequested": 42,
-    "voteFound": 26,
+    "voteRequested": 26,
+    "voteFound": 17,
     "wrongEvent": 0,
-    "fanThr": 29,
+    "fanThr": 24,
     "oddsOk": 7,
-    "calls": 42,
+    "calls": 26,
     "budgetHit": 0,
-    "details": 5,
+    "details": 1,
     "picks": 7
    },
    "evaluated": [
     "volleyball|2026-11-26|Nippon Steel Sakai Blazers|Tokyo Great Bears",
-    "volleyball|2026-11-26|Hyundai E&C Hillstate W|SOOP SOOPers W",
-    "volleyball|2026-11-26|Woori|Samsung Blue Fangs",
-    "volleyball|2026-11-26|Jiangsu|Beijing",
-    "volleyball|2026-11-26|Shanghai|Qingdao",
-    "volleyball|2026-11-26|Hebei|Fujian",
-    "volleyball|2026-11-26|River Plate|UPCN",
-    "volleyball|2026-11-26|DH Baku W|LKS Lodz W",
     "volleyball|2026-11-26|LP-Vampula W|Kangasala W",
     "volleyball|2026-11-26|Opole W|Mulhouse W",
     "volleyball|2026-11-26|Ferro Carril Oeste|Ciudad Voley",
@@ -20449,7 +21891,6 @@
     "volleyball|2026-11-26|Apollo 8 K|Olympiakos K",
     "volleyball|2026-11-26|Dynamo Apeldoorn K|Dudingen K",
     "volleyball|2026-11-26|LP-Vampula K|Kangasala K",
-    "volleyball|2026-11-26|Hyundai E&C Hillstate K|SOOP SOOPers K",
     "volleyball|2026-11-26|KPS Płock|Fort Poznan",
     "volleyball|2026-11-26|KSG Warszawa K|Szczyrk K",
     "volleyball|2026-11-26|Gislaved K|Falkoping K"
