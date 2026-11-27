@@ -18,7 +18,7 @@
   "top_block": false,
   "netStars": 0,
   "netKey": 0,
-  "llmAt": "2026-11-27T10:37:42.792572+00:00",
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "basketball",
   "eventId": 17459379,
   "teams": {
@@ -79,13 +79,14 @@
     "eid": 17459775
    }
   },
-  "signals": [],
-  "status": "no_key_absence",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False",
+  "lastFailAt": "2026-11-27T15:01:45.541071+00:00",
+  "signals": [],
+  "status": "no_key_absence"
  },
  "football|Alanyaspor|Konyaspor": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": "sofascore",
   "confirmed": false,
   "side": "home",
@@ -202,60 +203,78 @@
   "signals": [],
   "status": "no_key_absence",
   "aiSummary": "Konyaspor's absence of star player A. Demirbağ and key player C.",
-  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "hockey|Lukko|Jukurit": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": "llm",
   "confirmed": false,
   "side": "home",
   "home": [
    {
-    "name": "Nuutti Viitasalo",
+    "name": "Santeri Virtanen",
     "importance": "key",
     "status": "out",
-    "reason": "Injury requiring surgery, out for the rest of the season"
+    "reason": "Poissa kuukausia, paluuaikataulu tarkentuu"
+   },
+   {
+    "name": "Lenni Hämäläinen",
+    "importance": "other",
+    "status": "out",
+    "reason": "Odottetaan palaavan helmikuussa"
+   },
+   {
+    "name": "Anton Olsson",
+    "importance": "other",
+    "status": "out",
+    "reason": "Odotetaan palaavan joulukuun loppupuolella"
+   },
+   {
+    "name": "Nuutti Viitasalo",
+    "importance": "other",
+    "status": "out",
+    "reason": "Loppukauden sivussa"
+   },
+   {
+    "name": "Topias Haapanen",
+    "importance": "other",
+    "status": "out",
+    "reason": "Tilannetta seurataan viikko kerrallaan"
    }
   ],
   "away": [
    {
-    "name": "Thomas Olsen",
+    "name": "Niko Korkola",
     "importance": "key",
     "status": "out",
-    "reason": "Listed on Jukurit injury list (day‑by‑day)"
+    "reason": "Loukkautuminen, 4–6 viikkoa poissa"
    },
    {
-    "name": "Louis Boudon",
+    "name": "Jeremi Tammela",
     "importance": "key",
     "status": "out",
-    "reason": "Listed on Jukurit injury list (day‑by‑day)"
+    "reason": "Loukkautuminen, 4–6 viikkoa poissa"
    },
    {
-    "name": "Justin Addamo",
+    "name": "Aleks Haatanen",
     "importance": "key",
     "status": "out",
-    "reason": "Listed on Jukurit injury list (week‑by‑week)"
-   },
-   {
-    "name": "Elias Koponen",
-    "importance": "key",
-    "status": "out",
-    "reason": "Listed on Jukurit injury list (week‑by‑week)"
+    "reason": "Loukkautuminen, 4–6 viikkoa poissa"
    }
   ],
   "sources": [
-   "https://www.raumanlukko.fi/uutiset/nuutti-viitasalon-vamma-vaatii-leikkaushoitoa-ja-pitaa-puolustajan-poissa-pelikentilta-kauden-loppuun-asti",
-   "https://jukurit.fi/fi-fi/article/uutiset/viikkoinfo-4726-sarjakolmosena-kahden-kotipelin-viikkoon/6035/",
+   "https://www.raumanlukko.fi/ennakot/otteluennakko-lukko-jukurit-2026-11-27",
    "https://jukurit.fi/fi-fi/article/etusivu/valitettavia-poissaoloja-jukurit-varautuu-vahvistamaan-kokoonpanoaan/5580/",
-   "https://icehockeyman.com/2026/11/07/lukko-add-karki-on-loan-as-olsson-faces-absence/",
-   "https://www.is.fi/sm-liiga/art-2000012438921.html"
+   "https://www.iltalehti.fi/vedonlyonti/a/e35d7c0c-d21f-474a-b675-d83662ae8576",
+   "https://jukurit.fi/fi-fi/article/uutiset/viikkoinfo-1126-piden-ilta-lauantaina-lets-go-areenalla/5845/",
+   "https://www.sportti.com/jaakiekko/sm-liiga/lukko-koki-murskatappion-nyt-tuli-muutos-kokoonpanoon/"
   ],
   "lineup": null,
   "board": "ok",
   "top_block": false,
   "netStars": 0,
-  "netKey": -3,
-  "llmAt": "2026-11-27T10:37:42.792572+00:00",
+  "netKey": -2,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "hockey",
   "eventId": 16337458,
   "teams": {
@@ -330,8 +349,8 @@
   },
   "signals": [],
   "status": "no_key_absence",
-  "aiSummary": "Jukurit is missing four key players, including Thomas Olsen and Louis Boudon, while Lukko is only without Nuutti Viitasalo. These absences significantly weaken the away team, supporting the home pick.",
-  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
+  "aiSummary": "Jukurit are missing three key players, which significantly weakens the away side, while Lukko's absences include one key player but do not appear to undermine their home advantage as severely.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "volleyball|CSKA Sofia|Montana": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -1749,7 +1768,7 @@
   "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Stal Stalowa Wola|Legia Warszawa II": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
@@ -1820,7 +1839,7 @@
   "signals": [],
   "status": "unknown",
   "aiSummary": "No confirmed team news yet",
-  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Dhofar|Fanja SC": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -2850,14 +2869,14 @@
   "status": "lineups_ok"
  },
  "basketball|Panama|Puerto Rico": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-27T10:37:42.792572+00:00",
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "basketball",
   "eventId": 16680049,
   "teams": {
@@ -2919,7 +2938,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "basketball|Otef Darom|H. Hevel Modiin": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3026,7 +3047,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "basketball|Jyvaskyla|HBA-Marsky Helsinki": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3101,14 +3124,14 @@
   "status": "unknown"
  },
  "basketball|Latvia|Germany": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-27T10:37:42.792572+00:00",
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "basketball",
   "eventId": 16461380,
   "teams": {
@@ -3170,7 +3193,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "basketball|Novy Jicin|Brno U23": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3602,7 +3627,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Goczałkowice Zdrój|Zaglebie Sosnowiec": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3644,7 +3671,9 @@
    "away": null
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Tadamon Sour|Al Ahed Beirut": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3679,7 +3708,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Dubai City Club|Al Fujairah Club": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3768,7 +3799,9 @@
     "source": "search"
    }
   ],
-  "status": "star_out"
+  "status": "star_out",
+  "aiSummary": "Both teams are missing a star player due to other reasons, so the absences affect both sides equally. This does not specifically weaken our pick, Al Fujairah Club.",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Aluminium Arak|Persepolis FC": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3828,7 +3861,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Hapoel Kfar Shalem|Hapoel Kfar Saba": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3900,7 +3935,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Sailiya SC|Gharrafa SC": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -3972,17 +4009,19 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|SpVgg Bayreuth|Greuther Furth II": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
-  "llmAt": "2026-11-27T10:37:42.792572+00:00",
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 16489487,
   "teams": {
@@ -4044,16 +4083,19 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Athletic Bilbao B|Cultural Leonesa": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 16439460,
   "teams": {
@@ -4115,7 +4157,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Sonderjyske|Brøndby": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -4200,16 +4244,19 @@
    }
   },
   "signals": [],
-  "status": "no_key_absence"
+  "status": "no_key_absence",
+  "aiSummary": "Brøndby is missing star player L. Binks due to a hamstring injury, while Sonderjyske has no reported absences.",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
  },
  "football|Binga|AS Korofina": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "home",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 17629309,
   "teams": {
@@ -4228,16 +4275,44 @@
    "home": null
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Petrolul Ploiesti|Arges Pitesti": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
-  "source": null,
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "llm",
   "confirmed": false,
   "side": "home",
+  "home": [
+   {
+    "name": "Jerdea",
+    "importance": "other",
+    "status": "out",
+    "reason": "indisponibil după operaţia la gleznă"
+   }
+  ],
+  "away": [
+   {
+    "name": "Mario Tudose",
+    "importance": "star",
+    "status": "doubtful",
+    "reason": "problemă medicală la picior, incert dacă va juca"
+   }
+  ],
+  "sources": [
+   "https://www.flashscore.ro/stiri/live-superliga-petrolul-fc-arges-lupii-fara-ricardo-sousa-pe-banca/4rxdFNU9/",
+   "https://injuriesandsuspensions.com/matches/2263/petrolul-ploiesti-vs-arges-pitesti-2026-11-27-g1",
+   "https://ohmytip.com/prediction/petrolul-ploiesti-vs-arges-pitesti-prediction-27-11-2026-1565316",
+   "https://www.gsp.ro/fotbal/liga-1/live-petrolul-fc-arges-in-etapa-17-a-din-superliga-1003189.html",
+   "https://www.winonbetonline.com/football/matches/petrolul-ploiesti-vs-arges-pitesti-159737/"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 16403950,
   "teams": {
@@ -4299,16 +4374,34 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "no_key_absence",
+  "aiSummary": "Petrolul Ploiesti is missing Jerdea due to a post-surgery ankle issue, while Arges Pitesti faces uncertainty over star Mario Tudose due to a leg problem. The absence of a key player from the away side is more significant than the home team's loss.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Jong Utrecht|Almere City": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
-  "source": null,
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
   "confirmed": false,
   "side": "away",
+  "home": [
+   {
+    "name": "Mees Hoedemakers",
+    "importance": "other",
+    "status": "out",
+    "reason": "Injury",
+    "url": "https://www.fotmob.com/matches/almere-city-fc-vs-jong-fc-utrecht/iemcs8u"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://www.fotmob.com/matches/almere-city-fc-vs-jong-fc-utrecht/iemcs8u"
+  ],
+  "lineup": null,
   "board": "ok",
   "top_block": false,
-  "unknown": true,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 16317503,
   "teams": {
@@ -4370,16 +4463,19 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "no_key_absence",
+  "aiSummary": "Jong Utrecht is missing Mees Hoedemakers due to injury, while Almere City has no reported absences. This absence does not weaken our pick.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Le Pays du Valois|Valenciennes FC": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 17551549,
   "teams": {
@@ -4429,16 +4525,19 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Norwich U23s|Chelsea U23s": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 16788003,
   "teams": {
@@ -4500,16 +4599,19 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Étoile Carouge|Stade Lausanne Ouchy": {
-  "checkedAt": "2026-11-27T10:37:42.792572+00:00",
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
   "source": null,
   "confirmed": false,
   "side": "away",
   "board": "ok",
   "top_block": false,
   "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
   "sport": "football",
   "eventId": 16357040,
   "teams": {
@@ -4571,7 +4673,9 @@
    }
   },
   "signals": [],
-  "status": "unknown"
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  },
  "football|Werder Bremen|Borussia M'gladbach": {
   "checkedAt": "2026-11-27T10:37:42.792572+00:00",
@@ -4733,6 +4837,6635 @@
     "source": "sofascore"
    }
   ],
-  "status": "star_out"
+  "status": "star_out",
+  "aiSummary": "Borussia M'gladbach's absences are more significant, featuring the loss of star T. Kleindienst and key players E.",
+  "aiSummarySig": "2026-11-27T10:37:42.792572+00:00|False"
+ },
+ "handball|Nordhorn-Lingen|Lubeck-Schwartau": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "llm",
+  "confirmed": false,
+  "side": "away",
+  "home": [],
+  "away": [],
+  "sources": [
+   "https://www.hlsports.de/handball/grippewelle-erwischt-den-vfl-vor-schwieriger-auswaertsaufgabe-406385",
+   "https://vfl-luebeck-schwartau.de/news/detail/wollen-unseren-angriffsflow-deutlich-staerker-herstellen-vfl-gastiert-bei-der-hsg-nordhorn-lingen.html",
+   "https://www.collector.com.tr/1030082802",
+   "https://ran.joyn.de/sports/ticker/ma12191683-hsg-nordhorn-lingen-vfl-luebeck-schwartau",
+   "https://hsgnordhorn-lingen.de/2026/04/01/hsg-am-gruendonnerstag-zu-gast-beim-vfl-luebeck-schwartau/"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "handball",
+  "eventId": 16419461,
+  "teams": {
+   "home": 3983,
+   "away": 3991
+  },
+  "competition": {
+   "name": "2. HBL",
+   "ts": 1795804200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1102153,
+     "name": "P. Holzhacker",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 6.2,
+     "last": 6.0,
+     "share": 0.205,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 1066781,
+     "name": "M. Holpert",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 4.6,
+     "last": 5.0,
+     "share": 0.152,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 1520424,
+     "name": "E. Nickelsen",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 3.2,
+     "last": 5.0,
+     "share": 0.106,
+     "minutes": 0.0,
+     "unit": "goals"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796572800,
+    "tournament": "2. HBL",
+    "round": "",
+    "tier": 1,
+    "eid": 16419472
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|KalPa|JYP": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "llm",
+  "confirmed": false,
+  "side": "away",
+  "home": [
+   {
+    "name": "Juuso Mäenpää",
+    "importance": "star",
+    "status": "out",
+    "reason": "injured in previous game"
+   }
+  ],
+  "away": [
+   {
+    "name": "Sami Vatanen",
+    "importance": "star",
+    "status": "out",
+    "reason": "injured in previous game"
+   }
+  ],
+  "sources": [
+   "https://www.meksi.fi/a/9992434",
+   "https://www.hameensanomat.fi/urheilu/9992434",
+   "https://www.is.fi/sm-liiga/art-2000012442140.html",
+   "https://kalpa.fi/fi-fi/article/uutiset/katsaus-kalpan-sairastuvalle-27112026/7796/",
+   "https://www.suomikiekko.com/2026/11/kalpalle-synkka-takaisku-tahtihyokkaaja-loukkaantui-jalleen-paluu-hamaran-peitossa/"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16337455,
+  "teams": {
+   "home": 5568,
+   "away": 3842
+  },
+  "competition": {
+   "name": "Liiga",
+   "ts": 1795797000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 998345,
+     "name": "V. Ojantakanen",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 1.5,
+     "last": 1.0,
+     "share": 0.12,
+     "minutes": 0.0,
+     "unit": "pts"
+    },
+    {
+     "id": 88378,
+     "name": "S. Vatanen",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 1.5,
+     "last": 0.0,
+     "share": 0.12,
+     "minutes": 0.0,
+     "unit": "pts"
+    },
+    {
+     "id": 1018781,
+     "name": "L. Tukiainen",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 2.5,
+     "last": 0.0,
+     "share": 0.1,
+     "minutes": 0.0,
+     "unit": "pts"
+    },
+    {
+     "id": 790214,
+     "name": "O. Setanen",
+     "goalie": true,
+     "apps": 3,
+     "starts": 3,
+     "avg": 26.3,
+     "last": 21.0,
+     "share": 0.603,
+     "minutes": 0.0,
+     "unit": "saves"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795878000,
+    "tournament": "Liiga",
+    "round": "",
+    "tier": 1,
+    "eid": 16337462
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Both teams are missing a star player due to injury, but KalPa's absence of Juuso Mäenpää is more critical as it weakens the home side rather than our pick, JYP.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Kolner|Straubing Tigers": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "llm",
+  "confirmed": false,
+  "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "Florian Bugl",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury"
+   },
+   {
+    "name": "Danjo Leonhardt",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury"
+   },
+   {
+    "name": "Spencer Kersten",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "injury"
+   },
+   {
+    "name": "Tyler Madden",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "injury"
+   }
+  ],
+  "sources": [
+   "https://www.straubing-tigers.de/drei-spiele-in-sechs-tagen-tigers-treffen-auf-mannheim-koeln-und-muenchen/",
+   "https://www.idowa.de/sport/eishockey/straubing-tigers-warum-koerperliche-komponente-entscheiden-koennte-art-428067",
+   "https://www.sportschau.de/live-und-ergebnisse/eishockey/deutschland-del/ma12189754/koelner-haie_straubing-tigers/spiel-kader",
+   "https://www.haie.de/news/heimspiel-gegen-straubing-kec-trifft-freitagabend-vor-17-500-fans-auf-die-tigers/",
+   "https://www.hyper2play.com/en/hockey/matches/kolner-haie-vs-straubing-tigers-2518283"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": -1,
+  "netKey": -2,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16422565,
+  "teams": {
+   "home": 3847,
+   "away": 5434
+  },
+  "competition": {
+   "name": "DEL",
+   "ts": 1795804200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795957200,
+    "tournament": "DEL",
+    "round": "",
+    "tier": 1,
+    "eid": 16422571
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Straubing Tigers are missing star Florian Bugl and key players Danjo Leonhardt, Spencer Kersten, and Tyler Madden due to injury or doubt. These absences significantly weaken the away team, benefiting our pick, Kolner.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Rodovre Mighty Bulls|Rungsted": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16698179,
+  "teams": {
+   "home": 3882,
+   "away": 3885
+  },
+  "competition": {
+   "name": "Metal Ligaen",
+   "ts": 1795804200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795959000,
+    "tournament": "Metal Ligaen",
+    "round": "",
+    "tier": 1,
+    "eid": 16698181
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Rapperswil-Jona|Zurich": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16340998,
+  "teams": {
+   "home": 3897,
+   "away": 3899
+  },
+  "competition": {
+   "name": "National League A",
+   "ts": 1795805100,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795957200,
+    "tournament": "National League A",
+    "round": "",
+    "tier": 1,
+    "eid": 16341007
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Notre Dame Fighting Irish|Boston College Eagles": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 17158038,
+  "teams": {
+   "home": 216810,
+   "away": 216797
+  },
+  "competition": {
+   "name": "NCAA Men",
+   "ts": 1795809600,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795986000,
+    "tournament": "NCAA Men",
+    "round": "",
+    "tier": 1,
+    "eid": 17158090
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Henderson Silver Knights|Abbotsford Canucks": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16500059,
+  "teams": {
+   "home": 374579,
+   "away": 388667
+  },
+  "competition": {
+   "name": "AHL",
+   "ts": 1795813200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795917600,
+    "tournament": "AHL",
+    "round": "",
+    "tier": 1,
+    "eid": 16500081
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Charlotte Checkers|Hershey Bears": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16500060,
+  "teams": {
+   "home": 45181,
+   "away": 45163
+  },
+  "competition": {
+   "name": "AHL",
+   "ts": 1795813200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795899600,
+    "tournament": "AHL",
+    "round": "",
+    "tier": 1,
+    "eid": 16500071
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Hartford Wolf Pack|Springfield Thunderbirds": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16500061,
+  "teams": {
+   "home": 45162,
+   "away": 45171
+  },
+  "competition": {
+   "name": "AHL",
+   "ts": 1795816800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795982400,
+    "tournament": "AHL",
+    "round": "",
+    "tier": 1,
+    "eid": 16500085
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "rugby|Narbonne|Grenoble FC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "rugby",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "volleyball|Hradec Kralove|Bucovice": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "volleyball",
+  "eventId": 16501623,
+  "teams": {
+   "home": 337581,
+   "away": 363581
+  },
+  "competition": {
+   "name": "1. Liga",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796410800,
+    "tournament": "1. Liga",
+    "round": "",
+    "tier": 1,
+    "eid": 17394923
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Afan Lido|Caerau Ely": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16448542,
+  "teams": {
+   "home": 4906,
+   "away": 37466
+  },
+  "competition": {
+   "name": "Cymru South",
+   "ts": 1795807800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796413500,
+    "tournament": "Cymru South",
+    "round": "",
+    "tier": 1,
+    "eid": 16448550
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Moyola Park|Annagh United": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16397092,
+  "teams": {
+   "home": 39227,
+   "away": 39224
+  },
+  "competition": {
+   "name": "NIFL Championship",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796482800,
+    "tournament": "NIFL Championship",
+    "round": "",
+    "tier": 1,
+    "eid": 16397098
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Haverfordwest|GAP Connah's Quay": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16435138,
+  "teams": {
+   "home": 4915,
+   "away": 4912
+  },
+  "competition": {
+   "name": "Cymru Premier",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1959629,
+     "name": "C. West",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.429,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1395689,
+     "name": "H. Franklin",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.429,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 824796,
+     "name": "C. Renshaw",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.143,
+     "minutes": 90.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796413500,
+    "tournament": "Cymru Premier",
+    "round": "",
+    "tier": 1,
+    "eid": 16435144
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Cambrian & Clydach|Trefelin BGC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "home",
+  "home": [
+   {
+    "name": "D. John",
+    "importance": "other",
+    "status": "out",
+    "reason": "Hamstring Injury",
+    "url": "https://www.forebet.com/en/football/matches/cambrian--clydach-trefelin-bgc-2478440"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://www.forebet.com/en/football/matches/cambrian--clydach-trefelin-bgc-2478440"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16435134,
+  "teams": {
+   "home": 37097,
+   "away": 123522
+  },
+  "competition": {
+   "name": "Cymru Premier",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 2673192,
+     "name": "D. Edwards",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.8,
+     "last": 2.0,
+     "share": 0.333,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1395838,
+     "name": "J. Wright",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.111,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 808790,
+     "name": "K. Lewis",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.3,
+     "last": 0.0,
+     "share": 0.111,
+     "minutes": 80.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796473800,
+    "tournament": "Cymru Premier",
+    "round": "",
+    "tier": 1,
+    "eid": 16435145
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Cambrian & Clydach are missing D. John to a hamstring injury, while Trefelin BGC has no reported absences.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|OH Leuven|KV Kortrijk": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": false,
+  "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "B. Lambert",
+    "importance": "other",
+    "status": "out",
+    "reason": "yellow_or_red_card_suspension",
+    "id": 936240,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "sport": "football",
+  "eventId": 16397776,
+  "teams": {
+   "home": 2918,
+   "away": 4858
+  },
+  "competition": {
+   "name": "Pro League",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1405446,
+     "name": "R. Mirisola",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.25,
+     "minutes": 86.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 1860321,
+     "name": "D. Opoku",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.4,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 88.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1398529,
+     "name": "E. Addai",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 0.4,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 65.2,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796578200,
+    "tournament": "Belgian Cup",
+    "round": "Round of 16",
+    "tier": 1,
+    "eid": 17361236
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "OH Leuven has no reported absences, while KV Kortrijk is missing B. Lambert due to a suspension.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Brest|Paris FC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": false,
+  "side": "away",
+  "home": [
+   {
+    "name": "R. L. Guen",
+    "importance": "star",
+    "status": "out",
+    "reason": "Broken Ankle",
+    "id": 1894085,
+    "source": "sofascore"
+   },
+   {
+    "name": "K. Doumbia",
+    "importance": "star",
+    "status": "doubtful",
+    "reason": "Ankle Injury",
+    "id": 1156353,
+    "source": "sofascore"
+   },
+   {
+    "name": "K. Lala",
+    "importance": "other",
+    "status": "doubtful",
+    "reason": "Knee Injury",
+    "id": 141080,
+    "source": "sofascore"
+   }
+  ],
+  "away": [
+   {
+    "name": "N. Sangui",
+    "importance": "key",
+    "status": "out",
+    "reason": "Thigh Injury",
+    "id": 1426221,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": -1,
+  "netKey": 0,
+  "sport": "football",
+  "eventId": 16311022,
+  "teams": {
+   "home": 1715,
+   "away": 6070
+  },
+  "competition": {
+   "name": "Ligue 1",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 927005,
+     "name": "L. Sinayoko",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 2.2,
+     "last": 0.0,
+     "share": 0.409,
+     "minutes": 87.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 352802,
+     "name": "M. López",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.8,
+     "last": 1.0,
+     "share": 0.182,
+     "minutes": 88.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 1174462,
+     "name": "P. Pagis",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.6,
+     "last": 1.0,
+     "share": 0.136,
+     "minutes": 78.4,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796499900,
+    "tournament": "Ligue 1",
+    "round": "",
+    "tier": 1,
+    "eid": 16311033
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Brest's absence of star R. L.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Nacional Asunción|Club Rubio Ñu": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16589013,
+  "teams": {
+   "home": 33001,
+   "away": 36438
+  },
+  "competition": {
+   "name": "Primera División",
+   "ts": 1795811400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1173446,
+     "name": "H. Valdez",
+     "goalie": false,
+     "apps": 5,
+     "starts": 3,
+     "avg": 0.4,
+     "last": 2.0,
+     "share": 0.286,
+     "minutes": 67.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 989571,
+     "name": "C. Espinola",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.3,
+     "last": 0.0,
+     "share": 0.143,
+     "minutes": 75.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 822785,
+     "name": "J. Colmán",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.143,
+     "minutes": 72.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795989600,
+    "tournament": "Primera División",
+    "round": "",
+    "tier": 1,
+    "eid": 16589021
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "handball|Skanela|Hallby": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "handball",
+  "eventId": 16828931,
+  "teams": {
+   "home": 52664,
+   "away": 7302
+  },
+  "competition": {
+   "name": "Handbollsligan",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 2828831,
+     "name": "T. Johansson",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 5.0,
+     "last": 3.0,
+     "share": 0.176,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 2828836,
+     "name": "A. Ritter",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 4.8,
+     "last": 8.0,
+     "share": 0.169,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 2828830,
+     "name": "M. Broman",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 4.5,
+     "last": 5.0,
+     "share": 0.127,
+     "minutes": 0.0,
+     "unit": "goals"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796486400,
+    "tournament": "Handbollsligan",
+    "round": "",
+    "tier": 1,
+    "eid": 16828929
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "handball|Selestat|St. Raphael": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "handball",
+  "eventId": 16499210,
+  "teams": {
+   "home": 6610,
+   "away": 6609
+  },
+  "competition": {
+   "name": "LNH Division 1",
+   "ts": 1795807800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 2233202,
+     "name": "M. Leyvigne",
+     "goalie": false,
+     "apps": 3,
+     "starts": 0,
+     "avg": 6.3,
+     "last": 0.0,
+     "share": 0.144,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 1838824,
+     "name": "E. Gorgibus",
+     "goalie": false,
+     "apps": 3,
+     "starts": 0,
+     "avg": 5.3,
+     "last": 5.0,
+     "share": 0.121,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 912357,
+     "name": "J. Marescot",
+     "goalie": false,
+     "apps": 3,
+     "starts": 0,
+     "avg": 4.3,
+     "last": 3.0,
+     "share": 0.098,
+     "minutes": 0.0,
+     "unit": "goals"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796147100,
+    "tournament": "EHF European League",
+    "round": "",
+    "tier": 3,
+    "eid": 16825586
+   }
+  },
+  "signals": [
+   {
+    "kind": "reserves",
+    "reason": "European match Tue",
+    "reasonPl": "puchary wt.",
+    "competition": "EHF European League",
+    "days": 3.9
+   }
+  ],
+  "status": "reserves",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|KooKoo|Hameenlinna": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16337457,
+  "teams": {
+   "home": 3822,
+   "away": 3837
+  },
+  "competition": {
+   "name": "Liiga",
+   "ts": 1795797000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1657718,
+     "name": "V. Miettinen",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 1.3,
+     "last": 1.0,
+     "share": 0.114,
+     "minutes": 0.0,
+     "unit": "pts"
+    },
+    {
+     "id": 790299,
+     "name": "M. Siikonen",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 1.0,
+     "last": 1.0,
+     "share": 0.114,
+     "minutes": 0.0,
+     "unit": "pts"
+    },
+    {
+     "id": 823737,
+     "name": "V. Gallo",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 1.5,
+     "last": 1.0,
+     "share": 0.086,
+     "minutes": 0.0,
+     "unit": "pts"
+    },
+    {
+     "id": 962343,
+     "name": "E. Randelin",
+     "goalie": true,
+     "apps": 4,
+     "starts": 4,
+     "avg": 24.0,
+     "last": 43.0,
+     "share": 0.686,
+     "minutes": 0.0,
+     "unit": "saves"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795878000,
+    "tournament": "Liiga",
+    "round": "",
+    "tier": 1,
+    "eid": 16337468
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Vasteras|AIK": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16298357,
+  "teams": {
+   "home": 3752,
+   "away": 3738
+  },
+  "competition": {
+   "name": "HockeyAllsvenskan",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796234400,
+    "tournament": "HockeyAllsvenskan",
+    "round": "",
+    "tier": 1,
+    "eid": 16298370
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|Grizzly Wolfsburg|Nurnberg Ice Tigers": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "eventId": 16422570,
+  "teams": {
+   "home": 5430,
+   "away": 3858
+  },
+  "competition": {
+   "name": "DEL",
+   "ts": 1795804200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795966200,
+    "tournament": "DEL",
+    "round": "",
+    "tier": 1,
+    "eid": 16422574
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "hockey|St. Louis Blues|Dallas Stars": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "hockey",
+  "extra": {
+   "home": [
+    {
+     "name": "Pavel Buchnevich",
+     "status": "doubtful",
+     "reason": "Day-To-Day (day-to-day)",
+     "position": "LW",
+     "date": "2026-11-26T14:08Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Jimmy Snuggerud",
+     "status": "doubtful",
+     "reason": "Day-To-Day (day-to-day)",
+     "position": "RW",
+     "date": "2026-11-26T14:08Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Connor McMichael",
+     "status": "out",
+     "reason": "Injured Reserve (ir)",
+     "position": "LW",
+     "date": "2026-11-24T22:30Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Brandon Carlo",
+     "status": "out",
+     "reason": "Injured Reserve (ir)",
+     "position": "D",
+     "date": "2026-11-24T22:25Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Torey Krug",
+     "status": "out",
+     "reason": "Injured Reserve (Krug (ankle) was placed on long-term injured reserve by the Blues on Monday, per PuckPedia.)",
+     "position": "D",
+     "date": "2026-10-13T01:42Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Dillon Dube",
+     "status": "out",
+     "reason": "Injured Reserve (ir)",
+     "position": "C",
+     "date": "2026-10-10T21:13Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Tyler Tucker",
+     "status": "out",
+     "reason": "Injured Reserve (Tucker had arthroscopic knee surgery and will be re-assessed in six weeks, the team announced Wednesday.)",
+     "position": "D",
+     "date": "2026-09-30T19:39Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Joel Hofer",
+     "status": "doubtful",
+     "reason": "starting goalie (expected)",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Pius Suter",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Dylan Holloway",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Dalibor Dvorsky",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Philip Broberg",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Justin Barron",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    }
+   ],
+   "away": [
+    {
+     "name": "Kyle Capobianco",
+     "status": "out",
+     "reason": "Injured Reserve (Capobianco (leg) was moved to long-term injured reserve Saturday.)",
+     "position": "D",
+     "date": "2026-11-14T15:14Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Lian Bichsel",
+     "status": "out",
+     "reason": "Injured Reserve (Bichsel (lower body) was placed on injured reserve Saturday.)",
+     "position": "D",
+     "date": "2026-11-14T15:10Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Matt Duchene",
+     "status": "out",
+     "reason": "Injured Reserve (Duchene will be out for approximately three months after undergoing surgery to repair a core injury, the team announced )",
+     "position": "C",
+     "date": "2026-10-12T16:46Z",
+     "source": "espn",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+    },
+    {
+     "name": "Jake Oettinger",
+     "status": "doubtful",
+     "reason": "starting goalie (expected)",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Wyatt Johnston",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Jason Robertson",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Mikko Rantanen",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Roope Hintz",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    },
+    {
+     "name": "Miro Heiskanen",
+     "status": "plays",
+     "reason": "expected line-up",
+     "source": "rotowire",
+     "url": "https://www.rotowire.com/hockey/nhl-lineups.php"
+    }
+   ]
+  },
+  "extraSources": [
+   "espn_nhl",
+   "rotowire_nhl",
+   "dailyfaceoff_goalies"
+  ],
+  "eventId": 16550844,
+  "teams": {
+   "home": 3695,
+   "away": 3684
+  },
+  "competition": {
+   "name": "NHL",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 948792,
+     "name": "J. Robertson",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 1.2,
+     "last": 0.0,
+     "share": 0.207,
+     "minutes": 21.6,
+     "unit": "pts"
+    },
+    {
+     "id": 266155,
+     "name": "M. Rantanen",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 1.2,
+     "last": 0.0,
+     "share": 0.207,
+     "minutes": 21.4,
+     "unit": "pts"
+    },
+    {
+     "id": 1139286,
+     "name": "W. Johnston",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 1.0,
+     "last": 1.0,
+     "share": 0.172,
+     "minutes": 20.2,
+     "unit": "pts"
+    },
+    {
+     "id": 918332,
+     "name": "J. Oettinger",
+     "goalie": true,
+     "apps": 4,
+     "starts": 4,
+     "avg": 27.0,
+     "last": 24.0,
+     "share": 0.812,
+     "minutes": 61.1,
+     "unit": "saves"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795914000,
+    "tournament": "NHL",
+    "round": "",
+    "tier": 1,
+    "eid": 16550864
+   }
+  },
+  "signals": [
+   {
+    "kind": "star_doubtful",
+    "name": "J. Oettinger",
+    "share": 0.812,
+    "unit": "saves",
+    "reason": "starting goalie (expected)",
+    "source": "rotowire"
+   }
+  ],
+  "status": "star_doubtful",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "tennis|A. Herrero Linana|J. Riera": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "tennis|E. Ribeiro|F. Roncadelli": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "tennis|J. M. La Serna|G. A. Olivieri": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "tennis",
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "volleyball|Velez Sarsfield|River Plate": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "volleyball",
+  "eventId": 17246124,
+  "teams": {
+   "home": 308692,
+   "away": 235321
+  },
+  "competition": {
+   "name": "Liga Argentina A1",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795899600,
+    "tournament": "Liga Argentina A1",
+    "round": "",
+    "tier": 1,
+    "eid": 17246129
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "volleyball|Nantes W|Evreux W": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "volleyball",
+  "eventId": 16898718,
+  "teams": {
+   "home": 81291,
+   "away": 45672
+  },
+  "competition": {
+   "name": "Ligue A, Women",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796475600,
+    "tournament": "Ligue A, Women",
+    "round": "",
+    "tier": 1,
+    "eid": 16898723
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "basketball|Łotwa|Niemcy": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "away",
+  "home": [
+   {
+    "name": "Antetokounmpo, Giannis",
+    "importance": "star",
+    "status": "doubtful",
+    "reason": "Injury/Illness - Right Groin Tendinitis",
+    "url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-26_07_00PM.pdf"
+   }
+  ],
+  "away": [
+   {
+    "name": "McConnell, T.J.",
+    "importance": "key",
+    "status": "doubtful",
+    "reason": "Questionable",
+    "url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-26_07_00PM.pdf"
+   }
+  ],
+  "sources": [
+   "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-26_07_00PM.pdf"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "basketball",
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Łotwa's star Giannis Antetokounmpo is doubtful with a groin injury, while Niemcy's key player T.J. McConnell is also questionable.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "basketball|Panama|Portoryko": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "away",
+  "home": [
+   {
+    "name": "Олимпий Пирей",
+    "importance": "star",
+    "status": "out",
+    "reason": "Физические проблемы",
+    "url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-26_07_00PM.pdf"
+   },
+   {
+    "name": "МакКонн МакКонн",
+    "importance": "star",
+    "status": "out",
+    "reason": "Физические проблемы",
+    "url": "https://www.rotowire.com/basketball/injury-report.php"
+   }
+  ],
+  "away": [
+   {
+    "name": "МакКонн МакКонн",
+    "importance": "star",
+    "status": "out",
+    "reason": "Физические проблемы",
+    "url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-26_07_00PM.pdf"
+   },
+   {
+    "name": "МакКонн МакКонн",
+    "importance": "star",
+    "status": "out",
+    "reason": "Физические проблемы",
+    "url": "https://www.rotowire.com/basketball/injury-report.php"
+   }
+  ],
+  "sources": [
+   "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-26_07_00PM.pdf",
+   "https://www.rotowire.com/basketball/injury-report.php"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "basketball",
+  "signals": [
+   {
+    "kind": "star_out",
+    "name": "МакКонн МакКонн",
+    "share": null,
+    "basis": "market value",
+    "reason": "Физические проблемы",
+    "source": "search"
+   },
+   {
+    "kind": "star_out",
+    "name": "МакКонн МакКонн",
+    "share": null,
+    "basis": "market value",
+    "reason": "Физические проблемы",
+    "source": "search"
+   }
+  ],
+  "status": "star_out",
+  "aiSummary": "Panama is missing two star players due to physical problems, while Portoryko is missing two star players with the same injury. The absences affect both teams equally, so they do not specifically weaken our pick.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "basketball|Słowenia|Finlandia": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "basketball",
+  "eventId": 16461383,
+  "teams": {
+   "home": 6140,
+   "away": 25374
+  },
+  "competition": {
+   "name": "FIBA World Cup Qualification, Europe",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 904978,
+     "name": "K. Prepelič",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 18.0,
+     "last": 24.0,
+     "share": 0.222,
+     "minutes": 22.0,
+     "unit": "pts"
+    },
+    {
+     "id": 861440,
+     "name": "A. Nikolić",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 10.8,
+     "last": 18.0,
+     "share": 0.106,
+     "minutes": 24.3,
+     "unit": "pts"
+    },
+    {
+     "id": 861418,
+     "name": "A. Omić",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 8.4,
+     "last": 15.0,
+     "share": 0.104,
+     "minutes": 23.5,
+     "unit": "pts"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796058000,
+    "tournament": "FIBA World Cup Qualification, Europe",
+    "round": "",
+    "tier": 1,
+    "eid": 16461395
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "basketball|Louisville|St. John's (N.Y.)": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "away",
+  "home": [
+   {
+    "name": "Isaac Ellis",
+    "importance": "other",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://bigredlouie.com/louisville-basketball-vs-st-john-s-how-to-watch-odds-injury-updates-and-more-"
+   },
+   {
+    "name": "De'Shayne Montgomery",
+    "importance": "other",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://bigredlouie.com/louisville-basketball-vs-st-john-s-how-to-watch-odds-injury-updates-and-more-"
+   },
+   {
+    "name": "Gabe Dynes",
+    "importance": "other",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://bigredlouie.com/louisville-basketball-vs-st-john-s-how-to-watch-odds-injury-updates-and-more-"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://bigredlouie.com/louisville-basketball-vs-st-john-s-how-to-watch-odds-injury-updates-and-more-"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [],
+    "away": []
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 1599707,
+      "name": "A. Folgueiras",
+      "sub": true
+     },
+     {
+      "id": 1915310,
+      "name": "F. Bidunga",
+      "sub": true
+     },
+     {
+      "id": 1910840,
+      "name": "A. Wooley",
+      "sub": true
+     },
+     {
+      "id": 1910308,
+      "name": "K. Knox",
+      "sub": true
+     },
+     {
+      "id": 1598823,
+      "name": "J. Shelstad",
+      "sub": true
+     },
+     {
+      "id": 1430905,
+      "name": "S. Trimble",
+      "sub": true
+     },
+     {
+      "id": 2880757,
+      "name": "O. Ekezie Jr.",
+      "sub": true
+     },
+     {
+      "id": 1441398,
+      "name": "L. Wells",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 1441235,
+      "name": "K. Hall",
+      "sub": true
+     },
+     {
+      "id": 1503357,
+      "name": "I. Jackson",
+      "sub": true
+     },
+     {
+      "id": 1415034,
+      "name": "R. Prey",
+      "sub": true
+     },
+     {
+      "id": 2342332,
+      "name": "T. Yessoufou",
+      "sub": true
+     },
+     {
+      "id": 1433233,
+      "name": "Q. Ellis",
+      "sub": true
+     },
+     {
+      "id": 1431001,
+      "name": "R. Bailey",
+      "sub": true
+     },
+     {
+      "id": 1514583,
+      "name": "E. Liotopoulos",
+      "sub": true
+     },
+     {
+      "id": 1565927,
+      "name": "Z. Maronka",
+      "sub": true
+     },
+     {
+      "id": 2781384,
+      "name": "T. Edema",
+      "sub": true
+     },
+     {
+      "id": 1629466,
+      "name": "B. Sane",
+      "sub": true
+     }
+    ]
+   }
+  },
+  "sport": "basketball",
+  "eventId": 17633253,
+  "teams": {
+   "home": 34662,
+   "away": 49865
+  },
+  "competition": {
+   "name": "NCAA Men's Division I",
+   "ts": 1795744800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1503357,
+     "name": "I. Jackson",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 18.4,
+     "last": 18.0,
+     "share": 0.197,
+     "minutes": 26.8,
+     "unit": "pts"
+    },
+    {
+     "id": 1441235,
+     "name": "K. Hall",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 17.8,
+     "last": 17.0,
+     "share": 0.19,
+     "minutes": 29.4,
+     "unit": "pts"
+    },
+    {
+     "id": 2342332,
+     "name": "T. Yessoufou",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 13.8,
+     "last": 9.0,
+     "share": 0.147,
+     "minutes": 23.6,
+     "unit": "pts"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795802400,
+    "tournament": "NCAA Men's Division I",
+    "round": "",
+    "tier": 1,
+    "eid": 17645453
+   }
+  },
+  "signals": [
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "lineups_ok",
+  "aiSummary": "Louisville is missing Isaac Ellis, De'Shayne Montgomery, and Gabe Dynes due to injury, while St. John's has no reported absences.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "basketball|Palestine|United Arab Emirates": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "basketball",
+  "eventId": 17427265,
+  "teams": {
+   "home": 206348,
+   "away": 55353
+  },
+  "competition": {
+   "name": "FIBA Asia Cup 2029 Pre-Qualifiers",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1690027,
+     "name": "B. Halums",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 16.8,
+     "last": 15.0,
+     "share": 0.153,
+     "minutes": 21.2,
+     "unit": "pts"
+    },
+    {
+     "id": 2715448,
+     "name": "o. suleiman",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 19.2,
+     "last": 18.0,
+     "share": 0.14,
+     "minutes": 27.1,
+     "unit": "pts"
+    },
+    {
+     "id": 1801031,
+     "name": "J. M M Mayali",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 14.6,
+     "last": 13.0,
+     "share": 0.133,
+     "minutes": 26.7,
+     "unit": "pts"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795874400,
+    "tournament": "FIBA Asia Cup 2029 Pre-Qualifiers",
+    "round": "",
+    "tier": 1,
+    "eid": 17430601
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "basketball|Kazakhstan|Kuwait": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "basketball",
+  "eventId": 17427264,
+  "teams": {
+   "home": 105671,
+   "away": 206349
+  },
+  "competition": {
+   "name": "FIBA Asia Cup 2029 Pre-Qualifiers",
+   "ts": 1795791600,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1795852800,
+    "tournament": "FIBA Asia Cup 2029 Pre-Qualifiers",
+    "round": "",
+    "tier": 1,
+    "eid": 17428358
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Karlsruher U19|SV Sandhausen U19": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 17368423,
+  "teams": {
+   "home": 43726,
+   "away": 296384
+  },
+  "competition": {
+   "name": "U19 DFB Nachwuchsliga",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796472000,
+    "tournament": "U19 DFB Nachwuchsliga",
+    "round": "",
+    "tier": 1,
+    "eid": 17368439
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Harksheide|Pinneberg": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16517052,
+  "teams": {
+   "home": 421508,
+   "away": 1248043
+  },
+  "competition": {
+   "name": "Oberliga Hamburg",
+   "ts": 1795804200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796149800,
+    "tournament": "Oberliga Hamburg",
+    "round": "",
+    "tier": 1,
+    "eid": 16517155
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|SV Schwechat|FV Austria XIII": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16475653,
+  "teams": {
+   "home": 2099,
+   "away": 142216
+  },
+  "competition": {
+   "name": "Wiener Stadtliga",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1803733200,
+    "tournament": "Wiener Stadtliga",
+    "round": "",
+    "tier": 1,
+    "eid": 16475661
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Wandsbeker Concordia|Teutonia Ottensen": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16517049,
+  "teams": {
+   "home": 260941,
+   "away": 258984
+  },
+  "competition": {
+   "name": "Oberliga Hamburg",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796409900,
+    "tournament": "Oberliga Hamburg",
+    "round": "",
+    "tier": 1,
+    "eid": 16517062
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Sp. Luqueno|Olimpia Asuncion": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16589014,
+  "teams": {
+   "home": 5998,
+   "away": 5997
+  },
+  "competition": {
+   "name": "Primera División",
+   "ts": 1795820400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 789453,
+     "name": "G. Ávalos",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 1.8,
+     "last": 0.0,
+     "share": 0.375,
+     "minutes": 77.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1383222,
+     "name": "R. Benítez",
+     "goalie": false,
+     "apps": 5,
+     "starts": 1,
+     "avg": 0.8,
+     "last": 1.0,
+     "share": 0.167,
+     "minutes": 44.4,
+     "unit": "G+A"
+    },
+    {
+     "id": 885612,
+     "name": "R. Sánchez",
+     "goalie": false,
+     "apps": 4,
+     "starts": 1,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.083,
+     "minutes": 43.2,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1795989600,
+    "tournament": "Primera División",
+    "round": "",
+    "tier": 1,
+    "eid": 16589016
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Wigry Suwalki|Jagiellonia II": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16430004,
+  "teams": {
+   "home": 37805,
+   "away": 354516
+  },
+  "competition": {
+   "name": "Betclic 3. Liga, Group 1",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1803747600,
+    "tournament": "Betclic 3. Liga, Group 1",
+    "round": "",
+    "tier": 1,
+    "eid": 16430013
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Univ Cluj-Napoca|Sepsi OSK": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": true,
+  "side": "home",
+  "home": [
+   {
+    "name": "O. Mendy",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)",
+    "id": 1101178,
+    "source": "sofascore"
+   }
+  ],
+  "away": [
+   {
+    "name": "V. Daguin",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)",
+    "id": 1397884,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "S. Lefter",
+     "id": 1408991,
+     "star": false
+    },
+    {
+     "name": "D. Mikanović",
+     "id": 245249,
+     "star": false
+    },
+    {
+     "name": "F. Poulolo",
+     "id": 989522,
+     "star": false
+    },
+    {
+     "name": "I. Cristea",
+     "id": 578526,
+     "star": false
+    },
+    {
+     "name": "A. Chipciu",
+     "id": 44435,
+     "star": false
+    },
+    {
+     "name": "D. Codrea",
+     "id": 946446,
+     "star": false
+    },
+    {
+     "name": "O. Bic",
+     "id": 812807,
+     "star": false
+    },
+    {
+     "name": "I. Macalou",
+     "id": 1101188,
+     "star": true
+    },
+    {
+     "name": "P. Pinho",
+     "id": 1130651,
+     "star": false
+    },
+    {
+     "name": "M. Ștefănescu",
+     "id": 988637,
+     "star": false
+    },
+    {
+     "name": "J. Lukić",
+     "id": 927797,
+     "star": true
+    }
+   ],
+   "away": [
+    {
+     "name": "D. Lazar",
+     "id": 131433,
+     "star": false
+    },
+    {
+     "name": "G. Cascardo",
+     "id": 993042,
+     "star": true
+    },
+    {
+     "name": "D. Vîrtej",
+     "id": 823451,
+     "star": false
+    },
+    {
+     "name": "S. Karamoko",
+     "id": 1035771,
+     "star": true
+    },
+    {
+     "name": "F. Vianna",
+     "id": 1067493,
+     "star": false
+    },
+    {
+     "name": "N. Păun",
+     "id": 1068626,
+     "star": false
+    },
+    {
+     "name": "R. Cimpean",
+     "id": 2011286,
+     "star": false
+    },
+    {
+     "name": "R. Silaghi",
+     "id": 1102488,
+     "star": false
+    },
+    {
+     "name": "D. Andrei",
+     "id": 1133168,
+     "star": false
+    },
+    {
+     "name": "D. J. Oberlin",
+     "id": 547384,
+     "star": false
+    },
+    {
+     "name": "B. Cmiljanić",
+     "id": 189019,
+     "star": false
+    }
+   ]
+  },
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [
+     {
+      "name": "S. Lefter",
+      "id": 1408991,
+      "star": false
+     },
+     {
+      "name": "D. Mikanović",
+      "id": 245249,
+      "star": false
+     },
+     {
+      "name": "F. Poulolo",
+      "id": 989522,
+      "star": false
+     },
+     {
+      "name": "I. Cristea",
+      "id": 578526,
+      "star": false
+     },
+     {
+      "name": "A. Chipciu",
+      "id": 44435,
+      "star": false
+     },
+     {
+      "name": "D. Codrea",
+      "id": 946446,
+      "star": false
+     },
+     {
+      "name": "O. Bic",
+      "id": 812807,
+      "star": false
+     },
+     {
+      "name": "I. Macalou",
+      "id": 1101188,
+      "star": true
+     },
+     {
+      "name": "P. Pinho",
+      "id": 1130651,
+      "star": false
+     },
+     {
+      "name": "M. Ștefănescu",
+      "id": 988637,
+      "star": false
+     },
+     {
+      "name": "J. Lukić",
+      "id": 927797,
+      "star": true
+     }
+    ],
+    "away": [
+     {
+      "name": "D. Lazar",
+      "id": 131433,
+      "star": false
+     },
+     {
+      "name": "G. Cascardo",
+      "id": 993042,
+      "star": true
+     },
+     {
+      "name": "D. Vîrtej",
+      "id": 823451,
+      "star": false
+     },
+     {
+      "name": "S. Karamoko",
+      "id": 1035771,
+      "star": true
+     },
+     {
+      "name": "F. Vianna",
+      "id": 1067493,
+      "star": false
+     },
+     {
+      "name": "N. Păun",
+      "id": 1068626,
+      "star": false
+     },
+     {
+      "name": "R. Cimpean",
+      "id": 2011286,
+      "star": false
+     },
+     {
+      "name": "R. Silaghi",
+      "id": 1102488,
+      "star": false
+     },
+     {
+      "name": "D. Andrei",
+      "id": 1133168,
+      "star": false
+     },
+     {
+      "name": "D. J. Oberlin",
+      "id": 547384,
+      "star": false
+     },
+     {
+      "name": "B. Cmiljanić",
+      "id": 189019,
+      "star": false
+     }
+    ]
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 1408991,
+      "name": "S. Lefter",
+      "sub": false
+     },
+     {
+      "id": 245249,
+      "name": "D. Mikanović",
+      "sub": false
+     },
+     {
+      "id": 989522,
+      "name": "F. Poulolo",
+      "sub": false
+     },
+     {
+      "id": 578526,
+      "name": "I. Cristea",
+      "sub": false
+     },
+     {
+      "id": 44435,
+      "name": "A. Chipciu",
+      "sub": false
+     },
+     {
+      "id": 946446,
+      "name": "D. Codrea",
+      "sub": false
+     },
+     {
+      "id": 812807,
+      "name": "O. Bic",
+      "sub": false
+     },
+     {
+      "id": 1101188,
+      "name": "I. Macalou",
+      "sub": false
+     },
+     {
+      "id": 1130651,
+      "name": "P. Pinho",
+      "sub": false
+     },
+     {
+      "id": 988637,
+      "name": "M. Ștefănescu",
+      "sub": false
+     },
+     {
+      "id": 927797,
+      "name": "J. Lukić",
+      "sub": false
+     },
+     {
+      "id": 1436013,
+      "name": "M. Denis",
+      "sub": true
+     },
+     {
+      "id": 1426614,
+      "name": "A. Chinteș",
+      "sub": true
+     },
+     {
+      "id": 1392762,
+      "name": "A. Friday",
+      "sub": true
+     },
+     {
+      "id": 1426840,
+      "name": "A. Techereș",
+      "sub": true
+     },
+     {
+      "id": 284355,
+      "name": "E. Capradossi",
+      "sub": true
+     },
+     {
+      "id": 1144747,
+      "name": "L. Szimionaș",
+      "sub": true
+     },
+     {
+      "id": 1101178,
+      "name": "O. Mendy",
+      "sub": true
+     },
+     {
+      "id": 1085101,
+      "name": "M. Drammeh",
+      "sub": true
+     },
+     {
+      "id": 889106,
+      "name": "J. Stanojev",
+      "sub": true
+     },
+     {
+      "id": 93842,
+      "name": "D. Nistor",
+      "sub": true
+     },
+     {
+      "id": 2119275,
+      "name": "L. Pall",
+      "sub": true
+     },
+     {
+      "id": 1113174,
+      "name": "A. Gheorghiță",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 131433,
+      "name": "D. Lazar",
+      "sub": false
+     },
+     {
+      "id": 993042,
+      "name": "G. Cascardo",
+      "sub": false
+     },
+     {
+      "id": 823451,
+      "name": "D. Vîrtej",
+      "sub": false
+     },
+     {
+      "id": 1035771,
+      "name": "S. Karamoko",
+      "sub": false
+     },
+     {
+      "id": 1067493,
+      "name": "F. Vianna",
+      "sub": false
+     },
+     {
+      "id": 1068626,
+      "name": "N. Păun",
+      "sub": false
+     },
+     {
+      "id": 2011286,
+      "name": "R. Cimpean",
+      "sub": false
+     },
+     {
+      "id": 1102488,
+      "name": "R. Silaghi",
+      "sub": false
+     },
+     {
+      "id": 1133168,
+      "name": "D. Andrei",
+      "sub": false
+     },
+     {
+      "id": 547384,
+      "name": "D. J. Oberlin",
+      "sub": false
+     },
+     {
+      "id": 189019,
+      "name": "B. Cmiljanić",
+      "sub": false
+     },
+     {
+      "id": 1092524,
+      "name": "S. Gyenge",
+      "sub": true
+     },
+     {
+      "id": 1155673,
+      "name": "B. Oteliță",
+      "sub": true
+     },
+     {
+      "id": 197164,
+      "name": "A. Dobrosavlevici",
+      "sub": true
+     },
+     {
+      "id": 113387,
+      "name": "L. Rose",
+      "sub": true
+     },
+     {
+      "id": 1019182,
+      "name": "N. Heras",
+      "sub": true
+     },
+     {
+      "id": 75031,
+      "name": "A. Aganović",
+      "sub": true
+     },
+     {
+      "id": 1216049,
+      "name": "G. Ghimfuș",
+      "sub": true
+     },
+     {
+      "id": 1397884,
+      "name": "V. Daguin",
+      "sub": true
+     },
+     {
+      "id": 1842951,
+      "name": "H. Batzula",
+      "sub": true
+     },
+     {
+      "id": 974478,
+      "name": "C. Davordzie",
+      "sub": true
+     },
+     {
+      "id": 951553,
+      "name": "M. Mawa",
+      "sub": true
+     }
+    ]
+   }
+  },
+  "sport": "football",
+  "eventId": 16403945,
+  "teams": {
+   "home": 7734,
+   "away": 189789
+  },
+  "competition": {
+   "name": "SuperLiga României",
+   "ts": 1795793400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 927797,
+     "name": "J. Lukić",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 1.2,
+     "last": 1.0,
+     "share": 0.417,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 889106,
+     "name": "J. Stanojev",
+     "goalie": false,
+     "apps": 4,
+     "starts": 2,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 56.2,
+     "unit": "G+A"
+    },
+    {
+     "id": 1101178,
+     "name": "O. Mendy",
+     "goalie": false,
+     "apps": 3,
+     "starts": 1,
+     "avg": 0.3,
+     "last": 1.0,
+     "share": 0.083,
+     "minutes": 35.7,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796144400,
+    "tournament": "Cupa României Betano",
+    "round": "",
+    "tier": 1,
+    "eid": 16893284
+   }
+  },
+  "signals": [
+   {
+    "kind": "reserves",
+    "reason": "2 key players on the bench",
+    "reasonPl": "2 kluczowych na ławce"
+   },
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "reserves",
+  "aiSummary": "Both teams have their star players, O. Mendy and V.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|True"
+ },
+ "football|Deportivo Cuenca|Manta FC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 17102405,
+  "teams": {
+   "home": 5251,
+   "away": 33561
+  },
+  "competition": {
+   "name": "LigaPro Serie A",
+   "ts": 1795815000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 2110388,
+     "name": "C. Benalcazar",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 0.6,
+     "last": 0.0,
+     "share": 0.429,
+     "minutes": 68.6,
+     "unit": "G+A"
+    },
+    {
+     "id": 174935,
+     "name": "L. Mancinelli",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.143,
+     "minutes": 62.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 1069637,
+     "name": "M. Diaz",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.143,
+     "minutes": 75.4,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796587200,
+    "tournament": "LigaPro Serie A",
+    "round": "",
+    "tier": 1,
+    "eid": 17102421
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Newry City|Ballinamallard Utd": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "Ryan",
+    "importance": "other",
+    "status": "out",
+    "reason": "suspension",
+    "url": "https://wearetyrone.com/sport/mallards-facing-player-crisis-ahead-of-trip-to-newry/"
+   },
+   {
+    "name": "Ryan",
+    "importance": "other",
+    "status": "out",
+    "reason": "suspension",
+    "url": "https://wearetyrone.com/sport/mallards-facing-player-crisis-ahead-of-trip-to-newry/"
+   },
+   {
+    "name": "Morris",
+    "importance": "other",
+    "status": "out",
+    "reason": "suspension",
+    "url": "https://wearetyrone.com/sport/mallards-facing-player-crisis-ahead-of-trip-to-newry/"
+   },
+   {
+    "name": "Mayse",
+    "importance": "other",
+    "status": "out",
+    "reason": "suspension",
+    "url": "https://wearetyrone.com/sport/mallards-facing-player-crisis-ahead-of-trip-to-newry/"
+   },
+   {
+    "name": "Danny Barker",
+    "importance": "key",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://wearetyrone.com/sport/mallards-facing-player-crisis-ahead-of-trip-to-newry/"
+   }
+  ],
+  "sources": [
+   "https://wearetyrone.com/sport/mallards-facing-player-crisis-ahead-of-trip-to-newry/"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": -1,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16397094,
+  "teams": {
+   "home": 131580,
+   "away": 36785
+  },
+  "competition": {
+   "name": "NIFL Championship",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796413500,
+    "tournament": "NIFL Championship",
+    "round": "",
+    "tier": 1,
+    "eid": 16397103
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Newry City vs Ballinamallard Utd football match. Our pick: Newry City (home).",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Wusum Stars|Star Sport Academy": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 17474077,
+  "teams": {
+   "home": 381893,
+   "away": 1044584
+  },
+  "competition": {
+   "name": "Sierra Leone National Premier League",
+   "ts": 1795796100,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796573700,
+    "tournament": "Sierra Leone National Premier League",
+    "round": "",
+    "tier": 1,
+    "eid": 17474093
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Ittihad Jeddah|Neom SC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": false,
+  "side": "home",
+  "home": [],
+  "away": [],
+  "sources": null,
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "sport": "football",
+  "eventId": 17528403,
+  "teams": {
+   "home": 34315,
+   "away": 530631
+  },
+  "competition": {
+   "name": "Saudi Pro League",
+   "ts": 1795800600,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 846081,
+     "name": "H. Aouar",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.6,
+     "last": 0.0,
+     "share": 0.273,
+     "minutes": 86.2,
+     "unit": "G+A"
+    },
+    {
+     "id": 1474689,
+     "name": "M. Al-Sahafi",
+     "goalie": false,
+     "apps": 5,
+     "starts": 2,
+     "avg": 0.4,
+     "last": 1.0,
+     "share": 0.182,
+     "minutes": 39.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1462434,
+     "name": "G. Ilenikhena",
+     "goalie": false,
+     "apps": 5,
+     "starts": 3,
+     "avg": 0.4,
+     "last": 1.0,
+     "share": 0.182,
+     "minutes": 44.6,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796045100,
+    "tournament": "King's Cup",
+    "round": "Round of 16",
+    "tier": 1,
+    "eid": 16883258
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "No absences reported for either side.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Hvidovre IF|Kolding IF": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16317298,
+  "teams": {
+   "home": 1305,
+   "away": 22162
+  },
+  "competition": {
+   "name": "Betinia Liga",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 862374,
+     "name": "O. Kjærgaard",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 1.2,
+     "last": 1.0,
+     "share": 0.429,
+     "minutes": 86.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 1146396,
+     "name": "D. Bagou",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.6,
+     "last": 0.0,
+     "share": 0.214,
+     "minutes": 77.6,
+     "unit": "G+A"
+    },
+    {
+     "id": 959506,
+     "name": "M. Kiilerich",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.071,
+     "minutes": 90.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796565600,
+    "tournament": "Betinia Liga",
+    "round": "",
+    "tier": 1,
+    "eid": 16317304
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Venezia|Bologna": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": false,
+  "side": "away",
+  "home": [
+   {
+    "name": "T. Correia",
+    "importance": "other",
+    "status": "out",
+    "reason": "Muscle Injury",
+    "id": 851282,
+    "source": "sofascore"
+   }
+  ],
+  "away": [
+   {
+    "name": "E. Holm",
+    "importance": "key",
+    "status": "out",
+    "reason": "Hamstring Injury",
+    "id": 965264,
+    "source": "sofascore"
+   },
+   {
+    "name": "L. De Silvestri",
+    "importance": "other",
+    "status": "out",
+    "reason": "Muscle Injury",
+    "id": 14718,
+    "source": "sofascore"
+   },
+   {
+    "name": "O. El Azzouzi",
+    "importance": "other",
+    "status": "out",
+    "reason": "Thigh Injury",
+    "id": 1127191,
+    "source": "sofascore"
+   },
+   {
+    "name": "U. Happonen",
+    "importance": "other",
+    "status": "out",
+    "reason": "Finger Injury",
+    "id": 1526395,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 1,
+  "sport": "football",
+  "eventId": 16285108,
+  "teams": {
+   "home": 2688,
+   "away": 2685
+  },
+  "competition": {
+   "name": "Serie A",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 855829,
+     "name": "J. Miranda",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.176,
+     "minutes": 55.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 1100836,
+     "name": "S. Mbangula",
+     "goalie": false,
+     "apps": 5,
+     "starts": 1,
+     "avg": 0.6,
+     "last": 0.0,
+     "share": 0.176,
+     "minutes": 38.6,
+     "unit": "G+A"
+    },
+    {
+     "id": 928104,
+     "name": "N. Zortea",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.4,
+     "last": 1.0,
+     "share": 0.118,
+     "minutes": 74.4,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796413500,
+    "tournament": "Serie A",
+    "round": "",
+    "tier": 1,
+    "eid": 16285109
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Venezia will be without T. Correia, while Bologna is hit by the absences of E.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Ümraniyespor|Manisa BBSK": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16490557,
+  "teams": {
+   "home": 55625,
+   "away": 202391
+  },
+  "competition": {
+   "name": "Trendyol 1.Lig",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1405708,
+     "name": "B. Yılmaz",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 1.7,
+     "last": 2.0,
+     "share": 0.312,
+     "minutes": 89.3,
+     "unit": "G+A"
+    },
+    {
+     "id": 831357,
+     "name": "S. Hostikka",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.8,
+     "last": 2.0,
+     "share": 0.188,
+     "minutes": 74.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 93736,
+     "name": "T. Glumac",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.7,
+     "last": 0.0,
+     "share": 0.125,
+     "minutes": 90.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796121000,
+    "tournament": "Türkiye Kupası",
+    "round": "Round 4",
+    "tier": 1,
+    "eid": 17492504
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Warta Poznan|Pogoń Siedlce": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16366571,
+  "teams": {
+   "home": 7922,
+   "away": 162252
+  },
+  "competition": {
+   "name": "Betclic 1. Liga",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 956807,
+     "name": "J. Apolinarski",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.5,
+     "last": 1.0,
+     "share": 0.333,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1945576,
+     "name": "J. Kendzia",
+     "goalie": false,
+     "apps": 3,
+     "starts": 2,
+     "avg": 0.3,
+     "last": 1.0,
+     "share": 0.167,
+     "minutes": 59.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1513060,
+     "name": "K. Łysiak",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 60.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796572800,
+    "tournament": "Betclic 1. Liga",
+    "round": "",
+    "tier": 1,
+    "eid": 16367463
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|CA Atlanta|Ciudad Bolivar": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 17586727,
+  "teams": {
+   "home": 53799,
+   "away": 340432
+  },
+  "competition": {
+   "name": "Primera Nacional",
+   "ts": 1795816800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1085344,
+     "name": "Jere Puch",
+     "goalie": false,
+     "apps": 4,
+     "starts": 1,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.25,
+     "minutes": 35.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 871849,
+     "name": "F. Romero",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 1.0,
+     "share": 0.125,
+     "minutes": 85.6,
+     "unit": "G+A"
+    },
+    {
+     "id": 817519,
+     "name": "B. Rivero",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.125,
+     "minutes": 77.4,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": null
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|AEL Limassol|Olympiakos Nicosia": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16633427,
+  "teams": {
+   "home": 3407,
+   "away": 3401
+  },
+  "competition": {
+   "name": "Cyprus League by Stoiximan",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 809233,
+     "name": "L. Singh",
+     "goalie": false,
+     "apps": 4,
+     "starts": 2,
+     "avg": 0.8,
+     "last": 1.0,
+     "share": 0.3,
+     "minutes": 61.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 993811,
+     "name": "I. Milosavljević",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 0.4,
+     "last": 0.0,
+     "share": 0.2,
+     "minutes": 77.4,
+     "unit": "G+A"
+    },
+    {
+     "id": 1010877,
+     "name": "S. Conceição",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 0.2,
+     "last": 1.0,
+     "share": 0.1,
+     "minutes": 74.2,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796144400,
+    "tournament": "Cyprus League by Stoiximan",
+    "round": "",
+    "tier": 1,
+    "eid": 16633440
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Etoile-Carouge|Lausanne Ouchy": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16357040,
+  "teams": {
+   "home": 2497,
+   "away": 35162
+  },
+  "competition": {
+   "name": "Challenge League",
+   "ts": 1795806900,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1459394,
+     "name": "T. Bouchlarhem",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 2.0,
+     "last": 2.0,
+     "share": 0.4,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1210871,
+     "name": "M. Sartoretti",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 1.3,
+     "last": 1.0,
+     "share": 0.267,
+     "minutes": 66.3,
+     "unit": "G+A"
+    },
+    {
+     "id": 2027616,
+     "name": "J. Atangana",
+     "goalie": false,
+     "apps": 3,
+     "starts": 0,
+     "avg": 0.7,
+     "last": 0.0,
+     "share": 0.133,
+     "minutes": 38.7,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796234400,
+    "tournament": "Schweizer Cup",
+    "round": "Round of 16",
+    "tier": 1,
+    "eid": 17357604
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Warrington Rylands|Lancaster City": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16586757,
+  "teams": {
+   "home": 362880,
+   "away": 111
+  },
+  "competition": {
+   "name": "Northern Premier League, Premier Division",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796482800,
+    "tournament": "Northern Premier League, Premier Division",
+    "round": "",
+    "tier": 1,
+    "eid": 16586764
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Dinamo Tirana|Partizani Tirana": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16517682,
+  "teams": {
+   "home": 5217,
+   "away": 5222
+  },
+  "competition": {
+   "name": "Abissnet Superiore",
+   "ts": 1795800600,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 113871,
+     "name": "E. Hoxhallari",
+     "goalie": false,
+     "apps": 3,
+     "starts": 2,
+     "avg": 0.7,
+     "last": 0.0,
+     "share": 0.25,
+     "minutes": 76.3,
+     "unit": "G+A"
+    },
+    {
+     "id": 1605369,
+     "name": "O. Rifa",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.125,
+     "minutes": 36.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 2458129,
+     "name": "S. Meta",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.3,
+     "last": 0.0,
+     "share": 0.125,
+     "minutes": 46.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796214600,
+    "tournament": "Abissnet Superiore",
+    "round": "",
+    "tier": 1,
+    "eid": 16517690
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Norwich U21|Chelsea U21": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16788003,
+  "teams": {
+   "home": 54367,
+   "away": 36539
+  },
+  "competition": {
+   "name": "Premier League 2, Division 1",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1913027,
+     "name": "C. Ezenwata",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 2.0,
+     "last": 2.0,
+     "share": 0.333,
+     "minutes": 45.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1403133,
+     "name": "L. Black",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 45.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1403047,
+     "name": "H. McMahon",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.7,
+     "last": 1.0,
+     "share": 0.167,
+     "minutes": 30.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796745600,
+    "tournament": "Football League Trophy",
+    "round": "Round of 32",
+    "tier": 1,
+    "eid": 17638860
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Moyola|Annagh": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16397092,
+  "teams": {
+   "home": 39227,
+   "away": 39224
+  },
+  "competition": {
+   "name": "NIFL Championship",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796482800,
+    "tournament": "NIFL Championship",
+    "round": "",
+    "tier": 1,
+    "eid": 16397098
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Bochum|Darmstadt": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": false,
+  "side": "home",
+  "home": [
+   {
+    "name": "C. Drakas",
+    "importance": "other",
+    "status": "out",
+    "reason": "Unknown",
+    "id": 1394488,
+    "source": "sofascore"
+   },
+   {
+    "name": "P. Strompf",
+    "importance": "other",
+    "status": "out",
+    "reason": "Unknown",
+    "id": 886316,
+    "source": "sofascore"
+   }
+  ],
+  "away": [
+   {
+    "name": "L. Marseiler",
+    "importance": "key",
+    "status": "out",
+    "reason": "Cruciate Ligament Injury",
+    "id": 797871,
+    "source": "sofascore"
+   },
+   {
+    "name": "M. Schuhen",
+    "importance": "other",
+    "status": "out",
+    "reason": "Thigh Injury",
+    "id": 132654,
+    "source": "sofascore"
+   },
+   {
+    "name": "N. Verkooijen",
+    "importance": "other",
+    "status": "out",
+    "reason": "Unknown",
+    "id": 1465822,
+    "source": "sofascore"
+   },
+   {
+    "name": "P. Pfeiffer",
+    "importance": "star",
+    "status": "out",
+    "reason": "Unknown",
+    "id": 930135,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": -1,
+  "netKey": -2,
+  "sport": "football",
+  "eventId": 16429266,
+  "teams": {
+   "home": 2542,
+   "away": 2576
+  },
+  "competition": {
+   "name": "2. Bundesliga",
+   "ts": 1795800600,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 996989,
+     "name": "C. Rasmussen",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.308,
+     "minutes": 68.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 340719,
+     "name": "P. Hofmann",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.308,
+     "minutes": 74.2,
+     "unit": "G+A"
+    },
+    {
+     "id": 57627,
+     "name": "K. Mets",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.077,
+     "minutes": 90.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796240700,
+    "tournament": "DFB Pokal",
+    "round": "Round of 16",
+    "tier": 1,
+    "eid": 17469297
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "Bochum (home) faces Darmstadt (away) in a football match.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Stellenbosch FC|TS Galaxy FC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "home",
+  "home": [
+   {
+    "name": "Quwan Plaatjies",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.freetips.com/football/stellenbosch-vs-ts-galaxy-betting-tips-20261126-0002/"
+   }
+  ],
+  "away": [
+   {
+    "name": "Mbongeni Mzimela",
+    "importance": "star",
+    "status": "out",
+    "reason": "suspension",
+    "url": "https://www.freetips.com/football/stellenbosch-vs-ts-galaxy-betting-tips-20261126-0002/"
+   }
+  ],
+  "sources": [
+   "https://www.freetips.com/football/stellenbosch-vs-ts-galaxy-betting-tips-20261126-0002/"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16663459,
+  "teams": {
+   "home": 43555,
+   "away": 295408
+  },
+  "competition": {
+   "name": "South African Premier Division",
+   "ts": 1795800600,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796477400,
+    "tournament": "South African Premier Division",
+    "round": "",
+    "tier": 1,
+    "eid": 16663460
+   }
+  },
+  "signals": [
+   {
+    "kind": "star_out",
+    "name": "Quwan Plaatjies",
+    "share": null,
+    "basis": "market value",
+    "reason": "injury",
+    "source": "search"
+   }
+  ],
+  "status": "star_out",
+  "aiSummary": "Stellenbosch FC host TS Galaxy FC in a football match.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Leon|Cruz Azul": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": true,
+  "side": "away",
+  "home": [],
+  "away": [],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "O. García",
+     "id": 1183649,
+     "star": true
+    },
+    {
+     "name": "I. Moreno",
+     "id": 941187,
+     "star": false
+    },
+    {
+     "name": "J. Romaña",
+     "id": 839734,
+     "star": true
+    },
+    {
+     "name": "J. Guevara",
+     "id": 1175008,
+     "star": false
+    },
+    {
+     "name": "S. Vegas",
+     "id": 363748,
+     "star": false
+    },
+    {
+     "name": "L. Valadez",
+     "id": 1887076,
+     "star": false
+    },
+    {
+     "name": "R. Echeverría",
+     "id": 339265,
+     "star": false
+    },
+    {
+     "name": "F. Beltrán",
+     "id": 889214,
+     "star": false
+    },
+    {
+     "name": "D. Arcila",
+     "id": 1113526,
+     "star": false
+    },
+    {
+     "name": "I. Díaz",
+     "id": 796328,
+     "star": false
+    },
+    {
+     "name": "D. Cambindo",
+     "id": 947337,
+     "star": true
+    }
+   ],
+   "away": [
+    {
+     "name": "A. Gudiño",
+     "id": 938577,
+     "star": false
+    },
+    {
+     "name": "J. Márquez",
+     "id": 1046703,
+     "star": false
+    },
+    {
+     "name": "W. Ditta",
+     "id": 931705,
+     "star": true
+    },
+    {
+     "name": "J. Orozco",
+     "id": 1088274,
+     "star": false
+    },
+    {
+     "name": "O. Campos",
+     "id": 1097747,
+     "star": false
+    },
+    {
+     "name": "G. Piovi",
+     "id": 340537,
+     "star": false
+    },
+    {
+     "name": "E. Lira",
+     "id": 944068,
+     "star": true
+    },
+    {
+     "name": "J. Paradela",
+     "id": 944623,
+     "star": true
+    },
+    {
+     "name": "C. Rodríguez",
+     "id": 845849,
+     "star": false
+    },
+    {
+     "name": "A. Palavecino",
+     "id": 941541,
+     "star": false
+    },
+    {
+     "name": "N. Ibáñez",
+     "id": 848925,
+     "star": false
+    }
+   ]
+  },
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [
+     {
+      "name": "O. García",
+      "id": 1183649,
+      "star": true
+     },
+     {
+      "name": "I. Moreno",
+      "id": 941187,
+      "star": false
+     },
+     {
+      "name": "J. Romaña",
+      "id": 839734,
+      "star": true
+     },
+     {
+      "name": "J. Guevara",
+      "id": 1175008,
+      "star": false
+     },
+     {
+      "name": "S. Vegas",
+      "id": 363748,
+      "star": false
+     },
+     {
+      "name": "L. Valadez",
+      "id": 1887076,
+      "star": false
+     },
+     {
+      "name": "R. Echeverría",
+      "id": 339265,
+      "star": false
+     },
+     {
+      "name": "F. Beltrán",
+      "id": 889214,
+      "star": false
+     },
+     {
+      "name": "D. Arcila",
+      "id": 1113526,
+      "star": false
+     },
+     {
+      "name": "I. Díaz",
+      "id": 796328,
+      "star": false
+     },
+     {
+      "name": "D. Cambindo",
+      "id": 947337,
+      "star": true
+     }
+    ],
+    "away": [
+     {
+      "name": "A. Gudiño",
+      "id": 938577,
+      "star": false
+     },
+     {
+      "name": "J. Márquez",
+      "id": 1046703,
+      "star": false
+     },
+     {
+      "name": "W. Ditta",
+      "id": 931705,
+      "star": true
+     },
+     {
+      "name": "J. Orozco",
+      "id": 1088274,
+      "star": false
+     },
+     {
+      "name": "O. Campos",
+      "id": 1097747,
+      "star": false
+     },
+     {
+      "name": "G. Piovi",
+      "id": 340537,
+      "star": false
+     },
+     {
+      "name": "E. Lira",
+      "id": 944068,
+      "star": true
+     },
+     {
+      "name": "J. Paradela",
+      "id": 944623,
+      "star": true
+     },
+     {
+      "name": "C. Rodríguez",
+      "id": 845849,
+      "star": false
+     },
+     {
+      "name": "A. Palavecino",
+      "id": 941541,
+      "star": false
+     },
+     {
+      "name": "N. Ibáñez",
+      "id": 848925,
+      "star": false
+     }
+    ]
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 1183649,
+      "name": "O. García",
+      "sub": false
+     },
+     {
+      "id": 941187,
+      "name": "I. Moreno",
+      "sub": false
+     },
+     {
+      "id": 839734,
+      "name": "J. Romaña",
+      "sub": false
+     },
+     {
+      "id": 1175008,
+      "name": "J. Guevara",
+      "sub": false
+     },
+     {
+      "id": 363748,
+      "name": "S. Vegas",
+      "sub": false
+     },
+     {
+      "id": 1887076,
+      "name": "L. Valadez",
+      "sub": false
+     },
+     {
+      "id": 339265,
+      "name": "R. Echeverría",
+      "sub": false
+     },
+     {
+      "id": 889214,
+      "name": "F. Beltrán",
+      "sub": false
+     },
+     {
+      "id": 1113526,
+      "name": "D. Arcila",
+      "sub": false
+     },
+     {
+      "id": 796328,
+      "name": "I. Díaz",
+      "sub": false
+     },
+     {
+      "id": 947337,
+      "name": "D. Cambindo",
+      "sub": false
+     },
+     {
+      "id": 865755,
+      "name": "J. Rodríguez",
+      "sub": true
+     },
+     {
+      "id": 1132973,
+      "name": "J. Domínguez",
+      "sub": true
+     },
+     {
+      "id": 926417,
+      "name": "A. Alvarado",
+      "sub": true
+     },
+     {
+      "id": 1068525,
+      "name": "E. Guerra",
+      "sub": true
+     },
+     {
+      "id": 837400,
+      "name": "J. Cortizo",
+      "sub": true
+     },
+     {
+      "id": 2678697,
+      "name": "I. Martinez",
+      "sub": true
+     },
+     {
+      "id": 799302,
+      "name": "B. Colula",
+      "sub": true
+     },
+     {
+      "id": 889794,
+      "name": "P. Bellón",
+      "sub": true
+     },
+     {
+      "id": 2034057,
+      "name": "C. Mora",
+      "sub": true
+     },
+     {
+      "id": 2330620,
+      "name": "J. Lara",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 938577,
+      "name": "A. Gudiño",
+      "sub": false
+     },
+     {
+      "id": 1046703,
+      "name": "J. Márquez",
+      "sub": false
+     },
+     {
+      "id": 931705,
+      "name": "W. Ditta",
+      "sub": false
+     },
+     {
+      "id": 1088274,
+      "name": "J. Orozco",
+      "sub": false
+     },
+     {
+      "id": 1097747,
+      "name": "O. Campos",
+      "sub": false
+     },
+     {
+      "id": 340537,
+      "name": "G. Piovi",
+      "sub": false
+     },
+     {
+      "id": 944068,
+      "name": "E. Lira",
+      "sub": false
+     },
+     {
+      "id": 944623,
+      "name": "J. Paradela",
+      "sub": false
+     },
+     {
+      "id": 845849,
+      "name": "C. Rodríguez",
+      "sub": false
+     },
+     {
+      "id": 941541,
+      "name": "A. Palavecino",
+      "sub": false
+     },
+     {
+      "id": 848925,
+      "name": "N. Ibáñez",
+      "sub": false
+     },
+     {
+      "id": 809024,
+      "name": "A. Mozo",
+      "sub": true
+     },
+     {
+      "id": 884868,
+      "name": "C. Rotondi",
+      "sub": true
+     },
+     {
+      "id": 1187957,
+      "name": "A. Montaño",
+      "sub": true
+     },
+     {
+      "id": 922896,
+      "name": "G. Fernández",
+      "sub": true
+     },
+     {
+      "id": 1394210,
+      "name": "R. Orquin",
+      "sub": true
+     },
+     {
+      "id": 876190,
+      "name": "K. Mier",
+      "sub": true
+     },
+     {
+      "id": 1046625,
+      "name": "A. Montes",
+      "sub": true
+     },
+     {
+      "id": 822479,
+      "name": "O. Ebere",
+      "sub": true
+     },
+     {
+      "id": 1032022,
+      "name": "L. Romero",
+      "sub": true
+     },
+     {
+      "id": 787912,
+      "name": "J. Calero",
+      "sub": true
+     }
+    ]
+   }
+  },
+  "sport": "football",
+  "eventId": 17620848,
+  "teams": {
+   "home": 36534,
+   "away": 1947
+  },
+  "competition": {
+   "name": "Liga MX, Apertura",
+   "ts": 1795749000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1187957,
+     "name": "A. Montaño",
+     "goalie": false,
+     "apps": 5,
+     "starts": 3,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.278,
+     "minutes": 57.4,
+     "unit": "G+A"
+    },
+    {
+     "id": 944623,
+     "name": "J. Paradela",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 0.8,
+     "last": 2.0,
+     "share": 0.167,
+     "minutes": 67.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 848925,
+     "name": "N. Ibáñez",
+     "goalie": false,
+     "apps": 5,
+     "starts": 3,
+     "avg": 0.6,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 58.2,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796007600,
+    "tournament": "Liga MX, Apertura",
+    "round": "Quarterfinals",
+    "tier": 1,
+    "eid": 17621010
+   }
+  },
+  "signals": [
+   {
+    "kind": "star_out",
+    "name": "A. Montaño",
+    "share": 0.278,
+    "unit": "G+A",
+    "reason": "on the bench (confirmed line-up)",
+    "source": "sofascore"
+   }
+  ],
+  "status": "star_out",
+  "aiSummary": "No absences reported for either side.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|True"
+ },
+ "football|AEK Larnaka|Apollon Limassol": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "home",
+  "home": [
+   {
+    "name": "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.sentragoal.gr/prognostika/148393-aek-larnakas-apollon-lemesou/"
+   },
+   {
+    "name": "ΑΠΟΛΛΩΝ ΛΕΜΕΣΟΥ",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.sentragoal.gr/prognostika/148393-aek-larnakas-apollon-lemesou/"
+   }
+  ],
+  "away": [
+   {
+    "name": "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.sentragoal.gr/prognostika/148393-aek-larnakas-apollon-lemesou/"
+   },
+   {
+    "name": "ΑΠΟΛΛΩΝ ΛΕΜΕΣΟΥ",
+    "importance": "star",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.sentragoal.gr/prognostika/148393-aek-larnakas-apollon-lemesou/"
+   }
+  ],
+  "sources": [
+   "https://www.sentragoal.gr/prognostika/148393-aek-larnakas-apollon-lemesou/"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16633428,
+  "teams": {
+   "home": 3404,
+   "away": 3402
+  },
+  "competition": {
+   "name": "Cyprus League by Stoiximan",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1117232,
+     "name": "Y. Chacón",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.176,
+     "minutes": 76.2,
+     "unit": "G+A"
+    },
+    {
+     "id": 802899,
+     "name": "S. Köhler",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.7,
+     "last": 0.0,
+     "share": 0.118,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1907275,
+     "name": "A. Trică",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.118,
+     "minutes": 30.8,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796144400,
+    "tournament": "Cyprus League by Stoiximan",
+    "round": "",
+    "tier": 1,
+    "eid": 16633440
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "AEK Larnaka and Apollon Limassol are missing two star players due to injuries.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Institute FC|Ards FC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16397090,
+  "teams": {
+   "home": 5273,
+   "away": 5182
+  },
+  "competition": {
+   "name": "NIFL Championship",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": []
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796482800,
+    "tournament": "NIFL Championship",
+    "round": "",
+    "tier": 1,
+    "eid": 16397101
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|MVV Maastricht|Jong PSV": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "home",
+  "home": [],
+  "away": [
+   {
+    "name": "Sami Ouaissa",
+    "importance": "other",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.fotmob.com/matches/mvv-maastricht-vs-jong-psv/1dqjhcwg"
+   }
+  ],
+  "sources": [
+   "https://www.fotmob.com/matches/mvv-maastricht-vs-jong-psv/1dqjhcwg"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16317507,
+  "teams": {
+   "home": 2976,
+   "away": 46168
+  },
+  "competition": {
+   "name": "Eerste Divisie",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 2202901,
+     "name": "N. e. Hamdaoui",
+     "goalie": false,
+     "apps": 4,
+     "starts": 2,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.222,
+     "minutes": 53.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 1182232,
+     "name": "F. Dicke",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.111,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1127338,
+     "name": "O. Dumont",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.111,
+     "minutes": 81.8,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796410800,
+    "tournament": "Eerste Divisie",
+    "round": "",
+    "tier": 1,
+    "eid": 16317514
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "MVV Maastricht faces Jong PSV with Sami Ouaissa absent for Jong PSV due to injury.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Jong AZ|TOP Oss": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16317502,
+  "teams": {
+   "home": 46161,
+   "away": 2978
+  },
+  "competition": {
+   "name": "Eerste Divisie",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1395991,
+     "name": "J. Hartog",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 1.2,
+     "last": 0.0,
+     "share": 0.4,
+     "minutes": 66.6,
+     "unit": "G+A"
+    },
+    {
+     "id": 1566227,
+     "name": "F. Elkjær Andersen",
+     "goalie": false,
+     "apps": 5,
+     "starts": 3,
+     "avg": 0.4,
+     "last": 0.0,
+     "share": 0.133,
+     "minutes": 61.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1405743,
+     "name": "J. Esajas",
+     "goalie": false,
+     "apps": 3,
+     "starts": 1,
+     "avg": 0.3,
+     "last": 0.0,
+     "share": 0.067,
+     "minutes": 33.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796410800,
+    "tournament": "Eerste Divisie",
+    "round": "",
+    "tier": 1,
+    "eid": 16317515
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Jong AZ Alkmaar|TOP Oss": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16317502,
+  "teams": {
+   "home": 46161,
+   "away": 2978
+  },
+  "competition": {
+   "name": "Eerste Divisie",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1395991,
+     "name": "J. Hartog",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 1.2,
+     "last": 0.0,
+     "share": 0.4,
+     "minutes": 66.6,
+     "unit": "G+A"
+    },
+    {
+     "id": 1566227,
+     "name": "F. Elkjær Andersen",
+     "goalie": false,
+     "apps": 5,
+     "starts": 3,
+     "avg": 0.4,
+     "last": 0.0,
+     "share": 0.133,
+     "minutes": 61.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1405743,
+     "name": "J. Esajas",
+     "goalie": false,
+     "apps": 3,
+     "starts": 1,
+     "avg": 0.3,
+     "last": 0.0,
+     "share": 0.067,
+     "minutes": 33.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796410800,
+    "tournament": "Eerste Divisie",
+    "round": "",
+    "tier": 1,
+    "eid": 16317515
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Lusail City FC|Arabi Doha": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "sofascore",
+  "confirmed": true,
+  "side": "away",
+  "home": [],
+  "away": [
+   {
+    "name": "M. Olunga",
+    "importance": "star",
+    "status": "out",
+    "reason": "on the bench (confirmed line-up)",
+    "id": 825044,
+    "source": "sofascore"
+   }
+  ],
+  "sources": null,
+  "lineup": {
+   "home": [
+    {
+     "name": "A. Shakouri",
+     "id": 1500741,
+     "star": false
+    },
+    {
+     "name": "A. Pilali",
+     "id": 1464873,
+     "star": false
+    },
+    {
+     "name": "F. Russo",
+     "id": 914775,
+     "star": true
+    },
+    {
+     "name": "M. E. Ayash",
+     "id": 1014562,
+     "star": false
+    },
+    {
+     "name": "A. Nemati",
+     "id": 932486,
+     "star": true
+    },
+    {
+     "name": "O. Ebrahimi",
+     "id": 150993,
+     "star": false
+    },
+    {
+     "name": "K. Mansour",
+     "id": 978410,
+     "star": false
+    },
+    {
+     "name": "K. Mohammed",
+     "id": 921334,
+     "star": false
+    },
+    {
+     "name": "S. Jjbril",
+     "id": 2143535,
+     "star": false
+    },
+    {
+     "name": "H. Firouzi",
+     "id": 2143528,
+     "star": false
+    },
+    {
+     "name": "Rodrigo",
+     "id": 542472,
+     "star": true
+    }
+   ],
+   "away": [
+    {
+     "name": "J. A. A. Hail",
+     "id": 992936,
+     "star": false
+    },
+    {
+     "name": "K. B. Ziadeh",
+     "id": 1174234,
+     "star": false
+    },
+    {
+     "name": "W. Keddari",
+     "id": 1184318,
+     "star": false
+    },
+    {
+     "name": "A. Pérez",
+     "id": 602812,
+     "star": false
+    },
+    {
+     "name": "M. Al-Naimi",
+     "id": 926216,
+     "star": false
+    },
+    {
+     "name": "O. Tannane",
+     "id": 249435,
+     "star": false
+    },
+    {
+     "name": "A. Fathi",
+     "id": 911427,
+     "star": false
+    },
+    {
+     "name": "J. Veretout",
+     "id": 151124,
+     "star": true
+    },
+    {
+     "name": "I. Lihadji",
+     "id": 980403,
+     "star": false
+    },
+    {
+     "name": "P. Sarabia",
+     "id": 138573,
+     "star": true
+    },
+    {
+     "name": "Y. Snana",
+     "id": 1102846,
+     "star": false
+    }
+   ]
+  },
+  "board": "downgrade",
+  "top_block": true,
+  "netStars": 1,
+  "netKey": 1,
+  "lineupInfo": {
+   "confirmed": true,
+   "lineup": {
+    "home": [
+     {
+      "name": "A. Shakouri",
+      "id": 1500741,
+      "star": false
+     },
+     {
+      "name": "A. Pilali",
+      "id": 1464873,
+      "star": false
+     },
+     {
+      "name": "F. Russo",
+      "id": 914775,
+      "star": true
+     },
+     {
+      "name": "M. E. Ayash",
+      "id": 1014562,
+      "star": false
+     },
+     {
+      "name": "A. Nemati",
+      "id": 932486,
+      "star": true
+     },
+     {
+      "name": "O. Ebrahimi",
+      "id": 150993,
+      "star": false
+     },
+     {
+      "name": "K. Mansour",
+      "id": 978410,
+      "star": false
+     },
+     {
+      "name": "K. Mohammed",
+      "id": 921334,
+      "star": false
+     },
+     {
+      "name": "S. Jjbril",
+      "id": 2143535,
+      "star": false
+     },
+     {
+      "name": "H. Firouzi",
+      "id": 2143528,
+      "star": false
+     },
+     {
+      "name": "Rodrigo",
+      "id": 542472,
+      "star": true
+     }
+    ],
+    "away": [
+     {
+      "name": "J. A. A. Hail",
+      "id": 992936,
+      "star": false
+     },
+     {
+      "name": "K. B. Ziadeh",
+      "id": 1174234,
+      "star": false
+     },
+     {
+      "name": "W. Keddari",
+      "id": 1184318,
+      "star": false
+     },
+     {
+      "name": "A. Pérez",
+      "id": 602812,
+      "star": false
+     },
+     {
+      "name": "M. Al-Naimi",
+      "id": 926216,
+      "star": false
+     },
+     {
+      "name": "O. Tannane",
+      "id": 249435,
+      "star": false
+     },
+     {
+      "name": "A. Fathi",
+      "id": 911427,
+      "star": false
+     },
+     {
+      "name": "J. Veretout",
+      "id": 151124,
+      "star": true
+     },
+     {
+      "name": "I. Lihadji",
+      "id": 980403,
+      "star": false
+     },
+     {
+      "name": "P. Sarabia",
+      "id": 138573,
+      "star": true
+     },
+     {
+      "name": "Y. Snana",
+      "id": 1102846,
+      "star": false
+     }
+    ]
+   },
+   "squad": {
+    "home": [
+     {
+      "id": 1500741,
+      "name": "A. Shakouri",
+      "sub": false
+     },
+     {
+      "id": 1464873,
+      "name": "A. Pilali",
+      "sub": false
+     },
+     {
+      "id": 914775,
+      "name": "F. Russo",
+      "sub": false
+     },
+     {
+      "id": 1014562,
+      "name": "M. E. Ayash",
+      "sub": false
+     },
+     {
+      "id": 932486,
+      "name": "A. Nemati",
+      "sub": false
+     },
+     {
+      "id": 150993,
+      "name": "O. Ebrahimi",
+      "sub": false
+     },
+     {
+      "id": 978410,
+      "name": "K. Mansour",
+      "sub": false
+     },
+     {
+      "id": 921334,
+      "name": "K. Mohammed",
+      "sub": false
+     },
+     {
+      "id": 2143535,
+      "name": "S. Jjbril",
+      "sub": false
+     },
+     {
+      "id": 2143528,
+      "name": "H. Firouzi",
+      "sub": false
+     },
+     {
+      "id": 542472,
+      "name": "Rodrigo",
+      "sub": false
+     },
+     {
+      "id": 1148413,
+      "name": "M. Al-Ashwal",
+      "sub": true
+     },
+     {
+      "id": 1139716,
+      "name": "A. H. Katol",
+      "sub": true
+     },
+     {
+      "id": 1149918,
+      "name": "A. Kasr",
+      "sub": true
+     },
+     {
+      "id": 985126,
+      "name": "A. Karami",
+      "sub": true
+     },
+     {
+      "id": 926499,
+      "name": "H. Kamal",
+      "sub": true
+     },
+     {
+      "id": 1017412,
+      "name": "N. Al-Hadhrami",
+      "sub": true
+     },
+     {
+      "id": 1007791,
+      "name": "A. M. Mohammed",
+      "sub": true
+     },
+     {
+      "id": 1139725,
+      "name": "M. T. Khan",
+      "sub": true
+     },
+     {
+      "id": 1605040,
+      "name": "G. Stojanovski",
+      "sub": true
+     },
+     {
+      "id": 1139867,
+      "name": "M. Khaled",
+      "sub": true
+     }
+    ],
+    "away": [
+     {
+      "id": 992936,
+      "name": "J. A. A. Hail",
+      "sub": false
+     },
+     {
+      "id": 1174234,
+      "name": "K. B. Ziadeh",
+      "sub": false
+     },
+     {
+      "id": 1184318,
+      "name": "W. Keddari",
+      "sub": false
+     },
+     {
+      "id": 602812,
+      "name": "A. Pérez",
+      "sub": false
+     },
+     {
+      "id": 926216,
+      "name": "M. Al-Naimi",
+      "sub": false
+     },
+     {
+      "id": 249435,
+      "name": "O. Tannane",
+      "sub": false
+     },
+     {
+      "id": 911427,
+      "name": "A. Fathi",
+      "sub": false
+     },
+     {
+      "id": 151124,
+      "name": "J. Veretout",
+      "sub": false
+     },
+     {
+      "id": 980403,
+      "name": "I. Lihadji",
+      "sub": false
+     },
+     {
+      "id": 138573,
+      "name": "P. Sarabia",
+      "sub": false
+     },
+     {
+      "id": 1102846,
+      "name": "Y. Snana",
+      "sub": false
+     },
+     {
+      "id": 2622973,
+      "name": "Q. A. Haroun",
+      "sub": true
+     },
+     {
+      "id": 1535677,
+      "name": "A. Mahajna",
+      "sub": true
+     },
+     {
+      "id": 1148402,
+      "name": "A. Al-Hussain",
+      "sub": true
+     },
+     {
+      "id": 1547603,
+      "name": "M. Hassan",
+      "sub": true
+     },
+     {
+      "id": 796483,
+      "name": "S. Al-Hajri",
+      "sub": true
+     },
+     {
+      "id": 1088232,
+      "name": "H. Mohamad",
+      "sub": true
+     },
+     {
+      "id": 1141681,
+      "name": "L. Madjer",
+      "sub": true
+     },
+     {
+      "id": 1474257,
+      "name": "M. Gouda",
+      "sub": true
+     },
+     {
+      "id": 825044,
+      "name": "M. Olunga",
+      "sub": true
+     },
+     {
+      "id": 2240735,
+      "name": "J. P. Darros",
+      "sub": true
+     }
+    ]
+   }
+  },
+  "sport": "football",
+  "eventId": 16701119,
+  "teams": {
+   "home": 337651,
+   "away": 44444
+  },
+  "competition": {
+   "name": "Doha Bank Stars League",
+   "ts": 1795793400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 249435,
+     "name": "O. Tannane",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.8,
+     "last": 2.0,
+     "share": 0.235,
+     "minutes": 78.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 138573,
+     "name": "P. Sarabia",
+     "goalie": false,
+     "apps": 5,
+     "starts": 5,
+     "avg": 0.8,
+     "last": 1.0,
+     "share": 0.235,
+     "minutes": 89.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 825044,
+     "name": "M. Olunga",
+     "goalie": false,
+     "apps": 5,
+     "starts": 4,
+     "avg": 0.6,
+     "last": 0.0,
+     "share": 0.176,
+     "minutes": 67.2,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796302800,
+    "tournament": "Doha Bank Stars League",
+    "round": "",
+    "tier": 1,
+    "eid": 17560468
+   }
+  },
+  "signals": [
+   {
+    "kind": "lineups_ok"
+   }
+  ],
+  "status": "lineups_ok",
+  "aiSummary": "Lusail City FC has no reported absences, while Arabi Doha is without star player M. Olunga.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|True"
+ },
+ "football|Llanelli AFC|Cardiff Draconians": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16448545,
+  "teams": {
+   "home": 4916,
+   "away": 530654
+  },
+  "competition": {
+   "name": "Cymru South",
+   "ts": 1795807800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796412600,
+    "tournament": "Cymru South",
+    "round": "",
+    "tier": 1,
+    "eid": 16448552
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Glentoran Belfast|Larne": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16396818,
+  "teams": {
+   "home": 5179,
+   "away": 5184
+  },
+  "competition": {
+   "name": "NIFL Premiership",
+   "ts": 1795808700,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796154300,
+    "tournament": "NIFL Premiership",
+    "round": "",
+    "tier": 1,
+    "eid": 16396855
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Llanelli|Cardiff Draconians": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16448545,
+  "teams": {
+   "home": 4916,
+   "away": 530654
+  },
+  "competition": {
+   "name": "Cymru South",
+   "ts": 1795807800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796412600,
+    "tournament": "Cymru South",
+    "round": "",
+    "tier": 1,
+    "eid": 16448552
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|KRC Genk II|RSC Anderlecht II": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": "search",
+  "confirmed": false,
+  "side": "home",
+  "home": [
+   {
+    "name": "Christian Akpan",
+    "importance": "other",
+    "status": "out",
+    "reason": "injury",
+    "url": "https://www.fotmob.com/matches/anderlecht-futures-vs-genk-u23/1chub1xs5"
+   }
+  ],
+  "away": [],
+  "sources": [
+   "https://www.fotmob.com/matches/anderlecht-futures-vs-genk-u23/1chub1xs5"
+  ],
+  "lineup": null,
+  "board": "ok",
+  "top_block": false,
+  "netStars": 0,
+  "netKey": 0,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16384116,
+  "teams": {
+   "home": 421124,
+   "away": 421120
+  },
+  "competition": {
+   "name": "Challenger Pro League",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1931420,
+     "name": "A. D. Wannemacker",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.3,
+     "last": 0.0,
+     "share": 0.5,
+     "minutes": 81.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1931559,
+     "name": "L. A. Fernandez",
+     "goalie": false,
+     "apps": 4,
+     "starts": 1,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.5,
+     "minutes": 25.8,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796482800,
+    "tournament": "Challenger Pro League",
+    "round": "",
+    "tier": 1,
+    "eid": 16384129
+   }
+  },
+  "signals": [],
+  "status": "no_key_absence",
+  "aiSummary": "KRC Genk II (home) face RSC Anderlecht II (away) in a football match.",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|West Ham U21|Tottenham U21": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16787999,
+  "teams": {
+   "home": 36552,
+   "away": 77865
+  },
+  "competition": {
+   "name": "Premier League 2, Division 1",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1801116,
+     "name": "E. Sowunmi",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.273,
+     "minutes": 7.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 1403148,
+     "name": "T. Hall",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.182,
+     "minutes": 0.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1403130,
+     "name": "J. Rowswell",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.7,
+     "last": 0.0,
+     "share": 0.182,
+     "minutes": 38.3,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796238000,
+    "tournament": "Premier League International Cup",
+    "round": "",
+    "tier": 1,
+    "eid": 16837342
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|West Ham Utd U23s|Tottenham U23s": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "llmAt": "2026-11-27T15:01:45.541071+00:00",
+  "sport": "football",
+  "eventId": 16787999,
+  "teams": {
+   "home": 36552,
+   "away": 77865
+  },
+  "competition": {
+   "name": "Premier League 2, Division 1",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1801116,
+     "name": "E. Sowunmi",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 0.8,
+     "last": 0.0,
+     "share": 0.273,
+     "minutes": 7.8,
+     "unit": "G+A"
+    },
+    {
+     "id": 1403148,
+     "name": "T. Hall",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.182,
+     "minutes": 0.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 1403130,
+     "name": "J. Rowswell",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 0.7,
+     "last": 0.0,
+     "share": 0.182,
+     "minutes": 38.3,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796238000,
+    "tournament": "Premier League International Cup",
+    "round": "",
+    "tier": 1,
+    "eid": 16837342
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Fulham U21|Nottingham U21": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "football",
+  "eventId": 16787996,
+  "teams": {
+   "home": 36548,
+   "away": 324738
+  },
+  "competition": {
+   "name": "Premier League 2, Division 1",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1462765,
+     "name": "T. Works",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 2.0,
+     "last": 0.0,
+     "share": 0.333,
+     "minutes": 42.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 1899737,
+     "name": "D. Casey",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 45.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 2032907,
+     "name": "J. Sani",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.083,
+     "minutes": 45.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796756400,
+    "tournament": "Premier League International Cup",
+    "round": "",
+    "tier": 1,
+    "eid": 16837356
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Fulham U23s|Nottingham Forest U21": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "football",
+  "eventId": 16787996,
+  "teams": {
+   "home": 36548,
+   "away": 324738
+  },
+  "competition": {
+   "name": "Premier League 2, Division 1",
+   "ts": 1795806000,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 1462765,
+     "name": "T. Works",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 2.0,
+     "last": 0.0,
+     "share": 0.333,
+     "minutes": 42.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 1899737,
+     "name": "D. Casey",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 1.0,
+     "last": 0.0,
+     "share": 0.167,
+     "minutes": 45.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 2032907,
+     "name": "J. Sani",
+     "goalie": false,
+     "apps": 2,
+     "starts": 2,
+     "avg": 0.5,
+     "last": 0.0,
+     "share": 0.083,
+     "minutes": 45.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796756400,
+    "tournament": "Premier League International Cup",
+    "round": "",
+    "tier": 1,
+    "eid": 16837356
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Sariyer SK|Istanbulspor AS": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "football",
+  "eventId": 16490554,
+  "teams": {
+   "home": 4952,
+   "away": 3066
+  },
+  "competition": {
+   "name": "Trendyol 1.Lig",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 604856,
+     "name": "D. Davas",
+     "goalie": false,
+     "apps": 3,
+     "starts": 1,
+     "avg": 0.3,
+     "last": 1.0,
+     "share": 0.333,
+     "minutes": 41.3,
+     "unit": "G+A"
+    },
+    {
+     "id": 953201,
+     "name": "E. Korkmazoğlu",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.333,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 992393,
+     "name": "B. Kör",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 0.2,
+     "last": 1.0,
+     "share": 0.333,
+     "minutes": 14.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796207400,
+    "tournament": "Türkiye Kupası",
+    "round": "Round 4",
+    "tier": 1,
+    "eid": 17492491
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Sariyer|Istanbulspor": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "football",
+  "eventId": 16490554,
+  "teams": {
+   "home": 4952,
+   "away": 3066
+  },
+  "competition": {
+   "name": "Trendyol 1.Lig",
+   "ts": 1795798800,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 604856,
+     "name": "D. Davas",
+     "goalie": false,
+     "apps": 3,
+     "starts": 1,
+     "avg": 0.3,
+     "last": 1.0,
+     "share": 0.333,
+     "minutes": 41.3,
+     "unit": "G+A"
+    },
+    {
+     "id": 953201,
+     "name": "E. Korkmazoğlu",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.2,
+     "last": 0.0,
+     "share": 0.333,
+     "minutes": 90.0,
+     "unit": "G+A"
+    },
+    {
+     "id": 992393,
+     "name": "B. Kör",
+     "goalie": false,
+     "apps": 4,
+     "starts": 0,
+     "avg": 0.2,
+     "last": 1.0,
+     "share": 0.333,
+     "minutes": 14.0,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796207400,
+    "tournament": "Türkiye Kupası",
+    "round": "Round 4",
+    "tier": 1,
+    "eid": 17492491
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "football|Gyori ETO FC|Debrecen VSC": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "home",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "football",
+  "eventId": 16384319,
+  "teams": {
+   "home": 1923,
+   "away": 1921
+  },
+  "competition": {
+   "name": "OTP Bank Liga",
+   "ts": 1795804200,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "home": [
+    {
+     "id": 998999,
+     "name": "L. Kulenović",
+     "goalie": false,
+     "apps": 3,
+     "starts": 3,
+     "avg": 1.7,
+     "last": 2.0,
+     "share": 0.417,
+     "minutes": 83.3,
+     "unit": "G+A"
+    },
+    {
+     "id": 1131933,
+     "name": "J. Bennette",
+     "goalie": false,
+     "apps": 4,
+     "starts": 3,
+     "avg": 0.5,
+     "last": 1.0,
+     "share": 0.167,
+     "minutes": 68.5,
+     "unit": "G+A"
+    },
+    {
+     "id": 1086448,
+     "name": "V. Đukanović",
+     "goalie": false,
+     "apps": 4,
+     "starts": 4,
+     "avg": 0.5,
+     "last": 1.0,
+     "share": 0.167,
+     "minutes": 66.5,
+     "unit": "G+A"
+    }
+   ]
+  },
+  "nextFixture": {
+   "home": {
+    "ts": 1796562900,
+    "tournament": "OTP Bank Liga",
+    "round": "",
+    "tier": 1,
+    "eid": 16384331
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "handball|Skovde|Hammarby": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "handball",
+  "eventId": 16828927,
+  "teams": {
+   "home": 4103,
+   "away": 4110
+  },
+  "competition": {
+   "name": "Handbollsligan",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": [
+    {
+     "id": 1476366,
+     "name": "G. Davidsson",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 5.8,
+     "last": 5.0,
+     "share": 0.181,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 1438636,
+     "name": "E. Stenmalm",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 5.2,
+     "last": 3.0,
+     "share": 0.163,
+     "minutes": 0.0,
+     "unit": "goals"
+    },
+    {
+     "id": 2470827,
+     "name": "M. Dolk",
+     "goalie": false,
+     "apps": 5,
+     "starts": 0,
+     "avg": 3.6,
+     "last": 1.0,
+     "share": 0.113,
+     "minutes": 0.0,
+     "unit": "goals"
+    }
+   ]
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796147100,
+    "tournament": "EHF European League",
+    "round": "",
+    "tier": 3,
+    "eid": 16825597
+   }
+  },
+  "signals": [
+   {
+    "kind": "reserves",
+    "reason": "European match Tue",
+    "reasonPl": "puchary wt.",
+    "competition": "EHF European League",
+    "days": 4.0
+   }
+  ],
+  "status": "reserves",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
+ },
+ "handball|Hagen|Elbflorenz": {
+  "checkedAt": "2026-11-27T15:01:45.541071+00:00",
+  "source": null,
+  "confirmed": false,
+  "side": "away",
+  "board": "ok",
+  "top_block": false,
+  "unknown": true,
+  "sport": "handball",
+  "eventId": 16419459,
+  "teams": {
+   "home": 6325,
+   "away": 199953
+  },
+  "competition": {
+   "name": "2. HBL",
+   "ts": 1795802400,
+   "tier": 1
+  },
+  "keyPlayers": {
+   "away": []
+  },
+  "nextFixture": {
+   "away": {
+    "ts": 1796572800,
+    "tournament": "2. HBL",
+    "round": "",
+    "tier": 1,
+    "eid": 16419469
+   }
+  },
+  "signals": [],
+  "status": "unknown",
+  "aiSummary": "No confirmed team news yet",
+  "aiSummarySig": "2026-11-27T15:01:45.541071+00:00|False"
  }
 }
